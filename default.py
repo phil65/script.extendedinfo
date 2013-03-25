@@ -52,7 +52,7 @@ class Main:
         self._stop = False
         self.previousitem = ""
         while not self._stop:
-            if xbmc.getCondVisibility("Container.Content(artists)") or xbmc.getCondVisibility("Container.Content(albums)"):
+            if xbmc.getCondVisibility("Container.Content(artists)") or xbmc.getCondVisibility("Container.Content(albums)")or xbmc.getCondVisibility("Container.Content(movies)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
@@ -65,10 +65,10 @@ class Main:
                 self._clear_properties()
                 xbmc.sleep(1000)
             xbmc.sleep(100)
-            if not xbmc.getCondVisibility("Window.IsVisible(musiclibrary)"):
-                self._clear_properties()
-                xbmc.executebuiltin('ClearProperty(artistalbums_backend_running,home)')
-                self._stop = True
+       #     if not xbmc.getCondVisibility("Window.IsVisible(musiclibrary)"):
+        #        self._clear_properties()
+         #       xbmc.executebuiltin('ClearProperty(artistalbums_backend_running,home)')
+          #      self._stop = True
 
     def _set_details( self, dbid ):
         try:
@@ -83,26 +83,33 @@ class Main:
             elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title","artist","duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
                 json_query = simplejson.loads(json_query)
                 self._clear_properties()
                 if json_query.has_key('result') and json_query['result'].has_key('songs'):
                     self._set_album_properties(json_query)
+            elif (xbmc.getCondVisibility('Container.Content(movies)') and xbmc.getCondVisibility('ListItem.IsFolder')) or self.type == "set":
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "director", "writer","genre" , "thumbnail", "runtime", "plotoutline", "plot" ], "sort": { "order": "ascending",  "method": "sorttitle" }} },"id": 1 }' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_query = simplejson.loads(json_query)
+                self._clear_properties()
+                if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
+                    self._set_movie_properties(json_query)
         except:
             pass
             
     def _set_artist_properties( self, audio ):
-        # Set album properties
         count = 1
         latestyear = 0
         firstyear = 0
         playcount = 0
-        # Clear properties before setting new ones
         for item in audio['result']['albums']:
-            self.window.setProperty('AlbumTitle.%d' % count, item['title'])
-            self.window.setProperty('AlbumYear.%d' % count, str(item['year']))
-            self.window.setProperty('AlbumThumb.%d' % count, item['thumbnail'])
-            self.window.setProperty('AlbumID.%d' % count, str(item.get('albumid')))
-            self.window.setProperty('AlbumLabel.%d' % count, item['albumlabel'])
+            self.window.setProperty('Artist.Album.%d.Title' % count, item['title'])
+            self.window.setProperty('Artist.Album.%d.Year' % count, str(item['year']))
+            self.window.setProperty('Artist.Album.%d.Thumb' % count, item['thumbnail'])
+            self.window.setProperty('Artist.Album.%d.ID' % count, str(item.get('albumid')))
+            self.window.setProperty('Artist.Album.%d.Label' % count, item['albumlabel'])
             if item['playcount']:
                 playcount = playcount + item['playcount']
             if item['year']:
@@ -111,47 +118,78 @@ class Main:
                 if firstyear == 0 or item['year'] < firstyear:
                     firstyear = item['year']
             count += 1
-        self.window.setProperty('Albums.Newest', str(latestyear))
-        self.window.setProperty('Albums.Oldest', str(firstyear))
-        self.window.setProperty('Albums.Count', str(audio['result']['limits']['total']))
-        self.window.setProperty('Albums.Playcount', str(playcount))
+        self.window.setProperty('Artist.Albums.Newest', str(latestyear))
+        self.window.setProperty('Artist.Albums.Oldest', str(firstyear))
+        self.window.setProperty('Artist.Albums.Count', str(audio['result']['limits']['total']))
+        self.window.setProperty('Artist.Albums.Playcount', str(playcount))
         self.cleared = False
   
     def _set_album_properties( self, json_query ):
-        # Set album properties
         count = 1
         duration = 0
         discnumber = 0
-        # Clear properties before setting new ones
         for item in json_query['result']['songs']:
-            self.window.setProperty('SongTitle.%d' % count, item['title'])
+            self.window.setProperty('Album.Song.%d.Title' % count, item['title'])
             array = item['file'].split('.')
-            self.window.setProperty('SongFileExtension.%d' % count, str(array[-1]))
+            self.window.setProperty('Album.Song.%d.FileExtension' % count, str(array[-1]))
             if item['disc'] > discnumber:
                 discnumber = item['disc']
-            duration += duration
+            duration += item['duration']
             count += 1
-        self.window.setProperty('Songs.Discs', str(discnumber))
-        self.window.setProperty('Songs.Duration', str(duration))
-        self.window.setProperty('Songs.Count', str(json_query['result']['limits']['total']))
+        self.window.setProperty('Album.Songs.Discs', str(discnumber))
+        self.window.setProperty('Album.Songs.Duration', str(duration))
+        self.window.setProperty('Album.Songs.Count', str(json_query['result']['limits']['total']))
+        self.cleared = False
+        
+    def _set_movie_properties( self, json_query ):
+        count = 1
+        runtime = 0
+        writer = []
+        director = []
+        genre = []
+        plot = ""
+        for item in json_query['result']['setdetails']['movies']:
+        #    self.window.setProperty('Set.Movie.%d.Title' % count, item['title'])
+       #     self.window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
+            if item['plotoutline']:
+                plot += "[B]" + item['label'] + "[/B][CR]" + item['plotoutline'] + "[CR][CR]"
+            else:
+                plot += "[B]" + item['label'] + "[/B][CR]" + item['plot'] + "[CR][CR]"
+            runtime += item['runtime']
+            count += 1
+            if item.get( "writer" ):   writer += [ w for w in item[ "writer" ] if w and w not in writer ]
+            if item.get( "director" ): director += [ d for d in item[ "director" ] if d and d not in director ]
+            if item.get( "genre" ): genre += [ g for g in item[ "genre" ] if g and g not in genre ]
+        self.window.setProperty('Set.Movies.Plot', plot)
+        self.window.setProperty('Set.Movies.Runtime', str(runtime/60))
+        self.window.setProperty('Set.Movies.Writer', " / ".join( writer ))
+        self.window.setProperty('Set.Movies.Director', " / ".join( director ))
+        self.window.setProperty('Set.Movies.Genre', " / ".join( genre ))
+        self.window.setProperty('Set.Movies.Count', str(json_query['result']['limits']['total']))
         self.cleared = False
   
     def _clear_properties( self ):
         if not self.cleared:
             for i in range(1,50):
-                self.window.clearProperty('AlbumTitle.%d' % i)
-                self.window.clearProperty('AlbumYear.%d' % i)
-                self.window.clearProperty('AlbumThumb.%d' % i)
-                self.window.clearProperty('AlbumID.%d' % i)
-                self.window.clearProperty('SongTitle.%d' % i)
-                self.window.clearProperty('SongFileExtension.%d' % i)
-            self.window.clearProperty('Albums.Newest')   
-            self.window.clearProperty('Albums.Oldest')   
-            self.window.clearProperty('Albums.Count')   
-            self.window.clearProperty('Albums.Playcount')   
-            self.window.clearProperty('Songs.Discs')   
-            self.window.clearProperty('Songs.Duration')   
-            self.window.clearProperty('Songs.Count')   
+                self.window.clearProperty('Artist.Album.Title.%d' % i)
+                self.window.clearProperty('Artist.Album.Year.%d' % i)
+                self.window.clearProperty('Artist.Album.Thumb.%d' % i)
+                self.window.clearProperty('Artist.Album.ID.%d' % i)
+                self.window.clearProperty('Album.Song.Title.%d' % i)
+                self.window.clearProperty('Album.Song.FileExtension.%d' % i)
+            self.window.clearProperty('Artist.Albums.Newest')   
+            self.window.clearProperty('Artist.Albums.Oldest')   
+            self.window.clearProperty('Artist.Albums.Count')   
+            self.window.clearProperty('Artist.Albums.Playcount')   
+            self.window.clearProperty('Album.Songs.Discs')   
+            self.window.clearProperty('Album.Songs.Duration')   
+            self.window.clearProperty('Album.Songs.Count')   
+            self.window.clearProperty('Set.Movies.Plot')   
+            self.window.clearProperty('Set.Movies.Runtime')   
+            self.window.clearProperty('Set.Movies.Writer')   
+            self.window.clearProperty('Set.Movies.Director')   
+            self.window.clearProperty('Set.Movies.Genre')   
+            self.window.clearProperty('Set.Movies.Count')   
             self.cleared = True
 
 if ( __name__ == "__main__" ):
