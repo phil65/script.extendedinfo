@@ -76,8 +76,11 @@ def GetSimilarInLibrary(id):
     return artists    
 
 def passDataToSkin(prefix, data):
-    #use window properties
+    #use window properties       
     wnd = xbmcgui.Window(Window)
+   # for i in range(1,100):
+    #   for schleife zum resetten evtl
+     #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
     if data != None:
         wnd.setProperty('%s.Count' % prefix, str(len(data)))
         log( "%s.Count = %s" % (prefix, str(len(data)) ) )
@@ -88,7 +91,10 @@ def passDataToSkin(prefix, data):
                 log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % prefix, '0')
-   
+
+
+        
+        
 def GetLastFMInfo():
     for arg in sys.argv:
         if arg == 'script.ExtendedInfo':
