@@ -1,7 +1,7 @@
 import xml.dom.minidom
 from Utils import log, GetStringFromUrl, GetValue
 
-lastfm_apikey = 'fbd57a1baddb983d1848a939665310f6'
+lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
 
 def GetSimilarById(m_id):
     url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)

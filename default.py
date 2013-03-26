@@ -85,6 +85,7 @@ def passDataToSkin(prefix, data):
             log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
+                log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % prefix, '0')
    
@@ -136,6 +137,8 @@ def GetLastFMInfo():
             passDataToSkin('SimilarArtistsInLibrary', artists)
         elif info == 'artistevents':
             events = GetEvents(Artist_mbid)
+            log("Events:")
+            log(events)
             passDataToSkin('ArtistEvents', events)       
         elif info == 'nearevents':
             events = GetNearEvents()
@@ -155,8 +158,6 @@ class Main:
         self._init_vars()
         self._parse_argv()
         test = GetXBMCArtists()
-        log("testus")
-        log(test)
         # run in backend if parameter was set
         if self.info:
             GetLastFMInfo()
@@ -181,7 +182,6 @@ class Main:
             params = dict( arg.split("=") for arg in sys.argv[1].split("&"))
         except:
             params = {}
-        log("params: %s" % params)
         self.artistid = -1
         try: self.artistid = int(params.get("artistid", "-1"))
         except: pass
@@ -241,10 +241,10 @@ class Main:
                 self._clear_properties()
                 xbmc.sleep(1000)
             xbmc.sleep(100)
-       #     if not xbmc.getCondVisibility("Window.IsVisible(musiclibrary)"):
-        #        self._clear_properties()
-         #       xbmc.executebuiltin('ClearProperty(ExtendedInfo_backend_running,home)')
-          #      self._stop = True
+            if xbmc.getCondVisibility("!Window.IsActive(musiclibrary) + !Window.IsActive(videos)"):
+                self._clear_properties()
+                xbmc.executebuiltin('ClearProperty(ExtendedInfo_backend_running,home)')
+                self._stop = True
 
     def _set_details( self, dbid ):
         if dbid:
@@ -252,7 +252,6 @@ class Main:
                 if xbmc.getCondVisibility('Container.Content(artists)') or self.type == "artist":
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    log(json_query)
                     json_response = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_response['result'].has_key('albums'):
@@ -260,7 +259,6 @@ class Main:
                 elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "track", "duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    log(json_query)
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('songs'):
@@ -268,7 +266,6 @@ class Main:
                 elif (xbmc.getCondVisibility('Container.Content(movies)') and xbmc.getCondVisibility('ListItem.IsFolder')) or self.type == "set":
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country", "year" ], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    log(json_query)
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
@@ -276,7 +273,6 @@ class Main:
                 elif xbmc.getCondVisibility('Container.Content(songs)') or self.type == "songs":
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    log(json_query)
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
@@ -317,7 +313,6 @@ class Main:
         for item in json_query['result']['songs']:
             self.window.setProperty('Album.Song.%d.Title' % count, item['title'])
             tracklist += "[B]" + str(item['track']) + "[/B]: " + item['title'] + "[CR]"
-            log(tracklist)
             array = item['file'].split('.')
             self.window.setProperty('Album.Song.%d.FileExtension' % count, str(array[-1]))
             if item['disc'] > discnumber:
