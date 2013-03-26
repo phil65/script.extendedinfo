@@ -336,7 +336,7 @@ class Main:
         plot = ""
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
-          #  self.window.setProperty('Set.Movie.%d.Title' % count, item['title'])
+            self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
             self.window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
             self.window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
