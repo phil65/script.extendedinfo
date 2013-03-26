@@ -92,8 +92,11 @@ def passDataToSkin(prefix, data):
     else:
         wnd.setProperty('%s.Count' % prefix, '0')
 
-
-        
+# def retrieve_artist_details( artist_id ):
+    # json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["musicbrainzartistid"], "artistid": %d}, "id": 1}' %artist_id)
+    # json_query = unicode(json_query, 'utf-8', errors='ignore')
+    # json_response = simplejson.loads(json_query)
+    # if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):       
         
 def GetLastFMInfo():
     for arg in sys.argv:
@@ -135,16 +138,10 @@ def GetLastFMInfo():
 
     for info in infos:
         if info == 'similarartistsinlibrary':
-            log("starting similarartistinlibrary: Artist_mbid:")
-            log(Artist_mbid)
             artists = GetSimilarInLibrary(Artist_mbid)
-            log("results in")
-            log(artists)
             passDataToSkin('SimilarArtistsInLibrary', artists)
         elif info == 'artistevents':
             events = GetEvents(Artist_mbid)
-            log("Events:")
-            log(events)
             passDataToSkin('ArtistEvents', events)       
         elif info == 'nearevents':
             events = GetNearEvents()
@@ -196,11 +193,8 @@ class Main:
         self.info = params.get("info", False)
 
     def _create_musicvideo_list( self ):
-        # query the database
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
-        # avoid unicode errors
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        # parse the records
         json_response = simplejson.loads(json_query)
         if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):
             # iterate through the results
