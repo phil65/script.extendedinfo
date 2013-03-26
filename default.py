@@ -100,7 +100,7 @@ def passDataToSkin(prefix, data):
         
 def GetLastFMInfo():
     for arg in sys.argv:
-        if arg == 'script.ExtendedInfo':
+        if arg == 'script.extendedinfo':
             continue
         param = arg.lower()
         if param.startswith('info='):
@@ -116,7 +116,7 @@ def GetLastFMInfo():
         elif param.startswith('window='):
             Window = int(arg[7:])
         elif param.startswith('settuplocation'):
-            settings = xbmcaddon.Addon(id='script.ExtendedInfo')
+            settings = xbmcaddon.Addon(id='script.extendedinfo')
             country = settings.getSetting('country')
             city = settings.getSetting('city')
             log('stored country/city: %s/%s' % (country, city) )  
@@ -164,8 +164,8 @@ class Main:
         # run in backend if parameter was set
         if self.info:
             GetLastFMInfo()
-        elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(ExtendedInfo_backend_running))"):
-            xbmc.executebuiltin('SetProperty(ExtendedInfo_backend_running,true,home)')
+        elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
+            xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,true,home)')
             self.run_backend()
         # only set new properties if artistid is not smaller than 0, e.g. -1
         elif self.artistid and self.artistid > -1:
@@ -243,7 +243,7 @@ class Main:
             xbmc.sleep(100)
             if xbmc.getCondVisibility("!Window.IsActive(musiclibrary) + !Window.IsActive(videos)"):
                 self._clear_properties()
-                xbmc.executebuiltin('ClearProperty(ExtendedInfo_backend_running,home)')
+                xbmc.executebuiltin('ClearProperty(extendedinfo_backend_running,home)')
                 self._stop = True
 
     def _set_details( self, dbid ):

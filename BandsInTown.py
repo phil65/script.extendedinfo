@@ -34,7 +34,7 @@ def GetEvents(id):
     return HandleResult(results)
 
 def GetNearEvents():
-    settings = xbmcaddon.Addon(id='script.ExtendedInfo')
+    settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')
     url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&app_id=%s' % (bandsintown_apikey)
@@ -44,7 +44,7 @@ def GetNearEvents():
     return HandleResult(results)
 
 def GetArtistNearEvents(Artists):
-    settings = xbmcaddon.Addon(id='script.ExtendedInfo')
+    settings = xbmcaddon.Addon(id='script.extendedinfo')
     ArtistStr = ''
     for art in Artists:
         if len(ArtistStr) > 0:
