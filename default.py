@@ -3,19 +3,17 @@ import os, time, re
 import urllib
 import xml.dom.minidom
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-
-from MusicBrainz import GetMusicBrainzId, SetMusicBrainzIDsForAllArtists
+from MusicBrainz import GetMusicBrainzIdFromNet, SetMusicBrainzIDsForAllArtists
 from BandsInTown import GetEvents, GetNearEvents
 from Lastfm import GetSimilarById
 from Utils import log, GetStringFromUrl, GetValue, GetAttribute, Notify
-
+#from jsonrpc_calls import retrieve_album_details, retrieve_artist_details, get_fanart_path, get_thumbnail_path
 if sys.version_info < (2, 7):
     import simplejson
 else:
     import json as simplejson
+    
 
-    
-    
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
@@ -33,40 +31,34 @@ def log(txt):
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
-def GetThumbForArtistName(ArtistName):
-    thumb = xbmc.getCacheThumbName('artist' + ArtistName)
-    thumb = xbmc.translatePath("special://profile/Thumbnails/Music/Artists/%s" % thumb )
+def GetXBMCArtists():
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    log(json_query)
+    json_query = simplejson.loads(json_query)
+    artists = []        
+    if json_query.has_key('result') and json_query['result'].has_key('artists'):
+        count = 0
+        for item in json_query['result']['artists']:
+            mbid = ''
+            artist = {"name": item['label'], "xbmc_id": item['artistid'], "mbid": item['musicbrainzartistid'] , "thumb": item['thumbnail'] }
+            artists.append(artist)
+    return artists
     
-    if not os.path.isfile(thumb):
-        thumb = ''
-        
-    print '%s -> %s' % (ArtistName, thumb)
-        
-    return thumb
-
-'''
-def GetArtists():
-    retval = xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "id": 1 }')
-    results = json.loads(retval)
-
-    return results['result']['artists']
-'''
 def GetSimilarInLibrary(id):
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
-         #Notify('Last.fm didn\'t return proper response - check debug log for more details')
+         log('Last.fm didn\'t return proper response')
          return None
-    
+    log("calling GETXBMCArtists() in GetSimilarInLibrary")
     xbmc_artists = GetXBMCArtists()
+    log("GETXBMCArtists() called")
+    log(xbmc_artists)
     artists = []
-    
     start = time.clock()
-    
     for (count, simi_artist) in enumerate(simi_artists):
         for (count, xbmc_artist) in enumerate(xbmc_artists):
-            
             hit = False
-            
             if xbmc_artist['mbid'] != '':
                 #compare music brainz id
                 if xbmc_artist['mbid'] == simi_artist['mbid']:
@@ -75,22 +67,17 @@ def GetSimilarInLibrary(id):
                 #compare names
                 if xbmc_artist['name'] == simi_artist['name']:
                     hit = True
-            
             if hit:
-                xbmc_artist['thumb'] = GetThumbForArtistName(xbmc_artist['name'])
+                log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))
                 artists.append(xbmc_artist)
-    
     finish = time.clock()
-            
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
-    #Notify('Joining xbmc library and last.fm similar artists', 'took %f seconds)' % (finish - start))
-    
+    #Notify('Joining xbmc library and last.fm similar artists', 'took %f seconds)' % (finish - start))   
     return artists    
 
 def passDataToSkin(prefix, data):
     #use window properties
     wnd = xbmcgui.Window(Window)
-
     if data != None:
         wnd.setProperty('%s.Count' % prefix, str(len(data)))
         log( "%s.Count = %s" % (prefix, str(len(data)) ) )
@@ -105,73 +92,58 @@ def GetLastFMInfo():
     for arg in sys.argv:
         if arg == 'script.ExtendedInfo':
             continue
-        
         param = arg.lower()
-        
         if param.startswith('info='):
             infos.append(param[5:])
-        
         elif param.startswith('artistname='):
             ArtistName = arg[11:]
-            Artist_mbid = GetMusicBrainzId(ArtistName)
-            
+            # todo: look up local mbid first -->xbmcid for parameter
+            Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
         elif param.startswith('albumname='):
             AlbumName = arg[10:]
-            
         elif param.startswith('tracktitle='):
             TrackTitle = arg[11:]
-        
         elif param.startswith('window='):
             Window = int(arg[7:])
-        
         elif param.startswith('settuplocation'):
             settings = xbmcaddon.Addon(id='script.ExtendedInfo')
             country = settings.getSetting('country')
             city = settings.getSetting('city')
-            
             log('stored country/city: %s/%s' % (country, city) )  
-            
             kb = xbmc.Keyboard('', 'Country:')
             kb.doModal()
             country = kb.getText()
-            
             kb = xbmc.Keyboard('', 'City:')
             kb.doModal()
             city = kb.getText()
-            
             log('country/city: %s/%s' % (country, city) )         
-            
             settings.setSetting('location_method', 'country_city')
             settings.setSetting('country',country)
             settings.setSetting('city',city)
-            
             log('done with settings')
-        
         else:
             AdditionalParams.append(param)
-
     passDataToSkin('SimilarArtists', None)
     passDataToSkin('MusicEvents', None)
 
     for info in infos:
         if info == 'similarartistsinlibrary':
+            log("starting similarartistinlibrary: Artist_mbid:")
+            log(Artist_mbid)
             artists = GetSimilarInLibrary(Artist_mbid)
+            log("results in")
+            log(artists)
             passDataToSkin('SimilarArtistsInLibrary', artists)
-        
         elif info == 'artistevents':
             events = GetEvents(Artist_mbid)
-            passDataToSkin('ArtistEvents', events)
-        
+            passDataToSkin('ArtistEvents', events)       
         elif info == 'nearevents':
             events = GetNearEvents()
             passDataToSkin('NearEvents', events)        
-        
         elif info == 'topartistsnearevents':
             artists = GetXBMCArtists()
-            
             events = GetArtistNearEvents(artists[0:15])
             passDataToSkin('TopArtistsNearEvents', events)
-            
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
         elif info == 'updatexbmcdatabasewithartistmbid':
@@ -182,6 +154,9 @@ class Main:
         log("version %s started" % __addonversion__ )
         self._init_vars()
         self._parse_argv()
+        test = GetXBMCArtists()
+        log("testus")
+        log(test)
         # run in backend if parameter was set
         if self.info:
             GetLastFMInfo()
