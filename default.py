@@ -212,7 +212,7 @@ class Main:
         self.previoussong = ""
         self._create_musicvideo_list
         while not self._stop:
-            if xbmc.getCondVisibility("Container.Content(artists)") or xbmc.getCondVisibility("Container.Content(albums)")or xbmc.getCondVisibility("Container.Content(movies)"):
+            if xbmc.getCondVisibility("Container.Content(artists) | Container.Content(albums) | Container.Content(movies) | Container.Content(sets)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
@@ -263,7 +263,7 @@ class Main:
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('songs'):
                         self._set_album_properties(json_query)
-                elif (xbmc.getCondVisibility('Container.Content(movies)') and xbmc.getCondVisibility('ListItem.IsFolder')) or self.type == "set":
+                elif xbmc.getCondVisibility('[Container.Content(movies) + ListItem.IsFolder] | Container.Content(sets)') or self.type == "set":
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country", "year" ], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)

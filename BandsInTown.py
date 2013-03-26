@@ -8,7 +8,7 @@ bandsintown_apikey = 'xbmc_test'
 def HandleResult(results):
     events = []
     for event in results:
-        if event['datetime']:
+        try:
             date = event['datetime']
             date = date.replace("T", " - ").replace(":00", "",1)
             venue = event['venue']
@@ -21,9 +21,10 @@ def HandleResult(results):
             for art in artists:
                 my_arts += ' / '
                 my_arts += art['name']
-        my_arts = my_arts.replace(" / ", "",1)        
-        event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts  }
-        events.append(event)
+            my_arts = my_arts.replace(" / ", "",1)        
+            event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts  }
+            events.append(event)
+        except: pass
     return events
 
 def GetEvents(id):
