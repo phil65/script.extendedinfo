@@ -1,5 +1,5 @@
 import sys
-import os, time, re
+import os, time, datetime, re, random
 import urllib
 import xml.dom.minidom
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
@@ -44,16 +44,29 @@ def GetXBMCArtists():
             artist = {"name": item['label'], "xbmc_id": item['artistid'], "mbid": item['musicbrainzartistid'] , "thumb": item['thumbnail'] }
             artists.append(artist)
     return artists
+
+def GetXKCDInfo():
+    settings = xbmcaddon.Addon(id='script.extendedinfo')
+    for i in range(0,10):
+        
+        url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
+        response = GetStringFromUrl(url)
+        log(response)
+        results = simplejson.loads(response)
+        log(results)
+        wnd = xbmcgui.Window(Window)
+        wnd.setProperty('XKCD.%i.image' % i, results["img"])
+        log('XKCD.%i.image' % i)
+        log(results["img"])
+        wnd.setProperty('XKCD.%i.title' % i, results["title"])
+        wnd.setProperty('XKCD.%i.description' % i, results["alt"])
     
 def GetSimilarInLibrary(id):
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
          log('Last.fm didn\'t return proper response')
          return None
-    log("calling GETXBMCArtists() in GetSimilarInLibrary")
     xbmc_artists = GetXBMCArtists()
-    log("GETXBMCArtists() called")
-    log(xbmc_artists)
     artists = []
     start = time.clock()
     for (count, simi_artist) in enumerate(simi_artists):
@@ -137,7 +150,10 @@ def GetLastFMInfo():
     passDataToSkin('MusicEvents', None)
 
     for info in infos:
-        if info == 'similarartistsinlibrary':
+        if info == 'xkcd':
+            log("startin GetXKCDInfo")
+            GetXKCDInfo()              
+        elif info == 'similarartistsinlibrary':
             artists = GetSimilarInLibrary(Artist_mbid)
             passDataToSkin('SimilarArtistsInLibrary', artists)
         elif info == 'artistevents':
@@ -160,7 +176,6 @@ class Main:
         log("version %s started" % __addonversion__ )
         self._init_vars()
         self._parse_argv()
-        test = GetXBMCArtists()
         # run in backend if parameter was set
         if self.info:
             GetLastFMInfo()
@@ -249,34 +264,45 @@ class Main:
     def _set_details( self, dbid ):
         if dbid:
             try:
+                b = ""
                 if xbmc.getCondVisibility('Container.Content(artists)') or self.type == "artist":
+                    a = datetime.datetime.now()
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_response = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_response['result'].has_key('albums'):
                         self._set_artist_properties(json_response)
+                    b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
+                    a = datetime.datetime.now()
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "track", "duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('songs'):
                         self._set_album_properties(json_query)
+                    b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('[Container.Content(movies) + ListItem.IsFolder] | Container.Content(sets)') or self.type == "set":
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country", "year" ], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
+                    a = datetime.datetime.now()
+                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "file", "year", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country"], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
                         self._set_movie_properties(json_query)
+                    b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(songs)') or self.type == "songs":
+                    a = datetime.datetime.now()
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
                     if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
                         self._set_movie_properties(json_query)
+                    b = datetime.datetime.now() - a
+                if b:
+                    log('Total time needed to request: %s' % b)
             except Exception, e:
                 log(e)
             
@@ -337,7 +363,10 @@ class Main:
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
+            self.window.setProperty('Set.Movie.%d.Path' % count, self._media_path(item['file']))
+            self.window.setProperty('Set.Movie.%d.year' % count, str(item['year']))
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
+            self.window.setProperty('Set.Movie.%d.Art(discart)' % count, art.get('discart',''))
             self.window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
             self.window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
        #     self.window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
@@ -362,6 +391,25 @@ class Main:
         self.window.setProperty('Set.Movies.Count', str(json_query['result']['limits']['total']))
         self.cleared = False
   
+    def _media_path(self,path):
+        # Check for stacked movies
+        try:
+            path = os.path.split(path)[0].rsplit(' , ', 1)[1].replace(",,",",")
+        except:
+            path = os.path.split(path)[0]
+        # Fixes problems with rared movies and multipath
+        if path.startswith("rar://"):
+            path = [os.path.split(urllib.url2pathname(path.replace("rar://","")))[0]]
+        elif path.startswith("multipath://"):
+            temp_path = path.replace("multipath://","").split('%2f/')
+            path = []
+            for item in temp_path:
+                path.append(urllib.url2pathname(item))
+        else:
+            path = [path]
+        return path[0]
+
+
     def _clear_properties( self ):
         #todo
         self.cleared = False
