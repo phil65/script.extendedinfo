@@ -360,13 +360,15 @@ class Main:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))
             self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
+            self.window.setProperty('Set.Movie.%d.Plot' % count, item['plot'])
+            self.window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
             self.window.setProperty('Set.Movie.%d.Path' % count, self._media_path(item['file']))
             self.window.setProperty('Set.Movie.%d.Year' % count, str(item['year']))
+            self.window.setProperty('Set.Movie.%d.Duration' % count, str(item['runtime']/60))
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
             self.window.setProperty('Set.Movie.%d.Art(discart)' % count, art.get('discart',''))
             self.window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
             self.window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
-       #     self.window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
             if item['plotoutline']:
                 plot += "[B]" + item['label'] + " (" + str(item['year']) + ")[/B][CR]" + item['plotoutline'] + "[CR][CR]"
             else:
@@ -413,13 +415,17 @@ class Main:
         if not self.cleared:
             for i in range(1,50):
                 self.window.clearProperty('Artist.Album.%d.Title' % i)
+                self.window.clearProperty('Artist.Album.%d.Plot' % i)
+                self.window.clearProperty('Artist.Album.%d.PlotOutline' % i)
                 self.window.clearProperty('Artist.Album.%d.Year' % i)
+                self.window.clearProperty('Artist.Album.%d.Duration' % i)
                 self.window.clearProperty('Artist.Album.%d.Thumb' % i)
                 self.window.clearProperty('Artist.Album.%d.ID' % i)
                 self.window.clearProperty('Album.Song.%d.Title' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(clearlogo)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(fanart)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(poster)' % i)
+                self.window.clearProperty('Set.Movie.%d.Art(discart)' % i)
             self.window.clearProperty('Artist.Albums.Newest')   
             self.window.clearProperty('Artist.Albums.Oldest')   
             self.window.clearProperty('Artist.Albums.Count')   
