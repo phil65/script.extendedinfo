@@ -51,15 +51,11 @@ def GetXKCDInfo():
         
         url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
         response = GetStringFromUrl(url)
-        log(response)
         results = simplejson.loads(response)
-        log(results)
         wnd = xbmcgui.Window(Window)
-        wnd.setProperty('XKCD.%i.image' % i, results["img"])
-        log('XKCD.%i.image' % i)
-        log(results["img"])
-        wnd.setProperty('XKCD.%i.title' % i, results["title"])
-        wnd.setProperty('XKCD.%i.description' % i, results["alt"])
+        wnd.setProperty('XKCD.%i.Image' % i, results["img"])
+        wnd.setProperty('XKCD.%i.Title' % i, results["title"])
+        wnd.setProperty('XKCD.%i.Description' % i, results["alt"])
     
 def GetSimilarInLibrary(id):
     simi_artists = GetSimilarById(id)
@@ -362,6 +358,7 @@ class Main:
         plot = ""
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
+            self.window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))
             self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
             self.window.setProperty('Set.Movie.%d.Path' % count, self._media_path(item['file']))
             self.window.setProperty('Set.Movie.%d.Year' % count, str(item['year']))
