@@ -56,6 +56,16 @@ def GetXKCDInfo():
         wnd.setProperty('XKCD.%i.Image' % i, results["img"])
         wnd.setProperty('XKCD.%i.Title' % i, results["title"])
         wnd.setProperty('XKCD.%i.Description' % i, results["alt"])
+
+def GetCandHInfo():
+    url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=9b91d1900e14d1caff163aa6fa1b24bd&_render=json'
+    response = GetStringFromUrl(url)
+    log("response cyanide")
+    log(response)
+    results = simplejson.loads(response)
+    log(simplejson.dumps(response))
+    log(results)
+#too
     
 def GetSimilarInLibrary(id):
     simi_artists = GetSimilarById(id)
@@ -223,7 +233,16 @@ class Main:
         self.previoussong = ""
         self._create_musicvideo_list
         while not self._stop:
-            if xbmc.getCondVisibility("Container.Content(artists) | Container.Content(albums) | Container.Content(movies) | Container.Content(sets)"):
+            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + SubString(ListItem.Path,videodb://1/7/,left)"):
+                        self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
+                        xbmc.sleep(100)
+                    else:
+                        self._clear_properties()
+            elif xbmc.getCondVisibility("Container.Content(artists) | Container.Content(albums)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
