@@ -364,7 +364,7 @@ class Main:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
             self.window.setProperty('Set.Movie.%d.Path' % count, self._media_path(item['file']))
-            self.window.setProperty('Set.Movie.%d.year' % count, str(item['year']))
+            self.window.setProperty('Set.Movie.%d.Year' % count, str(item['year']))
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
             self.window.setProperty('Set.Movie.%d.Art(discart)' % count, art.get('discart',''))
             self.window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
