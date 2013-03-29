@@ -1,13 +1,8 @@
 import sys
 import os, time, datetime, re, random
 import urllib
-import xml.dom.minidom
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-from MusicBrainz import GetMusicBrainzIdFromNet, SetMusicBrainzIDsForAllArtists
-from BandsInTown import GetEvents, GetNearEvents
-from Lastfm import GetSimilarById
-from Utils import log, GetStringFromUrl, GetValue, GetAttribute, Notify
-#from jsonrpc_calls import retrieve_album_details, retrieve_artist_details, get_fanart_path, get_thumbnail_path
+from Utils import log, GetStringFromUrl
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -68,6 +63,7 @@ def GetCandHInfo():
 #too
     
 def GetSimilarInLibrary(id):
+    from Lastfm import GetSimilarById
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
          log('Last.fm didn\'t return proper response')
@@ -91,7 +87,6 @@ def GetSimilarInLibrary(id):
                 artists.append(xbmc_artist)
     finish = time.clock()
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
-    #Notify('Joining xbmc library and last.fm similar artists', 'took %f seconds)' % (finish - start))   
     return artists    
 
 def passDataToSkin(prefix, data):
@@ -127,6 +122,7 @@ def GetLastFMInfo():
         elif param.startswith('artistname='):
             ArtistName = arg[11:]
             # todo: look up local mbid first -->xbmcid for parameter
+            from MusicBrainz import GetMusicBrainzIdFromNet
             Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
         elif param.startswith('albumname='):
             AlbumName = arg[10:]
@@ -163,9 +159,11 @@ def GetLastFMInfo():
             artists = GetSimilarInLibrary(Artist_mbid)
             passDataToSkin('SimilarArtistsInLibrary', artists)
         elif info == 'artistevents':
+            from BandsInTown import GetEvents
             events = GetEvents(Artist_mbid)
             passDataToSkin('ArtistEvents', events)       
         elif info == 'nearevents':
+            from BandsInTown import GetNearEvents
             events = GetNearEvents()
             passDataToSkin('NearEvents', events)        
         elif info == 'topartistsnearevents':
@@ -173,8 +171,10 @@ def GetLastFMInfo():
             events = GetArtistNearEvents(artists[0:15])
             passDataToSkin('TopArtistsNearEvents', events)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
+            from MusicBrainz import SetMusicBrainzIDsForAllArtists
             SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
         elif info == 'updatexbmcdatabasewithartistmbid':
+            from MusicBrainz import SetMusicBrainzIDsForAllArtists
             SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
     
 class Main:
@@ -225,7 +225,7 @@ class Main:
                 path = item['file']
                 self.musicvideos.append((artist,title,path))
         log('musicvideos: %s' % self.musicvideos)
-        
+                  
     def run_backend(self):
         self._stop = False
         self.previousitem = ""
