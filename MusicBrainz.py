@@ -1,4 +1,4 @@
-import xbmc, xbmcgui, urllib, re, xml.dom.minidom, time
+import xbmc, urllib, xml.dom.minidom
 from Utils import log, GetStringFromUrl, GetValue, GetAttribute
 
 # def artist_musicbrainz_id( artist_id, artist_mbid ):
@@ -24,7 +24,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
         ret = GetStringFromUrl(url)
         if 'requests are exceeding the allowable rate limit' in ret:
             log('MusicBrainz limits amount of request per time - we must wait')
-            time.sleep(1)
+            xbmc.sleep(1000)
             tries = tries + 1
         else:
             gotit = True

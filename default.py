@@ -19,6 +19,9 @@ AlbumName = None
 TrackTitle = None
 AdditionalParams = []
 Window = 10000
+Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
+Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
+
 
 def log(txt):
     if isinstance(txt, str):
@@ -185,6 +188,10 @@ class Main:
         # run in backend if parameter was set
         if self.info:
             GetLastFMInfo()
+        elif self.exportsettings:
+            self._export_skinsettings()        
+        elif self.importsettings:
+            self._import_skinsettings()        
         elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
             xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,true,home)')
             self.run_backend()
@@ -212,6 +219,8 @@ class Main:
         self.backend = params.get("backend", False)
         self.type = params.get("type", False)
         self.info = params.get("info", False)
+        self.exportsettings = params.get("exportsettings", False)
+        self.importsettings = params.get("importsettings", False)
 
     def _create_musicvideo_list( self ):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
@@ -225,6 +234,71 @@ class Main:
                 path = item['file']
                 self.musicvideos.append((artist,title,path))
         log('musicvideos: %s' % self.musicvideos)
+                
+    def _export_skinsettings( self ):
+        import xbmcvfs
+        from xml.dom.minidom import parse
+        # Set path
+        self.guisettings_path = xbmc.translatePath( 'special://profile/guisettings.xml' ).decode("utf-8")
+        # Check to see if file exists
+        if xbmcvfs.exists( self.guisettings_path ):
+            log("guisettings.xml found")
+            self.doc = parse( self.guisettings_path )
+            skinsettings = self.doc.documentElement.getElementsByTagName( 'setting' )
+            newlist = []
+            for count, skinsetting in enumerate(skinsettings):
+                if skinsetting.childNodes:
+                    value = skinsetting.childNodes [ 0 ].nodeValue
+                else:
+                    value = ""
+                log(value)
+                if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
+                    newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
+            if not xbmcvfs.exists(Skin_Data_Path):
+                xbmcvfs.mkdir(Skin_Data_Path)
+            text_file_path = os.path.join( Skin_Data_Path, "backup.xml")
+            log("text_file_path:")
+            log(text_file_path)
+            text_file =  open(text_file_path, "w")
+            simplejson.dump(newlist,text_file)
+            text_file.close()
+            xbmc.executebuiltin( "Notification(Completed,Export successful)" )
+        else:
+            xbmc.executebuiltin( "Notification(Error,guisettings.xml not found)" )
+            log("guisettings.xml not found")
+        
+    def _import_skinsettings( self ):
+        import xbmcvfs
+        # Set path
+        self.backup_path = os.path.join( Skin_Data_Path, "backup.xml")
+        # Check to see if file exists
+        if xbmcvfs.exists( self.backup_path ):
+            log("backup.xml found")
+            with open(self.backup_path) as f: fc = simplejson.load(f)
+            progressDialog = xbmcgui.DialogProgress('Importing Skin Settings')
+            progressDialog.create('Importing Skin Settings')
+            xbmc.sleep(200)
+            for count, skinsetting in enumerate(fc):
+                if progressDialog.iscanceled():
+                    return
+                if skinsetting[1].startswith(xbmc.getSkinDir()):
+                    progressDialog.update( (count * 100) / len(fc)  , 'Updating: %s' % skinsetting[1])
+                    setting = skinsetting[1].replace(xbmc.getSkinDir() + ".","")
+                    if skinsetting[0] == "string":
+                        if skinsetting[2] <> "":
+                            xbmc.executebuiltin( "Skin.SetString(%s,%s)" % (setting,skinsetting[2]) )
+                        else:
+                            xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
+                    elif skinsetting[0] == "bool":
+                        if skinsetting[2] == "true":
+                            xbmc.executebuiltin( "Skin.SetBool(%s)" % setting )
+                        else:
+                            xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
+                xbmc.sleep(30)
+            xbmc.executebuiltin( "Notification(Completed,Import successful)" )
+
+        else:
+            log("backup.xml not found")
                   
     def run_backend(self):
         self._stop = False
