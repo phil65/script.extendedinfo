@@ -201,7 +201,7 @@ class Main:
         elif self.artistid and self.artistid > -1:
             self._set_details(self.artistid)
         # else clear old properties
-        else:
+        elif not len(sys.argv) >1:
             self._selection_dialog()
             
     def _selection_dialog(self):
