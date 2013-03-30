@@ -278,9 +278,9 @@ class Main:
             text_file =  open(text_file_path, "w")
             simplejson.dump(newlist,text_file)
             text_file.close()
-            xbmc.executebuiltin( "Notification(Completed,Export successful)" )
+            xbmc.executebuiltin( "Notification(%s,%s)" % (__language__(32005),__language__(32006)) )
         else:
-            xbmc.executebuiltin( "Notification(Error,guisettings.xml not found)" )
+            xbmc.executebuiltin( "Notification(%s,%s)" % (__language__(32007),__language__(32008)) )
             log("guisettings.xml not found")
         
     def _import_skinsettings( self ):
@@ -291,14 +291,14 @@ class Main:
         if xbmcvfs.exists( self.backup_path ):
             log("backup.xml found")
             with open(self.backup_path) as f: fc = simplejson.load(f)
-            progressDialog = xbmcgui.DialogProgress('Importing Skin Settings')
-            progressDialog.create('Importing Skin Settings')
+            progressDialog = xbmcgui.DialogProgress(__language__(32010))
+            progressDialog.create(__language__(32010))
             xbmc.sleep(200)
             for count, skinsetting in enumerate(fc):
                 if progressDialog.iscanceled():
                     return
                 if skinsetting[1].startswith(xbmc.getSkinDir()):
-                    progressDialog.update( (count * 100) / len(fc)  , 'Updating: %s' % skinsetting[1])
+                    progressDialog.update( (count * 100) / len(fc)  , __language__(32011) + ' %s' % skinsetting[1])
                     setting = skinsetting[1].replace(xbmc.getSkinDir() + ".","")
                     if skinsetting[0] == "string":
                         if skinsetting[2] <> "":
@@ -311,7 +311,7 @@ class Main:
                         else:
                             xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
                 xbmc.sleep(30)
-            xbmc.executebuiltin( "Notification(Completed,Import successful)" )
+            xbmc.executebuiltin( "Notification(%s,%s)"% (__language__(32005),__language__(32009)) )
 
         else:
             log("backup.xml not found")
@@ -420,7 +420,7 @@ class Main:
             self.window.setProperty('Artist.Album.%d.Title' % count, item['title'])
             self.window.setProperty('Artist.Album.%d.Year' % count, str(item['year']))
             self.window.setProperty('Artist.Album.%d.Thumb' % count, item['thumbnail'])
-            self.window.setProperty('Artist.Album.%d.ID' % count, str(item.get('albumid')))
+            self.window.setProperty('Artist.Album.%d.DBID' % count, str(item.get('albumid')))
             self.window.setProperty('Artist.Album.%d.Label' % count, item['albumlabel'])
             if item['playcount']:
                 playcount = playcount + item['playcount']

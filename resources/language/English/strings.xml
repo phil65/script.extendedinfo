@@ -4,4 +4,11 @@
 	<string id="32002">Import Skin Settings</string>
 	<string id="32003">Reset Skin Settings</string>
 	<string id="32004">Choose action</string>
+	<string id="32005">Completed</string>
+	<string id="32006">Export successful</string>
+	<string id="32007">Error</string>
+	<string id="32008">guisettings.xml not found</string>
+	<string id="32009">Import successful</string>
+	<string id="32010">Importing skin settings</string>
+	<string id="32011">Updating</string>
 </strings>
