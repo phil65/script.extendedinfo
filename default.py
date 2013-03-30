@@ -12,6 +12,7 @@ else:
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
+__language__     = __addon__.getLocalizedString
 
 infos = []
 Artist_mbid = None
@@ -61,6 +62,7 @@ def GetCandHInfo():
     log("response cyanide")
     log(response)
     results = simplejson.loads(response)
+    log("response cyanide")
     log(simplejson.dumps(response))
     log(results)
 #too
@@ -200,8 +202,22 @@ class Main:
             self._set_details(self.artistid)
         # else clear old properties
         else:
-            self._clear_properties()
+            self._selection_dialog()
             
+    def _selection_dialog(self):
+        modeselect= []
+        modeselect.append( __language__(32001) )
+        modeselect.append( __language__(32002) )
+        modeselect.append( __language__(32003) )
+        dialogSelection = xbmcgui.Dialog()
+        selection        = dialogSelection.select( __language__(32004), modeselect ) 
+        if selection == 0:
+            self._export_skinsettings()
+        elif selection == 1:
+            self._import_skinsettings()
+        elif selection == 2:
+            xbmc.executebuiltin("Skin.ResetSettings")
+
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
