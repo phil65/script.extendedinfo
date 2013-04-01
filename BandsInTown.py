@@ -27,8 +27,8 @@ def HandleResult(results):
         except: pass
     return events
 
-def GetEvents(id):
-    url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
+def GetEvents(id): # converted to api 2.0
+    url = 'http://api.bandsintown.com/artists/mbid_%s/events.json?api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
