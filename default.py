@@ -59,13 +59,17 @@ def GetXKCDInfo():
 def GetCandHInfo():
     url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=9b91d1900e14d1caff163aa6fa1b24bd&_render=json'
     response = GetStringFromUrl(url)
-    log("response cyanide")
-    log(response)
     results = simplejson.loads(response)
-    log("response cyanide")
-    log(simplejson.dumps(response))
-    log(results)
-#too
+    count = 1
+    for item in results["value"]["items"]:
+        log(item)
+        matches = re.search('src="([^"]+)"',str(item["description"]))
+        if matches:
+            wnd = xbmcgui.Window(Window)
+            wnd.setProperty('CyanideHappiness.%i.Image' % count, matches.group(1))
+            wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
+            log(item["title"])
+            count += 1
     
 def GetSimilarInLibrary(id):
     from Lastfm import GetSimilarById
@@ -365,7 +369,7 @@ class Main:
                 self._clear_properties()
                 xbmc.executebuiltin('ClearProperty(extendedinfo_backend_running,home)')
                 self._stop = True
-
+                
     def _set_details( self, dbid ):
         if dbid:
             try:
