@@ -47,29 +47,36 @@ def GetXBMCArtists():
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     for i in range(0,10):
-        
-        url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        wnd = xbmcgui.Window(Window)
-        wnd.setProperty('XKCD.%i.Image' % i, results["img"])
-        wnd.setProperty('XKCD.%i.Title' % i, results["title"])
-        wnd.setProperty('XKCD.%i.Description' % i, results["alt"])
+        try:
+            url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
+            response = GetStringFromUrl(url)
+            results = simplejson.loads(response)
+            wnd = xbmcgui.Window(Window)
+            wnd.setProperty('XKCD.%i.Image' % i, results["img"])
+            wnd.setProperty('XKCD.%i.Title' % i, results["title"])
+            wnd.setProperty('XKCD.%i.Description' % i, results["alt"])
+        except:
+            log("Error when setting XKCD info")
 
 def GetCandHInfo():
-    url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=9b91d1900e14d1caff163aa6fa1b24bd&_render=json'
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
+    results=[]
+    try:
+        url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=9b91d1900e14d1caff163aa6fa1b24bd&_render=json'
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching CandH data from net")
     count = 1
-    for item in results["value"]["items"]:
-        log(item)
-        matches = re.search('src="([^"]+)"',str(item["description"]))
-        if matches:
-            wnd = xbmcgui.Window(Window)
-            wnd.setProperty('CyanideHappiness.%i.Image' % count, matches.group(1))
-            wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-            log(item["title"])
-            count += 1
+    if results:
+        for item in results["value"]["items"]:
+            log(item)
+            matches = re.search('src="([^"]+)"',str(item["description"]))
+            if matches:
+                wnd = xbmcgui.Window(Window)
+                wnd.setProperty('CyanideHappiness.%i.Image' % count, matches.group(1))
+                wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
+                log(item["title"])
+                count += 1
     
 def GetSimilarInLibrary(id):
     from Lastfm import GetSimilarById

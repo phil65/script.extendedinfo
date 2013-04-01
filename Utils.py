@@ -4,11 +4,13 @@ def log(msg):
     print ' >> script.extendedinfo: %s' % str(msg)
     
 def GetStringFromUrl(encurl):
-    
-    f = urllib.urlopen(  encurl)
-    doc = f.read()
-    f.close()
-    
+    doc = ""
+    try: 
+        f = urllib.urlopen(  encurl)
+        doc = f.read()
+        f.close()
+    except:
+        log("could not get data from %s" % encurl)
     return str(doc)
 
 def GetValue(node, tag):
