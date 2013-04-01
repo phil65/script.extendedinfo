@@ -146,15 +146,15 @@ def GetLastFMInfo():
             TrackTitle = arg[11:]
         elif param.startswith('window='):
             Window = int(arg[7:])
-        elif param.startswith('settuplocation'):
+        elif param.startswith('setuplocation'):
             settings = xbmcaddon.Addon(id='script.extendedinfo')
             country = settings.getSetting('country')
             city = settings.getSetting('city')
             log('stored country/city: %s/%s' % (country, city) )  
-            kb = xbmc.Keyboard('', 'Country:')
+            kb = xbmc.Keyboard('', __language__(32013) + ":")
             kb.doModal()
             country = kb.getText()
-            kb = xbmc.Keyboard('', 'City:')
+            kb = xbmc.Keyboard('', __language__(32012) + ":")
             kb.doModal()
             city = kb.getText()
             log('country/city: %s/%s' % (country, city) )         
