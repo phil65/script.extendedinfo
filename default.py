@@ -163,7 +163,10 @@ def GetLastFMInfo():
     for info in infos:
         if info == 'xkcd':
             log("startin GetXKCDInfo")
-            GetXKCDInfo()              
+            GetXKCDInfo()
+        elif info == 'cyanide':
+            log("startin GetCandHInfo")
+            GetCandHInfo()         
         elif info == 'similarartistsinlibrary':
             artists = GetSimilarInLibrary(Artist_mbid)
             passDataToSkin('SimilarArtistsInLibrary', artists)
