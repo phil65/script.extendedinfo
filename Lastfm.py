@@ -5,9 +5,13 @@ lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
 
 def GetSimilarById(m_id):
     url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
-    ret = GetStringFromUrl(url)
-    curXML = xml.dom.minidom.parseString(ret)
-    curXMLs = curXML.getElementsByTagName('lfm')
+    try:
+        ret = GetStringFromUrl(url)
+        curXML = xml.dom.minidom.parseString(ret)
+        curXMLs = curXML.getElementsByTagName('lfm')
+    except:
+        log("error when getting info from LastFM")
+        return None
     if len(curXMLs) > 0:
         curXML = curXMLs[0]
     else:

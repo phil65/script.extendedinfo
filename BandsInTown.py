@@ -28,9 +28,12 @@ def HandleResult(results):
     return events
 
 def GetEvents(id):
-    url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
-    response = GetStringFromUrl(url)
-    results = json.loads(response)
+    try:
+        url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+    except:
+        log("Error when finding artist-related events")
     return HandleResult(results)
 
 def GetNearEvents():
@@ -39,8 +42,11 @@ def GetNearEvents():
     city = 'Wroclaw' #settings.getSetting('city')
     url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&api_version=2.0&app_id=%s' % (bandsintown_apikey)
     log('request: %s' % url)
-    response = GetStringFromUrl(url)
-    results = json.loads(response)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+    except:
+        results = []
     return HandleResult(results)
 
 def GetArtistNearEvents(Artists):
@@ -52,6 +58,9 @@ def GetArtistNearEvents(Artists):
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
     log('request: %s' % url)
-    response = GetStringFromUrl(url)
-    results = json.loads(response)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+    except:
+        log("error when getting artist data from bandsintown")
     return HandleResult(results)
