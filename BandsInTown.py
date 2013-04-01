@@ -50,7 +50,6 @@ def GetArtistNearEvents(Artists):
         if len(ArtistStr) > 0:
              ArtistStr = ArtistStr + '&'
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
-    Artists
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
     log('request: %s' % url)
     response = GetStringFromUrl(url)
