@@ -365,6 +365,8 @@ class Main:
                     if self.selecteditem in str(movie[comparator]):
                         self._set_detail_properties(movie,count)
                         count +=1
+                    if count > 19:
+                        break
             else:
                 self._clear_properties()
         xbmc.sleep(100)        
@@ -428,10 +430,11 @@ class Main:
             else:
                 self._clear_properties()
                 xbmc.sleep(1000)
-            xbmc.sleep(100)
             if xbmc.getCondVisibility("!Window.IsActive(musiclibrary) + !Window.IsActive(videos)"):
+                xbmc.sleep(500)               
+            xbmc.sleep(100)
+            if xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
                 self._clear_properties()
-                xbmc.executebuiltin('ClearProperty(extendedinfo_backend_running,home)')
                 self._stop = True
                 
     def _set_details( self, dbid ):
@@ -546,7 +549,9 @@ class Main:
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
             self.window.setProperty('Set.Movie.%d.Art(discart)' % count, art.get('discart',''))
             self.window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
+            self.window.setProperty('Detail.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
             self.window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
+            self.window.setProperty('Detail.Movie.%d.Art(poster)' % count, art.get('poster',''))
             if item['plotoutline']:
                 plot += "[B]" + item['label'] + " (" + str(item['year']) + ")[/B][CR]" + item['plotoutline'] + "[CR][CR]"
             else:
@@ -608,6 +613,8 @@ class Main:
                 self.window.clearProperty('Set.Movie.%d.Art(poster)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(discart)' % i)
                 self.window.clearProperty('Detail.Movie.%d.Art(poster)' % i)
+                self.window.clearProperty('Detail.Movie.%d.Art(fanart)' % i)
+                self.window.clearProperty('Detail.Movie.%d.Art(Path)' % i)
             self.window.clearProperty('Album.Songs.TrackList')   
             self.window.clearProperty('Album.Songs.Discs')   
             self.window.clearProperty('Artist.Albums.Newest')   
