@@ -1,8 +1,5 @@
 import urllib, xml.dom.minidom, xbmc
-
-def log(msg):
-    print ' >> script.extendedinfo: %s' % str(msg)
-    
+  
 def GetStringFromUrl(encurl):
     doc = ""
     try: 

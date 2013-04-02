@@ -2,7 +2,7 @@ import sys
 import os, time, datetime, re, random
 import urllib
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-from Utils import log, GetStringFromUrl
+from Utils import GetStringFromUrl
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -68,15 +68,28 @@ def GetCandHInfo():
         log("Error when fetching CandH data from net")
     count = 1
     if results:
+        wnd = xbmcgui.Window(Window)
         for item in results["value"]["items"]:
-            log(item)
             matches = re.search('src="([^"]+)"',str(item["description"]))
             if matches:
-                wnd = xbmcgui.Window(Window)
                 wnd.setProperty('CyanideHappiness.%i.Image' % count, matches.group(1))
                 wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-                log(item["title"])
                 count += 1
+                
+def GetFlickrImages():
+    results=[]
+    try:
+        url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching Flickr data from net")
+    count = 1
+    if results:
+        wnd = xbmcgui.Window(Window)
+        for item in results["value"]["items"]:
+            wnd.setProperty('Flickr.%i.Background' % count, item["link"])
+            count += 1
     
 def GetSimilarInLibrary(id):
     from Lastfm import GetSimilarById
@@ -171,6 +184,8 @@ def GetLastFMInfo():
         if info == 'xkcd':
             log("startin GetXKCDInfo")
             GetXKCDInfo()
+        elif info == 'flickr':
+            GetFlickrImages()
         elif info == 'cyanide':
             log("startin GetCandHInfo")
             GetCandHInfo()
@@ -300,7 +315,6 @@ class Main:
                     value = skinsetting.childNodes [ 0 ].nodeValue
                 else:
                     value = ""
-                log(value)
                 if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
                     newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
             if not xbmcvfs.exists(Skin_Data_Path):
