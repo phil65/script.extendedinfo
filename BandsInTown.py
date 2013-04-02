@@ -36,7 +36,7 @@ def GetEvents(id): # converted to api 2.0
         log("Error when finding artist-related events from" + url)
     return HandleResult(results)
 
-def GetNearEvents():
+def GetNearEvents(): # not possible with api 2.0
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')
@@ -50,7 +50,7 @@ def GetNearEvents():
         log("error getting concert data from " + url)
     return HandleResult(results)
 
-def GetArtistNearEvents(Artists):
+def GetArtistNearEvents(Artists): # not possible with api 2.0
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     ArtistStr = ''
     for art in Artists:

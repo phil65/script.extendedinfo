@@ -236,6 +236,7 @@ class Main:
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
         self.musicvideos = []
+        self.movies = []
         self.window.clearProperty('SongToMusicVideo.Path')
 
     def _parse_argv(self):
@@ -264,6 +265,24 @@ class Main:
                 path = item['file']
                 self.musicvideos.append((artist,title,path))
         log('musicvideos: %s' % self.musicvideos)
+        
+    def _create_movie_list( self ):
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+            # iterate through the results
+            for item in json_response['result']['movies']:
+                year = item['year']
+                path = item['file']
+                art = item['art']
+                genre = item['genre']
+                director = item['director']
+                cast = item['cast']
+                studio = item['studio']
+                country = item['country']
+                tag = item['tag']
+                self.movies.append((year,path,art,genre,director,cast,studio,country,tag))
                 
     def _export_skinsettings( self ):
         import xbmcvfs
@@ -329,13 +348,19 @@ class Main:
 
         else:
             log("backup.xml not found")
-                  
+
+    def _set_detail_properties( self, movie,count):
+        self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
+        self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie[2].get('fanart',''))
+        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie[2].get('poster',''))       
+            
     def run_backend(self):
         self._stop = False
         self.previousitem = ""
         self.previousartist = ""
         self.previoussong = ""
-        self._create_musicvideo_list
+    #    self._create_musicvideo_list()
+        self._create_movie_list()
         while not self._stop:
             if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
@@ -355,6 +380,107 @@ class Main:
                         xbmc.sleep(100)
                     else:
                         self._clear_properties()
+            elif xbmc.getCondVisibility("Container.Content(years)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem == str(movie[0]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+            elif xbmc.getCondVisibility("Container.Content(genres)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[3]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+                
+            elif xbmc.getCondVisibility("Container.Content(directors)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[4]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+                
+            elif xbmc.getCondVisibility("Container.Content(actors)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[5]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+            elif xbmc.getCondVisibility("Container.Content(studios)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[6]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+            elif xbmc.getCondVisibility("Container.Content(countries)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[7]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+            elif xbmc.getCondVisibility("Container.Content(tags)"):
+                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+                if (self.selecteditem != self.previousitem):
+                    self.previousitem = self.selecteditem
+                    if xbmc.getInfoLabel("ListItem.Label") > -1:
+                        self._clear_properties()
+                        count = 1
+                        for movie in self.movies:
+                            if self.selecteditem in str(movie[8]):
+                                self._set_detail_properties(movie,count)
+                                count +=1
+                    else:
+                        self._clear_properties()
+                xbmc.sleep(100)
+                        
             elif xbmc.getCondVisibility('Container.Content(Songs)'):
                 # get artistname and songtitle of the selected item
                 artist = xbmc.getInfoLabel('ListItem.Artist')
@@ -417,7 +543,7 @@ class Main:
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
-                    if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
+                    if json_query.has_key('result') and json_query['result'].has_key('musicvideos'):
                         self._set_movie_properties(json_query)
                     b = datetime.datetime.now() - a
                 if b:
@@ -531,7 +657,6 @@ class Main:
             path = [path]
         return path[0]
 
-
     def _clear_properties( self ):
         #todo
         self.cleared = False
@@ -545,10 +670,14 @@ class Main:
                 self.window.clearProperty('Artist.Album.%d.Thumb' % i)
                 self.window.clearProperty('Artist.Album.%d.ID' % i)
                 self.window.clearProperty('Album.Song.%d.Title' % i)
+                self.window.clearProperty('Album.Song.%d.FileExtension' % i)   
                 self.window.clearProperty('Set.Movie.%d.Art(clearlogo)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(fanart)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(poster)' % i)
                 self.window.clearProperty('Set.Movie.%d.Art(discart)' % i)
+                self.window.clearProperty('Detail.Movie.%d.Art(poster)' % i)
+            self.window.clearProperty('Album.Songs.TrackList')   
+            self.window.clearProperty('Album.Songs.Discs')   
             self.window.clearProperty('Artist.Albums.Newest')   
             self.window.clearProperty('Artist.Albums.Oldest')   
             self.window.clearProperty('Artist.Albums.Count')   
