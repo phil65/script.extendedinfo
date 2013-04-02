@@ -173,7 +173,7 @@ def GetLastFMInfo():
             GetXKCDInfo()
         elif info == 'cyanide':
             log("startin GetCandHInfo")
-            GetCandHInfo()         
+            GetCandHInfo()
         elif info == 'similarartistsinlibrary':
             artists = GetSimilarInLibrary(Artist_mbid)
             passDataToSkin('SimilarArtistsInLibrary', artists)
@@ -352,8 +352,23 @@ class Main:
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
         self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie[2].get('fanart',''))
-        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie[2].get('poster',''))       
-            
+        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie[2].get('poster',''))      
+
+    def _detail_selector( self, comparator):
+        self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
+        if (self.selecteditem != self.previousitem):
+            self.previousitem = self.selecteditem
+            if xbmc.getCondVisibility("!Stringcompare(ListItem.Label,..)"):
+                self._clear_properties()
+                count = 1
+                for movie in self.movies:
+                    if self.selecteditem in str(movie[comparator]):
+                        self._set_detail_properties(movie,count)
+                        count +=1
+            else:
+                self._clear_properties()
+        xbmc.sleep(100)        
+                        
     def run_backend(self):
         self._stop = False
         self.previousitem = ""
@@ -361,7 +376,7 @@ class Main:
         self.previoussong = ""
         self._create_musicvideo_list()
         self._create_movie_list()
-        while not self._stop:
+        while (not self._stop) and (not xbmc.abortRequested):
             if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
@@ -375,111 +390,25 @@ class Main:
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.DBID") > -1:
+                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID)"):
                         self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
                         xbmc.sleep(100)
                     else:
                         self._clear_properties()
             elif xbmc.getCondVisibility("Container.Content(years)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem == str(movie[0]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
+                self._detail_selector(0)
             elif xbmc.getCondVisibility("Container.Content(genres)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[3]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
-                
+                self._detail_selector(3)              
             elif xbmc.getCondVisibility("Container.Content(directors)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[4]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
+                self._detail_selector(4)
             elif xbmc.getCondVisibility("Container.Content(actors)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[5]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
+                self._detail_selector(5)
             elif xbmc.getCondVisibility("Container.Content(studios)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[6]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
+                self._detail_selector(6)
             elif xbmc.getCondVisibility("Container.Content(countries)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[7]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
+                self._detail_selector(7)
             elif xbmc.getCondVisibility("Container.Content(tags)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getInfoLabel("ListItem.Label") > -1:
-                        self._clear_properties()
-                        count = 1
-                        for movie in self.movies:
-                            if self.selecteditem in str(movie[8]):
-                                self._set_detail_properties(movie,count)
-                                count +=1
-                    else:
-                        self._clear_properties()
-                xbmc.sleep(100)
-                        
+                self._detail_selector(8)                       
             elif xbmc.getCondVisibility('Container.Content(Songs)'):
                 # get artistname and songtitle of the selected item
                 artist = xbmc.getInfoLabel('ListItem.Artist')
@@ -603,6 +532,7 @@ class Main:
         genre = []
         country = []
         studio = []
+        years = []
         plot = ""
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
@@ -628,6 +558,8 @@ class Main:
             if item.get( "genre" ): genre += [ g for g in item[ "genre" ] if g and g not in genre ]
             if item.get( "country" ): country += [ c for c in item[ "country" ] if c and c not in country ]
             if item.get( "studio" ): studio += [ s for s in item[ "studio" ] if s and s not in studio ]
+        #    years += [ str(item['year']) ]
+            years.append(str(item['year']))
         self.window.setProperty('Set.Movies.Plot', plot)
         self.window.setProperty('Set.Movies.Runtime', str(runtime/60))
         self.window.setProperty('Set.Movies.Writer', " / ".join( writer ))
@@ -635,6 +567,7 @@ class Main:
         self.window.setProperty('Set.Movies.Genre', " / ".join( genre ))
         self.window.setProperty('Set.Movies.Country', " / ".join( country ))
         self.window.setProperty('Set.Movies.Studio', " / ".join( studio ))
+        self.window.setProperty('Set.Movies.Years', " / ".join( years ))
         self.window.setProperty('Set.Movies.Count', str(json_query['result']['limits']['total']))
         self.cleared = False
   
@@ -689,6 +622,7 @@ class Main:
             self.window.clearProperty('Set.Movies.Writer')   
             self.window.clearProperty('Set.Movies.Director')   
             self.window.clearProperty('Set.Movies.Genre')   
+            self.window.clearProperty('Set.Movies.Years')   
             self.window.clearProperty('Set.Movies.Count')   
             self.cleared = True
 
