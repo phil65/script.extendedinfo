@@ -359,7 +359,7 @@ class Main:
         self.previousitem = ""
         self.previousartist = ""
         self.previoussong = ""
-    #    self._create_musicvideo_list()
+        self._create_musicvideo_list()
         self._create_movie_list()
         while not self._stop:
             if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
@@ -423,7 +423,6 @@ class Main:
                     else:
                         self._clear_properties()
                 xbmc.sleep(100)
-                
             elif xbmc.getCondVisibility("Container.Content(actors)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
                 if (self.selecteditem != self.previousitem):
