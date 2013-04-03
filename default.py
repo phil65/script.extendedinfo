@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime, re, random
 import urllib
-import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
 from Utils import GetStringFromUrl
 if sys.version_info < (2, 7):
     import simplejson
@@ -222,7 +222,11 @@ class Main:
         elif self.exportsettings:
             self._export_skinsettings()        
         elif self.importsettings:
-            self._import_skinsettings()        
+            self._import_skinsettings()
+        elif self.importextrathumbs:
+            self._addExtraThumbs()
+        elif self.importextrafanart:
+            self._addExtraFanart()
         elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
             xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,true,home)')
             self.run_backend()
@@ -238,6 +242,8 @@ class Main:
         modeselect.append( __language__(32001) )
         modeselect.append( __language__(32002) )
         modeselect.append( __language__(32003) )
+        modeselect.append( __language__(32014) )
+        modeselect.append( __language__(32015) )
         dialogSelection = xbmcgui.Dialog()
         selection        = dialogSelection.select( __language__(32004), modeselect ) 
         if selection == 0:
@@ -246,7 +252,11 @@ class Main:
             self._import_skinsettings()
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
-
+        elif selection == 3:
+            self._addExtraThumbs()
+        elif selection == 4:
+            self._addExtraFanart()
+            
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
@@ -267,6 +277,8 @@ class Main:
         self.info = params.get("info", False)
         self.exportsettings = params.get("exportsettings", False)
         self.importsettings = params.get("importsettings", False)
+        self.importextrathumbs = params.get("importextrathumbs", False)
+        self.importextrafanart = params.get("importextrafanart", False)
 
     def _create_musicvideo_list( self ):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
@@ -298,6 +310,51 @@ class Main:
                 country = item['country']
                 tag = item['tag']
                 self.movies.append((year,path,art,genre,director,cast,studio,country,tag))
+                
+                
+    def _addExtraThumbs( self ):
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+            # iterate through the results
+            progressDialog = xbmcgui.DialogProgress(__language__(32016))
+            progressDialog.create(__language__(32016))
+            for count,item in enumerate(json_response['result']['movies']):
+                if progressDialog.iscanceled():
+                    return
+                for i in range (1,5):
+                    progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: Extrathumb %i' % (item["label"],i))
+                    if progressDialog.iscanceled():
+                        return
+                    path= self._media_path(item['file']).encode("utf-8") + "/extrathumbs/thumb" + str(i) + ".jpg"
+                    if xbmcvfs.exists(path) and item['art'].get('extrathumb%i' % i,'') == "" :
+                        xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": { "movieid": %i, "art": { "extrathumb%i": "%s" }}, "id": 1 }' %( item.get('movieid'),i,path))
+                        
+                        
+    def _addExtraFanart( self ):
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+            # iterate through the results
+            progressDialog = xbmcgui.DialogProgress(__language__(32016))
+            progressDialog.create(__language__(32016))
+            for count,item in enumerate(json_response['result']['movies']):
+                if progressDialog.iscanceled():
+                    return
+                path= self._media_path(item['file']).encode("utf-8") + "/extrafanart/"
+                file_list = xbmcvfs.listdir(path)[1]
+                log(file_list)
+                
+                for i,file in enumerate (file_list):
+                    progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: ExtraFanart %i' % (item["label"],i))
+                    if progressDialog.iscanceled():
+                        return
+                    file_path =  path + "/" + file
+                    log(file_path)
+                    if xbmcvfs.exists(file_path) and item['art'].get('extrafanart%i' % i,'') == "" :
+                        xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.SetMovieDetails", "params": { "movieid": %i, "art": { "extrafanart%i": "%s" }}, "id": 1 }' %( item.get('movieid'),i,file_path))
                 
     def _export_skinsettings( self ):
         import xbmcvfs
