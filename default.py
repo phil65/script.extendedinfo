@@ -328,6 +328,8 @@ class Main:
                 log(file_list)
                 
                 for i,file in enumerate (file_list):
+                    if i > 19:
+                        break
                     progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i))
                     if progressDialog.iscanceled():
                         return
