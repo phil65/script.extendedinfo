@@ -2,13 +2,16 @@ import urllib, xml.dom.minidom, xbmc
   
 def GetStringFromUrl(encurl):
     doc = ""
-    try: 
-        f = urllib.urlopen(  encurl)
-        doc = f.read()
-        f.close()
-    except:
-        log("could not get data from %s" % encurl)
-    return str(doc)
+    succeed = 0
+    while succeed < 5:
+        try: 
+            f = urllib.urlopen(  encurl)
+            doc = f.read()
+            f.close()
+            return str(doc)
+        except:
+            log("could not get data from %s" % encurl)
+            succeed = succeed + 1
 
 def GetValue(node, tag):
     v = node.getElementsByTagName(tag)
