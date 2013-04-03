@@ -59,22 +59,25 @@ def GetXKCDInfo():
             log("Error when setting XKCD info")
 
 def GetCandHInfo():
-    results=[]
-    try:
-        url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=9b91d1900e14d1caff163aa6fa1b24bd&_render=json'
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching CandH data from net")
-    count = 1
-    if results:
-        wnd = xbmcgui.Window(Window)
-        for item in results["value"]["items"]:
-            matches = re.search('src="([^"]+)"',str(item["description"]))
+    for i in range(1,10):
+        try:
+            url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
+            response = GetStringFromUrl(url)
+        except:
+            log("Error when fetching CandH data from net")
+        count = 1
+        if response:
+            log(response)
+            wnd = xbmcgui.Window(Window)
+            regex = ur'src="([^"]+)"'
+            matches = re.findall(regex, response)
             if matches:
-                wnd.setProperty('CyanideHappiness.%i.Image' % count, matches.group(1))
-                wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-                count += 1
+                for item in matches:
+                    if item.startswith('http://www.explosm.net/db/files/Comics/'):
+                        wnd.setProperty('CyanideHappiness.%i.Image' % i, item)     
+             #   
+              #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
+             #   count += 1
                 
 def GetFlickrImages():
     results=[]
