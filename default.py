@@ -324,9 +324,7 @@ class Main:
                 if progressDialog.iscanceled():
                     return
                 path= self._media_path(item['file']).encode("utf-8") + "/" + type + "/"
-                file_list = xbmcvfs.listdir(path)[1]
-                log(file_list)
-                
+                file_list = xbmcvfs.listdir(path)[1]            
                 for i,file in enumerate (file_list):
                     if i > 19:
                         break
