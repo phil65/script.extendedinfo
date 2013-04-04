@@ -387,9 +387,10 @@ class Main:
             text_file =  open(text_file_path, "w")
             simplejson.dump(newlist,text_file)
             text_file.close()
-            xbmc.executebuiltin( "Notification(%s,%s)" % (__language__(32005),__language__(32006)) )
+            xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
+
         else:
-            xbmc.executebuiltin( "Notification(%s,%s)" % (__language__(32007),__language__(32008)) )
+            xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
             log("guisettings.xml not found")
         
     def _import_skinsettings( self ):
@@ -420,7 +421,7 @@ class Main:
                         else:
                             xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
                 xbmc.sleep(30)
-            xbmc.executebuiltin( "Notification(%s,%s)"% (__language__(32005),__language__(32009)) )
+            xbmcgui.Dialog().ok(__language__(32005),__language__(32009))
 
         else:
             log("backup not found")
@@ -487,7 +488,7 @@ class Main:
                 self._detail_selector(7)
             elif xbmc.getCondVisibility("Container.Content(tags)"):
                 self._detail_selector(8)                       
-            elif xbmc.getCondVisibility('Container.Content(Songs)'):
+            elif xbmc.getCondVisibility('Container.Content(songs)'):
                 # get artistname and songtitle of the selected item
                 artist = xbmc.getInfoLabel('ListItem.Artist')
                 song = xbmc.getInfoLabel('ListItem.Title')
