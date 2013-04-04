@@ -381,7 +381,7 @@ class Main:
                     newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
             if not xbmcvfs.exists(Skin_Data_Path):
                 xbmcvfs.mkdir(Skin_Data_Path)
-            text_file_path = get_browse_dialog() + "backup.txt"
+            text_file_path = get_browse_dialog() + xbmc.getSkinDir() +".backup.txt"
             log("text_file_path:")
             log(text_file_path)
             text_file =  open(text_file_path, "w")
@@ -398,7 +398,7 @@ class Main:
         self.backup_path = get_browse_dialog(dlg_type=1)
         # Check to see if file exists
         if xbmcvfs.exists( self.backup_path ):
-            log("backup.xml found")
+            log("backup found")
             with open(self.backup_path) as f: fc = simplejson.load(f)
             progressDialog = xbmcgui.DialogProgress(__language__(32010))
             progressDialog.create(__language__(32010))
@@ -423,7 +423,7 @@ class Main:
             xbmc.executebuiltin( "Notification(%s,%s)"% (__language__(32005),__language__(32009)) )
 
         else:
-            log("backup.xml not found")
+            log("backup not found")
 
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
