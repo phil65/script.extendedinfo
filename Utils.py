@@ -1,5 +1,9 @@
-import urllib, xml.dom.minidom, xbmc
-  
+import urllib, xml.dom.minidom, xbmc, xbmcaddon
+
+__addon__        = xbmcaddon.Addon()
+__addonid__      = __addon__.getAddonInfo('id')
+
+
 def GetStringFromUrl(encurl):
     doc = ""
     succeed = 0
@@ -22,6 +26,12 @@ def GetValue(node, tag):
         return '-'
     
     return unicode(v[0].childNodes[0].data)
+    
+def log(txt):
+    if isinstance(txt, str):
+        txt = txt.decode("utf-8")
+    message = u'%s: %s' % (__addonid__, txt)
+    xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 def GetAttribute(node, attr):
     v = unicode(node.getAttribute(tag))

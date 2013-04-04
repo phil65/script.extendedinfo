@@ -1,5 +1,5 @@
 import xbmc, urllib, xml.dom.minidom
-from Utils import log, GetStringFromUrl, GetValue, GetAttribute
+from Utils import GetStringFromUrl, GetValue, GetAttribute, log
 
 # def artist_musicbrainz_id( artist_id, artist_mbid ):
     # artist_details = retrieve_artist_details( artist_id )

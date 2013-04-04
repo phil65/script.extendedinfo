@@ -2,7 +2,7 @@ import sys
 import os, time, datetime, re, random
 import urllib
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl
+from Utils import GetStringFromUrl,log
 if sys.version_info < (2, 7):
     import simplejson
 else:
