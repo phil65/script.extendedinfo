@@ -20,6 +20,8 @@ AlbumName = None
 TrackTitle = None
 AdditionalParams = []
 Window = 10000
+extrathumb_limit = 4
+extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
 
@@ -238,13 +240,13 @@ class Main:
         elif self.importsettings:
             self._import_skinsettings()
         elif self.importextrathumb:
-            self._AddArtToLibrary("extrathumb","Movie","extrathumbs",4)
+            self._AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit)
         elif self.importextrafanart:
-            self._AddArtToLibrary("extrafanart","Movie","extrafanart",10)
+            self._AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit)
    #     elif self.importextrathumbtv:
   #          self._AddArtToLibrary("extrathumb","TVShow","extrathumbs")
         elif self.importextrafanarttv:
-            self._AddArtToLibrary("extrafanart","TVShow","extrafanart",10)
+            self._AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit)
         elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
             xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,true,home)')
             self.run_backend()
@@ -273,13 +275,13 @@ class Main:
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
-            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs",4)
+            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
         elif selection == 4:
-            self._AddArtToLibrary("extrafanart","Movie", "extrafanart",10)
+            self._AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
    #     elif selection == 5:
     #        self._AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
         elif selection == 5:
-            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart",10)
+            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
             
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
@@ -351,15 +353,15 @@ class Main:
                 path= self._media_path(item['file']).encode("utf-8") + "/" + folder + "/"
                 file_list = xbmcvfs.listdir(path)[1]            
                 for i,file in enumerate (file_list):
-                    if i > limit:
+                    if i + 1 > limit:
                         break
-                    progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i))
+                    progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i + 1))
                     if progressDialog.iscanceled():
                         return
                     file_path =  path + "/" + file
                     log(file_path)
                     if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
-                        xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i , file_path))
+                        xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
     def _export_skinsettings( self ):
         import xbmcvfs
