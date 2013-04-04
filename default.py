@@ -381,19 +381,30 @@ class Main:
                     value = ""
                 if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
                     newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
-            if not xbmcvfs.exists(Skin_Data_Path):
-                xbmcvfs.mkdir(Skin_Data_Path)
-            text_file_path = get_browse_dialog() + xbmc.getSkinDir() +".backup.txt"
-            log("text_file_path:")
-            log(text_file_path)
-            text_file =  open(text_file_path, "w")
-            simplejson.dump(newlist,text_file)
-            text_file.close()
-            xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
-
+            if self._save_to_file(newlist,"backup"):
+                xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
         else:
             xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
             log("guisettings.xml not found")
+            
+            
+    def _save_to_file( self, content, suffix, path = "" ):
+        try:
+            if path == "":
+                text_file_path = get_browse_dialog() + xbmc.getSkinDir() +"." + suffix + ".txt"
+            else:
+                if not xbmcvfs.exists(path):
+                    xbmcvfs.mkdir(path)
+                text_file_path = path + xbmc.getSkinDir() +"." + suffix + ".txt"
+            log("text_file_path:")
+            log(text_file_path)
+            text_file =  open(text_file_path, "w")
+            simplejson.dump(content,text_file)
+            text_file.close()
+            return True
+        except Exception:
+            sys.exc_clear()
+            return False
         
     def _import_skinsettings( self ):
         import xbmcvfs
