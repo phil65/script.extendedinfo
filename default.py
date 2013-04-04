@@ -143,7 +143,18 @@ def passDataToSkin(prefix, data):
     # json_query = unicode(json_query, 'utf-8', errors='ignore')
     # json_response = simplejson.loads(json_query)
     # if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):       
-        
+
+def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
+    """ shows a browse dialog and returns a value
+        - 0 : ShowAndGetDirectory
+        - 1 : ShowAndGetFile
+        - 2 : ShowAndGetImage
+        - 3 : ShowAndGetWriteableDirectory
+    """
+    dialog = xbmcgui.Dialog()
+    value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
+    return value
+    
 def GetLastFMInfo():
     for arg in sys.argv:
         if arg == 'script.extendedinfo':
@@ -227,13 +238,13 @@ class Main:
         elif self.importsettings:
             self._import_skinsettings()
         elif self.importextrathumb:
-            self._AddArtToLibrary("extrathumb","Movie","extrathumbs")
+            self._AddArtToLibrary("extrathumb","Movie","extrathumbs",4)
         elif self.importextrafanart:
-            self._AddArtToLibrary("extrafanart","Movie","extrafanart")
+            self._AddArtToLibrary("extrafanart","Movie","extrafanart",10)
    #     elif self.importextrathumbtv:
   #          self._AddArtToLibrary("extrathumb","TVShow","extrathumbs")
         elif self.importextrafanarttv:
-            self._AddArtToLibrary("extrafanart","TVShow","extrafanart")
+            self._AddArtToLibrary("extrafanart","TVShow","extrafanart",10)
         elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
             xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,true,home)')
             self.run_backend()
@@ -262,13 +273,13 @@ class Main:
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
-            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs")
+            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs",4)
         elif selection == 4:
-            self._AddArtToLibrary("extrafanart","Movie", "extrafanart")
+            self._AddArtToLibrary("extrafanart","Movie", "extrafanart",10)
    #     elif selection == 5:
     #        self._AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
         elif selection == 5:
-            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart")
+            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart",10)
             
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
@@ -324,10 +335,9 @@ class Main:
                 studio = item['studio']
                 country = item['country']
                 tag = item['tag']
-                self.movies.append((year,path,art,genre,director,cast,studio,country,tag))
-                
+                self.movies.append((year,path,art,genre,director,cast,studio,country,tag))               
                                
-    def _AddArtToLibrary( self, type, media, folder ):
+    def _AddArtToLibrary( self, type, media, folder, limit ):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
@@ -341,7 +351,7 @@ class Main:
                 path= self._media_path(item['file']).encode("utf-8") + "/" + folder + "/"
                 file_list = xbmcvfs.listdir(path)[1]            
                 for i,file in enumerate (file_list):
-                    if i > 19:
+                    if i > limit:
                         break
                     progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i))
                     if progressDialog.iscanceled():
@@ -350,7 +360,7 @@ class Main:
                     log(file_path)
                     if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
                         xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i , file_path))
-                
+
     def _export_skinsettings( self ):
         import xbmcvfs
         from xml.dom.minidom import parse
@@ -371,7 +381,7 @@ class Main:
                     newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
             if not xbmcvfs.exists(Skin_Data_Path):
                 xbmcvfs.mkdir(Skin_Data_Path)
-            text_file_path = os.path.join( Skin_Data_Path, "backup.xml")
+            text_file_path = get_browse_dialog() + "backup.txt"
             log("text_file_path:")
             log(text_file_path)
             text_file =  open(text_file_path, "w")
@@ -385,7 +395,7 @@ class Main:
     def _import_skinsettings( self ):
         import xbmcvfs
         # Set path
-        self.backup_path = os.path.join( Skin_Data_Path, "backup.xml")
+        self.backup_path = get_browse_dialog(dlg_type=1)
         # Check to see if file exists
         if xbmcvfs.exists( self.backup_path ):
             log("backup.xml found")
