@@ -627,6 +627,8 @@ class Main:
         studio = []
         years = []
         plot = ""
+        title_list = ""
+        title_list += "[B]" + str(json_query['result']['setdetails']['limits']['total']) + " " + xbmc.getLocalizedString(20342) + "[/B][CR][I]"
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))
@@ -642,6 +644,7 @@ class Main:
             self.window.setProperty('Detail.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
             self.window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
             self.window.setProperty('Detail.Movie.%d.Art(poster)' % count, art.get('poster',''))
+            title_list += item['label'] + " (" + str(item['year']) + ")[CR]"            
             if item['plotoutline']:
                 plot += "[B]" + item['label'] + " (" + str(item['year']) + ")[/B][CR]" + item['plotoutline'] + "[CR][CR]"
             else:
@@ -656,6 +659,10 @@ class Main:
         #    years += [ str(item['year']) ]
             years.append(str(item['year']))
         self.window.setProperty('Set.Movies.Plot', plot)
+        if json_query['result']['setdetails']['limits']['total'] > 1:
+            self.window.setProperty('Set.Movies.ExtendedPlot', title_list + "[/I][CR]" + plot)
+        else:
+            self.window.setProperty('Set.Movies.ExtendedPlot', plot)        
         self.window.setProperty('Set.Movies.Runtime', str(runtime/60))
         self.window.setProperty('Set.Movies.Writer', " / ".join( writer ))
         self.window.setProperty('Set.Movies.Director', " / ".join( director ))
