@@ -99,7 +99,7 @@ def GetFlickrImages():
             count += 1
     
 def GetSimilarInLibrary(id):
-    from Lastfm import GetSimilarById
+    from OnlineMusicInfo import GetSimilarById
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
          log('Last.fm didn\'t return proper response')
@@ -211,11 +211,11 @@ def GetLastFMInfo():
             artists = GetSimilarInLibrary(Artist_mbid)
             passDataToSkin('SimilarArtistsInLibrary', artists)
         elif info == 'artistevents':
-            from BandsInTown import GetEvents
+            from OnlineMusicInfo import GetEvents
             events = GetEvents(Artist_mbid)
             passDataToSkin('ArtistEvents', events)       
         elif info == 'nearevents':
-            from BandsInTown import GetNearEvents
+            from OnlineMusicInfo import GetNearEvents
             events = GetNearEvents()
             passDataToSkin('NearEvents', events)        
         elif info == 'topartistsnearevents':
