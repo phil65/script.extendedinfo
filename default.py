@@ -722,6 +722,7 @@ class Main:
             self.window.clearProperty('Album.Songs.Duration')   
             self.window.clearProperty('Album.Songs.Count')   
             self.window.clearProperty('Set.Movies.Plot')   
+            self.window.clearProperty('Set.Movies.ExtendedPlot')   
             self.window.clearProperty('Set.Movies.Runtime')   
             self.window.clearProperty('Set.Movies.Writer')   
             self.window.clearProperty('Set.Movies.Director')   
