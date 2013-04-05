@@ -61,13 +61,13 @@ def GetXKCDInfo():
             log("Error when setting XKCD info")
 
 def GetCandHInfo():
-    for i in range(1,10):
+    count = 1
+    for i in range(1,30):
         try:
             url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
             response = GetStringFromUrl(url)
         except:
             log("Error when fetching CandH data from net")
-        count = 1
         if response:
             log(response)
             wnd = xbmcgui.Window(Window)
@@ -76,10 +76,12 @@ def GetCandHInfo():
             if matches:
                 for item in matches:
                     if item.startswith('http://www.explosm.net/db/files/Comics/'):
-                        wnd.setProperty('CyanideHappiness.%i.Image' % i, item)     
+                        wnd.setProperty('CyanideHappiness.%i.Image' % count, item)     
+                        count += 1
              #   
               #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-             #   count += 1
+                if count > 10:
+                    break
                 
 def GetFlickrImages():
     results=[]
