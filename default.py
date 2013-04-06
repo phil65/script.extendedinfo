@@ -125,14 +125,8 @@ def GetSimilarInLibrary(id):
     finish = time.clock()
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
-
-# def retrieve_artist_details( artist_id ):
-    # json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["musicbrainzartistid"], "artistid": %d}, "id": 1}' %artist_id)
-    # json_query = unicode(json_query, 'utf-8', errors='ignore')
-    # json_response = simplejson.loads(json_query)
-    # if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):       
     
-def GetLastFMInfo():
+def StartInfoActions():
     for info in infos:
         if info == 'xkcd':
             log("startin GetXKCDInfo")
@@ -172,7 +166,7 @@ class Main:
         self._parse_argv()
         # run in backend if parameter was set
         if self.info:
-            GetLastFMInfo()
+            StartInfoActions()
         elif self.exportsettings:
             export_skinsettings()        
         elif self.importsettings:
@@ -229,8 +223,7 @@ class Main:
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
-
-            
+           
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
@@ -257,6 +250,7 @@ class Main:
         self.importextrafanarttv = params.get("importextrafanarttv", False)
         self.importallartwork = params.get("importallartwork", False)
         for arg in sys.argv:
+            log(arg)
             if arg == 'script.extendedinfo':
                 continue
             param = arg.lower()
@@ -292,8 +286,7 @@ class Main:
             else:
                 AdditionalParams.append(param)
         passDataToSkin('SimilarArtists', None)
-        passDataToSkin('MusicEvents', None)
-        
+        passDataToSkin('MusicEvents', None)      
         
     def _create_musicvideo_list( self ):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
