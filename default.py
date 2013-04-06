@@ -13,8 +13,7 @@ __addonid__      = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
 __language__     = __addon__.getLocalizedString
 
-infos = []
-Artist_mbid = None
+
 AlbumName = None
 TrackTitle = None
 AdditionalParams = []
@@ -125,52 +124,19 @@ def GetSimilarInLibrary(id):
     finish = time.clock()
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
-    
-def StartInfoActions():
-    for info in infos:
-        if info == 'xkcd':
-            log("startin GetXKCDInfo")
-            GetXKCDInfo()
-        elif info == 'flickr':
-            GetFlickrImages()
-        elif info == 'cyanide':
-            log("startin GetCandHInfo")
-            GetCandHInfo()
-        elif info == 'similarartistsinlibrary':
-            artists = GetSimilarInLibrary(Artist_mbid)
-            passDataToSkin('SimilarArtistsInLibrary', artists)
-        elif info == 'artistevents':
-            from OnlineMusicInfo import GetEvents
-            events = GetEvents(Artist_mbid)
-            passDataToSkin('ArtistEvents', events)       
-        elif info == 'nearevents':
-            from OnlineMusicInfo import GetNearEvents
-            events = GetNearEvents()
-            passDataToSkin('NearEvents', events)        
-        elif info == 'topartistsnearevents':
-            artists = GetXBMCArtists()
-            events = GetArtistNearEvents(artists[0:15])
-            passDataToSkin('TopArtistsNearEvents', events)
-        elif info == 'updatexbmcdatabasewithartistmbidbg':
-            from MusicBrainz import SetMusicBrainzIDsForAllArtists
-            SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
-        elif info == 'updatexbmcdatabasewithartistmbid':
-            from MusicBrainz import SetMusicBrainzIDsForAllArtists
-            SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
-    
+        
 class Main:
     def __init__( self ):
         log("version %s started" % __addonversion__ )
         self._init_vars()
-    #    GetYoutubeVideos("http://pipes.yahoo.com/pipes/pipe.run?_id=232e2f480431b82a9288a72778e2f1d4&_render=json&youtubeid=fional88","News")
         self._parse_argv()
         # run in backend if parameter was set
         if self.info:
-            StartInfoActions()
+            self._StartInfoActions()
         elif self.exportsettings:
             export_skinsettings()        
         elif self.importsettings:
-            self._import_skinsettings()
+            import_skinsettings()
         elif self.importextrathumb:
             AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
         elif self.importextrafanart:
@@ -192,6 +158,40 @@ class Main:
         # else clear old properties
         elif not len(sys.argv) >1:
             self._selection_dialog()
+
+    def _StartInfoActions(self):
+        for info in self.infos:
+            if info == 'json':
+                GetYoutubeVideos(self.feed,self.prop_prefix)
+            elif info == 'xkcd':
+                log("startin GetXKCDInfo")
+                GetXKCDInfo()
+            elif info == 'flickr':
+                GetFlickrImages()
+            elif info == 'cyanide':
+                log("startin GetCandHInfo")
+                GetCandHInfo()
+            elif info == 'similarartistsinlibrary':
+                artists = GetSimilarInLibrary(self.Artist_mbid)
+                passDataToSkin('SimilarArtistsInLibrary', artists)
+            elif info == 'artistevents':
+                from OnlineMusicInfo import GetEvents
+                events = GetEvents(self.Artist_mbid)
+                passDataToSkin('ArtistEvents', events)       
+            elif info == 'nearevents':
+                from OnlineMusicInfo import GetNearEvents
+                events = GetNearEvents()
+                passDataToSkin('NearEvents', events)        
+            elif info == 'topartistsnearevents':
+                artists = GetXBMCArtists()
+                events = GetArtistNearEvents(artists[0:15])
+                passDataToSkin('TopArtistsNearEvents', events)
+            elif info == 'updatexbmcdatabasewithartistmbidbg':
+                from MusicBrainz import SetMusicBrainzIDsForAllArtists
+                SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
+            elif info == 'updatexbmcdatabasewithartistmbid':
+                from MusicBrainz import SetMusicBrainzIDsForAllArtists
+                SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             
     def _selection_dialog(self):
         modeselect= []
@@ -208,7 +208,7 @@ class Main:
         if selection == 0:
             export_skinsettings()
         elif selection == 1:
-            self._import_skinsettings()
+            import_skinsettings()
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
@@ -229,6 +229,10 @@ class Main:
         self.cleared = False
         self.musicvideos = []
         self.movies = []
+        self.infos = []
+        self.feed = None
+        self.prop_prefix = None
+        self.Artist_mbid = None
         self.window.clearProperty('SongToMusicVideo.Path')
 
     def _parse_argv(self):
@@ -255,12 +259,16 @@ class Main:
                 continue
             param = arg.lower()
             if param.startswith('info='):
-                infos.append(param[5:])
+                self.infos.append(param[5:])
+            elif param.startswith('feed='):
+                self.feed = param[5:]
+            elif param.startswith('prefix='):
+                self.prop_prefix = param[7:]
             elif param.startswith('artistname='):
                 ArtistName = arg[11:]
                 # todo: look up local mbid first -->xbmcid for parameter
                 from MusicBrainz import GetMusicBrainzIdFromNet
-                Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
+                self.Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
             elif param.startswith('albumname='):
                 AlbumName = arg[10:]
             elif param.startswith('tracktitle='):
@@ -319,39 +327,6 @@ class Main:
                 tag = item['tag']
                 self.movies.append((year,path,art,genre,director,cast,studio,country,tag))               
                                        
-    def _import_skinsettings( self ):
-        import xbmcvfs
-        # Set path
-        self.backup_path = get_browse_dialog(dlg_type=1)
-        # Check to see if file exists
-        if xbmcvfs.exists( self.backup_path ):
-            log("backup found")
-            with open(self.backup_path) as f: fc = simplejson.load(f)
-            progressDialog = xbmcgui.DialogProgress(__language__(32010))
-            progressDialog.create(__language__(32010))
-            xbmc.sleep(200)
-            for count, skinsetting in enumerate(fc):
-                if progressDialog.iscanceled():
-                    return
-                if skinsetting[1].startswith(xbmc.getSkinDir()):
-                    progressDialog.update( (count * 100) / len(fc)  , __language__(32011) + ' %s' % skinsetting[1])
-                    setting = skinsetting[1].replace(xbmc.getSkinDir() + ".","")
-                    if skinsetting[0] == "string":
-                        if skinsetting[2] <> "":
-                            xbmc.executebuiltin( "Skin.SetString(%s,%s)" % (setting,skinsetting[2]) )
-                        else:
-                            xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
-                    elif skinsetting[0] == "bool":
-                        if skinsetting[2] == "true":
-                            xbmc.executebuiltin( "Skin.SetBool(%s)" % setting )
-                        else:
-                            xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
-                xbmc.sleep(30)
-            xbmcgui.Dialog().ok(__language__(32005),__language__(32009))
-
-        else:
-            log("backup not found")
-
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
         self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie[2].get('fanart',''))

@@ -39,7 +39,37 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                 if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
-
+def import_skinsettings():
+    import xbmcvfs
+    # Set path
+    backup_path = get_browse_dialog(dlg_type=1)
+    # Check to see if file exists
+    if xbmcvfs.exists( backup_path ):
+        log("backup found")
+        with open(backup_path) as f: fc = simplejson.load(f)
+        progressDialog = xbmcgui.DialogProgress(__language__(32010))
+        progressDialog.create(__language__(32010))
+        xbmc.sleep(200)
+        for count, skinsetting in enumerate(fc):
+            if progressDialog.iscanceled():
+                return
+            if skinsetting[1].startswith(xbmc.getSkinDir()):
+                progressDialog.update( (count * 100) / len(fc)  , __language__(32011) + ' %s' % skinsetting[1])
+                setting = skinsetting[1].replace(xbmc.getSkinDir() + ".","")
+                if skinsetting[0] == "string":
+                    if skinsetting[2] <> "":
+                        xbmc.executebuiltin( "Skin.SetString(%s,%s)" % (setting,skinsetting[2]) )
+                    else:
+                        xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
+                elif skinsetting[0] == "bool":
+                    if skinsetting[2] == "true":
+                        xbmc.executebuiltin( "Skin.SetBool(%s)" % setting )
+                    else:
+                        xbmc.executebuiltin( "Skin.Reset(%s)" % setting )
+            xbmc.sleep(30)
+        xbmcgui.Dialog().ok(__language__(32005),__language__(32009))
+    else:
+        log("backup not found")
 
 def export_skinsettings():
     import xbmcvfs
@@ -157,7 +187,8 @@ def save_to_file(content, suffix, path = "" ):
         log(e)
         return False
 
-def ConvertYoutubeURL(string):        
+def ConvertYoutubeURL(string):
+    import re
     if 'youtube.com/v' in string:
         vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL )
         for id in vid_ids:
