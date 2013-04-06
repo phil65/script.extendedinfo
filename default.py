@@ -28,7 +28,6 @@ Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/
 def GetXBMCArtists():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
-    log(json_query)
     json_query = simplejson.loads(json_query)
     artists = []        
     if json_query.has_key('result') and json_query['result'].has_key('artists'):
@@ -62,7 +61,6 @@ def GetCandHInfo():
         except:
             log("Error when fetching CandH data from net")
         if response:
-            log(response)
             wnd = xbmcgui.Window(Window)
             regex = ur'src="([^"]+)"'
             matches = re.findall(regex, response)
@@ -70,8 +68,11 @@ def GetCandHInfo():
                 for item in matches:
                     if item.startswith('http://www.explosm.net/db/files/Comics/'):
                         wnd.setProperty('CyanideHappiness.%i.Image' % count, item)     
-                        count += 1
-             #   
+                        dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
+                        datematches = re.findall(dateregex, response)
+                        for date in datematches:
+                            wnd.setProperty('CyanideHappiness.%i.Title' % count, date)     
+                        count += 1                      
               #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
                 if count > 10:
                     break
@@ -104,8 +105,6 @@ def GetYoutubeVideos(jsonurl,prefix=""):
     if results:
         wnd = xbmcgui.Window(Window)
         for item in results["value"]["items"]:
-            log("look here")
-            log(item["media:thumbnail"][0]["url"])
             wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, item["media:thumbnail"][0]["url"])
             wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(item["link"]))
             wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")")
@@ -135,7 +134,7 @@ def GetSimilarInLibrary(id):
                 if xbmc_artist['name'] == simi_artist['name']:
                     hit = True
             if hit:
-                log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))
+         #       log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))
                 artists.append(xbmc_artist)
     finish = time.clock()
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
@@ -149,12 +148,12 @@ def passDataToSkin(prefix, data):
      #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
     if data != None:
         wnd.setProperty('%s.Count' % prefix, str(len(data)))
-        log( "%s.Count = %s" % (prefix, str(len(data)) ) )
+  #      log( "%s.Count = %s" % (prefix, str(len(data)) ) )
         for (count, result) in enumerate(data):
-            log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
+    #        log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-                log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
+     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % prefix, '0')
 

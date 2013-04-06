@@ -25,6 +25,7 @@ def media_path(path):
     else:
         path = [path]
     return path[0]
+    
 def GetStringFromUrl(encurl):
     doc = ""
     succeed = 0
@@ -98,7 +99,6 @@ def ConvertYoutubeURL(string):
             convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return convertedstring    
     return ""
-
-    
+   
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
