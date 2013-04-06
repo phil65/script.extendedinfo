@@ -7,6 +7,76 @@ else:
     
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
+__language__     = __addon__.getLocalizedString
+
+Window = 10000
+
+def AddArtToLibrary( type, media, folder, limit , silent = False):
+    import xbmcvfs
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    if (json_response['result'] != None) and (json_response['result'].has_key('%ss' % media.lower())):
+        # iterate through the results
+        if silent == False:
+            progressDialog = xbmcgui.DialogProgress(__language__(32016))
+            progressDialog.create(__language__(32016))
+        for count,item in enumerate(json_response['result']['%ss' % media.lower()]):
+            if silent == False:
+                if progressDialog.iscanceled():
+                    return
+            path= media_path(item['file']).encode("utf-8") + "/" + folder + "/"
+            file_list = xbmcvfs.listdir(path)[1]            
+            for i,file in enumerate (file_list):
+                if i + 1 > limit:
+                    break
+                if silent == False:
+                    progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i + 1))
+                    if progressDialog.iscanceled():
+                        return
+                file_path =  path + "/" + file
+                log(file_path)
+                if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
+
+
+
+def export_skinsettings():
+    import xbmcvfs
+    from xml.dom.minidom import parse
+    # Set path
+    guisettings_path = xbmc.translatePath( 'special://profile/guisettings.xml' ).decode("utf-8")
+    # Check to see if file exists
+    if xbmcvfs.exists( guisettings_path ):
+        log("guisettings.xml found")
+        doc = parse( guisettings_path )
+        skinsettings = doc.documentElement.getElementsByTagName( 'setting' )
+        newlist = []
+        for count, skinsetting in enumerate(skinsettings):
+            if skinsetting.childNodes:
+                value = skinsetting.childNodes [ 0 ].nodeValue
+            else:
+                value = ""
+            if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
+                newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
+        if save_to_file(newlist,"backup"):
+            xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
+    else:
+        xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
+        log("guisettings.xml not found")
+
+def GetXBMCArtists():
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    artists = []        
+    if json_query.has_key('result') and json_query['result'].has_key('artists'):
+        count = 0
+        for item in json_query['result']['artists']:
+            mbid = ''
+            artist = {"name": item['label'], "xbmc_id": item['artistid'], "mbid": item['musicbrainzartistid'] , "thumb": item['thumbnail'] }
+            artists.append(artist)
+    return artists
 
 def media_path(path):
     # Check for stacked movies
@@ -102,3 +172,20 @@ def ConvertYoutubeURL(string):
    
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
+    
+def passDataToSkin(prefix, data):
+    #use window properties       
+    wnd = xbmcgui.Window(Window)
+   # for i in range(1,100):
+    #   for schleife zum resetten evtl
+     #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
+    if data != None:
+        wnd.setProperty('%s.Count' % prefix, str(len(data)))
+  #      log( "%s.Count = %s" % (prefix, str(len(data)) ) )
+        for (count, result) in enumerate(data):
+    #        log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
+            for (key,value) in result.iteritems():
+                wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
+     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
+    else:
+        wnd.setProperty('%s.Count' % prefix, '0')

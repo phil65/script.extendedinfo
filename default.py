@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime, re, random
-import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl, log, media_path,get_browse_dialog, ConvertYoutubeURL, save_to_file
+import xbmc, xbmcgui, xbmcaddon, xbmcplugin
+from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -23,20 +23,6 @@ extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
-
-
-def GetXBMCArtists():
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
-    artists = []        
-    if json_query.has_key('result') and json_query['result'].has_key('artists'):
-        count = 0
-        for item in json_query['result']['artists']:
-            mbid = ''
-            artist = {"name": item['label'], "xbmc_id": item['artistid'], "mbid": item['musicbrainzartistid'] , "thumb": item['thumbnail'] }
-            artists.append(artist)
-    return artists
 
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
@@ -140,23 +126,6 @@ def GetSimilarInLibrary(id):
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
 
-def passDataToSkin(prefix, data):
-    #use window properties       
-    wnd = xbmcgui.Window(Window)
-   # for i in range(1,100):
-    #   for schleife zum resetten evtl
-     #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-    if data != None:
-        wnd.setProperty('%s.Count' % prefix, str(len(data)))
-  #      log( "%s.Count = %s" % (prefix, str(len(data)) ) )
-        for (count, result) in enumerate(data):
-    #        log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
-            for (key,value) in result.iteritems():
-                wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
-    else:
-        wnd.setProperty('%s.Count' % prefix, '0')
-
 # def retrieve_artist_details( artist_id ):
     # json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["musicbrainzartistid"], "artistid": %d}, "id": 1}' %artist_id)
     # json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -205,21 +174,21 @@ class Main:
         if self.info:
             GetLastFMInfo()
         elif self.exportsettings:
-            self._export_skinsettings()        
+            export_skinsettings()        
         elif self.importsettings:
             self._import_skinsettings()
         elif self.importextrathumb:
-            self._AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
+            AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
         elif self.importextrafanart:
-            self._AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
+            AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
    #     elif self.importextrathumbtv:
-  #          self._AddArtToLibrary("extrathumb","TVShow","extrathumbs")
+  #          AddArtToLibrary("extrathumb","TVShow","extrathumbs")
         elif self.importextrafanarttv:
-            self._AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
+            AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
         elif self.importallartwork:
-            self._AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
-            self._AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
-            self._AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
+            AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
+            AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
+            AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
         elif self.backend and xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
             xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,True,home)')
             self.run_backend()
@@ -243,23 +212,23 @@ class Main:
         dialogSelection = xbmcgui.Dialog()
         selection        = dialogSelection.select( __language__(32004), modeselect ) 
         if selection == 0:
-            self._export_skinsettings()
+            export_skinsettings()
         elif selection == 1:
             self._import_skinsettings()
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
-            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
+            AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
         elif selection == 4:
-            self._AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
+            AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
    #     elif selection == 5:
-    #        self._AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
+    #        AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
         elif selection == 5:
-            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
+            AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
         elif selection == 6:
-            self._AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
-            self._AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
-            self._AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
+            AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
+            AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
+            AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
 
             
     def _init_vars(self):
@@ -356,58 +325,7 @@ class Main:
                 country = item['country']
                 tag = item['tag']
                 self.movies.append((year,path,art,genre,director,cast,studio,country,tag))               
-                               
-    def _AddArtToLibrary( self, type, media, folder, limit , silent = False):
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if (json_response['result'] != None) and (json_response['result'].has_key('%ss' % media.lower())):
-            # iterate through the results
-            if silent == False:
-                progressDialog = xbmcgui.DialogProgress(__language__(32016))
-                progressDialog.create(__language__(32016))
-            for count,item in enumerate(json_response['result']['%ss' % media.lower()]):
-                if silent == False:
-                    if progressDialog.iscanceled():
-                        return
-                path= media_path(item['file']).encode("utf-8") + "/" + folder + "/"
-                file_list = xbmcvfs.listdir(path)[1]            
-                for i,file in enumerate (file_list):
-                    if i + 1 > limit:
-                        break
-                    if silent == False:
-                        progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i + 1))
-                        if progressDialog.iscanceled():
-                            return
-                    file_path =  path + "/" + file
-                    log(file_path)
-                    if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
-                        xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
-
-    def _export_skinsettings( self ):
-        import xbmcvfs
-        from xml.dom.minidom import parse
-        # Set path
-        self.guisettings_path = xbmc.translatePath( 'special://profile/guisettings.xml' ).decode("utf-8")
-        # Check to see if file exists
-        if xbmcvfs.exists( self.guisettings_path ):
-            log("guisettings.xml found")
-            self.doc = parse( self.guisettings_path )
-            skinsettings = self.doc.documentElement.getElementsByTagName( 'setting' )
-            newlist = []
-            for count, skinsetting in enumerate(skinsettings):
-                if skinsetting.childNodes:
-                    value = skinsetting.childNodes [ 0 ].nodeValue
-                else:
-                    value = ""
-                if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
-                    newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
-            if save_to_file(newlist,"backup"):
-                xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
-        else:
-            xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
-            log("guisettings.xml not found")
-        
+                                       
     def _import_skinsettings( self ):
         import xbmcvfs
         # Set path
