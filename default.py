@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime, re, random
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl, log, media_path,get_browse_dialog, ConvertYoutubeURL
+from Utils import GetStringFromUrl, log, media_path,get_browse_dialog, ConvertYoutubeURL, save_to_file
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -403,30 +403,11 @@ class Main:
                     value = ""
                 if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
                     newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
-            if self._save_to_file(newlist,"backup"):
+            if save_to_file(newlist,"backup"):
                 xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
         else:
             xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
             log("guisettings.xml not found")
-            
-            
-    def _save_to_file( self, content, suffix, path = "" ):
-        try:
-            if path == "":
-                text_file_path = get_browse_dialog() + xbmc.getSkinDir() +"." + suffix + ".txt"
-            else:
-                if not xbmcvfs.exists(path):
-                    xbmcvfs.mkdir(path)
-                text_file_path = path + xbmc.getSkinDir() +"." + suffix + ".txt"
-            log("text_file_path:")
-            log(text_file_path)
-            text_file =  open(text_file_path, "w")
-            simplejson.dump(content,text_file)
-            text_file.close()
-            return True
-        except Exception:
-            sys.exc_clear()
-            return False
         
     def _import_skinsettings( self ):
         import xbmcvfs

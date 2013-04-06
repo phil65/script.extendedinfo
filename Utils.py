@@ -1,6 +1,10 @@
-import urllib, xml.dom.minidom, xbmc, xbmcaddon
-import os
-
+import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui
+import os,sys
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
+    
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 
@@ -63,6 +67,24 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
     dialog = xbmcgui.Dialog()
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
+    
+def save_to_file(content, suffix, path = "" ):
+    try:
+        if path == "":
+            text_file_path = get_browse_dialog() + xbmc.getSkinDir() +"." + suffix + ".txt"
+        else:
+            if not xbmcvfs.exists(path):
+                xbmcvfs.mkdir(path)
+            text_file_path = path + xbmc.getSkinDir() +"." + suffix + ".txt"
+        log("text_file_path:")
+        log(text_file_path)
+        text_file =  open(text_file_path, "w")
+        simplejson.dump(content,text_file)
+        text_file.close()
+        return True
+    except Exception,e:
+        log(e)
+        return False
 
 def ConvertYoutubeURL(string):        
     if 'youtube.com/v' in string:
