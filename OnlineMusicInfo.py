@@ -7,7 +7,7 @@ import urllib
 bandsintown_apikey = 'xbmc_open_source_media_center'
 lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
 
-def HandleResult(results):
+def HandleBandsInTownResult(results):
     events = []
     for event in results:
         try:
@@ -41,12 +41,15 @@ def HandleLastFMResult(results):
         region = event['venue']['location']['street']
         country = event['venue']['location']['country']
         artists = event['artists']['artist']
+        headliner = event['artists']['headliner']
+        artist_image = event['image'][-1]['#text']
+        venue_image = event['venue']['image'][-2]['#text']
         my_arts = ''
         if isinstance(artists, list):
             my_arts = ' / '.join(artists)
         else:
             my_arts = artists
-        event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts  }
+        event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts, 'artist_image':artist_image, 'venue_image':venue_image, 'headliner':headliner  }
         log(event)
         events.append(event)
     return events
@@ -58,7 +61,7 @@ def GetEvents(id): # converted to api 2.0
         results = json.loads(response)
     except:
         log("Error when finding artist-related events from" + url)
-    return HandleResult(results)
+    return HandleBandsInTownResult(results)
 
     
 def GetSimilarById(m_id):
@@ -123,4 +126,4 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
         results = json.loads(response)
     except:
         log("error when getting artist data from " + url)
-    return HandleResult(results)
+    return HandleBandsInTownResult(results)
