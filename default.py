@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime, re, random
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl, log, media_path
+from Utils import GetStringFromUrl, log, media_path,get_browse_dialog
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -184,17 +184,6 @@ def passDataToSkin(prefix, data):
     # json_query = unicode(json_query, 'utf-8', errors='ignore')
     # json_response = simplejson.loads(json_query)
     # if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):       
-
-def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
-    """ shows a browse dialog and returns a value
-        - 0 : ShowAndGetDirectory
-        - 1 : ShowAndGetFile
-        - 2 : ShowAndGetImage
-        - 3 : ShowAndGetWriteableDirectory
-    """
-    dialog = xbmcgui.Dialog()
-    value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
-    return value
     
 def GetLastFMInfo():
     for info in infos:
