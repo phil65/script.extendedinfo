@@ -1,8 +1,7 @@
 import sys
 import os, time, datetime, re, random
-import urllib
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl,log
+from Utils import GetStringFromUrl, log, media_path
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -97,6 +96,44 @@ def GetFlickrImages():
         for item in results["value"]["items"]:
             wnd.setProperty('Flickr.%i.Background' % count, item["link"])
             count += 1
+            
+
+def ConvertYoutubeURL(string):        
+    if 'youtube.com/v' in string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL )
+        for id in vid_ids:
+            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            return convertedstring       
+    if 'youtube.com/watch' in string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL )       
+        for id in vid_ids:
+            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            return convertedstring    
+    return ""
+
+            
+def GetYoutubeVideos(jsonurl,prefix=""):
+    results=[]
+    if not prefix.endswith('.') and prefix <> "":
+        prefix = prefix + '.'
+    try:
+        response = GetStringFromUrl(jsonurl)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching JSON data from net")
+    count = 1
+    if results:
+        wnd = xbmcgui.Window(Window)
+        for item in results["value"]["items"]:
+            log("look here")
+            log(item["media:thumbnail"][0]["url"])
+            wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, item["media:thumbnail"][0]["url"])
+            wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(item["link"]))
+            wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")")
+            wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"])
+            wnd.setProperty(prefix + 'RSS.%i.Description' % count, item["content"]["content"])
+            wnd.setProperty(prefix + 'RSS.%i.Date' % count, item["pubDate"])
+            count += 1
     
 def GetSimilarInLibrary(id):
     from OnlineMusicInfo import GetSimilarById
@@ -160,44 +197,6 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
     return value
     
 def GetLastFMInfo():
-    for arg in sys.argv:
-        if arg == 'script.extendedinfo':
-            continue
-        param = arg.lower()
-        if param.startswith('info='):
-            infos.append(param[5:])
-        elif param.startswith('artistname='):
-            ArtistName = arg[11:]
-            # todo: look up local mbid first -->xbmcid for parameter
-            from MusicBrainz import GetMusicBrainzIdFromNet
-            Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
-        elif param.startswith('albumname='):
-            AlbumName = arg[10:]
-        elif param.startswith('tracktitle='):
-            TrackTitle = arg[11:]
-        elif param.startswith('window='):
-            Window = int(arg[7:])
-        elif param.startswith('setuplocation'):
-            settings = xbmcaddon.Addon(id='script.extendedinfo')
-            country = settings.getSetting('country')
-            city = settings.getSetting('city')
-            log('stored country/city: %s/%s' % (country, city) )  
-            kb = xbmc.Keyboard('', __language__(32013) + ":")
-            kb.doModal()
-            country = kb.getText()
-            kb = xbmc.Keyboard('', __language__(32012) + ":")
-            kb.doModal()
-            city = kb.getText()
-            log('country/city: %s/%s' % (country, city) )         
-            settings.setSetting('location_method', 'country_city')
-            settings.setSetting('country',country)
-            settings.setSetting('city',city)
-            log('done with settings')
-        else:
-            AdditionalParams.append(param)
-    passDataToSkin('SimilarArtists', None)
-    passDataToSkin('MusicEvents', None)
-
     for info in infos:
         if info == 'xkcd':
             log("startin GetXKCDInfo")
@@ -233,6 +232,7 @@ class Main:
     def __init__( self ):
         log("version %s started" % __addonversion__ )
         self._init_vars()
+    #    GetYoutubeVideos("http://pipes.yahoo.com/pipes/pipe.run?_id=232e2f480431b82a9288a72778e2f1d4&_render=json&youtubeid=fional88","News")
         self._parse_argv()
         # run in backend if parameter was set
         if self.info:
@@ -320,7 +320,45 @@ class Main:
         self.importextrafanart = params.get("importextrafanart", False)
         self.importextrafanarttv = params.get("importextrafanarttv", False)
         self.importallartwork = params.get("importallartwork", False)
-
+        for arg in sys.argv:
+            if arg == 'script.extendedinfo':
+                continue
+            param = arg.lower()
+            if param.startswith('info='):
+                infos.append(param[5:])
+            elif param.startswith('artistname='):
+                ArtistName = arg[11:]
+                # todo: look up local mbid first -->xbmcid for parameter
+                from MusicBrainz import GetMusicBrainzIdFromNet
+                Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
+            elif param.startswith('albumname='):
+                AlbumName = arg[10:]
+            elif param.startswith('tracktitle='):
+                TrackTitle = arg[11:]
+            elif param.startswith('window='):
+                Window = int(arg[7:])
+            elif param.startswith('setuplocation'):
+                settings = xbmcaddon.Addon(id='script.extendedinfo')
+                country = settings.getSetting('country')
+                city = settings.getSetting('city')
+                log('stored country/city: %s/%s' % (country, city) )  
+                kb = xbmc.Keyboard('', __language__(32013) + ":")
+                kb.doModal()
+                country = kb.getText()
+                kb = xbmc.Keyboard('', __language__(32012) + ":")
+                kb.doModal()
+                city = kb.getText()
+                log('country/city: %s/%s' % (country, city) )         
+                settings.setSetting('location_method', 'country_city')
+                settings.setSetting('country',country)
+                settings.setSetting('city',city)
+                log('done with settings')
+            else:
+                AdditionalParams.append(param)
+        passDataToSkin('SimilarArtists', None)
+        passDataToSkin('MusicEvents', None)
+        
+        
     def _create_musicvideo_list( self ):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -365,7 +403,7 @@ class Main:
                 if silent == False:
                     if progressDialog.iscanceled():
                         return
-                path= self._media_path(item['file']).encode("utf-8") + "/" + folder + "/"
+                path= media_path(item['file']).encode("utf-8") + "/" + folder + "/"
                 file_list = xbmcvfs.listdir(path)[1]            
                 for i,file in enumerate (file_list):
                     if i + 1 > limit:
@@ -651,7 +689,7 @@ class Main:
             self.window.setProperty('Set.Movie.%d.Title' % count, item['label'])
             self.window.setProperty('Set.Movie.%d.Plot' % count, item['plot'])
             self.window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
-            self.window.setProperty('Set.Movie.%d.Path' % count, self._media_path(item['file']))
+            self.window.setProperty('Set.Movie.%d.Path' % count, media_path(item['file']))
             self.window.setProperty('Set.Movie.%d.Year' % count, str(item['year']))
             self.window.setProperty('Set.Movie.%d.Duration' % count, str(item['runtime']/60))
             self.window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
@@ -689,24 +727,6 @@ class Main:
         self.window.setProperty('Set.Movies.Count', str(json_query['result']['limits']['total']))
         self.cleared = False
   
-    def _media_path(self,path):
-        # Check for stacked movies
-        try:
-            path = os.path.split(path)[0].rsplit(' , ', 1)[1].replace(",,",",")
-        except:
-            path = os.path.split(path)[0]
-        # Fixes problems with rared movies and multipath
-        if path.startswith("rar://"):
-            path = [os.path.split(urllib.url2pathname(path.replace("rar://","")))[0]]
-        elif path.startswith("multipath://"):
-            temp_path = path.replace("multipath://","").split('%2f/')
-            path = []
-            for item in temp_path:
-                path.append(urllib.url2pathname(item))
-        else:
-            path = [path]
-        return path[0]
-
     def _clear_properties( self ):
         #todo
         self.cleared = False
