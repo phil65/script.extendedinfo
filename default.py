@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime, re, random
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin, xbmcvfs
-from Utils import GetStringFromUrl, log, media_path,get_browse_dialog
+from Utils import GetStringFromUrl, log, media_path,get_browse_dialog, ConvertYoutubeURL
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -24,12 +24,6 @@ extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
 
-
-def log(txt):
-    if isinstance(txt, str):
-        txt = txt.decode("utf-8")
-    message = u'%s: %s' % (__addonid__, txt)
-    xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 def GetXBMCArtists():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
@@ -96,21 +90,6 @@ def GetFlickrImages():
         for item in results["value"]["items"]:
             wnd.setProperty('Flickr.%i.Background' % count, item["link"])
             count += 1
-            
-
-def ConvertYoutubeURL(string):        
-    if 'youtube.com/v' in string:
-        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL )
-        for id in vid_ids:
-            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
-            return convertedstring       
-    if 'youtube.com/watch' in string:
-        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL )       
-        for id in vid_ids:
-            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
-            return convertedstring    
-    return ""
-
             
 def GetYoutubeVideos(jsonurl,prefix=""):
     results=[]

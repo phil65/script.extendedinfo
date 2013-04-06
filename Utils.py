@@ -63,6 +63,20 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
     dialog = xbmcgui.Dialog()
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
+
+def ConvertYoutubeURL(string):        
+    if 'youtube.com/v' in string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL )
+        for id in vid_ids:
+            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            return convertedstring       
+    if 'youtube.com/watch' in string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL )       
+        for id in vid_ids:
+            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            return convertedstring    
+    return ""
+
     
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
