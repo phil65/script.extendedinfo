@@ -40,21 +40,16 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
 def import_skinsettings():
-    import xbmcvfs
-    # Set path
-    backup_path = get_browse_dialog(dlg_type=1)
-    # Check to see if file exists
-    if xbmcvfs.exists( backup_path ):
-        log("backup found")
-        with open(backup_path) as f: fc = simplejson.load(f)
+    importstring=read_from_file()
+    if importstring:
         progressDialog = xbmcgui.DialogProgress(__language__(32010))
         progressDialog.create(__language__(32010))
         xbmc.sleep(200)
-        for count, skinsetting in enumerate(fc):
+        for count, skinsetting in enumerate(importstring):
             if progressDialog.iscanceled():
                 return
             if skinsetting[1].startswith(xbmc.getSkinDir()):
-                progressDialog.update( (count * 100) / len(fc)  , __language__(32011) + ' %s' % skinsetting[1])
+                progressDialog.update( (count * 100) / len(importstring)  , __language__(32011) + ' %s' % skinsetting[1])
                 setting = skinsetting[1].replace(xbmc.getSkinDir() + ".","")
                 if skinsetting[0] == "string":
                     if skinsetting[2] <> "":
@@ -118,8 +113,8 @@ def GetXBMCArtists():
                       "Style": " / ".join(item['style']) ,
                       "Mood": " / ".join(item['mood']) ,
                       "Instrument": " / ".join(item['instrument']) ,
-                      "genre": " / ".join(item['genre']) ,
-                      "path": 'musicdb://2/' + str(item['artistid']) + '/'
+                      "Genre": " / ".join(item['genre']) ,
+                      "LibraryPath": 'musicdb://2/' + str(item['artistid']) + '/'
                       }
             artists.append(artist)
     return artists
@@ -202,6 +197,17 @@ def save_to_file(content, suffix, path = "" ):
     except Exception,e:
         log(e)
         return False
+        
+def read_from_file(path = "" ):
+    import xbmcvfs
+    # Set path
+    backup_path = get_browse_dialog(dlg_type=1)
+    # Check to see if file exists
+    if xbmcvfs.exists( backup_path ):
+        with open(backup_path) as f: fc = simplejson.load(f)
+        return fc
+    else:
+        return False
 
 def ConvertYoutubeURL(string):
     import re
@@ -240,11 +246,11 @@ def passDataToSkin(prefix, data):
      #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
     if data != None:
         wnd.setProperty('%s.Count' % prefix, str(len(data)))
-        log( "%s.Count = %s" % (prefix, str(len(data)) ) )
+    #    log( "%s.Count = %s" % (prefix, str(len(data)) ) )
         for (count, result) in enumerate(data):
-            log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
+   #         log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-                log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
+     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % prefix, '0')

@@ -31,7 +31,7 @@ def HandleBandsInTownResult(results):
     
 def HandleLastFMResult(results):
     events = []
-    log("starting xyz")
+    log("starting HandleLastFMResult")
     for event in results['events']['event']:
         log(event)
         date = event['startDate']
@@ -54,11 +54,19 @@ def HandleLastFMResult(results):
         events.append(event)
     return events
 
-def GetEvents(id): # converted to api 2.0
-    url = 'http://api.bandsintown.com/artists/mbid_%s/events.json?api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
+def GetEvents(id,getall = False): # converted to api 2.0
+    if getall:
+        url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&app_id=%s&date=all' % (id, bandsintown_apikey)
+    else:
+        url = 'http://api.bandsintown.com/artists/mbid_%s/events.json?api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
+    log(url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
+        log("look here")
+        log(results)
+        if not results:
+            GetEvents(id,True)
     except:
         log("Error when finding artist-related events from" + url)
     return HandleBandsInTownResult(results)
