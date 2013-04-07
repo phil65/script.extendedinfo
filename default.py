@@ -87,18 +87,30 @@ def GetYoutubeVideos(jsonurl,prefix=""):
     except:
         log("Error when fetching JSON data from net")
     count = 1
+    log("found youtube vids: " + jsonurl)
     if results:
         wnd = xbmcgui.Window(Window)
-        for item in results["value"]["items"]:
-            wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, item["media:thumbnail"][0]["url"])
-            wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(item["link"]))
-            wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")")
-            wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"])
-            wnd.setProperty(prefix + 'RSS.%i.Description' % count, item["content"]["content"])
-            wnd.setProperty(prefix + 'RSS.%i.Date' % count, item["pubDate"])
-            count += 1
-    
-def GetSimilarInLibrary(id):
+        try:
+            for item in results["value"]["items"]:
+                wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, item["media:thumbnail"][0]["url"])
+                wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(item["link"]))
+                wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")")
+                wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"])
+                wnd.setProperty(prefix + 'RSS.%i.Description' % count, item["content"]["content"])
+                wnd.setProperty(prefix + 'RSS.%i.Date' % count, item["pubDate"])
+                count += 1
+        except:
+            for item in results["feed"]["entry"]:
+                for entry in item["link"]:
+                    if entry.get('href','').startswith('http://www.youtube.com/watch'):
+                        wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")")
+                        wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(entry.get('href','')))
+                        wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")
+                        log("http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")
+                wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"]["$t"])
+                count += 1
+
+def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
     from OnlineMusicInfo import GetSimilarById
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
@@ -116,7 +128,7 @@ def GetSimilarInLibrary(id):
                     hit = True
             else:
                 #compare names
-                if xbmc_artist['name'] == simi_artist['name']:
+                if xbmc_artist['Title'] == simi_artist['name']:
                     hit = True
             if hit:
          #       log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))

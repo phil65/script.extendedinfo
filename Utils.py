@@ -96,7 +96,7 @@ def export_skinsettings():
         log("guisettings.xml not found")
 
 def GetXBMCArtists():
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid", "thumbnail"]}, "id": 1}')
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
     artists = []        
@@ -104,7 +104,23 @@ def GetXBMCArtists():
         count = 0
         for item in json_query['result']['artists']:
             mbid = ''
-            artist = {"name": item['label'], "xbmc_id": item['artistid'], "mbid": item['musicbrainzartistid'] , "thumb": item['thumbnail'] }
+            artist = {"Title": item['label'],
+                      "DBID": item['artistid'],
+                      "mbid": item['musicbrainzartistid'] ,
+                      "Art(thumb)": item['thumbnail'] ,
+                      "Art(fanart)": item['fanart'] ,
+                      "description": item['description'] ,
+                      "Born": item['born'] ,
+                      "Died": item['died'] ,
+                      "Formed": item['formed'] ,
+                      "Disbanded": item['disbanded'] ,
+                      "YearsActive": " / ".join(item['yearsactive']) ,
+                      "Style": " / ".join(item['style']) ,
+                      "Mood": " / ".join(item['mood']) ,
+                      "Instrument": " / ".join(item['instrument']) ,
+                      "genre": " / ".join(item['genre']) ,
+                      "path": 'musicdb://2/' + str(item['artistid']) + '/'
+                      }
             artists.append(artist)
     return artists
 
@@ -200,6 +216,18 @@ def ConvertYoutubeURL(string):
             convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return convertedstring    
     return ""
+    
+def ExtractYoutubeID(string):
+    import re
+    if 'youtube.com/v' in string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL )
+        for id in vid_ids:
+            return id       
+    if 'youtube.com/watch' in string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL )       
+        for id in vid_ids:
+            return id    
+    return ""
    
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
@@ -212,11 +240,11 @@ def passDataToSkin(prefix, data):
      #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
     if data != None:
         wnd.setProperty('%s.Count' % prefix, str(len(data)))
-  #      log( "%s.Count = %s" % (prefix, str(len(data)) ) )
+        log( "%s.Count = %s" % (prefix, str(len(data)) ) )
         for (count, result) in enumerate(data):
-    #        log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
+            log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
+                log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % prefix, '0')
