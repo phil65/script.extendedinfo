@@ -308,19 +308,15 @@ def ExtractYoutubeID(string):
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
     
-def passDataToSkin(prefix, data):
-    #use window properties       
+def passDataToSkin(name, data, prefix=""):
     wnd = xbmcgui.Window(Window)
-   # for i in range(1,100):
-    #   for schleife zum resetten evtl
-     #  wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
     if data != None:
-        wnd.setProperty('%s.Count' % prefix, str(len(data)))
-    #    log( "%s.Count = %s" % (prefix, str(len(data)) ) )
+        wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+    #    log( "%s.Count = %s" % (name, str(len(data)) ) )
         for (count, result) in enumerate(data):
-   #         log( "%s.%i = %s" % (prefix, count + 1, str(result) ) )
+   #         log( "%s.%i = %s" % (name, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
-                wnd.setProperty('%s.%i.%s' % (prefix, count + 1, str(key)), unicode(value))
-     #           log('%s.%i.%s' % (prefix, count + 1, str(key)) + unicode(value))
+                wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+     #           log('%s.%i.%s' % (name, count + 1, str(key)) + unicode(value))
     else:
-        wnd.setProperty('%s.Count' % prefix, '0')
+        wnd.setProperty('%s.Count' % name, '0')

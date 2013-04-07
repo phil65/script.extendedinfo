@@ -77,10 +77,8 @@ def GetFlickrImages():
             wnd.setProperty('Flickr.%i.Background' % count, item["link"])
             count += 1
             
-def GetYoutubeVideos(jsonurl,prefix=""):
+def GetYoutubeVideos(jsonurl,prefix = ""):
     results=[]
-    if not prefix.endswith('.') and prefix <> "":
-        prefix = prefix + '.'
     try:
         response = GetStringFromUrl(jsonurl)
         results = simplejson.loads(response)
@@ -185,20 +183,20 @@ class Main:
                 GetCandHInfo()
             elif info == 'similarartistsinlibrary':
                 artists = GetSimilarInLibrary(self.Artist_mbid)
-                passDataToSkin('SimilarArtistsInLibrary', artists)
+                passDataToSkin('SimilarArtistsInLibrary', artists, self.prop_prefix)
             elif info == 'artistevents':
                 from OnlineMusicInfo import GetEvents
                 events = GetEvents(self.Artist_mbid)
              #   events = GetEvents(self.Artist_mbid,True)
-                passDataToSkin('ArtistEvents', events)       
+                passDataToSkin('ArtistEvents', events, self.prop_prefix)       
             elif info == 'nearevents':
                 from OnlineMusicInfo import GetNearEvents
                 events = GetNearEvents(self.type,self.festivalsonly)
-                passDataToSkin('NearEvents', events)        
+                passDataToSkin('NearEvents', events, self.prop_prefix)        
             elif info == 'topartistsnearevents':
                 artists = GetXBMCArtists()
                 events = GetArtistNearEvents(artists[0:15])
-                passDataToSkin('TopArtistsNearEvents', events)
+                passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
@@ -246,7 +244,7 @@ class Main:
         self.feed = None
         self.type = False
         self.festivalsonly = False
-        self.prop_prefix = None
+        self.prop_prefix = ""
         self.Artist_mbid = None
         self.window.clearProperty('SongToMusicVideo.Path')
 
@@ -281,6 +279,8 @@ class Main:
                 self.feed = param[5:]
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
+                if not self.prop_prefix.endswith('.') and self.prop_prefix <> "":
+                    self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
                 ArtistName = arg[11:]
                 # todo: look up local mbid first -->xbmcid for parameter
