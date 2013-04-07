@@ -143,7 +143,7 @@ class Main:
         self._init_vars()
         self._parse_argv()
         # run in backend if parameter was set
-        if self.info:
+        if self.infos:
             self._StartInfoActions()
         elif self.exportsettings:
             export_skinsettings()        
@@ -189,6 +189,7 @@ class Main:
             elif info == 'artistevents':
                 from OnlineMusicInfo import GetEvents
                 events = GetEvents(self.Artist_mbid)
+             #   events = GetEvents(self.Artist_mbid,True)
                 passDataToSkin('ArtistEvents', events)       
             elif info == 'nearevents':
                 from OnlineMusicInfo import GetNearEvents
@@ -243,6 +244,7 @@ class Main:
         self.movies = []
         self.infos = []
         self.feed = None
+        self.type = False
         self.prop_prefix = None
         self.Artist_mbid = None
         self.window.clearProperty('SongToMusicVideo.Path')
@@ -256,8 +258,6 @@ class Main:
         try: self.artistid = int(params.get("artistid", "-1"))
         except: pass
         self.backend = params.get("backend", False)
-        self.type = params.get("type", False)
-        self.info = params.get("info", False)
         self.exportsettings = params.get("exportsettings", False)
         self.importsettings = params.get("importsettings", False)
         self.importextrathumb = params.get("importextrathumb", False)
@@ -272,6 +272,8 @@ class Main:
             param = arg.lower()
             if param.startswith('info='):
                 self.infos.append(param[5:])
+            elif param.startswith('type='):
+                self.type = (param[5:])
             elif param.startswith('feed='):
                 self.feed = param[5:]
             elif param.startswith('prefix='):
@@ -306,38 +308,7 @@ class Main:
             else:
                 AdditionalParams.append(param)
         passDataToSkin('SimilarArtists', None)
-        passDataToSkin('MusicEvents', None)      
-        
-    def _create_musicvideo_list( self ):
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):
-            # iterate through the results
-            for item in json_response['result']['musicvideos']:
-                artist = item['artist']
-                title = item['label']
-                path = item['file']
-                self.musicvideos.append((artist,title,path))
-        log('musicvideos: %s' % self.musicvideos)
-        
-    def _create_movie_list( self ):
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
-            # iterate through the results
-            for item in json_response['result']['movies']:
-                year = item['year']
-                path = item['file']
-                art = item['art']
-                genre = item['genre']
-                director = item['director']
-                cast = item['cast']
-                studio = item['studio']
-                country = item['country']
-                tag = item['tag']
-                self.movies.append((year,path,art,genre,director,cast,studio,country,tag))               
+        passDataToSkin('MusicEvents', None)                 
                                        
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
@@ -366,8 +337,8 @@ class Main:
         self.previousitem = ""
         self.previousartist = ""
         self.previoussong = ""
-        self._create_musicvideo_list()
-        self._create_movie_list()
+        self.musicvideos = create_musicvideo_list()
+        self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
             if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")

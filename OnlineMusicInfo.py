@@ -32,28 +32,32 @@ def HandleBandsInTownResult(results):
 def HandleLastFMResult(results):
     events = []
     log("starting HandleLastFMResult")
-    for event in results['events']['event']:
-        log(event)
-        date = event['startDate']
-        venue = event['venue']['name']
-        city = event['venue']['location']['city']
-        name = event['venue']['name']
-        region = event['venue']['location']['street']
-        country = event['venue']['location']['country']
-        artists = event['artists']['artist']
-        headliner = event['artists']['headliner']
-        artist_image = event['image'][-1]['#text']
-        venue_image = event['venue']['image'][-2]['#text']
-        my_arts = ''
-        if isinstance(artists, list):
-            my_arts = ' / '.join(artists)
-        else:
-            my_arts = artists
-        event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts, 'artist_image':artist_image, 'venue_image':venue_image, 'headliner':headliner  }
-        log(event)
-        events.append(event)
+    try:
+        for event in results['events']['event']:
+            log(event)
+            date = event['startDate']
+            venue = event['venue']['name']
+            city = event['venue']['location']['city']
+            name = event['venue']['name']
+            region = event['venue']['location']['street']
+            country = event['venue']['location']['country']
+            artists = event['artists']['artist']
+            headliner = event['artists']['headliner']
+            artist_image = event['image'][-1]['#text']
+            venue_image = event['venue']['image'][-2]['#text']
+            my_arts = ''
+            if isinstance(artists, list):
+                my_arts = ' / '.join(artists)
+            else:
+                my_arts = artists
+            event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts, 'artist_image':artist_image, 'venue_image':venue_image, 'headliner':headliner  }
+            log(event)
+            events.append(event)
+    except:
+        log("Error when handling LastFM results")
     return events
-
+    
+''' old BandsInTown Way
 def GetEvents(id,getall = False): # converted to api 2.0
     if getall:
         url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&app_id=%s&date=all' % (id, bandsintown_apikey)
@@ -70,6 +74,22 @@ def GetEvents(id,getall = False): # converted to api 2.0
     except:
         log("Error when finding artist-related events from" + url)
     return HandleBandsInTownResult(results)
+   ''' 
+    
+def GetEvents(id,pastevents = False): # converted to api 2.0
+    if pastevents:
+        url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getpastevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
+    else:
+        url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
+    log(url)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+        log("look here")
+        log(results)
+    except:
+        log("Error when finding artist-related events from" + url)
+    return HandleLastFMResult(results)
 
     
 def GetSimilarById(m_id):
@@ -103,7 +123,7 @@ def GetSimilarById(m_id):
     return similars
     
     
-def GetNearEvents(): # not possible with api 2.0
+def GetNearEvents():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')

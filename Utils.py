@@ -90,6 +90,45 @@ def export_skinsettings():
         xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
         log("guisettings.xml not found")
 
+        
+def create_musicvideo_list():
+    musicvideos = []
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):
+        # iterate through the results
+        for item in json_response['result']['musicvideos']:
+            artist = item['artist']
+            title = item['label']
+            path = item['file']
+            musicvideos.append((artist,title,path))
+        return musicvideos
+    else:
+        return False
+        
+def create_movie_list():
+    movies = []
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+        # iterate through the results
+        for item in json_response['result']['movies']:
+            year = item['year']
+            path = item['file']
+            art = item['art']
+            genre = item['genre']
+            director = item['director']
+            cast = item['cast']
+            studio = item['studio']
+            country = item['country']
+            tag = item['tag']
+            movies.append((year,path,art,genre,director,cast,studio,country,tag))
+        return movies
+    else:
+        return False
+        
 def GetXBMCArtists():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -118,6 +157,37 @@ def GetXBMCArtists():
                       }
             artists.append(artist)
     return artists
+    
+def GetXBMCAlbums():
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount", "musicbrainzartistid"]}, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    albums = []        
+    if json_query.has_key('result') and json_query['result'].has_key('albums'):
+        count = 0
+        for item in json_query['result']['albums']:
+            mbid = ''
+            album = {"Title": item['label'],
+                      "DBID": item['albumid'],
+                      "Artist": item['artist'],
+                      "mbid": item['musicbrainzartistid'] ,
+                      "Art(thumb)": item['thumbnail'] ,
+                      "Art(fanart)": item['fanart'] ,
+                      "Description": item['description'] ,
+                      "Rating": item['rating'] ,
+                      "RecordLabel": item['albumlabel'] ,
+                      "Year": item['year'] ,
+                      "YearsActive": " / ".join(item['yearsactive']) ,
+                      "Style": " / ".join(item['style']) ,
+                      "Type": " / ".join(item['type']) ,
+                      "Mood": " / ".join(item['mood']) ,
+                      "Theme": " / ".join(item['theme']) ,
+                      "Genre": " / ".join(item['genre']) ,
+                      "Play": 'XBMC.RunScript(script.playalbum,albumid=' + str(item.get('albumid')) + ')'
+                      }
+            albums.append(album)
+    return albums
+    
 
 def media_path(path):
     # Check for stacked movies
