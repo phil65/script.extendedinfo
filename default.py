@@ -193,7 +193,7 @@ class Main:
                 passDataToSkin('ArtistEvents', events)       
             elif info == 'nearevents':
                 from OnlineMusicInfo import GetNearEvents
-                events = GetNearEvents()
+                events = GetNearEvents(self.type,self.festivalsonly)
                 passDataToSkin('NearEvents', events)        
             elif info == 'topartistsnearevents':
                 artists = GetXBMCArtists()
@@ -245,6 +245,7 @@ class Main:
         self.infos = []
         self.feed = None
         self.type = False
+        self.festivalsonly = False
         self.prop_prefix = None
         self.Artist_mbid = None
         self.window.clearProperty('SongToMusicVideo.Path')
@@ -274,6 +275,8 @@ class Main:
                 self.infos.append(param[5:])
             elif param.startswith('type='):
                 self.type = (param[5:])
+            elif param.startswith('festivalsonly='):
+                self.festivalsonly = (param[14:])
             elif param.startswith('feed='):
                 self.feed = param[5:]
             elif param.startswith('prefix='):

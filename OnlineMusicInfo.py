@@ -29,9 +29,9 @@ def HandleBandsInTownResult(results):
         except: pass
     return events
     
-def HandleLastFMResult(results):
+def HandleLastFMEventResult(results):
     events = []
-    log("starting HandleLastFMResult")
+    log("starting HandleLastFMEventResult")
     try:
         for event in results['events']['event']:
             log(event)
@@ -57,6 +57,35 @@ def HandleLastFMResult(results):
         log("Error when handling LastFM results")
     return events
     
+def HandleLastFMShoutResult(results):
+    events = []
+    log("starting HandleLastFMShoutResult")
+    try:
+        for shout in results['shouts']:
+            comment = shout['body']
+            author = shout['author']
+            date = shout['date']
+            shout = {'comment': comment, 'author': author, 'date':date  }
+            events.append(event)
+    except:
+        log("Error when handling LastFM Shout results")
+    return events
+    
+# def HandleLastFMTracksResult(results):
+    # tracks = []
+    # log("starting HandleLastFMTracksResult")
+    # try:
+        # for track in results['toptracks']:
+            # Title = track['name']
+            # author = track['author']
+            # date = track['date']
+            # track = {'comment': comment, 'author': author, 'date':date  }
+            # tracks.append(track)
+    # except:
+        # log("Error when handling LastFM Shout results")
+    # return events
+    
+    
 ''' old BandsInTown Way
 def GetEvents(id,getall = False): # converted to api 2.0
     if getall:
@@ -76,7 +105,7 @@ def GetEvents(id,getall = False): # converted to api 2.0
     return HandleBandsInTownResult(results)
    ''' 
     
-def GetEvents(id,pastevents = False): # converted to api 2.0
+def GetEvents(id,pastevents = False):
     if pastevents:
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getpastevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
     else:
@@ -89,7 +118,32 @@ def GetEvents(id,pastevents = False): # converted to api 2.0
         log(results)
     except:
         log("Error when finding artist-related events from" + url)
-    return HandleLastFMResult(results)
+    return HandleLastFMEventResult(results)
+    
+    
+# def GetTopTracks(id):
+    # url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
+    # log(url)
+    # try:
+        # response = GetStringFromUrl(url)
+        # results = json.loads(response)
+        # log("look here")
+        # log(results)
+    # except:
+        # log("Error when finding artist top-tracks from" + url)
+    # return HandleLastFMTracksResult(results)
+    
+def GetShouts(id,albumtitle):
+    url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&mbid=%s&album=%s&api_key=%s&format=json' % (id,albumtitle, lastfm_apikey)
+    log(url)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+        log("look here")
+        log(results)
+    except:
+        log("Error when finding shouts from" + url)
+    return HandleLastFMShoutResult(results)
 
     
 def GetSimilarById(m_id):
@@ -123,11 +177,18 @@ def GetSimilarById(m_id):
     return similars
     
     
-def GetNearEvents():
+def GetNearEvents(tag = False,festivalsonly = False):
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')
-    url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50' % lastfm_apikey
+    if festivalsonly:
+        festivalsonly = "1"
+    else:
+        festivalsonly = "0"
+    if not tag:
+        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
+    else:
+        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,tag,festivalsonly)   
     log('request: %s' % url)
     try:
         response = GetStringFromUrl(url)
@@ -138,7 +199,7 @@ def GetNearEvents():
     except:
         results = []
         log("error getting concert data from " + url)
-    return HandleLastFMResult(results)
+    return HandleLastFMEventResult(results)
 
 def GetArtistNearEvents(Artists): # not possible with api 2.0
     settings = xbmcaddon.Addon(id='script.extendedinfo')
