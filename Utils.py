@@ -312,11 +312,11 @@ def passDataToSkin(name, data, prefix=""):
     wnd = xbmcgui.Window(Window)
     if data != None:
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
-    #    log( "%s.Count = %s" % (name, str(len(data)) ) )
+        log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
-   #         log( "%s.%i = %s" % (name, count + 1, str(result) ) )
+            log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
-     #           log('%s.%i.%s' % (name, count + 1, str(key)) + unicode(value))
+                log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % name, '0')

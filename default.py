@@ -86,27 +86,36 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
         log("Error when fetching JSON data from net")
     count = 1
     log("found youtube vids: " + jsonurl)
+    videos=[]
     if results:
-        wnd = xbmcgui.Window(Window)
         try:
             for item in results["value"]["items"]:
-                wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, item["media:thumbnail"][0]["url"])
-                wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(item["link"]))
-                wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")")
-                wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"])
-                wnd.setProperty(prefix + 'RSS.%i.Description' % count, item["content"]["content"])
-                wnd.setProperty(prefix + 'RSS.%i.Date' % count, item["pubDate"])
+                Thumb = item["media:thumbnail"][0]["url"]
+                Media = ConvertYoutubeURL(item["link"])
+                Play = "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")"
+                Title = item["title"]
+                Description = item["content"]["content"]
+                Date = item["pubDate"]
+                video = {'Thumb': Thumb, 'Media': Media, 'Play':Play, 'Title':Title, 'Description':Description, 'Date':Date  }
+                log(video)
+                videos.append(video)
                 count += 1
         except:
             for item in results["feed"]["entry"]:
                 for entry in item["link"]:
                     if entry.get('href','').startswith('http://www.youtube.com/watch'):
-                        wnd.setProperty(prefix + 'RSS.%i.Play' % count, "PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")")
-                        wnd.setProperty(prefix + 'RSS.%i.Media' % count, ConvertYoutubeURL(entry.get('href','')))
-                        wnd.setProperty(prefix + 'RSS.%i.Thumb' % count, "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")
-                        log("http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")
-                wnd.setProperty(prefix + 'RSS.%i.Title' % count, item["title"]["$t"])
+                        Date = "To Come"
+                        Description = "To Come"
+                        Play = "PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")"
+                        Media = ConvertYoutubeURL(entry.get('href',''))
+                        Thumb = "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg"
+                        log("http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")                   
+                Title = item["title"]["$t"]
+                video = {'Thumb': Thumb, 'Media': Media, 'Play':Play, 'Title':Title, 'Description':Description, 'Date':Date  }
+                log(video)
+                videos.append(video)
                 count += 1
+    return videos
 
 def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
     from OnlineMusicInfo import GetSimilarById
@@ -172,7 +181,8 @@ class Main:
     def _StartInfoActions(self):
         for info in self.infos:
             if info == 'json':
-                GetYoutubeVideos(self.feed,self.prop_prefix)
+                videos = GetYoutubeVideos(self.feed,self.prop_prefix)
+                passDataToSkin('RSS', videos, self.prop_prefix)                
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
                 GetXKCDInfo()
