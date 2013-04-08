@@ -110,32 +110,36 @@ def create_musicvideo_list():
         
 def create_movie_list():
     movies = []
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
-    if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
-        # iterate through the results
-        for item in json_response['result']['movies']:
-            year = item['year']
-            path = item['file']
-            art = item['art']
-            genre = item['genre']
-            director = item['director']
-            cast = item['cast']
-            studio = item['studio']
-            country = item['country']
-            tag = item['tag']
-            movies.append((year,path,art,genre,director,cast,studio,country,tag))
-        return movies
+    filename = Addon_Data_Path + "/XBMCmovies.txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        return simplejson.loads(read_from_file(filename))
     else:
-        return False
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
+        json_response = simplejson.loads(json_query)
+        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+            # iterate through the results
+            for item in json_response['result']['movies']:
+                year = item['year']
+                path = item['file']
+                art = item['art']
+                genre = item['genre']
+                director = item['director']
+                cast = item['cast']
+                studio = item['studio']
+                country = item['country']
+                tag = item['tag']
+                movies.append((year,path,art,genre,director,cast,studio,country,tag))
+            return movies
+        else:
+            return False
         
 def GetXBMCArtists():
     artists = []        
     filename = Addon_Data_Path + "/XBMCartists.txt"
-    results = read_from_file(filename)
-    if results and time.time() - os.path.getmtime(filename) < 2409600:
-        results = simplejson.loads(results)
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
+        results = simplejson.loads(read_from_file(filename))
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
