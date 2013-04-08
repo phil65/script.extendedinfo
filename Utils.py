@@ -1,5 +1,5 @@
 import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui
-import os,sys
+import os,sys,time
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -8,6 +8,7 @@ else:
 __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
+Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
 Window = 10000
 
@@ -130,32 +131,38 @@ def create_movie_list():
         return False
         
 def GetXBMCArtists():
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
     artists = []        
-    if json_query.has_key('result') and json_query['result'].has_key('artists'):
-        count = 0
-        for item in json_query['result']['artists']:
-            mbid = ''
-            artist = {"Title": item['label'],
-                      "DBID": item['artistid'],
-                      "mbid": item['musicbrainzartistid'] ,
-                      "Art(thumb)": item['thumbnail'] ,
-                      "Art(fanart)": item['fanart'] ,
-                      "description": item['description'] ,
-                      "Born": item['born'] ,
-                      "Died": item['died'] ,
-                      "Formed": item['formed'] ,
-                      "Disbanded": item['disbanded'] ,
-                      "YearsActive": " / ".join(item['yearsactive']) ,
-                      "Style": " / ".join(item['style']) ,
-                      "Mood": " / ".join(item['mood']) ,
-                      "Instrument": " / ".join(item['instrument']) ,
-                      "Genre": " / ".join(item['genre']) ,
-                      "LibraryPath": 'musicdb://2/' + str(item['artistid']) + '/'
-                      }
-            artists.append(artist)
+    filename = Addon_Data_Path + "/XBMCartists.txt"
+    results = read_from_file(filename)
+    if results and time.time() - os.path.getmtime(filename) < 2409600:
+        results = simplejson.loads(results)
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        save_to_file(json_query,"XBMCartists",Addon_Data_Path)
+        json_query = simplejson.loads(json_query)
+        if json_query.has_key('result') and json_query['result'].has_key('artists'):
+            count = 0
+            for item in json_query['result']['artists']:
+                mbid = ''
+                artist = {"Title": item['label'],
+                          "DBID": item['artistid'],
+                          "mbid": item['musicbrainzartistid'] ,
+                          "Art(thumb)": item['thumbnail'] ,
+                          "Art(fanart)": item['fanart'] ,
+                          "description": item['description'] ,
+                          "Born": item['born'] ,
+                          "Died": item['died'] ,
+                          "Formed": item['formed'] ,
+                          "Disbanded": item['disbanded'] ,
+                          "YearsActive": " / ".join(item['yearsactive']) ,
+                          "Style": " / ".join(item['style']) ,
+                          "Mood": " / ".join(item['mood']) ,
+                          "Instrument": " / ".join(item['instrument']) ,
+                          "Genre": " / ".join(item['genre']) ,
+                          "LibraryPath": 'musicdb://2/' + str(item['artistid']) + '/'
+                          }
+                artists.append(artist)
     return artists
     
 def GetXBMCAlbums():
