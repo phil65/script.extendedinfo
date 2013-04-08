@@ -25,20 +25,24 @@ Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/
 
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
+    items = []
     for i in range(0,10):
         try:
             url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
-            wnd = xbmcgui.Window(Window)
-            wnd.setProperty('XKCD.%i.Image' % i, results["img"])
-            wnd.setProperty('XKCD.%i.Title' % i, results["title"])
-            wnd.setProperty('XKCD.%i.Description' % i, results["alt"])
+            Image = results["img"]
+            Title = results["title"]
+            Description = results["alt"]
+            item = {'Image': Image, 'Title': Title, 'Description':Description  }
+            items.append(item)
         except:
             log("Error when setting XKCD info")
+    return items
 
 def GetCandHInfo():
     count = 1
+    images = []
     for i in range(1,30):
         try:
             url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
@@ -46,24 +50,23 @@ def GetCandHInfo():
         except:
             log("Error when fetching CandH data from net")
         if response:
-            wnd = xbmcgui.Window(Window)
             regex = ur'src="([^"]+)"'
             matches = re.findall(regex, response)
             if matches:
                 for item in matches:
                     if item.startswith('http://www.explosm.net/db/files/Comics/'):
-                        wnd.setProperty('CyanideHappiness.%i.Image' % count, item)     
                         dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
                         datematches = re.findall(dateregex, response)
-                        for date in datematches:
-                            wnd.setProperty('CyanideHappiness.%i.Title' % count, date)     
+                        newitem = {'Image': item, 'Title': datematches[0]  }
+                        images.append(newitem)
                         count += 1                      
               #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
                 if count > 10:
                     break
+    return images
                 
 def GetFlickrImages():
-    results=[]
+    images=[]
     try:
         url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
         response = GetStringFromUrl(url)
@@ -74,8 +77,11 @@ def GetFlickrImages():
     if results:
         wnd = xbmcgui.Window(Window)
         for item in results["value"]["items"]:
-            wnd.setProperty('Flickr.%i.Background' % count, item["link"])
+            Background = item["link"]
+            image = {'Background': Background  }
+            images.append(image)
             count += 1
+    return images
             
 def GetYoutubeVideos(jsonurl,prefix = ""):
     results=[]
@@ -185,12 +191,13 @@ class Main:
                 passDataToSkin('RSS', videos, self.prop_prefix)                
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
-                GetXKCDInfo()
+                passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix)
             elif info == 'flickr':
-                GetFlickrImages()
+                log("startin flickr")
+                passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
-                GetCandHInfo()
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
             elif info == 'similarartistsinlibrary':
                 artists = GetSimilarInLibrary(self.Artist_mbid)
                 passDataToSkin('SimilarArtistsInLibrary', artists, self.prop_prefix)
