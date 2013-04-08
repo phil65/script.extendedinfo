@@ -136,6 +136,7 @@ def create_movie_list():
             return False
         
 def GetXBMCArtists():
+    import xbmcvfs
     artists = []        
     filename = Addon_Data_Path + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
