@@ -1,4 +1,4 @@
-import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui
+import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui,xbmcvfs
 import os,sys,time
 if sys.version_info < (2, 7):
     import simplejson
@@ -13,7 +13,6 @@ Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data
 Window = 10000
 
 def AddArtToLibrary( type, media, folder, limit , silent = False):
-    import xbmcvfs
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
@@ -68,7 +67,6 @@ def import_skinsettings():
         log("backup not found")
 
 def export_skinsettings():
-    import xbmcvfs
     from xml.dom.minidom import parse
     # Set path
     guisettings_path = xbmc.translatePath( 'special://profile/guisettings.xml' ).decode("utf-8")
@@ -109,7 +107,6 @@ def create_musicvideo_list():
         return False
         
 def create_movie_list():
-    import xbmcvfs
     movies = []
     filename = Addon_Data_Path + "/XBMCmovies.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
@@ -137,11 +134,10 @@ def create_movie_list():
             return False
         
 def GetXBMCArtists():
-    import xbmcvfs
     artists = []        
     filename = Addon_Data_Path + "/XBMCartists.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
-        results = simplejson.loads(read_from_file(filename))
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        return simplejson.loads(read_from_file(filename))
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -172,34 +168,39 @@ def GetXBMCArtists():
     return artists
     
 def GetXBMCAlbums():
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount", "musicbrainzartistid"]}, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
     albums = []        
-    if json_query.has_key('result') and json_query['result'].has_key('albums'):
-        count = 0
-        for item in json_query['result']['albums']:
-            mbid = ''
-            album = {"Title": item['label'],
-                      "DBID": item['albumid'],
-                      "Artist": item['artist'],
-                      "mbid": item['musicbrainzartistid'] ,
-                      "Art(thumb)": item['thumbnail'] ,
-                      "Art(fanart)": item['fanart'] ,
-                      "Description": item['description'] ,
-                      "Rating": item['rating'] ,
-                      "RecordLabel": item['albumlabel'] ,
-                      "Year": item['year'] ,
-                      "YearsActive": " / ".join(item['yearsactive']) ,
-                      "Style": " / ".join(item['style']) ,
-                      "Type": " / ".join(item['type']) ,
-                      "Mood": " / ".join(item['mood']) ,
-                      "Theme": " / ".join(item['theme']) ,
-                      "Genre": " / ".join(item['genre']) ,
-                      "Play": 'XBMC.RunScript(script.playalbum,albumid=' + str(item.get('albumid')) + ')'
-                      }
-            albums.append(album)
-    return albums
+    filename = Addon_Data_Path + "/XBMCalbums.txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        return simplejson.loads(read_from_file(filename))
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount", "musicbrainzartistid"]}, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        save_to_file(json_query,"XBMCalbums",Addon_Data_Path)
+        json_query = simplejson.loads(json_query)
+        if json_query.has_key('result') and json_query['result'].has_key('albums'):
+            count = 0
+            for item in json_query['result']['albums']:
+                mbid = ''
+                album = {"Title": item['label'],
+                          "DBID": item['albumid'],
+                          "Artist": item['artist'],
+                          "mbid": item['musicbrainzartistid'] ,
+                          "Art(thumb)": item['thumbnail'] ,
+                          "Art(fanart)": item['fanart'] ,
+                          "Description": item['description'] ,
+                          "Rating": item['rating'] ,
+                          "RecordLabel": item['albumlabel'] ,
+                          "Year": item['year'] ,
+                          "YearsActive": " / ".join(item['yearsactive']) ,
+                          "Style": " / ".join(item['style']) ,
+                          "Type": " / ".join(item['type']) ,
+                          "Mood": " / ".join(item['mood']) ,
+                          "Theme": " / ".join(item['theme']) ,
+                          "Genre": " / ".join(item['genre']) ,
+                          "Play": 'XBMC.RunScript(script.playalbum,albumid=' + str(item.get('albumid')) + ')'
+                          }
+                albums.append(album)
+        return albums
     
 def media_path(path):
     # Check for stacked movies

@@ -58,6 +58,24 @@ def HandleLastFMEventResult(results):
         log("Error when handling LastFM results")
     return events
     
+    
+def HandleLastFMAlbumResult(results):
+    albums = []
+    log("starting HandleLastFMAlbumResult")
+    try:
+        for album in results['topalbums']['album']:
+            log("topalbums")
+            log(album)
+            name = album['name']
+            mbid = album['mbid']
+            artist = album['artist']['name']
+            album = {'artist': artist, 'mbid': mbid, 'name':name  }
+            albums.append(album)
+    except:
+        log("Error when handling LastFM results")
+    return albums
+    
+    
 def HandleLastFMShoutResult(results):
     shouts = []
     log("starting HandleLastFMShoutResult")
@@ -72,19 +90,20 @@ def HandleLastFMShoutResult(results):
         log("Error when handling LastFM Shout results")
     return shouts
     
-# def HandleLastFMTracksResult(results):
-    # tracks = []
-    # log("starting HandleLastFMTracksResult")
-    # try:
-        # for track in results['toptracks']:
-            # Title = track['name']
-            # author = track['author']
-            # date = track['date']
-            # track = {'comment': comment, 'author': author, 'date':date  }
-            # tracks.append(track)
-    # except:
-        # log("Error when handling LastFM Shout results")
-    # return events
+def HandleLastFMTracksResult(results):
+    artists = []
+    log("starting HandleLastFMTracksResult")
+    try:
+        for artist in results['artists']['artist']:
+            log(artist)
+            Title = artist['name']
+            Thumb = artist['image'][-1]['#text']
+            Listeners = artist['listeners']
+            artist = {'Title': Title, 'Thumb': Thumb, 'Listeners':Listeners  }
+            artists.append(artist)
+    except:
+        log("Error when handling LastFM TopArtists results")
+    return artists
     
     
 ''' old BandsInTown Way
@@ -128,17 +147,17 @@ def GetEvents(id,pastevents = False):
     return HandleLastFMEventResult(results)
     
     
-# def GetTopTracks(id):
-    # url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettoptracks&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
-    # log(url)
-    # try:
-        # response = GetStringFromUrl(url)
-        # results = json.loads(response)
-        # log("look here")
-        # log(results)
-    # except:
-        # log("Error when finding artist top-tracks from" + url)
-    # return HandleLastFMTracksResult(results)
+def GetTopArtists():
+    url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&format=json' % (lastfm_apikey)
+    log(url)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+        log("look here")
+        log(results)
+    except:
+        log("Error when finding artist top-tracks from" + url)
+    return HandleLastFMTracksResult(results)
     
 def GetShouts(artistname,albumtitle):
     url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&artist=%s&album=%s&api_key=%s&format=json' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle), lastfm_apikey)
@@ -151,6 +170,18 @@ def GetShouts(artistname,albumtitle):
     except:
         log("Error when finding shouts from" + url)
     return HandleLastFMShoutResult(results)
+    
+def GetTopAlbums(username):
+    url = 'http://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=%s&api_key=%s&format=json' % (urllib.quote_plus(username), lastfm_apikey)
+    log(url)
+    try:
+        response = GetStringFromUrl(url)
+        results = json.loads(response)
+        log("shout results")
+        log(results)
+    except:
+        log("Error when finding topalbums from" + url)
+    return HandleLastFMAlbumResult(results)
 
     
 def GetSimilarById(m_id):

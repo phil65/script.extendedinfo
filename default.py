@@ -14,7 +14,6 @@ __addonversion__ = __addon__.getAddonInfo('version')
 __language__     = __addon__.getLocalizedString
 
 
-AlbumName = None
 TrackTitle = None
 AdditionalParams = []
 Window = 10000
@@ -195,10 +194,18 @@ class Main:
             elif info == 'flickr':
                 log("startin flickr")
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
+            elif info == 'gettopalbums':
+                log("startin gettopalbums")
+                from OnlineMusicInfo import GetTopAlbums
+                passDataToSkin('TopAlbums', GetTopAlbums(self.UserName), self.prop_prefix)
             elif info == 'shouts':
                 log("startin shouts")
                 from OnlineMusicInfo import GetShouts
-                passDataToSkin('Shout', GetShouts(self.ArtistName,xbmc.getInfoLabel("ListItem.Album")), self.prop_prefix)
+                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
+            elif info == 'topartists':
+                log("startin gettopartists")
+                from OnlineMusicInfo import GetTopArtists
+                passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
@@ -263,6 +270,9 @@ class Main:
         self.musicvideos = []
         self.movies = []
         self.infos = []
+        self.AlbumName = None
+        self.ArtistName = None
+        self.UserName = None
         self.feed = None
         self.type = False
         self.festivalsonly = False
@@ -309,7 +319,9 @@ class Main:
                 from MusicBrainz import GetMusicBrainzIdFromNet
                 self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
             elif param.startswith('albumname='):
-                AlbumName = arg[10:].replace('"','')
+                self.AlbumName = arg[10:].replace('"','')
+            elif param.startswith('username='):
+                self.UserName = arg[9:].replace('"','')
             elif param.startswith('tracktitle='):
                 TrackTitle = arg[11:].replace('"','')
             elif param.startswith('window='):
