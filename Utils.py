@@ -109,6 +109,7 @@ def create_musicvideo_list():
         return False
         
 def create_movie_list():
+    import xbmcvfs
     movies = []
     filename = Addon_Data_Path + "/XBMCmovies.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
