@@ -40,7 +40,7 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
 def import_skinsettings():
-    importstring=read_from_file()
+    importstring = read_from_file()
     if importstring:
         progressDialog = xbmcgui.DialogProgress(__language__(32010))
         progressDialog.create(__language__(32010))
@@ -84,7 +84,7 @@ def export_skinsettings():
                 value = ""
             if skinsetting.attributes[ 'name' ].nodeValue.startswith(xbmc.getSkinDir()):
                 newlist.append((skinsetting.attributes[ 'type' ].nodeValue,skinsetting.attributes[ 'name' ].nodeValue,value))
-        if save_to_file(newlist,"backup"):
+        if save_to_file(newlist,xbmc.getSkinDir() + ".backup"):
             xbmcgui.Dialog().ok(__language__(32005),__language__(32006))
     else:
         xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
@@ -188,7 +188,6 @@ def GetXBMCAlbums():
             albums.append(album)
     return albums
     
-
 def media_path(path):
     # Check for stacked movies
     try:
@@ -250,14 +249,15 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
     
-def save_to_file(content, suffix, path = "" ):
+def save_to_file(content, filename, path = "" ):
+    import xbmcvfs
     try:
         if path == "":
-            text_file_path = get_browse_dialog() + xbmc.getSkinDir() +"." + suffix + ".txt"
+            text_file_path = get_browse_dialog() + filename + ".txt"
         else:
             if not xbmcvfs.exists(path):
                 xbmcvfs.mkdir(path)
-            text_file_path = path + xbmc.getSkinDir() +"." + suffix + ".txt"
+            text_file_path = os.path.join(path,filename + ".txt")
         log("text_file_path:")
         log(text_file_path)
         text_file =  open(text_file_path, "w")
@@ -271,10 +271,11 @@ def save_to_file(content, suffix, path = "" ):
 def read_from_file(path = "" ):
     import xbmcvfs
     # Set path
-    backup_path = get_browse_dialog(dlg_type=1)
+    if path == "":
+        path = get_browse_dialog(dlg_type=1)
     # Check to see if file exists
-    if xbmcvfs.exists( backup_path ):
-        with open(backup_path) as f: fc = simplejson.load(f)
+    if xbmcvfs.exists( path ):
+        with open(path) as f: fc = simplejson.load(f)
         return fc
     else:
         return False
@@ -312,11 +313,11 @@ def passDataToSkin(name, data, prefix=""):
     wnd = xbmcgui.Window(Window)
     if data != None:
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
-        log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+   #     log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
-            log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
+    #        log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
-                log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
+    #            log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
     else:
         wnd.setProperty('%s.Count' % name, '0')

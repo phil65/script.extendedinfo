@@ -1,11 +1,12 @@
-import xbmcaddon
+import xbmcaddon,os,xbmc
 import simplejson as json
-from Utils import log, GetStringFromUrl, GetValue
+from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file
 import xml.dom.minidom
 import urllib
 
 bandsintown_apikey = 'xbmc_open_source_media_center'
 lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
+Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def HandleBandsInTownResult(results):
     events = []
@@ -181,6 +182,8 @@ def GetNearEvents(tag = False,festivalsonly = False):
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')
+    #NearEvents = read_from_file(Addon_Data_Path + "/concerts.txt")
+    
     if festivalsonly:
         festivalsonly = "1"
     else:
@@ -193,7 +196,8 @@ def GetNearEvents(tag = False,festivalsonly = False):
     try:
         response = GetStringFromUrl(url)
         log(response)
-      #  response = unicode(response, 'utf-8', errors='ignore')
+        log("saving concert data")
+        save_to_file(response,"concerts",Addon_Data_Path)
         results = json.loads(response)
         log(results)
     except:

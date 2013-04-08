@@ -255,7 +255,8 @@ class Main:
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
-           
+
+            
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
