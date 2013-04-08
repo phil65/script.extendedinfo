@@ -195,6 +195,10 @@ class Main:
             elif info == 'flickr':
                 log("startin flickr")
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
+            elif info == 'shouts':
+                log("startin shouts")
+                from OnlineMusicInfo import GetShouts
+                passDataToSkin('Shout', GetShouts(self.ArtistName,xbmc.getInfoLabel("ListItem.Album")), self.prop_prefix)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
@@ -299,14 +303,14 @@ class Main:
                 if not self.prop_prefix.endswith('.') and self.prop_prefix <> "":
                     self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
-                ArtistName = arg[11:]
+                self.ArtistName = arg[11:].replace('"','')
                 # todo: look up local mbid first -->xbmcid for parameter
                 from MusicBrainz import GetMusicBrainzIdFromNet
-                self.Artist_mbid = GetMusicBrainzIdFromNet(ArtistName)
+                self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
             elif param.startswith('albumname='):
-                AlbumName = arg[10:]
+                AlbumName = arg[10:].replace('"','')
             elif param.startswith('tracktitle='):
-                TrackTitle = arg[11:]
+                TrackTitle = arg[11:].replace('"','')
             elif param.startswith('window='):
                 Window = int(arg[7:])
             elif param.startswith('setuplocation'):

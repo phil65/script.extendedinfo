@@ -58,18 +58,18 @@ def HandleLastFMEventResult(results):
     return events
     
 def HandleLastFMShoutResult(results):
-    events = []
+    shouts = []
     log("starting HandleLastFMShoutResult")
     try:
-        for shout in results['shouts']:
+        for shout in results['shouts']['shout']:
             comment = shout['body']
             author = shout['author']
             date = shout['date']
-            shout = {'comment': comment, 'author': author, 'date':date  }
-            events.append(event)
+            newshout = {'comment': comment, 'author': author, 'date':date  }
+            shouts.append(newshout)
     except:
         log("Error when handling LastFM Shout results")
-    return events
+    return shouts
     
 # def HandleLastFMTracksResult(results):
     # tracks = []
@@ -114,7 +114,7 @@ def GetEvents(id,pastevents = False):
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("look here")
+        log("GetEvents Result")
         log(results)
     except:
         log("Error when finding artist-related events from" + url)
@@ -133,13 +133,13 @@ def GetEvents(id,pastevents = False):
         # log("Error when finding artist top-tracks from" + url)
     # return HandleLastFMTracksResult(results)
     
-def GetShouts(id,albumtitle):
-    url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&mbid=%s&album=%s&api_key=%s&format=json' % (id,albumtitle, lastfm_apikey)
+def GetShouts(artistname,albumtitle):
+    url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&artist=%s&album=%s&api_key=%s&format=json' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle), lastfm_apikey)
     log(url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("look here")
+        log("shout results")
         log(results)
     except:
         log("Error when finding shouts from" + url)
@@ -188,7 +188,7 @@ def GetNearEvents(tag = False,festivalsonly = False):
     if not tag:
         url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,tag,festivalsonly)   
+        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,urllib.quote_plus(tag),festivalsonly)   
     log('request: %s' % url)
     try:
         response = GetStringFromUrl(url)
