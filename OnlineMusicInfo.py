@@ -250,6 +250,29 @@ def GetNearEvents(tag = False,festivalsonly = False):
             results = []
             log("error getting concert data from " + url)
     return HandleLastFMEventResult(results)
+    
+def GetVenueEvents(id = ""):
+    import time
+    settings = xbmcaddon.Addon(id='script.extendedinfo')
+    filename = Addon_Data_Path + "/concerts" + id + ".txt"
+    results = read_from_file(filename)
+    if results and time.time() - os.path.getmtime(filename) < 86400:
+        results = json.loads(results)
+    else:
+        url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&format=json&limit=50&tag=%s' % (lastfm_apikey,id)   
+        log('request: %s' % url)
+        try:
+            response = GetStringFromUrl(url)
+            log(response)
+            log("saving concert data")
+            save_to_file(response,"concerts" + id, Addon_Data_Path)
+            results = json.loads(response)
+            log(results)
+        except:
+            results = []
+            log("error getting concert data from " + url)
+    return HandleLastFMEventResult(results)
+    
 
 def GetArtistNearEvents(Artists): # not possible with api 2.0
     settings = xbmcaddon.Addon(id='script.extendedinfo')

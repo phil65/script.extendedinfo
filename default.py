@@ -21,6 +21,9 @@ extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
+rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
+trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
+tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
@@ -63,9 +66,9 @@ def GetCandHInfo():
                 if count > 10:
                     break
     return images
-                
+                     
 def GetFlickrImages():
-    images=[]
+    images = []
     try:
         url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
         response = GetStringFromUrl(url)
@@ -74,16 +77,132 @@ def GetFlickrImages():
         log("Error when fetching Flickr data from net")
     count = 1
     if results:
-        wnd = xbmcgui.Window(Window)
         for item in results["value"]["items"]:
             Background = item["link"]
             image = {'Background': Background  }
             images.append(image)
             count += 1
     return images
+    
+def GetInCinemaInfo():
+    movies = []
+    try:
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s&country=%s' % (rottentomatoes_key,xbmc.getLanguage()[:2].lower())
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching RottenTomatoes data from net")
+    count = 1
+    if results:
+        log(results)
+        for item in results["movies"]:
+          #  Year = item["release_dates"]["theatre"]             
+            movie = {'Title': item["title"],
+                     'Thumb': item["posters"]["original"],
+                     'Runtime': item["runtime"],
+                     'Year': item["year"],
+                     'mpaa': item["mpaa_rating"],
+                     'Rating': item["ratings"]["critics_score"] / 10,
+                     'Plot': item["synopsis"]  }
+            movies.append(movie)
+            count += 1
+    return movies
+    
+def GetTraktCalendarShows(Type):
+    shows = []
+    try:
+        url = 'http://api.trakt.tv/calendar/%s.json/%s' % (Type,trakt_key)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching Trakt data from net")
+    count = 1
+    if results:
+        log(results)
+        for day in results:
+            for count, episode in enumerate(day["episodes"]):
+                log(episode)       
+                show = {'%i.Title' % (count) : episode["episode"]["title"],
+                        '%i.TVShowTitle' % (count) : episode["show"]["title"],
+                        '%i.Runtime' % (count) : episode["show"]["runtime"],
+                        '%i.Certification' % (count) : episode["show"]["certification"],
+                        '%i.Studio' % (count) : episode["show"]["network"],
+                        '%i.Plot' % (count) : episode["show"]["overview"],
+                        '%i.Genre' % (count) : " / ".join(episode["show"]["genres"]),
+                        '%i.Thumb' % (count) : episode["episode"]["images"]["screen"],
+                        '%i.Art(poster)' % (count) : episode["show"]["images"]["poster"],
+                        '%i.Art(banner)' % (count) : episode["show"]["images"]["banner"],
+                        '%i.Art(fanart)' % (count) : episode["show"]["images"]["fanart"]  }
+                log(show)
+                shows.append(show)
+            count += 1
+    return shows
+    
+def GetTrendingShows():
+    shows = []
+    try:
+        url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching  trending data from Trakt.tv")
+    count = 1
+    if results:
+        log(results)
+        for tvshow in results:      
+            show = {'Title': tvshow["title"],
+                    'Runtime': tvshow["runtime"],
+                    'Year': tvshow["year"],
+                    'mpaa': tvshow["certification"],
+                    'Studio': tvshow["network"],
+                    'Plot': tvshow["overview"],
+                    'NextDate': tvshow["air_day"],
+                    'ShortTime': tvshow["air_time"],
+                    'Premiered': tvshow["first_aired"],
+                    'Country': tvshow["country"],
+                    'Rating': tvshow["ratings"]["percentage"]/10,
+                    'Genre': " / ".join(tvshow["genres"]),
+                    'Art(poster)': tvshow["images"]["poster"],
+                    'Art(banner)': tvshow["images"]["banner"],
+                    'Art(fanart)': tvshow["images"]["fanart"]  }
+            log(show)
+            shows.append(show)
+            count += 1
+    return shows
+    
+def GetTrendingMovies():
+    movies = []
+    try:
+        url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching  trending data from Trakt.tv")
+    count = 1
+    if results:
+        log(results)
+        for movie in results:      
+            movie = {'Title': movie["title"],
+                    'Runtime': movie["runtime"],
+                    'Tagline': movie["tagline"],
+                    'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
+                    'Trailer': ConvertYoutubeURL(movie["trailer"]),
+                    'Year': movie["year"],
+                    'mpaa': movie["certification"],
+                    'Plot': movie["overview"],
+                    'Premiered': movie["released"],
+                    'Rating': movie["ratings"]["percentage"]/10,
+                    'Genre': " / ".join(movie["genres"]),
+                    'Art(poster)': movie["images"]["poster"],
+                    'Art(fanart)': movie["images"]["fanart"]  }
+            log(movie)
+            movies.append(movie)
+            count += 1
+    return movies
+    
             
 def GetYoutubeVideos(jsonurl,prefix = ""):
-    results=[]
+    results = []
     try:
         response = GetStringFromUrl(jsonurl)
         results = simplejson.loads(response)
@@ -209,6 +328,21 @@ class Main:
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
+            elif info == 'incinema':
+                log("startin GetInCinemaInfo")
+                passDataToSkin('InCinema', GetInCinemaInfo(), self.prop_prefix)
+            elif info == 'airingshows':
+                log("startin GetTraktCalendarShows")
+                passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix)
+            elif info == 'premiereshows':
+                log("startin GetTraktCalendarShows")
+                passDataToSkin('AiringShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
+            elif info == 'trendingshows':
+                log("startin GetTrendingShows")
+                passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix)
+            elif info == 'trendingmovies':
+                log("startin GetTrendingMovies")
+                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
                 artists = GetSimilarInLibrary(self.Artist_mbid)
                 passDataToSkin('SimilarArtistsInLibrary', artists, self.prop_prefix)
