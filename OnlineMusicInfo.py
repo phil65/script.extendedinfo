@@ -32,6 +32,7 @@ def HandleBandsInTownResult(results):
     
 def HandleLastFMEventResult(results):
     events = []
+    log(results)
     log("starting HandleLastFMEventResult")
     try:
         for event in results['events']['event']:
@@ -258,7 +259,7 @@ def GetVenueEvents(id = ""):
     if results and time.time() - os.path.getmtime(filename) < 86400:
         results = json.loads(results)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&format=json&limit=50&tag=%s' % (lastfm_apikey,id)   
+        url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
         log('request: %s' % url)
         try:
             response = GetStringFromUrl(url)

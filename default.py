@@ -345,17 +345,17 @@ class Main:
                 log("startin GetTrendingMovies")
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
-                artists = GetSimilarInLibrary(self.Artist_mbid)
-                passDataToSkin('SimilarArtistsInLibrary', artists, self.prop_prefix)
+                passDataToSkin('SimilarArtistsInLibrary', GetSimilarInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
                 from OnlineMusicInfo import GetEvents
-                events = GetEvents(self.Artist_mbid)
              #   events = GetEvents(self.Artist_mbid,True)
-                passDataToSkin('ArtistEvents', events, self.prop_prefix)       
+                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)       
             elif info == 'nearevents':
                 from OnlineMusicInfo import GetNearEvents
-                events = GetNearEvents(self.type,self.festivalsonly)
-                passDataToSkin('NearEvents', events, self.prop_prefix)        
+                passDataToSkin('NearEvents', GetNearEvents(self.type,self.festivalsonly), self.prop_prefix)
+            elif info == 'venueevents':
+                from OnlineMusicInfo import GetVenueEvents
+                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
                 artists = GetXBMCArtists()
                 events = GetArtistNearEvents(artists[0:15])
@@ -409,6 +409,7 @@ class Main:
         self.ArtistName = None
         self.UserName = None
         self.feed = None
+        self.id = None
         self.type = False
         self.festivalsonly = False
         self.prop_prefix = ""
@@ -444,6 +445,8 @@ class Main:
                 self.festivalsonly = (param[14:])
             elif param.startswith('feed='):
                 self.feed = param[5:]
+            elif param.startswith('id='):
+                self.id = param[3:]               
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
                 if not self.prop_prefix.endswith('.') and self.prop_prefix <> "":
