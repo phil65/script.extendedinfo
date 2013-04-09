@@ -36,22 +36,21 @@ def HandleLastFMEventResult(results):
     try:
         for event in results['events']['event']:
             log(event)
-            date = event['startDate']
-            venue = event['venue']['name']
-            city = event['venue']['location']['city']
-            name = event['venue']['name']
-            region = event['venue']['location']['street']
-            country = event['venue']['location']['country']
-            artists = event['artists']['artist']
-            headliner = event['artists']['headliner']
-            artist_image = event['image'][-1]['#text']
-            venue_image = event['venue']['image'][-2]['#text']
             my_arts = ''
             if isinstance(artists, list):
                 my_arts = ' / '.join(artists)
             else:
                 my_arts = artists
-            event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts, 'artist_image':artist_image, 'venue_image':venue_image, 'headliner':headliner  }
+            event = {'date': event['startDate'],
+                     'city': event['venue']['location']['city'],
+                     'name':event['venue']['name'],
+                     'id':event['venue']['id'],
+                     'region':event['venue']['location']['street'],
+                     'country':event['venue']['location']['country'],
+                     'artists':event['artists']['artist'],
+                     'artist_image':event['image'][-1]['#text'],
+                     'venue_image':event['venue']['image'][-2]['#text'],
+                     'headliner':event['artists']['headliner']  }
             log(event)
             events.append(event)
     except:
@@ -66,10 +65,9 @@ def HandleLastFMAlbumResult(results):
         for album in results['topalbums']['album']:
             log("topalbums")
             log(album)
-            name = album['name']
-            mbid = album['mbid']
-            artist = album['artist']['name']
-            album = {'artist': artist, 'mbid': mbid, 'name':name  }
+            album = {'artist': album['artist']['name'],
+                     'mbid': album['mbid'],
+                     'name':album['name']  }
             albums.append(album)
     except:
         log("Error when handling LastFM results")
