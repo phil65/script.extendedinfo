@@ -37,20 +37,21 @@ def HandleLastFMEventResult(results):
         for event in results['events']['event']:
             log(event)
             my_arts = ''
+            artists = event['artists']['artist']
             if isinstance(artists, list):
                 my_arts = ' / '.join(artists)
             else:
                 my_arts = artists
             event = {'date': event['startDate'],
                      'city': event['venue']['location']['city'],
-                     'name':event['venue']['name'],
+                     'name': event['venue']['name'],
                      'id':event['venue']['id'],
-                     'region':event['venue']['location']['street'],
-                     'country':event['venue']['location']['country'],
-                     'artists':event['artists']['artist'],
-                     'artist_image':event['image'][-1]['#text'],
-                     'venue_image':event['venue']['image'][-2]['#text'],
-                     'headliner':event['artists']['headliner']  }
+                     'region': event['venue']['location']['street'],
+                     'country': event['venue']['location']['country'],
+                     'artists': my_arts,
+                     'artist_image': event['image'][-1]['#text'],
+                     'venue_image': event['venue']['image'][-1]['#text'],
+                     'headliner': event['artists']['headliner']  }
             log(event)
             events.append(event)
     except:
