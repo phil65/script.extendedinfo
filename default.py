@@ -24,6 +24,8 @@ Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/
 rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
+bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
+moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
@@ -33,10 +35,9 @@ def GetXKCDInfo():
             url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
-            Image = results["img"]
-            Title = results["title"]
-            Description = results["alt"]
-            item = {'Image': Image, 'Title': Title, 'Description':Description  }
+            item = {'Image': results["img"],
+                    'Title': results["title"],
+                    'Description':results["alt"]  }
             items.append(item)
         except:
             log("Error when setting XKCD info")
@@ -59,7 +60,8 @@ def GetCandHInfo():
                     if item.startswith('http://www.explosm.net/db/files/Comics/'):
                         dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
                         datematches = re.findall(dateregex, response)
-                        newitem = {'Image': item, 'Title': datematches[0]  }
+                        newitem = {'Image': item,
+                                    'Title': datematches[0]  }
                         images.append(newitem)
                         count += 1                      
               #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
@@ -69,6 +71,7 @@ def GetCandHInfo():
                      
 def GetFlickrImages():
     images = []
+    results = ""
     try:
         url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
         response = GetStringFromUrl(url)
@@ -78,17 +81,18 @@ def GetFlickrImages():
     count = 1
     if results:
         for item in results["value"]["items"]:
-            Background = item["link"]
-            image = {'Background': Background  }
+            image = {'Background': item["link"]  }
             images.append(image)
             count += 1
     return images
     
-def GetInCinemaInfo():
+def GetRottenTomatoesMovies():
     movies = []
+    results = ""
     try:
        # url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s&country=%s' % (rottentomatoes_key,xbmc.getLanguage()[:2].lower())
         url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
+     #   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/770672122/similar.json?apikey=%s&limit=20' % (rottentomatoes_key)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -111,6 +115,7 @@ def GetInCinemaInfo():
     
 def GetTraktCalendarShows(Type):
     shows = []
+    results = ""
     try:
         url = 'http://api.trakt.tv/calendar/%s.json/%s' % (Type,trakt_key)
         response = GetStringFromUrl(url)
@@ -119,10 +124,8 @@ def GetTraktCalendarShows(Type):
         log("Error when fetching Trakt data from net")
     count = 1
     if results:
-        log(results)
         for day in results:
             for count, episode in enumerate(day["episodes"]):
-                log(episode)       
                 show = {'%i.Title' % (count) : episode["episode"]["title"],
                         '%i.TVShowTitle' % (count) : episode["show"]["title"],
                         '%i.Runtime' % (count) : episode["show"]["runtime"],
@@ -134,13 +137,13 @@ def GetTraktCalendarShows(Type):
                         '%i.Art(poster)' % (count) : episode["show"]["images"]["poster"],
                         '%i.Art(banner)' % (count) : episode["show"]["images"]["banner"],
                         '%i.Art(fanart)' % (count) : episode["show"]["images"]["fanart"]  }
-                log(show)
                 shows.append(show)
             count += 1
     return shows
     
 def GetTrendingShows():
     shows = []
+    results = ""
     try:
         url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
         response = GetStringFromUrl(url)
@@ -149,7 +152,6 @@ def GetTrendingShows():
         log("Error when fetching  trending data from Trakt.tv")
     count = 1
     if results:
-        log(results)
         for tvshow in results:      
             show = {'Title': tvshow["title"],
                     'Runtime': tvshow["runtime"],
@@ -166,13 +168,13 @@ def GetTrendingShows():
                     'Art(poster)': tvshow["images"]["poster"],
                     'Art(banner)': tvshow["images"]["banner"],
                     'Art(fanart)': tvshow["images"]["fanart"]  }
-            log(show)
             shows.append(show)
             count += 1
     return shows
     
 def GetTrendingMovies():
     movies = []
+    results = ""
     try:
         url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
         response = GetStringFromUrl(url)
@@ -181,7 +183,6 @@ def GetTrendingMovies():
         log("Error when fetching  trending data from Trakt.tv")
     count = 1
     if results:
-        log(results)
         for movie in results:      
             movie = {'Title': movie["title"],
                     'Runtime': movie["runtime"],
@@ -196,7 +197,6 @@ def GetTrendingMovies():
                     'Genre': " / ".join(movie["genres"]),
                     'Art(poster)': movie["images"]["poster"],
                     'Art(fanart)': movie["images"]["fanart"]  }
-            log(movie)
             movies.append(movie)
             count += 1
     return movies
@@ -215,31 +215,26 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
     if results:
         try:
             for item in results["value"]["items"]:
-                Thumb = item["media:thumbnail"][0]["url"]
-                Media = ConvertYoutubeURL(item["link"])
-                Play = "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")"
-                Title = item["title"]
-                Description = item["content"]["content"]
-                Date = item["pubDate"]
-                video = {'Thumb': Thumb, 'Media': Media, 'Play':Play, 'Title':Title, 'Description':Description, 'Date':Date  }
-                log(video)
+                video = {'Thumb': item["media:thumbnail"][0]["url"],
+                         'Media': ConvertYoutubeURL(item["link"]),
+                         'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
+                         'Title':item["title"],
+                         'Description':item["content"]["content"],
+                         'Date':item["pubDate"]  }
                 videos.append(video)
                 count += 1
         except:
             for item in results["feed"]["entry"]:
                 for entry in item["link"]:
                     if entry.get('href','').startswith('http://www.youtube.com/watch'):
-                        Date = "To Come"
-                        Description = "To Come"
-                        Play = "PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")"
-                        Media = ConvertYoutubeURL(entry.get('href',''))
-                        Thumb = "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg"
-                        log("http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg")                   
-                Title = item["title"]["$t"]
-                video = {'Thumb': Thumb, 'Media': Media, 'Play':Play, 'Title':Title, 'Description':Description, 'Date':Date  }
-                log(video)
-                videos.append(video)
-                count += 1
+                        video = {'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg",
+                                 'Media': ConvertYoutubeURL(entry.get('href','')),
+                                 'Play':"PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")",
+                                 'Title':item["title"]["$t"],
+                                 'Description':"To Come",
+                                 'Date':"To Come"  }
+                        videos.append(video)
+                        count += 1
     return videos
 
 def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
@@ -330,8 +325,11 @@ class Main:
                 log("startin GetCandHInfo")
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
             elif info == 'incinema':
-                log("startin GetInCinemaInfo")
-                passDataToSkin('InCinema', GetInCinemaInfo(), self.prop_prefix)
+                log("start gettin InCinema info")
+                passDataToSkin('InCinema', GetRottenTomatoesMovies(), self.prop_prefix)
+            elif info == 'similarmovies':
+                log("startin SimilarMovies")
+                passDataToSkin('SimilarMovies', GetRottenTomatoesMovies(), self.prop_prefix)
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix)
@@ -702,7 +700,6 @@ class Main:
             if item.get( "genre" ): genre += [ g for g in item[ "genre" ] if g and g not in genre ]
             if item.get( "country" ): country += [ c for c in item[ "country" ] if c and c not in country ]
             if item.get( "studio" ): studio += [ s for s in item[ "studio" ] if s and s not in studio ]
-        #    years += [ str(item['year']) ]
             years.append(str(item['year']))
         self.window.setProperty('Set.Movies.Plot', plot)
         if json_query['result']['setdetails']['limits']['total'] > 1:

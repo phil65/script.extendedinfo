@@ -110,7 +110,7 @@ def create_movie_list():
     movies = []
     filename = Addon_Data_Path + "/XBMCmovies.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        return simplejson.loads(read_from_file(filename))
+        return read_from_file(filename)
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -137,7 +137,7 @@ def GetXBMCArtists():
     artists = []        
     filename = Addon_Data_Path + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        return simplejson.loads(read_from_file(filename))
+        return read_from_file(filename)
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -171,7 +171,7 @@ def GetXBMCAlbums():
     albums = []        
     filename = Addon_Data_Path + "/XBMCalbums.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        return simplejson.loads(read_from_file(filename))
+        return read_from_file(filename)
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount", "musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -285,13 +285,15 @@ def save_to_file(content, filename, path = "" ):
         
 def read_from_file(path = "" ):
     import xbmcvfs
+    log("trying to load " + path)
     # Set path
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     # Check to see if file exists
     if xbmcvfs.exists( path ):
         with open(path) as f: fc = simplejson.load(f)
-        return fc
+        log("loaded file " + path)
+        return simplejson.loads(fc)
     else:
         return False
 

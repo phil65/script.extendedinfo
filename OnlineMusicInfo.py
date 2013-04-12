@@ -1,4 +1,4 @@
-import xbmcaddon,os,xbmc
+import xbmcaddon,os,xbmc,xbmcvfs
 import simplejson as json
 from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file
 import xml.dom.minidom
@@ -12,20 +12,19 @@ def HandleBandsInTownResult(results):
     events = []
     for event in results:
         try:
-            date = event['datetime']
-            date = date.replace("T", " - ").replace(":00", "",1)
             venue = event['venue']
-            city = venue['city']
-            name = venue['name']
-            region = venue['region']
-            country = venue['country']
             artists = event['artists']
             my_arts = ''
             for art in artists:
                 my_arts += ' / '
                 my_arts += art['name']
             my_arts = my_arts.replace(" / ", "",1)        
-            event = {'date': date, 'city': city, 'name':name, 'region':region, 'country':country, 'artists':my_arts  }
+            event = {'date': event['datetime'].replace("T", " - ").replace(":00", "",1),
+                     'city': venue['city'],
+                     'name': venue['name'],
+                     'region': venue['region'],
+                     'country': venue['country'],
+                     'artists': my_arts  }
             events.append(event)
         except: pass
     return events
@@ -36,8 +35,6 @@ def HandleLastFMEventResult(results):
     log("starting HandleLastFMEventResult")
     try:
         for event in results['events']['event']:
-            log(event)
-            my_arts = ''
             artists = event['artists']['artist']
             if isinstance(artists, list):
                 my_arts = ' / '.join(artists)
@@ -46,14 +43,13 @@ def HandleLastFMEventResult(results):
             event = {'date': event['startDate'],
                      'city': event['venue']['location']['city'],
                      'name': event['venue']['name'],
-                     'id':event['venue']['id'],
+                     'id': event['venue']['id'],
                      'region': event['venue']['location']['street'],
                      'country': event['venue']['location']['country'],
                      'artists': my_arts,
                      'artist_image': event['image'][-1]['#text'],
                      'venue_image': event['venue']['image'][-1]['#text'],
                      'headliner': event['artists']['headliner']  }
-            log(event)
             events.append(event)
     except:
         log("Error when handling LastFM results")
@@ -65,8 +61,6 @@ def HandleLastFMAlbumResult(results):
     log("starting HandleLastFMAlbumResult")
     try:
         for album in results['topalbums']['album']:
-            log("topalbums")
-            log(album)
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
                      'name':album['name']  }
@@ -81,25 +75,76 @@ def HandleLastFMShoutResult(results):
     log("starting HandleLastFMShoutResult")
     try:
         for shout in results['shouts']['shout']:
-            comment = shout['body']
-            author = shout['author']
-            date = shout['date']
-            newshout = {'comment': comment, 'author': author, 'date':date  }
+            newshout = {'comment': shout['body'],
+                        'author': shout['author'],
+                        'date':shout['date']  }
             shouts.append(newshout)
     except:
         log("Error when handling LastFM Shout results")
     return shouts
+    
+def HandleTheMovieDBMovieResult(results):
+    movies = []
+    log("starting HandleLastFMShoutResult")
+    try:
+        for movie in results['results']:
+            newmovie = {'Art(fanart)': movie['backdrop_path'],
+                        'Art(poster)': movie['poster_path'],
+                        'Title': movie['title'],
+                        'ID': movie['id'],
+                        'Rating': movie['vote_average'],
+                        'ReleaseDate':movie['release_date']  }
+            movies.append(newmovie)
+    except:
+        log("Error when handling TheMovieDB movie results")
+    return movies
+    
+def HandleTheMovieDBPeopleResult(results):
+    people = []
+    log("starting HandleLastFMPeopleResult")
+    try:
+        for person in results:
+            newperson = {'adult': person['adult'],
+                        'name': person['name'],
+                        'also_known_as': person['also_known_as'],
+                        'biography': person['biography'],
+                        'birthday': person['birthday'],
+                        'id': person['id'],
+                        'deathday': person['deathday'],
+                        'place_of_birth': person['place_of_birth'],
+                        'thumb': person['profile_path']  }
+            people.append(newperson)
+    except:
+        log("Error when handling TheMovieDB people results")
+    return people
+    
+    
+def HandleTheMovieDBCompanyResult(results):
+    companies = []
+    log("starting HandleLastFMCompanyResult")
+    try:
+        for company in results:
+            newcompany = {'parent_company': company['parent_company'],
+                        'name': company['name'],
+                        'description': company['description'],
+                        'headquarters': company['headquarters'],
+                        'homepage': company['homepage'],
+                        'id': company['id'],
+                        'logo_path': company['logo_path'] }
+            companies.append(newcompany)
+    except:
+        log("Error when handling TheMovieDB companies results")
+    return companies
+    
     
 def HandleLastFMTracksResult(results):
     artists = []
     log("starting HandleLastFMTracksResult")
     try:
         for artist in results['artists']['artist']:
-            log(artist)
-            Title = artist['name']
-            Thumb = artist['image'][-1]['#text']
-            Listeners = artist['listeners']
-            artist = {'Title': Title, 'Thumb': Thumb, 'Listeners':Listeners  }
+            artist = {'Title': artist['name'],
+                      'Thumb': artist['image'][-1]['#text'],
+                      'Listeners':artist['listeners']  }
             artists.append(artist)
     except:
         log("Error when handling LastFM TopArtists results")
@@ -116,8 +161,6 @@ def GetEvents(id,getall = False): # converted to api 2.0
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("look here")
-        log(results)
         if not results:
             GetEvents(id,True)
     except:
@@ -130,65 +173,56 @@ def GetEvents(id,pastevents = False):
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getpastevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
-    log(url)
     filename = Addon_Data_Path + "/concerts" + id + str(pastevents) +".txt"
-    results = read_from_file(filename)
-    if results and time.time() - os.path.getmtime(filename) < 86400:
-        results = json.loads(results)
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        results = read_from_file(filename)
     else:
         try:
             response = GetStringFromUrl(url)
             save_to_file(response,"artistconcerts" + id + str(pastevents),Addon_Data_Path)
             results = json.loads(response)
-            log("GetEvents Result")
-            log(results)
+            return HandleLastFMEventResult(results)
         except:
             log("Error when finding artist-related events from" + url)
-    return HandleLastFMEventResult(results)
+            return []
     
     
 def GetTopArtists():
     url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&format=json' % (lastfm_apikey)
-    log(url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("look here")
-        log(results)
+        return HandleLastFMTracksResult(results)
     except:
         log("Error when finding artist top-tracks from" + url)
-    return HandleLastFMTracksResult(results)
+        return []
     
 def GetShouts(artistname,albumtitle):
     url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&artist=%s&album=%s&api_key=%s&format=json' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle), lastfm_apikey)
-    log(url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("shout results")
-        log(results)
+        return HandleLastFMShoutResult(results)
     except:
         log("Error when finding shouts from" + url)
-    return HandleLastFMShoutResult(results)
+        return []
     
 def GetTopAlbums(username):
     url = 'http://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=%s&api_key=%s&format=json' % (urllib.quote_plus(username), lastfm_apikey)
-    log(url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("shout results")
-        log(results)
+        return HandleLastFMAlbumResult(results)
     except:
         log("Error when finding topalbums from" + url)
-    return HandleLastFMAlbumResult(results)
+        return []
 
     
 def GetSimilarById(m_id):
+    similars = []
     filename = Addon_Data_Path + "/similar" + m_id +".txt"
-    results = read_from_file(filename)
-    if results and time.time() - os.path.getmtime(filename) < 2409600:
-        similars = results
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
+        similars = read_from_file(filename)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
         try:
@@ -212,9 +246,9 @@ def GetSimilarById(m_id):
             print ret
             return None        
         artistXMLs = curXML.getElementsByTagName('artist')
-        similars = []
         for artistXML in artistXMLs:
-            artist = {"name": GetValue(artistXML, 'name'), "mbid": GetValue(artistXML, 'mbid')}
+            artist = {"name": GetValue(artistXML, 'name'),
+                      "mbid": GetValue(artistXML, 'mbid')}
             similars.append(artist)
         log('Found %i Similar artists in last.FM' % len(similars))
     return similars
@@ -222,6 +256,7 @@ def GetSimilarById(m_id):
     
 def GetNearEvents(tag = False,festivalsonly = False):
     import time
+    results = []
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     country = 'Poland' #settings.getSetting('country')
     city = 'Wroclaw' #settings.getSetting('city')
@@ -230,48 +265,45 @@ def GetNearEvents(tag = False,festivalsonly = False):
     else:
         festivalsonly = "0"
     filename = Addon_Data_Path + "/concerts" + festivalsonly + str(tag) +".txt"
-    results = read_from_file(filename)
-    if results and time.time() - os.path.getmtime(filename) < 86400:
-        results = json.loads(results)
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        results = read_from_file(filename)
+        log("loaded from file:")
+        log(results)
     else:
         if not tag:
             url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
         else:
             url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,urllib.quote_plus(tag),festivalsonly)   
-        log('request: %s' % url)
         try:
             response = GetStringFromUrl(url)
-            log(response)
-            log("saving concert data")
             save_to_file(response,"concerts" + festivalsonly + str(tag),Addon_Data_Path)
             results = json.loads(response)
+            log("refreshed NearEvents Info:")
             log(results)
         except:
-            results = []
             log("error getting concert data from " + url)
+            return []
     return HandleLastFMEventResult(results)
-    
+
+            
 def GetVenueEvents(id = ""):
     import time
     settings = xbmcaddon.Addon(id='script.extendedinfo')
     filename = Addon_Data_Path + "/concerts" + id + ".txt"
-    results = read_from_file(filename)
-    if results and time.time() - os.path.getmtime(filename) < 86400:
-        results = json.loads(results)
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        results = read_from_file(filename)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
         log('request: %s' % url)
         try:
             response = GetStringFromUrl(url)
-            log(response)
-            log("saving concert data")
             save_to_file(response,"concerts" + id, Addon_Data_Path)
             results = json.loads(response)
-            log(results)
+            return HandleLastFMEventResult(results)
         except:
             results = []
             log("error getting concert data from " + url)
-    return HandleLastFMEventResult(results)
+            return []
     
 
 def GetArtistNearEvents(Artists): # not possible with api 2.0
@@ -282,10 +314,10 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
              ArtistStr = ArtistStr + '&'
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    log('request: %s' % url)
     try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
+        return HandleBandsInTownResult(results)
     except:
         log("error when getting artist data from " + url)
-    return HandleBandsInTownResult(results)
+        return []

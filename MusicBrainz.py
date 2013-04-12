@@ -20,6 +20,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
     tries = 0
     trylimit = 5
     gotit = False
+    filename = Addon_Data_Path + "/mbid_" + urllib.quote_plus(artist) + ".txt"
     while tries < trylimit and not gotit:
         ret = GetStringFromUrl(url)
         if 'requests are exceeding the allowable rate limit' in ret:
