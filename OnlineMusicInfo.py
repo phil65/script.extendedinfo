@@ -54,8 +54,7 @@ def HandleLastFMEventResult(results):
     except:
         log("Error when handling LastFM results")
     return events
-    
-    
+       
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
@@ -68,8 +67,7 @@ def HandleLastFMAlbumResult(results):
     except:
         log("Error when handling LastFM results")
     return albums
-    
-    
+       
 def HandleLastFMShoutResult(results):
     shouts = []
     log("starting HandleLastFMShoutResult")
@@ -117,8 +115,7 @@ def HandleTheMovieDBPeopleResult(results):
     except:
         log("Error when handling TheMovieDB people results")
     return people
-    
-    
+      
 def HandleTheMovieDBCompanyResult(results):
     companies = []
     log("starting HandleLastFMCompanyResult")
@@ -135,8 +132,7 @@ def HandleTheMovieDBCompanyResult(results):
     except:
         log("Error when handling TheMovieDB companies results")
     return companies
-    
-    
+       
 def HandleLastFMTracksResult(results):
     artists = []
     log("starting HandleLastFMTracksResult")
@@ -253,8 +249,7 @@ def GetSimilarById(m_id):
             similars.append(artist)
         log('Found %i Similar artists in last.FM' % len(similars))
     return similars
-    
-    
+        
 def GetNearEvents(tag = False,festivalsonly = False):
     import time
     results = []

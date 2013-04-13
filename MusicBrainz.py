@@ -1,5 +1,5 @@
-import xbmc, urllib, xml.dom.minidom,xbmcaddon,os
-from Utils import GetStringFromUrl, GetValue, GetAttribute, log
+import xbmc, urllib, xml.dom.minidom,xbmcaddon,os,xbmcvfs,time
+from Utils import GetStringFromUrl, GetValue, GetAttribute, log, read_from_file
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 
@@ -18,43 +18,47 @@ Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data
     # return artist  
 
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
+    import base64
     url = 'http://musicbrainz.org/ws/1/artist/?type=xml&name=%s' % urllib.quote_plus(artist)
     tries = 0
     trylimit = 5
     gotit = False
-    filename = Addon_Data_Path + "/mbid_" + urllib.quote_plus(artist) + ".txt"
-    while tries < trylimit and not gotit:
-        ret = GetStringFromUrl(url)
-        if 'requests are exceeding the allowable rate limit' in ret:
-            log('MusicBrainz limits amount of request per time - we must wait')
-            xbmc.sleep(1000)
-            tries = tries + 1
+    filename = base64.urlsafe_b64encode(Addon_Data_Path + "/mbid_" + artist + ".txt")
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        return read_from_file(filename)
+    else:
+        while tries < trylimit and not gotit:
+            ret = GetStringFromUrl(url)
+            if 'requests are exceeding the allowable rate limit' in ret:
+                log('MusicBrainz limits amount of request per time - we must wait')
+                xbmc.sleep(1000)
+                tries = tries + 1
+            else:
+                gotit = True
+        if not gotit:
+            return -1
+        curXML = xml.dom.minidom.parseString(ret)
+        curXMLs = curXML.getElementsByTagName('metadata')
+        if len(curXMLs) > 0:
+            curXML = curXMLs[0]
         else:
-            gotit = True
-    if not gotit:
-        return -1
-    curXML = xml.dom.minidom.parseString(ret)
-    curXMLs = curXML.getElementsByTagName('metadata')
-    if len(curXMLs) > 0:
-        curXML = curXMLs[0]
-    else:
-        return None
-    curXMLs = curXML.getElementsByTagName('artist-list')
-    if len(curXMLs) > 0:
-        curXML = curXMLs[0]
-    else:
-        return None
-    curXMLs = curXML.getElementsByTagName('artist')
-    if len(curXMLs) > 0:
-        curXML = curXMLs[0]
-    else:
-        return None
-    artistName = GetValue(curXML, 'name') 
-    artistMusicBrainzId = curXML.getAttribute('id')
-    log('Found MusicBrainz ID')
-    if xbmc_artist_id != -1:
-        SetMusicBrainzID(xbmc_artist_id, artistMusicBrainzId)
-    return artistMusicBrainzId
+            return None
+        curXMLs = curXML.getElementsByTagName('artist-list')
+        if len(curXMLs) > 0:
+            curXML = curXMLs[0]
+        else:
+            return None
+        curXMLs = curXML.getElementsByTagName('artist')
+        if len(curXMLs) > 0:
+            curXML = curXMLs[0]
+        else:
+            return None
+        artistName = GetValue(curXML, 'name') 
+        artistMusicBrainzId = curXML.getAttribute('id')
+        log('Found MusicBrainz ID')
+        if xbmc_artist_id != -1:
+            SetMusicBrainzID(xbmc_artist_id, artistMusicBrainzId)
+        return artistMusicBrainzId
 
 def SetMusicBrainzID(xbmc_artist_id,musicbrainz_id):
     pass

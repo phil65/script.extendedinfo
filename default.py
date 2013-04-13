@@ -25,7 +25,6 @@ rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
-moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 
 def GetXKCDInfo():
     settings = xbmcaddon.Addon(id='script.extendedinfo')
@@ -170,6 +169,8 @@ def GetTrendingShows():
                     'Art(fanart)': tvshow["images"]["fanart"]  }
             shows.append(show)
             count += 1
+            if count > 20:
+                break
     return shows
     
 def GetTrendingMovies():
@@ -199,6 +200,8 @@ def GetTrendingMovies():
                     'Art(fanart)': movie["images"]["fanart"]  }
             movies.append(movie)
             count += 1
+            if count > 20:
+                break
     return movies
     
             
@@ -317,6 +320,14 @@ class Main:
                 log("startin shouts")
                 from OnlineMusicInfo import GetShouts
                 passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
+            elif info == 'studio':
+                log("startin companyinfo")
+                from TheMovieDB import SearchforCompany, GetCompanyInfo
+                CompanyId = SearchforCompany(self.id)
+                passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)            
+
+                
+                
             elif info == 'topartists':
                 log("startin gettopartists")
                 from OnlineMusicInfo import GetTopArtists
