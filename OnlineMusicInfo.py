@@ -176,6 +176,7 @@ def GetEvents(id,pastevents = False):
     filename = Addon_Data_Path + "/concerts" + id + str(pastevents) +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
+        return HandleLastFMEventResult(results)
     else:
         try:
             response = GetStringFromUrl(url)
@@ -292,6 +293,7 @@ def GetVenueEvents(id = ""):
     filename = Addon_Data_Path + "/concerts" + id + ".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
+        return HandleLastFMEventResult(results)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
         log('request: %s' % url)
