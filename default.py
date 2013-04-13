@@ -480,8 +480,6 @@ class Main:
                 log('done with settings')
             else:
                 AdditionalParams.append(param)
-        passDataToSkin('SimilarArtists', None)
-        passDataToSkin('MusicEvents', None)                 
                                        
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])

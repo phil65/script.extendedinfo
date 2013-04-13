@@ -1,5 +1,7 @@
-import xbmc, urllib, xml.dom.minidom
+import xbmc, urllib, xml.dom.minidom,xbmcaddon,os
 from Utils import GetStringFromUrl, GetValue, GetAttribute, log
+Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
+
 
 # def artist_musicbrainz_id( artist_id, artist_mbid ):
     # artist_details = retrieve_artist_details( artist_id )
