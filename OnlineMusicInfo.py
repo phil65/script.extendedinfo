@@ -80,59 +80,7 @@ def HandleLastFMShoutResult(results):
     except:
         log("Error when handling LastFM Shout results")
     return shouts
-    
-def HandleTheMovieDBMovieResult(results):
-    movies = []
-    log("starting HandleLastFMShoutResult")
-    try:
-        for movie in results['results']:
-            newmovie = {'Art(fanart)': movie['backdrop_path'],
-                        'Art(poster)': movie['poster_path'],
-                        'Title': movie['title'],
-                        'ID': movie['id'],
-                        'Rating': movie['vote_average'],
-                        'ReleaseDate':movie['release_date']  }
-            movies.append(newmovie)
-    except:
-        log("Error when handling TheMovieDB movie results")
-    return movies
-    
-def HandleTheMovieDBPeopleResult(results):
-    people = []
-    log("starting HandleLastFMPeopleResult")
-    try:
-        for person in results:
-            newperson = {'adult': person['adult'],
-                        'name': person['name'],
-                        'also_known_as': person['also_known_as'],
-                        'biography': person['biography'],
-                        'birthday': person['birthday'],
-                        'id': person['id'],
-                        'deathday': person['deathday'],
-                        'place_of_birth': person['place_of_birth'],
-                        'thumb': person['profile_path']  }
-            people.append(newperson)
-    except:
-        log("Error when handling TheMovieDB people results")
-    return people
-      
-def HandleTheMovieDBCompanyResult(results):
-    companies = []
-    log("starting HandleLastFMCompanyResult")
-    try:
-        for company in results:
-            newcompany = {'parent_company': company['parent_company'],
-                        'name': company['name'],
-                        'description': company['description'],
-                        'headquarters': company['headquarters'],
-                        'homepage': company['homepage'],
-                        'id': company['id'],
-                        'logo_path': company['logo_path'] }
-            companies.append(newcompany)
-    except:
-        log("Error when handling TheMovieDB companies results")
-    return companies
-       
+           
 def HandleLastFMTracksResult(results):
     artists = []
     log("starting HandleLastFMTracksResult")

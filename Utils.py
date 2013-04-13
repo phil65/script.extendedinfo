@@ -263,7 +263,7 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
     dialog = xbmcgui.Dialog()
     value = dialog.browse( dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default )
     return value
-    
+        
 def save_to_file(content, filename, path = "" ):
     import xbmcvfs
     try:

@@ -302,6 +302,8 @@ class Main:
             self._selection_dialog()
 
     def _StartInfoActions(self):
+        if not self.silent:
+            xbmc.executebuiltin( "ActivateWindow(busydialog)" )
         for info in self.infos:
             if info == 'json':
                 videos = GetYoutubeVideos(self.feed,self.prop_prefix)
@@ -313,22 +315,33 @@ class Main:
                 log("startin flickr")
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
             elif info == 'gettopalbums':
+                passDataToSkin('TopAlbums', None, self.prop_prefix)
                 log("startin gettopalbums")
                 from OnlineMusicInfo import GetTopAlbums
                 passDataToSkin('TopAlbums', GetTopAlbums(self.UserName), self.prop_prefix)
             elif info == 'shouts':
                 log("startin shouts")
+                passDataToSkin('Shout', None, self.prop_prefix)
                 from OnlineMusicInfo import GetShouts
                 passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
             elif info == 'studio':
                 log("startin companyinfo")
+                passDataToSkin('StudioInfo', None, self.prop_prefix)
                 from TheMovieDB import SearchforCompany, GetCompanyInfo
                 CompanyId = SearchforCompany(self.id)
-                passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)            
-
-                
-                
+                passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
+            elif info == 'similarmovies':
+                log("startin similarmovies")
+                passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                from TheMovieDB import GetMovieDBNumber, GetSimilarMovies
+                MovieId = GetMovieDBNumber(self.id)
+                log("MovieDB Id:" + str(MovieId))
+                if MovieId:
+                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
+     #           else:
+      #              passDataToSkin('SimilarMovies', GetSimilarMovies(self.id), self.prop_prefix)
             elif info == 'topartists':
+                passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
                 from OnlineMusicInfo import GetTopArtists
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix)
@@ -338,8 +351,8 @@ class Main:
             elif info == 'incinema':
                 log("start gettin InCinema info")
                 passDataToSkin('InCinema', GetRottenTomatoesMovies(), self.prop_prefix)
-            elif info == 'similarmovies':
-                log("startin SimilarMovies")
+            elif info == 'similarmoviesrt':
+                log("startin SimilarMoviesRT")
                 passDataToSkin('SimilarMovies', GetRottenTomatoesMovies(), self.prop_prefix)
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
@@ -375,6 +388,8 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
+        if not self.silent:
+            xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
     def _selection_dialog(self):
         modeselect= []
@@ -420,6 +435,7 @@ class Main:
         self.feed = None
         self.id = None
         self.type = False
+        self.silent = False
         self.festivalsonly = False
         self.prop_prefix = ""
         self.Artist_mbid = None
@@ -450,6 +466,8 @@ class Main:
                 self.infos.append(param[5:])
             elif param.startswith('type='):
                 self.type = (param[5:])
+            elif param.startswith('silent='):
+                self.silent = (param[7:])
             elif param.startswith('festivalsonly='):
                 self.festivalsonly = (param[14:])
             elif param.startswith('feed='):

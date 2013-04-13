@@ -8,20 +8,33 @@ moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def HandleTheMovieDBMovieResult(results):
+    base_url,size = GetMovieDBConfig()
     movies = []
     log("starting HandleTheMovieDBMovieResult")
     try:
         for movie in results["movies"]["results"]:
-            log(movie)
-            newmovie = {'Art(fanart)': movie['backdrop_path'],
-                        'Art(poster)': movie['poster_path'],
+            newmovie = {'Art(fanart)': base_url + size + movie['backdrop_path'],
+                        'Art(poster)': base_url + size + movie['poster_path'],
                         'Title': movie['title'],
                         'ID': movie['id'],
                         'Rating': movie['vote_average'],
                         'ReleaseDate':movie['release_date']  }
             movies.append(newmovie)
     except:
-        log("Error when handling TheMovieDB movie results")
+        try:
+            for movie in results["results"]:
+                log(movie)
+                newmovie = {'Art(fanart)': base_url + size + str(movie['backdrop_path']),
+                            'Art(poster)': base_url + size + str(movie['poster_path']),
+                            'Title': movie['title'],
+                            'ID': movie['id'],
+                            'Rating': movie['vote_average'],
+                            'ReleaseDate':movie['release_date']  }
+                movies.append(newmovie)
+        
+        except Exception, e:
+            log( str( e ))
+            log("Error when handling TheMovieDB movie results")
     return movies
     
 def HandleTheMovieDBPeopleResult(results):
@@ -69,6 +82,16 @@ def SearchforCompany(Company):
     response = json.loads(response)
     return response["results"][0]["id"]
     
+def GetMovieDBConfig():
+    headers = {"Accept": "application/json"}
+    request = Request("http://api.themoviedb.org/3/configuration?api_key=%s" % (moviedb_key), headers=headers)
+    response = urlopen(request).read()
+    response = json.loads(response)
+    save_to_file(response,"MovieDBConfig",Addon_Data_Path)
+    log("MovieDB Config")
+    log(response["images"]["base_url"])
+    return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
+    
 def GetCompanyInfo(Id):
     headers = {"Accept": "application/json"}
     request = Request("http://api.themoviedb.org/3/company/%s?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
@@ -77,11 +100,48 @@ def GetCompanyInfo(Id):
     log(response)
     return HandleTheMovieDBMovieResult(response)
     
+def GetSimilarMovies(Id):
+    headers = {"Accept": "application/json"}
+    request = Request("http://api.themoviedb.org/3/movie/%s/similar_movies?append_to_response=translations&api_key=%s" % (Id,moviedb_key), headers=headers)
+    response = urlopen(request).read()
+    response = json.loads(response)
+    log("in GetSimilarMovies")
+    log(response)
+    return HandleTheMovieDBMovieResult(response)
+    
 def GetMovieDBNumber(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = json.loads(json_query)
     if json_response['result'].has_key('moviedetails'):
-        return json_response['result']['moviedetails']['imdbnumber']
+        return search_movie(json_response['result']['moviedetails']['title'],json_response['result']['moviedetails']['year'])
     else:
         return []
+        
+        
+def search_movie(medianame,year = ''):
+    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )
+    medianame = urllib.quote_plus(medianame.encode('utf8','ignore'))
+    headers = {"Accept": "application/json"}
+    log(medianame)
+    request = Request("http://api.themoviedb.org/3/search/movie?query=%s+%s&api_key=%s" % (medianame, year, moviedb_key), headers=headers)
+    response = urlopen(request).read()
+    response = json.loads(response)
+    tmdb_id = ''
+    try:
+        if response == "Empty":
+            tmdb_id = ''
+        else:
+            for item in response['results']:
+                if item['id']:
+                    tmdb_id = item['id']
+                    log(tmdb_id)
+                    break
+    except Exception, e:
+        log( str( e ), xbmc.LOGERROR )
+    if tmdb_id == '':
+        log('TMDB API search found no ID')
+    else:
+        log('TMDB API search found ID: %s' %tmdb_id)
+    return tmdb_id
+        
