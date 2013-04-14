@@ -164,8 +164,8 @@ class Main:
                 image = GetGoogleMap(self.location)
                 wnd = xbmcgui.Window(Window)
                 wnd.setProperty('googlemap', image)
-                if not self.silent:
-                    xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+            if not self.silent:
+                xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
     def _selection_dialog(self):
         modeselect= []
