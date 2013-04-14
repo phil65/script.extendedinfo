@@ -344,7 +344,37 @@ def GetDatabaseID(type,dbid):
         else:
             return []
     
- 
+
+def getCacheThumbName(url, CachePath):
+    thumb = xbmc.getCacheThumbName(url)
+    thumbpath = os.path.join(CachePath, thumb)
+    return thumbpath
+
+def cleanText(text):
+    import re
+    text = re.sub('<(.|\n|\r)*?>','',text)
+    text = re.sub('&quot;','"',text)
+    text = re.sub('&amp;','&',text)
+    text = re.sub('&gt;','>',text)
+    text = re.sub('&lt;','<',text)
+    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
+    return text.strip()
+
+def download(src, dst, dst2):
+    if (not xbmc.abortRequested):
+        tmpname = xbmc.translatePath('special://profile/addon_data/%s/temp/%s' % ( __addonname__ , xbmc.getCacheThumbName(src) )).decode("utf-8")
+        if xbmcvfs.exists(tmpname):
+            xbmcvfs.delete(tmpname)
+        urllib.urlretrieve( src, tmpname )
+        if os.path.getsize(tmpname) > 999:
+            log( 'copying file to transition directory' )
+            xbmcvfs.copy(tmpname, dst2)
+            log( 'moving file to cache directory' )
+            xbmcvfs.rename(tmpname, dst)
+        else:
+            xbmcvfs.delete(tmpname)
+
+    
 def passDataToSkin(name, data, prefix=""):
     wnd = xbmcgui.Window(Window)
     if data != None:

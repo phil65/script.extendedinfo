@@ -159,8 +159,13 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
-        if not self.silent:
-            xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+            elif info == 'getbingmap':
+                from MiscScraper import GetGoogleMap
+                image = GetGoogleMap(self.location)
+                wnd = xbmcgui.Window(Window)
+                wnd.setProperty('googlemap', image)
+                if not self.silent:
+                    xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
     def _selection_dialog(self):
         modeselect= []
@@ -206,7 +211,8 @@ class Main:
         self.feed = None
         self.id = None
         self.type = False
-        self.silent = False
+        self.location = ""
+        self.silent = True
         self.festivalsonly = False
         self.prop_prefix = ""
         self.Artist_mbid = None
@@ -237,6 +243,8 @@ class Main:
                 self.infos.append(param[5:])
             elif param.startswith('type='):
                 self.type = (param[5:])
+            elif param.startswith('location='):
+                self.location = (param[9:])
             elif param.startswith('silent='):
                 self.silent = (param[7:])
             elif param.startswith('festivalsonly='):
