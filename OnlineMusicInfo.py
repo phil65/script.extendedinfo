@@ -46,6 +46,8 @@ def HandleLastFMEventResult(results):
                      'id': event['venue']['id'],
                      'region': event['venue']['location']['street'],
                      'country': event['venue']['location']['country'],
+                     'geolong': event['venue']['location']['geo:point']['geo:long'],
+                     'geolat': event['venue']['location']['geo:point']['geo:lat'],
                      'artists': my_arts,
                      'artist_image': event['image'][-1]['#text'],
                      'venue_image': event['venue']['image'][-1]['#text'],
