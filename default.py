@@ -159,7 +159,7 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
-            elif info == 'getbingmap':
+            elif info == 'getgooglemap':
                 from MiscScraper import GetGoogleMap
                 image = GetGoogleMap(self.location)
                 wnd = xbmcgui.Window(Window)
