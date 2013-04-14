@@ -1,4 +1,4 @@
-import xbmcaddon,os,xbmc,xbmcvfs
+import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
 from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file
 import xml.dom.minidom
@@ -117,7 +117,7 @@ def GetEvents(id,pastevents = False):
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getpastevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
-    filename = Addon_Data_Path + "/concerts" + id + str(pastevents) +".txt"
+    filename = Addon_Data_Path + "/concerts" + str(id) + str(pastevents) +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
         return HandleLastFMEventResult(results)
@@ -134,13 +134,19 @@ def GetEvents(id,pastevents = False):
     
 def GetTopArtists():
     url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&format=json' % (lastfm_apikey)
-    try:
-        response = GetStringFromUrl(url)
-        results = json.loads(response)
+    filename = Addon_Data_Path + "/topartists.txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        results = read_from_file(filename)
         return HandleLastFMTracksResult(results)
-    except:
-        log("Error when finding artist top-tracks from" + url)
-        return []
+    else:
+        try:
+            response = GetStringFromUrl(url)
+            save_to_file(response,"topartists",Addon_Data_Path)
+            results = json.loads(response)
+            return HandleLastFMTracksResult(results)
+        except:
+            log("Error when finding artist top-tracks from" + url)
+            return []
     
 def GetShouts(artistname,albumtitle):
     url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&artist=%s&album=%s&api_key=%s&format=json' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle), lastfm_apikey)

@@ -23,7 +23,8 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
     tries = 0
     trylimit = 5
     gotit = False
-    filename = base64.urlsafe_b64encode(Addon_Data_Path + "/mbid_" + artist + ".txt")
+    filename = Addon_Data_Path + "/mbid_" + ".txt"
+    filename = base64.urlsafe_b64encode(filename)
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         return read_from_file(filename)
     else:
