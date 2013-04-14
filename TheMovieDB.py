@@ -102,22 +102,12 @@ def GetCompanyInfo(Id):
     
 def GetSimilarMovies(Id):
     headers = {"Accept": "application/json"}
-    request = Request("http://api.themoviedb.org/3/movie/%s/similar_movies?append_to_response=translations&api_key=%s" % (Id,moviedb_key), headers=headers)
+    request = Request("http://api.themoviedb.org/3/movie/%s/similar_movies?append_to_response=translations,releases,trailers&api_key=%s" % (Id,moviedb_key), headers=headers)
     response = urlopen(request).read()
     response = json.loads(response)
     log("in GetSimilarMovies")
     log(response)
-    return HandleTheMovieDBMovieResult(response)
-    
-def GetMovieDBNumber(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = json.loads(json_query)
-    if json_response['result'].has_key('moviedetails'):
-        return search_movie(json_response['result']['moviedetails']['title'],json_response['result']['moviedetails']['year'])
-    else:
-        return []
-        
+    return HandleTheMovieDBMovieResult(response)        
         
 def search_movie(medianame,year = ''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )

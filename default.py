@@ -21,251 +21,6 @@ extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
-rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
-trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
-tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
-bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
-
-def GetXKCDInfo():
-    settings = xbmcaddon.Addon(id='script.extendedinfo')
-    items = []
-    for i in range(0,10):
-        try:
-            url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-            item = {'Image': results["img"],
-                    'Title': results["title"],
-                    'Description':results["alt"]  }
-            items.append(item)
-        except:
-            log("Error when setting XKCD info")
-    return items
-
-def GetCandHInfo():
-    count = 1
-    images = []
-    for i in range(1,30):
-        try:
-            url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
-            response = GetStringFromUrl(url)
-        except:
-            log("Error when fetching CandH data from net")
-        if response:
-            regex = ur'src="([^"]+)"'
-            matches = re.findall(regex, response)
-            if matches:
-                for item in matches:
-                    if item.startswith('http://www.explosm.net/db/files/Comics/'):
-                        dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
-                        datematches = re.findall(dateregex, response)
-                        newitem = {'Image': item,
-                                    'Title': datematches[0]  }
-                        images.append(newitem)
-                        count += 1                      
-              #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-                if count > 10:
-                    break
-    return images
-                     
-def GetFlickrImages():
-    images = []
-    results = ""
-    try:
-        url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching Flickr data from net")
-    count = 1
-    if results:
-        for item in results["value"]["items"]:
-            image = {'Background': item["link"]  }
-            images.append(image)
-            count += 1
-    return images
-    
-def GetRottenTomatoesMovies():
-    movies = []
-    results = ""
-    try:
-       # url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s&country=%s' % (rottentomatoes_key,xbmc.getLanguage()[:2].lower())
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
-     #   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/770672122/similar.json?apikey=%s&limit=20' % (rottentomatoes_key)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching RottenTomatoes data from net")
-    count = 1
-    if results:
-        log(results)
-        for item in results["movies"]:
-          #  Year = item["release_dates"]["theatre"]             
-            movie = {'Title': item["title"],
-                     'Thumb': item["posters"]["original"],
-                     'Runtime': item["runtime"],
-                     'Year': item["year"],
-                     'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["critics_score"] / 10,
-                     'Plot': item["synopsis"]  }
-            movies.append(movie)
-            count += 1
-    return movies
-    
-def GetTraktCalendarShows(Type):
-    shows = []
-    results = ""
-    try:
-        url = 'http://api.trakt.tv/calendar/%s.json/%s' % (Type,trakt_key)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching Trakt data from net")
-    count = 1
-    if results:
-        for day in results:
-            for count, episode in enumerate(day["episodes"]):
-                show = {'%i.Title' % (count) : episode["episode"]["title"],
-                        '%i.TVShowTitle' % (count) : episode["show"]["title"],
-                        '%i.Runtime' % (count) : episode["show"]["runtime"],
-                        '%i.Certification' % (count) : episode["show"]["certification"],
-                        '%i.Studio' % (count) : episode["show"]["network"],
-                        '%i.Plot' % (count) : episode["show"]["overview"],
-                        '%i.Genre' % (count) : " / ".join(episode["show"]["genres"]),
-                        '%i.Thumb' % (count) : episode["episode"]["images"]["screen"],
-                        '%i.Art(poster)' % (count) : episode["show"]["images"]["poster"],
-                        '%i.Art(banner)' % (count) : episode["show"]["images"]["banner"],
-                        '%i.Art(fanart)' % (count) : episode["show"]["images"]["fanart"]  }
-                shows.append(show)
-            count += 1
-    return shows
-    
-def GetTrendingShows():
-    shows = []
-    results = ""
-    try:
-        url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching  trending data from Trakt.tv")
-    count = 1
-    if results:
-        for tvshow in results:      
-            show = {'Title': tvshow["title"],
-                    'Runtime': tvshow["runtime"],
-                    'Year': tvshow["year"],
-                    'mpaa': tvshow["certification"],
-                    'Studio': tvshow["network"],
-                    'Plot': tvshow["overview"],
-                    'NextDate': tvshow["air_day"],
-                    'ShortTime': tvshow["air_time"],
-                    'Premiered': tvshow["first_aired"],
-                    'Country': tvshow["country"],
-                    'Rating': tvshow["ratings"]["percentage"]/10,
-                    'Genre': " / ".join(tvshow["genres"]),
-                    'Art(poster)': tvshow["images"]["poster"],
-                    'Art(banner)': tvshow["images"]["banner"],
-                    'Art(fanart)': tvshow["images"]["fanart"]  }
-            shows.append(show)
-            count += 1
-            if count > 20:
-                break
-    return shows
-    
-def GetTrendingMovies():
-    movies = []
-    results = ""
-    try:
-        url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching  trending data from Trakt.tv")
-    count = 1
-    if results:
-        for movie in results:      
-            movie = {'Title': movie["title"],
-                    'Runtime': movie["runtime"],
-                    'Tagline': movie["tagline"],
-                    'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
-                    'Trailer': ConvertYoutubeURL(movie["trailer"]),
-                    'Year': movie["year"],
-                    'mpaa': movie["certification"],
-                    'Plot': movie["overview"],
-                    'Premiered': movie["released"],
-                    'Rating': movie["ratings"]["percentage"]/10,
-                    'Genre': " / ".join(movie["genres"]),
-                    'Art(poster)': movie["images"]["poster"],
-                    'Art(fanart)': movie["images"]["fanart"]  }
-            movies.append(movie)
-            count += 1
-            if count > 20:
-                break
-    return movies
-    
-            
-def GetYoutubeVideos(jsonurl,prefix = ""):
-    results = []
-    try:
-        response = GetStringFromUrl(jsonurl)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching JSON data from net")
-    count = 1
-    log("found youtube vids: " + jsonurl)
-    videos=[]
-    if results:
-        try:
-            for item in results["value"]["items"]:
-                video = {'Thumb': item["media:thumbnail"][0]["url"],
-                         'Media': ConvertYoutubeURL(item["link"]),
-                         'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
-                         'Title':item["title"],
-                         'Description':item["content"]["content"],
-                         'Date':item["pubDate"]  }
-                videos.append(video)
-                count += 1
-        except:
-            for item in results["feed"]["entry"]:
-                for entry in item["link"]:
-                    if entry.get('href','').startswith('http://www.youtube.com/watch'):
-                        video = {'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href','')) + "/0.jpg",
-                                 'Media': ConvertYoutubeURL(entry.get('href','')),
-                                 'Play':"PlayMedia(" + ConvertYoutubeURL(entry.get('href','')) + ")",
-                                 'Title':item["title"]["$t"],
-                                 'Description':"To Come",
-                                 'Date':"To Come"  }
-                        videos.append(video)
-                        count += 1
-    return videos
-
-def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
-    from OnlineMusicInfo import GetSimilarById
-    simi_artists = GetSimilarById(id)
-    if simi_artists == None:
-         log('Last.fm didn\'t return proper response')
-         return None
-    xbmc_artists = GetXBMCArtists()
-    artists = []
-    start = time.clock()
-    for (count, simi_artist) in enumerate(simi_artists):
-        for (count, xbmc_artist) in enumerate(xbmc_artists):
-            hit = False
-            if xbmc_artist['mbid'] != '':
-                #compare music brainz id
-                if xbmc_artist['mbid'] == simi_artist['mbid']:
-                    hit = True
-            else:
-                #compare names
-                if xbmc_artist['Title'] == simi_artist['name']:
-                    hit = True
-            if hit:
-         #       log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))
-                artists.append(xbmc_artist)
-    finish = time.clock()
-    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
-    return artists    
         
 class Main:
     def __init__( self ):
@@ -306,12 +61,15 @@ class Main:
             xbmc.executebuiltin( "ActivateWindow(busydialog)" )
         for info in self.infos:
             if info == 'json':
+                from MiscScraper import GetYoutubeVideos
                 videos = GetYoutubeVideos(self.feed,self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix)                
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
+                from MiscScraper import GetXKCDInfo
                 passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix)
             elif info == 'flickr':
+                from MiscScraper import GetFlickrImages
                 log("startin flickr")
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
             elif info == 'gettopalbums':
@@ -330,16 +88,6 @@ class Main:
                 from TheMovieDB import SearchforCompany, GetCompanyInfo
                 CompanyId = SearchforCompany(self.id)
                 passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
-            elif info == 'similarmovies':
-                log("startin similarmovies")
-                passDataToSkin('SimilarMovies', None, self.prop_prefix)
-                from TheMovieDB import GetMovieDBNumber, GetSimilarMovies
-                MovieId = GetMovieDBNumber(self.id)
-                log("MovieDB Id:" + str(MovieId))
-                if MovieId:
-                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
-     #           else:
-      #              passDataToSkin('SimilarMovies', GetSimilarMovies(self.id), self.prop_prefix)
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
@@ -347,39 +95,62 @@ class Main:
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
+                from MiscScraper import GetCandHInfo
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
             elif info == 'incinema':
                 log("start gettin InCinema info")
+                from MiscScraper import GetRottenTomatoesMovies
                 passDataToSkin('InCinema', GetRottenTomatoesMovies(), self.prop_prefix)
-            elif info == 'similarmoviesrt':
-                log("startin SimilarMoviesRT")
-                passDataToSkin('SimilarMovies', GetRottenTomatoesMovies(), self.prop_prefix)
+            # elif info == 'similarmovies':
+                # log("startin similarmovies")
+                # passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                # from TheMovieDB import GetDatabaseID, GetSimilarMovies
+                # MovieId = search_movie(GetDatabaseID(self.id))
+                # log("MovieDB Id:" + str(MovieId))
+                # if MovieId:
+                    # passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
+            elif info == 'similar':
+                passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                log("startin GetSimilarRT")
+                from MiscScraper import GetSimilarRT
+                id = GetDatabaseID(self.type,self.id)
+                passDataToSkin('SimilarMovies', GetSimilarRT(self.type,id), self.prop_prefix)
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
+                from MiscScraper import GetTraktCalendarShows
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix)
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
+                from MiscScraper import GetTraktCalendarShows
                 passDataToSkin('AiringShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
+                from MiscScraper import GetTrendingShows
                 passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix)
             elif info == 'trendingmovies':
                 log("startin GetTrendingMovies")
+                from MiscScraper import GetTrendingMovies
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
+                passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
+                from MiscScraper import GetSimilarInLibrary
                 passDataToSkin('SimilarArtistsInLibrary', GetSimilarInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
+                passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents
              #   events = GetEvents(self.Artist_mbid,True)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)       
             elif info == 'nearevents':
+                passDataToSkin('NearEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetNearEvents
                 passDataToSkin('NearEvents', GetNearEvents(self.type,self.festivalsonly), self.prop_prefix)
             elif info == 'venueevents':
+                passDataToSkin('VenueEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetVenueEvents
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
                 artists = GetXBMCArtists()
+                from OnlineMusicInfo import GetArtistNearEvents
                 events = GetArtistNearEvents(artists[0:15])
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
             elif info == 'updatexbmcdatabasewithartistmbidbg':

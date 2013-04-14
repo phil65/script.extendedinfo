@@ -325,16 +325,35 @@ def ExtractYoutubeID(string):
    
 def Notify(header, line='', line2='', line3=''):
     xbmc.executebuiltin('Notification(%s,%s,%s,%s)' % (header, line, line2, line3) )
+ 
+def GetDatabaseID(type,dbid):
+    if type=="movie":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if json_response['result'].has_key('moviedetails'):
+            return json_response['result']['moviedetails']['imdbnumber']
+        else:
+            return []
+    elif type == "tvshow":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if json_response['result'].has_key('tvshowdetails'):
+            return json_response['result']['tvshowdetails']['imdbnumber']
+        else:
+            return []
     
+ 
 def passDataToSkin(name, data, prefix=""):
     wnd = xbmcgui.Window(Window)
     if data != None:
-        wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
         log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
             log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
                 log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
+        wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
-        wnd.setProperty('%s.Count' % name, '0')
+        wnd.setProperty('%s%s.Count' % (prefix, name), '0')
