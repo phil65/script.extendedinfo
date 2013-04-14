@@ -1,6 +1,6 @@
 import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
-from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file
+from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file, cleanText
 import xml.dom.minidom
 import urllib
 
@@ -41,10 +41,14 @@ def HandleLastFMEventResult(results):
             else:
                 my_arts = artists
             event = {'date': event['startDate'],
-                     'city': event['venue']['location']['city'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
-                     'region': event['venue']['location']['street'],
+                     'street': event['venue']['location']['street'],
+                     'eventname': event['title'],
+                     'website': event['website'],
+                     'description': cleanText(event['description']),
+                    # 'description': event['description'], ticket missing
+                     'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
                      'country': event['venue']['location']['country'],
                      'geolong': event['venue']['location']['geo:point']['geo:long'],
                      'geolat': event['venue']['location']['geo:point']['geo:lat'],

@@ -352,6 +352,7 @@ def getCacheThumbName(url, CachePath):
 
 def cleanText(text):
     import re
+    text = re.sub('<br \/>','[CR]',text)
     text = re.sub('<(.|\n|\r)*?>','',text)
     text = re.sub('&quot;','"',text)
     text = re.sub('&amp;','&',text)
