@@ -164,6 +164,11 @@ class Main:
                 image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect)
                 wnd = xbmcgui.Window(Window)
                 wnd.setProperty('googlemap', image)
+            elif info == 'getgooglestreetviewmap':
+                from MiscScraper import GetGoogleStreetViewMap
+                image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect)
+                wnd = xbmcgui.Window(Window)
+                wnd.setProperty('googlemap', image)
             if not self.silent:
                 xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
