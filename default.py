@@ -161,7 +161,7 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getgooglemap':
                 from MiscScraper import GetGoogleMap
-                image = GetGoogleMap(self.location)
+                image = GetGoogleMap(self.location,self.zoomlevel,self.type)
                 wnd = xbmcgui.Window(Window)
                 wnd.setProperty('googlemap', image)
             if not self.silent:
@@ -211,6 +211,7 @@ class Main:
         self.feed = None
         self.id = None
         self.type = False
+        self.zoomlevel = "15"
         self.location = ""
         self.silent = True
         self.festivalsonly = False
@@ -243,6 +244,8 @@ class Main:
                 self.infos.append(param[5:])
             elif param.startswith('type='):
                 self.type = (param[5:])
+            elif param.startswith('zoomlevel='):
+                self.zoomlevel = (param[10:])
             elif param.startswith('location='):
                 self.location = (param[9:])
             elif param.startswith('silent='):
