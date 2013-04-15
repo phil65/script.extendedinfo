@@ -166,7 +166,7 @@ class Main:
                 wnd.setProperty('googlemap', image)
             elif info == 'getgooglestreetviewmap':
                 from MiscScraper import GetGoogleStreetViewMap
-                image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect)
+                image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect,zoomlevel = self.zoomlevel)
                 wnd = xbmcgui.Window(Window)
                 wnd.setProperty('googlemap', image)
             if not self.silent:
