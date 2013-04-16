@@ -273,6 +273,7 @@ def GetStringFromUrl(encurl):
             log("could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed = succeed + 1
+    return ""
 
 def GetValue(node, tag):
     v = node.getElementsByTagName(tag)
