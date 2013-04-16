@@ -94,9 +94,9 @@ def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
             size = "640x640"
         else:
             size = "640x400"
-            log("yyyy")
+            log("yyyy")           
         if lat:
-            search_string = lat + "," + lon
+            search_string = str(lat) + "," + str(lon)
             log("Location: " + search_string)
         else:
             search_string = urllib.quote_plus(search_string)

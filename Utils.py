@@ -12,6 +12,46 @@ Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data
 
 Window = 10000
 
+def string2deg(string):
+    import re
+    if string[0] == "w":
+       negative = True
+       log("W detected")
+    else:
+        negative = False
+    string = string[1:]
+    string = string.strip() # trim leading/trailing whitespace
+    string = string.replace('"','')
+    string = string.replace("'","")
+    string = string.replace("d","")
+    string = string.replace("  "," ")
+    log("look here")
+    log(string)
+    div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
+    # (optional +/-) degrees + min + decimal seconds
+    sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
+    co_re= re.compile(sdec)
+    co_search= co_re.search(string)
+    if co_search is None:
+        raise ValueError("Invalid input string: %s" % string)
+    elems = co_search.groups()
+    degrees = float(elems[0])
+    arcminutes = float(elems[1])
+    arcseconds = float(elems[2])
+    # Check for nonsense values
+    if degrees > 90.0:
+      #  raise ValueError("Degree value must be <= 90.")
+       negative = True
+    if arcminutes >= 60.0:
+        raise ValueError("Arcminute value must be < 60.")
+    if arcseconds >= 60.0:
+        raise ValueError("Arcsecond value must be < 60 (was %f)." % arcseconds)
+    decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
+    if negative:
+        decDegrees = -1.0 * decDegrees
+    return decDegrees
+
+
 def AddArtToLibrary( type, media, folder, limit , silent = False):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
     json_query = unicode(json_query, 'utf-8', errors='ignore')

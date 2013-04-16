@@ -188,14 +188,20 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getgooglemap':
                 from MiscScraper import GetGoogleMap, GetGeoCodes
-                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
                 wnd = xbmcgui.Window(Window)
-                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                if self.location:
+                if self.location == "geocode":
+                    lat = string2deg(self.lat)
+                    lon = string2deg(self.lon)
+                elif self.location:
                     lat, lon = GetGeoCodes(self.location)
                 else:
                     lat = self.lat
                     lon = self.lon
+                log(lat)
+                log(lon)
+                log(self.location)
+                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
+                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))
             elif info == 'moverightgooglemap' or info == 'moveleftgooglemap' or info == 'moveupgooglemap' or info == 'movedowngooglemap':
