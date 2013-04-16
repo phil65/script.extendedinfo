@@ -376,15 +376,18 @@ def download(src, dst, dst2):
             xbmcvfs.delete(tmpname)
 
     
-def passDataToSkin(name, data, prefix=""):
+def passDataToSkin(name, data, prefix="",debug = False):
     wnd = xbmcgui.Window(Window)
     if data != None:
-    #    log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+        if debug:
+            log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
-     #       log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
+            if debug:
+                log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
-      #          log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
+                if debug:
+                    log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         wnd.setProperty('%s%s.Count' % (prefix, name), '0')

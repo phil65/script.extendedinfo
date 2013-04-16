@@ -96,7 +96,7 @@ class Main:
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 from MiscScraper import GetCandHInfo
-                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)                
             elif info == 'incinema':
                 log("start gettin InCinema info")
                 from MiscScraper import GetRottenTomatoesMovies
@@ -109,6 +109,14 @@ class Main:
                 # log("MovieDB Id:" + str(MovieId))
                 # if MovieId:
                     # passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
+            elif info == 'movielists':
+                 log("startin movielists")
+                 passDataToSkin('MovieLists', None, self.prop_prefix)
+                 from TheMovieDB import GetMovieLists
+                 id = GetDatabaseID("movie",self.id)
+                 log("MovieDB Id:" + str(id))
+                 if id:
+                    passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 log("startin GetSimilarRT")
@@ -149,6 +157,7 @@ class Main:
                 from OnlineMusicInfo import GetVenueEvents
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
+                passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
                 artists = GetXBMCArtists()
                 from OnlineMusicInfo import GetArtistNearEvents
                 events = GetArtistNearEvents(artists[0:15])
@@ -160,10 +169,38 @@ class Main:
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getgooglemap':
-                from MiscScraper import GetGoogleMap
-                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect)
+                from MiscScraper import GetGoogleMap, GetGeoCodes
+                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
                 wnd = xbmcgui.Window(Window)
-                wnd.setProperty('googlemap', image)
+                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                if self.location:
+                    lat, lon = GetGeoCodes(self.location)
+                else:
+                    lat = self.lat
+                    lon = self.lon
+                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
+                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
+            elif info == 'moverightgooglemap' or info == 'moveleftgooglemap' or info == 'moveupgooglemap' or info == 'movedowngooglemap':
+                from MiscScraper import GetGoogleMap
+                wnd = xbmcgui.Window(Window)
+                lat = wnd.getProperty('%slat' % self.prop_prefix)
+                lon = wnd.getProperty('%slon' % self.prop_prefix)
+                if info == 'moveupgooglemap':
+                    lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
+                    log(lat)
+                elif info == 'movedowngooglemap':
+                    lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
+                elif info == 'moveleftgooglemap':
+                    lon = float(lon) - 400.0 / float(self.zoomlevel)/ float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)  
+                elif info == 'moverightgooglemap':
+                    lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
+                self.location = str(lat) + "," + str(lon)
+                log("Move Right: " + self.location)
+                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
+                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
+                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
+                
             elif info == 'getgooglestreetviewmap':
                 from MiscScraper import GetGoogleStreetViewMap
                 image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect,zoomlevel = self.zoomlevel,direction=self.direction)
@@ -220,6 +257,8 @@ class Main:
         self.aspect = "Landscape"
         self.zoomlevel = "15"
         self.location = ""
+        self.lat = ""
+        self.lon = ""
         self.silent = True
         self.festivalsonly = False
         self.prop_prefix = ""
@@ -259,6 +298,10 @@ class Main:
                 self.zoomlevel = (param[10:])
             elif param.startswith('location='):
                 self.location = (param[9:])
+            elif param.startswith('lat='):
+                self.lat = (param[4:])
+            elif param.startswith('lon='):
+                self.lon = (param[4:])
             elif param.startswith('silent='):
                 self.silent = (param[7:])
             elif param.startswith('festivalsonly='):

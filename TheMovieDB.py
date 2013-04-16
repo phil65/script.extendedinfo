@@ -37,6 +37,22 @@ def HandleTheMovieDBMovieResult(results):
             log("Error when handling TheMovieDB movie results")
     return movies
     
+def HandleTheMovieDBListResult(results):
+    base_url,size = GetMovieDBConfig()
+    lists = []
+    log("starting HandleTheMovieDBListResult")
+    try:
+        for list in results["results"]:
+            newlist = {'Art(poster)': base_url + size + list['poster_path'],
+                        'Title': list['name'],
+                        'ID': list['id'],
+                        'Description': list['description']}
+            lists.append(newlist)
+    except:
+        pass
+    return lists
+    
+    
 def HandleTheMovieDBPeopleResult(results):
     people = []
     log("starting HandleLastFMPeopleResult")
@@ -99,6 +115,15 @@ def GetCompanyInfo(Id):
     response = json.loads(response)
     log(response)
     return HandleTheMovieDBMovieResult(response)
+    
+    
+def GetMovieLists(Id):
+    headers = {"Accept": "application/json"}
+    request = Request("http://api.themoviedb.org/3/movie/%s/lists?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
+    response = urlopen(request).read()
+    response = json.loads(response)
+    log(response)
+    return HandleTheMovieDBListResult(response)
     
 def GetSimilarMovies(Id):
     headers = {"Accept": "application/json"}

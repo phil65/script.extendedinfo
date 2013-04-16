@@ -85,7 +85,7 @@ def GetBingMap(search_string):
         log("Error when fetching Bing data from net")
         return ""      
         
-def GetGoogleMap(search_string,zoomlevel,type,aspect):
+def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
     try:
         if not type:
             type="roadmap"
@@ -95,12 +95,32 @@ def GetGoogleMap(search_string,zoomlevel,type,aspect):
         else:
             size = "640x400"
             log("yyyy")
-        search_string = urllib.quote_plus(search_string)
-        base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&'
-        url = base_url + 'maptype=%s&center=%s&zoom=%s&scale=2&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
+        if lat:
+            search_string = lat + "," + lon
+            log("Location: " + search_string)
+        else:
+            search_string = urllib.quote_plus(search_string)
+        base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
+        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
         log("Google Maps Search:" + url)
         return url
     except:
+        return ""
+        
+        
+def GetGeoCodes(search_string):
+    try:
+        search_string = urllib.quote_plus(search_string)
+        base_url='https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&'
+        url = base_url + 'address=%s' % (search_string)
+        log("Google Geocodes Search:" + url)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+        log(results)
+        location = results["results"][0]["geometry"]["location"]
+        return (location["lat"], location["lng"])
+    except Exception,e:
+        log(e)
         return ""
         
 def GetGoogleStreetViewMap(search_string,aspect,zoomlevel,direction):
