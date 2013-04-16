@@ -144,12 +144,12 @@ def GetGoogleStreetViewMap(search_string,aspect,zoomlevel,direction):
         return ""
         
       
-def GetRottenTomatoesMovies():
+def GetRottenTomatoesMovies(type):
     movies = []
     results = ""
     try:
        # url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s&country=%s' % (rottentomatoes_key,xbmc.getLanguage()[:2].lower())
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/%s.json?apikey=%s' % (type, rottentomatoes_key)
      #   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/770672122/similar.json?apikey=%s&limit=20' % (rottentomatoes_key)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)

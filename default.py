@@ -100,8 +100,26 @@ class Main:
             elif info == 'incinema':
                 log("start gettin InCinema info")
                 from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('InCinema', GetRottenTomatoesMovies(), self.prop_prefix)
-            # elif info == 'similarmovies':
+                passDataToSkin('InCinema', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix)
+            elif info == 'boxoffice':
+                log("start gettin boxoffice info")
+                from MiscScraper import GetRottenTomatoesMovies
+                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix)
+            elif info == 'opening':
+                log("start gettin opening info")
+                from MiscScraper import GetRottenTomatoesMovies
+                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix)
+            elif info == 'upcoming':
+                log("start gettin upcoming info")
+                from MiscScraper import GetRottenTomatoesMovies
+                passDataToSkin('Upcoming', GetRottenTomatoesMovies("upcoming"), self.prop_prefix)
+            elif info == 'toprentals':
+                log("start gettin toprentals info")
+                from MiscScraper import GetRottenTomatoesMovies
+                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
+                
+                
+                # elif info == 'similarmovies':
                 # log("startin similarmovies")
                 # passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 # from TheMovieDB import GetDatabaseID, GetSimilarMovies
