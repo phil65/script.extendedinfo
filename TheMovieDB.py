@@ -12,29 +12,18 @@ def HandleTheMovieDBMovieResult(results):
     movies = []
     log("starting HandleTheMovieDBMovieResult")
     try:
-        for movie in results["movies"]["results"]:
+        for movie in results["results"]:
             newmovie = {'Art(fanart)': base_url + size + movie['backdrop_path'],
                         'Art(poster)': base_url + size + movie['poster_path'],
                         'Title': movie['title'],
+                        'OriginalTitle': movie['original_title'],
                         'ID': movie['id'],
                         'Rating': movie['vote_average'],
                         'ReleaseDate':movie['release_date']  }
             movies.append(newmovie)
-    except:
-        try:
-            for movie in results["results"]:
-                log(movie)
-                newmovie = {'Art(fanart)': base_url + size + str(movie['backdrop_path']),
-                            'Art(poster)': base_url + size + str(movie['poster_path']),
-                            'Title': movie['title'],
-                            'ID': movie['id'],
-                            'Rating': movie['vote_average'],
-                            'ReleaseDate':movie['release_date']  }
-                movies.append(newmovie)
-        
-        except Exception, e:
-            log( str( e ))
-            log("Error when handling TheMovieDB movie results")
+    except Exception, e:
+        log(e)
+        log("Error when handling TheMovieDB movie results")
     return movies
     
 def HandleTheMovieDBListResult(results):
@@ -51,7 +40,6 @@ def HandleTheMovieDBListResult(results):
     except:
         pass
     return lists
-    
     
 def HandleTheMovieDBPeopleResult(results):
     people = []
@@ -71,7 +59,6 @@ def HandleTheMovieDBPeopleResult(results):
     except:
         log("Error when handling TheMovieDB people results")
     return people
-    
     
 def HandleTheMovieDBCompanyResult(results):
     companies = []
@@ -110,13 +97,13 @@ def GetMovieDBConfig():
     
 def GetCompanyInfo(Id):
     headers = {"Accept": "application/json"}
-    request = Request("http://api.themoviedb.org/3/company/%s?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
+    request = Request("http://api.themoviedb.org/3/company/%s/movies?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
     response = urlopen(request).read()
     response = json.loads(response)
+    log("Company response:")
     log(response)
     return HandleTheMovieDBMovieResult(response)
-    
-    
+     
 def GetMovieLists(Id):
     headers = {"Accept": "application/json"}
     request = Request("http://api.themoviedb.org/3/movie/%s/lists?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)

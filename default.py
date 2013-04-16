@@ -87,6 +87,7 @@ class Main:
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 from TheMovieDB import SearchforCompany, GetCompanyInfo
                 CompanyId = SearchforCompany(self.id)
+                log("CompanyID=" + str(CompanyId))
                 passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
@@ -192,15 +193,14 @@ class Main:
                 if self.location == "geocode":
                     lat = string2deg(self.lat)
                     lon = string2deg(self.lon)
+                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
                 elif self.location:
+                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
                     lat, lon = GetGeoCodes(self.location)
                 else:
                     lat = self.lat
                     lon = self.lon
-                log(lat)
-                log(lon)
-                log(self.location)
-                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
+                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))

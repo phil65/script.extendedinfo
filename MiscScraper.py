@@ -106,8 +106,7 @@ def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
         return url
     except:
         return ""
-        
-        
+               
 def GetGeoCodes(search_string):
     try:
         search_string = urllib.quote_plus(search_string)
@@ -143,7 +142,6 @@ def GetGoogleStreetViewMap(search_string,aspect,zoomlevel,direction):
         log(e)
         return ""
         
-      
 def GetRottenTomatoesMovies(type):
     movies = []
     results = ""
@@ -286,8 +284,7 @@ def GetTrendingMovies():
         count = 1
         if results:
             return HandleTraktMovieResult(results)
-    
-    
+       
 def GetSimilarRT(type,imdb_id):
     movies = []
     shows = []
@@ -316,7 +313,6 @@ def GetSimilarRT(type,imdb_id):
             elif type =="movie":
                 return HandleTraktMovieResult(results)
     return[]
-    
             
 def GetYoutubeVideos(jsonurl,prefix = ""):
     results = []
