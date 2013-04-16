@@ -121,7 +121,7 @@ def GetGeoCodes(search_string):
         return (location["lat"], location["lng"])
     except Exception,e:
         log(e)
-        return ""
+        return ("","")
         
 def GetGoogleStreetViewMap(search_string,aspect,zoomlevel,direction):
     try:

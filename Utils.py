@@ -25,10 +25,8 @@ def string2deg(string):
     string = string.replace("'","")
     string = string.replace("d","")
     string = string.replace("  "," ")
-    log("look here")
     log(string)
     div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
-    # (optional +/-) degrees + min + decimal seconds
     sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
     co_re= re.compile(sdec)
     co_search= co_re.search(string)
@@ -38,14 +36,9 @@ def string2deg(string):
     degrees = float(elems[0])
     arcminutes = float(elems[1])
     arcseconds = float(elems[2])
-    # Check for nonsense values
     if degrees > 90.0:
       #  raise ValueError("Degree value must be <= 90.")
        negative = True
-    if arcminutes >= 60.0:
-        raise ValueError("Arcminute value must be < 60.")
-    if arcseconds >= 60.0:
-        raise ValueError("Arcsecond value must be < 60 (was %f)." % arcseconds)
     decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
     if negative:
         decDegrees = -1.0 * decDegrees

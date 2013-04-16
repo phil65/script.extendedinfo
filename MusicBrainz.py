@@ -30,14 +30,16 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
     else:
         while tries < trylimit and not gotit:
             ret = GetStringFromUrl(url)
-            if 'requests are exceeding the allowable rate limit' in ret:
-                log('MusicBrainz limits amount of request per time - we must wait')
-                xbmc.sleep(1000)
-                tries = tries + 1
-            else:
-                gotit = True
+            if ret:
+                if 'requests are exceeding the allowable rate limit' in ret:
+                    log('MusicBrainz limits amount of request per time - we must wait')
+                    xbmc.sleep(1000)
+                    tries = tries + 1
+                else:
+                    gotit = True
         if not gotit:
             return -1
+        log(ret)
         curXML = xml.dom.minidom.parseString(ret)
         curXMLs = curXML.getElementsByTagName('metadata')
         if len(curXMLs) > 0:
