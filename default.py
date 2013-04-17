@@ -83,12 +83,13 @@ class Main:
                 from OnlineMusicInfo import GetShouts
                 passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
             elif info == 'studio':
-                log("startin companyinfo")
-                passDataToSkin('StudioInfo', None, self.prop_prefix)
-                from TheMovieDB import SearchforCompany, GetCompanyInfo
-                CompanyId = SearchforCompany(self.id)
-                log("CompanyID=" + str(CompanyId))
-                passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
+                if self.id:
+                    log("startin companyinfo")
+                    passDataToSkin('StudioInfo', None, self.prop_prefix)
+                    from TheMovieDB import SearchforCompany, GetCompanyInfo
+                    CompanyId = SearchforCompany(self.id)
+                    log("CompanyID=" + str(CompanyId))
+                    passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
@@ -129,13 +130,19 @@ class Main:
                 # if MovieId:
                     # passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
             elif info == 'movielists':
-                 log("startin movielists")
-                 passDataToSkin('MovieLists', None, self.prop_prefix)
-                 from TheMovieDB import GetMovieLists
-                 id = GetDatabaseID("movie",self.id)
-                 log("MovieDB Id:" + str(id))
-                 if id:
-                    passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+                if self.id:
+                    log("startin movielists")
+                    passDataToSkin('MovieLists', None, self.prop_prefix)
+                    from TheMovieDB import GetMovieLists
+                    id = GetDatabaseID("movie",self.id)
+                    log("MovieDB Id:" + str(id))
+                    if id:
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+            elif info == 'extendedinfo':
+                 if self.id:
+                     log("startin GetExtendedMovieInfo")
+                     from TheMovieDB import GetExtendedMovieInfo
+                     passHomeDataToSkin(GetExtendedMovieInfo(self.id))
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 log("startin GetSimilarRT")
@@ -328,6 +335,8 @@ class Main:
                 self.lon = (param[4:])
             elif param.startswith('silent='):
                 self.silent = (param[7:])
+                if self.silent == "false":
+                    self.silent = False
             elif param.startswith('festivalsonly='):
                 self.festivalsonly = (param[14:])
             elif param.startswith('feed='):

@@ -1,6 +1,6 @@
 import xbmcaddon,os,xbmc,xbmcvfs
 import simplejson as json
-from Utils import log, GetStringFromUrl, read_from_file, save_to_file
+from Utils import *
 import urllib
 from urllib2 import Request, urlopen
 
@@ -83,7 +83,10 @@ def SearchforCompany(Company):
     request = Request("http://api.themoviedb.org/3/search/company?query=%s&api_key=%s" % (urllib.quote_plus(Company),moviedb_key), headers=headers)
     response = urlopen(request).read()
     response = json.loads(response)
-    return response["results"][0]["id"]
+    if len(response["results"]) > 0:
+        return response["results"][0]["id"]
+    else:
+        return ""
     
 def GetMovieDBConfig():
     headers = {"Accept": "application/json"}
@@ -96,13 +99,82 @@ def GetMovieDBConfig():
     return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
     
 def GetCompanyInfo(Id):
+    try:
+        headers = {"Accept": "application/json"}
+        request = Request("http://api.themoviedb.org/3/company/%s/movies?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
+        response = urlopen(request).read()
+        response = json.loads(response)
+        log("Company response:")
+        log(response)
+        return HandleTheMovieDBMovieResult(response)
+    except:
+        return []
+    
+def GetExtendedMovieInfo(Id):
+    base_url,size = GetMovieDBConfig()
     headers = {"Accept": "application/json"}
-    request = Request("http://api.themoviedb.org/3/company/%s/movies?append_to_response=movies&api_key=%s" % (Id,moviedb_key), headers=headers)
+    request = Request("http://api.themoviedb.org/3/movie/%s?append_to_response=trailers,casts&api_key=%s" % (Id,moviedb_key), headers=headers)
     response = urlopen(request).read()
     response = json.loads(response)
-    log("Company response:")
+    prettyprint(response)
+    log("GetExtendedMovieInfo response:")
     log(response)
-    return HandleTheMovieDBMovieResult(response)
+    if 1 == 1:
+        authors = []
+        directors = []
+        genres = []
+        for item in response['genres']:
+            genres.append(item["name"])
+        for item in response['casts']['crew']:
+            log(item)
+            if item["job"] == "Author":
+                authors.append(item["name"])
+            if item["job"] == "Director":
+                directors.append(item["name"])
+        Writer = " / ".join(authors)
+        Director = " / ".join(directors)
+        Genre = " / ".join(genres)
+        if len(response['trailers']['youtube']) > 0:
+            Trailer = response['trailers']['youtube'][0]['source']
+        else:
+            Trailer = ""
+        if len(response['production_countries']) > 0:
+            Country = response['production_countries'][0]["name"]
+        else:
+            Country = ""
+        if len(response['production_companies']) > 0:
+            Studio = response['production_companies'][0]["name"]
+        else:
+            Studio = ""
+        newmovie = {'Art(fanart)': base_url + size + response['backdrop_path'],
+                    'Fanart': base_url + size + response['backdrop_path'],
+                    'Art(poster)': base_url + size + response['poster_path'],
+                    'Poster': base_url + size + response['poster_path'],
+                    'Title': response['title'],
+                    'Label': response['title'],
+                    'Tagline': response['tagline'],
+                    'RunningTime': response['runtime'],
+                    'Budget': response['budget'],
+                    'Director': Director,
+                    'Writer': Writer,
+                    'Budget': response['budget'],
+                    'Homepage': response['homepage'],
+                    'Set': response['belongs_to_collection'],
+                    'ID': response['id'],
+                    'Plot': response['overview'],
+                    'OriginalTitle': response['original_title'],
+                    'Genre': Genre,
+                    'ID': response['id'],
+                    'Rating': response['vote_average'],
+                    'Play': 'PlayMedia(plugin://plugin.video.youtube/?action=play_video&videoid=%s)' %Trailer,
+                    'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %Trailer,
+                    'ReleaseDate':response['release_date'],
+                    'Country':Country,
+                    'Studio':Studio,
+                    'Year':response['release_date'][:4]  }
+    else:
+        return False
+    return newmovie
      
 def GetMovieLists(Id):
     headers = {"Accept": "application/json"}

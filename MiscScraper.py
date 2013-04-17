@@ -207,6 +207,7 @@ def HandleTraktMovieResult(results):
                 'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
                 'Trailer': ConvertYoutubeURL(movie["trailer"]),
                 'Year': movie["year"],
+                'ID': movie["tmdb_id"],
                 'mpaa': movie["certification"],
                 'Plot': movie["overview"],
                 'Premiered': movie["released"],

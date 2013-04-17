@@ -409,7 +409,15 @@ def download(src, dst, dst2):
         else:
             xbmcvfs.delete(tmpname)
 
+def passHomeDataToSkin(data, debug = True):
+    wnd = xbmcgui.Window(Window)
+    if data != None:
+        for (key,value) in data.iteritems():
+            wnd.setProperty('%s' % (str(key)), unicode(value))
+            if debug:
+                log('%s' % (str(key)) + unicode(value))
     
+            
 def passDataToSkin(name, data, prefix="",debug = False):
     wnd = xbmcgui.Window(Window)
     if data != None:
@@ -425,3 +433,6 @@ def passDataToSkin(name, data, prefix="",debug = False):
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         wnd.setProperty('%s%s.Count' % (prefix, name), '0')
+        
+def prettyprint(string):
+    log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
