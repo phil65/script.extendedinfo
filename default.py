@@ -142,6 +142,7 @@ class Main:
                  if self.id:
                      log("startin GetExtendedMovieInfo")
                      from TheMovieDB import GetExtendedMovieInfo
+                     create_movie_list()
                      passHomeDataToSkin(GetExtendedMovieInfo(self.id))
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
@@ -609,7 +610,7 @@ class Main:
         self.window.setProperty('Set.Movies.Country', " / ".join( country ))
         self.window.setProperty('Set.Movies.Studio', " / ".join( studio ))
         self.window.setProperty('Set.Movies.Years', " / ".join( years ))
-        self.window.setProperty('Set.Movies.Count', str(json_query['result']['limits']['total']))
+        self.window.setProperty('Set.Movies.Count', str(json_query['result']['setdetails']['limits']['total']))
         self.cleared = False
   
     def _clear_properties( self ):
