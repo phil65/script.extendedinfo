@@ -151,7 +151,7 @@ def GetCompanyInfo(Id):
     
 def GetExtendedMovieInfo(Id):
     base_url,size = GetMovieDBConfig()
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     prettyprint(response)
     if 1 == 1:
         authors = []
@@ -171,6 +171,10 @@ def GetExtendedMovieInfo(Id):
             Trailer = response['trailers']['youtube'][0]['source']
         else:
             Trailer = ""
+        if len(response['releases']['countries']) > 0:
+            mpaa = response['releases']['countries'][0]['certification']
+        else:
+            mpaa = ""
         if len(response['production_countries']) > 0:
             Country = response['production_countries'][0]["name"]
         else:
@@ -195,6 +199,7 @@ def GetExtendedMovieInfo(Id):
                     'Tagline': response.get('tagline',""),
                     'RunningTime': response.get('runtime',""),
                     'Budget': response.get('budget',""),
+                    'mpaa': mpaa,
                     'Director': Director,
                     'Writer': Writer,
                     'Budget': response.get('budget',""),
