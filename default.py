@@ -91,6 +91,14 @@ class Main:
                     passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
             elif info == 'set':
                 passDataToSkin('MovieSetItems', None, self.prop_prefix)
+                if self.dbid:
+                    from TheMovieDB import SearchForSet
+                    name = GetMovieSetName(self.dbid)
+                    if name:
+                        log(name)
+                        self.setid  = SearchForSet(name)   
+                log("yyyy")
+                log(self.setid)
                 if self.setid:
                     log("startin companyinfo")
                     from TheMovieDB import GetSetMovies

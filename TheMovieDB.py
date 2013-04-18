@@ -77,6 +77,13 @@ def HandleTheMovieDBCompanyResult(results):
     return companies
     
 def SearchforCompany(Company):
+  #  Companies = Company.split(" / ")
+   # Company = Companies[0]
+    import re
+    regex = re.compile('\(.+?\)')
+    Company = regex.sub('', Company)
+    log("xxxx")
+    log(Company)
     response = GetMovieDBData("http://api.themoviedb.org/3/search/company?query=%s&api_key=%s" % (urllib.quote_plus(Company),moviedb_key))
     if len(response["results"]) > 0:
         return response["results"][0]["id"]
@@ -84,7 +91,16 @@ def SearchforCompany(Company):
         return ""
         
 def GetPersonID(person):
+    Persons = person.split(" / ")
+    person = Persons[0]
     response = GetMovieDBData("http://api.themoviedb.org/3/search/person?query=%s&api_key=%s" % (urllib.quote_plus(person),moviedb_key))
+    if len(response["results"]) > 0:
+        return response["results"][0]["id"]
+    else:
+        return ""
+        
+def SearchForSet(setname):
+    response = GetMovieDBData("http://api.themoviedb.org/3/search/collection?query=%s&api_key=%s" % (urllib.quote_plus(setname),moviedb_key))
     if len(response["results"]) > 0:
         return response["results"][0]["id"]
     else:
@@ -117,6 +133,7 @@ def GetCompanyInfo(Id):
 def GetExtendedMovieInfo(Id):
     base_url,size = GetMovieDBConfig()
     response = GetMovieDBData("http://api.themoviedb.org/3/movie/%s?append_to_response=trailers,casts&api_key=%s" % (Id,moviedb_key))
+    prettyprint(response)
     if 1 == 1:
         authors = []
         directors = []
@@ -164,7 +181,7 @@ def GetExtendedMovieInfo(Id):
                     'Budget': response.get('budget',""),
                     'Homepage': response.get('homepage',""),
                     'Set': SetName,
-                    'SetID': SetID,
+                    'SetId': SetID,
                     'ID': response.get('id',""),
                     'Plot': response.get('overview',""),
                     'OriginalTitle': response.get('original_title',""),
@@ -179,6 +196,7 @@ def GetExtendedMovieInfo(Id):
                     'VideoResolution':"",
                     'AudioChannels':"",
                     'VideoCodec':"",
+                    'VideoAspect':"",
                     'Logo': "",
                     'DBID': "",
                     'Studio':Studio,
