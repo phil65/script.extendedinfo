@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<settings>
+  <category label="General Settings">
+    <setting type="sep"/>
+<!--       <setting label="30023" type="labelenum" values="IMDb|themoviedb.org" id="titlesource" default="IMDb"/>
+ -->  <setting label="Language for MovieDB requests" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="LanguageID" default="en"/>
+      <setting label="Language for LastFM Requests" type="select" values="Argentina|Australia|Austria|Belgium|Brazil|Bulgaria|Canada|China|Colombia|Chile|Croatia|Czech Republic|Denmark|Finland|France|Germany|Greece|Hong Kong|Hungary|Iceland|India|Israel|Italy|Japan|Mexico|Netherlands|Norway|Pakistan|Poland|Portugal|Romania|Russia|Serbia|Singapore|Slovenia|Spain|Sweden|Switzerland|Thailand|Turkey|UK|Uruguay|USA|Venezuela" id="LanguageLabel" default="USA"/>
+      <setting type="sep"/>
+  </category>
+</settings>

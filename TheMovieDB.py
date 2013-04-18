@@ -4,8 +4,11 @@ from Utils import *
 import urllib
 from urllib2 import Request, urlopen
 
-moviedb_key = '34142515d9d23817496eeb4ff1d223d0'      
-Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
+moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
+__addon__        = xbmcaddon.Addon()
+__addonid__      = __addon__.getAddonInfo('id')
+__language__     = __addon__.getLocalizedString   
+Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
 def HandleTheMovieDBMovieResult(results):
     base_url,size = GetMovieDBConfig()
@@ -102,7 +105,7 @@ def GetPersonID(person):
         
 def SearchForSet(setname):
     setname = setname.replace("[","").replace("]","").replace("Kollektion","Collection")
-    response = GetMovieDBData("search/collection?query=%s&" % urllib.quote_plus(setname))
+    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname), __addon__.getSetting("LanguageID")))
     if len(response["results"]) > 0:
         log("found SetDetails")
         return response["results"][0]["id"]
@@ -110,14 +113,15 @@ def SearchForSet(setname):
         return ""
 
 def GetMovieDBData(url):
-    log("Downloading MovieDB Data: " + url)
     url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
+    log("Downloading MovieDB Data: " + url)
     headers = {"Accept": "application/json"}
     succeed = 0
     while succeed < 3:
         try:
             request = Request(url, headers = headers)
             response = urlopen(request).read()
+            log(response)
             return json.loads(response)
         except:
             log("could not get data from %s" % url)
@@ -147,7 +151,7 @@ def GetCompanyInfo(Id):
     
 def GetExtendedMovieInfo(Id):
     base_url,size = GetMovieDBConfig()
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts&" % (Id))
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     prettyprint(response)
     if 1 == 1:
         authors = []
@@ -221,26 +225,26 @@ def GetExtendedMovieInfo(Id):
     return newmovie
      
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s/lists?append_to_response=movies&" % (Id))
+    response = GetMovieDBData("movie/%s/lists?append_to_response=movies&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBListResult(response)
     
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s/similar_movies?" % (Id))
+    response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["results"])
     
 def GetSetMovies(Id):
-    response = GetMovieDBData("collection/%s?" % (Id))
+    response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["parts"])
 
 def GetDirectorMovies(Id):
-    response = GetMovieDBData("person/%s/credits?" % (Id))
+    response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
     return HandleTheMovieDBMovieResult(response["crew"])
               
 def search_movie(medianame,year = ''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )
     medianame = urllib.quote_plus(medianame.encode('utf8','ignore'))
-    response = GetMovieDBData("search/movie?query=%s+%s&" % (medianame, year))
+    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&" % (medianame, year, __addon__.getSetting("LanguageID")))
     tmdb_id = ''
     try:
         if response == "Empty":
