@@ -244,15 +244,16 @@ class Main:
                 wnd = xbmcgui.Window(Window)
                 lat = wnd.getProperty('%slat' % self.prop_prefix)
                 lon = wnd.getProperty('%slon' % self.prop_prefix)
-                if info == 'moveupgooglemap':
-                    lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
-                    log(lat)
-                elif info == 'movedowngooglemap':
-                    lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
-                elif info == 'moveleftgooglemap':
-                    lon = float(lon) - 400.0 / float(self.zoomlevel)/ float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)  
-                elif info == 'moverightgooglemap':
-                    lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
+                if lat and lon:
+                    if info == 'moveupgooglemap':
+                        lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
+                        log(lat)
+                    elif info == 'movedowngooglemap':
+                        lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
+                    elif info == 'moveleftgooglemap':
+                        lon = float(lon) - 400.0 / float(self.zoomlevel)/ float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)  
+                    elif info == 'moverightgooglemap':
+                        lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
                 self.location = str(lat) + "," + str(lon)
                 log("Move Right: " + self.location)
                 image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)

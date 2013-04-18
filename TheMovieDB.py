@@ -98,18 +98,17 @@ def GetPersonID(person):
     Persons = person.split(" / ")
     person = Persons[0]
     response = GetMovieDBData("search/person?query=%s&" % urllib.quote_plus(person))
-    if response and "results" in response:
+    try:
         return response["results"][0]["id"]
-    else:
+    except:
         return ""
         
 def SearchForSet(setname):
     setname = setname.replace("[","").replace("]","").replace("Kollektion","Collection")
     response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname), __addon__.getSetting("LanguageID")))
-    if len(response["results"]) > 0:
-        log("found SetDetails")
+    try:
         return response["results"][0]["id"]
-    else:
+    except:
         return ""
 
 def GetMovieDBData(url):
