@@ -83,7 +83,7 @@ def GetBingMap(search_string):
         return url
     except:
         log("Error when fetching Bing data from net")
-        return ""      
+        return ""     
         
 def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
     try:
@@ -200,22 +200,25 @@ def GetTraktCalendarShows(Type):
 def HandleTraktMovieResult(results):
     count = 1
     movies = []
-    for movie in results:      
-        movie = {'Title': movie["title"],
-                'Runtime': movie["runtime"],
-                'Tagline': movie["tagline"],
-                'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
-                'Trailer': ConvertYoutubeURL(movie["trailer"]),
-                'Year': movie["year"],
-                'ID': movie["tmdb_id"],
-                'mpaa': movie["certification"],
-                'Plot': movie["overview"],
-                'Premiered': movie["released"],
-                'Rating': movie["ratings"]["percentage"]/10,
-                'Genre': " / ".join(movie["genres"]),
-                'Art(poster)': movie["images"]["poster"],
-                'Art(fanart)': movie["images"]["fanart"]  }
-        movies.append(movie)
+    for movie in results:
+        try:
+            movie = {'Title': movie["title"],
+                    'Runtime': movie["runtime"],
+                    'Tagline': movie["tagline"],
+                    'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
+                    'Trailer': ConvertYoutubeURL(movie["trailer"]),
+                    'Year': movie["year"],
+                    'ID': movie["tmdb_id"],
+                    'mpaa': movie["certification"],
+                    'Plot': movie["overview"],
+                    'Premiered': movie["released"],
+                    'Rating': movie["ratings"]["percentage"]/10,
+                    'Genre': " / ".join(movie["genres"]),
+                    'Art(poster)': movie["images"]["poster"],
+                    'Art(fanart)': movie["images"]["fanart"]  }
+            movies.append(movie)
+        except Exception,e:
+            log(e)          
         count += 1
         if count > 20:
             break
@@ -349,6 +352,33 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         videos.append(video)
                         count += 1
     return videos
+    
+def GetYoutubeSearch(search_string,prefix = ""):
+    results = []
+    try:
+        url = 'https://gdata.youtube.com/feeds/api/videos?q=football+-soccer&orderby=published&start-index=11&max-results=10&v=2' % urllib.quote(search_string)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching JSON data from Bing")
+    count = 1
+    log("found Bing vids: " + search_string)
+    videos=[]
+    if results:
+        try:
+            for item in results["value"]["items"]:
+                video = {'Thumb': item["media:thumbnail"][0]["url"],
+                         'Media': ConvertYoutubeURL(item["link"]),
+                         'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
+                         'Title':item["title"],
+                         'Description':item["content"]["content"],
+                         'Date':item["pubDate"]  }
+                videos.append(video)
+                count += 1
+        except:
+            pass
+    return videos
+    
 
 def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
     from OnlineMusicInfo import GetSimilarById

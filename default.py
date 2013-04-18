@@ -83,13 +83,20 @@ class Main:
                 from OnlineMusicInfo import GetShouts
                 passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
             elif info == 'studio':
-                if self.id:
+                passDataToSkin('StudioInfo', None, self.prop_prefix)
+                if self.studio:
                     log("startin companyinfo")
-                    passDataToSkin('StudioInfo', None, self.prop_prefix)
                     from TheMovieDB import SearchforCompany, GetCompanyInfo
-                    CompanyId = SearchforCompany(self.id)
-                    log("CompanyID=" + str(CompanyId))
+                    CompanyId = SearchforCompany(self.studio)
                     passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
+            elif info == 'set':
+                passDataToSkin('MovieSetItems', None, self.prop_prefix)
+                if self.setid:
+                    log("startin companyinfo")
+                    from TheMovieDB import GetSetMovies
+                    passDataToSkin('MovieSetItems', GetSetMovies(self.setid), self.prop_prefix,True)
+                    
+                    
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
@@ -102,7 +109,7 @@ class Main:
             elif info == 'incinema':
                 log("start gettin InCinema info")
                 from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('InCinema', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix)
+                passDataToSkin('InCinemaMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix)
             elif info == 'boxoffice':
                 log("start gettin boxoffice info")
                 from MiscScraper import GetRottenTomatoesMovies
@@ -121,35 +128,47 @@ class Main:
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
                 
                 
-                # elif info == 'similarmovies':
-                # log("startin similarmovies")
-                # passDataToSkin('SimilarMovies', None, self.prop_prefix)
-                # from TheMovieDB import GetDatabaseID, GetSimilarMovies
-                # MovieId = search_movie(GetDatabaseID(self.id))
-                # log("MovieDB Id:" + str(MovieId))
-                # if MovieId:
-                    # passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
+            elif info == 'similarmovies':
+                log("startin MovieDBGetSimilarMovies")
+                passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                from TheMovieDB import GetSimilarMovies
+                # MovieId = GetDatabaseID(self.id)
+                if self.id:
+                    MovieId = self.id
+                else:
+                    MovieId = GetDatabaseID("movie",self.dbid)
+                log("MovieDB Id:" + str(MovieId))
+                if MovieId:
+                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
             elif info == 'movielists':
+                passDataToSkin('MovieLists', None, self.prop_prefix)
                 if self.id:
                     log("startin movielists")
-                    passDataToSkin('MovieLists', None, self.prop_prefix)
                     from TheMovieDB import GetMovieLists
                     id = GetDatabaseID("movie",self.id)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
             elif info == 'extendedinfo':
-                 if self.id:
-                     log("startin GetExtendedMovieInfo")
-                     from TheMovieDB import GetExtendedMovieInfo
-                     create_movie_list()
-                     passHomeDataToSkin(GetExtendedMovieInfo(self.id))
+                if self.id:
+                    log("startin GetExtendedMovieInfo")
+                    from TheMovieDB import GetExtendedMovieInfo
+                    passHomeDataToSkin(GetExtendedMovieInfo(self.id))
+            elif info == 'directormovies':
+                passDataToSkin('DirectorMovies', None, self.prop_prefix)
+                if self.director:
+                    log("startin GetDirectorMovies")
+                    from TheMovieDB import GetDirectorMovies, GetPersonID
+                    id = GetPersonID(self.director)
+                    if id:
+                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix,True)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 log("startin GetSimilarRT")
                 from MiscScraper import GetSimilarRT
-                id = GetDatabaseID(self.type,self.id)
-                passDataToSkin('SimilarMovies', GetSimilarRT(self.type,id), self.prop_prefix)
+                if self.type and self.id:
+                    id = GetDatabaseID(self.type,self.id)
+                    passDataToSkin('SimilarMovies', GetSimilarRT(self.type,id), self.prop_prefix)
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
                 from MiscScraper import GetTraktCalendarShows
@@ -238,8 +257,8 @@ class Main:
                 image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect,zoomlevel = self.zoomlevel,direction=self.direction)
                 wnd = xbmcgui.Window(Window)
                 wnd.setProperty('googlemap', image)
-            if not self.silent:
-                xbmc.executebuiltin( "Dialog.Close(busydialog)" )
+        if not self.silent:
+            xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
     def _selection_dialog(self):
         modeselect= []
@@ -284,11 +303,15 @@ class Main:
         self.UserName = None
         self.feed = None
         self.id = None
+        self.dbid = None
+        self.setid = None
         self.type = False
         self.direction = 0
         self.aspect = "Landscape"
         self.zoomlevel = "15"
         self.location = ""
+        self.director = ""
+        self.studio = ""
         self.lat = ""
         self.lon = ""
         self.silent = True
@@ -330,6 +353,10 @@ class Main:
                 self.zoomlevel = (param[10:])
             elif param.startswith('location='):
                 self.location = (param[9:])
+            elif param.startswith('studio='):
+                self.studio = (param[7:])
+            elif param.startswith('director='):
+                self.director = (param[9:])
             elif param.startswith('lat='):
                 self.lat = (param[4:])
             elif param.startswith('lon='):
@@ -343,7 +370,11 @@ class Main:
             elif param.startswith('feed='):
                 self.feed = param[5:]
             elif param.startswith('id='):
-                self.id = param[3:]               
+                self.id = param[3:]
+            elif param.startswith('dbid='):
+                self.dbid = param[5:]  
+            elif param.startswith('setid='):
+                self.setid = param[6:]  
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
                 if not self.prop_prefix.endswith('.') and self.prop_prefix <> "":
