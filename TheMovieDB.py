@@ -84,34 +84,46 @@ def SearchforCompany(Company):
     Company = regex.sub('', Company)
     log("xxxx")
     log(Company)
-    response = GetMovieDBData("http://api.themoviedb.org/3/search/company?query=%s&api_key=%s" % (urllib.quote_plus(Company),moviedb_key))
-    if len(response["results"]) > 0:
+    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company))
+    try:
         return response["results"][0]["id"]
-    else:
+    except:
+        log("could not find response[results][0][id]")
         return ""
         
 def GetPersonID(person):
     Persons = person.split(" / ")
     person = Persons[0]
-    response = GetMovieDBData("http://api.themoviedb.org/3/search/person?query=%s&api_key=%s" % (urllib.quote_plus(person),moviedb_key))
-    if len(response["results"]) > 0:
+    response = GetMovieDBData("search/person?query=%s&" % urllib.quote_plus(person))
+    if response and "results" in response:
         return response["results"][0]["id"]
     else:
         return ""
         
 def SearchForSet(setname):
-    response = GetMovieDBData("http://api.themoviedb.org/3/search/collection?query=%s&api_key=%s" % (urllib.quote_plus(setname),moviedb_key))
+    setname = setname.replace("[","").replace("]","").replace("Kollektion","Collection")
+    response = GetMovieDBData("search/collection?query=%s&" % urllib.quote_plus(setname))
     if len(response["results"]) > 0:
+        log("found SetDetails")
         return response["results"][0]["id"]
     else:
         return ""
 
 def GetMovieDBData(url):
     log("Downloading MovieDB Data: " + url)
+    url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
     headers = {"Accept": "application/json"}
-    request = Request(url, headers = headers)
-    response = urlopen(request).read()
-    return json.loads(response)
+    succeed = 0
+    while succeed < 3:
+        try:
+            request = Request(url, headers = headers)
+            response = urlopen(request).read()
+            return json.loads(response)
+        except:
+            log("could not get data from %s" % url)
+            xbmc.sleep(1000)
+            succeed += 1
+    return []
         
 def GetMovieDBConfig():
     filename = Addon_Data_Path + "/MovieDBConfig.txt"
@@ -119,20 +131,23 @@ def GetMovieDBConfig():
         results = read_from_file(filename)
         return (results["images"]["base_url"],results["images"]["poster_sizes"][-1])
     else:
-        headers = {"Accept": "application/json"}
-        request = Request("http://api.themoviedb.org/3/configuration?api_key=%s" % (moviedb_key), headers=headers)
-        response = urlopen(request).read()
-        save_to_file(response,"MovieDBConfig",Addon_Data_Path)
-        results = json.loads(response)
-        return (results["images"]["base_url"],results["images"]["poster_sizes"][-1])
+        response = GetMovieDBData("configuration?")
+   #     save_to_file(response,"MovieDBConfig",Addon_Data_Path)
+        if response:
+            return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
+        else:
+            return ("","")
     
 def GetCompanyInfo(Id):
-    response = GetMovieDBData("http://api.themoviedb.org/3/company/%s/movies?append_to_response=movies&api_key=%s" % (Id,moviedb_key))
-    return HandleTheMovieDBMovieResult(response["results"])
+    response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (Id))
+    if response and "results" in response:
+        return HandleTheMovieDBMovieResult(response["results"])
+    else:
+        return []
     
 def GetExtendedMovieInfo(Id):
     base_url,size = GetMovieDBConfig()
-    response = GetMovieDBData("http://api.themoviedb.org/3/movie/%s?append_to_response=trailers,casts&api_key=%s" % (Id,moviedb_key))
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts&" % (Id))
     prettyprint(response)
     if 1 == 1:
         authors = []
@@ -206,26 +221,26 @@ def GetExtendedMovieInfo(Id):
     return newmovie
      
 def GetMovieLists(Id):
-    response = GetMovieDBData("http://api.themoviedb.org/3/movie/%s/lists?append_to_response=movies&api_key=%s" % (Id,moviedb_key))
+    response = GetMovieDBData("movie/%s/lists?append_to_response=movies&" % (Id))
     return HandleTheMovieDBListResult(response)
     
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("http://api.themoviedb.org/3/movie/%s/similar_movies?&api_key=%s" % (Id,moviedb_key))
+    response = GetMovieDBData("movie/%s/similar_movies?" % (Id))
     return HandleTheMovieDBMovieResult(response["results"])
     
 def GetSetMovies(Id):
-    response = GetMovieDBData("http://api.themoviedb.org/3/collection/%s?&api_key=%s" % (Id,moviedb_key))
+    response = GetMovieDBData("collection/%s?" % (Id))
     return HandleTheMovieDBMovieResult(response["parts"])
 
 def GetDirectorMovies(Id):
-    response = GetMovieDBData("http://api.themoviedb.org/3/person/%s/credits?api_key=%s" % (Id,moviedb_key))
+    response = GetMovieDBData("person/%s/credits?" % (Id))
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
     return HandleTheMovieDBMovieResult(response["crew"])
               
 def search_movie(medianame,year = ''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )
     medianame = urllib.quote_plus(medianame.encode('utf8','ignore'))
-    response = GetMovieDBData("http://api.themoviedb.org/3/search/movie?query=%s+%s&api_key=%s" % (medianame, year, moviedb_key))
+    response = GetMovieDBData("search/movie?query=%s+%s&" % (medianame, year))
     tmdb_id = ''
     try:
         if response == "Empty":

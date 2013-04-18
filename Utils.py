@@ -265,7 +265,7 @@ def GetStringFromUrl(encurl):
         except:
             log("could not get data from %s" % encurl)
             xbmc.sleep(1000)
-            succeed = succeed + 1
+            succeed += 1
     return ""
 
 def GetValue(node, tag):
@@ -327,7 +327,12 @@ def read_from_file(path = "" ):
     if xbmcvfs.exists( path ):
         with open(path) as f: fc = simplejson.load(f)
         log("loaded file " + path)
-        return simplejson.loads(fc)
+        try:
+            return simplejson.loads(fc)
+        except:
+            log("error when loading file")
+            log(fc)
+            return []
     else:
         return False
 
