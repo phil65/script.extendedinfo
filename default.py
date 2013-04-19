@@ -225,34 +225,41 @@ class Main:
             elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
                 from MiscScraper import GetGoogleMap, GetGeoCodes
                 wnd = xbmcgui.Window(Window)
+                if self.location == "geocode":
+                    self.lat = string2deg(self.lat)
+                    self.lon = string2deg(self.lon)
                 if info == 'getgooglemap':                    
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                 else:
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)                    
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                if not self.lat or info=="geocode":
-                    lat, lon = GetGeoCodes(self.location)
+                if not self.lat:
+                    if not self.location=="geocode":
+                        lat, lon = GetGeoCodes(self.location)
                     wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                     wnd.setProperty('%slon' % self.prop_prefix, str(lon))
                     wnd.setProperty('%sLocation' % self.prop_prefix, "")
-            elif info == 'moverightgooglemap' or info == 'moveleftgooglemap' or info == 'moveupgooglemap' or info == 'movedowngooglemap':
+            elif "move" in info and "googlemap" in info:
                 from MiscScraper import GetGoogleMap
                 wnd = xbmcgui.Window(Window)
                 lat = wnd.getProperty('%slat' % self.prop_prefix)
                 lon = wnd.getProperty('%slon' % self.prop_prefix)
                 if lat and lon:
-                    if info == 'moveupgooglemap':
+                    if "up" in info:
                         lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
                         log(lat)
-                    elif info == 'movedowngooglemap':
+                    elif "down" in info:
                         lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
-                    elif info == 'moveleftgooglemap':
+                    elif "left" in info:
                         lon = float(lon) - 400.0 / float(self.zoomlevel)/ float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)  
-                    elif info == 'moverightgooglemap':
+                    elif "right" in info:
                         lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
                 self.location = str(lat) + "," + str(lon)
                 log("Move Right: " + self.location)
-                image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
+                if "street" in info:
+                    image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
+                else:
+                    image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))

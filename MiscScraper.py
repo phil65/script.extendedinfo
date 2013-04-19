@@ -87,9 +87,6 @@ def GetBingMap(search_string):
         
 def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
     try:
-        if search_string == "geocode":
-            lat = string2deg(lat)
-            lon = string2deg(lon)
         if not type:
             type="roadmap"
         if aspect == "square":
