@@ -230,10 +230,11 @@ class Main:
                 else:
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)                    
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                if not self.lat:
+                if not self.lat or info=="geocode":
                     lat, lon = GetGeoCodes(self.location)
                     wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                     wnd.setProperty('%slon' % self.prop_prefix, str(lon))
+                    wnd.setProperty('%sLocation' % self.prop_prefix, "")
             elif info == 'moverightgooglemap' or info == 'moveleftgooglemap' or info == 'moveupgooglemap' or info == 'movedowngooglemap':
                 from MiscScraper import GetGoogleMap
                 wnd = xbmcgui.Window(Window)
