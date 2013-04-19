@@ -449,24 +449,23 @@ class Main:
                                        
     def _set_detail_properties( self, movie,count):
         self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
-        self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie[2].get('fanart',''))
-        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie[2].get('poster',''))      
+        self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie["art"].get('fanart',''))
+        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie["art"].get('poster',''))      
 
     def _detail_selector( self, comparator):
         self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-        if (self.selecteditem != self.previousitem):
+        if (self.selecteditem != self.previousitem) and xbmc.getCondVisibility("!Stringcompare(ListItem.Label,..)"):
             self.previousitem = self.selecteditem
-            if xbmc.getCondVisibility("!Stringcompare(ListItem.Label,..)"):
-                self._clear_properties()
-                count = 1
-                for movie in self.movies:
-                    if self.selecteditem in str(movie[comparator]):
-                        self._set_detail_properties(movie,count)
-                        count +=1
-                    if count > 19:
-                        break
-            else:
-                self._clear_properties()
+            self._clear_properties()
+            count = 1
+            for movie in self.movies:
+                if self.selecteditem in str(movie[comparator]):
+                    self._set_detail_properties(movie,count)
+                    count +=1
+                if count > 19:
+                    break
+        else:
+            self._clear_properties()
         xbmc.sleep(100)        
                         
     def run_backend(self):
@@ -477,20 +476,11 @@ class Main:
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
-            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets)"):
+            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
-                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + SubString(ListItem.Path,videodb://1/7/,left)"):
-                        self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
-                        xbmc.sleep(100)
-                    else:
-                        self._clear_properties()
-            elif xbmc.getCondVisibility("Container.Content(artists) | Container.Content(albums)"):
-                self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
-                if (self.selecteditem != self.previousitem):
-                    self.previousitem = self.selecteditem
-                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID)"):
+                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + [SubString(ListItem.Path,videodb://1/7/,left)| Container.Content(artists) | Container.Content(albums)]"):
                         self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
                         xbmc.sleep(100)
                     else:
@@ -543,10 +533,10 @@ class Main:
                     a = datetime.datetime.now()
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_response = simplejson.loads(json_query)
+                    json_query = simplejson.loads(json_query)
                     self._clear_properties()
-                    if json_response['result'].has_key('albums'):
-                        self._set_artist_properties(json_response)
+                    if json_query['result'].has_key('albums'):
+                        self._set_artist_properties(json_query)
                     b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
                     a = datetime.datetime.now()

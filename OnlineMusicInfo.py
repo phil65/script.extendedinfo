@@ -1,6 +1,6 @@
 import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
-from Utils import log, GetStringFromUrl, GetValue, read_from_file, save_to_file, cleanText
+from Utils import *
 import xml.dom.minidom
 import urllib
 
@@ -32,14 +32,27 @@ def HandleBandsInTownResult(results):
 def HandleLastFMEventResult(results):
     events = []
     log(results)
+    prettyprint(results)
     log("starting HandleLastFMEventResult")
-    try:
+    if True:
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
                 my_arts = ' / '.join(artists)
             else:
                 my_arts = artists
+            lat = ""
+            lon = ""               
+            if event['venue']['location']['geo:point']['geo:long']:
+                lon = event['venue']['location']['geo:point']['geo:long']
+                lat = event['venue']['location']['geo:point']['geo:lat']
+                search_string = ""
+            elif event['venue']['location']['street']:
+                search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
+            else:
+                search_string = event['venue']['name']
+            from MiscScraper import GetGoogleMap
+            googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "16",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
@@ -53,11 +66,12 @@ def HandleLastFMEventResult(results):
                      'geolong': event['venue']['location']['geo:point']['geo:long'],
                      'geolat': event['venue']['location']['geo:point']['geo:lat'],
                      'artists': my_arts,
+                     'googlemap': googlemap,
                      'artist_image': event['image'][-1]['#text'],
                      'venue_image': event['venue']['image'][-1]['#text'],
                      'headliner': event['artists']['headliner']  }
             events.append(event)
-    except:
+    else:
         log("Error when handling LastFM results")
     return events
        
@@ -140,14 +154,14 @@ def GetEvents(id,pastevents = False):
     
 def GetTopArtists():
     url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&format=json' % (lastfm_apikey)
-    filename = Addon_Data_Path + "/topartists.txt"
+    filename = Addon_Data_Path + "/GetTopArtists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
         return HandleLastFMTracksResult(results)
     else:
         try:
             response = GetStringFromUrl(url)
-            save_to_file(response,"topartists",Addon_Data_Path)
+            save_to_file(response,"GetTopArtists",Addon_Data_Path)
             results = json.loads(response)
             return HandleLastFMTracksResult(results)
         except:
@@ -177,7 +191,7 @@ def GetTopAlbums(username):
     
 def GetSimilarById(m_id):
     similars = []
-    filename = Addon_Data_Path + "/similar" + m_id +".txt"
+    filename = Addon_Data_Path + "/GetSimilarById" + m_id +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
         similars = read_from_file(filename)
     else:
@@ -220,7 +234,7 @@ def GetNearEvents(tag = False,festivalsonly = False):
         festivalsonly = "1"
     else:
         festivalsonly = "0"
-    filename = Addon_Data_Path + "/concerts" + festivalsonly + str(tag) +".txt"
+    filename = Addon_Data_Path + "/NearEvents" + festivalsonly + str(tag) +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
         log("loaded from file:")
@@ -232,7 +246,7 @@ def GetNearEvents(tag = False,festivalsonly = False):
             url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,urllib.quote_plus(tag),festivalsonly)   
         try:
             response = GetStringFromUrl(url)
-            save_to_file(response,"concerts" + festivalsonly + str(tag),Addon_Data_Path)
+            save_to_file(response,"NearEvents" + festivalsonly + str(tag),Addon_Data_Path)
             results = json.loads(response)
             log("refreshed NearEvents Info:")
             log(results)
@@ -245,7 +259,8 @@ def GetNearEvents(tag = False,festivalsonly = False):
 def GetVenueEvents(id = ""):
     import time
     settings = xbmcaddon.Addon(id='script.extendedinfo')
-    filename = Addon_Data_Path + "/concerts" + id + ".txt"
+    filename = Addon_Data_Path + "/VenueEvents" + id + ".txt"
+  #  if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
         return HandleLastFMEventResult(results)
@@ -254,7 +269,7 @@ def GetVenueEvents(id = ""):
         log('request: %s' % url)
         try:
             response = GetStringFromUrl(url)
-            save_to_file(response,"concerts" + id, Addon_Data_Path)
+            save_to_file(response,"VenueEvents" + id, Addon_Data_Path)
             results = json.loads(response)
             return HandleLastFMEventResult(results)
         except:
