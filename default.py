@@ -223,6 +223,7 @@ class Main:
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
+                direction = ""
                 from MiscScraper import GetGoogleMap, GetGeoCodes
                 wnd = xbmcgui.Window(Window)
                 if self.location == "geocode":
@@ -232,10 +233,13 @@ class Main:
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
                 else:
-                    image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)                    
-                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "15",direction = self.direction)                    
+                    direction = str(int(self.direction) * 18)
+                    image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = direction)                    
+                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "17",direction = direction)                    
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
+                wnd.setProperty('%sDirection' % self.prop_prefix, str(self.direction))
+                wnd.setProperty('%sDirection2' % self.prop_prefix, str(direction))
                 if not self.lat:
                     if not self.location=="geocode":
                         lat, lon = GetGeoCodes(self.location)
@@ -247,25 +251,45 @@ class Main:
                 wnd = xbmcgui.Window(Window)
                 lat = wnd.getProperty('%slat' % self.prop_prefix)
                 lon = wnd.getProperty('%slon' % self.prop_prefix)
+                direction = int(self.direction) * 18
                 if lat and lon:
-                    if "up" in info:
-                        lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
-                    elif "down" in info:
-                        lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
-                    elif "left" in info:
-                        lon = float(lon) - 400.0 / float(self.zoomlevel)/ float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)  
-                    elif "right" in info:
-                        lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
+                    if "street" in info:
+                        from math import sin, cos, radians
+                        stepsize = 0.0002
+                        radiantdirection = radians(float(direction))
+                        if "up" in info:
+                            lat = float(lat) + cos(radiantdirection) * stepsize
+                            lon = float(lon) + sin(radiantdirection) * stepsize
+                        elif "down" in info:
+                            lat = float(lat) - cos(radiantdirection) * stepsize
+                            lon = float(lon) - sin(radiantdirection) * stepsize      
+                        elif "left" in info:
+                            lat = float(lat) - sin(radiantdirection) * stepsize
+                            lon = float(lon) - cos(radiantdirection) * stepsize
+                        elif "right" in info:
+                            lat = float(lat) + sin(radiantdirection) * stepsize
+                            lon = float(lon) + cos(radiantdirection) * stepsize
+                    else:
+                        stepsize = 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
+                        if "up" in info:
+                            lat = float(lat) + stepsize
+                        elif "down" in info:
+                            lat = float(lat) - stepsize           
+                        elif "left" in info:
+                            lon = float(lon) - 2.0 * stepsize  
+                        elif "right" in info:
+                            lon = float(lon) + 2.0 * stepsize
                 self.location = str(lat) + "," + str(lon)
                 if "street" in info:
-                    image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
-                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "15",direction = self.direction)                    
+                    image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = direction)
+                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "17",direction = self.direction)                    
                 else:
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
+                wnd.setProperty('%sDirection' % self.prop_prefix, self.direction)
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))
         if not self.silent:
             xbmc.executebuiltin( "Dialog.Close(busydialog)" )

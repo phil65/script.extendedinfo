@@ -104,7 +104,6 @@ def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
             base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
             url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
         else:
-            direction = int(direction) * 20
             zoom = 130 - int(zoomlevel) * 6
             base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
             url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key, str(direction))        
