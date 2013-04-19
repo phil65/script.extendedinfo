@@ -230,16 +230,19 @@ class Main:
                     self.lon = string2deg(self.lon)
                 if info == 'getgooglemap':                    
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
+                    overview = ""
                 else:
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)                    
+                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "15",direction = self.direction)                    
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
                 if not self.lat:
                     if not self.location=="geocode":
                         lat, lon = GetGeoCodes(self.location)
                     wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                     wnd.setProperty('%slon' % self.prop_prefix, str(lon))
                     wnd.setProperty('%sLocation' % self.prop_prefix, "")
-            elif "move" in info and "googlemap" in info:
+            elif "move" in info and "google" in info:
                 from MiscScraper import GetGoogleMap
                 wnd = xbmcgui.Window(Window)
                 lat = wnd.getProperty('%slat' % self.prop_prefix)
@@ -258,9 +261,12 @@ class Main:
                 log("Move Right: " + self.location)
                 if "street" in info:
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
+                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "15",direction = self.direction)                    
                 else:
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
+                    overview = ""
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))
         if not self.silent:
