@@ -261,11 +261,23 @@ class Main:
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))
                 
-            elif info == 'getgooglestreetviewmap':
-                from MiscScraper import GetGoogleStreetViewMap
-                image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect,zoomlevel = self.zoomlevel,direction=self.direction)
+            elif info == 'getgooglestreetviewmap': 
+                from MiscScraper import GetGoogleStreetViewMap, GetGeoCodes
                 wnd = xbmcgui.Window(Window)
-                wnd.setProperty('googlemap', image)
+                if self.location == "geocode":
+                    lat = string2deg(self.lat)
+                    lon = string2deg(self.lon)
+                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = lat,lon = lon,zoomlevel = self.zoomlevel,direction = self.direction)
+                elif self.location:
+                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)
+                    lat, lon = GetGeoCodes(self.location)
+                else:
+                    lat = self.lat
+                    lon = self.lon
+                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = lat,lon = lon, zoomlevel = self.zoomlevel,direction = self.direction)
+                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
+                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
         if not self.silent:
             xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             

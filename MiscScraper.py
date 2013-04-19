@@ -122,12 +122,15 @@ def GetGeoCodes(search_string):
         log(e)
         return ("","")
         
-def GetGoogleStreetViewMap(search_string,aspect,zoomlevel,direction):
-    try:
+def GetGoogleStreetViewMap(search_string,aspect,lat,lon,zoomlevel,direction):
+    try:  
         if aspect == "square":
             size = "640x640"
         else:
             size = "640x400"
+        if lat:
+            search_string = str(lat) + "," + str(lon)
+            log("Location: " + search_string)
         direction = direction * 17
         zoom = 130 - int(zoomlevel) * 6
         log("zoomlevel ist bei " + str(zoom))
