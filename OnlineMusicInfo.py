@@ -34,7 +34,7 @@ def HandleLastFMEventResult(results):
     log(results)
     prettyprint(results)
     log("starting HandleLastFMEventResult")
-    if True:
+    try:
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
@@ -71,7 +71,7 @@ def HandleLastFMEventResult(results):
                      'venue_image': event['venue']['image'][-1]['#text'],
                      'headliner': event['artists']['headliner']  }
             events.append(event)
-    else:
+    except:
         log("Error when handling LastFM results")
     return events
        
