@@ -222,23 +222,18 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
-            elif info == 'getgooglemap':
+            elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
                 from MiscScraper import GetGoogleMap, GetGeoCodes
                 wnd = xbmcgui.Window(Window)
-                if self.location == "geocode":
-                    lat = string2deg(self.lat)
-                    lon = string2deg(self.lon)
-                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
-                elif self.location:
-                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
-                    lat, lon = GetGeoCodes(self.location)
+                if info == 'getgooglemap':                    
+                    image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                 else:
-                    lat = self.lat
-                    lon = self.lon
-                    image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=lat,lon=lon)
+                    image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)                    
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
-                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
+                if not self.lat:
+                    lat, lon = GetGeoCodes(self.location)
+                    wnd.setProperty('%slat' % self.prop_prefix, str(lat))
+                    wnd.setProperty('%slon' % self.prop_prefix, str(lon))
             elif info == 'moverightgooglemap' or info == 'moveleftgooglemap' or info == 'moveupgooglemap' or info == 'movedowngooglemap':
                 from MiscScraper import GetGoogleMap
                 wnd = xbmcgui.Window(Window)
@@ -256,25 +251,7 @@ class Main:
                         lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
                 self.location = str(lat) + "," + str(lon)
                 log("Move Right: " + self.location)
-                image = GetGoogleMap(search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon)
-                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
-                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
-                
-            elif info == 'getgooglestreetviewmap': 
-                from MiscScraper import GetGoogleStreetViewMap, GetGeoCodes
-                wnd = xbmcgui.Window(Window)
-                if self.location == "geocode":
-                    lat = string2deg(self.lat)
-                    lon = string2deg(self.lon)
-                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = lat,lon = lon,zoomlevel = self.zoomlevel,direction = self.direction)
-                elif self.location:
-                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = self.direction)
-                    lat, lon = GetGeoCodes(self.location)
-                else:
-                    lat = self.lat
-                    lon = self.lon
-                    image = GetGoogleStreetViewMap(search_string = self.location,aspect = self.aspect, lat = lat,lon = lon, zoomlevel = self.zoomlevel,direction = self.direction)
+                image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                 wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
                 wnd.setProperty('%slat' % self.prop_prefix, str(lat))
                 wnd.setProperty('%slon' % self.prop_prefix, str(lon))

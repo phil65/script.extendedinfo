@@ -85,8 +85,11 @@ def GetBingMap(search_string):
         log("Error when fetching Bing data from net")
         return ""     
         
-def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
+def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
     try:
+        if search_string == "geocode":
+            lat = string2deg(lat)
+            lon = string2deg(lon)
         if not type:
             type="roadmap"
         if aspect == "square":
@@ -95,13 +98,19 @@ def GetGoogleMap(search_string,zoomlevel,type,aspect,lat,lon):
         else:
             size = "640x400"
             log("yyyy")           
-        if lat:
+        if lat and lon:
             search_string = str(lat) + "," + str(lon)
             log("Location: " + search_string)
         else:
             search_string = urllib.quote_plus(search_string)
-        base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
-        url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
+        if mode == "normal":
+            base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
+            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
+        else:
+            direction = direction * 17
+            zoom = 130 - int(zoomlevel) * 6
+            base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
+            url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key, str(direction))        
         log("Google Maps Search:" + url)
         return url
     except:
@@ -121,29 +130,6 @@ def GetGeoCodes(search_string):
     except Exception,e:
         log(e)
         return ("","")
-        
-def GetGoogleStreetViewMap(search_string,aspect,lat,lon,zoomlevel,direction):
-    try:  
-        if aspect == "square":
-            size = "640x640"
-        else:
-            size = "640x400"
-        if lat:
-            search_string = str(lat) + "," + str(lon)
-            log("Location: " + search_string)
-        direction = direction * 17
-        zoom = 130 - int(zoomlevel) * 6
-        log("zoomlevel ist bei " + str(zoom))
-        search_string = urllib.quote_plus(search_string)
-        base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-        url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key, str(direction))
-        log("Google Maps Search:" + url)
-        cachedthumb = xbmc.getCacheThumbName(url)
-        log(cachedthumb)
-        return url
-    except Exception,e:
-        log(e)
-        return ""
         
 def GetRottenTomatoesMovies(type):
     movies = []
