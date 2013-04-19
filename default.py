@@ -226,21 +226,23 @@ class Main:
                 direction = ""
                 from MiscScraper import GetGoogleMap, GetGeoCodes
                 wnd = xbmcgui.Window(Window)
-                if self.location == "geocode":
+                if self.location == "geocode": # convert Image Coordinates to float values
                     self.lat = string2deg(self.lat)
                     self.lon = string2deg(self.lon)
-                if info == 'getgooglemap':                    
+                if info == 'getgooglemap':  # request normal map                   
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
-                else:
+                else: # request streetview
                     direction = str(int(self.direction) * 18)
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = direction)                    
                     overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "17",direction = direction)                    
-                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
+                wnd.setProperty('%sgooglemap' % self.prop_prefix, image) # set properties 
                 wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
                 wnd.setProperty('%sDirection' % self.prop_prefix, str(self.direction))
                 wnd.setProperty('%sDirection2' % self.prop_prefix, str(direction))
-                if not self.lat:
+                if not self.lat or self.location=="geocode": # set properties for lat / lon (after JSON call for speed)
+                    lat = self.lat
+                    lon = self.lon
                     if not self.location=="geocode":
                         lat, lon = GetGeoCodes(self.location)
                     wnd.setProperty('%slat' % self.prop_prefix, str(lat))
