@@ -250,7 +250,6 @@ class Main:
                 if lat and lon:
                     if "up" in info:
                         lat = float(lat) + 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
-                        log(lat)
                     elif "down" in info:
                         lat = float(lat) - 200.0   / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)   / float(self.zoomlevel)            
                     elif "left" in info:
@@ -258,7 +257,6 @@ class Main:
                     elif "right" in info:
                         lon = float(lon) + 400.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)  / float(self.zoomlevel) 
                 self.location = str(lat) + "," + str(lon)
-                log("Move Right: " + self.location)
                 if "street" in info:
                     image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "15",direction = self.direction)                    
