@@ -143,8 +143,10 @@ class Main:
                 # MovieId = GetDatabaseID(self.id)
                 if self.id:
                     MovieId = self.id
-                else:
+                elif self.dbid:
                     MovieId = GetDatabaseID("movie",self.dbid)
+                else:
+                    MovieId = ""
                 log("MovieDB Id:" + str(MovieId))
                 if MovieId:
                     passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
@@ -170,6 +172,14 @@ class Main:
                     id = GetPersonID(self.director)
                     if id:
                         passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix,True)
+            elif info == 'writermovies':
+                passDataToSkin('WriterMovies', None, self.prop_prefix)
+                if self.writer and not self.writer.split(" / ")[0] == self.director.split(" / ")[0]:
+                    log("startin GetWriterMovies")
+                    from TheMovieDB import GetDirectorMovies, GetPersonID
+                    id = GetPersonID(self.writer)
+                    if id:
+                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix,True)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 log("startin GetSimilarRT")
@@ -347,6 +357,7 @@ class Main:
         self.zoomlevel = "15"
         self.location = ""
         self.director = ""
+        self.writer = ""
         self.studio = ""
         self.lat = ""
         self.lon = ""
@@ -393,6 +404,8 @@ class Main:
                 self.studio = (param[7:])
             elif param.startswith('director='):
                 self.director = (param[9:])
+            elif param.startswith('writer='):
+                self.writer = (param[7:])
             elif param.startswith('lat='):
                 self.lat = (param[4:])
             elif param.startswith('lon='):
