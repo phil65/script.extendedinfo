@@ -22,6 +22,9 @@ def HandleTheMovieDBMovieResult(results):
                         'Title': movie.get('title',""),
                         'OriginalTitle': movie.get('original_title',""),
                         'ID': movie.get('id',""),
+                        'Path': "",
+                        'Play': "",
+                        'DBID': "",
                         'Rating': movie.get('vote_average',""),
                         'ReleaseDate':movie.get('release_date',"")  }
             if not str(movie['id']) in str(movies):
