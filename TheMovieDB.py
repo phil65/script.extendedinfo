@@ -27,7 +27,7 @@ def HandleTheMovieDBMovieResult(results):
                         'DBID': "",
                         'Rating': movie.get('vote_average',""),
                         'ReleaseDate':movie.get('release_date',"")  }
-            if not str(movie['id']) in str(movies):
+            if not str(movie['id']) in str(movies): ## too dirty
                 movies.append(newmovie)
     else:
         log("Error when handling TheMovieDB movie results")
@@ -116,17 +116,21 @@ def SearchForSet(setname):
         return ""
 
 def GetMovieDBData(url):
+    from base64 import b64encode
+    filename = b64encode(url).replace("/","XXXX")
     url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
     log("Downloading MovieDB Data: " + url)
     headers = {"Accept": "application/json"}
     succeed = 0
     while succeed < 3:
-        try:
+        if True:
             request = Request(url, headers = headers)
             response = urlopen(request).read()
             log(response)
-            return json.loads(response)
-        except:
+            save_to_file(response,filename,Addon_Data_Path)
+            response = json.loads(response)
+            return response
+        else:
             log("could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
@@ -156,7 +160,7 @@ def GetExtendedMovieInfo(Id):
     base_url,size = GetMovieDBConfig()
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     prettyprint(response)
-    if 1 == 1:
+    if True:
         authors = []
         directors = []
         genres = []

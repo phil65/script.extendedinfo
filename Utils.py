@@ -176,8 +176,9 @@ def create_light_movielist():
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "streamdetails", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
         save_to_file(json_query,"XBMClightmovielist",Addon_Data_Path)
-        return simplejson.loads(json_query)
+        return json_query
             
 def media_streamdetails(filename, streamdetails):
     info = {}
