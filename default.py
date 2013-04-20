@@ -100,11 +100,11 @@ class Main:
                 log("yyyy")
                 log(self.setid)
                 if self.setid:
-                    log("startin companyinfo")
+                    log("startin SetInfo")
                     from TheMovieDB import GetSetMovies
-                    passDataToSkin('MovieSetItems', GetSetMovies(self.setid), self.prop_prefix,True)
-                    
-                    
+                    SetData = GetSetMovies(self.setid)
+                    if SetData:
+                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix,True)                
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
@@ -215,7 +215,7 @@ class Main:
              #   events = GetEvents(self.Artist_mbid,True)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)       
             elif info == 'nearevents':
-                passDataToSkin('NearEvents', None, self.prop_prefix)
+                passDataToSkin('NearEvents', None, self.prop_prefix,True)
                 from OnlineMusicInfo import GetNearEvents
                 passDataToSkin('NearEvents', GetNearEvents(self.type,self.festivalsonly), self.prop_prefix)
             elif info == 'venueevents':

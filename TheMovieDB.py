@@ -28,6 +28,7 @@ def HandleTheMovieDBMovieResult(results):
                 movies.append(newmovie)
     else:
         log("Error when handling TheMovieDB movie results")
+    movies = CompareWithLibrary(movies,create_light_movielist())        
     return movies
     
 def HandleTheMovieDBListResult(results):
@@ -210,7 +211,7 @@ def GetExtendedMovieInfo(Id):
                     'OriginalTitle': response.get('original_title',""),
                     'Genre': Genre,
                     'Rating': response.get('vote_average',""),
-                    'Play': 'PlayMedia(plugin://plugin.video.youtube/?action=play_video&videoid=%s)' %Trailer,
+                    'Play': '',
                     'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %Trailer,
                     'ReleaseDate':response.get('release_date',""),
                     'Country':Country,
@@ -226,7 +227,8 @@ def GetExtendedMovieInfo(Id):
                     'Year':response.get('release_date',"")[:4]  }
     else:
         return False
-    return newmovie
+    newmovie = CompareWithLibrary([newmovie],create_light_movielist())        
+    return newmovie[0]
      
 def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s/lists?append_to_response=movies&language=%s&" % (Id, __addon__.getSetting("LanguageID")))

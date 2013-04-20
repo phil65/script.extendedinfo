@@ -153,6 +153,7 @@ def create_movie_list():
             # iterate through the results
             for item in json_response['result']['movies']:
                 year = item['year']
+                DBID = item['id']
                 path = item['file']
                 art = item['art']
                 genre = item['genre']
@@ -165,6 +166,19 @@ def create_movie_list():
             return movies
         else:
             return False
+            
+            
+def create_light_movielist():
+    movies = []
+    filename = Addon_Data_Path + "/XBMCmoviesets.txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
+        return read_from_file(filename)
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        save_to_file(json_query,"XBMCmoviesets",Addon_Data_Path)
+        return simplejson.loads(json_query)
+            
         
 def GetXBMCArtists():
     artists = []        
@@ -252,6 +266,18 @@ def media_path(path):
     else:
         path = [path]
     return path[0]
+
+def CompareWithLibrary(onlinelist,locallist):
+    log("startin compare")
+    for onlineitem in onlinelist:
+        for localitem in locallist["result"]["movies"]:
+            if onlineitem["Title"] == localitem["label"]:
+                log("compare success" + onlineitem["Title"])
+                log(localitem)
+                onlineitem.update({"Play": localitem["movieid"]})             
+                onlineitem.update({"DBID": localitem["movieid"]})             
+    return onlinelist
+
     
 def GetStringFromUrl(encurl):
     doc = ""

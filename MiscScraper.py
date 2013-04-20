@@ -190,7 +190,6 @@ def HandleTraktMovieResult(results):
             movie = {'Title': movie["title"],
                     'Runtime': movie["runtime"],
                     'Tagline': movie["tagline"],
-                    'Play': "PlayMedia(" + ConvertYoutubeURL(movie["trailer"]) + ")",
                     'Trailer': ConvertYoutubeURL(movie["trailer"]),
                     'Year': movie["year"],
                     'ID': movie["tmdb_id"],
