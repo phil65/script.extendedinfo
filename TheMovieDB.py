@@ -118,23 +118,26 @@ def SearchForSet(setname):
 def GetMovieDBData(url):
     from base64 import b64encode
     filename = b64encode(url).replace("/","XXXX")
-    url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
-    log("Downloading MovieDB Data: " + url)
-    headers = {"Accept": "application/json"}
-    succeed = 0
-    while succeed < 3:
-        if True:
-            request = Request(url, headers = headers)
-            response = urlopen(request).read()
-            log(response)
-            save_to_file(response,filename,Addon_Data_Path)
-            response = json.loads(response)
-            return response
-        else:
-            log("could not get data from %s" % url)
-            xbmc.sleep(1000)
-            succeed += 1
-    return []
+    try:
+        url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
+        log("Downloading MovieDB Data: " + url)
+        headers = {"Accept": "application/json"}
+        succeed = 0
+        while succeed < 3:
+            if True:
+                request = Request(url, headers = headers)
+                response = urlopen(request).read()
+                log(response)
+                save_to_file(response,filename,Addon_Data_Path)
+                response = json.loads(response)
+                return response
+            else:
+                log("could not get data from %s" % url)
+                xbmc.sleep(1000)
+                succeed += 1
+        return []
+    except:
+        pass
         
 def GetMovieDBConfig():
     filename = Addon_Data_Path + "/MovieDBConfig.txt"
