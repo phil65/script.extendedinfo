@@ -236,6 +236,10 @@ def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["results"])
     
+def GetUpcomingMovies():
+    response = GetMovieDBData("movie/upcoming?language=%s&" % ( __addon__.getSetting("LanguageID")))
+    return HandleTheMovieDBMovieResult(response["results"])
+    
 def GetSetMovies(Id):
     response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["parts"])

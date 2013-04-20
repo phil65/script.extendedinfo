@@ -128,8 +128,10 @@ class Main:
                 passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix)
             elif info == 'upcoming':
                 log("start gettin upcoming info")
-                from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('Upcoming', GetRottenTomatoesMovies("upcoming"), self.prop_prefix)
+          #      from MiscScraper import GetRottenTomatoesMovies
+           #     passDataToSkin('UpcomingMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, True)
+                from TheMovieDB import GetUpcomingMovies
+                passDataToSkin('UpcomingMovies', GetUpcomingMovies(), self.prop_prefix, True)
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
