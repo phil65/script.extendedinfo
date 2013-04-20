@@ -106,7 +106,7 @@ def GetPersonID(person):
         
 def SearchForSet(setname):
     setname = setname.replace("[","").replace("]","").replace("Kollektion","Collection")
-    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname), __addon__.getSetting("LanguageID")))
+    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname.encode("utf-8")), __addon__.getSetting("LanguageID")))
     try:
         return response["results"][0]["id"]
     except:
