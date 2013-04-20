@@ -174,7 +174,7 @@ def create_light_movielist():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set","originaltitle"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         save_to_file(json_query,"XBMCmoviesets",Addon_Data_Path)
         return simplejson.loads(json_query)
@@ -271,7 +271,11 @@ def CompareWithLibrary(onlinelist,locallist):
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
-            if onlineitem["Title"] == localitem["label"]:
+            if localitem["originaltitle"]:
+                comparator = localitem["originaltitle"]
+            else:
+                comparator = localitem["label"]
+            if onlineitem["Title"] == comparator:
                 log("compare success" + onlineitem["Title"])
                 log(localitem)
                 onlineitem.update({"Play": localitem["movieid"]})             
