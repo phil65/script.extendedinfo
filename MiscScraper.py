@@ -409,38 +409,10 @@ def GetYoutubeSearchVideos(search_string,hd,orderby,time):
                          'Description': item["media$group"]["media$description"]["$t"],
                          'Title': item["title"]["$t"],
                          'Author': item["author"][0]["name"]["$t"],
-                         'Date': item["published"]["$t"]  }
+                         'Date': item["published"]["$t"].replace("T"," ").replace(".000Z","")  }
                 videos.append(video)
                 count += 1
-    return videos
-    
-    
-def GetYoutubeSearch(search_string,prefix = ""):
-    results = []
-    try:
-        url = 'https://gdata.youtube.com/feeds/api/videos?q=football+-soccer&orderby=published&start-index=11&max-results=10&v=2' % urllib.quote(search_string)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-    except:
-        log("Error when fetching JSON data from Bing")
-    count = 1
-    log("found Bing vids: " + search_string)
-    videos=[]
-    if results:
-        try:
-            for item in results["value"]["items"]:
-                video = {'Thumb': item["media:thumbnail"][0]["url"],
-                         'Media': ConvertYoutubeURL(item["link"]),
-                         'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
-                         'Title':item["title"],
-                         'Description':item["content"]["content"],
-                         'Date':item["pubDate"]  }
-                videos.append(video)
-                count += 1
-        except:
-            pass
-    return videos
-    
+    return videos    
 
 def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
     from OnlineMusicInfo import GetSimilarById
