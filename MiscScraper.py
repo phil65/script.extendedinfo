@@ -13,6 +13,7 @@ trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
 googlemaps_key = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def GetXKCDInfo():
@@ -363,6 +364,38 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         videos.append(video)
                         count += 1
     return videos
+    
+def GetYoutubeSearchVideos(search_string,hd,orderby,time):
+    results = []
+    if hd and not hd=="False":
+        hd_string = "&hd=true"
+    else:
+        hd_string = ""
+    if not orderby:
+        orderby = "relevance"
+    if not time:
+        time = "all_time"
+    try:
+        response = GetStringFromUrl('http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key,hd_string) )
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching JSON data from net")
+    count = 1
+    prettyprint(results)
+    log("found youtube vids: " + search_string)
+    videos=[]
+    if results:
+            for item in results["feed"]["entry"]:
+                video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
+                         'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                         'Description': item["media$group"]["media$description"]["$t"],
+                         'Title': item["title"]["$t"],
+                         'Author': item["author"][0]["name"]["$t"],
+                         'Date': item["published"]["$t"]  }
+                videos.append(video)
+                count += 1
+    return videos
+    
     
 def GetYoutubeSearch(search_string,prefix = ""):
     results = []

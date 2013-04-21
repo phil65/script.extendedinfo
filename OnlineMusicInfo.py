@@ -52,7 +52,7 @@ def HandleLastFMEventResult(results):
             else:
                 search_string = event['venue']['name']
             from MiscScraper import GetGoogleMap
-            googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "16",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
+            googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "13",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],

@@ -1,4 +1,4 @@
-import xbmcaddon,os,xbmc,xbmcvfs,time
+import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
 from Utils import *
 import urllib
@@ -118,26 +118,28 @@ def SearchForSet(setname):
 def GetMovieDBData(url):
     from base64 import b64encode
     filename = b64encode(url).replace("/","XXXX")
-    try:
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        return read_from_file(filename)
+    else:
         url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
         log("Downloading MovieDB Data: " + url)
         headers = {"Accept": "application/json"}
         succeed = 0
         while succeed < 3:
-            if True:
+            try:
                 request = Request(url, headers = headers)
                 response = urlopen(request).read()
                 log(response)
                 save_to_file(response,filename,Addon_Data_Path)
                 response = json.loads(response)
+                prettyprint(response)
                 return response
-            else:
+            except:
                 log("could not get data from %s" % url)
                 xbmc.sleep(1000)
                 succeed += 1
         return []
-    except:
-        pass
+
         
 def GetMovieDBConfig():
     filename = Addon_Data_Path + "/MovieDBConfig.txt"
@@ -246,21 +248,35 @@ def GetMovieLists(Id):
     
 def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
-    return HandleTheMovieDBMovieResult(response["results"])
+    log(response)
+    prettyprint(response)
+    try:
+        return HandleTheMovieDBMovieResult(response["results"])
+    except:
+        return []
     
 def GetMovieDBMovies(type):
     response = GetMovieDBData("movie/%s?language=%s&" % ( type, __addon__.getSetting("LanguageID")))
-    return HandleTheMovieDBMovieResult(response["results"])
-    
+    try:
+        return HandleTheMovieDBMovieResult(response["results"])
+    except:
+        return []
+        
 def GetSetMovies(Id):
     response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
-    return HandleTheMovieDBMovieResult(response["parts"])
-
+    try:
+        return HandleTheMovieDBMovieResult(response["parts"])
+    except:
+        return []
+        
 def GetDirectorMovies(Id):
     response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
-    return HandleTheMovieDBMovieResult(response["crew"])
-              
+    try:
+        return HandleTheMovieDBMovieResult(response["crew"])
+    except:
+        return []      
+        
 def search_movie(medianame,year = ''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )
     medianame = urllib.quote_plus(medianame.encode('utf8','ignore'))

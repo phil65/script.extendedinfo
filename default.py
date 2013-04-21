@@ -237,7 +237,12 @@ class Main:
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents
              #   events = GetEvents(self.Artist_mbid,True)
-                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)       
+                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)     
+            elif info == 'youtubesearch':
+                passDataToSkin('YoutubeSearch', None, self.prop_prefix)
+                from MiscScraper import GetYoutubeSearchVideos
+             #   events = GetEvents(self.Artist_mbid,True)
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,False,False), self.prop_prefix,True)     
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix,True)
                 from OnlineMusicInfo import GetNearEvents
@@ -265,6 +270,8 @@ class Main:
                 if self.location == "geocode": # convert Image Coordinates to float values
                     self.lat = string2deg(self.lat)
                     self.lon = string2deg(self.lon)
+                    log(self.lat)
+                    log(self.lon)
                 if info == 'getgooglemap':  # request normal map                   
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
@@ -378,6 +385,7 @@ class Main:
         self.dbid = None
         self.setid = None
         self.type = False
+        self.hd = False
         self.direction = 0
         self.aspect = "Landscape"
         self.zoomlevel = "15"
@@ -450,6 +458,8 @@ class Main:
                 self.dbid = param[5:]  
             elif param.startswith('setid='):
                 self.setid = param[6:]  
+            elif param.startswith('hd='):
+                self.hd = param[3:]  
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
                 if not self.prop_prefix.endswith('.') and self.prop_prefix <> "":

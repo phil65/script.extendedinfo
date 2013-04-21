@@ -14,18 +14,16 @@ Window = 10000
 
 def string2deg(string):
     import re
-    if string[0] == "w":
-       negative = True
-       log("W detected")
-    else:
-        negative = False
-    string = string[1:]
     string = string.strip() # trim leading/trailing whitespace
     string = string.replace('"','')
     string = string.replace("'","")
+    if string[0].lower() == "w" or string[0].lower() == "s":
+       negative = True
+    else:
+        negative = False
+    string = string[1:]
     string = string.replace("d","")
     string = string.replace("  "," ")
-    log(string)
     div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
     sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
     co_re= re.compile(sdec)
@@ -36,9 +34,6 @@ def string2deg(string):
     degrees = float(elems[0])
     arcminutes = float(elems[1])
     arcseconds = float(elems[2])
-    if degrees > 90.0:
-      #  raise ValueError("Degree value must be <= 90.")
-       negative = True
     decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
     if negative:
         decDegrees = -1.0 * decDegrees
