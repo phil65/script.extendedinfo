@@ -143,7 +143,7 @@ class Main:
             elif info == 'toprated':
                 log("start gettin InCinemaMovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('TopRatedMovies', GetMovieDBMovies("rop_rated"), self.prop_prefix, True)          
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, True)          
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
