@@ -171,9 +171,9 @@ def create_movie_list():
 def create_light_movielist():
     movies = []
     filename = Addon_Data_Path + "/XBMClightmovielist.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
-        return read_from_file(filename)
-    else:
+    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
+        # return read_from_file(filename)
+    if True:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "streamdetails", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
@@ -327,7 +327,7 @@ def CompareWithLibrary(onlinelist,locallist):
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"],localitem["label"]]
-            if onlineitem["Title"] in comparators:
+            if onlineitem["OriginalTitle"] in comparators:
                 streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), localitem['streamdetails'])
                 log("compare success" + onlineitem["Title"])
                 log(localitem)
