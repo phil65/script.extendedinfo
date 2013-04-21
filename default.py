@@ -263,6 +263,12 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
+            elif info == 'getlocationevents':
+                from OnlineMusicInfo import GetNearEvents
+                wnd = xbmcgui.Window(Window)
+                lat = wnd.getProperty('%slat' % self.prop_prefix)
+                lon = wnd.getProperty('%slon' % self.prop_prefix)
+                passDataToSkin('NearEvents', GetNearEvents(False,False,lat,lon), self.prop_prefix)
             elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
                 direction = ""
                 from MiscScraper import GetGoogleMap, GetGeoCodes

@@ -128,6 +128,24 @@ def GetGeoCodes(search_string):
         log(e)
         return ("","")
         
+def GetLocationNames(search_string):
+    try:
+        search_string = urllib.quote_plus(search_string)
+        base_url='https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&'
+        url = base_url + 'latlng=%s' % (search_string)
+        log("Google Geocodes Search:" + url)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+        prettyprint(results)
+        components = results["results"][0]["address_components"]
+        for item in components:
+            if "country" in item["type"]:
+                log(item["short_name"])
+        return (item["short_name"])
+    except Exception,e:
+        log(e)
+        return ("","")
+        
 def GetRottenTomatoesMovies(type):
     movies = []
     results = ""

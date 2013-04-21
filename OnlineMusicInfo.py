@@ -224,7 +224,7 @@ def GetSimilarById(m_id):
         log('Found %i Similar artists in last.FM' % len(similars))
     return similars
         
-def GetNearEvents(tag = False,festivalsonly = False):
+def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
     import time
     results = []
     settings = xbmcaddon.Addon(id='script.extendedinfo')
@@ -234,19 +234,21 @@ def GetNearEvents(tag = False,festivalsonly = False):
         festivalsonly = "1"
     else:
         festivalsonly = "0"
-    filename = Addon_Data_Path + "/NearEvents" + festivalsonly + str(tag) +".txt"
+    filename = Addon_Data_Path + "/NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon) +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
         log("loaded from file:")
         log(results)
     else:
-        if not tag:
-            url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
-        else:
-            url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&tag=%s&festivalsonly=%s' % (lastfm_apikey,urllib.quote_plus(tag),festivalsonly)   
+        
+        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
+        if tag:
+            url = url + '&tag=%s' % (urllib.quote_plus(tag))  
+        if lat:
+            url = url + '&lat=%s&long=%s&distance=60' % (lat,lon)  
         try:
             response = GetStringFromUrl(url)
-            save_to_file(response,"NearEvents" + festivalsonly + str(tag),Addon_Data_Path)
+            save_to_file(response,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
             results = json.loads(response)
             log("refreshed NearEvents Info:")
             log(results)
