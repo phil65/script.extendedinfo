@@ -91,7 +91,7 @@ class Main:
                     passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
             elif info == 'set':
                 passDataToSkin('MovieSetItems', None, self.prop_prefix)
-                if self.dbid:
+                if self.dbid and not "show" in str(self.type):
                     from TheMovieDB import SearchForSet
                     name = GetMovieSetName(self.dbid)
                     if name:
@@ -114,7 +114,7 @@ class Main:
                 log("startin GetCandHInfo")
                 from MiscScraper import GetCandHInfo
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)                
-            elif info == 'incinema':
+            elif info == 'incinemaRT':
                 log("start gettin InCinema info")
                 from MiscScraper import GetRottenTomatoesMovies
                 passDataToSkin('InCinemaMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix)
@@ -130,8 +130,20 @@ class Main:
                 log("start gettin upcoming info")
           #      from MiscScraper import GetRottenTomatoesMovies
            #     passDataToSkin('UpcomingMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, True)
-                from TheMovieDB import GetUpcomingMovies
-                passDataToSkin('UpcomingMovies', GetUpcomingMovies(), self.prop_prefix, True)
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix, True)
+            elif info == 'incinema':
+                log("start gettin InCinemaMovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('InCinemaMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, True)
+            elif info == 'popular':
+                log("start gettin popularmovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, True)
+            elif info == 'toprated':
+                log("start gettin InCinemaMovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("rop_rated"), self.prop_prefix, True)          
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
@@ -166,6 +178,11 @@ class Main:
                     log("startin GetExtendedMovieInfo")
                     from TheMovieDB import GetExtendedMovieInfo
                     passHomeDataToSkin(GetExtendedMovieInfo(self.id))
+            elif info == 'extendedtvinfo':
+                if self.id:
+                    log("startin GetTVShowInfo")
+                    from MiscScraper import GetTVShowInfo
+                    passHomeDataToSkin(GetTVShowInfo(self.id)[0])
             elif info == 'directormovies':
                 passDataToSkin('DirectorMovies', None, self.prop_prefix)
                 if self.director:
@@ -184,11 +201,18 @@ class Main:
                         passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix,True)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
-                log("startin GetSimilarRT")
-                from MiscScraper import GetSimilarRT
-                if self.type and self.id:
-                    id = GetDatabaseID(self.type,self.id)
-                    passDataToSkin('SimilarMovies', GetSimilarRT(self.type,id), self.prop_prefix)
+                log("startin GetSimilarTrakt")
+                log(self.dbid)
+                log(self.id)
+                log(self.type)
+                from MiscScraper import GetSimilarTrakt
+                if self.type and (self.id or self.dbid):
+                    if self.dbid:
+                        id = GetDatabaseID(self.type,self.dbid)
+                        log("SimilarTrakt: found dbid " + str(id))
+                    else:
+                        id = self.id
+                    passDataToSkin('SimilarMovies', GetSimilarTrakt(self.type,id), self.prop_prefix)                    
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
                 from MiscScraper import GetTraktCalendarShows

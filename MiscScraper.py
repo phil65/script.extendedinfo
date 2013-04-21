@@ -186,7 +186,7 @@ def HandleTraktMovieResult(results):
     count = 1
     movies = []
     for movie in results:
-        try:
+        try:         
             movie = {'Title': movie["title"],
                     'Runtime': movie["runtime"],
                     'Tagline': movie["tagline"],
@@ -209,24 +209,33 @@ def HandleTraktMovieResult(results):
     return movies
 
 def HandleTraktTVShowResult(results):
+    import datetime
     count = 1
     shows = []
+    prettyprint(results)
     for tvshow in results:      
+        premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
         show = {'Title': tvshow["title"],
+                'Label': tvshow["title"],
+                'TVShowTitle': tvshow["title"],
                 'Runtime': tvshow["runtime"],
                 'Year': tvshow["year"],
                 'mpaa': tvshow["certification"],
                 'Studio': tvshow["network"],
                 'Plot': tvshow["overview"],
+                'ID': tvshow["tvdb_id"],
                 'NextDate': tvshow["air_day"],
                 'ShortTime': tvshow["air_time"],
-                'Premiered': tvshow["first_aired"],
+                'Label2': tvshow["air_day"] + " " + tvshow["air_time"],                
+                'Premiered': premiered,
                 'Country': tvshow["country"],
                 'Rating': tvshow["ratings"]["percentage"]/10,
                 'Genre': " / ".join(tvshow["genres"]),
                 'Art(poster)': tvshow["images"]["poster"],
+                'Poster': tvshow["images"]["poster"],
                 'Art(banner)': tvshow["images"]["banner"],
-                'Art(fanart)': tvshow["images"]["fanart"]  }
+                'Art(fanart)': tvshow["images"]["fanart"],
+                'Fanart': tvshow["images"]["fanart"]  }
         shows.append(show)
         count += 1
         if count > 20:
@@ -244,14 +253,31 @@ def GetTrendingShows():
         try:
             url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
             response = GetStringFromUrl(url)
-            log(response)
             save_to_file(response,"trendingshows",Addon_Data_Path)
             results = simplejson.loads(response)
         except:
             log("Error when fetching  trending data from Trakt.tv")
-        count = 1
         if results:
             return HandleTraktTVShowResult(results)
+            
+def GetTVShowInfo(id):
+    results = ""
+    filename = Addon_Data_Path + "/tvshow" + id + ".txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+        results = read_from_file(filename)
+        log(results)
+        return HandleTraktTVShowResult([results])
+    else:    
+        try:
+            url = 'http://api.trakt.tv/show/summary.json/%s/%s' % (trakt_key,id)
+            response = GetStringFromUrl(url)
+            save_to_file(response,"tvshow" + id,Addon_Data_Path)
+            results = simplejson.loads(response)
+        except:
+            log("Error when fetching  trending data from Trakt.tv")
+        if results:
+            return HandleTraktTVShowResult([results])
+                       
     
 def GetTrendingMovies():
     results = ""
@@ -273,14 +299,15 @@ def GetTrendingMovies():
         if results:
             return HandleTraktMovieResult(results)
        
-def GetSimilarRT(type,imdb_id):
+def GetSimilarTrakt(type,imdb_id):
     movies = []
     shows = []
     results = ""
+    log("Similar ID is " + str(imdb_id))
     if type == "tvshow":
         type = "show"
     filename = Addon_Data_Path + "/similar" + type + imdb_id + ".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         results = read_from_file(filename)
         if type == "show":
             return HandleTraktTVShowResult(results)

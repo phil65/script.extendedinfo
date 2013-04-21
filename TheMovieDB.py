@@ -26,7 +26,7 @@ def HandleTheMovieDBMovieResult(results):
                         'Play': "",
                         'DBID': "",
                         'Rating': movie.get('vote_average',""),
-                        'ReleaseDate':movie.get('release_date',"")  }
+                        'Premiered':movie.get('release_date',"")  }
             if not str(movie['id']) in str(movies): ## too dirty
                 movies.append(newmovie)
     else:
@@ -248,8 +248,8 @@ def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["results"])
     
-def GetUpcomingMovies():
-    response = GetMovieDBData("movie/upcoming?language=%s&" % ( __addon__.getSetting("LanguageID")))
+def GetMovieDBMovies(type):
+    response = GetMovieDBData("movie/%s?language=%s&" % ( type, __addon__.getSetting("LanguageID")))
     return HandleTheMovieDBMovieResult(response["results"])
     
 def GetSetMovies(Id):
