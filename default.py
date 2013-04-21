@@ -166,13 +166,13 @@ class Main:
                     passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
             elif info == 'movielists':
                 passDataToSkin('MovieLists', None, self.prop_prefix)
-                if self.id:
+                if self.dbid:
                     log("startin movielists")
                     from TheMovieDB import GetMovieLists
-                    id = GetDatabaseID("movie",self.id)
+                    id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
             elif info == 'extendedinfo':
                 if self.id:
                     log("startin GetExtendedMovieInfo")
