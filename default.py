@@ -220,7 +220,7 @@ class Main:
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
                 from MiscScraper import GetTraktCalendarShows
-                passDataToSkin('AiringShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
+                passDataToSkin('AiringShows', GetTraktCalendarShows("premieres"), self.prop_prefix,True)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
                 from MiscScraper import GetTrendingShows
@@ -391,7 +391,7 @@ class Main:
         self.dbid = None
         self.setid = None
         self.type = False
-        self.hd = False
+        self.hd = ""
         self.direction = 0
         self.aspect = "Landscape"
         self.zoomlevel = "15"

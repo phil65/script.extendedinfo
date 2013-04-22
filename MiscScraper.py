@@ -171,13 +171,15 @@ def GetRottenTomatoesMovies(type):
                      'Plot': item["synopsis"]  }
             movies.append(movie)
             count += 1
+            if count > 20:
+                break
     return movies
     
 def GetTraktCalendarShows(Type):
     shows = []
     results = ""
     try:
-        url = 'http://api.trakt.tv/calendar/%s.json/%s' % (Type,trakt_key)
+        url = 'http://api.trakt.tv/calendar/%s.json/%s/today/14' % (Type,trakt_key)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -185,20 +187,24 @@ def GetTraktCalendarShows(Type):
     count = 1
     if results:
         for day in results:
-            for count, episode in enumerate(day["episodes"]):
-                show = {'%i.Title' % (count) : episode["episode"]["title"],
-                        '%i.TVShowTitle' % (count) : episode["show"]["title"],
-                        '%i.Runtime' % (count) : episode["show"]["runtime"],
-                        '%i.Certification' % (count) : episode["show"]["certification"],
-                        '%i.Studio' % (count) : episode["show"]["network"],
-                        '%i.Plot' % (count) : episode["show"]["overview"],
-                        '%i.Genre' % (count) : " / ".join(episode["show"]["genres"]),
-                        '%i.Thumb' % (count) : episode["episode"]["images"]["screen"],
-                        '%i.Art(poster)' % (count) : episode["show"]["images"]["poster"],
-                        '%i.Art(banner)' % (count) : episode["show"]["images"]["banner"],
-                        '%i.Art(fanart)' % (count) : episode["show"]["images"]["fanart"]  }
+            for episode in day["episodes"]:
+                show = {'Title' : episode["episode"]["title"],
+                        'TVShowTitle' : episode["show"]["title"],
+                        'Runtime' : episode["show"]["runtime"],
+                        'Year' : episode["show"].get("year"),
+                        'Certification' : episode["show"]["certification"],
+                        'Studio' : episode["show"]["network"],
+                        'Plot' : episode["show"]["overview"],
+                        'Genre' : " / ".join(episode["show"]["genres"]),
+                        'Thumb' : episode["episode"]["images"]["screen"],
+                        'Art(poster)' : episode["show"]["images"]["poster"],
+                        'Art(banner)' : episode["show"]["images"]["banner"],
+                        'Art(fanart)' : episode["show"]["images"]["fanart"]  }
                 shows.append(show)
-            count += 1
+                log(count)
+                count += 1
+                if count > 20:
+                    break
     return shows
 
 def HandleTraktMovieResult(results):
@@ -383,12 +389,10 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         count += 1
     return videos
     
-def GetYoutubeSearchVideos(search_string,hd,orderby,time):
+def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
     results = []
     if hd and not hd=="False":
         hd_string = "&hd=true"
-    else:
-        hd_string = ""
     if not orderby:
         orderby = "relevance"
     if not time:
