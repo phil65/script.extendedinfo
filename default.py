@@ -176,6 +176,16 @@ class Main:
                     log("MovieDB Id:" + str(id))
                     if id:
                         passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+            elif info == 'keywords':
+                passDataToSkin('Keywords', None, self.prop_prefix)
+                if self.dbid:
+                    log("startin Keywords")
+                    from TheMovieDB import GetMovieKeywords
+                    id = GetDatabaseID("movie",self.dbid)
+                    log("MovieDB Id:" + str(id))
+                    if id:
+                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix,True)
+                        
             elif info == 'extendedinfo':
                 if self.id:
                     log("startin GetExtendedMovieInfo")

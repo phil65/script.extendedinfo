@@ -243,8 +243,21 @@ def GetExtendedMovieInfo(Id):
     return newmovie[0]
      
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s/lists?append_to_response=movies&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s/lists?language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     return HandleTheMovieDBListResult(response)
+    
+def GetMovieKeywords(Id):
+    response = GetMovieDBData("movie/%s/keywords?language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    keywords = []
+    if True:
+        for keyword in response["keywords"]:
+            newkeyword = {'id': keyword.get('id',""),
+                        'name': keyword['name']}
+            log(newkeyword)
+            keywords.append(newkeyword)
+    else:
+        pass
+    return keywords
     
 def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")),1)
