@@ -137,28 +137,15 @@ def create_musicvideo_list():
 def create_movie_list():
     movies = []
     filename = Addon_Data_Path + "/XBMCmovies.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
         save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
-        json_response = simplejson.loads(json_query)
-        if (json_response['result'] != None) and ("movies" in json_response["result"]):
-            # iterate through the results
-            for item in json_response['result']['movies']:
-                year = item.get('year')
-                DBID = item.get('movieid')
-                path = item.get('file')
-                art = item.get('art')
-                genre = item.get('genre')
-                director = item.get('director')
-                cast = item.get('cast')
-                studio = item.get('studio')
-                country = item.get('country')
-                tag = item.get('tag')
-                movies.append((year,path,art,genre,director,cast,studio,country,tag))
-            return movies
+        if (json_query['result'] != None) and ("movies" in json_query["result"]):
+            return json_query
         else:
             return False
             
@@ -257,10 +244,7 @@ def media_streamdetails(filename, streamdetails):
         info['audiocodec'] = ''
         info['audiochannels'] = ''
     return info
-
-
-
-            
+          
 def GetXBMCArtists():
     artists = []        
     filename = Addon_Data_Path + "/XBMCartists.txt"
@@ -347,8 +331,7 @@ def media_path(path):
     else:
         path = [path]
     return path[0]
-   
-    
+     
 def CompareWithLibrary(onlinelist):
     global locallist
     if not locallist:
@@ -379,8 +362,7 @@ def CompareWithLibrary(onlinelist):
     b = datetime.datetime.now() - a
     log('Processing Time for comparing: %s' % b)
     return onlinelist
-
-    
+  
 def GetStringFromUrl(encurl):
     doc = ""
     succeed = 0
@@ -509,8 +491,7 @@ def GetDatabaseID(type,dbid):
             return json_response['result']['tvshowdetails']['imdbnumber']
         else:
             return []
-            
-            
+                        
 def GetMovieSetName(dbid):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -561,8 +542,7 @@ def passHomeDataToSkin(data, debug = True):
             wnd.setProperty('%s' % (str(key)), unicode(value))
             if debug:
                 log('%s' % (str(key)) + unicode(value))
-    
-            
+               
 def passDataToSkin(name, data, prefix="",debug = False):
     wnd = xbmcgui.Window(Window)
     if data != None:

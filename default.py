@@ -517,24 +517,27 @@ class Main:
                 AdditionalParams.append(param)
                                        
     def _set_detail_properties( self, movie,count):
-        self.window.setProperty('Detail.Movie.%i.Path' % (count), movie[1])
+        self.window.setProperty('Detail.Movie.%i.Path' % (count), movie["file"])
         self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie["art"].get('fanart',''))
         self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie["art"].get('poster',''))      
 
     def _detail_selector( self, comparator):
         self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
-        if (self.selecteditem != self.previousitem) and xbmc.getCondVisibility("!Stringcompare(ListItem.Label,..)"):
-            self.previousitem = self.selecteditem
-            self._clear_properties()
-            count = 1
-            for movie in self.movies:
-                if self.selecteditem in str(movie[comparator]):
-                    self._set_detail_properties(movie,count)
-                    count +=1
-                if count > 19:
-                    break
-        else:
-            self._clear_properties()
+        if (self.selecteditem != self.previousitem):
+            if xbmc.getCondVisibility("!Stringcompare(ListItem.Label,..)"):
+                self.previousitem = self.selecteditem
+                self._clear_properties()
+                count = 1
+                for movie in self.movies["result"]["movies"]:
+                    log(comparator)
+                    if self.selecteditem in str(movie[comparator]):
+                        log(movie)
+                        self._set_detail_properties(movie,count)
+                        count +=1
+                    if count > 19:
+                        break
+            else:
+                self._clear_properties()
         xbmc.sleep(100)        
                         
     def run_backend(self):
@@ -555,19 +558,19 @@ class Main:
                     else:
                         self._clear_properties()
             elif xbmc.getCondVisibility("Container.Content(years)"):
-                self._detail_selector(0)
+                self._detail_selector("year")
             elif xbmc.getCondVisibility("Container.Content(genres)"):
-                self._detail_selector(3)              
+                self._detail_selector("genre")              
             elif xbmc.getCondVisibility("Container.Content(directors)"):
-                self._detail_selector(4)
+                self._detail_selector("director")
             elif xbmc.getCondVisibility("Container.Content(actors)"):
-                self._detail_selector(5)
+                self._detail_selector("cast")
             elif xbmc.getCondVisibility("Container.Content(studios)"):
-                self._detail_selector(6)
+                self._detail_selector("studio")
             elif xbmc.getCondVisibility("Container.Content(countries)"):
-                self._detail_selector(7)
+                self._detail_selector("country")
             elif xbmc.getCondVisibility("Container.Content(tags)"):
-                self._detail_selector(8)                       
+                self._detail_selector("tag")                       
             elif xbmc.getCondVisibility('Container.Content(songs)'):
                 # get artistname and songtitle of the selected item
                 artist = xbmc.getInfoLabel('ListItem.Artist')

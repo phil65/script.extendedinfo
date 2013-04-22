@@ -276,8 +276,8 @@ def GetTrendingShows():
         try:
             url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
             response = GetStringFromUrl(url)
-            save_to_file(response,"trendingshows",Addon_Data_Path)
             results = simplejson.loads(response)
+            save_to_file(response,"trendingshows",Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:
@@ -294,8 +294,8 @@ def GetTVShowInfo(id):
         try:
             url = 'http://api.trakt.tv/show/summary.json/%s/%s' % (trakt_key,id)
             response = GetStringFromUrl(url)
-            save_to_file(response,"tvshow" + id,Addon_Data_Path)
             results = simplejson.loads(response)
+            save_to_file(response,"tvshow" + id,Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:
@@ -341,8 +341,8 @@ def GetSimilarTrakt(type,imdb_id):
             url = 'http://api.trakt.tv/%s/related.json/%s/%s/' % (type, trakt_key, imdb_id)
             log(url)
             response = GetStringFromUrl(url)
-            save_to_file(response,"similar" + type + imdb_id,Addon_Data_Path)
             results = simplejson.loads(response)
+            save_to_file(response,"similar" + type + imdb_id,Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:
