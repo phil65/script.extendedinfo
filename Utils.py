@@ -171,12 +171,15 @@ def create_light_movielist():
         # return read_from_file(filename)
     if True:
         a = datetime.datetime.now()
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "streamdetails", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
-        save_to_file(json_query,"XBMClightmovielist",Addon_Data_Path)
         b = datetime.datetime.now() - a
-        log('Processing Time for creating light movielist: %s' % b)
+        log('Processing Time for fetching JSON light movielist: %s' % b)
+        a = datetime.datetime.now()
+        save_to_file(json_query,"XBMClightmovielist",Addon_Data_Path)   
+        b = datetime.datetime.now() - a
+        log('Processing Time for save light movielist: %s' % b)
         return json_query
             
 def media_streamdetails(filename, streamdetails):
@@ -332,16 +335,16 @@ def CompareWithLibrary(onlinelist):
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"],localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators:
-                streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), localitem['streamdetails'])
-                log("compare success" + onlineitem["Title"])
-                log(localitem)
+                # streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), localitem['streamdetails'])
+                # log("compare success" + onlineitem["Title"])
+                # log(localitem)
                 onlineitem.update({"Play": localitem["movieid"]})             
                 onlineitem.update({"DBID": localitem["movieid"]})             
-                onlineitem.update({"VideoCodec": streaminfo["videocodec"]})             
-                onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})             
-                onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})             
-                onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
-                onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                # onlineitem.update({"VideoCodec": streaminfo["videocodec"]})             
+                # onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})             
+                # onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})             
+                # onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
+                # onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
                 break
     b = datetime.datetime.now() - a
     log('Processing Time for comparing: %s' % b)
