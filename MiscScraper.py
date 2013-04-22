@@ -423,21 +423,12 @@ def GetSimilarInLibrary(id): # returns similar artists from own database based o
          return None
     xbmc_artists = GetXBMCArtists()
     artists = []
-    start = time.clock()
     for (count, simi_artist) in enumerate(simi_artists):
         for (count, xbmc_artist) in enumerate(xbmc_artists):
-            hit = False
             if xbmc_artist['mbid'] != '':
-                #compare music brainz id
                 if xbmc_artist['mbid'] == simi_artist['mbid']:
-                    hit = True
-            else:
-                #compare names
-                if xbmc_artist['Title'] == simi_artist['name']:
-                    hit = True
-            if hit:
-         #       log('%s -> %s' % (xbmc_artist['name'], xbmc_artist['thumb']))
-                artists.append(xbmc_artist)
-    finish = time.clock()
+                    artists.append(xbmc_artist)
+            elif xbmc_artist['Title'] == simi_artist['name']:
+                    artists.append(xbmc_artist)
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
