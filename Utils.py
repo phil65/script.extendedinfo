@@ -11,6 +11,7 @@ __language__     = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
 Window = 10000
+locallist = []
 
 def string2deg(string):
     import re
@@ -317,7 +318,11 @@ def media_path(path):
         path = [path]
     return path[0]
 
-def CompareWithLibrary(onlinelist,locallist):
+def CompareWithLibrary(onlinelist):
+    global locallist
+    if not locallist:
+        locallist = create_light_movielist()
+        log("movielist created")
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
@@ -332,7 +337,8 @@ def CompareWithLibrary(onlinelist,locallist):
                 onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})             
                 onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})             
                 onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
-                onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})             
+                onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                break
     return onlinelist
 
     
@@ -383,21 +389,20 @@ def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask=
         
 def save_to_file(content, filename, path = "" ):
     import xbmcvfs
-    try:
+    if True:
         if path == "":
             text_file_path = get_browse_dialog() + filename + ".txt"
         else:
             if not xbmcvfs.exists(path):
                 xbmcvfs.mkdir(path)
             text_file_path = os.path.join(path,filename + ".txt")
-        log("text_file_path:")
+        log("save to textfile:")
         log(text_file_path)
         text_file =  open(text_file_path, "w")
         simplejson.dump(content,text_file)
         text_file.close()
         return True
-    except Exception,e:
-        log(e)
+    else:
         return False
         
 def read_from_file(path = "" ):
@@ -409,10 +414,10 @@ def read_from_file(path = "" ):
     # Check to see if file exists
     if xbmcvfs.exists( path ):
         with open(path) as f: fc = simplejson.load(f)
-        log("loaded file " + path)
-        try:
-            return simplejson.loads(fc)
-        except:
+        log("loaded textfile " + path)
+        if True:
+            return fc
+        else:
             log("error when loading file")
             log(fc)
             return []
