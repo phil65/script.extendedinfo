@@ -600,7 +600,7 @@ class Main:
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
-                    if json_query.has_key('result') and json_query['result'].has_key('songs'):
+                    if "result" in json_query and json_query['result'].has_key('songs'):
                         self._set_album_properties(json_query)
                     b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('[Container.Content(movies) + ListItem.IsFolder] | Container.Content(sets)') or self.type == "set":
@@ -609,7 +609,7 @@ class Main:
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
-                    if json_query.has_key('result') and json_query['result'].has_key('setdetails'):
+                    if "result" in json_query and json_query['result'].has_key('setdetails'):
                         self._set_movie_properties(json_query)
                     b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(songs)') or self.type == "songs":
@@ -618,7 +618,7 @@ class Main:
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_query = simplejson.loads(json_query)
                     self._clear_properties()
-                    if json_query.has_key('result') and json_query['result'].has_key('musicvideos'):
+                    if "result" in json_query and json_query['result'].has_key('musicvideos'):
                         self._set_movie_properties(json_query)
                     b = datetime.datetime.now() - a
                 if b:

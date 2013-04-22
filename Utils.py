@@ -45,7 +45,7 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
-    if (json_response['result'] != None) and (json_response['result'].has_key('%ss' % media.lower())):
+    if (json_response['result'] != None) and ('%ss' % (media.lower()) in json_response['result']):
         # iterate through the results
         if silent == False:
             progressDialog = xbmcgui.DialogProgress(__language__(32016))
@@ -124,7 +124,7 @@ def create_musicvideo_list():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
-    if (json_response['result'] != None) and (json_response['result'].has_key('musicvideos')):
+    if "result" in json_response and ("musicvideos" in json_response['result']):
         # iterate through the results
         for item in json_response['result']['musicvideos']:
             artist = item['artist']
@@ -145,19 +145,19 @@ def create_movie_list():
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
         json_response = simplejson.loads(json_query)
-        if (json_response['result'] != None) and (json_response['result'].has_key('movies')):
+        if (json_response['result'] != None) and ("movies" in json_response["result"]):
             # iterate through the results
             for item in json_response['result']['movies']:
-                year = item['year']
-                DBID = item['id']
-                path = item['file']
-                art = item['art']
-                genre = item['genre']
-                director = item['director']
-                cast = item['cast']
-                studio = item['studio']
-                country = item['country']
-                tag = item['tag']
+                year = item.get('year')
+                DBID = item.get('movieid')
+                path = item.get('file')
+                art = item.get('art')
+                genre = item.get('genre')
+                director = item.get('director')
+                cast = item.get('cast')
+                studio = item.get('studio')
+                country = item.get('country')
+                tag = item.get('tag')
                 movies.append((year,path,art,genre,director,cast,studio,country,tag))
             return movies
         else:
@@ -181,6 +181,25 @@ def create_light_movielist():
         b = datetime.datetime.now() - a
         log('Processing Time for save light movielist: %s' % b)
         return json_query
+        
+def GetSimilarFromOwnLibrary(dbid):
+    movies = []
+#    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
+        # return read_from_file(filename)
+    if True:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "moviedetails" in json_response['result']:
+            genre = json_response['result']['moviedetails']['genre'][0]
+            year = json_response['result']['moviedetails']['year']
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","year"], "sort": { "method": "label" } }, "id": 1}')
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = simplejson.loads(json_query)
+            if "moviedetails" in json_response['result']:
+                for item in json_response['result']:
+                    log(item)
+        
             
 def media_streamdetails(filename, streamdetails):
     info = {}
@@ -247,7 +266,7 @@ def GetXBMCArtists():
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         save_to_file(json_query,"XBMCartists",Addon_Data_Path)
         json_query = simplejson.loads(json_query)
-        if json_query.has_key('result') and json_query['result'].has_key('artists'):
+        if "result" in json_query and "artists" in json_query['result']:
             count = 0
             for item in json_query['result']['artists']:
                 mbid = ''
@@ -281,7 +300,7 @@ def GetXBMCAlbums():
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         save_to_file(json_query,"XBMCalbums",Addon_Data_Path)
         json_query = simplejson.loads(json_query)
-        if json_query.has_key('result') and json_query['result'].has_key('albums'):
+        if "result" in json_query and "albums" in json_query['result']:
             count = 0
             for item in json_query['result']['albums']:
                 mbid = ''
@@ -323,7 +342,8 @@ def media_path(path):
     else:
         path = [path]
     return path[0]
-
+   
+    
 def CompareWithLibrary(onlinelist):
     global locallist
     if not locallist:
@@ -338,7 +358,7 @@ def CompareWithLibrary(onlinelist):
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
-                if json_response['result'].has_key('moviedetails'):
+                if "moviedetails" in json_response["result"]:
                     difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
                     if difference >-2 and difference <2:
                         streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
@@ -472,7 +492,7 @@ def GetDatabaseID(type,dbid):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('moviedetails'):
+        if "moviedetails" in json_response["result"]:
             return json_response['result']['moviedetails']['imdbnumber']
         else:
             return []
@@ -480,7 +500,7 @@ def GetDatabaseID(type,dbid):
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
-        if json_response['result'].has_key('tvshowdetails'):
+        if "tvshowdetails" in json_response["result"]:
             return json_response['result']['tvshowdetails']['imdbnumber']
         else:
             return []
@@ -490,7 +510,7 @@ def GetMovieSetName(dbid):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
-    if json_response['result'].has_key('moviedetails'):
+    if "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid',"")
         if dbsetid:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
