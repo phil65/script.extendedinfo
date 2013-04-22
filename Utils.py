@@ -190,7 +190,17 @@ def GetSimilarFromOwnLibrary(dbid):
                             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year", "art"], "movieid":%s }, "id": 1}' % str(item['movieid']))
                             json_query = unicode(json_query, 'utf-8', errors='ignore')
                             json_response = simplejson.loads(json_query)
-                            prettyprint(json_response)
+                            movie = json_response["result"]["moviedetails"]
+                            newmovie = {'Art(fanart)': movie["art"].get('Fanart',""),
+                                        'Art(poster)': movie["art"].get('Poster',""),
+                                        'Title': movie.get('title',""),
+                                        'OriginalTitle': movie.get('originaltitle',""),
+                                        'ID': movie.get('movieid',""),
+                                        'Path': "",
+                                        'Play': "",
+                                        'DBID': "",
+                                        'Rating': movie.get('rating',""),
+                                        'Premiered':movie.get('year',"")  }
         
             
 def media_streamdetails(filename, streamdetails):
