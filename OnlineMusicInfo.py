@@ -235,10 +235,8 @@ def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
     filename = Addon_Data_Path + "/NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon) +".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-        log("loaded from file:")
-        log(results)
+        log("Results loaded from file: " + filename)
     else:
-        
         url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
         if tag:
             url = url + '&tag=%s' % (urllib.quote_plus(tag))  
@@ -248,8 +246,6 @@ def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
             response = GetStringFromUrl(url)
             save_to_file(response,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
             results = json.loads(response)
-            log("refreshed NearEvents Info:")
-            log(results)
         except:
             log("error getting concert data from " + url)
             return []
@@ -266,7 +262,7 @@ def GetVenueEvents(id = ""):
         return HandleLastFMEventResult(results)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
-        log('request: %s' % url)
+        log('GetVenueEvents request: %s' % url)
         try:
             response = GetStringFromUrl(url)
             save_to_file(response,"VenueEvents" + id, Addon_Data_Path)
@@ -274,7 +270,7 @@ def GetVenueEvents(id = ""):
             return HandleLastFMEventResult(results)
         except:
             results = []
-            log("error getting concert data from " + url)
+            log("GetVenueEvents: error getting concert data from " + url)
             return []
     
 
@@ -291,5 +287,5 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
         results = json.loads(response)
         return HandleBandsInTownResult(results)
     except:
-        log("error when getting artist data from " + url)
+        log("GetArtistNearEvents: error when getting artist data from " + url)
         return []

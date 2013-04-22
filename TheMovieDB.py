@@ -120,6 +120,7 @@ def GetMovieDBData(url):
     global base_url
     global size
     if not base_url:
+        log("fetching base_url and size (MovieDB config)")
         base_url = True
         base_url,size = GetMovieDBConfig()
     filename = b64encode(url).replace("/","XXXX")
