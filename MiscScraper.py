@@ -270,14 +270,13 @@ def GetTrendingShows():
     filename = Addon_Data_Path + "/trendingshows.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-        log(results)
         return HandleTraktTVShowResult(results)
     else:    
         try:
             url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
-            save_to_file(response,"trendingshows",Addon_Data_Path)
+            save_to_file(results,"trendingshows",Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:
@@ -389,14 +388,19 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
     
 def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
     results = []
-    if hd and not hd=="False":
+    if hd and not hd == "false":
         hd_string = "&hd=true"
+    else:
+        hd_string = ""
     if not orderby:
         orderby = "relevance"
     if not time:
         time = "all_time"
+    search_string = urllib.quote(search_string.replace('"',''))
+    log(search_string)
     try:
-        response = GetStringFromUrl('http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key,hd_string) )
+        url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key,hd_string)
+        response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
         log("Error when fetching JSON data from net")
