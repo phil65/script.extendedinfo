@@ -220,7 +220,7 @@ class Main:
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
                 from MiscScraper import GetTraktCalendarShows
-                passDataToSkin('AiringShows', GetTraktCalendarShows("premieres"), self.prop_prefix,True)
+                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix,True)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
                 from MiscScraper import GetTrendingShows
@@ -472,9 +472,10 @@ class Main:
                     self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
                 self.ArtistName = arg[11:].replace('"','')
-                # todo: look up local mbid first -->xbmcid for parameter
-                from MusicBrainz import GetMusicBrainzIdFromNet
-                self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
+                if self.ArtistName:
+                    # todo: look up local mbid first -->xbmcid for parameter
+                    from MusicBrainz import GetMusicBrainzIdFromNet
+                    self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
             elif param.startswith('albumname='):
                 self.AlbumName = arg[10:].replace('"','')
             elif param.startswith('username='):
