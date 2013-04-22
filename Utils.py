@@ -64,7 +64,6 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                     if progressDialog.iscanceled():
                         return
                 file_path =  path + "/" + file
-                log(file_path)
                 if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
@@ -141,7 +140,7 @@ def create_movie_list():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
         json_response = simplejson.loads(json_query)
@@ -171,7 +170,7 @@ def create_light_movielist():
         # return read_from_file(filename)
     if True:
         a = datetime.datetime.now()
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         b = datetime.datetime.now() - a
@@ -187,18 +186,24 @@ def GetSimilarFromOwnLibrary(dbid):
 #    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
     if True:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response['result']:
             genre = json_response['result']['moviedetails']['genre'][0]
-            year = json_response['result']['moviedetails']['year']
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","year"], "sort": { "method": "label" } }, "id": 1}')
+            year = int(json_response['result']['moviedetails']['year'])
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","year"], "sort": { "method": "random" } }, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
-            if "moviedetails" in json_response['result']:
-                for item in json_response['result']:
-                    log(item)
+            if "movies" in json_query['result']:
+                for item in json_query['result']['movies']:
+                    if item['genre'][0] == genre:
+                        difference = int(item['year']) - year
+                        if difference < 3 and difference > -3:
+                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year", "art"], "movieid":%s }, "id": 1}' % str(item['movieid']))
+                            json_query = unicode(json_query, 'utf-8', errors='ignore')
+                            json_response = simplejson.loads(json_query)
+                            prettyprint(json_response)
         
             
 def media_streamdetails(filename, streamdetails):

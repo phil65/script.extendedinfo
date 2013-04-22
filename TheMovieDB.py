@@ -141,7 +141,6 @@ def GetMovieDBData(url = "", cache_days = 14):
                 log("saved file " + filename)
                 response = json.loads(response)
                 save_to_file(response,filename,Addon_Data_Path)
-                prettyprint(response)
                 return response
             except:
                 log("could not get data from %s" % url)
