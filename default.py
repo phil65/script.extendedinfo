@@ -245,7 +245,7 @@ class Main:
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
                 from OnlineMusicInfo import GetSimilarInLibrary
-                passDataToSkin('SimilarArtists', GetSimilarInLibrary(self.Artist_mbid), self.prop_prefix)
+                passDataToSkin('SimilarArtists', GetSimilarInLibrary(self.Artist_mbid), self.prop_prefix,True)
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents
@@ -268,7 +268,7 @@ class Main:
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
                 artists = GetXBMCArtists()
                 from OnlineMusicInfo import GetArtistNearEvents
-                events = GetArtistNearEvents(artists[0:15])
+                events = GetArtistNearEvents(artists["result"]["artists"][0:15])
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists

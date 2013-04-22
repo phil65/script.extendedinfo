@@ -144,14 +144,24 @@ def create_movie_list():
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
-        if (json_query['result'] != None) and ("movies" in json_query["result"]):
+        if json_query['result'] != None and "movies" in json_query["result"]:
             return json_query
         else:
             return False
             
+def GetXBMCArtists():
+    filename = Addon_Data_Path + "/XBMCartists.txt"
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
+        return read_from_file(filename)
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_query = simplejson.loads(json_query)
+        save_to_file(json_query,"XBMCartists",Addon_Data_Path)
+        return json_query
+            
             
 def create_light_movielist():
-    movies = []
     filename = Addon_Data_Path + "/XBMClightmovielist.txt"
     # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
@@ -254,40 +264,6 @@ def media_streamdetails(filename, streamdetails):
         info['audiocodec'] = ''
         info['audiochannels'] = ''
     return info
-          
-def GetXBMCArtists():
-    artists = []        
-    filename = Addon_Data_Path + "/XBMCartists.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        return read_from_file(filename)
-    else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = simplejson.loads(json_query)
-        save_to_file(json_query,"XBMCartists",Addon_Data_Path)
-        if "result" in json_query and "artists" in json_query['result']:
-            count = 0
-            for item in json_query['result']['artists']:
-                mbid = ''
-                artist = {"Title": item['label'],
-                          "DBID": item['artistid'],
-                          "mbid": item['musicbrainzartistid'] ,
-                          "Art(thumb)": item['thumbnail'] ,
-                          "Art(fanart)": item['fanart'] ,
-                          "description": item['description'] ,
-                          "Born": item['born'] ,
-                          "Died": item['died'] ,
-                          "Formed": item['formed'] ,
-                          "Disbanded": item['disbanded'] ,
-                          "YearsActive": " / ".join(item['yearsactive']) ,
-                          "Style": " / ".join(item['style']) ,
-                          "Mood": " / ".join(item['mood']) ,
-                          "Instrument": " / ".join(item['instrument']) ,
-                          "Genre": " / ".join(item['genre']) ,
-                          "LibraryPath": 'musicdb://2/' + str(item['artistid']) + '/'
-                          }
-                artists.append(artist)
-    return artists
     
 def GetXBMCAlbums():
     albums = []        
