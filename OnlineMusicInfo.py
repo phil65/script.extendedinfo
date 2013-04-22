@@ -31,8 +31,6 @@ def HandleBandsInTownResult(results):
     
 def HandleLastFMEventResult(results):
     events = []
-    log(results)
-    prettyprint(results)
     log("starting HandleLastFMEventResult")
     try:
         for event in results['events']['event']:

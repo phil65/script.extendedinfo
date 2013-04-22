@@ -136,7 +136,6 @@ def GetLocationNames(search_string):
         log("Google Geocodes Search:" + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
-        prettyprint(results)
         components = results["results"][0]["address_components"]
         for item in components:
             if "country" in item["type"]:
@@ -237,7 +236,6 @@ def HandleTraktTVShowResult(results):
     import datetime
     count = 1
     shows = []
-    prettyprint(results)
     for tvshow in results:      
         premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
         show = {'Title': tvshow["title"],
@@ -403,7 +401,6 @@ def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
     except:
         log("Error when fetching JSON data from net")
     count = 1
-    prettyprint(results)
     log("found youtube vids: " + search_string)
     videos=[]
     if results:

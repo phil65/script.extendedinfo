@@ -477,7 +477,6 @@ def GetMovieSetName(dbid):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
-            prettyprint(json_response)
             return json_response['result']['setdetails'].get('label',"")
     return ""    
 

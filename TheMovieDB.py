@@ -9,9 +9,10 @@ __addon__        = xbmcaddon.Addon()
 __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString   
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
+base_url = ""
+size = ""
 
 def HandleTheMovieDBMovieResult(results):
-    base_url,size = GetMovieDBConfig()
     movies = []
     log("starting HandleTheMovieDBMovieResult")
     if True:
@@ -35,7 +36,6 @@ def HandleTheMovieDBMovieResult(results):
     return movies
     
 def HandleTheMovieDBListResult(results):
-    base_url,size = GetMovieDBConfig()
     lists = []
     if True:
         for list in results["results"]:
@@ -117,6 +117,11 @@ def SearchForSet(setname):
 
 def GetMovieDBData(url):
     from base64 import b64encode
+    global base_url
+    global size
+    if not base_url:
+        base_url = True
+        base_url,size = GetMovieDBConfig()
     filename = b64encode(url).replace("/","XXXX")
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         return read_from_file(filename)
@@ -142,17 +147,11 @@ def GetMovieDBData(url):
 
         
 def GetMovieDBConfig():
-    filename = Addon_Data_Path + "/MovieDBConfig.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
-        return (results["images"]["base_url"],results["images"]["poster_sizes"][-1])
+    response = GetMovieDBData("configuration?")
+    if response:
+        return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
     else:
-        response = GetMovieDBData("configuration?")
-   #     save_to_file(response,"MovieDBConfig",Addon_Data_Path)
-        if response:
-            return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
-        else:
-            return ("","")
+        return ("","")
     
 def GetCompanyInfo(Id):
     response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (Id))
@@ -162,9 +161,7 @@ def GetCompanyInfo(Id):
         return []
     
 def GetExtendedMovieInfo(Id):
-    base_url,size = GetMovieDBConfig()
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")))
-    prettyprint(response)
     if True:
         authors = []
         directors = []
@@ -248,8 +245,6 @@ def GetMovieLists(Id):
     
 def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")))
-    log(response)
-    prettyprint(response)
     try:
         return HandleTheMovieDBMovieResult(response["results"])
     except:
