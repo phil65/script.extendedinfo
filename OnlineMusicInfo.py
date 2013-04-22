@@ -143,7 +143,7 @@ def GetEvents(id,pastevents = False):
         try:
             response = GetStringFromUrl(url)
             results = json.loads(response)
-            save_to_file(response,"artistconcerts" + id + str(pastevents),Addon_Data_Path)
+            save_to_file(results,"artistconcerts" + id + str(pastevents),Addon_Data_Path)
             return HandleLastFMEventResult(results)
         except:
             log("Error when finding artist-related events from" + url)
@@ -160,7 +160,7 @@ def GetTopArtists():
         try:
             response = GetStringFromUrl(url)
             results = json.loads(response)
-            save_to_file(response,"GetTopArtists",Addon_Data_Path)
+            save_to_file(results,"GetTopArtists",Addon_Data_Path)
             return HandleLastFMTracksResult(results)
         except:
             log("Error when finding artist top-tracks from" + url)
@@ -245,7 +245,7 @@ def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
         try:
             response = GetStringFromUrl(url)
             results = json.loads(response)
-            save_to_file(response,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
+            save_to_file(results,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
         except:
             log("error getting concert data from " + url)
             return []
@@ -266,7 +266,7 @@ def GetVenueEvents(id = ""):
         try:
             response = GetStringFromUrl(url)
             results = json.loads(response)
-            save_to_file(response,"VenueEvents" + id, Addon_Data_Path)
+            save_to_file(results,"VenueEvents" + id, Addon_Data_Path)
             return HandleLastFMEventResult(results)
         except:
             results = []
