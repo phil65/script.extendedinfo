@@ -417,22 +417,4 @@ def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
                          'Date': item["published"]["$t"].replace("T"," ").replace(".000Z","")  }
                 videos.append(video)
                 count += 1
-    return videos    
-
-def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
-    from OnlineMusicInfo import GetSimilarById
-    simi_artists = GetSimilarById(id)
-    if simi_artists == None:
-         log('Last.fm didn\'t return proper response')
-         return None
-    xbmc_artists = GetXBMCArtists()
-    artists = []
-    for (count, simi_artist) in enumerate(simi_artists):
-        for (count, xbmc_artist) in enumerate(xbmc_artists):
-            if xbmc_artist['mbid'] != '':
-                if xbmc_artist['mbid'] == simi_artist['mbid']:
-                    artists.append(xbmc_artist)
-            elif xbmc_artist['Title'] == simi_artist['name']:
-                    artists.append(xbmc_artist)
-    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
-    return artists    
+    return videos

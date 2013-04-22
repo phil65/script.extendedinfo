@@ -263,8 +263,8 @@ def GetXBMCArtists():
     else:
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        save_to_file(json_query,"XBMCartists",Addon_Data_Path)
         json_query = simplejson.loads(json_query)
+        save_to_file(json_query,"XBMCartists",Addon_Data_Path)
         if "result" in json_query and "artists" in json_query['result']:
             count = 0
             for item in json_query['result']['artists']:
