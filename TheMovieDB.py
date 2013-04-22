@@ -134,7 +134,7 @@ def GetMovieDBData(url = "", cache_days = 14):
         headers = {"Accept": "application/json"}
         succeed = 0
         while succeed < 3:
-            if True:
+            try:
                 request = Request(url, headers = headers)
                 response = urlopen(request).read()
                 log(response)
@@ -143,7 +143,7 @@ def GetMovieDBData(url = "", cache_days = 14):
                 save_to_file(response,filename,Addon_Data_Path)
                 prettyprint(response)
                 return response
-            else:
+            except:
                 log("could not get data from %s" % url)
                 xbmc.sleep(1000)
                 succeed += 1

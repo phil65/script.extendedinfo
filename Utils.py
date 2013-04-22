@@ -1,4 +1,4 @@
-import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui,xbmcvfs
+import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui,xbmcvfs,datetime
 import os,sys,time
 if sys.version_info < (2, 7):
     import simplejson
@@ -170,10 +170,13 @@ def create_light_movielist():
     # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
     if True:
+        a = datetime.datetime.now()
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "streamdetails", "imdbnumber", "file"], "sort": { "method": "label" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         save_to_file(json_query,"XBMClightmovielist",Addon_Data_Path)
+        b = datetime.datetime.now() - a
+        log('Processing Time for creating light movielist: %s' % b)
         return json_query
             
 def media_streamdetails(filename, streamdetails):
@@ -323,6 +326,7 @@ def CompareWithLibrary(onlinelist):
     if not locallist:
         locallist = create_light_movielist()
         log("movielist created")
+    a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
@@ -339,6 +343,8 @@ def CompareWithLibrary(onlinelist):
                 onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
                 onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
                 break
+    b = datetime.datetime.now() - a
+    log('Processing Time for comparing: %s' % b)
     return onlinelist
 
     

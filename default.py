@@ -159,9 +159,9 @@ class Main:
                     MovieId = self.id
                 elif self.dbid:
                     MovieId = GetDatabaseID("movie",self.dbid)
+                    log("IMDBId from local DB:" + str(MovieId))
                 else:
                     MovieId = ""
-                log("MovieDB Id:" + str(MovieId))
                 if MovieId:
                     passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
             elif info == 'movielists':
