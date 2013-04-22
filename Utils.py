@@ -328,19 +328,18 @@ def CompareWithLibrary(onlinelist):
     global locallist
     if not locallist:
         locallist = create_light_movielist()
-        log("movielist created")
     a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"],localitem["label"]]
-            if onlineitem["OriginalTitle"] in comparators:
+            if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
+                log("compare success" + onlineitem["Title"])
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 if json_response['result'].has_key('moviedetails'):
                     streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
-                    log("compare success" + onlineitem["Title"])
                     log(localitem)
                     onlineitem.update({"Play": localitem["movieid"]})             
                     onlineitem.update({"DBID": localitem["movieid"]})             
