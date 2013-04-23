@@ -107,7 +107,7 @@ class Main:
                     from TheMovieDB import GetSetMovies
                     SetData = GetSetMovies(self.setid)
                     if SetData:
-                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix,True)                
+                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix)                
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
@@ -134,19 +134,19 @@ class Main:
           #      from MiscScraper import GetRottenTomatoesMovies
            #     passDataToSkin('UpcomingMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, True)
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix, True)
+                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix)
             elif info == 'incinema':
                 log("start gettin InCinemaMovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('InCinemaMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, True)
+                passDataToSkin('InCinemaMovies', GetMovieDBMovies("now_playing"), self.prop_prefix)
             elif info == 'popular':
                 log("start gettin popularmovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, True)
+                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix)
             elif info == 'toprated':
                 log("start gettin InCinemaMovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, True)          
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix)          
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
@@ -175,7 +175,7 @@ class Main:
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
             elif info == 'keywords':
                 passDataToSkin('Keywords', None, self.prop_prefix)
                 if self.dbid:
@@ -184,7 +184,7 @@ class Main:
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix,True)
+                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)
                         
             elif info == 'extendedinfo':
                 if self.id:
@@ -203,7 +203,7 @@ class Main:
                     from TheMovieDB import GetDirectorMovies, GetPersonID
                     id = GetPersonID(self.director)
                     if id:
-                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix,True)
+                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix)
             elif info == 'writermovies':
                 passDataToSkin('WriterMovies', None, self.prop_prefix)
                 if self.writer and not self.writer.split(" / ")[0] == self.director.split(" / ")[0]:
@@ -211,7 +211,7 @@ class Main:
                     from TheMovieDB import GetDirectorMovies, GetPersonID
                     id = GetPersonID(self.writer)
                     if id:
-                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix,True)
+                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 log("startin GetSimilarTrakt")
@@ -233,7 +233,7 @@ class Main:
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
                 from MiscScraper import GetTraktCalendarShows
-                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix,True)
+                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
                 from MiscScraper import GetTrendingShows
@@ -244,7 +244,7 @@ class Main:
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
-                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix,True)
+                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents
@@ -254,7 +254,7 @@ class Main:
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
              #   events = GetEvents(self.Artist_mbid,True)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,False,False), self.prop_prefix,True)     
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,False,False), self.prop_prefix)     
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix,True)
                 from OnlineMusicInfo import GetNearEvents
