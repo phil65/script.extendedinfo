@@ -65,7 +65,7 @@ class Main:
                 videos = GetYoutubeVideos(self.feed,self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix)
             elif info == 'similarlocal':
-                passDataToSkin('LocalSimilarMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)
+                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)
                         
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")

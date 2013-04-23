@@ -198,8 +198,6 @@ def GetSimilarArtistsInLibrary(id):
                 log(newartist)
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
-
-
             
 def create_light_movielist():
     filename = Addon_Data_Path + "/XBMClightmovielist.txt"
@@ -237,21 +235,22 @@ def GetSimilarFromOwnLibrary(dbid):
                     if item['genre'][0] == genre:
                         difference = int(item['year']) - year
                         if difference < 3 and difference > -3:
-                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year", "art"], "movieid":%s }, "id": 1}' % str(item['movieid']))
+                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(item['movieid']))
                             json_query = unicode(json_query, 'utf-8', errors='ignore')
                             json_response = simplejson.loads(json_query)
                             movie = json_response["result"]["moviedetails"]
-                            newmovie = {'Art(fanart)': movie["art"].get('Fanart',""),
-                                        'Art(poster)': movie["art"].get('Poster',""),
-                                        'Title': movie.get('title',""),
+                            newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
+                                        'Art(poster)': movie["art"].get('poster',""),
+                                        'Title': movie.get('label',""),
                                         'OriginalTitle': movie.get('originaltitle',""),
                                         'ID': movie.get('movieid',""),
                                         'Path': "",
                                         'Play': "",
                                         'DBID': "",
-                                        'Rating': movie.get('rating',""),
+                                        'Rating': str(round(float(movie['rating']),1)),
                                         'Premiered':movie.get('year',"")  }
-        
+                            movies.append(newmovie)  
+                return movies
             
 def media_streamdetails(filename, streamdetails):
     info = {}
