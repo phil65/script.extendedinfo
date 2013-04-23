@@ -75,11 +75,11 @@ class Main:
                 from MiscScraper import GetFlickrImages
                 log("startin flickr")
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
-            elif info == 'gettopalbums':
-                passDataToSkin('TopAlbums', None, self.prop_prefix)
+            elif info == 'discography':
+                passDataToSkin('Discography', None, self.prop_prefix)
                 log("startin gettopalbums")
-                from OnlineMusicInfo import GetTopAlbums
-                passDataToSkin('TopAlbums', GetTopAlbums(self.UserName), self.prop_prefix)
+                from OnlineMusicInfo import GetArtistTopAlbums
+                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix,True)
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)

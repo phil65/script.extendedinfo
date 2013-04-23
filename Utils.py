@@ -221,44 +221,61 @@ def GetSimilarFromOwnLibrary(dbid):
 #    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
     if True:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response['result']:
             genres = json_response['result']['moviedetails']['genre']
             year = int(json_response['result']['moviedetails']['year'])
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","year"], "sort": { "method": "random" } }, "id": 1}')
+            countries = json_response['result']['moviedetails']['country']
+            directors = json_response['result']['moviedetails']['director']
+            mpaa = json_response['result']['moviedetails']['mpaa']
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if "movies" in json_query['result']:
                 for item in json_query['result']['movies']:
+                    difference = int(item['year']) - year
                     hit = 0.0
                     miss = 0.0
+                    quota = 0.0 
                     for genre in genres:
                         if genre in item['genre']:
                             hit += 1.0
                         else:
                             miss += 1.0
                     miss += 0.00001
-                    quota = hit / miss
-                    if quota >0.6:
-                        difference = int(item['year']) - year
-                        if difference < 4 and difference > -4:
-                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(item['movieid']))
-                            json_query = unicode(json_query, 'utf-8', errors='ignore')
-                            json_response = simplejson.loads(json_query)
-                            movie = json_response["result"]["moviedetails"]
-                            newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
-                                        'Art(poster)': movie["art"].get('poster',""),
-                                        'Title': movie.get('label',""),
-                                        'OriginalTitle': movie.get('originaltitle',""),
-                                        'ID': movie.get('imdbnumber',""),
-                                        'Path': "",
-                                        'Play': "",
-                                        'DBID': "",
-                                        'Rating': str(round(float(movie['rating']),1)),
-                                        'Premiered':movie.get('year',"")  }
-                            movies.append(newmovie)  
+                    if hit > 0.0:
+                        quota = float(hit) / float(hit + miss)
+                    if genres[0] == item['genre'][0]:
+                        quota += 0.3 
+                    if difference < 6 and difference > -6:
+                        quota += 0.15
+                    if difference < 3 and difference > -3:
+                        quota += 0.15
+                    if countries[0] == item['country'][0]:
+                        quota += 0.4  
+                    if mpaa == item['mpaa']:
+                        quota += 0.4
+                    if directors[0] == item['director'][0]:
+                        quota += 0.6  
+                        
+                    if quota >1.5:
+                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(item['movieid']))
+                        json_query = unicode(json_query, 'utf-8', errors='ignore')
+                        json_response = simplejson.loads(json_query)
+                        movie = json_response["result"]["moviedetails"]
+                        newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
+                                    'Art(poster)': movie["art"].get('poster',""),
+                                    'Title': movie.get('label',""),
+                                    'OriginalTitle': movie.get('originaltitle',""),
+                                    'ID': movie.get('imdbnumber',""),
+                                    'Path': "",
+                                    'Play': "",
+                                    'DBID': "",
+                                    'Rating': str(round(float(movie['rating']),1)),
+                                    'Premiered':movie.get('year',"")  }
+                        movies.append(newmovie)  
                 return movies
             
 def media_streamdetails(filename, streamdetails):

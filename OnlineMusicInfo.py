@@ -32,7 +32,7 @@ def HandleBandsInTownResult(results):
 def HandleLastFMEventResult(results):
     events = []
     log("starting HandleLastFMEventResult")
-    try:
+    if True:
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
@@ -69,20 +69,22 @@ def HandleLastFMEventResult(results):
                      'venue_image': event['venue']['image'][-1]['#text'],
                      'headliner': event['artists']['headliner']  }
             events.append(event)
-    except:
+    else:
         log("Error when handling LastFM results")
     return events
        
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    try:
+    if True:
         for album in results['topalbums']['album']:
+            log(['image'])
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
+                     'thumb': album['image'][-1]['#text'],
                      'name':album['name']  }
             albums.append(album)
-    except:
+    else:
         log("Error when handling LastFM results")
     return albums
            
@@ -102,14 +104,14 @@ def HandleLastFMShoutResult(results):
 def HandleLastFMTracksResult(results):
     artists = []
     log("starting HandleLastFMTracksResult")
-    try:
+    if True:
         for artist in results['artists']['artist']:
             artist = {'Title': artist['name'],
                       'mbid': artist['mbid'],
                       'Thumb': artist['image'][-1]['#text'],
                       'Listeners':artist['listeners']  }
             artists.append(artist)
-    except:
+    else:
         log("Error when handling LastFM TopArtists results")
     return artists
  
@@ -159,12 +161,12 @@ def GetTopArtists():
         results = read_from_file(filename)
         return HandleLastFMTracksResult(results)
     else:
-        try:
+        if True:
             response = GetStringFromUrl(url)
             results = json.loads(response)
             save_to_file(results,"GetTopArtists",Addon_Data_Path)
             return HandleLastFMTracksResult(results)
-        except:
+        else:
             log("Error when finding artist top-tracks from" + url)
             return []
     
@@ -178,13 +180,14 @@ def GetShouts(artistname,albumtitle):
         log("Error when finding shouts from" + url)
         return []
     
-def GetTopAlbums(username):
-    url = 'http://ws.audioscrobbler.com/2.0/?method=user.gettopalbums&user=%s&api_key=%s&format=json' % (urllib.quote_plus(username), lastfm_apikey)
-    try:
+def GetArtistTopAlbums(mbid):
+    url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&mbid=%s&api_key=%s&format=json' % (mbid, lastfm_apikey)
+    log(url)
+    if True:
         response = GetStringFromUrl(url)
         results = json.loads(response)
         return HandleLastFMAlbumResult(results)
-    except:
+    else:
         log("Error when finding topalbums from" + url)
         return []
         
@@ -195,11 +198,11 @@ def GetSimilarById(m_id):
         similars = read_from_file(filename)
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
-        try:
+        if True:
             ret = GetStringFromUrl(url)
             curXML = xml.dom.minidom.parseString(ret)
             curXMLs = curXML.getElementsByTagName('lfm')
-        except:
+        else:
             log("error when getting info from LastFM")
             return None
         if len(curXMLs) > 0:
@@ -243,11 +246,11 @@ def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
             url = url + '&tag=%s' % (urllib.quote_plus(tag))  
         if lat:
             url = url + '&lat=%s&long=%s&distance=60' % (lat,lon)  
-        try:
+        if True:
             response = GetStringFromUrl(url)
             results = json.loads(response)
             save_to_file(results,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
-        except:
+        else:
             log("error getting concert data from " + url)
             return []
     return HandleLastFMEventResult(results)
@@ -264,12 +267,12 @@ def GetVenueEvents(id = ""):
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
         log('GetVenueEvents request: %s' % url)
-        try:
+        if True:
             response = GetStringFromUrl(url)
             results = json.loads(response)
             save_to_file(results,"VenueEvents" + id, Addon_Data_Path)
             return HandleLastFMEventResult(results)
-        except:
+        else:
             results = []
             log("GetVenueEvents: error getting concert data from " + url)
             return []
@@ -283,10 +286,10 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
              ArtistStr = ArtistStr + '&'
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    try:
+    if True:
         response = GetStringFromUrl(url)
         results = json.loads(response)
         return HandleBandsInTownResult(results)
-    except:
+    else:
         log("GetArtistNearEvents: error when getting artist data from " + url)
         return []
