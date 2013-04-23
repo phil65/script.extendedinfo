@@ -202,6 +202,10 @@ def GetExtendedMovieInfo(Id):
         else:
             SetName = ""
             SetID = ""
+        if 'release_date' in response:
+            year = response.get('release_date',"")[:4]
+        else:
+            year = ""
         newmovie = {'Art(fanart)': base_url + size + str(response.get('backdrop_path',"")),
                     'Fanart': base_url + size + str(response.get('backdrop_path',"")),
                     'Art(poster)': base_url + size + str(response.get('poster_path',"")),
@@ -236,7 +240,7 @@ def GetExtendedMovieInfo(Id):
                     'Logo': "",
                     'DBID': "",
                     'Studio':Studio,
-                    'Year':response.get('release_date',"")[:4]  }
+                    'Year': year  }
     else:
         return False
     newmovie = CompareWithLibrary([newmovie])        
