@@ -154,12 +154,53 @@ def GetXBMCArtists():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail", "musicbrainzartistid"]}, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         save_to_file(json_query,"XBMCartists",Addon_Data_Path)
         return json_query
             
+def GetSimilarArtistsInLibrary(id):
+    from OnlineMusicInfo import GetSimilarById
+    simi_artists = GetSimilarById(id)
+    if simi_artists == None:
+         log('Last.fm didn\'t return proper response')
+         return None
+    xbmc_artists = GetXBMCArtists()
+    prettyprint(xbmc_artists)
+    artists = []
+    for (count, simi_artist) in enumerate(simi_artists):
+        for (count, xbmc_artist) in enumerate(xbmc_artists["result"]["artists"]):
+            if xbmc_artist['musicbrainzartistid'] != '':
+                if xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
+                    artists.append(xbmc_artist)
+            elif xbmc_artist['artist'] == simi_artist['name']:
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                json_response = simplejson.loads(json_query)
+                item = json_response["result"]["artistdetails"]
+                newartist = {"Title"       : item['label'],
+                             "Genre"       : " / ".join(item['genre']),
+                             "Thumb"       : item['thumbnail'], #remove
+                             "Fanart"      : item['fanart'], #remove
+                             "Art(thumb)"  : item['thumbnail'],
+                             "Art(fanart)" : item['fanart'],
+                             "Description" : item['description'],
+                             "Born"        : item['born'],
+                             "Died"        : item['died'],
+                             "Formed"      : item['formed'],
+                             "Disbanded"   : item['disbanded'],
+                             "YearsActive" : " / ".join(item['yearsactive']),
+                             "Style"       : " / ".join(item['style']),
+                             "Mood"        : " / ".join(item['mood']),
+                             "Instrument"  : " / ".join(item['instrument']),
+                             "LibraryPath" : 'musicdb://2/' + str(item['artistid']) + '/' }                         
+                artists.append(newartist)
+                log(newartist)
+    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
+    return artists    
+
+
             
 def create_light_movielist():
     filename = Addon_Data_Path + "/XBMClightmovielist.txt"
@@ -276,7 +317,6 @@ def GetXBMCAlbums():
         save_to_file(json_query,"XBMCalbums",Addon_Data_Path)
         json_query = simplejson.loads(json_query)
         if "result" in json_query and "albums" in json_query['result']:
-            count = 0
             for item in json_query['result']['albums']:
                 mbid = ''
                 album = {"Title": item['label'],

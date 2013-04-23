@@ -244,8 +244,7 @@ class Main:
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
-                from OnlineMusicInfo import GetSimilarInLibrary
-                passDataToSkin('SimilarArtists', GetSimilarInLibrary(self.Artist_mbid), self.prop_prefix,True)
+                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix,True)
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents

@@ -113,26 +113,6 @@ def HandleLastFMTracksResult(results):
     return artists
  
 
-def GetSimilarInLibrary(id): # returns similar artists from own database based on lastfm
-    simi_artists = GetSimilarById(id)
-    if simi_artists == None:
-         log('Last.fm didn\'t return proper response')
-         return None
-    xbmc_artists = GetXBMCArtists()
-    prettyprint(xbmc_artists)
-    artists = []
-    for (count, simi_artist) in enumerate(simi_artists):
-        for (count, xbmc_artist) in enumerate(xbmc_artists["result"]["artists"]):
-            # if xbmc_artist['mbid'] != '':
-                # if xbmc_artist['mbid'] == simi_artist['mbid']:
-                    # artists.append(xbmc_artist)
-            if xbmc_artist['artist'] == simi_artist['name']:
-                    artists.append(xbmc_artist)
-                    log(xbmc_artist)
-    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
-    return artists    
-
- 
     
 ''' old BandsInTown Way
 def GetEvents(id,getall = False): # converted to api 2.0
