@@ -167,7 +167,6 @@ def GetSimilarArtistsInLibrary(id):
          log('Last.fm didn\'t return proper response')
          return None
     xbmc_artists = GetXBMCArtists()
-    prettyprint(xbmc_artists)
     artists = []
     for (count, simi_artist) in enumerate(simi_artists):
         for (count, xbmc_artist) in enumerate(xbmc_artists["result"]["artists"]):

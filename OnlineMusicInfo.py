@@ -85,7 +85,7 @@ def HandleLastFMAlbumResult(results):
     except:
         log("Error when handling LastFM results")
     return albums
-       
+           
 def HandleLastFMShoutResult(results):
     shouts = []
     log("starting HandleLastFMShoutResult")
@@ -105,6 +105,7 @@ def HandleLastFMTracksResult(results):
     try:
         for artist in results['artists']['artist']:
             artist = {'Title': artist['name'],
+                      'mbid': artist['mbid'],
                       'Thumb': artist['image'][-1]['#text'],
                       'Listeners':artist['listeners']  }
             artists.append(artist)
@@ -152,7 +153,7 @@ def GetEvents(id,pastevents = False):
     
     
 def GetTopArtists():
-    url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&format=json' % (lastfm_apikey)
+    url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&limit=100&format=json' % (lastfm_apikey)
     filename = Addon_Data_Path + "/GetTopArtists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
@@ -186,8 +187,7 @@ def GetTopAlbums(username):
     except:
         log("Error when finding topalbums from" + url)
         return []
-
-    
+        
 def GetSimilarById(m_id):
     similars = []
     filename = Addon_Data_Path + "/GetSimilarById" + m_id +".txt"
