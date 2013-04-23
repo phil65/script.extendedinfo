@@ -225,14 +225,14 @@ def GetSimilarFromOwnLibrary(dbid):
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response['result']:
-            genre = json_response['result']['moviedetails']['genre'][0]
+            genres = json_response['result']['moviedetails']['genre']
             year = int(json_response['result']['moviedetails']['year'])
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","year"], "sort": { "method": "random" } }, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if "movies" in json_query['result']:
                 for item in json_query['result']['movies']:
-                    if item['genre'][0] == genre:
+                    if item['genre'][0] == genres[0]:
                         difference = int(item['year']) - year
                         if difference < 3 and difference > -3:
                             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(item['movieid']))
