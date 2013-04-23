@@ -539,6 +539,7 @@ class Main:
                 self._clear_properties()
         xbmc.sleep(100)        
                         
+
     def run_backend(self):
         self._stop = False
         self.previousitem = ""
@@ -557,7 +558,7 @@ class Main:
                     else:
                         self._clear_properties()
             elif xbmc.getCondVisibility("Container.Content(years)"):
-                self._detail_selector("year")
+                self._detail_selector("year")            
             elif xbmc.getCondVisibility("Container.Content(genres)"):
                 self._detail_selector("genre")              
             elif xbmc.getCondVisibility("Container.Content(directors)"):
@@ -586,6 +587,16 @@ class Main:
                             xbmc.sleep(100)
                             # stop iterating
                             break
+            elif xbmc.getCondVisibility("Window.IsActive(visualisation)"):
+                artist = xbmc.getInfoLabel('MusicPlayer.Artist')
+                if (artist != self.previousartist):
+                    if artist:
+                        from MusicBrainz import GetMusicBrainzIdFromNet
+                        Artist_mbid = GetMusicBrainzIdFromNet(artist)
+                        passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
+                        passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(Artist_mbid), self.prop_prefix)
+            elif xbmc.getCondVisibility('Window.IsActive(screensaver)'):
+                xbmc.sleep(1000)
             else:
                 self._clear_properties()
                 xbmc.sleep(1000)

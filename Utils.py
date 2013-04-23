@@ -225,6 +225,7 @@ def GetSimilarFromOwnLibrary(dbid):
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response['result']:
+            id = json_response['result']['moviedetails']['movieid']
             genres = json_response['result']['moviedetails']['genre']
             year = int(json_response['result']['moviedetails']['year'])
             countries = json_response['result']['moviedetails']['country']
@@ -234,6 +235,7 @@ def GetSimilarFromOwnLibrary(dbid):
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_query = simplejson.loads(json_query)
             if "movies" in json_query['result']:
+                quotalist= []
                 for item in json_query['result']['movies']:
                     difference = int(item['year']) - year
                     hit = 0.0
@@ -254,28 +256,40 @@ def GetSimilarFromOwnLibrary(dbid):
                     if difference < 3 and difference > -3:
                         quota += 0.15
                     if countries[0] == item['country'][0]:
+                        log("same country")
                         quota += 0.4  
                     if mpaa == item['mpaa']:
+                        log("same mpaa")
                         quota += 0.4
                     if directors[0] == item['director'][0]:
-                        quota += 0.6  
+                        log("same director")
+                        quota += 0.6
+                    quotalist.append((quota,item["movieid"]))
+                    log("added quota " + str(quota))
+                if True:
+                    quotalist = sorted(quotalist, key=lambda quota: quota[0],reverse=True)
+                    count = 1
+                    for list_movie in quotalist:
+                        if id <> list_movie[1]:
+                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
+                            json_query = unicode(json_query, 'utf-8', errors='ignore')
+                            json_response = simplejson.loads(json_query)
+                            movie = json_response["result"]["moviedetails"]
+                            newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
+                                        'Art(poster)': movie["art"].get('poster',""),
+                                        'Title': movie.get('label',""),
+                                        'OriginalTitle': movie.get('originaltitle',""),
+                                        'ID': movie.get('imdbnumber',""),
+                                        'Path': "",
+                                        'Play': "",
+                                        'DBID': "",
+                                        'Rating': str(round(float(movie['rating']),1)),
+                                        'Premiered':movie.get('year',"")  }
+                            movies.append(newmovie)
+                            count += 1
+                            if count > 20:
+                                break
                         
-                    if quota >1.5:
-                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(item['movieid']))
-                        json_query = unicode(json_query, 'utf-8', errors='ignore')
-                        json_response = simplejson.loads(json_query)
-                        movie = json_response["result"]["moviedetails"]
-                        newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
-                                    'Art(poster)': movie["art"].get('poster',""),
-                                    'Title': movie.get('label',""),
-                                    'OriginalTitle': movie.get('originaltitle',""),
-                                    'ID': movie.get('imdbnumber',""),
-                                    'Path': "",
-                                    'Play': "",
-                                    'DBID': "",
-                                    'Rating': str(round(float(movie['rating']),1)),
-                                    'Premiered':movie.get('year',"")  }
-                        movies.append(newmovie)  
                 return movies
             
 def media_streamdetails(filename, streamdetails):
