@@ -254,7 +254,7 @@ class Main:
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
              #   events = GetEvents(self.Artist_mbid,True)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,"relevance","all_time"), self.prop_prefix)     
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,self.orderby,self.time), self.prop_prefix)     
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix,True)
                 from OnlineMusicInfo import GetNearEvents
@@ -405,6 +405,8 @@ class Main:
         self.hd = ""
         self.direction = 0
         self.aspect = "Landscape"
+        self.orderby = "relevance"
+        self.time = "all_time"
         self.zoomlevel = "15"
         self.location = ""
         self.director = ""
@@ -453,6 +455,10 @@ class Main:
                 self.location = (param[9:])
             elif param.startswith('studio='):
                 self.studio = (param[7:])
+            elif param.startswith('orderby='):
+                self.orderby = (param[8:])
+            elif param.startswith('time='):
+                self.time = (param[5:])                
             elif param.startswith('director='):
                 self.director = (param[9:])
             elif param.startswith('writer='):
