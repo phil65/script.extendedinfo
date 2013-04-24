@@ -117,7 +117,7 @@ def HandleLastFMTracksResult(results):
         log("Error when handling LastFM TopArtists results")
     return artists
     
-def GetEvents(id,pastevents = False):
+def GetEvents(id, pastevents = False):
     if pastevents:
         url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
@@ -150,7 +150,7 @@ def GetTopArtists():
         log("Error when finding artist top-tracks from" + url)
         return []
     
-def GetShouts(artistname,albumtitle):
+def GetShouts(artistname, albumtitle):
     url = 'method=album.getshouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
     results = GetLastFMData(url)
     if True:
@@ -177,7 +177,7 @@ def GetSimilarById(m_id):
         log("Error when finding SimilarById from" + url)
         return []
         
-def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
+def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     if festivalsonly:
         festivalsonly = "1"
     else:
