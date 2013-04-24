@@ -1,7 +1,6 @@
 import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
 from Utils import *
-import xml.dom.minidom
 import urllib
 
 bandsintown_apikey = 'xbmc_open_source_media_center'
