@@ -47,8 +47,11 @@ def HandleLastFMEventResult(results):
                 search_string = ""
             elif event['venue']['location']['street']:
                 search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
+            elif event['venue']['location']['city']:
+                search_string = event['venue']['location']['city'] + " " + event['venue']['name']               
             else:
                 search_string = event['venue']['name']
+            log("search string vor venue: " + search_string)
             from MiscScraper import GetGoogleMap
             googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "13",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
             event = {'date': event['startDate'],
@@ -105,11 +108,12 @@ def HandleLastFMTracksResult(results):
     artists = []
     log("starting HandleLastFMTracksResult")
     if True:
-        for artist in results['artists']['artist']:
+        for artist in results['artist']:
             artist = {'Title': artist['name'],
+                      'name': artist['name'],
                       'mbid': artist['mbid'],
                       'Thumb': artist['image'][-1]['#text'],
-                      'Listeners':artist['listeners']  }
+                      'Listeners':artist.get('listeners',"")  }
             artists.append(artist)
     else:
         log("Error when handling LastFM TopArtists results")
@@ -159,13 +163,13 @@ def GetTopArtists():
     filename = Addon_Data_Path + "/GetTopArtists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-        return HandleLastFMTracksResult(results)
+        return HandleLastFMTracksResult(results['artists'])
     else:
         if True:
             response = GetStringFromUrl(url)
             results = json.loads(response)
             save_to_file(results,"GetTopArtists",Addon_Data_Path)
-            return HandleLastFMTracksResult(results)
+            return HandleLastFMTracksResult(results['artists'])
         else:
             log("Error when finding artist top-tracks from" + url)
             return []
@@ -194,37 +198,15 @@ def GetArtistTopAlbums(mbid):
 def GetSimilarById(m_id):
     similars = []
     filename = Addon_Data_Path + "/GetSimilarById" + m_id +".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 2409600:
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         similars = read_from_file(filename)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
+        url = 'http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
         if True:
-            ret = GetStringFromUrl(url)
-            curXML = xml.dom.minidom.parseString(ret)
-            curXMLs = curXML.getElementsByTagName('lfm')
-        else:
-            log("error when getting info from LastFM")
-            return None
-        if len(curXMLs) > 0:
-            curXML = curXMLs[0]
-        else:
-            log('No <lfm> found - printing retrieved xml:')
-            print ret
-            return None    
-        curXMLs = curXML.getElementsByTagName('similarartists')
-        if len(curXMLs) > 0:
-            curXML = curXMLs[0]
-        else:
-            log('No <similarartists> found - printing retrieved xml:')
-            print ret
-            return None        
-        artistXMLs = curXML.getElementsByTagName('artist')
-        for artistXML in artistXMLs:
-            artist = {"name": GetValue(artistXML, 'name'),
-                      "mbid": GetValue(artistXML, 'mbid')}
-            similars.append(artist)
-        log('Found %i Similar artists in last.FM' % len(similars))
-    return similars
+            response = GetStringFromUrl(url)
+            results = json.loads(response)
+            prettyprint(results)
+            return HandleLastFMTracksResult(results['similarartists'])
         
 def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
     import time
