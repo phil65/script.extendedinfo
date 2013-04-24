@@ -84,7 +84,7 @@ class Main:
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from OnlineMusicInfo import GetShouts
-                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
+                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:
@@ -175,7 +175,7 @@ class Main:
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
             elif info == 'keywords':
                 passDataToSkin('Keywords', None, self.prop_prefix)
                 if self.dbid:
@@ -387,8 +387,7 @@ class Main:
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
-
-            
+           
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
         self.cleared = False
@@ -573,15 +572,15 @@ class Main:
                 self._detail_selector("tag")                       
             elif xbmc.getCondVisibility('Container.Content(songs)'):
                 # get artistname and songtitle of the selected item
-                artist = xbmc.getInfoLabel('ListItem.Artist')
-                song = xbmc.getInfoLabel('ListItem.Title')
+                self.selecteditem = xbmc.getInfoLabel('ListItem.DBID')
                 # check if we've focussed a new song
-                if (artist != self.previousartist) and (song != self.previoussong):
+                if self.selecteditem != self.previousitem:
+                    self.previousitem = self.selecteditem
                     # clear the window property
                     self.window.clearProperty('SongToMusicVideo.Path')
                     # iterate through our musicvideos
                     for musicvideo in self.musicvideos:
-                        if artist == musicvideo[0] and song == musicvideo[1]:
+                        if self.selecteditem == musicvideo[0]:#needs fixing
                             # match found, set the window property
                             self.window.setProperty('SongToMusicVideo.Path', musicvideo[2])
                             xbmc.sleep(100)
@@ -602,6 +601,8 @@ class Main:
                 xbmc.sleep(1000)
             if xbmc.getCondVisibility("!Window.IsActive(musiclibrary) + !Window.IsActive(videos)"):
                 xbmc.sleep(500)               
+                self.previousitem = ""
+                self.selecteditem = ""
             xbmc.sleep(100)
             if xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
                 self._clear_properties()
