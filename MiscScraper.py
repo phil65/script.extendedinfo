@@ -386,18 +386,13 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         count += 1
     return videos
     
-def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
+def GetYoutubeSearchVideos(search_string = "" ,hd = "", orderby = "relevance", time = "all_time"):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
-    if not orderby:
-        orderby = "relevance"
-    if not time:
-        time = "all_time"
     search_string = urllib.quote(search_string.replace('"',''))
-    log(search_string)
     try:
         url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key,hd_string)
         response = GetStringFromUrl(url)
@@ -405,8 +400,7 @@ def GetYoutubeSearchVideos(search_string ,hd, orderby, time):
     except:
         log("Error when fetching JSON data from net")
     count = 1
-    log("found youtube vids: " + search_string)
-    videos=[]
+    videos = []
     if results:
             for item in results["feed"]["entry"]:
                 video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],

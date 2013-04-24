@@ -31,7 +31,7 @@ def HandleBandsInTownResult(results):
 def HandleLastFMEventResult(results):
     events = []
     log("starting HandleLastFMEventResult")
-    if True:
+    if results['events'].get("event"):
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
