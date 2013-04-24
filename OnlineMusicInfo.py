@@ -119,22 +119,14 @@ def HandleLastFMTracksResult(results):
     
 def GetEvents(id,pastevents = False):
     if pastevents:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getpastevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
+        url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=artist.getevents&mbid=%s&api_key=%s&format=json' % (id, lastfm_apikey)
-    filename = Addon_Data_Path + "/concerts" + str(id) + str(pastevents) +".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
+        url = 'method=artist.getevents&mbid=%s' % (id)
+    results = GetLastFMData(url)
+    if True:
         return HandleLastFMEventResult(results)
     else:
-        try:
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            save_to_file(results,"artistconcerts" + id + str(pastevents),Addon_Data_Path)
-            return HandleLastFMEventResult(results)
-        except:
-            log("Error when finding artist-related events from" + url)
-            return []
+        return []
 
 def GetLastFMData(url = "", cache_days = 14):
     from base64 import b64encode
@@ -186,30 +178,21 @@ def GetSimilarById(m_id):
         return []
         
 def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
-    import time
-    results = []
     if festivalsonly:
         festivalsonly = "1"
     else:
         festivalsonly = "0"
-    filename = Addon_Data_Path + "/NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon) +".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
-        log("Results loaded from file: " + filename)
+    url = 'method=geo.getevents&festivalsonly=%s' % (festivalsonly)
+    if tag:
+        url = url + '&tag=%s' % (urllib.quote_plus(tag))  
+    if lat:
+        url = url + '&lat=%s&long=%s&distance=60' % (lat,lon)  
+    results = GetLastFMData(url)
+    if True:
+        return HandleLastFMEventResult(results)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=geo.getevents&api_key=%s&format=json&limit=50&festivalsonly=%s' % (lastfm_apikey,festivalsonly)
-        if tag:
-            url = url + '&tag=%s' % (urllib.quote_plus(tag))  
-        if lat:
-            url = url + '&lat=%s&long=%s&distance=60' % (lat,lon)  
-        if True:
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            save_to_file(results,"NearEvents" + festivalsonly + str(tag) + str(lat) + str(lon),Addon_Data_Path)
-        else:
-            log("error getting concert data from " + url)
-            return []
-    return HandleLastFMEventResult(results)
+        return []
+
            
 def GetVenueEvents(id = ""):
     url = 'method=venue.getevents&venue=%s' % (id)
@@ -222,7 +205,6 @@ def GetVenueEvents(id = ""):
         return []
 
 def GetArtistNearEvents(Artists): # not possible with api 2.0
-    settings = xbmcaddon.Addon(id='script.extendedinfo')
     ArtistStr = ''
     for art in Artists:
         if len(ArtistStr) > 0:
