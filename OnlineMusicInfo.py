@@ -80,7 +80,6 @@ def HandleLastFMAlbumResult(results):
     log("starting HandleLastFMAlbumResult")
     if True:
         for album in results['topalbums']['album']:
-            log(['image'])
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
                      'thumb': album['image'][-1]['#text'],
@@ -117,25 +116,6 @@ def HandleLastFMTracksResult(results):
     else:
         log("Error when handling LastFM TopArtists results")
     return artists
- 
-
-    
-''' old BandsInTown Way
-def GetEvents(id,getall = False): # converted to api 2.0
-    if getall:
-        url = 'http://api.bandsintown.com/artists/mbid_%s/events?format=json&app_id=%s&date=all' % (id, bandsintown_apikey)
-    else:
-        url = 'http://api.bandsintown.com/artists/mbid_%s/events.json?api_version=2.0&app_id=%s' % (id, bandsintown_apikey)
-    log(url)
-    try:
-        response = GetStringFromUrl(url)
-        results = json.loads(response)
-        if not results:
-            GetEvents(id,True)
-    except:
-        log("Error when finding artist-related events from" + url)
-    return HandleBandsInTownResult(results)
-   ''' 
     
 def GetEvents(id,pastevents = False):
     if pastevents:
@@ -155,64 +135,59 @@ def GetEvents(id,pastevents = False):
         except:
             log("Error when finding artist-related events from" + url)
             return []
-    
-    
-def GetTopArtists():
-    url = 'http://ws.audioscrobbler.com/2.0/?method=chart.getTopArtists&api_key=%s&limit=100&format=json' % (lastfm_apikey)
-    filename = Addon_Data_Path + "/GetTopArtists.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
-        return HandleLastFMTracksResult(results['artists'])
+
+def GetLastFMData(url = "", cache_days = 14):
+    from base64 import b64encode
+    filename = b64encode(url).replace("/","XXXX")
+    path = Addon_Data_Path + "/" + filename + ".txt"
+    log("trying to load "  + path)
+    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
+        return read_from_file(path)
     else:
-        if True:
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            save_to_file(results,"GetTopArtists",Addon_Data_Path)
-            return HandleLastFMTracksResult(results['artists'])
-        else:
-            log("Error when finding artist top-tracks from" + url)
-            return []
-    
-def GetShouts(artistname,albumtitle):
-    url = 'http://ws.audioscrobbler.com/2.0/?method=album.getshouts&artist=%s&album=%s&api_key=%s&format=json' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle), lastfm_apikey)
-    try:
+        url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
         response = GetStringFromUrl(url)
         results = json.loads(response)
+        save_to_file(results,filename,Addon_Data_Path)
+        return results
+                      
+def GetTopArtists():
+    results = GetLastFMData("method=chart.getTopArtists&limit=100")
+    if True:
+        return HandleLastFMTracksResult(results['artists'])
+    else:
+        log("Error when finding artist top-tracks from" + url)
+        return []
+    
+def GetShouts(artistname,albumtitle):
+    url = 'method=album.getshouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
+    results = GetLastFMData(url)
+    if True:
         return HandleLastFMShoutResult(results)
-    except:
+    else:
         log("Error when finding shouts from" + url)
         return []
     
 def GetArtistTopAlbums(mbid):
-    url = 'http://ws.audioscrobbler.com/2.0/?method=artist.gettopalbums&mbid=%s&api_key=%s&format=json' % (mbid, lastfm_apikey)
-    log(url)
+    url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
+    results = GetLastFMData(url)
     if True:
-        response = GetStringFromUrl(url)
-        results = json.loads(response)
         return HandleLastFMAlbumResult(results)
     else:
         log("Error when finding topalbums from" + url)
         return []
         
 def GetSimilarById(m_id):
-    similars = []
-    filename = Addon_Data_Path + "/GetSimilarById" + m_id +".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
-        similars = read_from_file(filename)
+    url = 'method=artist.getsimilar&mbid=%s' % (m_id)
+    results = GetLastFMData(url)
+    if True:
+        return HandleLastFMTracksResult(results['similarartists'])
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?format=json&method=artist.getsimilar&mbid=%s&api_key=%s' % (m_id, lastfm_apikey)
-        if True:
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            prettyprint(results)
-            return HandleLastFMTracksResult(results['similarartists'])
+        log("Error when finding SimilarById from" + url)
+        return []
         
 def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
     import time
     results = []
-    settings = xbmcaddon.Addon(id='script.extendedinfo')
-    country = 'Poland' #settings.getSetting('country')
-    city = 'Wroclaw' #settings.getSetting('city')
     if festivalsonly:
         festivalsonly = "1"
     else:
@@ -235,29 +210,16 @@ def GetNearEvents(tag = False,festivalsonly = False,lat = "", lon = ""):
             log("error getting concert data from " + url)
             return []
     return HandleLastFMEventResult(results)
-
-            
+           
 def GetVenueEvents(id = ""):
-    import time
-    settings = xbmcaddon.Addon(id='script.extendedinfo')
-    filename = Addon_Data_Path + "/VenueEvents" + id + ".txt"
-  #  if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
+    url = 'method=venue.getevents&venue=%s' % (id)
+    log('GetVenueEvents request: %s' % url)
+    results = GetLastFMData(url)
+    if True:
         return HandleLastFMEventResult(results)
     else:
-        url = 'http://ws.audioscrobbler.com/2.0/?method=venue.getevents&api_key=%s&venue=%s&format=json' % (lastfm_apikey,id)
-        log('GetVenueEvents request: %s' % url)
-        if True:
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            save_to_file(results,"VenueEvents" + id, Addon_Data_Path)
-            return HandleLastFMEventResult(results)
-        else:
-            results = []
-            log("GetVenueEvents: error getting concert data from " + url)
-            return []
-    
+        log("GetVenueEvents: error getting concert data from " + url)
+        return []
 
 def GetArtistNearEvents(Artists): # not possible with api 2.0
     settings = xbmcaddon.Addon(id='script.extendedinfo')
