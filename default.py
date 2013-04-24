@@ -597,13 +597,10 @@ class Main:
             elif xbmc.getCondVisibility('Window.IsActive(screensaver)'):
                 xbmc.sleep(1000)
             else:
-                self._clear_properties()
-                xbmc.sleep(1000)
-            if xbmc.getCondVisibility("!Window.IsActive(musiclibrary) + !Window.IsActive(videos)"):
-                xbmc.sleep(500)               
                 self.previousitem = ""
-                self.selecteditem = ""
-            xbmc.sleep(100)
+                self.selecteditem = ""    
+                self._clear_properties()
+                xbmc.sleep(500)     
             if xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
                 self._clear_properties()
                 self._stop = True
