@@ -10,7 +10,8 @@ __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString   
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 base_url = ""
-size = ""
+poster_size = ""
+fanart_size = ""
 
 def HandleTheMovieDBMovieResult(results):
     movies = []
@@ -18,8 +19,8 @@ def HandleTheMovieDBMovieResult(results):
     if True:
         for movie in results:
             log(movie)
-            newmovie = {'Art(fanart)': base_url + size + str(movie.get('backdrop_path',"")),
-                        'Art(poster)': base_url + size + str(movie.get('poster_path',"")),
+            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path',"")),
+                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path',"")),
                         'Title': movie.get('title',""),
                         'OriginalTitle': movie.get('original_title',""),
                         'ID': movie.get('id',""),
@@ -39,7 +40,7 @@ def HandleTheMovieDBListResult(results):
     lists = []
     if True:
         for list in results["results"]:
-            newlist = {'Art(poster)': base_url + size + str(list.get('poster_path',"")),
+            newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path',"")),
                         'Title': list['name'],
                         'ID': list['id'],
                         'Description': list['description']}
@@ -118,11 +119,12 @@ def SearchForSet(setname):
 def GetMovieDBData(url = "", cache_days = 14):
     from base64 import b64encode
     global base_url
-    global size
+    global poster_size
+    global fanart_size
     if not base_url:
         log("fetching base_url and size (MovieDB config)")
         base_url = True
-        base_url,size = GetMovieDBConfig()
+        base_url, poster_size, fanart_size = GetMovieDBConfig()
     filename = b64encode(url).replace("/","XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
     log("trying to load "  + path)
@@ -152,7 +154,7 @@ def GetMovieDBData(url = "", cache_days = 14):
 def GetMovieDBConfig():
     response = GetMovieDBData("configuration?",60)
     if response:
-        return (response["images"]["base_url"],response["images"]["poster_sizes"][-1])
+        return (response["images"]["base_url"],response["images"]["poster_sizes"][-2],response["images"]["backdrop_sizes"][-2])
     else:
         return ("","")
     
@@ -206,10 +208,10 @@ def GetExtendedMovieInfo(Id):
             year = response.get('release_date',"")[:4]
         else:
             year = ""
-        newmovie = {'Art(fanart)': base_url + size + str(response.get('backdrop_path',"")),
-                    'Fanart': base_url + size + str(response.get('backdrop_path',"")),
-                    'Art(poster)': base_url + size + str(response.get('poster_path',"")),
-                    'Poster': base_url + size + str(response.get('poster_path',"")),
+        newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path',"")),
+                    'Fanart': base_url + fanart_size + str(response.get('backdrop_path',"")),
+                    'Art(poster)': base_url + poster_size + str(response.get('poster_path',"")),
+                    'Poster': base_url + poster_size + str(response.get('poster_path',"")),
                     'Title': response.get('title',""),
                     'Label': response.get('title',""),
                     'Tagline': response.get('tagline',""),

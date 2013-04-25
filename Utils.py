@@ -206,7 +206,6 @@ def GetSimilarArtistsInLibrary(id):
     return artists    
             
 def create_light_movielist():
-    filename = Addon_Data_Path + "/XBMClightmovielist.txt"
     # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
     if True:
@@ -217,7 +216,6 @@ def create_light_movielist():
         b = datetime.datetime.now() - a
         log('Processing Time for fetching JSON light movielist: %s' % b)
         a = datetime.datetime.now()
-        save_to_file(json_query,"XBMClightmovielist",Addon_Data_Path)   
         b = datetime.datetime.now() - a
         log('Processing Time for save light movielist: %s' % b)
         return json_query
