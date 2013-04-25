@@ -40,7 +40,6 @@ def string2deg(string):
         decDegrees = -1.0 * decDegrees
     return decDegrees
 
-
 def AddArtToLibrary( type, media, folder, limit , silent = False):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
     json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -116,7 +115,6 @@ def export_skinsettings():
     else:
         xbmcgui.Dialog().ok(__language__(32007),__language__(32008))
         log("guisettings.xml not found")
-
         
 def create_musicvideo_list():
     musicvideos = []
@@ -136,18 +134,26 @@ def create_musicvideo_list():
         
 def create_movie_list():
     movies = []
-    filename = Addon_Data_Path + "/XBMCmovies.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
-        return read_from_file(filename)
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "random" } }, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    if json_query['result'] != None and "movies" in json_query["result"]:
+        return json_query
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["year", "file", "art", "genre", "director","cast","studio","country","tag"], "sort": { "method": "random" } }, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = simplejson.loads(json_query)
-        save_to_file(json_query,"XBMCmovies",Addon_Data_Path)
-        if json_query['result'] != None and "movies" in json_query["result"]:
-            return json_query
-        else:
-            return False
+        return False
+            
+def create_channel_list():
+    channels = []
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "PVR.GetChannels", "params": {"properties": ["thumbnail","channeltype", "hidden", "locked", "channel", "lastplayed"], "channelgroupid": "alltv" }, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    prettyprint(json_query)
+    if json_query['result'] != None and "movies" in json_query["result"]:
+        return json_query
+    else:
+        return False
+            
+               
             
 def GetXBMCArtists():
     filename = Addon_Data_Path + "/XBMCartists.txt"

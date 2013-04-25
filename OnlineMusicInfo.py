@@ -182,11 +182,11 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
         festivalsonly = "1"
     else:
         festivalsonly = "0"
-    url = 'method=geo.getevents&festivalsonly=%s' % (festivalsonly)
+    url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
         url = url + '&tag=%s' % (urllib.quote_plus(tag))  
     if lat:
-        url = url + '&lat=%s&long=%s&distance=60' % (lat,lon)  
+        url = url + '&lat=%s&long=%s' % (lat,lon)  # &distance=60
     results = GetLastFMData(url)
     if True:
         return HandleLastFMEventResult(results)

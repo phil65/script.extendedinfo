@@ -258,7 +258,7 @@ class Main:
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix,True)
                 from OnlineMusicInfo import GetNearEvents
-                passDataToSkin('NearEvents', GetNearEvents(self.type,self.festivalsonly), self.prop_prefix)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly), self.prop_prefix)
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetVenueEvents
@@ -280,7 +280,7 @@ class Main:
                 wnd = xbmcgui.Window(Window)
                 lat = wnd.getProperty('%slat' % self.prop_prefix)
                 lon = wnd.getProperty('%slon' % self.prop_prefix)
-                passDataToSkin('NearEvents', GetNearEvents(False,False,lat,lon), self.prop_prefix)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly,lat,lon), self.prop_prefix)
             elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
                 direction = ""
                 from MiscScraper import GetGoogleMap, GetGeoCodes
@@ -410,6 +410,7 @@ class Main:
         self.zoomlevel = "15"
         self.location = ""
         self.director = ""
+        self.tag = ""
         self.writer = ""
         self.studio = ""
         self.lat = ""
@@ -445,6 +446,8 @@ class Main:
                 self.infos.append(param[5:])
             elif param.startswith('type='):
                 self.type = (param[5:])
+            elif param.startswith('tag='):
+                self.tag = (param[4:])
             elif param.startswith('direction='):
                 self.direction = (param[10:])
             elif param.startswith('aspect='):
