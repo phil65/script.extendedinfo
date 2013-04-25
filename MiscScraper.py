@@ -189,6 +189,7 @@ def GetTraktCalendarShows(Type):
             for episode in day["episodes"]:
                 show = {'Title' : episode["episode"]["title"],
                         'TVShowTitle' : episode["show"]["title"],
+                        'ID' : episode["show"]["tvdb_id"],
                         'Runtime' : episode["show"]["runtime"],
                         'Year' : episode["show"].get("year"),
                         'Certification' : episode["show"]["certification"],
