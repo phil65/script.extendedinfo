@@ -100,7 +100,7 @@ def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
             search_string = str(lat) + "," + str(lon)
             log("Location: " + search_string)
         else:
-            search_string = urllib.quote_plus(search_string)
+            search_string = urllib.quote_plus(search_string.replace('"',''))
         if mode == "normal":
             base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
             url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
@@ -395,6 +395,7 @@ def GetYoutubeSearchVideos(search_string = "" ,hd = "", orderby = "relevance", t
     search_string = urllib.quote(search_string.replace('"',''))
     try:
         url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key,hd_string)
+        log(url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
