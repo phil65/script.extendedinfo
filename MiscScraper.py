@@ -240,7 +240,7 @@ def HandleTraktTVShowResult(results):
     for tvshow in results:    
         try:
             premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
-        else:
+        except:
             premiered = ""
         show = {'Title': tvshow["title"],
                 'Label': tvshow["title"],
