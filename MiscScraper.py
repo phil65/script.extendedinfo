@@ -237,8 +237,11 @@ def HandleTraktTVShowResult(results):
     import datetime
     count = 1
     shows = []
-    for tvshow in results:      
-        premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
+    for tvshow in results:    
+        try:
+            premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
+        else:
+            premiered = ""
         show = {'Title': tvshow["title"],
                 'Label': tvshow["title"],
                 'TVShowTitle': tvshow["title"],
