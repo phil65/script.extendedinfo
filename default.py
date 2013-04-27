@@ -97,7 +97,8 @@ class Main:
                 from MiscScraper import GetYoutubeVideos
                 videos = GetYoutubeVideos(self.feed,self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix)
-            elif info == 'similarlocal':
+            elif info == 'similarlocal' and self.dbid:
+                passDataToSkin('SimilarLocalMovies', None , self.prop_prefix)
                 from Utils import GetSimilarFromOwnLibrary
                 passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)
                         
@@ -589,7 +590,6 @@ class Main:
                         break
             else:
                 self._clear_properties()
-        xbmc.sleep(100)        
                         
 
     def run_backend(self):
@@ -607,7 +607,7 @@ class Main:
                     self.previousitem = self.selecteditem
                     if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + [SubString(ListItem.Path,videodb://1/7/,left)| Container.Content(artists) | Container.Content(albums)]"):
                         self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
-                        xbmc.sleep(100)
+                        log("setting movieset labels")
                     else:
                         self._clear_properties()
             elif xbmc.getCondVisibility("Container.Content(years)"):
@@ -659,6 +659,7 @@ class Main:
             if xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
                 self._clear_properties()
                 self._stop = True
+            xbmc.sleep(100)     
                 
     def _set_details( self, dbid ):
         if dbid:
