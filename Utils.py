@@ -231,16 +231,12 @@ def GetSimilarFromOwnLibrary(dbid):
                     if difference < 3 and difference > -3:
                         quota += 0.15
                     if countries[0] == item['country'][0]:
-                        log("same country")
                         quota += 0.4  
                     if mpaa == item['mpaa']:
-                        log("same mpaa")
                         quota += 0.4
                     if directors[0] == item['director'][0]:
-                        log("same director")
                         quota += 0.6
                     quotalist.append((quota,item["movieid"]))
-                    log("added quota " + str(quota))
                 if True:
                     quotalist = sorted(quotalist, key=lambda quota: quota[0],reverse=True)
                     count = 1
