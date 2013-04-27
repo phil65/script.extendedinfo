@@ -113,9 +113,10 @@ def HandleLastFMShoutResult(results):
         log("Error when handling LastFM Shout results")
     return shouts
            
-def HandleLastFMTracksResult(results):
+def HandleLastFMArtistResult(results):
     artists = []
-    log("starting HandleLastFMTracksResult")
+    log("starting HandleLastFMArtistResult")
+    prettyprint(results)
     if True:
         for artist in results['artist']:
             artist = {'Title': artist['name'],
@@ -156,7 +157,7 @@ def GetLastFMData(url = "", cache_days = 14):
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
     if True:
-        return HandleLastFMTracksResult(results['artists'])
+        return HandleLastFMArtistResult(results['artists'])
     else:
         log("Error when finding artist top-tracks from" + url)
         return []
@@ -180,10 +181,10 @@ def GetArtistTopAlbums(mbid):
         return []
         
 def GetSimilarById(m_id):
-    url = 'method=artist.getsimilar&mbid=%s' % (m_id)
+    url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
     results = GetLastFMData(url)
     if True:
-        return HandleLastFMTracksResult(results['similarartists'])
+        return HandleLastFMArtistResult(results['similarartists'])
     else:
         log("Error when finding SimilarById from" + url)
         return []

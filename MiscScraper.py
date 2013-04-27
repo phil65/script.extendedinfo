@@ -262,7 +262,8 @@ def HandleTraktTVShowResult(results):
                 'Poster': tvshow["images"]["poster"],
                 'Art(banner)': tvshow["images"]["banner"],
                 'Art(fanart)': tvshow["images"]["fanart"],
-                'Fanart': tvshow["images"]["fanart"]  }
+                'Fanart': tvshow["images"]["fanart"],
+                'Thumb': tvshow["images"]["fanart"]  }
         shows.append(show)
         count += 1
         if count > 20:
@@ -298,7 +299,7 @@ def GetTVShowInfo(id):
             url = 'http://api.trakt.tv/show/summary.json/%s/%s' % (trakt_key,id)
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
-            save_to_file(response,"tvshow" + id,Addon_Data_Path)
+            save_to_file(results,"tvshow" + id,Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:
@@ -345,7 +346,7 @@ def GetSimilarTrakt(type,imdb_id):
             log(url)
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
-            save_to_file(response,"similar" + type + imdb_id,Addon_Data_Path)
+            save_to_file(results,"similar" + type + imdb_id,Addon_Data_Path)
         except:
             log("Error when fetching  trending data from Trakt.tv")
         if results:

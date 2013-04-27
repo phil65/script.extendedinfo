@@ -115,6 +115,24 @@ class Main:
                 log("startin gettopalbums")
                 from OnlineMusicInfo import GetArtistTopAlbums
                 passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix,True)
+            elif info == 'artistdetails':
+                passDataToSkin('ArtistDetails', None, self.prop_prefix)
+                log("startin ArtistDetails")
+                from TheAudioDB import GetDiscography, GetArtistDetails
+            #    GetAudioDBData("search.php?s=Blur")
+                
+            #    from TheAudioDB import GetArtistTopAlbums
+                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix,True)
+                passHomeDataToSkin(GetArtistDetails(self.ArtistName),True)
+
+            elif info == 'albuminfo':
+                passHomeDataToSkin(None)
+                log("startin ArtistDetails")
+                from TheAudioDB import GetAlbumDetails
+                passDataToSkin('Discography', GetAlbumDetails(self.id), self.prop_prefix,True)
+                passHomeDataToSkin(GetArtistDetails(self.ArtistName),True)
+
+                
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
@@ -283,6 +301,7 @@ class Main:
                 from MiscScraper import GetTrendingMovies
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
+                from Utils import GetSimilarArtistsInLibrary
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
                 passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
