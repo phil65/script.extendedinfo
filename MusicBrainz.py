@@ -1,5 +1,5 @@
 import xbmc, urllib, xml.dom.minidom,xbmcaddon,os,xbmcvfs,time
-from Utils import GetStringFromUrl, GetValue, GetAttribute, log, read_from_file
+from Utils import GetStringFromUrl, log, read_from_file
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 
@@ -15,16 +15,28 @@ Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data
             # artist[ "musicbrainz_artistid" ] = artist_mbid
         # else:
             # artist[ "musicbrainz_artistid" ] = artist_details["musicbrainzartistid"]
-    # return artist  
-
+    # return artist
+    
+def GetAttribute(node, attr):
+    v = unicode(node.getAttribute(tag))
+    
+def GetValue(node, tag):
+    v = node.getElementsByTagName(tag)
+    if len(v) == 0:
+        return '-'
+    
+    if len(v[0].childNodes) == 0:
+        return '-'
+    
+    return unicode(v[0].childNodes[0].data)
+    
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
     import base64
     url = 'http://musicbrainz.org/ws/1/artist/?type=xml&name=%s' % urllib.quote_plus(artist)
     tries = 0
     trylimit = 5
     gotit = False
-    filename = Addon_Data_Path + "/mbid_" + ".txt"
-    filename = base64.urlsafe_b64encode(filename)
+    filename = base64.urlsafe_b64encode(url)
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         return read_from_file(filename)
     else:
@@ -62,29 +74,3 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
         if xbmc_artist_id != -1:
             SetMusicBrainzID(xbmc_artist_id, artistMusicBrainzId)
         return artistMusicBrainzId
-
-def SetMusicBrainzID(xbmc_artist_id,musicbrainz_id):
-    pass
-    #todo: set MBID with JSON if possible
-
-def SetMusicBrainzIDsForAllArtists(Progress, CheckForNotFound):
-    #TODO - same as above
-    pass
-    # if Progress:
-        # progressDialog = xbmcgui.DialogProgress('Updating Music Database with MusicBrainz IDs for artists')
-        # progressDialog.create('Updating Music Database with MusicBrainz IDs for artists')
-    # for count, record in enumerate(records):
-        # fields = re.findall( "<field>(.*?)</field>", record, re.DOTALL )
-        # if Progress:
-            # if progressDialog.iscanceled():
-                # return
-            # progressDialog.update( (count * 100) / len(records)  , 'Updating: %s' % fields[0])
-        # brainz_id = -1
-        # xbmc_id = int(fields[1])
-        # while brainz_id == -1: #ensure we got response
-            # if Progress and progressDialog.iscanceled():
-                # return
-            # brainz_id = GetMusicBrainzIdFromNet(fields[0], xbmc_id)            
-        # if brainz_id == None:
-            # SetMusicBrainzID(xbmc_id, 'not_there')
-                

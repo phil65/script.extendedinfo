@@ -1,6 +1,6 @@
 import xbmcaddon, os, xbmc, xbmcvfs, time
 import simplejson as json
-from Utils import *
+from Utils import log, prettyprint, read_from_file, save_to_file, CompareWithLibrary
 import urllib
 from urllib2 import Request, urlopen
 

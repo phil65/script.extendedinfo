@@ -1,7 +1,7 @@
 import sys
-import os, time, datetime, re, random
+import os, time, datetime
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-from Utils import *
+from Utils import log, prettyprint
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -21,28 +21,59 @@ extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
+
+def passHomeDataToSkin(data, debug = True):
+    wnd = xbmcgui.Window(Window)
+    if data != None:
+        for (key,value) in data.iteritems():
+            wnd.setProperty('%s' % (str(key)), unicode(value))
+            if debug:
+                log('%s' % (str(key)) + unicode(value))
+               
+def passDataToSkin(name, data, prefix="",debug = False):
+    wnd = xbmcgui.Window(Window)
+    if data != None:
+        if debug:
+            log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+        for (count, result) in enumerate(data):
+            if debug:
+                log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
+            for (key,value) in result.iteritems():
+                wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+                if debug:
+                    log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
+        wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+    else:
+        wnd.setProperty('%s%s.Count' % (prefix, name), '0')
         
 class Main:
     def __init__( self ):
         log("version %s started" % __addonversion__ )
+        xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
         self._init_vars()
         self._parse_argv()
         # run in backend if parameter was set
         if self.infos:
             self._StartInfoActions()
         elif self.exportsettings:
+            from Utils import export_skinsettings
             export_skinsettings()        
         elif self.importsettings:
+            from Utils import import_skinsettings
             import_skinsettings()
         elif self.importextrathumb:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
         elif self.importextrafanart:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
    #     elif self.importextrathumbtv:
   #          AddArtToLibrary("extrathumb","TVShow","extrathumbs")
         elif self.importextrafanarttv:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
         elif self.importallartwork:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
             AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
             AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
@@ -55,6 +86,8 @@ class Main:
         # else clear old properties
         elif not len(sys.argv) >1:
             self._selection_dialog()
+        xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
+
 
     def _StartInfoActions(self):
         if not self.silent:
@@ -65,6 +98,7 @@ class Main:
                 videos = GetYoutubeVideos(self.feed,self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix)
             elif info == 'similarlocal':
+                from Utils import GetSimilarFromOwnLibrary
                 passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)
                         
             elif info == 'xkcd':
@@ -96,6 +130,7 @@ class Main:
                 passDataToSkin('MovieSetItems', None, self.prop_prefix)
                 if self.dbid and not "show" in str(self.type):
                     from TheMovieDB import SearchForSet
+                    from Utils import GetMovieSetName
                     name = GetMovieSetName(self.dbid)
                     if name:
                         log(name)
@@ -161,6 +196,7 @@ class Main:
                 if self.id:
                     MovieId = self.id
                 elif self.dbid:
+                    from Utils import GetDatabaseID
                     MovieId = GetDatabaseID("movie",self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
@@ -172,6 +208,7 @@ class Main:
                 if self.dbid:
                     log("startin movielists")
                     from TheMovieDB import GetMovieLists
+                    from Utils import GetDatabaseID
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
@@ -181,6 +218,7 @@ class Main:
                 if self.dbid:
                     log("startin Keywords")
                     from TheMovieDB import GetMovieKeywords
+                    from Utils import GetDatabaseID
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
@@ -221,6 +259,7 @@ class Main:
                 from MiscScraper import GetSimilarTrakt
                 if self.type and (self.id or self.dbid):
                     if self.dbid:
+                        from Utils import GetDatabaseID
                         id = GetDatabaseID(self.type,self.dbid)
                         log("SimilarTrakt: found dbid " + str(id))
                     else:
@@ -264,9 +303,10 @@ class Main:
                 from OnlineMusicInfo import GetVenueEvents
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
+                from Utils import GetXBMCArtists
+                from OnlineMusicInfo import GetArtistNearEvents
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
                 artists = GetXBMCArtists()
-                from OnlineMusicInfo import GetArtistNearEvents
                 events = GetArtistNearEvents(artists["result"]["artists"][0:15])
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
@@ -283,7 +323,7 @@ class Main:
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly,lat,lon), self.prop_prefix)
             elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
                 direction = ""
-                from MiscScraper import GetGoogleMap, GetGeoCodes
+                from MiscScraper import GetGoogleMap, GetGeoCodes, string2deg
                 wnd = xbmcgui.Window(Window)
                 if self.location == "geocode": # convert Image Coordinates to float values
                     self.lat = string2deg(self.lat)
@@ -376,14 +416,18 @@ class Main:
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
         elif selection == 4:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
    #     elif selection == 5:
     #        AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
         elif selection == 5:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
         elif selection == 6:
+            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
@@ -553,6 +597,7 @@ class Main:
         self.previousitem = ""
         self.previousartist = ""
         self.previoussong = ""
+        from Utils import create_musicvideo_list, create_movie_list
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
@@ -600,6 +645,7 @@ class Main:
                 if (artist != self.previousartist):
                     if artist:
                         from MusicBrainz import GetMusicBrainzIdFromNet
+                        from Utils import GetSimilarArtistsInLibrary
                         Artist_mbid = GetMusicBrainzIdFromNet(artist)
                         passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
                         passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(Artist_mbid), self.prop_prefix)
@@ -716,6 +762,7 @@ class Main:
         plot = ""
         title_list = ""
         title_list += "[B]" + str(json_query['result']['setdetails']['limits']['total']) + " " + xbmc.getLocalizedString(20342) + "[/B][CR][I]"
+        from Utils import media_path
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))

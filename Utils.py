@@ -1,4 +1,4 @@
-import urllib, xml.dom.minidom, xbmc, xbmcaddon,xbmcgui,xbmcvfs,datetime
+import urllib, xbmc, xbmcaddon,xbmcgui,xbmcvfs,datetime
 import os,sys,time
 if sys.version_info < (2, 7):
     import simplejson
@@ -12,33 +12,6 @@ Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data
 
 Window = 10000
 locallist = []
-
-def string2deg(string):
-    import re
-    string = string.strip() # trim leading/trailing whitespace
-    string = string.replace('"','')
-    string = string.replace("'","")
-    if string[0].lower() == "w" or string[0].lower() == "s":
-       negative = True
-    else:
-        negative = False
-    string = string[1:]
-    string = string.replace("d","")
-    string = string.replace("  "," ")
-    div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
-    sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
-    co_re= re.compile(sdec)
-    co_search= co_re.search(string)
-    if co_search is None:
-        raise ValueError("Invalid input string: %s" % string)
-    elems = co_search.groups()
-    degrees = float(elems[0])
-    arcminutes = float(elems[1])
-    arcseconds = float(elems[2])
-    decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
-    if negative:
-        decDegrees = -1.0 * decDegrees
-    return decDegrees
 
 def AddArtToLibrary( type, media, folder, limit , silent = False):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
@@ -152,9 +125,7 @@ def create_channel_list():
         return json_query
     else:
         return False
-            
-               
-            
+                      
 def GetXBMCArtists():
     filename = Addon_Data_Path + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
@@ -446,25 +417,12 @@ def GetStringFromUrl(encurl):
             xbmc.sleep(1000)
             succeed += 1
     return ""
-
-def GetValue(node, tag):
-    v = node.getElementsByTagName(tag)
-    if len(v) == 0:
-        return '-'
-    
-    if len(v[0].childNodes) == 0:
-        return '-'
-    
-    return unicode(v[0].childNodes[0].data)
     
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
-
-def GetAttribute(node, attr):
-    v = unicode(node.getAttribute(tag))
 
 def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
     """ shows a browse dialog and returns a value
@@ -573,60 +531,6 @@ def GetMovieSetName(dbid):
             json_response = simplejson.loads(json_query)
             return json_response['result']['setdetails'].get('label',"")
     return ""    
-
-def getCacheThumbName(url, CachePath):
-    thumb = xbmc.getCacheThumbName(url)
-    thumbpath = os.path.join(CachePath, thumb)
-    return thumbpath
-
-def cleanText(text):
-    import re
-    text = re.sub('<br \/>','[CR]',text)
-    text = re.sub('<(.|\n|\r)*?>','',text)
-    text = re.sub('&quot;','"',text)
-    text = re.sub('&amp;','&',text)
-    text = re.sub('&gt;','>',text)
-    text = re.sub('&lt;','<',text)
-    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
-    return text.strip()
-
-def download(src, dst, dst2):
-    if (not xbmc.abortRequested):
-        tmpname = xbmc.translatePath('special://profile/addon_data/%s/temp/%s' % ( __addonname__ , xbmc.getCacheThumbName(src) )).decode("utf-8")
-        if xbmcvfs.exists(tmpname):
-            xbmcvfs.delete(tmpname)
-        urllib.urlretrieve( src, tmpname )
-        if os.path.getsize(tmpname) > 999:
-            log( 'copying file to transition directory' )
-            xbmcvfs.copy(tmpname, dst2)
-            log( 'moving file to cache directory' )
-            xbmcvfs.rename(tmpname, dst)
-        else:
-            xbmcvfs.delete(tmpname)
-
-def passHomeDataToSkin(data, debug = True):
-    wnd = xbmcgui.Window(Window)
-    if data != None:
-        for (key,value) in data.iteritems():
-            wnd.setProperty('%s' % (str(key)), unicode(value))
-            if debug:
-                log('%s' % (str(key)) + unicode(value))
-               
-def passDataToSkin(name, data, prefix="",debug = False):
-    wnd = xbmcgui.Window(Window)
-    if data != None:
-        if debug:
-            log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
-        for (count, result) in enumerate(data):
-            if debug:
-                log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
-            for (key,value) in result.iteritems():
-                wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
-                if debug:
-                    log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
-        wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
-    else:
-        wnd.setProperty('%s%s.Count' % (prefix, name), '0')
         
 def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))

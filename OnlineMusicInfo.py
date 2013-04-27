@@ -27,6 +27,17 @@ def HandleBandsInTownResult(results):
             events.append(event)
         except: pass
     return events
+
+def cleanText(text):
+    import re
+    text = re.sub('<br \/>','[CR]',text)
+    text = re.sub('<(.|\n|\r)*?>','',text)
+    text = re.sub('&quot;','"',text)
+    text = re.sub('&amp;','&',text)
+    text = re.sub('&gt;','>',text)
+    text = re.sub('&lt;','<',text)
+    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
+    return text.strip()    
     
 def HandleLastFMEventResult(results):
     events = []

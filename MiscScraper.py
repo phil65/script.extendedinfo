@@ -390,6 +390,33 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         count += 1
     return videos
     
+def string2deg(string):
+    import re
+    string = string.strip() # trim leading/trailing whitespace
+    string = string.replace('"','')
+    string = string.replace("'","")
+    if string[0].lower() == "w" or string[0].lower() == "s":
+       negative = True
+    else:
+        negative = False
+    string = string[1:]
+    string = string.replace("d","")
+    string = string.replace("  "," ")
+    div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
+    sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
+    co_re= re.compile(sdec)
+    co_search= co_re.search(string)
+    if co_search is None:
+        raise ValueError("Invalid input string: %s" % string)
+    elems = co_search.groups()
+    degrees = float(elems[0])
+    arcminutes = float(elems[1])
+    arcseconds = float(elems[2])
+    decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
+    if negative:
+        decDegrees = -1.0 * decDegrees
+    return decDegrees    
+    
 def GetYoutubeSearchVideos(search_string = "" ,hd = "", orderby = "relevance", time = "all_time"):
     results = []
     if hd and not hd == "false":
