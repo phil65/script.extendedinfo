@@ -84,6 +84,23 @@ def HandleAudioDBTrackResult(results):
         log("Error when handling HandleAudioDBTrackResult results")
     return tracks
     
+def HandleAudioDBMusicVideoResult(results):
+    mvids = []
+    log("starting HandleAudioDBMusicVideoResult")
+ #   prettyprint(results)
+    if 'mvids' in results and results['mvids']:
+        for mvid in results['mvids']:
+            mvid = {'Track': mvid['strTrack'],
+                     'Description': mvid['strDescriptionEN'],
+                     'id': mvid['idTrack'],
+                     'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(mvid.get('strMusicVid','')) + "/0.jpg",
+                     'Path': ConvertYoutubeURL(mvid['strMusicVid']),
+                     'Label':mvid['strTrack']  }
+            mvids.append(mvid)
+    else:
+        log("Error when handling HandleAudioDBMusicVideoResult results")
+    return mvids
+    
     
     
 def GetExtendedAudioDBInfo(results):
@@ -168,6 +185,14 @@ def GetAlbumDetails(audiodbid):
   #  prettyprint(results)
     if True:
         return HandleAudioDBAlbumResult(results)[0]
+    else:
+        return []
+        
+def GetMusicVideos(audiodbid):
+    url = 'mvid.php?i=%s' % (audiodbid)
+    results = GetAudioDBData(url)
+    if True:
+        return HandleAudioDBMusicVideoResult(results)
     else:
         return []
         

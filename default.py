@@ -134,14 +134,18 @@ class Main:
                 from OnlineMusicInfo import GetArtistTopAlbums
                 passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix,True)
             elif info == 'artistdetails':
-                passDataToSkin('ArtistDetails', None, self.prop_prefix)
+                passDataToSkin('Discography', None, self.prop_prefix)
+                passDataToSkin('MusicVideos', None, self.prop_prefix)
                 log("startin ArtistDetails")
-                from TheAudioDB import GetDiscography, GetArtistDetails, GetMostLovedTracks
+                from TheAudioDB import GetDiscography, GetArtistDetails, GetMostLovedTracks, GetMusicVideos
+                ArtistDetails = GetArtistDetails(self.ArtistName)
+                MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
             #    GetAudioDBData("search.php?s=Blur")
                 GetMostLovedTracks(self.ArtistName)
+                passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix,True)
             #    from TheAudioDB import GetArtistTopAlbums
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix,True)
-                passHomeDataToSkin(GetArtistDetails(self.ArtistName),True)
+                passHomeDataToSkin(ArtistDetails,True)
 
             elif info == 'albuminfo':
                 passHomeDataToSkin(None)
