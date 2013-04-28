@@ -644,7 +644,7 @@ class Main:
                 self._detail_selector("country")
             elif xbmc.getCondVisibility("Container.Content(tags)"):
                 self._detail_selector("tag")                       
-            elif xbmc.getCondVisibility('Container.Content(songs)'):
+            elif xbmc.getCondVisibility('Container.Content(songs)') and self.musicvideos:
                 # get artistname and songtitle of the selected item
                 self.selecteditem = xbmc.getInfoLabel('ListItem.DBID')
                 # check if we've focussed a new song

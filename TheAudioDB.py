@@ -85,6 +85,7 @@ def GetExtendedAudioDBInfo(results):
                      'audiodbid': artist.get('idArtist'),
                      'Description': Description,
                      'Genre': artist.get('strSubGenre'),
+                     'Label2': artist.get('strSubGenre'),
                      'Thumb': artist.get('strArtistThumb'),
                      'Art(Thumb)': artist.get('strArtistThumb'),
                      'Members':artist.get('intMembers')  }
