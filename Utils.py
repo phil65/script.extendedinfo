@@ -318,36 +318,36 @@ def media_streamdetails(filename, streamdetails):
 def GetXBMCAlbums():
     albums = []        
     filename = Addon_Data_Path + "/XBMCalbums.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        return read_from_file(filename)
+    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
+        json_query = read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount", "musicbrainzartistid"]}, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "description", "albumlabel", "theme", "mood", "style", "type", "artist", "genre", "year", "thumbnail", "fanart", "rating", "playcount"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        save_to_file(json_query,"XBMCalbums",Addon_Data_Path)
         json_query = simplejson.loads(json_query)
-        if "result" in json_query and "albums" in json_query['result']:
-            for item in json_query['result']['albums']:
-                mbid = ''
-                album = {"Title": item['label'],
-                          "DBID": item['albumid'],
-                          "Artist": item['artist'],
-                          "mbid": item['musicbrainzartistid'] ,
-                          "Art(thumb)": item['thumbnail'] ,
-                          "Art(fanart)": item['fanart'] ,
-                          "Description": item['description'] ,
-                          "Rating": item['rating'] ,
-                          "RecordLabel": item['albumlabel'] ,
-                          "Year": item['year'] ,
-                          "YearsActive": " / ".join(item['yearsactive']) ,
-                          "Style": " / ".join(item['style']) ,
-                          "Type": " / ".join(item['type']) ,
-                          "Mood": " / ".join(item['mood']) ,
-                          "Theme": " / ".join(item['theme']) ,
-                          "Genre": " / ".join(item['genre']) ,
-                          "Play": 'XBMC.RunScript(script.playalbum,albumid=' + str(item.get('albumid')) + ')'
-                          }
-                albums.append(album)
-        return albums
+        save_to_file(json_query,"XBMCalbums",Addon_Data_Path)
+    if "result" in json_query and "albums" in json_query['result']:
+        for item in json_query['result']['albums']:
+            mbid = ''
+            album = {"Title": item['label'],
+                      "DBID": item['albumid'],
+                      "Artist": item['artist'],
+                 #     "mbid": item['musicbrainzartistid'] ,
+                      "Art(thumb)": item['thumbnail'] ,
+                      "Art(fanart)": item['fanart'] ,
+                      "Description": item['description'] ,
+                      "Rating": item['rating'] ,
+                      "RecordLabel": item['albumlabel'] ,
+                      "Year": item['year'] ,
+              #        "YearsActive": " / ".join(item['yearsactive']) ,
+                      "Style": " / ".join(item['style']) ,
+                      "Type": " / ".join(item['type']) ,
+                      "Mood": " / ".join(item['mood']) ,
+                      "Theme": " / ".join(item['theme']) ,
+                      "Genre": " / ".join(item['genre']) ,
+                      "Play": 'XBMC.RunScript(script.playalbum,albumid=' + str(item.get('albumid')) + ')'
+                      }
+            albums.append(album)
+    return albums
     
 def media_path(path):
     # Check for stacked movies
@@ -407,25 +407,15 @@ def CompareAlbumWithLibrary(onlinelist):
     a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
-        for localitem in locallist["result"]["albums"]:
-            if onlineitem["OriginalTitle"] in localitem["Title"] and onlineitem["Title"] in localitem["Artist"]:
-                log("compare success" + onlineitem["Title"])
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+        for localitem in locallist:
+            if onlineitem["name"] == localitem["Title"]:
+                log("compare success: " + onlineitem["name"])
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["DBID"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
-                if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
-                    difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
-                    if difference >-2 and difference <2:
-                        streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
-                        log(localitem)
-                        onlineitem.update({"Play": localitem["movieid"]})             
-                        onlineitem.update({"DBID": localitem["movieid"]})             
-                        onlineitem.update({"Path": localitem["movieid"]})             
-                        onlineitem.update({"VideoCodec": streaminfo["videocodec"]})             
-                        onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})             
-                        onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})             
-                        onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
-                        onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                onlineitem.update({"DBID": localitem["DBID"]})             
+                onlineitem.update({"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(localitem["DBID"]) + ')'})             
+               # onlineitem.update({"Path": localitem["movieid"]})             
                 break
     b = datetime.datetime.now() - a
     log('Processing Time for comparing: %s' % b)

@@ -55,6 +55,7 @@ def HandleAudioDBAlbumResult(results):
                      'name':album['strAlbum'],
                      'Label':album['strAlbum']  }
             albums.append(album)
+        albums = CompareAlbumWithLibrary(albums)
     else:
         log("Error when handling HandleAudioDBAlbumResult results")
     return albums

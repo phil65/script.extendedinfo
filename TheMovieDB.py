@@ -212,7 +212,7 @@ def GetExtendedMovieInfo(Id):
         else:
             SetName = ""
             SetID = ""
-        if 'release_date' in response:
+        if 'release_date' in response and response.get('release_date') <> None:
             year = response.get('release_date',"")[:4]
         else:
             year = ""
