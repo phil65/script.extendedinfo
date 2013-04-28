@@ -6,7 +6,7 @@ import urllib
 AudioDB_apikey = '58353d43204d68753987fl'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
-def GetAudioDBData(url = "", cache_days = 14):
+def GetAudioDBData(url = "", cache_days = 0):
     from base64 import b64encode
     filename = b64encode(url).replace("/","XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
@@ -34,15 +34,22 @@ def HandleAudioDBAlbumResult(results):
             else:
                 Description = ""
             album = {'artist': album['strArtist'],
+                     'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
                      'id': album['idAlbum'],
                      'audiodbid': album['idAlbum'],
                      'Description': Description,
                      'Genre': album['strSubGenre'],
+                     'Mood': album['strMood'],
+                     'Style': album['strSpeed'],
+                     'Theme': album['strTheme'],
+                     'Type': album['strReleaseFormat'],
                      'thumb': album['strAlbumThumb'],
+                     'Icon': album['strAlbumThumb'],
                      'year': album['intYearReleased'],
                      'Sales': album['intSales'],
-                     'name':album['strAlbum']  }
+                     'name':album['strAlbum'],
+                     'Label':album['strAlbum']  }
             albums.append(album)
     else:
         log("Error when handling HandleAudioDBAlbumResult results")
@@ -54,19 +61,33 @@ def GetExtendedAudioDBInfo(results):
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             if 'strBiographyEN' in artist:
-                Description = artist['strBiographyEN']
+                Description = artist.get('strBiographyEN')
             elif 'strBiography' in artist:
-                Description = artist['strBiography']
+                Description = artist.get('strBiography')
             else:
                 Description = ""
-            artist = {'artist': artist['strArtist'],
-                     'mbid': artist['strMusicBrainzID'],
-                     'Banner': artist['strArtistBanner'],
-                     'audiodbid': artist['idArtist'],
+            if "strReview" in artist:
+                Description += "[CR]" + artist.get('strReview')
+            artist = {'artist': artist.get('strArtist'),
+                     'mbid': artist.get('strMusicBrainzID'),
+                     'Banner': artist.get('strArtistBanner'),
+                     'Logo': artist.get('strArtistLogo'),
+                     'Fanart': artist.get('strArtistFanart'),
+                     'Born': artist.get('intBornYear'),
+                     'Formed': artist.get('intFormedYear'),
+                     'Died': artist.get('intDiedYear'),
+                     'Country': artist.get('strCountryCode'),
+                     'Website': artist.get('strWebsite'),
+                     'Twitter': artist.get('strTwitter'),
+                     'Facebook': artist.get('strFacebook'),
+                     'Gender': artist.get('strGender'),
+                     'Banner': artist.get('strArtistBanner'),
+                     'audiodbid': artist.get('idArtist'),
                      'Description': Description,
-                     'Genre': artist['strSubGenre'],
-                     'thumb': artist['strArtistThumb'],
-                     'Members':artist['intMembers']  }
+                     'Genre': artist.get('strSubGenre'),
+                     'Thumb': artist.get('strArtistThumb'),
+                     'Art(Thumb)': artist.get('strArtistThumb'),
+                     'Members':artist.get('intMembers')  }
             artists.append(artist)
     else:
         log("Error when handling GetExtendedAudioDBInfo results")
@@ -97,7 +118,7 @@ def GetAlbumDetails(audiodbid):
     results = GetAudioDBData(url)
     prettyprint(results)
     if True:
- #       return GetExtendedAlbumInfo(results)
-  #  else:
+        return HandleAudioDBAlbumResult(results)[0]
+    else:
         return []
         

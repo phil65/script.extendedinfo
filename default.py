@@ -129,8 +129,9 @@ class Main:
                 passHomeDataToSkin(None)
                 log("startin ArtistDetails")
                 from TheAudioDB import GetAlbumDetails
-                passDataToSkin('Discography', GetAlbumDetails(self.id), self.prop_prefix,True)
-                passHomeDataToSkin(GetArtistDetails(self.ArtistName),True)
+                AlbumDetails = GetAlbumDetails(self.id)
+                prettyprint(AlbumDetails)
+                passHomeDataToSkin(AlbumDetails,True)
 
                 
             elif info == 'shouts':

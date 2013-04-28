@@ -90,13 +90,12 @@ def SearchforCompany(Company):
     import re
     regex = re.compile('\(.+?\)')
     Company = regex.sub('', Company)
-    log("xxxx")
     log(Company)
     response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company),30)
     try:
         return response["results"][0]["id"]
     except:
-        log("could not find response[results][0][id]")
+        log("could not find Company ID")
         return ""
         
 def GetPersonID(person):
@@ -106,6 +105,7 @@ def GetPersonID(person):
     try:
         return response["results"][0]["id"]
     except:
+        log("could not find Person ID")
         return ""
         
 def SearchForSet(setname):
