@@ -22,6 +22,24 @@ extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
 
+def GetDatabaseID(type,dbid):
+    if type=="movie":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "moviedetails" in json_response["result"]:
+            return json_response['result']['moviedetails']['imdbnumber']
+        else:
+            return []
+    elif type == "tvshow":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "tvshowdetails" in json_response["result"]:
+            return json_response['result']['tvshowdetails']['imdbnumber']
+        else:
+            return []
+
 def passHomeDataToSkin(data, debug = True):
     wnd = xbmcgui.Window(Window)
     if data != None:
@@ -216,7 +234,6 @@ class Main:
                 if self.id:
                     MovieId = self.id
                 elif self.dbid:
-                    from Utils import GetDatabaseID
                     MovieId = GetDatabaseID("movie",self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
@@ -228,7 +245,6 @@ class Main:
                 if self.dbid:
                     log("startin movielists")
                     from TheMovieDB import GetMovieLists
-                    from Utils import GetDatabaseID
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
@@ -238,17 +254,23 @@ class Main:
                 if self.dbid:
                     log("startin Keywords")
                     from TheMovieDB import GetMovieKeywords
-                    from Utils import GetDatabaseID
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
                         passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)
                         
             elif info == 'extendedinfo':
+                log("startin GetExtendedMovieInfo")
                 if self.id:
-                    log("startin GetExtendedMovieInfo")
+                    MovieId = self.id
+                elif self.dbid:
+                    MovieId = GetDatabaseID("movie",self.dbid)
+                    log("IMDBId from local DB:" + str(MovieId))
+                else:
+                    MovieId = ""
+                if MovieId:
                     from TheMovieDB import GetExtendedMovieInfo
-                    passHomeDataToSkin(GetExtendedMovieInfo(self.id))
+                    passHomeDataToSkin(GetExtendedMovieInfo(MovieId))
             elif info == 'extendedtvinfo':
                 if self.id:
                     log("startin GetTVShowInfo")
@@ -279,7 +301,6 @@ class Main:
                 from MiscScraper import GetSimilarTrakt
                 if self.type and (self.id or self.dbid):
                     if self.dbid:
-                        from Utils import GetDatabaseID
                         id = GetDatabaseID(self.type,self.dbid)
                         log("SimilarTrakt: found dbid " + str(id))
                     else:

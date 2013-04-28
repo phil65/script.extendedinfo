@@ -149,8 +149,7 @@ def GetMovieDBData(url = "", cache_days = 14):
                 xbmc.sleep(1000)
                 succeed += 1
         return []
-
-        
+  
 def GetMovieDBConfig():
     response = GetMovieDBData("configuration?",60)
     if response:
@@ -164,7 +163,15 @@ def GetCompanyInfo(Id):
         return HandleTheMovieDBMovieResult(response["results"])
     else:
         return []
-    
+ 
+def millify(n):
+    import math
+    millnames=['','Thousand','Million','Billion','Trillion']
+    millidx=max(0,min(len(millnames)-1,
+                      int(math.floor(math.log10(abs(n))/3.0))))
+    return '%.0f %s'%(n/10**(3*millidx),millnames[millidx])
+
+ 
 def GetExtendedMovieInfo(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     prettyprint(response)
@@ -209,6 +216,11 @@ def GetExtendedMovieInfo(Id):
             year = response.get('release_date',"")[:4]
         else:
             year = ""
+        BudgetValue = response.get('budget',"")
+        if not BudgetValue in [0,""]:
+            Budget = millify(float(BudgetValue))
+        else:
+            Budget = ""
         newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path',"")),
                     'Fanart': base_url + fanart_size + str(response.get('backdrop_path',"")),
                     'Art(poster)': base_url + poster_size + str(response.get('poster_path',"")),
@@ -221,7 +233,7 @@ def GetExtendedMovieInfo(Id):
                     'mpaa': mpaa,
                     'Director': Director,
                     'Writer': Writer,
-                    'Budget': response.get('budget',""),
+                    'Budget': Budget,
                     'Homepage': response.get('homepage',""),
                     'Set': SetName,
                     'SetId': SetID,
