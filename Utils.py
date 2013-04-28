@@ -398,7 +398,43 @@ def CompareWithLibrary(onlinelist):
     b = datetime.datetime.now() - a
     log('Processing Time for comparing: %s' % b)
     return onlinelist
-  
+
+
+def CompareAlbumWithLibrary(onlinelist):
+    global locallist
+    if not locallist:
+        locallist = GetXBMCAlbums()
+    a = datetime.datetime.now()
+    log("startin compare")
+    for onlineitem in onlinelist:
+        for localitem in locallist["result"]["albums"]:
+            if onlineitem["OriginalTitle"] in localitem["Title"] and onlineitem["Title"] in localitem["Artist"]:
+                log("compare success" + onlineitem["Title"])
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                json_response = simplejson.loads(json_query)
+                if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
+                    difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
+                    if difference >-2 and difference <2:
+                        streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
+                        log(localitem)
+                        onlineitem.update({"Play": localitem["movieid"]})             
+                        onlineitem.update({"DBID": localitem["movieid"]})             
+                        onlineitem.update({"Path": localitem["movieid"]})             
+                        onlineitem.update({"VideoCodec": streaminfo["videocodec"]})             
+                        onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})             
+                        onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})             
+                        onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})             
+                        onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                break
+    b = datetime.datetime.now() - a
+    log('Processing Time for comparing: %s' % b)
+    return onlinelist
+
+
+
+
+    
 def GetStringFromUrl(encurl):
     doc = ""
     succeed = 0

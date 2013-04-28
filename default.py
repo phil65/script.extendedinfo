@@ -33,8 +33,7 @@ def passHomeDataToSkin(data, debug = True):
 def passDataToSkin(name, data, prefix="",debug = False):
     wnd = xbmcgui.Window(Window)
     if data != None:
-        if debug:
-            log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+        log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
             if debug:
                 log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
@@ -45,6 +44,7 @@ def passDataToSkin(name, data, prefix="",debug = False):
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         wnd.setProperty('%s%s.Count' % (prefix, name), '0')
+        log( "%s%s.Count = None" % (prefix, name ) )
         
 class Main:
     def __init__( self ):
@@ -118,9 +118,9 @@ class Main:
             elif info == 'artistdetails':
                 passDataToSkin('ArtistDetails', None, self.prop_prefix)
                 log("startin ArtistDetails")
-                from TheAudioDB import GetDiscography, GetArtistDetails
+                from TheAudioDB import GetDiscography, GetArtistDetails, GetMostLovedTracks
             #    GetAudioDBData("search.php?s=Blur")
-                
+                GetMostLovedTracks(self.ArtistName)
             #    from TheAudioDB import GetArtistTopAlbums
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix,True)
                 passHomeDataToSkin(GetArtistDetails(self.ArtistName),True)
@@ -661,14 +661,15 @@ class Main:
                             # stop iterating
                             break
             elif xbmc.getCondVisibility("Window.IsActive(visualisation)"):
-                artist = xbmc.getInfoLabel('MusicPlayer.Artist')
-                if (artist != self.previousartist):
-                    if artist:
-                        from MusicBrainz import GetMusicBrainzIdFromNet
-                        from Utils import GetSimilarArtistsInLibrary
-                        Artist_mbid = GetMusicBrainzIdFromNet(artist)
-                        passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
-                        passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(Artist_mbid), self.prop_prefix)
+                self.selecteditem = xbmc.getInfoLabel('MusicPlayer.Artist')
+                if (self.selecteditem != self.previousitem) and self.selecteditem:
+                    self.previousitem = self.selecteditem
+                    from MusicBrainz import GetMusicBrainzIdFromNet
+                    from Utils import GetSimilarArtistsInLibrary
+                    log("Daemon updating SimilarArtists")
+                    Artist_mbid = GetMusicBrainzIdFromNet(self.selecteditem)
+                    passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
+                    passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(Artist_mbid), self.prop_prefix)
             elif xbmc.getCondVisibility('Window.IsActive(screensaver)'):
                 xbmc.sleep(1000)
             else:

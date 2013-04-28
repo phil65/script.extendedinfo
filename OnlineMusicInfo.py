@@ -116,7 +116,6 @@ def HandleLastFMShoutResult(results):
 def HandleLastFMArtistResult(results):
     artists = []
     log("starting HandleLastFMArtistResult")
-    prettyprint(results)
     if True:
         for artist in results['artist']:
             artist = {'Title': artist['name'],

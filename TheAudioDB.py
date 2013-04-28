@@ -33,12 +33,16 @@ def HandleAudioDBAlbumResult(results):
                 Description = album['strDescription']
             else:
                 Description = ""
+            if album.get('strReview') <> None and album['strReview']:
+                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + album["strReview"]
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
                      'id': album['idAlbum'],
                      'audiodbid': album['idAlbum'],
                      'Description': Description,
+                     'Path': "",
+                     'Plot': Description,
                      'Genre': album['strSubGenre'],
                      'Mood': album['strMood'],
                      'Style': album['strSpeed'],
@@ -55,47 +59,77 @@ def HandleAudioDBAlbumResult(results):
         log("Error when handling HandleAudioDBAlbumResult results")
     return albums
     
+def HandleAudioDBTrackResult(results):
+    tracks = []
+    log("starting HandleAudioDBTrackResult")
+ #   prettyprint(results)
+    if 'track' in results and results['track']:
+        for track in results['track']:
+            if 'strTrackThumb' in track:
+                Thumb = track['strTrackThumb']
+            elif 'strMusicVidScreen1' in track:
+                Thumb = track['strMusicVidScreen1']
+            else:
+                Thumb = ""
+            track = {'Track': track['strTrack'],
+                     'Artist': track['strArtist'],
+                     'mbid': track['strMusicBrainzID'],
+                     'Album': track['strAlbum'],
+                     'Thumb':Thumb,
+                     'Path': track['strMusicVid'],
+                     'Label':track['strTrack']  }
+            tracks.append(track)
+    else:
+        log("Error when handling HandleAudioDBTrackResult results")
+    return tracks
+    
+    
+    
 def GetExtendedAudioDBInfo(results):
     artists = []
     log("starting GetExtendedAudioDBInfo")
+    prettyprint(results)
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             if 'strBiographyEN' in artist:
-                Description = artist.get('strBiographyEN')
+                Description = artist.get('strBiographyEN',"")
             elif 'strBiography' in artist:
-                Description = artist.get('strBiography')
+                Description = artist.get('strBiography',"")
             else:
                 Description = ""
             if "strReview" in artist:
-                Description += "[CR]" + artist.get('strReview')
-            artist = {'artist': artist.get('strArtist'),
-                     'mbid': artist.get('strMusicBrainzID'),
-                     'Banner': artist.get('strArtistBanner'),
-                     'Logo': artist.get('strArtistLogo'),
-                     'Fanart': artist.get('strArtistFanart'),
-                     'Born': artist.get('intBornYear'),
-                     'Formed': artist.get('intFormedYear'),
-                     'Died': artist.get('intDiedYear'),
-                     'Country': artist.get('strCountryCode'),
-                     'Website': artist.get('strWebsite'),
-                     'Twitter': artist.get('strTwitter'),
-                     'Facebook': artist.get('strFacebook'),
-                     'Gender': artist.get('strGender'),
-                     'Banner': artist.get('strArtistBanner'),
-                     'audiodbid': artist.get('idArtist'),
+                Description += "[CR]" + artist.get('strReview',"")
+            artist = {'artist': artist.get('strArtist',""),
+                     'mbid': artist.get('strMusicBrainzID',""),
+                     'Banner': artist.get('strArtistBanner',""),
+                     'Logo': artist.get('strArtistLogo',""),
+                     'Fanart': artist.get('strArtistFanart',""),
+                     'Born': artist.get('intBornYear',""),
+                     'Formed': artist.get('intFormedYear',""),
+                     'Died': artist.get('intDiedYear',""),
+                     'Country': artist.get('strCountryCode',""),
+                     'Website': artist.get('strWebsite',""),
+                     'Twitter': artist.get('strTwitter',""),
+                     'Facebook': artist.get('strFacebook',""),
+                     'Gender': artist.get('strGender',""),
+                     'Banner': artist.get('strArtistBanner',""),
+                     'audiodbid': artist.get('idArtist',""),
                      'Description': Description,
-                     'Genre': artist.get('strSubGenre'),
-                     'Label2': artist.get('strSubGenre'),
-                     'Thumb': artist.get('strArtistThumb'),
-                     'Art(Thumb)': artist.get('strArtistThumb'),
-                     'Members':artist.get('intMembers')  }
+                     'Plot': Description,
+                     'Path': "",
+                     'Genre': artist.get('strSubGenre',""),
+                     'Label2': artist.get('strSubGenre',""),
+                     'Thumb': artist.get('strArtistThumb',""),
+                     'Art(Thumb)': artist.get('strArtistThumb',""),
+                     'Members':artist.get('intMembers',"")  }
             artists.append(artist)
     else:
         log("Error when handling GetExtendedAudioDBInfo results")
-    return artists[0]
-    
-    
-    
+    if len(artists) > 0:
+        return artists[0]
+    else:
+        return {}
+       
 def GetDiscography(search_string):
     url = 'searchalbum.php?s=%s' % (urllib.quote_plus(search_string))
     results = GetAudioDBData(url)
@@ -107,9 +141,22 @@ def GetDiscography(search_string):
 def GetArtistDetails(search_string):
     url = 'search.php?s=%s' % (urllib.quote_plus(search_string))
     results = GetAudioDBData(url)
-    prettyprint(results)
+   # prettyprint(results)
     if True:
         return GetExtendedAudioDBInfo(results)
+    else:
+        return []
+              
+def GetMostLovedTracks(search_string = "", mbid = ""):
+    if mbid:
+        pass
+    else:
+        url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
+    log(url)
+    results = GetAudioDBData(url)
+    prettyprint(results)
+    if True:
+        return HandleAudioDBTrackResult(results)
     else:
         return []
         
@@ -117,7 +164,7 @@ def GetArtistDetails(search_string):
 def GetAlbumDetails(audiodbid):
     url = 'album.php?m=%s' % (audiodbid)
     results = GetAudioDBData(url)
-    prettyprint(results)
+  #  prettyprint(results)
     if True:
         return HandleAudioDBAlbumResult(results)[0]
     else:
