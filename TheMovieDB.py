@@ -39,7 +39,7 @@ def HandleTheMovieDBMovieResult(results):
 def HandleTheMovieDBListResult(results):
     lists = []
     if True:
-        for list in results["results"]:
+        for list in results["lists"]["results"]:
             newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path',"")),
                         'Title': list['name'],
                         'ID': list['id'],
@@ -166,7 +166,8 @@ def GetCompanyInfo(Id):
         return []
     
 def GetExtendedMovieInfo(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    prettyprint(response)
     if True:
         authors = []
         directors = []
@@ -250,14 +251,14 @@ def GetExtendedMovieInfo(Id):
     return newmovie[0]
      
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s/lists?language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     return HandleTheMovieDBListResult(response)
     
 def GetMovieKeywords(Id):
-    response = GetMovieDBData("movie/%s/keywords?language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     keywords = []
     if True:
-        for keyword in response["keywords"]:
+        for keyword in response["keywords"]["keywords"]:
             newkeyword = {'id': keyword.get('id',""),
                         'name': keyword['name']}
             log(newkeyword)
@@ -267,9 +268,9 @@ def GetMovieKeywords(Id):
     return keywords
     
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s/similar_movies?language=%s&" % (Id, __addon__.getSetting("LanguageID")),1)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     try:
-        return HandleTheMovieDBMovieResult(response["results"])
+        return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
     except:
         return []
     
