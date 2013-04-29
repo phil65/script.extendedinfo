@@ -151,18 +151,17 @@ class Main:
                 passHomeDataToSkin(None)
                 log("startin ArtistDetails")
                 from TheAudioDB import GetAlbumDetails, GetTrackDetails
-                AlbumDetails = GetAlbumDetails(self.id)
-                Trackinfo = GetTrackDetails(self.id)
-                prettyprint(AlbumDetails)
-                passHomeDataToSkin(AlbumDetails)
-                passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)
-
-                
+                if self.id:
+                    AlbumDetails = GetAlbumDetails(self.id)
+                    Trackinfo = GetTrackDetails(self.id)
+                    prettyprint(AlbumDetails)
+                    passHomeDataToSkin(AlbumDetails)
+                    passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)      
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from OnlineMusicInfo import GetShouts
-                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
+                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:

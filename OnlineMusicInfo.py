@@ -108,7 +108,7 @@ def HandleLastFMShoutResult(results):
         for shout in results['shouts']['shout']:
             newshout = {'comment': shout['body'],
                         'author': shout['author'],
-                        'date':shout['date']  }
+                        'date':shout['date'][4:]  }
             shouts.append(newshout)
     except:
         log("Error when handling LastFM Shout results")
@@ -119,12 +119,13 @@ def HandleLastFMArtistResult(results):
     log("starting HandleLastFMArtistResult")
     if True:
         for artist in results['artist']:
-            artist = {'Title': artist['name'],
-                      'name': artist['name'],
-                      'mbid': artist['mbid'],
-                      'Thumb': artist['image'][-1]['#text'],
-                      'Listeners':artist.get('listeners',"")  }
-            artists.append(artist)
+            if 'name' in artist:
+                artist = {'Title': artist['name'],
+                          'name': artist['name'],
+                          'mbid': artist['mbid'],
+                          'Thumb': artist['image'][-1]['#text'],
+                          'Listeners':artist.get('listeners',"")  }
+                artists.append(artist)
     else:
         log("Error when handling LastFM TopArtists results")
     return artists
@@ -183,6 +184,7 @@ def GetArtistTopAlbums(mbid):
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
     results = GetLastFMData(url)
+    prettyprint(results)
     if True:
         return HandleLastFMArtistResult(results['similarartists'])
     else:

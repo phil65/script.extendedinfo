@@ -186,8 +186,11 @@ def GetMostLovedTracks(search_string = "", mbid = ""):
         return []
         
         
-def GetAlbumDetails(audiodbid):
-    url = 'album.php?m=%s' % (audiodbid)
+def GetAlbumDetails(audiodbid = "", mbid = ""):
+    if audiodbid:
+        url = 'album.php?m=%s' % (audiodbid)
+    elif mbid:
+        url = 'album-mb.php?i=%s' % (mbid)
     results = GetAudioDBData(url)
   #  prettyprint(results)
     if True:
