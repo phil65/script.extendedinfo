@@ -118,8 +118,7 @@ class Main:
             elif info == 'similarlocal' and self.dbid:
                 passDataToSkin('SimilarLocalMovies', None , self.prop_prefix)
                 from Utils import GetSimilarFromOwnLibrary
-                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)
-                        
+                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)                       
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
                 from MiscScraper import GetXKCDInfo
@@ -146,7 +145,6 @@ class Main:
             #    from TheAudioDB import GetArtistTopAlbums
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix)
                 passHomeDataToSkin(ArtistDetails)
-
             elif info == 'albuminfo':
                 passHomeDataToSkin(None)
                 log("startin ArtistDetails")
@@ -229,8 +227,6 @@ class Main:
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
-                
-                
             elif info == 'similarmovies':
                 log("startin MovieDBGetSimilarMovies")
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
@@ -262,8 +258,7 @@ class Main:
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)
-                        
+                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)                        
             elif info == 'extendedinfo':
                 log("startin GetExtendedMovieInfo")
                 if self.id:
@@ -340,7 +335,11 @@ class Main:
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
              #   events = GetEvents(self.Artist_mbid)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,self.orderby,self.time), self.prop_prefix)     
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,self.orderby,self.time), self.prop_prefix)
+            elif info == 'youtubeusersearch':
+                passDataToSkin('YoutubeUserSearch', None, self.prop_prefix)
+                from MiscScraper import GetYoutubeUserVideos
+                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix,True)                 
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetNearEvents

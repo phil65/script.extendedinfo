@@ -445,3 +445,30 @@ def GetYoutubeSearchVideos(search_string = "" ,hd = "", orderby = "relevance", t
                 videos.append(video)
                 count += 1
     return videos
+    
+    
+def GetYoutubeUserVideos(userid = ""):
+    results = []
+    userid = urllib.quote(userid.replace('"',''))
+    try:
+        url = 'https://gdata.youtube.com/feeds/api/users/%s/uploads?v=2&alt=json' % (userid)
+        log(url)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching JSON data from net")
+    count = 1
+    videos = []
+    if results:
+        log(results)
+        for item in results["feed"]["entry"]:
+            video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
+                     'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Description': item["media$group"]["media$description"]["$t"],
+                     'Title': item["title"]["$t"],
+                     'Author': item["author"][0]["name"]["$t"],
+                     'Date': item["published"]["$t"].replace("T"," ").replace(".000Z","")  }
+            videos.append(video)
+            count += 1
+    return videos
+    
