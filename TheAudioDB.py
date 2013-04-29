@@ -5,6 +5,7 @@ import urllib
 
 AudioDB_apikey = '58353d43204d68753987fl'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
+__addon__        = xbmcaddon.Addon()
 
 def GetAudioDBData(url = "", cache_days = 0):
     from base64 import b64encode
@@ -27,7 +28,10 @@ def HandleAudioDBAlbumResult(results):
     prettyprint(results)
     if 'album' in results and results['album']:
         for album in results['album']:
-            if 'strDescriptionEN' in album:
+            localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
+            if localdescription in album and album[localdescription] <> None:
+                Description = album.get(localdescription,"")
+            elif 'strDescriptionEN' in album:
                 Description = album['strDescriptionEN']
             elif 'strDescription' in album:
                 Description = album['strDescription']
@@ -100,16 +104,17 @@ def HandleAudioDBMusicVideoResult(results):
     else:
         log("Error when handling HandleAudioDBMusicVideoResult results")
     return mvids
-    
-    
-    
+       
 def GetExtendedAudioDBInfo(results):
     artists = []
     log("starting GetExtendedAudioDBInfo")
     prettyprint(results)
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
-            if 'strBiographyEN' in artist:
+            localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
+            if localbio in artist and artist[localbio] <> None:
+                Description = artist.get(localbio,"")
+            elif 'strBiographyEN' in artist and artist['strBiographyEN'] <> None:
                 Description = artist.get('strBiographyEN',"")
             elif 'strBiography' in artist:
                 Description = artist.get('strBiography',"")
@@ -122,6 +127,8 @@ def GetExtendedAudioDBInfo(results):
                      'Banner': artist.get('strArtistBanner',""),
                      'Logo': artist.get('strArtistLogo',""),
                      'Fanart': artist.get('strArtistFanart',""),
+                     'Fanart2': artist.get('strArtistFanart2',""),
+                     'Fanart3': artist.get('strArtistFanart3',""),
                      'Born': artist.get('intBornYear',""),
                      'Formed': artist.get('intFormedYear',""),
                      'Died': artist.get('intDiedYear',""),
