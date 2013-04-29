@@ -66,18 +66,18 @@ def HandleAudioDBTrackResult(results):
  #   prettyprint(results)
     if 'track' in results and results['track']:
         for track in results['track']:
-            if 'strTrackThumb' in track:
-                Thumb = track['strTrackThumb']
-            elif 'strMusicVidScreen1' in track:
-                Thumb = track['strMusicVidScreen1']
+            if 'strMusicVid' in track and track['strMusicVid'] <> None:
+                Thumb = "http://i.ytimg.com/vi/" + ExtractYoutubeID(track.get('strMusicVid','')) + "/0.jpg"
+                Path = ConvertYoutubeURL(track['strMusicVid'])
             else:
                 Thumb = ""
+                Path = ""
             track = {'Track': track['strTrack'],
                      'Artist': track['strArtist'],
                      'mbid': track['strMusicBrainzID'],
                      'Album': track['strAlbum'],
-                     'Thumb':Thumb,
-                     'Path': track['strMusicVid'],
+                     'Thumb': Thumb,
+                     'Path': Path ,
                      'Label':track['strTrack']  }
             tracks.append(track)
     else:
@@ -193,6 +193,16 @@ def GetMusicVideos(audiodbid):
     results = GetAudioDBData(url)
     if True:
         return HandleAudioDBMusicVideoResult(results)
+    else:
+        return []
+        
+def GetTrackDetails(audiodbid):
+    url = 'track.php?m=%s' % (audiodbid)
+    results = GetAudioDBData(url)
+    prettyprint("look here")
+    prettyprint(results)
+    if True:
+        return HandleAudioDBTrackResult(results)
     else:
         return []
         

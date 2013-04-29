@@ -58,7 +58,7 @@ def passDataToSkin(name, data, prefix="",debug = False):
             for (key,value) in result.iteritems():
                 wnd.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
                 if debug:
-                    log('%s%s.%i.%s' % (prefix, name, count + 1, str(key)) + unicode(value))
+                    log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + unicode(value))
         wnd.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         wnd.setProperty('%s%s.Count' % (prefix, name), '0')
@@ -132,7 +132,7 @@ class Main:
                 passDataToSkin('Discography', None, self.prop_prefix)
                 log("startin gettopalbums")
                 from OnlineMusicInfo import GetArtistTopAlbums
-                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix,True)
+                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistdetails':
                 passDataToSkin('Discography', None, self.prop_prefix)
                 passDataToSkin('MusicVideos', None, self.prop_prefix)
@@ -142,25 +142,27 @@ class Main:
                 MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
             #    GetAudioDBData("search.php?s=Blur")
                 GetMostLovedTracks(self.ArtistName)
-                passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix,True)
+                passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix)
             #    from TheAudioDB import GetArtistTopAlbums
-                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix,True)
-                passHomeDataToSkin(ArtistDetails,True)
+                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix)
+                passHomeDataToSkin(ArtistDetails)
 
             elif info == 'albuminfo':
                 passHomeDataToSkin(None)
                 log("startin ArtistDetails")
-                from TheAudioDB import GetAlbumDetails
+                from TheAudioDB import GetAlbumDetails, GetTrackDetails
                 AlbumDetails = GetAlbumDetails(self.id)
+                Trackinfo = GetTrackDetails(self.id)
                 prettyprint(AlbumDetails)
-                passHomeDataToSkin(AlbumDetails,True)
+                passHomeDataToSkin(AlbumDetails)
+                passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)
 
                 
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from OnlineMusicInfo import GetShouts
-                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
+                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:
@@ -252,7 +254,7 @@ class Main:
                     id = GetDatabaseID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix,True)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
             elif info == 'keywords':
                 passDataToSkin('Keywords', None, self.prop_prefix)
                 if self.dbid:
@@ -333,15 +335,15 @@ class Main:
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetEvents
-             #   events = GetEvents(self.Artist_mbid,True)
+             #   events = GetEvents(self.Artist_mbid)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)     
             elif info == 'youtubesearch':
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
-             #   events = GetEvents(self.Artist_mbid,True)
+             #   events = GetEvents(self.Artist_mbid)
                 passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id,self.hd,self.orderby,self.time), self.prop_prefix)     
             elif info == 'nearevents':
-                passDataToSkin('NearEvents', None, self.prop_prefix,True)
+                passDataToSkin('NearEvents', None, self.prop_prefix)
                 from OnlineMusicInfo import GetNearEvents
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly), self.prop_prefix)
             elif info == 'venueevents':

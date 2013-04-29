@@ -72,7 +72,8 @@ def HandleLastFMEventResult(results):
                      'website': event['website'],
                      'description': cleanText(event['description']),
                     # 'description': event['description'], ticket missing
-                     'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
+                 #    'city': event['venue']['location']['postalcode'] + " " + event['venue']['location']['city'],
+                     'city': event['venue']['location']['city'],
                      'country': event['venue']['location']['country'],
                      'geolong': event['venue']['location']['geo:point']['geo:long'],
                      'geolat': event['venue']['location']['geo:point']['geo:lat'],
