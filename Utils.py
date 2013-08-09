@@ -37,7 +37,7 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                         return
                 # just in case someone uses backslahes in the path
                 # fixes problems mentioned on some german forum
-                file_path =  os.path.join(path, file)
+                file_path =  os.path.join(path, file).encode('string-escape')
                 if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
