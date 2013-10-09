@@ -447,7 +447,7 @@ def save_to_file(content, filename, path = "" ):
             text_file_path = os.path.join(path,filename + ".txt")
         log("save to textfile:")
         log(text_file_path)
-        text_file =  open(text_file_path, "w")
+        text_file =  xbmcvfs.File(text_file_path,"w")
         simplejson.dump(content,text_file)
         text_file.close()
         return True
