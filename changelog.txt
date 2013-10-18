@@ -1,2 +1,5 @@
+v 0.0.2:
+- file handling updates
+
 v 0.0.1:
 - initial release

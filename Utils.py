@@ -26,7 +26,7 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
             if silent == False:
                 if progressDialog.iscanceled():
                     return
-            path= media_path(item['file']).encode("utf-8") + "/" + folder + "/"
+            path = os.path.join(media_path(item['file']).encode("utf-8"), folder)
             file_list = xbmcvfs.listdir(path)[1]            
             for i,file in enumerate (file_list):
                 if i + 1 > limit:
@@ -35,7 +35,9 @@ def AddArtToLibrary( type, media, folder, limit , silent = False):
                     progressDialog.update( (count * 100) / json_response['result']['limits']['total']  , __language__(32011) + ' %s: %s %i' % (item["label"],type,i + 1))
                     if progressDialog.iscanceled():
                         return
-                file_path =  path + "/" + file
+                # just in case someone uses backslahes in the path
+                # fixes problems mentioned on some german forum
+                file_path =  os.path.join(path, file).encode('string-escape')
                 if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type,i),'') == "" :
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %( media , media.lower() , item.get('%sid' % media.lower()) , type , i + 1, file_path))
 
@@ -445,7 +447,7 @@ def save_to_file(content, filename, path = "" ):
             text_file_path = os.path.join(path,filename + ".txt")
         log("save to textfile:")
         log(text_file_path)
-        text_file =  open(text_file_path, "w")
+        text_file =  xbmcvfs.File(text_file_path,"w")
         simplejson.dump(content,text_file)
         text_file.close()
         return True

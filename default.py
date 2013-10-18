@@ -456,8 +456,10 @@ class Main:
         dialogSelection = xbmcgui.Dialog()
         selection        = dialogSelection.select( __language__(32004), modeselect ) 
         if selection == 0:
+            from Utils import export_skinsettings
             export_skinsettings()
         elif selection == 1:
+            from Utils import import_skinsettings
             import_skinsettings()
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
