@@ -192,41 +192,65 @@ class Main:
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 from MiscScraper import GetCandHInfo
-                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)                
-            elif info == 'incinemaRT':
-                log("start gettin InCinema info")
-                from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('InCinemaMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix)
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
+
+            ### RottenTomatoesMovies #################################################################################
+            elif info == 'intheaters':
+                log("start gettin intheaters info")
+                from MiscScraper import GetRottenTomatoesMoviesInTheaters
+                passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix)
             elif info == 'boxoffice':
                 log("start gettin boxoffice info")
-                from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix)
+                from MiscScraper import GetRottenTomatoesMoviesBoxOffice
+                passDataToSkin('BoxOffice', GetRottenTomatoesMoviesBoxOffice("box_office"), self.prop_prefix)
             elif info == 'opening':
                 log("start gettin opening info")
-                from MiscScraper import GetRottenTomatoesMovies
-                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix)
-            elif info == 'upcoming':
-                log("start gettin upcoming info")
-          #      from MiscScraper import GetRottenTomatoesMovies
-           #     passDataToSkin('UpcomingMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, True)
-                from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix)
-            elif info == 'incinema':
-                log("start gettin InCinemaMovies info")
-                from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('InCinemaMovies', GetMovieDBMovies("now_playing"), self.prop_prefix)
-            elif info == 'popular':
-                log("start gettin popularmovies info")
-                from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix)
-            elif info == 'toprated':
-                log("start gettin InCinemaMovies info")
-                from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix)          
+                from MiscScraper import GetRottenTomatoesMoviesOpening
+                passDataToSkin('Opening', GetRottenTomatoesMoviesOpening("opening"), self.prop_prefix)
+            elif info == 'comingsoon':
+                log("start gettin comingsoon info")
+                from MiscScraper import GetRottenTomatoesMoviesComingSoon
+                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix)
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from MiscScraper import GetRottenTomatoesMovies
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
+                                
+            ### The MovieDB ##########################################################################################
+            elif info == 'incinemas':
+                log("start gettin incinemasmovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix)
+            elif info == 'upcoming':
+                log("start gettin upcoming info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix)
+            elif info == 'topratedmovies':
+                log("start gettin topratedmovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix)
+            elif info == 'popularmovies':
+                log("start gettin popularmovies info")
+                from TheMovieDB import GetMovieDBMovies
+                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix)
+
+            elif info == 'airingtodaytvshows':
+                log("start gettin airingtodaytvshows info")
+                from TheMovieDB import GetMovieDBTVShows
+                passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix)
+            elif info == 'onairtvshows':
+                log("start gettin onairtvshows info")
+                from TheMovieDB import GetMovieDBTVShows
+                passDataToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), self.prop_prefix)
+            elif info == 'topratedtvshows':
+                log("start gettin topratedtvshows info")
+                from TheMovieDB import GetMovieDBTVShows
+                passDataToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), self.prop_prefix)
+            elif info == 'populartvshows':
+                log("start gettin populartvshows info")
+                from TheMovieDB import GetMovieDBTVShows
+                passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix)                
+ 
             elif info == 'similarmovies':
                 log("startin MovieDBGetSimilarMovies")
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
@@ -652,7 +676,7 @@ class Main:
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
-                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + [SubString(ListItem.Path,videodb://1/7/,left)| Container.Content(artists) | Container.Content(albums)]"):
+                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + [SubString(ListItem.Path,videodb://movies/sets/,left)| Container.Content(artists) | Container.Content(albums)]"):
                         self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
                         log("setting movieset labels")
                     else:

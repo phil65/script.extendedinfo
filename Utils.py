@@ -172,7 +172,7 @@ def GetSimilarArtistsInLibrary(id):
                              "Style"       : " / ".join(item['style']),
                              "Mood"        : " / ".join(item['mood']),
                              "Instrument"  : " / ".join(item['instrument']),
-                             "LibraryPath" : 'musicdb://2/' + str(item['artistid']) + '/' }                         
+                             "LibraryPath" : 'musicdb://artists/' + str(item['artistid']) + '/' }                         
                 artists.append(newartist)
                 log(newartist)
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
@@ -244,7 +244,7 @@ def GetSimilarFromOwnLibrary(dbid):
                     count = 1
                     for list_movie in quotalist:
                         if id <> list_movie[1]:
-                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","genre","year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
+                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
                             json_query = unicode(json_query, 'utf-8', errors='ignore')
                             json_response = simplejson.loads(json_query)
                             movie = json_response["result"]["moviedetails"]
@@ -425,7 +425,7 @@ def log(txt):
     message = u'%s: %s' % (__addonid__, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
-def get_browse_dialog( default="", heading="", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
+def get_browse_dialog( default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False ):
     """ shows a browse dialog and returns a value
         - 0 : ShowAndGetDirectory
         - 1 : ShowAndGetFile
