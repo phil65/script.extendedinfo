@@ -12,7 +12,8 @@ rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
-googlemaps_key = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
+googlemaps_key = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
@@ -103,7 +104,7 @@ def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
             search_string = urllib.quote_plus(search_string.replace('"',''))
         if mode == "normal":
             base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
-            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key)
+            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key_old)
         else:
             zoom = 130 - int(zoomlevel) * 6
             base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
@@ -145,13 +146,11 @@ def GetLocationNames(search_string):
         log(e)
         return ("","")
         
-def GetRottenTomatoesMovies(type):
+def GetRottenTomatoesMoviesInTheaters(type):
     movies = []
     results = ""
     try:
-       # url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s&country=%s' % (rottentomatoes_key,xbmc.getLanguage()[:2].lower())
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/%s.json?apikey=%s' % (type, rottentomatoes_key)
-     #   url = 'http://api.rottentomatoes.com/api/public/v1.0/movies/770672122/similar.json?apikey=%s&limit=20' % (rottentomatoes_key)
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -160,19 +159,101 @@ def GetRottenTomatoesMovies(type):
     if results:
         log(results)
         for item in results["movies"]:
-          #  Year = item["release_dates"]["theatre"]             
             movie = {'Title': item["title"],
-                     'Thumb': item["posters"]["original"],
+                     'Art(poster)': item["posters"]["original"],
                      'Runtime': item["runtime"],
                      'Year': item["year"],
+                     'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["critics_score"] / 10,
+                     'Rating': item["ratings"]["audience_score"]/10.0,
                      'Plot': item["synopsis"]  }
             movies.append(movie)
             count += 1
             if count > 20:
                 break
     return movies
+
+def GetRottenTomatoesMoviesOpening(type):
+    movies = []
+    results = ""
+    try:
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?apikey=%s' % (rottentomatoes_key)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching RottenTomatoes data from net")
+    count = 1
+    if results:
+        log(results)
+        for item in results["movies"]:
+            movie = {'Title': item["title"],
+                     'Art(poster)': item["posters"]["original"],
+                     'Runtime': item["runtime"],
+                     'Year': item["year"],
+                     'Premiered': item["release_dates"]["theater"],
+                     'mpaa': item["mpaa_rating"],
+                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Plot': item["synopsis"]  }
+            movies.append(movie)
+            count += 1
+            if count > 20:
+                break
+    return movies
+    
+def GetRottenTomatoesMoviesComingSoon(type):
+    movies = []
+    results = ""
+    try:
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?apikey=%s' % (rottentomatoes_key)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching RottenTomatoes data from net")
+    count = 1
+    if results:
+        log(results)
+        for item in results["movies"]:
+            movie = {'Title': item["title"],
+                     'Art(poster)': item["posters"]["original"],
+                     'Runtime': item["runtime"],
+                     'Year': item["year"],
+                     'Premiered': item["release_dates"]["theater"],
+                     'mpaa': item["mpaa_rating"],
+                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Plot': item["synopsis"]  }
+            movies.append(movie)
+            count += 1
+            if count > 20:
+                break
+    return movies
+
+def GetRottenTomatoesMoviesBoxOffice(type):
+    movies = []
+    results = ""
+    try:
+        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%s' % (rottentomatoes_key)
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+    except:
+        log("Error when fetching RottenTomatoes data from net")
+    count = 1
+    if results:
+        log(results)
+        for item in results["movies"]:
+            movie = {'Title': item["title"],
+                     'Art(poster)': item["posters"]["original"],
+                     'Runtime': item["runtime"],
+                     'Year': item["year"],
+                     'Premiered': item["release_dates"]["theater"],
+                     'mpaa': item["mpaa_rating"],
+                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Plot': item["synopsis"]  }
+            movies.append(movie)
+            count += 1
+            if count > 20:
+                break
+    return movies
+
     
 def GetTraktCalendarShows(Type):
     shows = []
@@ -210,7 +291,11 @@ def GetTraktCalendarShows(Type):
 def HandleTraktMovieResult(results):
     count = 1
     movies = []
-    for movie in results:
+    for movie in results:   
+        try:
+            premiered = str(datetime.datetime.fromtimestamp(int(movie["released"])))[:10]
+        except:
+            premiered = ""
         try:         
             movie = {'Title': movie["title"],
                     'Runtime': movie["runtime"],
@@ -220,8 +305,8 @@ def HandleTraktMovieResult(results):
                     'ID': movie["tmdb_id"],
                     'mpaa': movie["certification"],
                     'Plot': movie["overview"],
-                    'Premiered': movie["released"],
-                    'Rating': movie["ratings"]["percentage"]/10,
+                    'Premiered': premiered,
+                    'Rating': movie["ratings"]["percentage"]/10.0,
                     'Genre': " / ".join(movie["genres"]),
                     'Art(poster)': movie["images"]["poster"],
                     'Art(fanart)': movie["images"]["fanart"]  }
@@ -251,12 +336,12 @@ def HandleTraktTVShowResult(results):
                 'Studio': tvshow["network"],
                 'Plot': tvshow["overview"],
                 'ID': tvshow["tvdb_id"],
-                'NextDate': tvshow["air_day"],
-                'ShortTime': tvshow["air_time"],
-                'Label2': tvshow["air_day"] + " " + tvshow["air_time"],                
+                'AirDay': tvshow["air_day"],
+                'AirShortTime': tvshow["air_time"],
+                'Label2': tvshow["air_day"] + " " + tvshow["air_time"],
                 'Premiered': premiered,
                 'Country': tvshow["country"],
-                'Rating': tvshow["ratings"]["percentage"]/10,
+                'Rating': tvshow["ratings"]["percentage"]/10.0,
                 'Genre': " / ".join(tvshow["genres"]),
                 'Art(poster)': tvshow["images"]["poster"],
                 'Poster': tvshow["images"]["poster"],

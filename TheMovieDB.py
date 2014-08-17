@@ -28,14 +28,38 @@ def HandleTheMovieDBMovieResult(results):
                         'Play': "",
                         'DBID': "",
                         'Rating': movie.get('vote_average',""),
-                        'Premiered':movie.get('release_date',"")  }
+                        'Year': movie.get('release_date',"")[:4],
+                        'Premiered': movie.get('release_date',"")  }
             if not str(movie['id']) in str(movies): ## too dirty
                 movies.append(newmovie)
     else:
         log("Error when handling TheMovieDB movie results")
-    movies = CompareWithLibrary(movies)        
+    movies = CompareWithLibrary(movies)
     return movies
-    
+
+def HandleTheMovieDBTVShowResult(results):
+    tvshows = []
+    log("starting HandleTheMovieDBTVShowResult")
+    if True:
+        for tv in results:
+            log(tv)
+            newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path',"")),
+                    'Art(poster)': base_url + poster_size + str(tv.get('poster_path',"")),
+                    'Title': tv.get('name',""),
+                    'OriginalTitle': tv.get('original_name',""),
+                    'ID': tv.get('id',""),
+                    'Path': "",
+                    'Play': "",
+                    'DBID': "",
+                    'Rating': tv.get('vote_average',""),
+                    'Premiered': tv.get('first_air_date',"")  }
+            if not str(tv['id']) in str(tvshows): ## too dirty
+                tvshows.append(newtv)
+    else:
+        log("Error when handling TheMovieDB tv results")
+    tvshows = CompareWithLibrary(tvshows)        
+    return tvshows
+
 def HandleTheMovieDBListResult(results):
     lists = []
     if True:
@@ -283,6 +307,13 @@ def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
     try:
         return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
+    except:
+        return []
+
+def GetMovieDBTVShows(type):
+    response = GetMovieDBData("tv/%s?language=%s&" % ( type, __addon__.getSetting("LanguageID")),2)
+    try:
+        return HandleTheMovieDBTVShowResult(response["results"])
     except:
         return []
     
