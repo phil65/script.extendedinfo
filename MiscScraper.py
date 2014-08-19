@@ -92,7 +92,6 @@ def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
         if not type:
             type="roadmap"
         if aspect == "square":
-            log("xxxx")
             size = "640x640"
         else:
             size = "640x400"
@@ -478,9 +477,8 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
     
 def string2deg(string):
     import re
-    string = string.strip() # trim leading/trailing whitespace
-    string = string.replace('"','')
-    string = string.replace("'","")
+    string = string.strip().replace('"','').replace("'","") # trim leading/trailing whitespace
+    log("String:" + string)
     if string[0].lower() == "w" or string[0].lower() == "s":
        negative = True
     else:

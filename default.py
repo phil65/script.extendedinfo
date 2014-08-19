@@ -396,10 +396,20 @@ class Main:
                 from MiscScraper import GetGoogleMap, GetGeoCodes, string2deg
                 wnd = xbmcgui.Window(Window)
                 if self.location == "geocode": # convert Image Coordinates to float values
-                    self.lat = string2deg(self.lat)
-                    self.lon = string2deg(self.lon)
-                    log(self.lat)
-                    log(self.lon)
+                    if not self.lon == "":
+                        self.lat = string2deg(self.lat)
+                        log("Lat: " + self.lat)
+                        self.lon = string2deg(self.lon)
+                        log("Lon: " + self.lon)
+                    else:
+                        log("splitting string")
+                        coords = self.lat.split(",lon=")
+                        log("Lat: " + coords[0])
+                        log("Lon: " + coords[1])
+                        self.lat = string2deg(coords[0])
+                        self.lon = string2deg(coords[1])
+                        
+
                 if info == 'getgooglemap':  # request normal map                   
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
