@@ -22,7 +22,7 @@ extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 Skin_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir() ).decode("utf-8") )
 
-def GetDatabaseID(type,dbid):
+def GetImdbID(type,dbid):
     if type=="movie":
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -159,14 +159,16 @@ class Main:
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from OnlineMusicInfo import GetShouts
-                passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
+                if self.ArtistName and self.AlbumName:
+                    passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:
                     log("startin companyinfo")
                     from TheMovieDB import SearchforCompany, GetCompanyInfo
-                    CompanyId = SearchforCompany(self.studio)
-                    passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
+                    if self.studio:
+                        CompanyId = SearchforCompany(self.studio)
+                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
             elif info == 'set':
                 passDataToSkin('MovieSetItems', None, self.prop_prefix)
                 if self.dbid and not "show" in str(self.type):
@@ -176,8 +178,6 @@ class Main:
                     if name:
                         log(name)
                         self.setid  = SearchForSet(name)   
-                log("yyyy")
-                log(self.setid)
                 if self.setid:
                     log("startin SetInfo")
                     from TheMovieDB import GetSetMovies
@@ -255,11 +255,11 @@ class Main:
                 log("startin MovieDBGetSimilarMovies")
                 passDataToSkin('SimilarMovies', None, self.prop_prefix)
                 from TheMovieDB import GetSimilarMovies
-                # MovieId = GetDatabaseID(self.id)
+                # MovieId = GetImdbID(self.id)
                 if self.id:
                     MovieId = self.id
                 elif self.dbid:
-                    MovieId = GetDatabaseID("movie",self.dbid)
+                    MovieId = GetImdbID("movie",self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
                     MovieId = ""
@@ -270,7 +270,7 @@ class Main:
                 if self.dbid:
                     log("startin movielists")
                     from TheMovieDB import GetMovieLists
-                    id = GetDatabaseID("movie",self.dbid)
+                    id = GetImdbID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
                         passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
@@ -279,7 +279,7 @@ class Main:
                 if self.dbid:
                     log("startin Keywords")
                     from TheMovieDB import GetMovieKeywords
-                    id = GetDatabaseID("movie",self.dbid)
+                    id = GetImdbID("movie",self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
                         passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)                        
@@ -288,7 +288,7 @@ class Main:
                 if self.id:
                     MovieId = self.id
                 elif self.dbid:
-                    MovieId = GetDatabaseID("movie",self.dbid)
+                    MovieId = GetImdbID("movie",self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
                     MovieId = ""
@@ -325,7 +325,7 @@ class Main:
                 from MiscScraper import GetSimilarTrakt
                 if self.type and (self.id or self.dbid):
                     if self.dbid:
-                        id = GetDatabaseID(self.type,self.dbid)
+                        id = GetImdbID(self.type,self.dbid)
                         log("SimilarTrakt: found dbid " + str(id))
                     else:
                         id = self.id
