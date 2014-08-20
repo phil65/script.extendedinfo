@@ -413,6 +413,8 @@ class Main:
                         
                 elif self.location=="search":
                      self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
+                     if self.location=="":
+                        sys.exit()
                 if info == 'getgooglemap':  # request normal map                   
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
