@@ -409,16 +409,19 @@ def GetStringFromUrl(encurl):
     succeed = 0
     while succeed < 5:
         try: 
-            f = urllib.urlopen(  encurl)
-            doc = f.read()
-            f.close()
-            return str(doc)
+            import urllib2
+            req = urllib2.Request(encurl)
+            req.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
+            res = urllib2.urlopen(req)
+            html = res.read()
+            log("URL String: " + html)
+            return html
         except:
             log("could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
     return ""
-    
+        
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
