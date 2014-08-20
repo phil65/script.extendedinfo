@@ -356,6 +356,8 @@ class Main:
              #   events = GetEvents(self.Artist_mbid)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)     
             elif info == 'youtubesearch':
+                wnd = xbmcgui.Window(Window)
+                wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id) # set properties 
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
              #   events = GetEvents(self.Artist_mbid)
