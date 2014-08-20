@@ -411,7 +411,8 @@ class Main:
                         self.lat = string2deg(coords[0])
                         self.lon = string2deg(coords[1])
                         
-
+                elif self.location=="search":
+                     self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
                 if info == 'getgooglemap':  # request normal map                   
                     image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
                     overview = ""
