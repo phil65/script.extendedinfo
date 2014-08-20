@@ -4,7 +4,8 @@ from Utils import *
 import urllib
 
 bandsintown_apikey = 'xbmc_open_source_media_center'
-lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
+lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
+#lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def HandleBandsInTownResult(results):
@@ -41,8 +42,9 @@ def cleanText(text):
     
 def HandleLastFMEventResult(results):
     events = []
-    log("starting HandleLastFMEventResult")
-    if results['events'].get("event"):
+    log("starting HandleLastFMEventResult based on following JSON answer:")
+    prettyprint(results)
+    if "events" in results and results['events'].get("event"):
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
@@ -90,14 +92,14 @@ def HandleLastFMEventResult(results):
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    if True:
+    try:
         for album in results['topalbums']['album']:
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
                      'thumb': album['image'][-1]['#text'],
                      'name':album['name']  }
             albums.append(album)
-    else:
+    except:
         log("Error when handling LastFM results")
     return albums
            
@@ -117,7 +119,7 @@ def HandleLastFMShoutResult(results):
 def HandleLastFMArtistResult(results):
     artists = []
     log("starting HandleLastFMArtistResult")
-    if True:
+    try:
         for artist in results['artist']:
             if 'name' in artist:
                 artist = {'Title': artist['name'],
@@ -126,7 +128,7 @@ def HandleLastFMArtistResult(results):
                           'Thumb': artist['image'][-1]['#text'],
                           'Listeners':artist.get('listeners',"")  }
                 artists.append(artist)
-    else:
+    except:
         log("Error when handling LastFM TopArtists results")
     return artists
     
@@ -136,9 +138,9 @@ def GetEvents(id, pastevents = False):
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMEventResult(results)
-    else:
+    except:
         return []
 
 def GetLastFMData(url = "", cache_days = 14):
@@ -157,38 +159,38 @@ def GetLastFMData(url = "", cache_days = 14):
                       
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
-    if True:
+    try:
         return HandleLastFMArtistResult(results['artists'])
-    else:
+    except:
         log("Error when finding artist top-tracks from" + url)
         return []
     
 def GetShouts(artistname, albumtitle):
     url = 'method=album.getshouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMShoutResult(results)
-    else:
+    except:
         log("Error when finding shouts from" + url)
         return []
     
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMAlbumResult(results)
-    else:
+    except:
         log("Error when finding topalbums from" + url)
         return []
         
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
     results = GetLastFMData(url)
-    prettyprint(results)
-    if True:
+    try:
         return HandleLastFMArtistResult(results['similarartists'])
-    else:
+    except:
         log("Error when finding SimilarById from" + url)
+        prettyprint(results)
         return []
         
 def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
@@ -202,9 +204,9 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     if lat:
         url = url + '&lat=%s&long=%s' % (lat,lon)  # &distance=60
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMEventResult(results)
-    else:
+    except:
         return []
 
            
@@ -212,9 +214,9 @@ def GetVenueEvents(id = ""):
     url = 'method=venue.getevents&venue=%s' % (id)
     log('GetVenueEvents request: %s' % url)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMEventResult(results)
-    else:
+    except:
         log("GetVenueEvents: error getting concert data from " + url)
         return []
 
@@ -225,10 +227,10 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
              ArtistStr = ArtistStr + '&'
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    if True:
+    try:
         response = GetStringFromUrl(url)
         results = json.loads(response)
         return HandleBandsInTownResult(results)
-    else:
+    except:
         log("GetArtistNearEvents: error when getting artist data from " + url)
         return []
