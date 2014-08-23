@@ -1,7 +1,7 @@
 import sys
 import os, time, datetime
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-from Utils import log, prettyprint
+from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -74,24 +74,18 @@ class Main:
         if self.infos:
             self._StartInfoActions()
         elif self.exportsettings:
-            from Utils import export_skinsettings
             export_skinsettings()        
         elif self.importsettings:
-            from Utils import import_skinsettings
             import_skinsettings()
         elif self.importextrathumb:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
         elif self.importextrafanart:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
    #     elif self.importextrathumbtv:
   #          AddArtToLibrary("extrathumb","TVShow","extrathumbs")
         elif self.importextrafanarttv:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
         elif self.importallartwork:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie","extrathumbs",extrathumb_limit,True)
             AddArtToLibrary("extrafanart","Movie","extrafanart",extrafanart_limit,True)
             AddArtToLibrary("extrafanart","TVShow","extrafanart",extrafanart_limit,True)
@@ -117,7 +111,6 @@ class Main:
                 passDataToSkin('RSS', videos, self.prop_prefix)
             elif info == 'similarlocal' and self.dbid:
                 passDataToSkin('SimilarLocalMovies', None , self.prop_prefix)
-                from Utils import GetSimilarFromOwnLibrary
                 passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid) , self.prop_prefix)                       
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
@@ -173,7 +166,6 @@ class Main:
                 passDataToSkin('MovieSetItems', None, self.prop_prefix)
                 if self.dbid and not "show" in str(self.type):
                     from TheMovieDB import SearchForSet
-                    from Utils import GetMovieSetName
                     name = GetMovieSetName(self.dbid)
                     if name:
                         log(name)
@@ -347,7 +339,6 @@ class Main:
                 from MiscScraper import GetTrendingMovies
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
-                from Utils import GetSimilarArtistsInLibrary
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
                 passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
@@ -375,7 +366,6 @@ class Main:
                 from OnlineMusicInfo import GetVenueEvents
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
-                from Utils import GetXBMCArtists
                 from OnlineMusicInfo import GetArtistNearEvents
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
                 artists = GetXBMCArtists()
@@ -390,95 +380,9 @@ class Main:
             elif info == 'getlocationevents':
                 from OnlineMusicInfo import GetNearEvents
                 wnd = xbmcgui.Window(Window)
-                lat = wnd.getProperty('%slat' % self.prop_prefix)
-                lon = wnd.getProperty('%slon' % self.prop_prefix)
+                lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
+                lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly,lat,lon), self.prop_prefix)
-            elif info == 'getgooglemap' or info == 'getgooglestreetviewmap':
-                direction = ""
-                from MiscScraper import GetGoogleMap, GetGeoCodes, string2deg
-                wnd = xbmcgui.Window(Window)
-                if self.location == "geocode": # convert Image Coordinates to float values
-                    if not self.lon == "":
-                        self.lat = string2deg(self.lat)
-                        log("Lat: " + self.lat)
-                        self.lon = string2deg(self.lon)
-                        log("Lon: " + self.lon)
-                    else:
-                        log("splitting string")
-                        coords = self.lat.split(",lon=")
-                        log("Lat: " + coords[0])
-                        log("Lon: " + coords[1])
-                        self.lat = string2deg(coords[0])
-                        self.lon = string2deg(coords[1])
-                        
-                elif self.location=="search":
-                     self.location=xbmcgui.Dialog().input("Enter Search String", type=xbmcgui.INPUT_ALPHANUM)
-                     if self.location=="":
-                        sys.exit()
-                if info == 'getgooglemap':  # request normal map                   
-                    image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
-                    overview = ""
-                else: # request streetview
-                    direction = str(int(self.direction) * 18)
-                    image = GetGoogleMap(mode = "streetview",search_string = self.location,aspect = self.aspect,type = self.type, lat = self.lat,lon = self.lon,zoomlevel = self.zoomlevel,direction = direction)                    
-                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "17",direction = direction)                    
-                wnd.setProperty('%sgooglemap' % self.prop_prefix, image) # set properties 
-                wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
-                wnd.setProperty('%sDirection' % self.prop_prefix, str(self.direction))
-                wnd.setProperty('%sDirection2' % self.prop_prefix, str(direction))
-                if not self.lat or self.location=="geocode": # set properties for lat / lon (after JSON call for speed)
-                    lat = self.lat
-                    lon = self.lon
-                    if not self.location=="geocode":
-                        lat, lon = GetGeoCodes(self.location)
-                    wnd.setProperty('%slat' % self.prop_prefix, str(lat))
-                    wnd.setProperty('%slon' % self.prop_prefix, str(lon))
-                    wnd.setProperty('%sLocation' % self.prop_prefix, "")
-            elif "move" in info and "google" in info:
-                from MiscScraper import GetGoogleMap
-                wnd = xbmcgui.Window(Window)
-                lat = wnd.getProperty('%slat' % self.prop_prefix)
-                lon = wnd.getProperty('%slon' % self.prop_prefix)
-                direction = int(self.direction) * 18
-                if lat and lon:
-                    if "street" in info:
-                        from math import sin, cos, radians
-                        stepsize = 0.0002
-                        radiantdirection = radians(float(direction))
-                        if "up" in info:
-                            lat = float(lat) + cos(radiantdirection) * stepsize
-                            lon = float(lon) + sin(radiantdirection) * stepsize
-                        elif "down" in info:
-                            lat = float(lat) - cos(radiantdirection) * stepsize
-                            lon = float(lon) - sin(radiantdirection) * stepsize      
-                        elif "left" in info:
-                            lat = float(lat) - sin(radiantdirection) * stepsize
-                            lon = float(lon) - cos(radiantdirection) * stepsize
-                        elif "right" in info:
-                            lat = float(lat) + sin(radiantdirection) * stepsize
-                            lon = float(lon) + cos(radiantdirection) * stepsize
-                    else:
-                        stepsize = 200.0 / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel) / float(self.zoomlevel)
-                        if "up" in info:
-                            lat = float(lat) + stepsize
-                        elif "down" in info:
-                            lat = float(lat) - stepsize           
-                        elif "left" in info:
-                            lon = float(lon) - 2.0 * stepsize  
-                        elif "right" in info:
-                            lon = float(lon) + 2.0 * stepsize
-                self.location = str(lat) + "," + str(lon)
-                if "street" in info:
-                    image = GetGoogleMap(mode = "streetview",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = direction)
-                    overview = GetGoogleMap(mode = "normal",search_string = self.location,aspect = self.aspect,type = "roadmap", lat = self.lat,lon = self.lon,zoomlevel = "17",direction = self.direction)                    
-                else:
-                    image = GetGoogleMap(mode = "normal",search_string = self.location,zoomlevel = self.zoomlevel,type = self.type,aspect = self.aspect, lat=self.lat,lon=self.lon,direction = self.direction)
-                    overview = ""
-                wnd.setProperty('%sgooglemap' % self.prop_prefix, image)
-                wnd.setProperty('%sgooglemapoverview' % self.prop_prefix, overview)
-                wnd.setProperty('%slat' % self.prop_prefix, str(lat))
-                wnd.setProperty('%sDirection' % self.prop_prefix, self.direction)
-                wnd.setProperty('%slon' % self.prop_prefix, str(lon))
         if not self.silent:
             xbmc.executebuiltin( "Dialog.Close(busydialog)" )
             
@@ -495,26 +399,20 @@ class Main:
         dialogSelection = xbmcgui.Dialog()
         selection        = dialogSelection.select( __language__(32004), modeselect ) 
         if selection == 0:
-            from Utils import export_skinsettings
             export_skinsettings()
         elif selection == 1:
-            from Utils import import_skinsettings
             import_skinsettings()
         elif selection == 2:
             xbmc.executebuiltin("Skin.ResetSettings")
         elif selection == 3:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
         elif selection == 4:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
    #     elif selection == 5:
     #        AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
         elif selection == 5:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
         elif selection == 6:
-            from Utils import AddArtToLibrary
             AddArtToLibrary("extrathumb","Movie", "extrathumbs",extrathumb_limit)
             AddArtToLibrary("extrafanart","Movie", "extrafanart",extrafanart_limit)
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
@@ -534,18 +432,12 @@ class Main:
         self.setid = None
         self.type = False
         self.hd = ""
-        self.direction = 0
-        self.aspect = "Landscape"
         self.orderby = "relevance"
         self.time = "all_time"
-        self.zoomlevel = "15"
-        self.location = ""
         self.director = ""
         self.tag = ""
         self.writer = ""
         self.studio = ""
-        self.lat = ""
-        self.lon = ""
         self.silent = True
         self.festivalsonly = False
         self.prop_prefix = ""
@@ -579,14 +471,6 @@ class Main:
                 self.type = (param[5:])
             elif param.startswith('tag='):
                 self.tag = (param[4:])
-            elif param.startswith('direction='):
-                self.direction = (param[10:])
-            elif param.startswith('aspect='):
-                self.aspect = (param[7:])
-            elif param.startswith('zoomlevel='):
-                self.zoomlevel = (param[10:])
-            elif param.startswith('location='):
-                self.location = (param[9:])
             elif param.startswith('studio='):
                 self.studio = (param[7:])
             elif param.startswith('orderby='):
@@ -683,7 +567,6 @@ class Main:
         self.previousitem = ""
         self.previousartist = ""
         self.previoussong = ""
-        from Utils import create_musicvideo_list, create_movie_list
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
@@ -731,7 +614,6 @@ class Main:
                 if (self.selecteditem != self.previousitem) and self.selecteditem:
                     self.previousitem = self.selecteditem
                     from MusicBrainz import GetMusicBrainzIdFromNet
-                    from Utils import GetSimilarArtistsInLibrary
                     log("Daemon updating SimilarArtists")
                     Artist_mbid = GetMusicBrainzIdFromNet(self.selecteditem)
                     passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
@@ -850,7 +732,6 @@ class Main:
         plot = ""
         title_list = ""
         title_list += "[B]" + str(json_query['result']['setdetails']['limits']['total']) + " " + xbmc.getLocalizedString(20342) + "[/B][CR][I]"
-        from Utils import media_path
         for item in json_query['result']['setdetails']['movies']:
             art = item['art']
             self.window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))

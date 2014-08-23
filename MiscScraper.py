@@ -8,12 +8,9 @@ else:
     import json as simplejson
     
 
-rottentomatoes_key = '7ndbwf7s2pa9t34tmghspyz6'
+rottentomatoes_key = 'sr9ambpra5r3ys2khtxn5bxt'
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
-bing_key =  'Ai8sLX5R44tf24_2CGmbxTYiIX6w826dsCVh36oBDyTmH21Y6CxYEqtrV9oYoM6O'
-googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-googlemaps_key = 'AIzaSyCo31ElCssn5GfH2eHXHABR3zu0XiALCc4'
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
@@ -75,59 +72,7 @@ def GetFlickrImages():
             images.append(image)
             count += 1
     return images
-    
-def GetBingMap(search_string):
-    try:
-        log(urllib.quote(search_string))
-        log(urllib.quote_plus(search_string))
-        url = 'http://dev.virtualearth.net/REST/v1/Imagery/Map/AerialWithLabels/%s?mapSize=800,600&key=%s' % (urllib.quote(search_string),bing_key)
-        log(url)
-        return url
-    except:
-        log("Error when fetching Bing data from net")
-        return ""     
-        
-def GetGoogleMap(mode,search_string,zoomlevel,type,aspect,lat,lon,direction):
-    try:
-        if not type:
-            type="roadmap"
-        if aspect == "square":
-            size = "640x640"
-        else:
-            size = "640x400"
-            log("yyyy")           
-        if lat and lon:
-            search_string = str(lat) + "," + str(lon)
-            log("Location: " + search_string)
-        else:
-            search_string = urllib.quote_plus(search_string.replace('"',''))
-        if mode == "normal":
-            base_url='http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&'
-            url = base_url + 'maptype=%s&center=%s&zoom=%s&markers=%s&size=%s&key=%s' % (type, search_string, zoomlevel, search_string, size, googlemaps_key_old)
-        else:
-            zoom = 130 - int(zoomlevel) * 6
-            base_url='http://maps.googleapis.com/maps/api/streetview?&sensor=false&'
-            url = base_url + 'location=%s&size=%s&fov=%s&key=%s&heading=%s' % (search_string, size, str(zoom), googlemaps_key, str(direction))        
-        log("Google Maps Search:" + url)
-        return url
-    except:
-        return ""
-               
-def GetGeoCodes(search_string):
-    try:
-        search_string = urllib.quote_plus(search_string)
-        base_url='https://maps.googleapis.com/maps/api/geocode/json?&sensor=false&'
-        url = base_url + 'address=%s' % (search_string)
-        log("Google Geocodes Search:" + url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        log(results)
-        location = results["results"][0]["geometry"]["location"]
-        return (location["lat"], location["lng"])
-    except Exception,e:
-        log(e)
-        return ("","")
-        
+                                   
 def GetLocationNames(search_string):
     try:
         search_string = urllib.quote_plus(search_string)
@@ -150,13 +95,13 @@ def GetRottenTomatoesMoviesInTheaters(type):
     results = ""
     try:
         url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
+        log("Json Query: " + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
         log("Error when fetching RottenTomatoes data from net")
     count = 1
     if results:
-        log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -177,6 +122,7 @@ def GetRottenTomatoesMoviesOpening(type):
     results = ""
     try:
         url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?apikey=%s' % (rottentomatoes_key)
+        log("Json Query: " + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -204,13 +150,13 @@ def GetRottenTomatoesMoviesComingSoon(type):
     results = ""
     try:
         url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?apikey=%s' % (rottentomatoes_key)
+        log("Json Query: " + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
         log("Error when fetching RottenTomatoes data from net")
     count = 1
     if results:
-        log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -231,6 +177,7 @@ def GetRottenTomatoesMoviesBoxOffice(type):
     results = ""
     try:
         url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%s' % (rottentomatoes_key)
+        log("Json Query: " + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -259,6 +206,7 @@ def GetTraktCalendarShows(Type):
     results = ""
     try:
         url = 'http://api.trakt.tv/calendar/%s.json/%s/today/14' % (Type,trakt_key)
+        log("Json Query: " + url)
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
     except:
@@ -281,7 +229,6 @@ def GetTraktCalendarShows(Type):
                         'Art(banner)' : episode["show"]["images"]["banner"],
                         'Art(fanart)' : episode["show"]["images"]["fanart"]  }
                 shows.append(show)
-                log(count)
                 count += 1
                 if count > 20:
                     break
@@ -366,7 +313,8 @@ def GetTrendingShows():
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
             save_to_file(results,"trendingshows",Addon_Data_Path)
-        except:
+        except Exception, e:
+            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
         if results:
             return HandleTraktTVShowResult(results)
@@ -376,7 +324,6 @@ def GetTVShowInfo(id):
     filename = Addon_Data_Path + "/tvshow" + id + ".txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-        log(results)
         return HandleTraktTVShowResult([results])
     else:    
         try:
@@ -384,7 +331,8 @@ def GetTVShowInfo(id):
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
             save_to_file(results,"tvshow" + id,Addon_Data_Path)
-        except:
+        except Exception, e:
+            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
         if results:
             return HandleTraktTVShowResult([results])
@@ -401,10 +349,9 @@ def GetTrendingMovies():
         try:
             url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
             response = GetStringFromUrl(url)
-            log("TrendingMovies Response:")
-            log(response)
             results = simplejson.loads(response)
-        except:
+        except Exception, e:
+            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
         count = 1
         if results:
@@ -475,32 +422,6 @@ def GetYoutubeVideos(jsonurl,prefix = ""):
                         count += 1
     return videos
     
-def string2deg(string):
-    import re
-    string = string.strip().replace('"','').replace("'","") # trim leading/trailing whitespace
-    log("String:" + string)
-    if string[0].lower() == "w" or string[0].lower() == "s":
-       negative = True
-    else:
-        negative = False
-    string = string[1:]
-    string = string.replace("d","")
-    string = string.replace("  "," ")
-    div = '[|:|\s]' # allowable field delimiters "|", ":", whitespace
-    sdec = '(\d{1,3})' + div + '(\d{1,2})' + div + '(\d{1,2}\.?\d+?)'
-    co_re= re.compile(sdec)
-    co_search= co_re.search(string)
-    if co_search is None:
-        raise ValueError("Invalid input string: %s" % string)
-    elems = co_search.groups()
-    degrees = float(elems[0])
-    arcminutes = float(elems[1])
-    arcseconds = float(elems[2])
-    decDegrees = degrees + arcminutes/60.0 + arcseconds/3600.0
-    if negative:
-        decDegrees = -1.0 * decDegrees
-    return decDegrees    
-    
 def GetYoutubeSearchVideos(search_string = "" ,hd = "", orderby = "relevance", time = "all_time"):
     results = []
     if hd and not hd == "false":
@@ -543,7 +464,6 @@ def GetYoutubeUserVideos(userid = ""):
     count = 1
     videos = []
     if results:
-        log(results)
         for item in results["feed"]["entry"]:
             video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
                      'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),

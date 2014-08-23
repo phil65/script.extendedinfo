@@ -1,5 +1,4 @@
-import urllib, xbmc, xbmcaddon,xbmcgui,xbmcvfs,datetime
-import os,sys,time
+import urllib, xbmc, xbmcaddon, xbmcgui, xbmcvfs, datetime, urllib2, os, sys, time
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -409,7 +408,6 @@ def GetStringFromUrl(encurl):
     succeed = 0
     while succeed < 5:
         try: 
-            import urllib2
             req = urllib2.Request(encurl)
             req.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
             res = urllib2.urlopen(req)
@@ -417,7 +415,7 @@ def GetStringFromUrl(encurl):
             log("URL String: " + html)
             return html
         except:
-            log("could not get data from %s" % encurl)
+            log("GetStringFromURL: could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
     return ""

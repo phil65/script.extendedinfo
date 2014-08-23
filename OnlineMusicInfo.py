@@ -5,7 +5,7 @@ import urllib
 
 bandsintown_apikey = 'xbmc_open_source_media_center'
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
-#lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
+googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def HandleBandsInTownResult(results):
@@ -42,8 +42,6 @@ def cleanText(text):
     
 def HandleLastFMEventResult(results):
     events = []
-    log("starting HandleLastFMEventResult based on following JSON answer:")
-    prettyprint(results)
     if "events" in results and results['events'].get("event"):
         for event in results['events']['event']:
             artists = event['artists']['artist']
@@ -63,9 +61,7 @@ def HandleLastFMEventResult(results):
                 search_string = event['venue']['location']['city'] + " " + event['venue']['name']               
             else:
                 search_string = event['venue']['name']
-            log("search string vor venue: " + search_string)
-            from MiscScraper import GetGoogleMap
-            googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "13",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
@@ -141,6 +137,7 @@ def GetEvents(id, pastevents = False):
     try:
         return HandleLastFMEventResult(results)
     except:
+        log("Error in GetEvents()")
         return []
 
 def GetLastFMData(url = "", cache_days = 14):
@@ -161,7 +158,8 @@ def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
     try:
         return HandleLastFMArtistResult(results['artists'])
-    except:
+    except Exception,e:
+        log(e)
         log("Error when finding artist top-tracks from" + url)
         return []
     
@@ -170,7 +168,8 @@ def GetShouts(artistname, albumtitle):
     results = GetLastFMData(url)
     try:
         return HandleLastFMShoutResult(results)
-    except:
+    except Exception,e:
+        log(e)
         log("Error when finding shouts from" + url)
         return []
     
@@ -179,7 +178,8 @@ def GetArtistTopAlbums(mbid):
     results = GetLastFMData(url)
     try:
         return HandleLastFMAlbumResult(results)
-    except:
+    except Exception,e:
+        log(e)
         log("Error when finding topalbums from" + url)
         return []
         
@@ -188,9 +188,9 @@ def GetSimilarById(m_id):
     results = GetLastFMData(url)
     try:
         return HandleLastFMArtistResult(results['similarartists'])
-    except:
+    except Exception,e:
+        log(e)
         log("Error when finding SimilarById from" + url)
-        prettyprint(results)
         return []
         
 def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
@@ -206,7 +206,9 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     results = GetLastFMData(url)
     try:
         return HandleLastFMEventResult(results)
-    except:
+    except Exception,e:
+        log(e)
+        log("Error in GetNearEvents()")
         return []
 
            
