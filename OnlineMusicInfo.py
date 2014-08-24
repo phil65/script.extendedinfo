@@ -1,4 +1,4 @@
-import xbmcaddon, os, xbmc, xbmcvfs, time
+import xbmcaddon, os, xbmc, xbmcvfs, time, sys
 if sys.version_info < (2, 7):
     import simplejson
 else:
