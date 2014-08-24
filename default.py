@@ -131,10 +131,11 @@ class Main:
                 log("startin ArtistDetails")
                 from TheAudioDB import GetDiscography, GetArtistDetails, GetMostLovedTracks, GetMusicVideos
                 ArtistDetails = GetArtistDetails(self.ArtistName)
-                MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
+                if "audiodbid" in ArtistDetails:
+                    MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
+                    passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix)
             #    GetAudioDBData("search.php?s=Blur")
                 GetMostLovedTracks(self.ArtistName)
-                passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix)
             #    from TheAudioDB import GetArtistTopAlbums
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix)
                 passHomeDataToSkin(ArtistDetails)
