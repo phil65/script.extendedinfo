@@ -1,5 +1,8 @@
 import xbmcaddon, os, xbmc, xbmcvfs, time
-import simplejson as json
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 from Utils import *
 import urllib
 
