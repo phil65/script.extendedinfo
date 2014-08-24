@@ -153,7 +153,7 @@ def GetLastFMData(url = "", cache_days = 14):
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
         response = GetStringFromUrl(url)
-        results = json.loads(response)
+        results = simplejson.loads(response)
         save_to_file(results,filename,Addon_Data_Path)
         return results
                       
@@ -234,7 +234,7 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
     try:
         response = GetStringFromUrl(url)
-        results = json.loads(response)
+        results = simplejson.loads(response)
         return HandleBandsInTownResult(results)
     except:
         log("GetArtistNearEvents: error when getting artist data from " + url)
