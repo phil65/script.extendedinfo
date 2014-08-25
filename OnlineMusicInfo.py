@@ -1,4 +1,4 @@
-import xbmcaddon, os, xbmc, xbmcvfs, time, sys
+import xbmcaddon, os, xbmc, xbmcvfs, time, sys, locale
 if sys.version_info < (2, 7):
     import simplejson
 else:
@@ -126,7 +126,7 @@ def HandleLastFMArtistResult(results):
                           'name': artist['name'],
                           'mbid': artist['mbid'],
                           'Thumb': artist['image'][-1]['#text'],
-                          'Listeners':artist.get('listeners',"")  }
+                          'Listeners': locale.format('%i', artist.get('listeners',""), True)  }
                 artists.append(artist)
     except:
         log("Error when handling LastFM TopArtists results")
