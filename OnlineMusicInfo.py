@@ -59,12 +59,13 @@ def HandleLastFMEventResult(results):
                 lat = event['venue']['location']['geo:point']['geo:lat']
                 search_string = ""
             elif event['venue']['location']['street']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
+                search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
             elif event['venue']['location']['city']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['name']               
+                search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
             else:
-                search_string = event['venue']['name']
+                search_string = urllib.quote_plus(event['venue']['name'])
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
+            log(googlemap)
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
