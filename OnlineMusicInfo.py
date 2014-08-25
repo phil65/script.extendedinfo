@@ -122,14 +122,17 @@ def HandleLastFMArtistResult(results):
     try:
         for artist in results['artist']:
             if 'name' in artist:
+                listeners = int(artist.get('listeners',0))
+                
                 artist = {'Title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
                           'Thumb': artist['image'][-1]['#text'],
-                          'Listeners': locale.format('%i', artist.get('listeners',""), True)  }
+                          'Listeners': locale.format('%i', listeners, True)  }
                 artists.append(artist)
-    except:
+    except Exception, e:
         log("Error when handling LastFM TopArtists results")
+        log(e)
     return artists
     
 def GetEvents(id, pastevents = False):
