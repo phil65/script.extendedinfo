@@ -25,7 +25,6 @@ def GetAudioDBData(url = "", cache_days = 0):
 def HandleAudioDBAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    prettyprint(results)
     if 'album' in results and results['album']:
         for album in results['album']:
             localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
@@ -108,7 +107,6 @@ def HandleAudioDBMusicVideoResult(results):
 def GetExtendedAudioDBInfo(results):
     artists = []
     log("starting GetExtendedAudioDBInfo")
-    prettyprint(results)
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
@@ -179,7 +177,6 @@ def GetMostLovedTracks(search_string = "", mbid = ""):
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
     log(url)
     results = GetAudioDBData(url)
-    prettyprint(results)
     if True:
         return HandleAudioDBTrackResult(results)
     else:
@@ -209,8 +206,6 @@ def GetMusicVideos(audiodbid):
 def GetTrackDetails(audiodbid):
     url = 'track.php?m=%s' % (audiodbid)
     results = GetAudioDBData(url)
-    prettyprint("look here")
-    prettyprint(results)
     if True:
         return HandleAudioDBTrackResult(results)
     else:
