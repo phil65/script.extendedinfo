@@ -9,7 +9,7 @@ __addonid__      = __addon__.getAddonInfo('id')
 __language__     = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
-Window = 10000
+window = xbmcgui.Window(10000)
 locallist = []
 
 def AddArtToLibrary( type, media, folder, limit , silent = False):
@@ -515,3 +515,177 @@ def GetMovieSetName(dbid):
         
 def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
+    
+def _set_artist_properties( audio ):
+    count = 1
+    latestyear = 0
+    firstyear = 0
+    playcount = 0
+    for item in audio['result']['albums']:
+        window.setProperty('Artist.Album.%d.Title' % count, item['title'])
+        window.setProperty('Artist.Album.%d.Year' % count, str(item['year']))
+        window.setProperty('Artist.Album.%d.Thumb' % count, item['thumbnail'])
+        window.setProperty('Artist.Album.%d.DBID' % count, str(item.get('albumid')))
+        window.setProperty('Artist.Album.%d.Label' % count, item['albumlabel'])
+        if item['playcount']:
+            playcount = playcount + item['playcount']
+        if item['year']:
+            if item['year'] > latestyear:
+                latestyear = item['year']
+            if firstyear == 0 or item['year'] < firstyear:
+                firstyear = item['year']
+        count += 1
+    window.setProperty('Artist.Albums.Newest', str(latestyear))
+    window.setProperty('Artist.Albums.Oldest', str(firstyear))
+    window.setProperty('Artist.Albums.Count', str(audio['result']['limits']['total']))
+    window.setProperty('Artist.Albums.Playcount', str(playcount))
+
+def set_album_properties( json_query ):
+    count = 1
+    duration = 0
+    discnumber = 0
+    tracklist=""
+    for item in json_query['result']['songs']:
+        window.setProperty('Album.Song.%d.Title' % count, item['title'])
+        tracklist += "[B]" + str(item['track']) + "[/B]: " + item['title'] + "[CR]"
+        array = item['file'].split('.')
+        window.setProperty('Album.Song.%d.FileExtension' % count, str(array[-1]))
+        if item['disc'] > discnumber:
+            discnumber = item['disc']
+        duration += item['duration']
+        count += 1
+    window.setProperty('Album.Songs.Discs', str(discnumber))
+    window.setProperty('Album.Songs.Duration', str(duration))
+    window.setProperty('Album.Songs.Tracklist', tracklist)
+    window.setProperty('Album.Songs.Count', str(json_query['result']['limits']['total']))
+    
+def set_movie_properties( json_query ):
+    count = 1
+    runtime = 0
+    writer = []
+    director = []
+    genre = []
+    country = []
+    studio = []
+    years = []
+    plot = ""
+    title_list = ""
+    title_list += "[B]" + str(json_query['result']['setdetails']['limits']['total']) + " " + xbmc.getLocalizedString(20342) + "[/B][CR][I]"
+    for item in json_query['result']['setdetails']['movies']:
+        art = item['art']
+        window.setProperty('Set.Movie.%d.DBID' % count, str(item.get('movieid')))
+        window.setProperty('Set.Movie.%d.Title' % count, item['label'])
+        window.setProperty('Set.Movie.%d.Plot' % count, item['plot'])
+        window.setProperty('Set.Movie.%d.PlotOutline' % count, item['plotoutline'])
+        window.setProperty('Set.Movie.%d.Path' % count, media_path(item['file']))
+        window.setProperty('Set.Movie.%d.Year' % count, str(item['year']))
+        window.setProperty('Set.Movie.%d.Duration' % count, str(item['runtime']/60))
+        window.setProperty('Set.Movie.%d.Art(clearlogo)' % count, art.get('clearlogo',''))
+        window.setProperty('Set.Movie.%d.Art(discart)' % count, art.get('discart',''))
+        window.setProperty('Set.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
+        window.setProperty('Detail.Movie.%d.Art(fanart)' % count, art.get('fanart',''))
+        window.setProperty('Set.Movie.%d.Art(poster)' % count, art.get('poster',''))
+        window.setProperty('Detail.Movie.%d.Art(poster)' % count, art.get('poster',''))
+        title_list += item['label'] + " (" + str(item['year']) + ")[CR]"            
+        if item['plotoutline']:
+            plot += "[B]" + item['label'] + " (" + str(item['year']) + ")[/B][CR]" + item['plotoutline'] + "[CR][CR]"
+        else:
+            plot += "[B]" + item['label'] + " (" + str(item['year']) + ")[/B][CR]" + item['plot'] + "[CR][CR]"
+        runtime += item['runtime']
+        count += 1
+        if item.get( "writer" ):   writer += [ w for w in item[ "writer" ] if w and w not in writer ]
+        if item.get( "director" ): director += [ d for d in item[ "director" ] if d and d not in director ]
+        if item.get( "genre" ): genre += [ g for g in item[ "genre" ] if g and g not in genre ]
+        if item.get( "country" ): country += [ c for c in item[ "country" ] if c and c not in country ]
+        if item.get( "studio" ): studio += [ s for s in item[ "studio" ] if s and s not in studio ]
+        years.append(str(item['year']))
+    window.setProperty('Set.Movies.Plot', plot)
+    if json_query['result']['setdetails']['limits']['total'] > 1:
+        window.setProperty('Set.Movies.ExtendedPlot', title_list + "[/I][CR]" + plot)
+    else:
+        window.setProperty('Set.Movies.ExtendedPlot', plot)        
+    window.setProperty('Set.Movies.Runtime', str(runtime/60))
+    window.setProperty('Set.Movies.Writer', " / ".join( writer ))
+    window.setProperty('Set.Movies.Director', " / ".join( director ))
+    window.setProperty('Set.Movies.Genre', " / ".join( genre ))
+    window.setProperty('Set.Movies.Country', " / ".join( country ))
+    window.setProperty('Set.Movies.Studio', " / ".join( studio ))
+    window.setProperty('Set.Movies.Years', " / ".join( years ))
+    window.setProperty('Set.Movies.Count', str(json_query['result']['setdetails']['limits']['total']))
+    
+def clear_properties():
+    for i in range(1,50):
+        window.clearProperty('Artist.Album.%d.Title' % i)
+        window.clearProperty('Artist.Album.%d.Plot' % i)
+        window.clearProperty('Artist.Album.%d.PlotOutline' % i)
+        window.clearProperty('Artist.Album.%d.Year' % i)
+        window.clearProperty('Artist.Album.%d.Duration' % i)
+        window.clearProperty('Artist.Album.%d.Thumb' % i)
+        window.clearProperty('Artist.Album.%d.ID' % i)
+        window.clearProperty('Album.Song.%d.Title' % i)
+        window.clearProperty('Album.Song.%d.FileExtension' % i)   
+        window.clearProperty('Set.Movie.%d.Art(clearlogo)' % i)
+        window.clearProperty('Set.Movie.%d.Art(fanart)' % i)
+        window.clearProperty('Set.Movie.%d.Art(poster)' % i)
+        window.clearProperty('Set.Movie.%d.Art(discart)' % i)
+        window.clearProperty('Detail.Movie.%d.Art(poster)' % i)
+        window.clearProperty('Detail.Movie.%d.Art(fanart)' % i)
+        window.clearProperty('Detail.Movie.%d.Art(Path)' % i)
+    window.clearProperty('Album.Songs.TrackList')   
+    window.clearProperty('Album.Songs.Discs')   
+    window.clearProperty('Artist.Albums.Newest')   
+    window.clearProperty('Artist.Albums.Oldest')   
+    window.clearProperty('Artist.Albums.Count')   
+    window.clearProperty('Artist.Albums.Playcount')   
+    window.clearProperty('Album.Songs.Discs')   
+    window.clearProperty('Album.Songs.Duration')   
+    window.clearProperty('Album.Songs.Count')   
+    window.clearProperty('Set.Movies.Plot')   
+    window.clearProperty('Set.Movies.ExtendedPlot')   
+    window.clearProperty('Set.Movies.Runtime')   
+    window.clearProperty('Set.Movies.Writer')   
+    window.clearProperty('Set.Movies.Director')   
+    window.clearProperty('Set.Movies.Genre')   
+    window.clearProperty('Set.Movies.Years')   
+    window.clearProperty('Set.Movies.Count')   
+    
+def GetImdbID(type,dbid):
+    if type=="movie":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "moviedetails" in json_response["result"]:
+            return json_response['result']['moviedetails']['imdbnumber']
+        else:
+            return []
+    elif type == "tvshow":
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "tvshowdetails" in json_response["result"]:
+            return json_response['result']['tvshowdetails']['imdbnumber']
+        else:
+            return []
+
+def passHomeDataToSkin(data, debug = True):
+    if data != None:
+        for (key,value) in data.iteritems():
+            window.setProperty('%s' % (str(key)), unicode(value))
+            if debug:
+                log('%s' % (str(key)) + unicode(value))
+               
+def passDataToSkin(name, data, prefix="",debug = False):
+    if data != None:
+       # log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+        for (count, result) in enumerate(data):
+            if debug:
+                log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )
+            for (key,value) in result.iteritems():
+                window.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+                if debug:
+                    log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + unicode(value))
+        window.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+    else:
+        window.setProperty('%s%s.Count' % (prefix, name), '0')
+        log( "%s%s.Count = None" % (prefix, name ) )
+    
