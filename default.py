@@ -51,7 +51,7 @@ def passHomeDataToSkin(data, debug = True):
 def passDataToSkin(name, data, prefix="",debug = False):
     wnd = xbmcgui.Window(Window)
     if data != None:
-        log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+       # log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
             if debug:
                 log( "%s%s.%i = %s" % (prefix, name, count + 1, str(result) ) )

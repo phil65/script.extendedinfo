@@ -82,9 +82,9 @@ def GetLocationNames(search_string):
         response = GetStringFromUrl(url)
         results = simplejson.loads(response)
         components = results["results"][0]["address_components"]
-        for item in components:
-            if "country" in item["type"]:
-                log(item["short_name"])
+   #     for item in components:
+    #        if "country" in item["type"]:
+      #          log(item["short_name"])
         return (item["short_name"])
     except Exception,e:
         log(e)
@@ -129,7 +129,7 @@ def GetRottenTomatoesMoviesOpening(type):
         log("Error when fetching RottenTomatoes data from net")
     count = 1
     if results:
-        log(results)
+ #       log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -184,7 +184,7 @@ def GetRottenTomatoesMoviesBoxOffice(type):
         log("Error when fetching RottenTomatoes data from net")
     count = 1
     if results:
-        log(results)
+    #    log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -343,7 +343,7 @@ def GetTrendingMovies():
     filename = Addon_Data_Path + "/trendingmovies.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-        log(results)
+   #     log(results)
         return HandleTraktMovieResult(results)
     else:  
         try:
@@ -361,7 +361,6 @@ def GetSimilarTrakt(type,imdb_id):
     movies = []
     shows = []
     results = ""
-    log("Similar ID is " + str(imdb_id))
     if type == "tvshow":
         type = "show"
     filename = Addon_Data_Path + "/similar" + type + imdb_id + ".txt"

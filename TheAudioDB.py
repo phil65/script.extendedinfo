@@ -18,7 +18,6 @@ def GetAudioDBData(url = "", cache_days = 0):
         url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
         response = GetStringFromUrl(url)
         results = json.loads(response)
-        log("look here")
         save_to_file(results,filename,Addon_Data_Path)
         return results
         
@@ -175,7 +174,7 @@ def GetMostLovedTracks(search_string = "", mbid = ""):
         pass
     else:
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
-    log(url)
+    log("GetMostLoveTracks URL:" + url)
     results = GetAudioDBData(url)
     if True:
         return HandleAudioDBTrackResult(results)

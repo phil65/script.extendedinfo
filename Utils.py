@@ -173,7 +173,6 @@ def GetSimilarArtistsInLibrary(id):
                              "Instrument"  : " / ".join(item['instrument']),
                              "LibraryPath" : 'musicdb://artists/' + str(item['artistid']) + '/' }                         
                 artists.append(newartist)
-                log(newartist)
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists    
             
@@ -354,7 +353,7 @@ def CompareWithLibrary(onlinelist):
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"],localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
-                log("compare success" + onlineitem["Title"])
+       #         log("compare success" + onlineitem["Title"])
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
@@ -362,7 +361,6 @@ def CompareWithLibrary(onlinelist):
                     difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
                     if difference >-2 and difference <2:
                         streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
-                        log(localitem)
                         onlineitem.update({"Play": localitem["movieid"]})             
                         onlineitem.update({"DBID": localitem["movieid"]})             
                         onlineitem.update({"Path": localitem["movieid"]})             
@@ -446,8 +444,7 @@ def save_to_file(content, filename, path = "" ):
             if not xbmcvfs.exists(path):
                 xbmcvfs.mkdir(path)
             text_file_path = os.path.join(path,filename + ".txt")
-        log("save to textfile:")
-        log(text_file_path)
+        log("save to textfile: " + text_file_path)
         text_file =  xbmcvfs.File(text_file_path,"w")
         simplejson.dump(content,text_file)
         text_file.close()
