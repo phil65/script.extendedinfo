@@ -15,11 +15,15 @@ def GetAudioDBData(url = "", cache_days = 0):
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
         return read_from_file(path)
     else:
-        url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
-        response = GetStringFromUrl(url)
-        results = json.loads(response)
-        save_to_file(results,filename,Addon_Data_Path)
-        return results
+        try:
+            url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
+            response = GetStringFromUrl(url)
+            results = json.loads(response)
+            save_to_file(results,filename,Addon_Data_Path)
+            return results
+        except:
+            log("GetAudioDBData failed with answer: " + response)
+            return []
         
 def HandleAudioDBAlbumResult(results):
     albums = []
