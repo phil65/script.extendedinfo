@@ -314,8 +314,8 @@ def GetTrendingShows():
             results = simplejson.loads(response)
             save_to_file(results,"trendingshows",Addon_Data_Path)
         except Exception, e:
-            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
+            log(e)
         if results:
             return HandleTraktTVShowResult(results)
             
@@ -332,8 +332,8 @@ def GetTVShowInfo(id):
             results = simplejson.loads(response)
             save_to_file(results,"tvshow" + id,Addon_Data_Path)
         except Exception, e:
-            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
+            log(e)
         if results:
             return HandleTraktTVShowResult([results])
                        
@@ -351,8 +351,8 @@ def GetTrendingMovies():
             response = GetStringFromUrl(url)
             results = simplejson.loads(response)
         except Exception, e:
-            log( str( e ), xbmc.LOGERROR )
             log("Error when fetching  trending data from Trakt.tv")
+            log(e)
         count = 1
         if results:
             return HandleTraktMovieResult(results)
