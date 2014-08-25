@@ -88,6 +88,7 @@ def HandleAudioDBTrackResult(results):
             tracks.append(track)
     else:
         log("Error when handling HandleAudioDBTrackResult results")
+        prettyprint(results)
     return tracks
     
 def HandleAudioDBMusicVideoResult(results):

@@ -86,7 +86,8 @@ def HandleLastFMEventResult(results):
                      'headliner': event['artists']['headliner']  }
             events.append(event)
     else:
-        log("Error when handling LastFM results")
+        log("Error in HandleLastFMEventResult. JSON query follows:")
+        prettyprint(results)
     return events
        
 def HandleLastFMAlbumResult(results):
@@ -100,7 +101,8 @@ def HandleLastFMAlbumResult(results):
                      'name':album['name']  }
             albums.append(album)
     except:
-        log("Error when handling LastFM results")
+        log("Error in HandleLastFMAlbumResult. JSON query follows:")
+        prettyprint(results)
     return albums
            
 def HandleLastFMShoutResult(results):
@@ -123,7 +125,7 @@ def HandleLastFMArtistResult(results):
         for artist in results['artist']:
             if 'name' in artist:
                 listeners = int(artist.get('listeners',0))
-                
+                log(locale.format('%i', listeners, True))
                 artist = {'Title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
