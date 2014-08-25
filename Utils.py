@@ -253,7 +253,7 @@ def GetSimilarFromOwnLibrary(dbid):
                                         'ID': movie.get('imdbnumber',""),
                                         'Path': "",
                                         'Play': "",
-                                        'DBID': "",
+                                        'DBID': str(movie['movieid']),
                                         'Rating': str(round(float(movie['rating']),1)),
                                         'Premiered':movie.get('year',"")  }
                             movies.append(newmovie)
