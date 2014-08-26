@@ -516,7 +516,7 @@ def GetMovieSetName(dbid):
 def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
     
-def _set_artist_properties( audio ):
+def set_artist_properties( audio ):
     count = 1
     latestyear = 0
     firstyear = 0

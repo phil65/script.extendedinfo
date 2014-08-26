@@ -51,6 +51,7 @@ class Daemon:
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
+            log("Daemon active")
             if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
@@ -122,7 +123,7 @@ class Daemon:
                     json_query = simplejson.loads(json_query)
                     clear_properties()
                     if json_query['result'].has_key('albums'):
-                        _set_artist_properties(json_query)
+                        set_artist_properties(json_query)
                     b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
                     a = datetime.datetime.now()
@@ -623,7 +624,7 @@ class Main:
                     json_query = simplejson.loads(json_query)
                     clear_properties()
                     if json_query['result'].has_key('albums'):
-                        _set_artist_properties(json_query)
+                        set_artist_properties(json_query)
                     b = datetime.datetime.now() - a
                 elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
                     a = datetime.datetime.now()
