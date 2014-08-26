@@ -65,7 +65,6 @@ def HandleLastFMEventResult(results):
             else:
                 search_string = urllib.quote_plus(event['venue']['name'])
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
-            log(googlemap)
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
@@ -125,7 +124,6 @@ def HandleLastFMArtistResult(results):
         for artist in results['artist']:
             if 'name' in artist:
                 listeners = int(artist.get('listeners',0))
-                log(format(listeners, ",d"))
                 artist = {'Title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
@@ -223,7 +221,6 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
            
 def GetVenueEvents(id = ""):
     url = 'method=venue.getevents&venue=%s' % (id)
-    log('GetVenueEvents request: %s' % url)
     results = GetLastFMData(url)
     try:
         return HandleLastFMEventResult(results)
