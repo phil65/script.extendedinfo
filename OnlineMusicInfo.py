@@ -211,12 +211,8 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     if lat:
         url = url + '&lat=%s&long=%s' % (lat,lon)  # &distance=60
     results = GetLastFMData(url)
-    try:
-        return HandleLastFMEventResult(results)
-    except Exception,e:
-        log(e)
-        log("Error in GetNearEvents()")
-        return []
+    prettyprint(results)
+    return HandleLastFMEventResult(results)
 
            
 def GetVenueEvents(id = ""):
