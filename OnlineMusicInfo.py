@@ -1,10 +1,14 @@
-import xbmcaddon, os, xbmc, xbmcvfs, time
-import simplejson as json
+import xbmcaddon, os, xbmc, xbmcvfs, time, sys
+if sys.version_info < (2, 7):
+    import simplejson
+else:
+    import json as simplejson
 from Utils import *
 import urllib
 
 bandsintown_apikey = 'xbmc_open_source_media_center'
-lastfm_apikey = 'bb258101395ce46c63843bd6261e3fc8'
+lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
+googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def HandleBandsInTownResult(results):
@@ -41,8 +45,7 @@ def cleanText(text):
     
 def HandleLastFMEventResult(results):
     events = []
-    log("starting HandleLastFMEventResult")
-    if results['events'].get("event"):
+    if "events" in results and results['events'].get("event"):
         for event in results['events']['event']:
             artists = event['artists']['artist']
             if isinstance(artists, list):
@@ -50,20 +53,21 @@ def HandleLastFMEventResult(results):
             else:
                 my_arts = artists
             lat = ""
-            lon = ""               
-            if event['venue']['location']['geo:point']['geo:long']:
-                lon = event['venue']['location']['geo:point']['geo:long']
-                lat = event['venue']['location']['geo:point']['geo:lat']
+            lon = ""
+            try:
+                if event['venue']['location']['geo:point']['geo:long']:
+                    lon = event['venue']['location']['geo:point']['geo:long']
+                    lat = event['venue']['location']['geo:point']['geo:lat']
+                    search_string = lat + "," + lon
+                elif event['venue']['location']['street']:
+                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
+                elif event['venue']['location']['city']:
+                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
+                else:
+                    search_string = urllib.quote_plus(event['venue']['name'])
+            except:
                 search_string = ""
-            elif event['venue']['location']['street']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['location']['street']
-            elif event['venue']['location']['city']:
-                search_string = event['venue']['location']['city'] + " " + event['venue']['name']               
-            else:
-                search_string = event['venue']['name']
-            log("search string vor venue: " + search_string)
-            from MiscScraper import GetGoogleMap
-            googlemap = GetGoogleMap(mode = "normal",search_string = search_string,zoomlevel = "13",type = "roadmap",aspect = "square", lat=lat,lon=lon,direction = "")
+            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
             event = {'date': event['startDate'],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
@@ -84,21 +88,23 @@ def HandleLastFMEventResult(results):
                      'headliner': event['artists']['headliner']  }
             events.append(event)
     else:
-        log("Error when handling LastFM results")
+        log("Error in HandleLastFMEventResult. JSON query follows:")
+     #   prettyprint(results)
     return events
        
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    if True:
+    try:
         for album in results['topalbums']['album']:
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
                      'thumb': album['image'][-1]['#text'],
                      'name':album['name']  }
             albums.append(album)
-    else:
-        log("Error when handling LastFM results")
+    except:
+        log("Error in HandleLastFMAlbumResult. JSON query follows:")
+   #     prettyprint(results)
     return albums
            
 def HandleLastFMShoutResult(results):
@@ -117,17 +123,19 @@ def HandleLastFMShoutResult(results):
 def HandleLastFMArtistResult(results):
     artists = []
     log("starting HandleLastFMArtistResult")
-    if True:
+    try:
         for artist in results['artist']:
             if 'name' in artist:
+                listeners = int(artist.get('listeners',0))
                 artist = {'Title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
                           'Thumb': artist['image'][-1]['#text'],
-                          'Listeners':artist.get('listeners',"")  }
+                          'Listeners': format(listeners, ",d")  }
                 artists.append(artist)
-    else:
+    except Exception, e:
         log("Error when handling LastFM TopArtists results")
+        log(e)
     return artists
     
 def GetEvents(id, pastevents = False):
@@ -136,9 +144,10 @@ def GetEvents(id, pastevents = False):
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMEventResult(results)
-    else:
+    except:
+        log("Error in GetEvents()")
         return []
 
 def GetLastFMData(url = "", cache_days = 14):
@@ -151,43 +160,46 @@ def GetLastFMData(url = "", cache_days = 14):
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
         response = GetStringFromUrl(url)
-        results = json.loads(response)
+        results = simplejson.loads(response)
         save_to_file(results,filename,Addon_Data_Path)
         return results
                       
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
-    if True:
+    try:
         return HandleLastFMArtistResult(results['artists'])
-    else:
+    except Exception,e:
+        log(e)
         log("Error when finding artist top-tracks from" + url)
         return []
     
 def GetShouts(artistname, albumtitle):
     url = 'method=album.getshouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMShoutResult(results)
-    else:
+    except Exception,e:
+        log(e)
         log("Error when finding shouts from" + url)
         return []
     
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMAlbumResult(results)
-    else:
+    except Exception,e:
+        log(e)
         log("Error when finding topalbums from" + url)
         return []
         
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
     results = GetLastFMData(url)
-    prettyprint(results)
-    if True:
+    try:
         return HandleLastFMArtistResult(results['similarartists'])
-    else:
+    except Exception,e:
+        log(e)
         log("Error when finding SimilarById from" + url)
         return []
         
@@ -202,19 +214,16 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     if lat:
         url = url + '&lat=%s&long=%s' % (lat,lon)  # &distance=60
     results = GetLastFMData(url)
-    if True:
-        return HandleLastFMEventResult(results)
-    else:
-        return []
+ #   prettyprint(results)
+    return HandleLastFMEventResult(results)
 
            
 def GetVenueEvents(id = ""):
     url = 'method=venue.getevents&venue=%s' % (id)
-    log('GetVenueEvents request: %s' % url)
     results = GetLastFMData(url)
-    if True:
+    try:
         return HandleLastFMEventResult(results)
-    else:
+    except:
         log("GetVenueEvents: error getting concert data from " + url)
         return []
 
@@ -225,10 +234,10 @@ def GetArtistNearEvents(Artists): # not possible with api 2.0
              ArtistStr = ArtistStr + '&'
         ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
     url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    if True:
+    try:
         response = GetStringFromUrl(url)
-        results = json.loads(response)
+        results = simplejson.loads(response)
         return HandleBandsInTownResult(results)
-    else:
+    except:
         log("GetArtistNearEvents: error when getting artist data from " + url)
         return []

@@ -15,17 +15,19 @@ def GetAudioDBData(url = "", cache_days = 0):
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
         return read_from_file(path)
     else:
-        url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
-        response = GetStringFromUrl(url)
-        results = json.loads(response)
-        log("look here")
-        save_to_file(results,filename,Addon_Data_Path)
-        return results
+        try:
+            url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
+            response = GetStringFromUrl(url)
+            results = json.loads(response)
+            save_to_file(results,filename,Addon_Data_Path)
+            return results
+        except:
+            log("GetAudioDBData failed with answer: " + response)
+            return []
         
 def HandleAudioDBAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    prettyprint(results)
     if 'album' in results and results['album']:
         for album in results['album']:
             localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
@@ -86,6 +88,7 @@ def HandleAudioDBTrackResult(results):
             tracks.append(track)
     else:
         log("Error when handling HandleAudioDBTrackResult results")
+        prettyprint(results)
     return tracks
     
 def HandleAudioDBMusicVideoResult(results):
@@ -108,7 +111,6 @@ def HandleAudioDBMusicVideoResult(results):
 def GetExtendedAudioDBInfo(results):
     artists = []
     log("starting GetExtendedAudioDBInfo")
-    prettyprint(results)
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
@@ -177,9 +179,8 @@ def GetMostLovedTracks(search_string = "", mbid = ""):
         pass
     else:
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
-    log(url)
+    log("GetMostLoveTracks URL:" + url)
     results = GetAudioDBData(url)
-    prettyprint(results)
     if True:
         return HandleAudioDBTrackResult(results)
     else:
@@ -209,8 +210,6 @@ def GetMusicVideos(audiodbid):
 def GetTrackDetails(audiodbid):
     url = 'track.php?m=%s' % (audiodbid)
     results = GetAudioDBData(url)
-    prettyprint("look here")
-    prettyprint(results)
     if True:
         return HandleAudioDBTrackResult(results)
     else:
