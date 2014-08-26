@@ -28,6 +28,7 @@ def HandleTheMovieDBMovieResult(results):
                         'Play': "",
                         'DBID': "",
                         'Rating': movie.get('vote_average',""),
+                        'Votes': movie.get('vote_count',""),
                         'Year': movie.get('release_date',"")[:4],
                         'Premiered': movie.get('release_date',"")  }
             if not str(movie['id']) in str(movies): ## too dirty
@@ -52,6 +53,7 @@ def HandleTheMovieDBTVShowResult(results):
                     'Play': "",
                     'DBID': "",
                     'Rating': tv.get('vote_average',""),
+                    'Votes': tv.get('vote_count',""),
                     'Premiered': tv.get('first_air_date',"")  }
             if not str(tv['id']) in str(tvshows): ## too dirty
                 tvshows.append(newtv)
