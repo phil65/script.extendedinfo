@@ -249,7 +249,7 @@ class Main:
                 if self.id:
                     AlbumDetails = GetAlbumDetails(self.id)
                     Trackinfo = GetTrackDetails(self.id)
-                    prettyprint(AlbumDetails)
+              #      prettyprint(AlbumDetails)
                     passHomeDataToSkin(AlbumDetails)
                     passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)      
             elif info == 'shouts':

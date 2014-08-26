@@ -89,7 +89,7 @@ def HandleLastFMEventResult(results):
             events.append(event)
     else:
         log("Error in HandleLastFMEventResult. JSON query follows:")
-        prettyprint(results)
+     #   prettyprint(results)
     return events
        
 def HandleLastFMAlbumResult(results):
@@ -104,7 +104,7 @@ def HandleLastFMAlbumResult(results):
             albums.append(album)
     except:
         log("Error in HandleLastFMAlbumResult. JSON query follows:")
-        prettyprint(results)
+   #     prettyprint(results)
     return albums
            
 def HandleLastFMShoutResult(results):
@@ -214,7 +214,7 @@ def GetNearEvents(tag = False,festivalsonly = False, lat = "", lon = ""):
     if lat:
         url = url + '&lat=%s&long=%s' % (lat,lon)  # &distance=60
     results = GetLastFMData(url)
-    prettyprint(results)
+ #   prettyprint(results)
     return HandleLastFMEventResult(results)
 
            

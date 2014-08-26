@@ -121,7 +121,7 @@ def create_channel_list():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "PVR.GetChannels", "params": {"properties": ["thumbnail","channeltype", "hidden", "locked", "channel", "lastplayed"], "channelgroupid": "alltv" }, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
-    prettyprint(json_query)
+#    prettyprint(json_query)
     if json_query['result'] != None and "movies" in json_query["result"]:
         return json_query
     else:
