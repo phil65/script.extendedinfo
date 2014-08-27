@@ -196,73 +196,72 @@ def GetSimilarFromOwnLibrary(dbid):
     movies = []
 #    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
-    if True:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    if "moviedetails" in json_response['result']:
+        id = json_response['result']['moviedetails']['movieid']
+        genres = json_response['result']['moviedetails']['genre']
+        year = int(json_response['result']['moviedetails']['year'])
+        countries = json_response['result']['moviedetails']['country']
+        directors = json_response['result']['moviedetails']['director']
+        mpaa = json_response['result']['moviedetails']['mpaa']
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if "moviedetails" in json_response['result']:
-            id = json_response['result']['moviedetails']['movieid']
-            genres = json_response['result']['moviedetails']['genre']
-            year = int(json_response['result']['moviedetails']['year'])
-            countries = json_response['result']['moviedetails']['country']
-            directors = json_response['result']['moviedetails']['director']
-            mpaa = json_response['result']['moviedetails']['mpaa']
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_query = simplejson.loads(json_query)
-            if "movies" in json_query['result']:
-                quotalist= []
-                for item in json_query['result']['movies']:
-                    difference = int(item['year']) - year
-                    hit = 0.0
-                    miss = 0.0
-                    quota = 0.0 
-                    for genre in genres:
-                        if genre in item['genre']:
-                            hit += 1.0
-                        else:
-                            miss += 1.0
-                    miss += 0.00001
-                    if hit > 0.0:
-                        quota = float(hit) / float(hit + miss)
-                    if genres[0] == item['genre'][0]:
-                        quota += 0.3 
-                    if difference < 6 and difference > -6:
-                        quota += 0.15
-                    if difference < 3 and difference > -3:
-                        quota += 0.15
-                    if countries[0] == item['country'][0]:
-                        quota += 0.4  
-                    if mpaa == item['mpaa']:
-                        quota += 0.4
-                    if directors[0] == item['director'][0]:
-                        quota += 0.6
-                    quotalist.append((quota,item["movieid"]))
-                if True:
-                    quotalist = sorted(quotalist, key=lambda quota: quota[0],reverse=True)
-                    count = 1
-                    for list_movie in quotalist:
-                        if id <> list_movie[1]:
-                            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
-                            json_query = unicode(json_query, 'utf-8', errors='ignore')
-                            json_response = simplejson.loads(json_query)
-                            movie = json_response["result"]["moviedetails"]
-                            newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
-                                        'Art(poster)': movie["art"].get('poster',""),
-                                        'Title': movie.get('label',""),
-                                        'OriginalTitle': movie.get('originaltitle',""),
-                                        'ID': movie.get('imdbnumber',""),
-                                        'Path': "",
-                                        'Play': "",
-                                        'DBID': str(movie['movieid']),
-                                        'Rating': str(round(float(movie['rating']),1)),
-                                        'Premiered':movie.get('year',"")  }
-                            movies.append(newmovie)
-                            count += 1
-                            if count > 20:
-                                break
-                        
-                return movies
+        json_query = simplejson.loads(json_query)
+        if "movies" in json_query['result']:
+            quotalist= []
+            for item in json_query['result']['movies']:
+                difference = int(item['year']) - year
+                hit = 0.0
+                miss = 0.0
+                quota = 0.0 
+                for genre in genres:
+                    if genre in item['genre']:
+                        hit += 1.0
+                    else:
+                        miss += 1.0
+                miss += 0.00001
+                if hit > 0.0:
+                    quota = float(hit) / float(hit + miss)
+                if genres[0] == item['genre'][0]:
+                    quota += 0.3 
+                if difference < 6 and difference > -6:
+                    quota += 0.15
+                if difference < 3 and difference > -3:
+                    quota += 0.15
+                if countries[0] == item['country'][0]:
+                    quota += 0.4  
+                if mpaa == item['mpaa']:
+                    quota += 0.4
+                if directors[0] == item['director'][0]:
+                    quota += 0.6
+                quotalist.append((quota,item["movieid"]))
+            if True:
+                quotalist = sorted(quotalist, key=lambda quota: quota[0],reverse=True)
+                count = 1
+                for list_movie in quotalist:
+                    if id <> list_movie[1]:
+                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
+                        json_query = unicode(json_query, 'utf-8', errors='ignore')
+                        json_response = simplejson.loads(json_query)
+                        movie = json_response["result"]["moviedetails"]
+                        newmovie = {'Art(fanart)': movie["art"].get('fanart',""),
+                                    'Art(poster)': movie["art"].get('poster',""),
+                                    'Title': movie.get('label',""),
+                                    'OriginalTitle': movie.get('originaltitle',""),
+                                    'ID': movie.get('imdbnumber',""),
+                                    'Path': "",
+                                    'Play': "",
+                                    'DBID': str(movie['movieid']),
+                                    'Rating': str(round(float(movie['rating']),1)),
+                                    'Premiered':movie.get('year',"")  }
+                        movies.append(newmovie)
+                        count += 1
+                        if count > 20:
+                            break
+                    
+            return movies
             
 def media_streamdetails(filename, streamdetails):
     info = {}
@@ -438,37 +437,27 @@ def get_browse_dialog( default="", heading="Browse", dlg_type=3, shares="files",
         
 def save_to_file(content, filename, path = "" ):
     import xbmcvfs
-    if True:
-        if path == "":
-            text_file_path = get_browse_dialog() + filename + ".txt"
-        else:
-            if not xbmcvfs.exists(path):
-                xbmcvfs.mkdir(path)
-            text_file_path = os.path.join(path,filename + ".txt")
-        log("save to textfile: " + text_file_path)
-        text_file =  xbmcvfs.File(text_file_path,"w")
-        simplejson.dump(content,text_file)
-        text_file.close()
-        return True
+    if path == "":
+        text_file_path = get_browse_dialog() + filename + ".txt"
     else:
-        return False
+        if not xbmcvfs.exists(path):
+            xbmcvfs.mkdir(path)
+        text_file_path = os.path.join(path,filename + ".txt")
+    log("save to textfile: " + text_file_path)
+    text_file =  xbmcvfs.File(text_file_path,"w")
+    simplejson.dump(content,text_file)
+    text_file.close()
+    return True
         
 def read_from_file(path = "" ):
     import xbmcvfs
     log("trying to load " + path)
-    # Set path
     if path == "":
         path = get_browse_dialog(dlg_type=1)
-    # Check to see if file exists
     if xbmcvfs.exists( path ):
         with open(path) as f: fc = simplejson.load(f)
         log("loaded textfile " + path)
-        if True:
-            return fc
-        else:
-            log("error when loading file")
-            log(fc)
-            return []
+        return fc
     else:
         return False
 
@@ -615,7 +604,7 @@ def set_movie_properties( json_query ):
     window.setProperty('Set.Movies.Count', str(json_query['result']['setdetails']['limits']['total']))
     
 def clear_properties():
-    for i in range(1,50):
+    for i in range(1,40):
         window.clearProperty('Artist.Album.%d.Title' % i)
         window.clearProperty('Artist.Album.%d.Plot' % i)
         window.clearProperty('Artist.Album.%d.PlotOutline' % i)

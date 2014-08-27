@@ -27,7 +27,6 @@ def GetAudioDBData(url = "", cache_days = 0):
         
 def HandleAudioDBAlbumResult(results):
     albums = []
-    log("starting HandleLastFMAlbumResult")
     if 'album' in results and results['album']:
         for album in results['album']:
             localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
@@ -68,7 +67,6 @@ def HandleAudioDBAlbumResult(results):
     
 def HandleAudioDBTrackResult(results):
     tracks = []
-    log("starting HandleAudioDBTrackResult")
  #   prettyprint(results)
     if 'track' in results and results['track']:
         for track in results['track']:
@@ -93,7 +91,6 @@ def HandleAudioDBTrackResult(results):
     
 def HandleAudioDBMusicVideoResult(results):
     mvids = []
-    log("starting HandleAudioDBMusicVideoResult")
  #   prettyprint(results)
     if 'mvids' in results and results['mvids']:
         for mvid in results['mvids']:
@@ -110,7 +107,6 @@ def HandleAudioDBMusicVideoResult(results):
        
 def GetExtendedAudioDBInfo(results):
     artists = []
-    log("starting GetExtendedAudioDBInfo")
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
@@ -160,19 +156,13 @@ def GetExtendedAudioDBInfo(results):
 def GetDiscography(search_string):
     url = 'searchalbum.php?s=%s' % (urllib.quote_plus(search_string))
     results = GetAudioDBData(url)
-    if True:
-        return HandleAudioDBAlbumResult(results)
-    else:
-        return []
+    return HandleAudioDBAlbumResult(results)
         
 def GetArtistDetails(search_string):
     url = 'search.php?s=%s' % (urllib.quote_plus(search_string))
     results = GetAudioDBData(url)
    # prettyprint(results)
-    if True:
-        return GetExtendedAudioDBInfo(results)
-    else:
-        return []
+    return GetExtendedAudioDBInfo(results)
               
 def GetMostLovedTracks(search_string = "", mbid = ""):
     if mbid:
@@ -181,10 +171,7 @@ def GetMostLovedTracks(search_string = "", mbid = ""):
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
     log("GetMostLoveTracks URL:" + url)
     results = GetAudioDBData(url)
-    if True:
-        return HandleAudioDBTrackResult(results)
-    else:
-        return []
+    return HandleAudioDBTrackResult(results)
         
         
 def GetAlbumDetails(audiodbid = "", mbid = ""):
@@ -194,24 +181,16 @@ def GetAlbumDetails(audiodbid = "", mbid = ""):
         url = 'album-mb.php?i=%s' % (mbid)
     results = GetAudioDBData(url)
   #  prettyprint(results)
-    if True:
-        return HandleAudioDBAlbumResult(results)[0]
-    else:
-        return []
+    return HandleAudioDBAlbumResult(results)[0]
         
 def GetMusicVideos(audiodbid):
     url = 'mvid.php?i=%s' % (audiodbid)
     results = GetAudioDBData(url)
-    if True:
-        return HandleAudioDBMusicVideoResult(results)
-    else:
-        return []
+    return HandleAudioDBMusicVideoResult(results)
         
 def GetTrackDetails(audiodbid):
     url = 'track.php?m=%s' % (audiodbid)
     results = GetAudioDBData(url)
-    if True:
-        return HandleAudioDBTrackResult(results)
-    else:
-        return []
+    return HandleAudioDBTrackResult(results)
+
         

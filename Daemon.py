@@ -114,7 +114,7 @@ class Daemon:
                 self._stop = True
             xbmc.sleep(100)     
 
-    def _set_song_details( self, dbid ):
+    def _set_song_details( self, dbid ): #unused, needs fixing
         try:
             b = ""
             a = datetime.datetime.now()
@@ -148,12 +148,12 @@ class Daemon:
     def _set_movie_details( self, dbid ):
         try:
             if xbmc.getCondVisibility('Container.Content(movies)') or self.type == "movie":
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","set","setid","cast"], "movieid":%s }, "id": 1}' % dbid)
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 log(json_query)
                 json_response = simplejson.loads(json_query)
                 if json_response['result'].has_key('moviedetails'):
-                    self._set_properties(json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
+                    self._set_properties(json_response)
         except Exception, e:
             log(e)
 
@@ -232,11 +232,13 @@ class Daemon:
             else:
                 clear_properties()
 
-    def _set_properties( self, audio, subtitles ):
+    def _set_properties( self, results ):
         # Set language properties
         count = 1
+        audio = results['result']['moviedetails']['streamdetails']['audio']
+        subtitles = results['result']['moviedetails']['streamdetails']['subtitle']
         # Clear properties before setting new ones
-   #     self._clear_properties()
+        clear_properties()
         for item in audio:
             self.wnd.setProperty('AudioLanguage.%d' % count, item['language'])
             self.wnd.setProperty('AudioCodec.%d' % count, item['codec'])

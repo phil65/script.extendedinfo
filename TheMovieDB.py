@@ -16,98 +16,81 @@ fanart_size = ""
 def HandleTheMovieDBMovieResult(results):
     movies = []
     log("starting HandleTheMovieDBMovieResult")
-    if True:
-        for movie in results:
-            log(movie)
-            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path',"")),
-                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path',"")),
-                        'Title': movie.get('title',""),
-                        'OriginalTitle': movie.get('original_title',""),
-                        'ID': movie.get('id',""),
-                        'Path': "",
-                        'Play': "",
-                        'DBID': "",
-                        'Rating': movie.get('vote_average',""),
-                        'Votes': movie.get('vote_count',""),
-                        'Year': movie.get('release_date',"")[:4],
-                        'Premiered': movie.get('release_date',"")  }
-            if not str(movie['id']) in str(movies): ## too dirty
-                movies.append(newmovie)
-    else:
-        log("Error when handling TheMovieDB movie results")
+    for movie in results:
+        newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path',"")),
+                    'Art(poster)': base_url + poster_size + str(movie.get('poster_path',"")),
+                    'Title': movie.get('title',""),
+                    'OriginalTitle': movie.get('original_title',""),
+                    'ID': movie.get('id',""),
+                    'Path': "",
+                    'Play': "",
+                    'DBID': "",
+                    'Rating': movie.get('vote_average',""),
+                    'Votes': movie.get('vote_count',""),
+                    'Year': movie.get('release_date',"")[:4],
+                    'Premiered': movie.get('release_date',"")  }
+        if not str(movie['id']) in str(movies): ## too dirty
+            movies.append(newmovie)
     movies = CompareWithLibrary(movies)
     return movies
 
 def HandleTheMovieDBTVShowResult(results):
     tvshows = []
     log("starting HandleTheMovieDBTVShowResult")
-    if True:
-        for tv in results:
-            log(tv)
-            newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path',"")),
-                    'Art(poster)': base_url + poster_size + str(tv.get('poster_path',"")),
-                    'Title': tv.get('name',""),
-                    'OriginalTitle': tv.get('original_name',""),
-                    'ID': tv.get('id',""),
-                    'Path': "",
-                    'Play': "",
-                    'DBID': "",
-                    'Rating': tv.get('vote_average',""),
-                    'Votes': tv.get('vote_count',""),
-                    'Premiered': tv.get('first_air_date',"")  }
-            if not str(tv['id']) in str(tvshows): ## too dirty
-                tvshows.append(newtv)
-    else:
-        log("Error when handling TheMovieDB tv results")
+    for tv in results:
+        newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path',"")),
+                'Art(poster)': base_url + poster_size + str(tv.get('poster_path',"")),
+                'Title': tv.get('name',""),
+                'OriginalTitle': tv.get('original_name',""),
+                'ID': tv.get('id',""),
+                'Path': "",
+                'Play': "",
+                'DBID': "",
+                'Rating': tv.get('vote_average',""),
+                'Votes': tv.get('vote_count',""),
+                'Premiered': tv.get('first_air_date',"")  }
+        if not str(tv['id']) in str(tvshows): ## too dirty
+            tvshows.append(newtv)
     tvshows = CompareWithLibrary(tvshows)        
     return tvshows
 
 def HandleTheMovieDBListResult(results):
     lists = []
-    if True:
-        for list in results["lists"]["results"]:
-            newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path',"")),
-                        'Title': list['name'],
-                        'ID': list['id'],
-                        'Description': list['description']}
-            lists.append(newlist)
-    else:
-        pass
+    for list in results["lists"]["results"]:
+        newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path',"")),
+                    'Title': list['name'],
+                    'ID': list['id'],
+                    'Description': list['description']}
+        lists.append(newlist)
     return lists
     
 def HandleTheMovieDBPeopleResult(results):
     people = []
-    if True:
-        for person in results:
-            newperson = {'adult': person['adult'],
-                        'name': person['name'],
-                        'also_known_as': person['also_known_as'],
-                        'biography': person['biography'],
-                        'birthday': person['birthday'],
-                        'id': person['id'],
-                        'deathday': person['deathday'],
-                        'place_of_birth': person['place_of_birth'],
-                        'thumb': person['profile_path']  }
-            people.append(newperson)
-    else:
-        log("Error when handling TheMovieDB people results")
+    for person in results:
+        newperson = {'adult': person['adult'],
+                    'name': person['name'],
+                    'also_known_as': person['also_known_as'],
+                    'biography': person['biography'],
+                    'birthday': person['birthday'],
+                    'id': person['id'],
+                    'deathday': person['deathday'],
+                    'place_of_birth': person['place_of_birth'],
+                    'thumb': person['profile_path']  }
+        people.append(newperson)
     return people
     
 def HandleTheMovieDBCompanyResult(results):
     companies = []
     log("starting HandleLastFMCompanyResult")
-    if True:
-        for company in results:
-            newcompany = {'parent_company': company['parent_company'],
-                        'name': company['name'],
-                        'description': company['description'],
-                        'headquarters': company['headquarters'],
-                        'homepage': company['homepage'],
-                        'id': company['id'],
-                        'logo_path': company['logo_path'] }
-            companies.append(newcompany)
-    else:
-        log("Error when handling TheMovieDB companies results")
+    for company in results:
+        newcompany = {'parent_company': company['parent_company'],
+                    'name': company['name'],
+                    'description': company['description'],
+                    'headquarters': company['headquarters'],
+                    'homepage': company['homepage'],
+                    'id': company['id'],
+                    'logo_path': company['logo_path'] }
+        companies.append(newcompany)
     return companies
     
 def SearchforCompany(Company):
