@@ -160,10 +160,15 @@ def GetLastFMData(url = "", cache_days = 14):
     else:
         url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
         response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        save_to_file(results,filename,Addon_Data_Path)
-        return results
-                      
+        try:
+            results = simplejson.loads(response)
+            save_to_file(results,filename,Addon_Data_Path)
+            return results
+        except Exception,e:
+            log("Error in GetLastFMData. No Internet connection?")
+            log(e)
+            log(results)
+                          
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
     try:
