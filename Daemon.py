@@ -43,7 +43,7 @@ class Daemon:
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
-            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums) | Container.Content(episodes) | Container.Content(musicvideos)"):
+            if xbmc.getCondVisibility("[Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums) | Container.Content(episodes) | Container.Content(musicvideos)] + !Container.Scrolling"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
