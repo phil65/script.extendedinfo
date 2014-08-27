@@ -13,8 +13,6 @@ __addonid__      = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
 __language__     = __addon__.getLocalizedString
 
-Window = 10000
-
 class Daemon:
     def __init__( self ):
         log("version %s started" % __addonversion__ )
@@ -24,6 +22,7 @@ class Daemon:
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000) # Home Window
+        self.wnd = xbmcgui.Window(12003) # Video info dialog
         self.musicvideos = []
         self.movies = []
         self.id = None
@@ -44,14 +43,24 @@ class Daemon:
         self.musicvideos = create_musicvideo_list()
         self.movies = create_movie_list()
         while (not self._stop) and (not xbmc.abortRequested):
-            log("Daemon active")
-            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums)"):
+            if xbmc.getCondVisibility("Container.Content(movies) | Container.Content(sets) | Container.Content(artists) | Container.Content(albums) | Container.Content(episodes) | Container.Content(musicvideos)"):
                 self.selecteditem = xbmc.getInfoLabel("ListItem.DBID")
                 if (self.selecteditem != self.previousitem):
                     self.previousitem = self.selecteditem
-                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + [SubString(ListItem.Path,videodb://movies/sets/,left)| Container.Content(artists) | Container.Content(albums)]"):
-                        self._set_details(xbmc.getInfoLabel("ListItem.DBID"))
+                    if xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + Container.Content(artists)"):
+                        self._set_artist_details(xbmc.getInfoLabel("ListItem.DBID"))
                         log("setting movieset labels")
+                    elif xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + Container.Content(albums)"):
+                        self._set_album_details(xbmc.getInfoLabel("ListItem.DBID"))
+                        log("setting movieset labels")                        
+                    elif  xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + SubString(ListItem.Path,videodb://movies/sets/,left)"):
+                        self._set_movieset_details(xbmc.getInfoLabel("ListItem.DBID"))
+                    elif  xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + Container.Content(movies)"):
+                        self._set_movie_details(xbmc.getInfoLabel("ListItem.DBID"))    
+                    elif  xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + Container.Content(episodes)"):
+                        self._set_episode_details(xbmc.getInfoLabel("ListItem.DBID"))    
+                    elif  xbmc.getCondVisibility("!IsEmpty(ListItem.DBID) + Container.Content(musicvideos)"):
+                        self._set_musicvideo_details(xbmc.getInfoLabel("ListItem.DBID"))    
                     else:
                         clear_properties()
             elif xbmc.getCondVisibility("Container.Content(years)"):
@@ -105,51 +114,106 @@ class Daemon:
                 self._stop = True
             xbmc.sleep(100)     
 
-    def _set_details( self, dbid ):
-        if dbid:
-            try:
-                b = ""
-                if xbmc.getCondVisibility('Container.Content(artists)') or self.type == "artist":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if json_query['result'].has_key('albums'):
-                        set_artist_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "track", "duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('songs'):
-                        set_album_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('[Container.Content(movies) + ListItem.IsFolder] | Container.Content(sets)') or self.type == "set":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "file", "year", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country"], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('setdetails'):
-                        set_movie_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('Container.Content(songs)') or self.type == "songs":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('musicvideos'):
-                        set_movie_properties(json_query)
-                    b = datetime.datetime.now() - a
-                if b:
-                    log('Total time needed to request: %s' % b)
-            except Exception, e:
-                log(e)
+    def _set_song_details( self, dbid ):
+        try:
+            b = ""
+            a = datetime.datetime.now()
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = simplejson.loads(json_query)
+            clear_properties()
+            if "result" in json_query and json_query['result'].has_key('musicvideos'):
+                set_movie_properties(json_query)
+            b = datetime.datetime.now() - a
+            log('Total time needed to request JSON and set properties for song: %s' % b)
+        except Exception, e:
+            log(e)
                 
+                
+    def _set_artist_details( self, dbid ):
+        try:
+            b = ""
+            a = datetime.datetime.now()
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = simplejson.loads(json_query)
+            clear_properties()
+            if json_query['result'].has_key('albums'):
+                set_artist_properties(json_query)
+            b = datetime.datetime.now() - a
+            log('Total time needed to request JSON and set properties for artist: %s' % b)
+        except Exception, e:
+            log(e)
+
+    def _set_movie_details( self, dbid ):
+        try:
+            if xbmc.getCondVisibility('Container.Content(movies)') or self.type == "movie":
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails"], "movieid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if json_response['result'].has_key('moviedetails'):
+                    self._set_properties(json_response['result']['moviedetails']['streamdetails']['audio'], json_response['result']['moviedetails']['streamdetails']['subtitle'])
+        except Exception, e:
+            log(e)
+
+    def _set_episode_details( self, dbid ):
+        try:
+            if xbmc.getCondVisibility('Container.Content(episodes)') or self.type == "episode":
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["streamdetails"], "episodeid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if json_response['result'].has_key('episodedetails'):
+                    self._set_properties(json_response['result']['episodedetails']['streamdetails']['audio'], json_response['result']['episodedetails']['streamdetails']['subtitle'])
+        except Exception, e:
+            log(e)        
+                
+    def _set_musicvideo_details( self, dbid ):
+        try:
+            if xbmc.getCondVisibility('Container.Content(musicvideos)') or self.type == "musicvideo":
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideoDetails", "params": {"properties": ["streamdetails"], "musicvideoid":%s }, "id": 1}' % dbid)
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                log(json_query)
+                json_response = simplejson.loads(json_query)
+                if json_response['result'].has_key('musicvideodetails'):
+                    self._set_properties(json_response['result']['musicvideodetails']['streamdetails']['audio'], json_response['result']['musicvideodetails']['streamdetails']['subtitle'])
+        except Exception, e:
+            log(e)        
+                
+    def _set_album_details( self, dbid ):
+        try:
+            b = ""
+            a = datetime.datetime.now()
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "track", "duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = simplejson.loads(json_query)
+            clear_properties()
+            if "result" in json_query and json_query['result'].has_key('songs'):
+                set_album_properties(json_query)
+            b = datetime.datetime.now() - a
+            log('Total time needed to request JSON and set properties for album: %s' % b)
+        except Exception, e:
+            log(e)
+
+                
+                
+    def _set_movieset_details( self, dbid ):
+        try:
+            b = ""
+            a = datetime.datetime.now()
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "file", "year", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country"], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_query = simplejson.loads(json_query)
+            clear_properties()
+            if "result" in json_query and json_query['result'].has_key('setdetails'):
+                set_movie_properties(json_query)
+            b = datetime.datetime.now() - a
+            log('Total time needed to request JSON and set properties for set: %s' % b)
+        except Exception, e:
+            log("Exception in _set_movieset_details:")
+            log(e)
+                            
     def _detail_selector( self, comparator):
         self.selecteditem = xbmc.getInfoLabel("ListItem.Label")
         if (self.selecteditem != self.previousitem):
@@ -166,5 +230,22 @@ class Daemon:
                     if count > 19:
                         break
             else:
-                clear_properties()            
+                clear_properties()
+
+    def _set_properties( self, audio, subtitles ):
+        # Set language properties
+        count = 1
+        # Clear properties before setting new ones
+   #     self._clear_properties()
+        for item in audio:
+            self.wnd.setProperty('AudioLanguage.%d' % count, item['language'])
+            self.wnd.setProperty('AudioCodec.%d' % count, item['codec'])
+            self.wnd.setProperty('AudioChannels.%d' % count, str(item['channels']))
+            count += 1
+        count = 1
+        for item in subtitles:
+            self.wnd.setProperty('SubtitleLanguage.%d' % count, item['language'])     
+            count += 1
+     #   self.cleared = False
+                
             

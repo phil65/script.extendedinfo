@@ -10,6 +10,7 @@ __language__     = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
 
 window = xbmcgui.Window(10000)
+wnd = xbmcgui.Window(12003)
 locallist = []
 
 def AddArtToLibrary( type, media, folder, limit , silent = False):
@@ -631,6 +632,11 @@ def clear_properties():
         window.clearProperty('Detail.Movie.%d.Art(poster)' % i)
         window.clearProperty('Detail.Movie.%d.Art(fanart)' % i)
         window.clearProperty('Detail.Movie.%d.Art(Path)' % i)
+        wnd.clearProperty('AudioLanguage.%d' % i)
+        wnd.clearProperty('AudioCodec.%d' % i)
+        wnd.clearProperty('AudioChannels.%d' % i)
+        wnd.clearProperty('SubtitleLanguage.%d' % i)
+        
     window.clearProperty('Album.Songs.TrackList')   
     window.clearProperty('Album.Songs.Discs')   
     window.clearProperty('Artist.Albums.Newest')   
