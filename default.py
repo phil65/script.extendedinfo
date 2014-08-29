@@ -140,23 +140,23 @@ class Main:
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
                 log("start gettin intheaters info")
-                from MiscScraper import GetRottenTomatoesMoviesInTheaters
+                from RottenTomatoes import GetRottenTomatoesMoviesInTheaters
                 passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix)
             elif info == 'boxoffice':
                 log("start gettin boxoffice info")
-                from MiscScraper import GetRottenTomatoesMoviesBoxOffice
+                from RottenTomatoes import GetRottenTomatoesMoviesBoxOffice
                 passDataToSkin('BoxOffice', GetRottenTomatoesMoviesBoxOffice("box_office"), self.prop_prefix)
             elif info == 'opening':
                 log("start gettin opening info")
-                from MiscScraper import GetRottenTomatoesMoviesOpening
+                from RottenTomatoes import GetRottenTomatoesMoviesOpening
                 passDataToSkin('Opening', GetRottenTomatoesMoviesOpening("opening"), self.prop_prefix)
             elif info == 'comingsoon':
                 log("start gettin comingsoon info")
-                from MiscScraper import GetRottenTomatoesMoviesComingSoon
+                from RottenTomatoes import GetRottenTomatoesMoviesComingSoon
                 passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix)
             elif info == 'toprentals':
                 log("start gettin toprentals info")
-                from MiscScraper import GetRottenTomatoesMovies
+                from RottenTomatoes import GetRottenTomatoesMovies
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
                                 
             ### The MovieDB ##########################################################################################
@@ -265,7 +265,7 @@ class Main:
                 log(self.dbid)
                 log(self.id)
                 log(self.type)
-                from MiscScraper import GetSimilarTrakt
+                from Trakt import GetSimilarTrakt
                 if self.type and (self.id or self.dbid):
                     if self.dbid:
                         id = GetImdbID(self.type,self.dbid)
@@ -275,19 +275,19 @@ class Main:
                     passDataToSkin('SimilarMovies', GetSimilarTrakt(self.type,id), self.prop_prefix)                    
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
-                from MiscScraper import GetTraktCalendarShows
+                from Trakt import GetTraktCalendarShows
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix)
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
-                from MiscScraper import GetTraktCalendarShows
+                from Trakt import GetTraktCalendarShows
                 passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
-                from MiscScraper import GetTrendingShows
+                from Trakt import GetTrendingShows
                 passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix)
             elif info == 'trendingmovies':
                 log("startin GetTrendingMovies")
-                from MiscScraper import GetTrendingMovies
+                from Trakt import GetTrendingMovies
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)            
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
