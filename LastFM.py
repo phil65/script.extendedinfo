@@ -6,43 +6,11 @@ else:
 from Utils import *
 import urllib
 
-bandsintown_apikey = 'xbmc_open_source_media_center'
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
 googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
-def HandleBandsInTownResult(results):
-    events = []
-    for event in results:
-        try:
-            venue = event['venue']
-            artists = event['artists']
-            my_arts = ''
-            for art in artists:
-                my_arts += ' / '
-                my_arts += art['name']
-            my_arts = my_arts.replace(" / ", "",1)        
-            event = {'date': event['datetime'].replace("T", " - ").replace(":00", "",1),
-                     'city': venue['city'],
-                     'name': venue['name'],
-                     'region': venue['region'],
-                     'country': venue['country'],
-                     'artists': my_arts  }
-            events.append(event)
-        except: pass
-    return events
 
-def cleanText(text):
-    import re
-    text = re.sub('<br \/>','[CR]',text)
-    text = re.sub('<(.|\n|\r)*?>','',text)
-    text = re.sub('&quot;','"',text)
-    text = re.sub('&amp;','&',text)
-    text = re.sub('&gt;','>',text)
-    text = re.sub('&lt;','<',text)
-    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
-    return text.strip()    
-    
 def HandleLastFMEventResult(results):
     events = []
     if "events" in results and results['events'].get("event"):
@@ -232,17 +200,3 @@ def GetVenueEvents(id = ""):
         log("GetVenueEvents: error getting concert data from " + url)
         return []
 
-def GetArtistNearEvents(Artists): # not possible with api 2.0
-    ArtistStr = ''
-    for art in Artists:
-        if len(ArtistStr) > 0:
-             ArtistStr = ArtistStr + '&'
-        ArtistStr = ArtistStr + 'artists[]=' + urllib.quote(art['name'])     
-    url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    try:
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
-        return HandleBandsInTownResult(results)
-    except:
-        log("GetArtistNearEvents: error when getting artist data from " + url)
-        return []

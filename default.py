@@ -73,7 +73,7 @@ class Main:
             elif info == 'discography':
                 passDataToSkin('Discography', None, self.prop_prefix)
                 log("startin gettopalbums")
-                from OnlineMusicInfo import GetArtistTopAlbums
+                from LastFM import GetArtistTopAlbums
                 passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistdetails':
                 passDataToSkin('Discography', None, self.prop_prefix)
@@ -102,7 +102,7 @@ class Main:
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
-                from OnlineMusicInfo import GetShouts
+                from LastFM import GetShouts
                 if self.ArtistName and self.AlbumName:
                     passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
             elif info == 'studio':
@@ -130,7 +130,7 @@ class Main:
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix)
                 log("startin gettopartists")
-                from OnlineMusicInfo import GetTopArtists
+                from LastFM import GetTopArtists
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
@@ -294,7 +294,7 @@ class Main:
                 passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix)
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix)
-                from OnlineMusicInfo import GetEvents
+                from LastFM import GetEvents
              #   events = GetEvents(self.Artist_mbid)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)     
             elif info == 'youtubesearch':
@@ -307,20 +307,21 @@ class Main:
             elif info == 'youtubeusersearch':
                 passDataToSkin('YoutubeUserSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeUserVideos
-                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix,True)                 
+                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix)                 
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix)
-                from OnlineMusicInfo import GetNearEvents
+                from LastFM import GetNearEvents
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly), self.prop_prefix)
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix)
-                from OnlineMusicInfo import GetVenueEvents
+                from LastFM import GetVenueEvents
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)             
             elif info == 'topartistsnearevents':
-                from OnlineMusicInfo import GetArtistNearEvents
+                from MiscScraper import GetArtistNearEvents
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
                 artists = GetXBMCArtists()
-                events = GetArtistNearEvents(artists["result"]["artists"][0:15])
+                events = GetArtistNearEvents(artists["result"]["artists"][0:49])
+               # prettyprint(events)
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
@@ -329,7 +330,7 @@ class Main:
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getlocationevents':
-                from OnlineMusicInfo import GetNearEvents
+                from LastFM import GetNearEvents
                 wnd = xbmcgui.Window(Window)
                 lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
                 lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')

@@ -1,4 +1,4 @@
-import os, re, random, sys
+import os, re, random, sys, urllib
 import xbmc, xbmcaddon
 from Utils import *
 if sys.version_info < (2, 7):
@@ -8,6 +8,7 @@ else:
     
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
+bandsintown_apikey = 'xbmc_open_source_media_center'
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id') ).decode("utf-8") )
 
 def GetXKCDInfo():
@@ -157,4 +158,59 @@ def GetYoutubeUserVideos(userid = ""):
             videos.append(video)
             count += 1
     return videos
+
+def HandleBandsInTownResult(results):
+    events = []
+    for event in results:
+        try:
+            venue = event['venue']
+            artists = ''
+            for art in event["artists"]:
+                artists += ' / '
+                artists += art['name']
+                artists = artists.replace(" / ", "",1)        
+            event = {'date': event['datetime'].replace("T", " - ").replace(":00", "",1),
+                     'city': venue['city'],
+                     'lat': venue['latitude'],
+                     'lon': venue['longitude'],
+                     'id': venue['id'],
+                     'url': venue['url'],
+                     'name': venue['name'],
+                     'region': venue['region'],
+                     'country': venue['country'],
+             #        'artist_mbid': ,
+          #           'status': event['status'],
+         #            'ticket_status': event['ticket_status'],
+                     'artists': artists  }
+            events.append(event)
+        except Exception,e: 
+            log("Exception in HandleBandsInTownResult")
+            log(e)
+            prettyprint(event)
+    return events
     
+def GetArtistNearEvents(Artists): # not possible with api 2.0
+    ArtistStr = ''
+    count = 0
+  #  prettyprint(Artists)
+    for art in Artists:
+        artist = art['artist']
+        try:
+            artist = urllib.quote(artist)
+        except:
+            artist = urllib.quote(artist.encode("utf-8"))
+        if count < 49:
+            if len(ArtistStr) > 0:
+                 ArtistStr = ArtistStr + '&'
+            ArtistStr = ArtistStr + 'artists[]=' + artist
+            count += 1
+    url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
+    response = GetStringFromUrl(url)
+    results = simplejson.loads(response)
+  #   prettyprint(results)
+    return HandleBandsInTownResult(results)
+    if False:
+        log("GetArtistNearEvents: error when getting artist data from " + url)
+        log(results)
+        return []
+

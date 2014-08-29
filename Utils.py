@@ -104,7 +104,7 @@ def GetXBMCArtists():
         return json_query
             
 def GetSimilarArtistsInLibrary(id):
-    from OnlineMusicInfo import GetSimilarById
+    from LastFM import GetSimilarById
     simi_artists = GetSimilarById(id)
     if simi_artists == None:
          log('Last.fm didn\'t return proper response')
@@ -374,7 +374,7 @@ def GetStringFromUrl(encurl):
             req.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
             res = urllib2.urlopen(req)
             html = res.read()
-            log("URL String: " + html)
+       #     log("URL String: " + html)
             return html
         except:
             log("GetStringFromURL: could not get data from %s" % encurl)
@@ -510,3 +510,13 @@ def passDataToSkin(name, data, prefix="",debug = False):
         window.setProperty('%s%s.Count' % (prefix, name), '0')
         log( "%s%s.Count = None" % (prefix, name ) )
     
+def cleanText(text):
+    import re
+    text = re.sub('<br \/>','[CR]',text)
+    text = re.sub('<(.|\n|\r)*?>','',text)
+    text = re.sub('&quot;','"',text)
+    text = re.sub('&amp;','&',text)
+    text = re.sub('&gt;','>',text)
+    text = re.sub('&lt;','<',text)
+    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.','',text)
+    return text.strip()   
