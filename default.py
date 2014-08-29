@@ -1,7 +1,6 @@
 import sys
 import os, datetime
 import xbmc, xbmcgui, xbmcaddon, xbmcplugin
-from Daemon import Daemon          
 from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
@@ -455,56 +454,6 @@ class Main:
             else:
                 AdditionalParams.append(param)
                                        
-    def _set_detail_properties( self, movie,count):
-        self.window.setProperty('Detail.Movie.%i.Path' % (count), movie["file"])
-        self.window.setProperty('Detail.Movie.%i.Art(fanart)' % (count), movie["art"].get('fanart',''))
-        self.window.setProperty('Detail.Movie.%i.Art(poster)' % (count), movie["art"].get('poster',''))      
-                                       
-    def _set_details( self, dbid ):
-        if dbid:
-            try:
-                b = ""
-                if xbmc.getCondVisibility('Container.Content(artists)') or self.type == "artist":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title", "year", "albumlabel", "playcount", "thumbnail"], "sort": { "method": "label" }, "filter": {"artistid": %s} }, "id": 1}' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if json_query['result'].has_key('albums'):
-                        set_artist_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('Container.Content(albums)') or self.type == "album":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetSongs", "params": {"properties": ["title", "track", "duration", "file", "lastplayed", "disc"], "sort": { "method": "label" }, "filter": {"albumid": %s} }, "id": 1}' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('songs'):
-                        set_album_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('[Container.Content(movies) + ListItem.IsFolder] | Container.Content(sets)') or self.type == "set":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid": %s, "properties": [ "thumbnail" ], "movies": { "properties":  [ "rating", "art", "file", "year", "director", "writer","genre" , "thumbnail", "runtime", "studio", "plotoutline", "plot", "country"], "sort": { "order": "ascending",  "method": "year" }} },"id": 1 }' % dbid)
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('setdetails'):
-                        set_movie_properties(json_query)
-                    b = datetime.datetime.now() - a
-                elif xbmc.getCondVisibility('Container.Content(songs)') or self.type == "songs":
-                    a = datetime.datetime.now()
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMusicVideos", "params": {"properties": ["artist", "file"], "sort": { "method": "artist" } }, "id": 1}')
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_query = simplejson.loads(json_query)
-                    clear_properties()
-                    if "result" in json_query and json_query['result'].has_key('musicvideos'):
-                        set_movie_properties(json_query)
-                    b = datetime.datetime.now() - a
-                if b:
-                    log('Total time needed to request: %s' % b)
-            except Exception, e:
-                log(e)
-            
     def _selection_dialog(self):
         modeselect= []
         modeselect.append( __language__(32001) )
@@ -537,16 +486,5 @@ class Main:
             AddArtToLibrary("extrafanart","TVShow", "extrafanart",extrafanart_limit)
             
 if ( __name__ == "__main__" ):
-    try:
-        params = dict( arg.split("=") for arg in sys.argv[1].split("&"))
-    except:
-        params = {}
-    backend = params.get("backend", False)
-    if backend:
-        if xbmc.getCondVisibility("IsEmpty(Window(home).Property(extendedinfo_backend_running))"):
-            xbmc.executebuiltin('SetProperty(extendedinfo_backend_running,True,home)')
-            log("starting daemon")
-            Daemon()
-    else:
-        Main()
+    Main()
 log('finished')
