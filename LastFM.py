@@ -180,6 +180,16 @@ def GetTrackShouts(artistname, tracktitle):
         log(e)
         log("Error when finding shouts from" + url)
         return []
+
+def GetEventShouts(eventid):
+    url = 'method=event.GetShouts&event=%s' % (eventid)
+    results = GetLastFMData(url)
+    try:
+        return HandleLastFMShoutResult(results)
+    except Exception,e:
+        log(e)
+        log("Error when finding shouts from" + url)
+        return []
     
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
