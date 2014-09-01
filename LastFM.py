@@ -87,6 +87,21 @@ def HandleLastFMShoutResult(results):
     except:
         log("Error when handling LastFM Shout results")
     return shouts
+
+def HandleLastFMTrackResult(results):
+    log("starting HandleLastFMTrackResult")
+    if True:
+       # prettyprint(results)
+        if "wiki" in results['track']:
+            summary = cleanText(results['track']['wiki']['summary'])
+        else:
+            summary = ""
+        TrackInfo = {'playcount': str(results['track']['playcount']),
+                     'Thumb': str(results['track']['playcount']),
+                     'summary': summary}
+    else:
+        log("Error when handling LastFM Track results")
+    return TrackInfo
            
 def HandleLastFMArtistResult(results):
     artists = []
@@ -146,8 +161,18 @@ def GetTopArtists():
         log("Error when finding artist top-tracks from" + url)
         return []
     
-def GetShouts(artistname, albumtitle):
-    url = 'method=album.getshouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
+def GetAlbumShouts(artistname, albumtitle):
+    url = 'method=album.GetAlbumShouts&artist=%s&album=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(albumtitle))
+    results = GetLastFMData(url)
+    try:
+        return HandleLastFMShoutResult(results)
+    except Exception,e:
+        log(e)
+        log("Error when finding shouts from" + url)
+        return []
+
+def GetTrackShouts(artistname, tracktitle):
+    url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname),urllib.quote_plus(tracktitle))
     results = GetLastFMData(url)
     try:
         return HandleLastFMShoutResult(results)
@@ -198,5 +223,14 @@ def GetVenueEvents(id = ""):
         return HandleLastFMEventResult(results)
     except:
         log("GetVenueEvents: error getting concert data from " + url)
+        return []
+
+def GetTrackInfo(artist = "", track = ""):
+    url = 'method=track.getInfo&artist=%s&track=%s' % (urllib.quote_plus(artist),urllib.quote_plus(track))
+    results = GetLastFMData(url)
+    if True:
+        return HandleLastFMTrackResult(results)
+    else:
+        log("GetVenueEvents: error getting TrackInfo data from " + url)
         return []
 

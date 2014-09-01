@@ -17,6 +17,7 @@ __language__     = __addon__.getLocalizedString
 TrackTitle = None
 AdditionalParams = []
 Window = 10000
+wnd = xbmcgui.Window(Window)
 extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
@@ -102,9 +103,9 @@ class Main:
             elif info == 'shouts':
                 log("startin shouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
-                from LastFM import GetShouts
+                from LastFM import GetAlbumShouts
                 if self.ArtistName and self.AlbumName:
-                    passDataToSkin('Shout', GetShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
+                    passDataToSkin('Shout', GetAlbumShouts(self.ArtistName,self.AlbumName), self.prop_prefix,True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:
@@ -298,7 +299,6 @@ class Main:
              #   events = GetEvents(self.Artist_mbid)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)     
             elif info == 'youtubesearch':
-                wnd = xbmcgui.Window(Window)
                 wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id) # set properties 
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix)
                 from MiscScraper import GetYoutubeSearchVideos
@@ -312,6 +312,12 @@ class Main:
                 passDataToSkin('NearEvents', None, self.prop_prefix)
                 from LastFM import GetNearEvents
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly), self.prop_prefix)
+            elif info == 'trackinfo':
+                passDataToSkin('TrackInfo', None, self.prop_prefix)
+                from LastFM import GetTrackInfo
+                TrackInfo = GetTrackInfo(self.ArtistName,self.TrackName)  
+                log("Summary: " + TrackInfo["summary"])
+                wnd.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"]) # set properties 
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix)
                 from LastFM import GetVenueEvents
@@ -331,7 +337,6 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getlocationevents':
                 from LastFM import GetNearEvents
-                wnd = xbmcgui.Window(Window)
                 lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
                 lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')
                 passDataToSkin('NearEvents', GetNearEvents(self.tag,self.festivalsonly,lat,lon), self.prop_prefix)
@@ -346,6 +351,7 @@ class Main:
         self.infos = []
         self.AlbumName = None
         self.ArtistName = None
+        self.TrackName = None
         self.UserName = None
         self.feed = None
         self.id = None
@@ -430,6 +436,8 @@ class Main:
                     self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
             elif param.startswith('albumname='):
                 self.AlbumName = arg[10:].replace('"','')
+            elif param.startswith('trackname='):
+                self.TrackName = arg[10:].replace('"','')
             elif param.startswith('username='):
                 self.UserName = arg[9:].replace('"','')
             elif param.startswith('tracktitle='):
