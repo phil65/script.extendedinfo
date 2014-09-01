@@ -36,7 +36,7 @@ def HandleLastFMEventResult(results):
             except:
                 search_string = ""
             googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
-            event = {'date': event['startDate'],
+            event = {'date': event['startDate'][:-3],
                      'name': event['venue']['name'],
                      'id': event['venue']['id'],
                      'street': event['venue']['location']['street'],
