@@ -51,7 +51,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id = -1):
                     gotit = True
         if not gotit:
             return -1
-        log(ret)
+        #log(ret)
         curXML = xml.dom.minidom.parseString(ret)
         curXMLs = curXML.getElementsByTagName('metadata')
         if len(curXMLs) > 0:
