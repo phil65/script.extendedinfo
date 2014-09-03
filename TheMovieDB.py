@@ -1,98 +1,112 @@
-import xbmcaddon, os, xbmc, xbmcvfs, time
+import xbmcaddon
+import os
+import xbmc
+import xbmcvfs
+import time
 import simplejson as json
 from Utils import log, prettyprint, read_from_file, save_to_file, CompareWithLibrary
 import urllib
 from urllib2 import Request, urlopen
 
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
-__addon__        = xbmcaddon.Addon()
-__addonid__      = __addon__.getAddonInfo('id')
-__language__     = __addon__.getLocalizedString   
-Addon_Data_Path = os.path.join( xbmc.translatePath("special://profile/addon_data/%s" % __addonid__ ).decode("utf-8") )
+__addon__ = xbmcaddon.Addon()
+__addonid__ = __addon__.getAddonInfo('id')
+__language__ = __addon__.getLocalizedString
+Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 base_url = ""
 poster_size = ""
 fanart_size = ""
+
 
 def HandleTheMovieDBMovieResult(results):
     movies = []
     log("starting HandleTheMovieDBMovieResult")
     for movie in results:
-        newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path',"")),
-                    'Art(poster)': base_url + poster_size + str(movie.get('poster_path',"")),
-                    'Title': movie.get('title',""),
-                    'OriginalTitle': movie.get('original_title',""),
-                    'ID': movie.get('id',""),
-                    'Path': "",
-                    'Play': "",
-                    'DBID': "",
-                    'Rating': movie.get('vote_average',""),
-                    'Votes': movie.get('vote_count',""),
-                    'Year': movie.get('release_date',"")[:4],
-                    'Premiered': movie.get('release_date',"")  }
-        if not str(movie['id']) in str(movies): ## too dirty
-            movies.append(newmovie)
+        try:
+            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path', "")),
+                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'Title': movie.get('title', ""),
+                        'OriginalTitle': movie.get('original_title', ""),
+                        'ID': movie.get('id', ""),
+                        'Path': "",
+                        'Play': "",
+                        'DBID': "",
+                        'Rating': movie.get('vote_average', ""),
+                        'Votes': movie.get('vote_count', ""),
+                        'Year': movie.get('release_date', "")[:4],
+                        'Premiered': movie.get('release_date', "")}
+            if not str(movie['id']) in str(movies):  # too dirty
+                movies.append(newmovie)
+        except Exception as e:
+            log("Exception:" + e)
+            prettyprint(movie)
     movies = CompareWithLibrary(movies)
     return movies
+
 
 def HandleTheMovieDBTVShowResult(results):
     tvshows = []
     log("starting HandleTheMovieDBTVShowResult")
     for tv in results:
-        newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path',"")),
-                'Art(poster)': base_url + poster_size + str(tv.get('poster_path',"")),
-                'Title': tv.get('name',""),
-                'OriginalTitle': tv.get('original_name',""),
-                'ID': tv.get('id',""),
-                'Path': "",
-                'Play': "",
-                'DBID': "",
-                'Rating': tv.get('vote_average',""),
-                'Votes': tv.get('vote_count',""),
-                'Premiered': tv.get('first_air_date',"")  }
-        if not str(tv['id']) in str(tvshows): ## too dirty
+        newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path', "")),
+                 'Art(poster)': base_url + poster_size + str(tv.get('poster_path', "")),
+                 'Title': tv.get('name', ""),
+                 'OriginalTitle': tv.get('original_name', ""),
+                 'ID': tv.get('id', ""),
+                 'Path': "",
+                 'Play': "",
+                 'DBID': "",
+                 'Rating': tv.get('vote_average', ""),
+                 'Votes': tv.get('vote_count', ""),
+                 'Premiered': tv.get('first_air_date', "")}
+        if not str(tv['id']) in str(tvshows):  # too dirty
             tvshows.append(newtv)
-    tvshows = CompareWithLibrary(tvshows)        
+    tvshows = CompareWithLibrary(tvshows)
     return tvshows
+
 
 def HandleTheMovieDBListResult(results):
     lists = []
     for list in results["lists"]["results"]:
-        newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path',"")),
-                    'Title': list['name'],
-                    'ID': list['id'],
-                    'Description': list['description']}
+        newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path', "")),
+                   'Title': list['name'],
+                   'ID': list['id'],
+                   'Description': list['description']}
         lists.append(newlist)
     return lists
-    
+
+
 def HandleTheMovieDBPeopleResult(results):
     people = []
     for person in results:
         newperson = {'adult': person['adult'],
-                    'name': person['name'],
-                    'also_known_as': person['also_known_as'],
-                    'biography': person['biography'],
-                    'birthday': person['birthday'],
-                    'id': person['id'],
-                    'deathday': person['deathday'],
-                    'place_of_birth': person['place_of_birth'],
-                    'thumb': person['profile_path']  }
+                     'name': person['name'],
+                     'also_known_as': person['also_known_as'],
+                     'biography': person['biography'],
+                     'birthday': person['birthday'],
+                     'id': person['id'],
+                     'deathday': person['deathday'],
+                     'place_of_birth': person['place_of_birth'],
+                     'thumb': person['profile_path']}
         people.append(newperson)
     return people
-    
+
+
 def HandleTheMovieDBCompanyResult(results):
     companies = []
     log("starting HandleLastFMCompanyResult")
     for company in results:
         newcompany = {'parent_company': company['parent_company'],
-                    'name': company['name'],
-                    'description': company['description'],
-                    'headquarters': company['headquarters'],
-                    'homepage': company['homepage'],
-                    'id': company['id'],
-                    'logo_path': company['logo_path'] }
+                      'name': company['name'],
+                      'description': company['description'],
+                      'headquarters': company['headquarters'],
+                      'homepage': company['homepage'],
+                      'id': company['id'],
+                      'logo_path': company['logo_path']}
         companies.append(newcompany)
     return companies
-    
+
+
 def SearchforCompany(Company):
   #  Companies = Company.split(" / ")
    # Company = Companies[0]
@@ -100,32 +114,35 @@ def SearchforCompany(Company):
     regex = re.compile('\(.+?\)')
     Company = regex.sub('', Company)
     log(Company)
-    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company),30)
+    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company), 30)
     try:
         return response["results"][0]["id"]
     except:
         log("could not find Company ID")
         return ""
-        
+
+
 def GetPersonID(person):
     Persons = person.split(" / ")
     person = Persons[0]
-    response = GetMovieDBData("search/person?query=%s&" % urllib.quote_plus(person),30)
+    response = GetMovieDBData("search/person?query=%s&" % urllib.quote_plus(person), 30)
     try:
         return response["results"][0]["id"]
     except:
         log("could not find Person ID")
         return ""
-        
+
+
 def SearchForSet(setname):
-    setname = setname.replace("[","").replace("]","").replace("Kollektion","Collection")
-    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname.encode("utf-8")), __addon__.getSetting("LanguageID")),14)
+    setname = setname.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
+    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname.encode("utf-8")), __addon__.getSetting("LanguageID")), 14)
     try:
         return response["results"][0]["id"]
     except:
         return ""
 
-def GetMovieDBData(url = "", cache_days = 14):
+
+def GetMovieDBData(url="", cache_days=14):
     from base64 import b64encode
     global base_url
     global poster_size
@@ -134,9 +151,9 @@ def GetMovieDBData(url = "", cache_days = 14):
         log("fetching base_url and size (MovieDB config)")
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    filename = b64encode(url).replace("/","XXXX")
+    filename = b64encode(url).replace("/", "XXXX")
     path = Addon_Data_Path + "/" + filename + ".txt"
-    log("trying to load "  + path)
+    log("trying to load " + path)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
         return read_from_file(path)
     else:
@@ -146,42 +163,44 @@ def GetMovieDBData(url = "", cache_days = 14):
         succeed = 0
         while succeed < 3:
             try:
-                request = Request(url, headers = headers)
+                request = Request(url, headers=headers)
                 response = urlopen(request).read()
                 log("saved file " + filename)
                 response = json.loads(response)
-                save_to_file(response,filename,Addon_Data_Path)
+                save_to_file(response, filename, Addon_Data_Path)
                 return response
             except:
                 log("could not get data from %s" % url)
                 xbmc.sleep(1000)
                 succeed += 1
         return []
-  
+
+
 def GetMovieDBConfig():
-    response = GetMovieDBData("configuration?",60)
+    response = GetMovieDBData("configuration?", 60)
     if response:
-        return (response["images"]["base_url"],response["images"]["poster_sizes"][-2],response["images"]["backdrop_sizes"][-2])
+        return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
-        return ("","")
-    
+        return ("", "")
+
+
 def GetCompanyInfo(Id):
-    response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (Id),30)
+    response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (Id), 30)
     if response and "results" in response:
         return HandleTheMovieDBMovieResult(response["results"])
     else:
         return []
- 
+
+
 def millify(n):
     import math
-    millnames=['','Thousand','Million','Billion','Trillion']
-    millidx=max(0,min(len(millnames)-1,
-                      int(math.floor(math.log10(abs(n))/3.0))))
-    return '%.0f %s'%(n/10**(3*millidx),millnames[millidx])
+    millnames = ['', 'Thousand', 'Million', 'Billion', 'Trillion']
+    millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
+    return '%.0f %s' % (n/10**(3*millidx), millnames[millidx])
 
- 
+
 def GetExtendedMovieInfo(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     prettyprint(response)
     if True:
         authors = []
@@ -213,105 +232,111 @@ def GetExtendedMovieInfo(Id):
             Studio = response['production_companies'][0]["name"]
         else:
             Studio = ""
-        Set = response.get("belongs_to_collection","")
+        Set = response.get("belongs_to_collection", "")
         if Set:
-            SetName = Set.get("name","")
-            SetID = Set.get("id","")         
+            SetName = Set.get("name", "")
+            SetID = Set.get("id", "")
         else:
             SetName = ""
             SetID = ""
-        if 'release_date' in response and response.get('release_date') <> None:
-            year = response.get('release_date',"")[:4]
+        if 'release_date' in response and response.get('release_date') is not None:
+            year = response.get('release_date', "")[:4]
         else:
             year = ""
-        BudgetValue = response.get('budget',"")
-        if not BudgetValue in [0,""]:
+        BudgetValue = response.get('budget', "")
+        if not BudgetValue in [0, ""]:
             Budget = millify(float(BudgetValue))
         else:
             Budget = ""
-        newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path',"")),
-                    'Fanart': base_url + fanart_size + str(response.get('backdrop_path',"")),
-                    'Art(poster)': base_url + poster_size + str(response.get('poster_path',"")),
-                    'Poster': base_url + poster_size + str(response.get('poster_path',"")),
-                    'Title': response.get('title',""),
-                    'Label': response.get('title',""),
-                    'Tagline': response.get('tagline',""),
-                    'RunningTime': response.get('runtime',""),
-                    'Budget': response.get('budget',""),
+        newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path', "")),
+                    'Fanart': base_url + fanart_size + str(response.get('backdrop_path', "")),
+                    'Art(poster)': base_url + poster_size + str(response.get('poster_path', "")),
+                    'Poster': base_url + poster_size + str(response.get('poster_path', "")),
+                    'Title': response.get('title', ""),
+                    'Label': response.get('title', ""),
+                    'Tagline': response.get('tagline', ""),
+                    'RunningTime': response.get('runtime', ""),
+                    'Budget': response.get('budget', ""),
                     'mpaa': mpaa,
                     'Director': Director,
                     'Writer': Writer,
                     'Budget': Budget,
-                    'Homepage': response.get('homepage',""),
+                    'Homepage': response.get('homepage', ""),
                     'Set': SetName,
                     'SetId': SetID,
-                    'ID': response.get('id',""),
-                    'Plot': response.get('overview',""),
-                    'OriginalTitle': response.get('original_title',""),
+                    'ID': response.get('id', ""),
+                    'Plot': response.get('overview', ""),
+                    'OriginalTitle': response.get('original_title', ""),
                     'Genre': Genre,
-                    'Rating': response.get('vote_average',""),
+                    'Rating': response.get('vote_average', ""),
                     'Play': '',
-                    'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' %Trailer,
-                    'ReleaseDate':response.get('release_date',""),
-                    'Premiered':response.get('release_date',""),
-                    'Country':Country,
-                    'Studio':Studio,
-                    'DiscArt':"",
-                    'VideoResolution':"",
-                    'AudioChannels':"",
-                    'VideoCodec':"",
-                    'VideoAspect':"",
+                    'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
+                    'ReleaseDate': response.get('release_date', ""),
+                    'Premiered': response.get('release_date', ""),
+                    'Country': Country,
+                    'Studio': Studio,
+                    'DiscArt': "",
+                    'VideoResolution': "",
+                    'AudioChannels': "",
+                    'VideoCodec': "",
+                    'VideoAspect': "",
                     'Logo': "",
                     'DBID': "",
-                    'Studio':Studio,
-                    'Year': year  }
+                    'Studio': Studio,
+                    'Year': year}
     else:
         return False
-    newmovie = CompareWithLibrary([newmovie])        
+    newmovie = CompareWithLibrary([newmovie])
     return newmovie[0]
-     
+
+
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTheMovieDBListResult(response)
-    
+
+
 def GetMovieKeywords(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     keywords = []
     if True:
         for keyword in response["keywords"]["keywords"]:
-            newkeyword = {'id': keyword.get('id',""),
-                        'name': keyword['name']}
+            newkeyword = {'id': keyword.get('id', ""),
+                          'name': keyword['name']}
             keywords.append(newkeyword)
     else:
         pass
     return keywords
     
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")),30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
 
 
 def GetMovieDBTVShows(type):
-    response = GetMovieDBData("tv/%s?language=%s&" % ( type, __addon__.getSetting("LanguageID")),2)
+    response = GetMovieDBData("tv/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
     return HandleTheMovieDBTVShowResult(response["results"])
-    
+
+
 def GetMovieDBMovies(type):
-    response = GetMovieDBData("movie/%s?language=%s&" % ( type, __addon__.getSetting("LanguageID")),2)
+    response = GetMovieDBData("movie/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
     return HandleTheMovieDBMovieResult(response["results"])
-        
+
+
 def GetSetMovies(Id):
-    response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")),14)
+    response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
     return HandleTheMovieDBMovieResult(response["parts"])
-        
+
+
 def GetDirectorMovies(Id):
-    response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")),14)
+    response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
-    return HandleTheMovieDBMovieResult(response["crew"])   
-        
-def search_movie(medianame,year = ''):
-    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year) )
-    medianame = urllib.quote_plus(medianame.encode('utf8','ignore'))
-    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&" % (medianame, year, __addon__.getSetting("LanguageID")),1)
+    return HandleTheMovieDBMovieResult(response["crew"])
+
+
+def search_movie(medianame, year=''):
+    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))
+    medianame = urllib.quote_plus(medianame.encode('utf8', 'ignore'))
+    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&" % (medianame, year, __addon__.getSetting("LanguageID")), 1)
     tmdb_id = ''
     try:
         if response == "Empty":
@@ -322,11 +347,10 @@ def search_movie(medianame,year = ''):
                     tmdb_id = item['id']
                     log(tmdb_id)
                     break
-    except Exception, e:
-        log( str( e ), xbmc.LOGERROR )
+    except Exception as e:
+        log(e)
     if tmdb_id == '':
         log('TMDB API search found no ID')
     else:
-        log('TMDB API search found ID: %s' %tmdb_id)
+        log('TMDB API search found ID: %s' % tmdb_id)
     return tmdb_id
-        
