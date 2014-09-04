@@ -375,7 +375,7 @@ class Main:
 
     def _parse_argv(self):
         try:
-            params = dict( arg.split("=") for arg in sys.argv[1].split("&"))
+            params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
         except:
             params = {}
         self.exportsettings = params.get("exportsettings", False)

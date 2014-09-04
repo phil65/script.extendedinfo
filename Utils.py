@@ -52,7 +52,8 @@ def AddArtToLibrary(type, media, folder, limit, silent=False):
                 # fixes problems mentioned on some german forum
                 file_path = os.path.join(path, file).encode('string-escape')
                 if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type, i), '') == "":
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' % (media, media.lower(), item.get('%sid' % media.lower()), type, i + 1, file_path))
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %
+                                        (media, media.lower(), item.get('%sid' % media.lower()), type, i + 1, file_path))
 
 
 def import_skinsettings():
@@ -133,26 +134,27 @@ def GetSimilarArtistsInLibrary(id):
                 if xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                     artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
+                json_query = xbmc.executeJSONRPC(
+                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 item = json_response["result"]["artistdetails"]
-                newartist = {"Title"       : item['label'],
-                             "Genre"       : " / ".join(item['genre']),
-                             "Thumb"       : item['thumbnail'], #remove
-                             "Fanart"      : item['fanart'], #remove
-                             "Art(thumb)"  : item['thumbnail'],
-                             "Art(fanart)" : item['fanart'],
-                             "Description" : item['description'],
-                             "Born"        : item['born'],
-                             "Died"        : item['died'],
-                             "Formed"      : item['formed'],
-                             "Disbanded"   : item['disbanded'],
-                             "YearsActive" : " / ".join(item['yearsactive']),
-                             "Style"       : " / ".join(item['style']),
-                             "Mood"        : " / ".join(item['mood']),
-                             "Instrument"  : " / ".join(item['instrument']),
-                             "LibraryPath" : 'musicdb://artists/' + str(item['artistid']) + '/' }                         
+                newartist = {"Title": item['label'],
+                             "Genre": " / ".join(item['genre']),
+                             "Thumb": item['thumbnail'],  # remove
+                             "Fanart": item['fanart'],  # remove
+                             "Art(thumb)": item['thumbnail'],
+                             "Art(fanart)": item['fanart'],
+                             "Description": item['description'],
+                             "Born": item['born'],
+                             "Died": item['died'],
+                             "Formed": item['formed'],
+                             "Disbanded": item['disbanded'],
+                             "YearsActive": " / ".join(item['yearsactive']),
+                             "Style": " / ".join(item['style']),
+                             "Mood": " / ".join(item['mood']),
+                             "Instrument": " / ".join(item['instrument']),
+                             "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'}
                 artists.append(newartist)
     log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists
@@ -163,7 +165,8 @@ def create_light_movielist():
         # return read_from_file(filename)
     if True:
         a = datetime.datetime.now()
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         b = datetime.datetime.now() - a
@@ -176,9 +179,10 @@ def create_light_movielist():
 
 def GetSimilarFromOwnLibrary(dbid):
     movies = []
-#    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
+# if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
         # return read_from_file(filename)
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response['result']:
@@ -188,7 +192,8 @@ def GetSimilarFromOwnLibrary(dbid):
         countries = json_response['result']['moviedetails']['country']
         directors = json_response['result']['moviedetails']['director']
         mpaa = json_response['result']['moviedetails']['mpaa']
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         if "movies" in json_query['result']:
@@ -224,7 +229,8 @@ def GetSimilarFromOwnLibrary(dbid):
                 count = 1
                 for list_movie in quotalist:
                     if id is not list_movie[1]:
-                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
+                        json_query = xbmc.executeJSONRPC(
+                            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
                         json_query = unicode(json_query, 'utf-8', errors='ignore')
                         json_response = simplejson.loads(json_query)
                         movie = json_response["result"]["moviedetails"]
@@ -341,7 +347,8 @@ def CompareWithLibrary(onlinelist):
             comparators = [localitem["originaltitle"], localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
        #         log("compare success" + onlineitem["Title"])
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+                json_query = xbmc.executeJSONRPC(
+                    '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
@@ -372,7 +379,8 @@ def CompareAlbumWithLibrary(onlinelist):
         for localitem in locallist:
             if onlineitem["name"] == localitem["title"]:
                 log("compare success: " + onlineitem["name"])
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
+                json_query = xbmc.executeJSONRPC(
+                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
                 album = json_query["result"]["albumdetails"]
@@ -420,12 +428,6 @@ def log(txt):
 
 
 def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
-    """ shows a browse dialog and returns a value
-        - 0 : ShowAndGetDirectory
-        - 1 : ShowAndGetFile
-        - 2 : ShowAndGetImage
-        - 3 : ShowAndGetWriteableDirectory
-    """
     dialog = xbmcgui.Dialog()
     value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
     return value
