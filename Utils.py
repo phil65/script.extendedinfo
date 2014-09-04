@@ -511,7 +511,7 @@ def prettyprint(string):
 
 
 def GetImdbID(type, dbid):
-    if type=="movie":
+    if type == "movie":
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
@@ -529,7 +529,7 @@ def GetImdbID(type, dbid):
             return []
 
 
-def passHomeDataToSkin(data, debug = True):
+def passHomeDataToSkin(data, debug=True):
     if data is not None:
         for (key, value) in data.iteritems():
             window.setProperty('%s' % (str(key)), unicode(value))
@@ -537,7 +537,7 @@ def passHomeDataToSkin(data, debug = True):
                 log('%s' % (str(key)) + unicode(value))
 
 
-def passDataToSkin(name, data, prefix="",debug = False):
+def passDataToSkin(name, data, prefix="", debug=False):
     if data is not None:
        # log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
