@@ -27,7 +27,7 @@ def GetRottenTomatoesMoviesInTheaters(type):
                      'Year': item["year"],
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Rating': item["ratings"]["audience_score"] / 10.0,
                      'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
@@ -56,7 +56,7 @@ def GetRottenTomatoesMoviesOpening(type):
                      'Year': item["year"],
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Rating': item["ratings"]["audience_score"] / 10.0,
                      'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
@@ -84,7 +84,7 @@ def GetRottenTomatoesMoviesComingSoon(type):
                      'Year': item["year"],
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Rating': item["ratings"]["audience_score"] / 10.0,
                      'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
@@ -113,7 +113,7 @@ def GetRottenTomatoesMoviesBoxOffice(type):
                      'Year': item["year"],
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
-                     'Rating': item["ratings"]["audience_score"]/10.0,
+                     'Rating': item["ratings"]["audience_score"] / 10.0,
                      'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1

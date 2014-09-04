@@ -132,15 +132,15 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="a
     count = 1
     videos = []
     if results:
-            for item in results["feed"]["entry"]:
-                video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
-                         'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
-                         'Description': item["media$group"]["media$description"]["$t"],
-                         'Title': item["title"]["$t"],
-                         'Author': item["author"][0]["name"]["$t"],
-                         'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
-                videos.append(video)
-                count += 1
+        for item in results["feed"]["entry"]:
+            video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
+                     'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Description': item["media$group"]["media$description"]["$t"],
+                     'Title': item["title"]["$t"],
+                     'Author': item["author"][0]["name"]["$t"],
+                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
+            videos.append(video)
+            count += 1
     return videos
 
 
@@ -188,9 +188,9 @@ def HandleBandsInTownResult(results):
                      'name': venue['name'],
                      'region': venue['region'],
                      'country': venue['country'],
-             #        'artist_mbid': ,
-          #           'status': event['status'],
-         #            'ticket_status': event['ticket_status'],
+                     #        'artist_mbid': ,
+                     #           'status': event['status'],
+                     #            'ticket_status': event['ticket_status'],
                      'artists': artists}
             events.append(event)
         except Exception as e:
@@ -224,4 +224,3 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
         log("GetArtistNearEvents: error when getting artist data from " + url)
         log(results)
         return []
-

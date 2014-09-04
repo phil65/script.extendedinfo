@@ -196,7 +196,7 @@ def millify(n):
     import math
     millnames = ['', 'Thousand', 'Million', 'Billion', 'Trillion']
     millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
-    return '%.0f %s' % (n/10**(3*millidx), millnames[millidx])
+    return '%.0f %s' % (n / 10 ** (3 * millidx), millnames[millidx])
 
 
 def GetExtendedMovieInfo(Id):
@@ -306,7 +306,8 @@ def GetMovieKeywords(Id):
     else:
         pass
     return keywords
-    
+
+
 def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
