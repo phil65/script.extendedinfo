@@ -28,12 +28,13 @@ def GetRottenTomatoesMoviesInTheaters(type):
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"]/10.0,
-                     'Plot': item["synopsis"]  }
+                     'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
             if count > 20:
                 break
     return movies
+
 
 def GetRottenTomatoesMoviesOpening(type):
     movies = []
@@ -56,13 +57,14 @@ def GetRottenTomatoesMoviesOpening(type):
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"]/10.0,
-                     'Plot': item["synopsis"]  }
+                     'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
             if count > 20:
                 break
     return movies
-    
+
+
 def GetRottenTomatoesMoviesComingSoon(type):
     movies = []
     results = ""
@@ -83,12 +85,13 @@ def GetRottenTomatoesMoviesComingSoon(type):
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"]/10.0,
-                     'Plot': item["synopsis"]  }
+                     'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
             if count > 20:
                 break
     return movies
+
 
 def GetRottenTomatoesMoviesBoxOffice(type):
     movies = []
@@ -111,7 +114,7 @@ def GetRottenTomatoesMoviesBoxOffice(type):
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"]/10.0,
-                     'Plot': item["synopsis"]  }
+                     'Plot': item["synopsis"]}
             movies.append(movie)
             count += 1
             if count > 20:
