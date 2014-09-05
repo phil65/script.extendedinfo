@@ -80,17 +80,21 @@ class Main:
                 log("startin gettopalbums")
                 from LastFM import GetArtistTopAlbums
                 passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix)
+            elif info == 'mostlovedtracks':
+                passDataToSkin('MostLovedTracks', None, self.prop_prefix)
+                log("startin GetMostLovedTracks")
+                from TheAudioDB import GetMostLovedTracks
+                passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix)
             elif info == 'artistdetails':
                 passDataToSkin('Discography', None, self.prop_prefix)
                 passDataToSkin('MusicVideos', None, self.prop_prefix)
                 log("startin ArtistDetails")
-                from TheAudioDB import GetDiscography, GetArtistDetails, GetMostLovedTracks, GetMusicVideos
+                from TheAudioDB import GetDiscography, GetArtistDetails, GetMusicVideos
                 ArtistDetails = GetArtistDetails(self.ArtistName)
                 if "audiodbid" in ArtistDetails:
                     MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
                     passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix)
             #    GetAudioDBData("search.php?s=Blur")
-                GetMostLovedTracks(self.ArtistName)
             #    from TheAudioDB import GetArtistTopAlbums
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix)
                 passHomeDataToSkin(ArtistDetails)
