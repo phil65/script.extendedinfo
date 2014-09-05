@@ -127,11 +127,15 @@ def GetExtendedAudioDBInfo(results):
                 Description = artist.get('strBiography', "")
             else:
                 Description = ""
+            if 'strArtistBanner' in artist and artist['strArtistBanner'] is not None:
+                banner = artist['strArtistBanner']
+            else:
+                banner = ""
             if "strReview" in artist:
                 Description += "[CR]" + artist.get('strReview', "")
             artist = {'artist': artist.get('strArtist', ""),
                       'mbid': artist.get('strMusicBrainzID', ""),
-                      'Banner': artist.get('strArtistBanner', ""),
+                      'Banner': banner,
                       'Logo': artist.get('strArtistLogo', ""),
                       'Fanart': artist.get('strArtistFanart', ""),
                       'Fanart2': artist.get('strArtistFanart2', ""),
@@ -144,7 +148,6 @@ def GetExtendedAudioDBInfo(results):
                       'Twitter': artist.get('strTwitter', ""),
                       'Facebook': artist.get('strFacebook', ""),
                       'Gender': artist.get('strGender', ""),
-                      'Banner': artist.get('strArtistBanner', ""),
                       'audiodbid': artist.get('idArtist', ""),
                       'Description': Description,
                       'Plot': Description,
