@@ -201,91 +201,88 @@ def millify(n):
 
 def GetExtendedMovieInfo(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
-    if True:
-        authors = []
-        directors = []
-        genres = []
-        for item in response['genres']:
-            genres.append(item["name"])
-        for item in response['casts']['crew']:
-            if item["job"] == "Author":
-                authors.append(item["name"])
-            if item["job"] == "Director":
-                directors.append(item["name"])
-        Writer = " / ".join(authors)
-        Director = " / ".join(directors)
-        Genre = " / ".join(genres)
-        if len(response['trailers']['youtube']) > 0:
-            Trailer = response['trailers']['youtube'][0]['source']
-        else:
-            Trailer = ""
-        if len(response['releases']['countries']) > 0:
-            mpaa = response['releases']['countries'][0]['certification']
-        else:
-            mpaa = ""
-        if len(response['production_countries']) > 0:
-            Country = response['production_countries'][0]["name"]
-        else:
-            Country = ""
-        if len(response['production_companies']) > 0:
-            Studio = response['production_companies'][0]["name"]
-        else:
-            Studio = ""
-        Set = response.get("belongs_to_collection", "")
-        if Set:
-            SetName = Set.get("name", "")
-            SetID = Set.get("id", "")
-        else:
-            SetName = ""
-            SetID = ""
-        if 'release_date' in response and response.get('release_date') is not None:
-            year = response.get('release_date', "")[:4]
-        else:
-            year = ""
-        BudgetValue = response.get('budget', "")
-        if not BudgetValue in [0, ""]:
-            Budget = millify(float(BudgetValue))
-        else:
-            Budget = ""
-        newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path', "")),
-                    'Fanart': base_url + fanart_size + str(response.get('backdrop_path', "")),
-                    'Art(poster)': base_url + poster_size + str(response.get('poster_path', "")),
-                    'Poster': base_url + poster_size + str(response.get('poster_path', "")),
-                    'Title': response.get('title', ""),
-                    'Label': response.get('title', ""),
-                    'Tagline': response.get('tagline', ""),
-                    'RunningTime': response.get('runtime', ""),
-                    'Budget': response.get('budget', ""),
-                    'mpaa': mpaa,
-                    'Director': Director,
-                    'Writer': Writer,
-                    'Budget': Budget,
-                    'Homepage': response.get('homepage', ""),
-                    'Set': SetName,
-                    'SetId': SetID,
-                    'ID': response.get('id', ""),
-                    'Plot': response.get('overview', ""),
-                    'OriginalTitle': response.get('original_title', ""),
-                    'Genre': Genre,
-                    'Rating': response.get('vote_average', ""),
-                    'Play': '',
-                    'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
-                    'ReleaseDate': response.get('release_date', ""),
-                    'Premiered': response.get('release_date', ""),
-                    'Country': Country,
-                    'Studio': Studio,
-                    'DiscArt': "",
-                    'VideoResolution': "",
-                    'AudioChannels': "",
-                    'VideoCodec': "",
-                    'VideoAspect': "",
-                    'Logo': "",
-                    'DBID': "",
-                    'Studio': Studio,
-                    'Year': year}
+#    prettyprint(response)
+    authors = []
+    directors = []
+    genres = []
+    for item in response['genres']:
+        genres.append(item["name"])
+    for item in response['casts']['crew']:
+        if item["job"] == "Author":
+            authors.append(item["name"])
+        if item["job"] == "Director":
+            directors.append(item["name"])
+    Writer = " / ".join(authors)
+    Director = " / ".join(directors)
+    Genre = " / ".join(genres)
+    if len(response['trailers']['youtube']) > 0:
+        Trailer = response['trailers']['youtube'][0]['source']
     else:
-        return False
+        Trailer = ""
+    if len(response['releases']['countries']) > 0:
+        mpaa = response['releases']['countries'][0]['certification']
+    else:
+        mpaa = ""
+    if len(response['production_countries']) > 0:
+        Country = response['production_countries'][0]["name"]
+    else:
+        Country = ""
+    if len(response['production_companies']) > 0:
+        Studio = response['production_companies'][0]["name"]
+    else:
+        Studio = ""
+    Set = response.get("belongs_to_collection", "")
+    if Set:
+        SetName = Set.get("name", "")
+        SetID = Set.get("id", "")
+    else:
+        SetName = ""
+        SetID = ""
+    if 'release_date' in response and response.get('release_date') is not None:
+        year = response.get('release_date', "")[:4]
+    else:
+        year = ""
+    BudgetValue = response.get('budget', "")
+    if not BudgetValue in [0, ""]:
+        Budget = millify(float(BudgetValue))
+    else:
+        Budget = ""
+    newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path', "")),
+                'Fanart': base_url + fanart_size + str(response.get('backdrop_path', "")),
+                'Art(poster)': base_url + poster_size + str(response.get('poster_path', "")),
+                'Poster': base_url + poster_size + str(response.get('poster_path', "")),
+                'Title': response.get('title', ""),
+                'Label': response.get('title', ""),
+                'Tagline': response.get('tagline', ""),
+                'RunningTime': response.get('runtime', ""),
+                'Budget': response.get('budget', ""),
+                'mpaa': mpaa,
+                'Director': Director,
+                'Writer': Writer,
+                'Budget': Budget,
+                'Homepage': response.get('homepage', ""),
+                'Set': SetName,
+                'SetId': SetID,
+                'ID': response.get('id', ""),
+                'Plot': response.get('overview', ""),
+                'OriginalTitle': response.get('original_title', ""),
+                'Genre': Genre,
+                'Rating': response.get('vote_average', ""),
+                'Play': '',
+                'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
+                'ReleaseDate': response.get('release_date', ""),
+                'Premiered': response.get('release_date', ""),
+                'Country': Country,
+                'Studio': Studio,
+                'DiscArt': "",
+                'VideoResolution': "",
+                'AudioChannels': "",
+                'VideoCodec': "",
+                'VideoAspect': "",
+                'Logo': "",
+                'DBID': "",
+                'Studio': Studio,
+                'Year': year}
     newmovie = CompareWithLibrary([newmovie])
     return newmovie[0]
 
