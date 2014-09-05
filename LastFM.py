@@ -68,16 +68,16 @@ def HandleLastFMEventResult(results):
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
-    try:
+    if 'topalbums' in results:
         for album in results['topalbums']['album']:
             album = {'artist': album['artist']['name'],
                      'mbid': album['mbid'],
                      'thumb': album['image'][-1]['#text'],
                      'name': album['name']}
             albums.append(album)
-    except:
-        log("Error in HandleLastFMAlbumResult. JSON query follows:")
-   #     prettyprint(results)
+    else:
+        log("No Info in JSON answer:")
+        prettyprint(results)
     return albums
 
 
@@ -90,14 +90,16 @@ def HandleLastFMShoutResult(results):
                         'author': shout['author'],
                         'date': shout['date'][4:]}
             shouts.append(newshout)
-    except:
+    except Exception as e:
         log("Error when handling LastFM Shout results")
+        log(e)
+        prettyprint(results)
     return shouts
 
 
 def HandleLastFMTrackResult(results):
     log("starting HandleLastFMTrackResult")
-    if True:
+    try:
        # prettyprint(results)
         if "wiki" in results['track']:
             summary = cleanText(results['track']['wiki']['summary'])
@@ -106,8 +108,10 @@ def HandleLastFMTrackResult(results):
         TrackInfo = {'playcount': str(results['track']['playcount']),
                      'Thumb': str(results['track']['playcount']),
                      'summary': summary}
-    else:
+    except Exception as e:
         log("Error when handling LastFM Track results")
+        log(e)
+        prettyprint(results)
     return TrackInfo
 
 
@@ -127,6 +131,7 @@ def HandleLastFMArtistResult(results):
     except Exception as e:
         log("Error when handling LastFM TopArtists results")
         log(e)
+        prettyprint(results)
     return artists
 
 
