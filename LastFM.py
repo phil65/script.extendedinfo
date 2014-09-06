@@ -165,16 +165,14 @@ def GetLastFMData(url="", cache_days=14):
         except Exception as e:
             log("Error in GetLastFMData. No Internet connection?")
             log(e)
-            log(results)
-
+            return []
 
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
-    try:
+    if "artists" in results:
         return HandleLastFMArtistResult(results['artists'])
-    except Exception as e:
-        log(e)
-        log("Error when finding artist top-tracks from" + url)
+    else:
+        log("Error when finding artist top-tracks.")
         return []
 
 

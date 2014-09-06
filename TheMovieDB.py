@@ -295,41 +295,53 @@ def GetMovieLists(Id):
 def GetMovieKeywords(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     keywords = []
-    if True:
+    if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
             newkeyword = {'id': keyword.get('id', ""),
                           'name': keyword['name']}
             keywords.append(newkeyword)
+        return keywords
     else:
-        pass
-    return keywords
+        log("No Keywords in JSON answer")
+        return []
 
 
 def GetSimilarMovies(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
-    return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
-
+    if "similar_movies" in response:
+        return HandleTheMovieDBMovieResult(response["similar_movies"]["results"])
+    else:
+        log("No JSON Data available")
 
 def GetMovieDBTVShows(type):
     response = GetMovieDBData("tv/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
-    return HandleTheMovieDBTVShowResult(response["results"])
-
+    if "results" in response:
+        return HandleTheMovieDBTVShowResult(response["results"])
+    else:
+        log("No JSON Data available")
 
 def GetMovieDBMovies(type):
     response = GetMovieDBData("movie/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
-    return HandleTheMovieDBMovieResult(response["results"])
+    if "results" in response:
+      return HandleTheMovieDBMovieResult(response["results"])
+    else:
+        log("No JSON Data available")
 
 
 def GetSetMovies(Id):
     response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
-    return HandleTheMovieDBMovieResult(response["parts"])
-
+    if "parts" in response:
+        return HandleTheMovieDBMovieResult(response["parts"])
+    else:
+        log("No JSON Data available")
 
 def GetDirectorMovies(Id):
     response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
-    return HandleTheMovieDBMovieResult(response["crew"])
-
+    if "crew" in response:
+        return HandleTheMovieDBMovieResult(response["crew"])
+    else:
+        log("No JSON Data available")
 
 def search_movie(medianame, year=''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))

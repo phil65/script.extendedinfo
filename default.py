@@ -15,7 +15,6 @@ __addonid__ = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
 __language__ = __addon__.getLocalizedString
 
-
 TrackTitle = None
 AdditionalParams = []
 Window = 10000
@@ -134,7 +133,6 @@ class Main:
                     from TheMovieDB import SearchForSet
                     name = GetMovieSetName(self.dbid)
                     if name:
-                        log(name)
                         self.setid = SearchForSet(name)
                 if self.setid:
                     log("startin SetInfo")
