@@ -108,12 +108,18 @@ class Main:
               #      prettyprint(AlbumDetails)
                     passHomeDataToSkin(AlbumDetails)
                     passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)
-            elif info == 'shouts':
-                log("startin shouts")
+            elif info == 'albumshouts':
+                log("startin GetAlbumShouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from LastFM import GetAlbumShouts
                 if self.ArtistName and self.AlbumName:
                     passDataToSkin('Shout', GetAlbumShouts(self.ArtistName, self.AlbumName), self.prop_prefix, True)
+            elif info == 'artistshouts':
+                log("startin GetArtistShouts")
+                passDataToSkin('Shout', None, self.prop_prefix)
+                from LastFM import GetArtistShouts
+                if self.ArtistName :
+                    passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
                 if self.studio:

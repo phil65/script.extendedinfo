@@ -189,6 +189,17 @@ def GetAlbumShouts(artistname, albumtitle):
         return []
 
 
+def GetArtistShouts(artistname):
+    url = 'method=artist.GetShouts&artist=%s' % (urllib.quote_plus(artistname))
+    results = GetLastFMData(url)
+    try:
+        return HandleLastFMShoutResult(results)
+    except Exception as e:
+        log(e)
+        log("Error when finding shouts from" + url)
+        return []
+
+
 def GetTrackShouts(artistname, tracktitle):
     url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(tracktitle))
     results = GetLastFMData(url)
