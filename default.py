@@ -17,7 +17,6 @@ __language__ = __addon__.getLocalizedString
 
 TrackTitle = None
 AdditionalParams = []
-Window = 10000
 wnd = xbmcgui.Window(Window)
 extrathumb_limit = 4
 extrafanart_limit = 10
@@ -117,7 +116,7 @@ class Main:
                 log("startin GetArtistShouts")
                 passDataToSkin('Shout', None, self.prop_prefix)
                 from LastFM import GetArtistShouts
-                if self.ArtistName :
+                if self.ArtistName:
                     passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, True)
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix)
@@ -171,6 +170,7 @@ class Main:
                 log("start gettin toprentals info")
                 from RottenTomatoes import GetRottenTomatoesMovies
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
+
             ### The MovieDB ##########################################################################################
             elif info == 'incinemas':
                 log("start gettin incinemasmovies info")
@@ -355,6 +355,7 @@ class Main:
 
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window
+        self.control = None
         self.cleared = False
         self.musicvideos = []
         self.movies = []
@@ -451,7 +452,9 @@ class Main:
             elif param.startswith('username='):
                 self.UserName = arg[9:].replace('"', '')
             elif param.startswith('window='):
-                Window = int(arg[7:])
+                self.window = int(arg[7:])
+            elif param.startswith('control='):
+                self.control = int(arg[8:])
             elif param.startswith('setuplocation'):
                 settings = xbmcaddon.Addon(id='script.extendedinfo')
                 country = settings.getSetting('country')

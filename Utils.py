@@ -555,6 +555,19 @@ def passDataToSkin(name, data, prefix="", debug=False):
         log("%s%s.Count = None" % (prefix, name))
 
 
+def CreateListItems(data, controlwindow, controlnumber):
+    itemlist = controlwindow.getControl(controlnumber)
+    if data is not None:
+        for (count, result) in enumerate(data):
+            listitem = xbmcgui.ListItem('%s' % (str(count)))
+            for (key, value) in result.iteritems():
+                if str(key).lower() in ["name", "label", "title"]:
+                    listitem.setLabel(unicode(value))                    
+                if str(key).lower() in ["thumb"]:
+                    listitem.setThumbnailImage(unicode(value))                    
+                listitem.setProperty('%s' % (str(key)), unicode(value))
+            itemlist.addItem(listitem)
+
 def cleanText(text):
     import re
     text = re.sub('<br \/>', '[CR]', text)
