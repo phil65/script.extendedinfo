@@ -534,7 +534,7 @@ def GetImdbID(type, dbid):
 def passHomeDataToSkin(data, debug=True):
     if data is not None:
         for (key, value) in data.iteritems():
-            window.setProperty('%s' % (str(key)), u(value))
+            window.setProperty('%s' % (str(key)), unicode(value))
             if debug:
                 log('%s' % (str(key)) + unicode(value))
 
@@ -564,8 +564,6 @@ def SetWindowProperties(name, data, prefix="", debug=False):
 
 
 def CreateListItems(data, controlwindow, controlnumber):
-    log(controlwindow)
-    log(controlnumber)
     itemlist = controlwindow.getControl(controlnumber)
     if data is not None:
         for (count, result) in enumerate(data):
