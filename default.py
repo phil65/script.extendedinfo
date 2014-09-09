@@ -17,7 +17,7 @@ __language__ = __addon__.getLocalizedString
 
 TrackTitle = None
 AdditionalParams = []
-wnd = xbmcgui.Window(Window)
+wnd = xbmcgui.Window(10000)
 extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
@@ -60,41 +60,41 @@ class Main:
         for info in self.infos:
             if info == 'json':
                 from MiscScraper import GetYoutubeVideos
-                videos = GetYoutubeVideos(self.feed, self.prop_prefix)
-                passDataToSkin('RSS', videos, self.prop_prefix)
+                videos = GetYoutubeVideos(self.feed, self.prop_prefix, self.window, self.control)
+                passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control)
             elif info == 'similarlocal' and self.dbid:
-                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix)
-                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix)
+                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control)
             elif info == 'xkcd':
                 log("startin GetXKCDInfo")
                 from MiscScraper import GetXKCDInfo
-                passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix)
+                passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix, self.window, self.control)
             elif info == 'flickr':
                 from MiscScraper import GetFlickrImages
                 log("startin flickr")
-                passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix)
+                passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control)
             elif info == 'discography':
-                passDataToSkin('Discography', None, self.prop_prefix)
+                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control)
                 log("startin gettopalbums")
                 from LastFM import GetArtistTopAlbums
-                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix)
+                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix, self.window, self.control)
             elif info == 'mostlovedtracks':
-                passDataToSkin('MostLovedTracks', None, self.prop_prefix)
+                passDataToSkin('MostLovedTracks', None, self.prop_prefix, self.window, self.control)
                 log("startin GetMostLovedTracks")
                 from TheAudioDB import GetMostLovedTracks
-                passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix)
+                passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix, self.window, self.control)
             elif info == 'artistdetails':
-                passDataToSkin('Discography', None, self.prop_prefix)
-                passDataToSkin('MusicVideos', None, self.prop_prefix)
+                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('MusicVideos', None, self.prop_prefix, self.window, self.control)
                 log("startin ArtistDetails")
                 from TheAudioDB import GetDiscography, GetArtistDetails, GetMusicVideos
                 ArtistDetails = GetArtistDetails(self.ArtistName)
                 if "audiodbid" in ArtistDetails:
                     MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
-                    passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix)
+                    passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix, self.window, self.control)
             #    GetAudioDBData("search.php?s=Blur")
             #    from TheAudioDB import GetArtistTopAlbums
-                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix)
+                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control)
                 passHomeDataToSkin(ArtistDetails)
             elif info == 'albuminfo':
                 passHomeDataToSkin(None)
@@ -105,29 +105,29 @@ class Main:
                     Trackinfo = GetTrackDetails(self.id)
               #      prettyprint(AlbumDetails)
                     passHomeDataToSkin(AlbumDetails)
-                    passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix)
+                    passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix, self.window, self.control)
             elif info == 'albumshouts':
                 log("startin GetAlbumShouts")
-                passDataToSkin('Shout', None, self.prop_prefix)
+                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetAlbumShouts
                 if self.ArtistName and self.AlbumName:
-                    passDataToSkin('Shout', GetAlbumShouts(self.ArtistName, self.AlbumName), self.prop_prefix, True)
+                    passDataToSkin('Shout', GetAlbumShouts(self.ArtistName, self.AlbumName), self.prop_prefix, self.window, self.control)
             elif info == 'artistshouts':
                 log("startin GetArtistShouts")
-                passDataToSkin('Shout', None, self.prop_prefix)
+                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetArtistShouts
                 if self.ArtistName:
-                    passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, True)
+                    passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, self.window, self.control)
             elif info == 'studio':
-                passDataToSkin('StudioInfo', None, self.prop_prefix)
+                passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control)
                 if self.studio:
                     log("startin companyinfo")
                     from TheMovieDB import SearchforCompany, GetCompanyInfo
                     if self.studio:
                         CompanyId = SearchforCompany(self.studio)
-                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix)
+                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control)
             elif info == 'set':
-                passDataToSkin('MovieSetItems', None, self.prop_prefix)
+                passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control)
                 if self.dbid and not "show" in str(self.type):
                     from TheMovieDB import SearchForSet
                     name = GetMovieSetName(self.dbid)
@@ -138,76 +138,76 @@ class Main:
                     from TheMovieDB import GetSetMovies
                     SetData = GetSetMovies(self.setid)
                     if SetData:
-                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix)
+                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control)
             elif info == 'topartists':
-                passDataToSkin('TopArtists', None, self.prop_prefix)
+                passDataToSkin('TopArtists', None, self.prop_prefix, self.window, self.control)
                 log("startin gettopartists")
                 from LastFM import GetTopArtists
-                passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix)
+                passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control)
             elif info == 'cyanide':
                 log("startin GetCandHInfo")
                 from MiscScraper import GetCandHInfo
-                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix)
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control)
 
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
                 log("start gettin intheaters info")
                 from RottenTomatoes import GetRottenTomatoesMoviesInTheaters
-                passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix)
+                passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix, self.window, self.control)
             elif info == 'boxoffice':
                 log("start gettin boxoffice info")
                 from RottenTomatoes import GetRottenTomatoesMoviesBoxOffice
-                passDataToSkin('BoxOffice', GetRottenTomatoesMoviesBoxOffice("box_office"), self.prop_prefix)
+                passDataToSkin('BoxOffice', GetRottenTomatoesMoviesBoxOffice("box_office"), self.prop_prefix, self.window, self.control)
             elif info == 'opening':
                 log("start gettin opening info")
                 from RottenTomatoes import GetRottenTomatoesMoviesOpening
-                passDataToSkin('Opening', GetRottenTomatoesMoviesOpening("opening"), self.prop_prefix)
+                passDataToSkin('Opening', GetRottenTomatoesMoviesOpening("opening"), self.prop_prefix, self.window, self.control)
             elif info == 'comingsoon':
                 log("start gettin comingsoon info")
                 from RottenTomatoes import GetRottenTomatoesMoviesComingSoon
-                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix)
+                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix, self.window, self.control)
             elif info == 'toprentals':
                 log("start gettin toprentals info")
                 from RottenTomatoes import GetRottenTomatoesMovies
-                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix)
+                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control)
 
             ### The MovieDB ##########################################################################################
             elif info == 'incinemas':
                 log("start gettin incinemasmovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix)
+                passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, self.window, self.control)
             elif info == 'upcoming':
                 log("start gettin upcoming info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix)
+                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix, self.window, self.control)
             elif info == 'topratedmovies':
                 log("start gettin topratedmovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix)
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, self.window, self.control)
             elif info == 'popularmovies':
                 log("start gettin popularmovies info")
                 from TheMovieDB import GetMovieDBMovies
-                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix)
+                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, self.window, self.control)
 
             elif info == 'airingtodaytvshows':
                 log("start gettin airingtodaytvshows info")
                 from TheMovieDB import GetMovieDBTVShows
-                passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix)
+                passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix, self.window, self.control)
             elif info == 'onairtvshows':
                 log("start gettin onairtvshows info")
                 from TheMovieDB import GetMovieDBTVShows
-                passDataToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), self.prop_prefix)
+                passDataToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), self.prop_prefix, self.window, self.control)
             elif info == 'topratedtvshows':
                 log("start gettin topratedtvshows info")
                 from TheMovieDB import GetMovieDBTVShows
-                passDataToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), self.prop_prefix)
+                passDataToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), self.prop_prefix, self.window, self.control)
             elif info == 'populartvshows':
                 log("start gettin populartvshows info")
                 from TheMovieDB import GetMovieDBTVShows
-                passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix)
+                passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix, self.window, self.control)
             elif info == 'similarmovies':
                 log("startin MovieDBGetSimilarMovies")
-                passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
                 from TheMovieDB import GetSimilarMovies
                 # MovieId = GetImdbID(self.id)
                 if self.id:
@@ -218,25 +218,25 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix)
+                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix, self.window, self.control)
             elif info == 'movielists':
-                passDataToSkin('MovieLists', None, self.prop_prefix)
+                passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control)
                 if self.dbid:
                     log("startin movielists")
                     from TheMovieDB import GetMovieLists
                     id = GetImdbID("movie", self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix, self.window, self.control)
             elif info == 'keywords':
-                passDataToSkin('Keywords', None, self.prop_prefix)
+                passDataToSkin('Keywords', None, self.prop_prefix, self.window, self.control)
                 if self.dbid:
                     log("startin Keywords")
                     from TheMovieDB import GetMovieKeywords
                     id = GetImdbID("movie", self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix)
+                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix, self.window, self.control)
             elif info == 'extendedinfo':
                 log("startin GetExtendedMovieInfo")
                 if self.id:
@@ -255,23 +255,23 @@ class Main:
                     from MiscScraper import GetTVShowInfo
                     passHomeDataToSkin(GetTVShowInfo(self.id)[0])
             elif info == 'directormovies':
-                passDataToSkin('DirectorMovies', None, self.prop_prefix)
+                passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control)
                 if self.director:
                     log("startin GetDirectorMovies")
                     from TheMovieDB import GetDirectorMovies, GetPersonID
                     id = GetPersonID(self.director)
                     if id:
-                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix)
+                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix, self.window, self.control)
             elif info == 'writermovies':
-                passDataToSkin('WriterMovies', None, self.prop_prefix)
+                passDataToSkin('WriterMovies', None, self.prop_prefix, self.window, self.control)
                 if self.writer and not self.writer.split(" / ")[0] == self.director.split(" / ")[0]:
                     log("startin GetWriterMovies")
                     from TheMovieDB import GetDirectorMovies, GetPersonID
                     id = GetPersonID(self.writer)
                     if id:
-                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix)
+                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix, self.window, self.control)
             elif info == 'similar':
-                passDataToSkin('SimilarMovies', None, self.prop_prefix)
+                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
                 log("startin GetSimilarTrakt")
                 log(self.dbid)
                 log(self.id)
@@ -283,62 +283,62 @@ class Main:
                         log("SimilarTrakt: found dbid " + str(id))
                     else:
                         id = self.id
-                    passDataToSkin('SimilarMovies', GetSimilarTrakt(self.type, id), self.prop_prefix)
+                    passDataToSkin('SimilarMovies', GetSimilarTrakt(self.type, id), self.prop_prefix, self.window, self.control)
             elif info == 'airingshows':
                 log("startin GetTraktCalendarShows")
                 from Trakt import GetTraktCalendarShows
-                passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix)
+                passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control)
             elif info == 'premiereshows':
                 log("startin GetTraktCalendarShows")
                 from Trakt import GetTraktCalendarShows
-                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix)
+                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix, self.window, self.control)
             elif info == 'trendingshows':
                 log("startin GetTrendingShows")
                 from Trakt import GetTrendingShows
-                passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix)
+                passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix, self.window, self.control)
             elif info == 'trendingmovies':
                 log("startin GetTrendingMovies")
                 from Trakt import GetTrendingMovies
-                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix)
+                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control)
             elif info == 'similarartistsinlibrary':
-                passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix)
-                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix)
+                passDataToSkin('SimilarArtistsInLibrary', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control)
             elif info == 'artistevents':
-                passDataToSkin('ArtistEvents', None, self.prop_prefix)
+                passDataToSkin('ArtistEvents', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetEvents
              #   events = GetEvents(self.Artist_mbid)
-                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix)
+                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control)
             elif info == 'youtubesearch':
                 wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
-                passDataToSkin('YoutubeSearch', None, self.prop_prefix)
+                passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control)
                 from MiscScraper import GetYoutubeSearchVideos
              #   events = GetEvents(self.Artist_mbid)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby, self.time), self.prop_prefix)
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby, self.time), self.prop_prefix, self.window, self.control)
             elif info == 'youtubeusersearch':
-                passDataToSkin('YoutubeUserSearch', None, self.prop_prefix)
+                passDataToSkin('YoutubeUserSearch', None, self.prop_prefix, self.window, self.control)
                 from MiscScraper import GetYoutubeUserVideos
-                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix)
+                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control)
             elif info == 'nearevents':
-                passDataToSkin('NearEvents', None, self.prop_prefix)
+                passDataToSkin('NearEvents', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetNearEvents
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix, self.window, self.control)
             elif info == 'trackinfo':
-                passDataToSkin('TrackInfo', None, self.prop_prefix)
+                passDataToSkin('TrackInfo', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetTrackInfo
                 TrackInfo = GetTrackInfo(self.ArtistName, self.TrackName)
                 log("Summary: " + TrackInfo["summary"])
                 wnd.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
             elif info == 'venueevents':
-                passDataToSkin('VenueEvents', None, self.prop_prefix)
+                passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control)
                 from LastFM import GetVenueEvents
-                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix)
+                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control)
             elif info == 'topartistsnearevents':
                 from MiscScraper import GetArtistNearEvents
-                passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix)
+                passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix, self.window, self.control)
                 artists = GetXBMCArtists()
                 events = GetArtistNearEvents(artists["result"]["artists"][0:49])
                # prettyprint(events)
-                passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix)
+                passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix, self.window, self.control)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 from MusicBrainz import SetMusicBrainzIDsForAllArtists
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
@@ -349,7 +349,7 @@ class Main:
                 from LastFM import GetNearEvents
                 lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
                 lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, lat, lon), self.prop_prefix)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, lat, lon), self.prop_prefix, self.window, self.control)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 

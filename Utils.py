@@ -539,7 +539,14 @@ def passHomeDataToSkin(data, debug=True):
                 log('%s' % (str(key)) + unicode(value))
 
 
-def passDataToSkin(name, data, prefix="", debug=False):
+def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, debug=False):
+    if controlnumber is not None:
+        CreateListItems(data,controlwindow,controlnumber)
+    else:
+        SetWindowProperties(name, data, prefix, debug)
+
+
+def SetWindowProperties(name, data, prefix="", debug=False):
     if data is not None:
        # log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
         for (count, result) in enumerate(data):
@@ -562,10 +569,12 @@ def CreateListItems(data, controlwindow, controlnumber):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             for (key, value) in result.iteritems():
                 if str(key).lower() in ["name", "label", "title"]:
-                    listitem.setLabel(unicode(value))                    
+                    listitem.setLabel(unicode(value))
                 if str(key).lower() in ["thumb"]:
-                    listitem.setThumbnailImage(unicode(value))                    
+                    listitem.setThumbnailImage(unicode(value))
                 listitem.setProperty('%s' % (str(key)), unicode(value))
+            itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
+            listitem.setPath(path=itempath)
             itemlist.addItem(listitem)
 
 def cleanText(text):
