@@ -452,7 +452,7 @@ class Main:
             elif param.startswith('username='):
                 self.UserName = arg[9:].replace('"', '')
             elif param.startswith('window='):
-                self.window = int(arg[7:])
+                self.window = xbmcgui.Window(int(arg[7:]))
             elif param.startswith('control='):
                 self.control = int(arg[8:])
             elif param.startswith('setuplocation'):
