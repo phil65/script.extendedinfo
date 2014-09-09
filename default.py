@@ -60,7 +60,7 @@ class Main:
         for info in self.infos:
             if info == 'json':
                 from MiscScraper import GetYoutubeVideos
-                videos = GetYoutubeVideos(self.feed, self.prop_prefix, self.window, self.control)
+                videos = GetYoutubeVideos(self.feed, self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control)
             elif info == 'similarlocal' and self.dbid:
                 passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control)
