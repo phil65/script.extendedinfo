@@ -164,7 +164,6 @@ def GetTrendingMovies():
     filename = Addon_Data_Path + "/trendingmovies.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
         results = read_from_file(filename)
-   #     log(results)
         return HandleTraktMovieResult(results)
     else:
         url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
