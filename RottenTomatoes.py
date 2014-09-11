@@ -5,7 +5,7 @@ if sys.version_info < (2, 7):
 else:
     import json as simplejson
 
-rottentomatoes_key = 'sr9ambpra5r3ys2khtxn5bxt'
+rottentomatoes_key = '63sbsudx936yedd2wdmt6tkn'
 
 
 def GetRottenTomatoesMoviesInTheaters(type):
