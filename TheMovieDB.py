@@ -204,12 +204,17 @@ def GetSeasonInfo(tvshowname, seasonnumber):
  #   prettyprint(response)
     tvshowid = str(response['results'][0]['id'])
   #  log(tvshowid)
-    response = GetMovieDBData("tv/%s/season/%s?language=%s&" % (tvshowid, seasonnumber, __addon__.getSetting("LanguageID")), 30)
- #   prettyprint(response)
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos&language=%s&" % (tvshowid, seasonnumber, __addon__.getSetting("LanguageID")), 30)
+  #  prettyprint(response)
     season = {'SeasonDescription': response["overview"],
-              'air_date': response["air_date"]}
-    return season
-
+              'AirDate': response["air_date"]}
+    videos = []
+    for item in response["videos"]["results"]:
+        video = {'key': item["key"],
+                 'name': item["name"],
+                 'type': item["type"]}
+        videos.append(video)
+    return season, videos
 
 
 def GetExtendedMovieInfo(Id):

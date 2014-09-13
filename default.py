@@ -226,9 +226,12 @@ class Main:
                     from MiscScraper import GetTVShowInfo
                     passHomeDataToSkin(GetTVShowInfo(self.id)[0])
             elif info == 'seasoninfo':
+                passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control)
                 if self.tvshow and self.season:
                     from TheMovieDB import GetSeasonInfo
-                    passHomeDataToSkin(GetSeasonInfo(self.tvshow, self.season))
+                    seasoninfo, videos = GetSeasonInfo(self.tvshow, self.season)
+                    passHomeDataToSkin(seasoninfo)
+                    passDataToSkin("SeasonVideos", videos, self.prop_prefix, self.window, self.control)
             elif info == 'directormovies':
                 passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control)
                 if self.director:
