@@ -18,47 +18,53 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 
 def HandleLastFMEventResult(results):
     events = []
-    if "events" in results and results['events'].get("event"):
-        for event in results['events']['event']:
-            artists = event['artists']['artist']
-            if isinstance(artists, list):
-                my_arts = ' / '.join(artists)
-            else:
-                my_arts = artists
-            lat = ""
-            lon = ""
-            try:
-                if event['venue']['location']['geo:point']['geo:long']:
-                    lon = event['venue']['location']['geo:point']['geo:long']
-                    lat = event['venue']['location']['geo:point']['geo:lat']
-                    search_string = lat + "," + lon
-                elif event['venue']['location']['street']:
-                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
-                elif event['venue']['location']['city']:
-                    search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
+    if "events" in results:
+        if "@attr" in results["events"]:
+            if int(results["events"]["@attr"]["total"]) == 1:
+                results['events']['event'] = [results['events']['event']]
+            for event in results['events']['event']:
+                artists = event['artists']['artist']
+                if isinstance(artists, list):
+                    my_arts = ' / '.join(artists)
                 else:
-                    search_string = urllib.quote_plus(event['venue']['name'])
-            except:
-                search_string = ""
-            googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
-            event = {'date': event['startDate'][:-3],
-                     'name': event['venue']['name'],
-                     'id': event['venue']['id'],
-                     'street': event['venue']['location']['street'],
-                     'eventname': event['title'],
-                     'website': event['website'],
-                     'description': cleanText(event['description']),
-                     'postalcode': event['venue']['location']['postalcode'],
-                     'city': event['venue']['location']['city'],
-                     'country': event['venue']['location']['country'],
-                     'geolong': event['venue']['location']['geo:point']['geo:long'],
-                     'geolat': event['venue']['location']['geo:point']['geo:lat'],
-                     'artists': my_arts,
-                     'googlemap': googlemap,
-                     'artist_image': event['image'][-1]['#text'],
-                     'venue_image': event['venue']['image'][-1]['#text'],
-                     'headliner': event['artists']['headliner']}
-            events.append(event)
+                    my_arts = artists
+                lat = ""
+                lon = ""
+
+                try:
+                    if event['venue']['location']['geo:point']['geo:long']:
+                        lon = event['venue']['location']['geo:point']['geo:long']
+                        lat = event['venue']['location']['geo:point']['geo:lat']
+                        search_string = lat + "," + lon
+                    elif event['venue']['location']['street']:
+                        search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
+                    elif event['venue']['location']['city']:
+                        search_string = urllib.quote_plus(event['venue']['location']['city'] + " " + event['venue']['name'])
+                    else:
+                        search_string = urllib.quote_plus(event['venue']['name'])
+                except:
+                    search_string = ""
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
+                event = {'date': event['startDate'][:-3],
+                         'name': event['venue']['name'],
+                         'id': event['venue']['id'],
+                         'street': event['venue']['location']['street'],
+                         'eventname': event['title'],
+                         'website': event['website'],
+                         'description': cleanText(event['description']),
+                         'postalcode': event['venue']['location']['postalcode'],
+                         'city': event['venue']['location']['city'],
+                         'country': event['venue']['location']['country'],
+                         'geolong': event['venue']['location']['geo:point']['geo:long'],
+                         'geolat': event['venue']['location']['geo:point']['geo:lat'],
+                         'artists': my_arts,
+                         'googlemap': googlemap,
+                         'artist_image': event['image'][-1]['#text'],
+                         'venue_image': event['venue']['image'][-1]['#text'],
+                         'headliner': event['artists']['headliner']}
+                events.append(event)
+    elif "error" in results:
+        Notify("Error", results["message"])
     else:
         log("Error in HandleLastFMEventResult. JSON query follows:")
      #   prettyprint(results)
