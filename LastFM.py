@@ -146,7 +146,7 @@ def GetEvents(id, pastevents=False):
         url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
-    results = GetLastFMData(url)
+    results = GetLastFMData(url, 1)
     try:
         return HandleLastFMEventResult(results)
     except:
@@ -172,6 +172,7 @@ def GetLastFMData(url="", cache_days=14):
             log("Error in GetLastFMData. No Internet connection?")
             log(e)
             return []
+
 
 def GetTopArtists():
     results = GetLastFMData("method=chart.getTopArtists&limit=100")
@@ -258,14 +259,14 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
     if lat:
         url = url + '&lat=%s&long=%s' % (lat, lon)  # &distance=60
-    results = GetLastFMData(url)
+    results = GetLastFMData(url, 1)
  #   prettyprint(results)
     return HandleLastFMEventResult(results)
 
 
 def GetVenueEvents(id=""):
     url = 'method=venue.getevents&venue=%s' % (id)
-    results = GetLastFMData(url)
+    results = GetLastFMData(url, 1)
     try:
         return HandleLastFMEventResult(results)
     except:
