@@ -225,20 +225,24 @@ class Main:
                 if self.id:
                     from MiscScraper import GetTVShowInfo
                     passHomeDataToSkin(GetTVShowInfo(self.id)[0])
+            elif info == 'seasoninfo':
+                if self.tvshow and self.season:
+                    from TheMovieDB import GetSeasonInfo
+                    passHomeDataToSkin(GetSeasonInfo(self.tvshow, self.season))
             elif info == 'directormovies':
                 passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control)
                 if self.director:
                     from TheMovieDB import GetDirectorMovies, GetPersonID
-                    id = GetPersonID(self.director)
-                    if id:
-                        passDataToSkin('DirectorMovies', GetDirectorMovies(id), self.prop_prefix, self.window, self.control)
+                    directorid = GetPersonID(self.director)
+                    if directorid:
+                        passDataToSkin('DirectorMovies', GetDirectorMovies(directorid), self.prop_prefix, self.window, self.control)
             elif info == 'writermovies':
                 passDataToSkin('WriterMovies', None, self.prop_prefix, self.window, self.control)
                 if self.writer and not self.writer.split(" / ")[0] == self.director.split(" / ")[0]:
                     from TheMovieDB import GetDirectorMovies, GetPersonID
-                    id = GetPersonID(self.writer)
-                    if id:
-                        passDataToSkin('WriterMovies', GetDirectorMovies(id), self.prop_prefix, self.window, self.control)
+                    writerid = GetPersonID(self.writer)
+                    if writerid:
+                        passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control)
             elif info == 'similar':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
                 from Trakt import GetSimilarTrakt
@@ -330,6 +334,8 @@ class Main:
         self.time = "all_time"
         self.director = ""
         self.tag = ""
+        self.tvshow = ""
+        self.season = ""
         self.writer = ""
         self.studio = ""
         self.silent = True
@@ -391,6 +397,10 @@ class Main:
                 self.setid = param[6:]
             elif param.startswith('hd='):
                 self.hd = param[3:]
+            elif param.startswith('tvshow='):
+                self.tvshow = param[7:]
+            elif param.startswith('season='):
+                self.season = param[7:]
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
                 if not self.prop_prefix.endswith('.') and self.prop_prefix is not "":
