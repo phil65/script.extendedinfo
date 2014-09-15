@@ -30,7 +30,6 @@ def HandleLastFMEventResult(results):
                     my_arts = artists
                 lat = ""
                 lon = ""
-
                 try:
                     if event['venue']['location']['geo:point']['geo:long']:
                         lon = event['venue']['location']['geo:point']['geo:long']
@@ -48,6 +47,7 @@ def HandleLastFMEventResult(results):
                 event = {'date': event['startDate'][:-3],
                          'name': event['venue']['name'],
                          'id': event['venue']['id'],
+                         'venue_id': event['venue']['id'],
                          'street': event['venue']['location']['street'],
                          'eventname': event['title'],
                          'website': event['website'],
@@ -55,8 +55,10 @@ def HandleLastFMEventResult(results):
                          'postalcode': event['venue']['location']['postalcode'],
                          'city': event['venue']['location']['city'],
                          'country': event['venue']['location']['country'],
-                         'geolong': event['venue']['location']['geo:point']['geo:long'],
                          'geolat': event['venue']['location']['geo:point']['geo:lat'],
+                         'geolong': event['venue']['location']['geo:point']['geo:long'],
+                         'lat': event['venue']['location']['geo:point']['geo:lat'],
+                         'lon': event['venue']['location']['geo:point']['geo:long'],
                          'artists': my_arts,
                          'googlemap': googlemap,
                          'artist_image': event['image'][-1]['#text'],
