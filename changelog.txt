@@ -1,3 +1,9 @@
+v0.8.0
+- many Bugfixes
+- removed GoogleMaps functionality and daemon mode
+- exchanged API key
+- some new functions (mostlovedtracks, albumshouts)
+
 v0.0.5
 Fixes & Additions for various info lists from Rotten Tomatoes, TheMovieDB and Trakt.tv (See README file for details).
 
