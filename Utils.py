@@ -403,14 +403,8 @@ def GetStringFromUrl(encurl):
         try:
             request = urllib2.Request(encurl)
             request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
-            request.add_header('Accept-encoding', 'gzip')
             response = urllib2.urlopen(request)
-            if response.info().get('Content-Encoding') == 'gzip':
-                buf = StringIO(response.read())
-                compr = gzip.GzipFile(fileobj=buf)
-                data = compr.read()
-            else:
-                data = response.read()
+            data = response.read()
        #     log("URL String: " + data)
             return data
         except:
