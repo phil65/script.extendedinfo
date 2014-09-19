@@ -1,4 +1,4 @@
-from Utils import GetStringFromUrl
+from Utils import *
 import sys
 if sys.version_info < (2, 7):
     import simplejson
@@ -6,20 +6,19 @@ else:
     import json as simplejson
 
 rottentomatoes_key = '63sbsudx936yedd2wdmt6tkn'
+base_url = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
 
 
 def GetRottenTomatoesMoviesInTheaters(type):
     movies = []
-    results = ""
     try:
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
-        log("Json Query: " + url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        url = 'movies/in_theaters.json?apikey=%s' % (rottentomatoes_key)
+        results = Get_JSON_response(base_url, url)
     except:
-        log("Error when fetching RottenTomatoes data from net")
+        results = None
+        Notify("Error when fetching RottenTomatoes data from net")
     count = 1
-    if results:
+    if results is not None:
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -38,16 +37,14 @@ def GetRottenTomatoesMoviesInTheaters(type):
 
 def GetRottenTomatoesMoviesOpening(type):
     movies = []
-    results = ""
     try:
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/opening.json?apikey=%s' % (rottentomatoes_key)
-        log("Json Query: " + url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        url = 'movies/opening.json?apikey=%s' % (rottentomatoes_key)
+        results = Get_JSON_response(base_url, url)
     except:
-        log("Error when fetching RottenTomatoes data from net")
+        results = None
+        Notify("Error when fetching RottenTomatoes data from net")
     count = 1
-    if results:
+    if results is not None:
  #       log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
@@ -67,16 +64,14 @@ def GetRottenTomatoesMoviesOpening(type):
 
 def GetRottenTomatoesMoviesComingSoon(type):
     movies = []
-    results = ""
     try:
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/upcoming.json?apikey=%s' % (rottentomatoes_key)
-        log("Json Query: " + url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        url = 'movies/upcoming.json?apikey=%s' % (rottentomatoes_key)
+        results = Get_JSON_response(base_url, url)
     except:
-        log("Error when fetching RottenTomatoes data from net")
+        Notify("Error when fetching RottenTomatoes data from net")
+        results = None
     count = 1
-    if results:
+    if results is not None:
         for item in results["movies"]:
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
@@ -95,16 +90,14 @@ def GetRottenTomatoesMoviesComingSoon(type):
 
 def GetRottenTomatoesMoviesBoxOffice(type):
     movies = []
-    results = ""
     try:
-        url = 'http://api.rottentomatoes.com/api/public/v1.0/lists/movies/box_office.json?apikey=%s' % (rottentomatoes_key)
-        log("Json Query: " + url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        url = 'movies/box_office.json?apikey=%s' % (rottentomatoes_key)
+        results = Get_JSON_response(base_url, url)
     except:
-        log("Error when fetching RottenTomatoes data from net")
+        Notify("Error when fetching RottenTomatoes data from net")
+        results = None
     count = 1
-    if results:
+    if results is not None:
     #    log(results)
         for item in results["movies"]:
             movie = {'Title': item["title"],
