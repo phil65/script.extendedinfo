@@ -1,8 +1,6 @@
 import xbmcaddon
 import os
 import xbmc
-import xbmcvfs
-import time
 import sys
 if sys.version_info < (2, 7):
     import simplejson
@@ -14,6 +12,7 @@ import urllib
 lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
 googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
+base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&' % (lastfm_apikey)
 
 
 def HandleLastFMEventResult(results):
@@ -148,7 +147,7 @@ def GetEvents(id, pastevents=False):
         url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
-    results = GetLastFMData(url, 1)
+    results = Get_JSON_response(base_url, url, 1)
     try:
         return HandleLastFMEventResult(results)
     except:
@@ -156,28 +155,8 @@ def GetEvents(id, pastevents=False):
         return []
 
 
-def GetLastFMData(url="", cache_days=7):
-    from base64 import b64encode
-    filename = b64encode(url).replace("/", "XXXX")
-    path = Addon_Data_Path + "/" + filename + ".txt"
-    log("trying to load " + path)
-    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-        return read_from_file(path)
-    else:
-        url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&%s' % (lastfm_apikey, url)
-        response = GetStringFromUrl(url)
-        try:
-            results = simplejson.loads(response)
-            save_to_file(results, filename, Addon_Data_Path)
-            return results
-        except Exception as e:
-            log("Error in GetLastFMData. No Internet connection?")
-            log(e)
-            return []
-
-
 def GetTopArtists():
-    results = GetLastFMData("method=chart.getTopArtists&limit=100")
+    results = Get_JSON_response(base_url, "method=chart.getTopArtists&limit=100")
     if "artists" in results:
         return HandleLastFMArtistResult(results['artists'])
     else:
@@ -187,7 +166,7 @@ def GetTopArtists():
 
 def GetAlbumShouts(artistname, albumtitle):
     url = 'method=album.GetAlbumShouts&artist=%s&album=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(albumtitle))
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMShoutResult(results)
     except Exception as e:
@@ -198,7 +177,7 @@ def GetAlbumShouts(artistname, albumtitle):
 
 def GetArtistShouts(artistname):
     url = 'method=artist.GetShouts&artist=%s' % (urllib.quote_plus(artistname))
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMShoutResult(results)
     except Exception as e:
@@ -209,7 +188,7 @@ def GetArtistShouts(artistname):
 
 def GetTrackShouts(artistname, tracktitle):
     url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(tracktitle))
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMShoutResult(results)
     except Exception as e:
@@ -220,7 +199,7 @@ def GetTrackShouts(artistname, tracktitle):
 
 def GetEventShouts(eventid):
     url = 'method=event.GetShouts&event=%s' % (eventid)
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMShoutResult(results)
     except Exception as e:
@@ -231,7 +210,7 @@ def GetEventShouts(eventid):
 
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMAlbumResult(results)
     except Exception as e:
@@ -242,7 +221,7 @@ def GetArtistTopAlbums(mbid):
 
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     try:
         return HandleLastFMArtistResult(results['similarartists'])
     except Exception as e:
@@ -261,14 +240,14 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
     if lat:
         url = url + '&lat=%s&long=%s' % (lat, lon)  # &distance=60
-    results = GetLastFMData(url, 1)
+    results = Get_JSON_response(base_url, url, 1)
  #   prettyprint(results)
     return HandleLastFMEventResult(results)
 
 
 def GetVenueEvents(id=""):
     url = 'method=venue.getevents&venue=%s' % (id)
-    results = GetLastFMData(url, 1)
+    results = Get_JSON_response(base_url, url, 1)
     try:
         return HandleLastFMEventResult(results)
     except:
@@ -278,7 +257,7 @@ def GetVenueEvents(id=""):
 
 def GetTrackInfo(artist="", track=""):
     url = 'method=track.getInfo&artist=%s&track=%s' % (urllib.quote_plus(artist), urllib.quote_plus(track))
-    results = GetLastFMData(url)
+    results = Get_JSON_response(base_url, url)
     if True:
         return HandleLastFMTrackResult(results)
     else:

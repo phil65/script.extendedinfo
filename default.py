@@ -4,7 +4,6 @@ import xbmc
 import xbmcgui
 import xbmcaddon
 from LastFM import *
-from MusicBrainz import *
 from MiscScraper import *
 from TheAudioDB import *
 from TheMovieDB import *
@@ -373,8 +372,10 @@ class Main:
                 self.UserName = arg[9:].replace('"', '')
             elif param.startswith('window='):
                 if arg[7:] == "currentdialog":
+                    xbmc.sleep(300)
                     self.window = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
                 elif arg[7:] == "current":
+                    xbmc.sleep(300)
                     self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
                 else:
                     self.window = xbmcgui.Window(int(arg[7:]))

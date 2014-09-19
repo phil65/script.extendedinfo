@@ -10,6 +10,8 @@ import sys
 import time
 import gzip
 from StringIO import StringIO
+from base64 import b64encode
+
 
 if sys.version_info < (2, 7):
     import simplejson
@@ -369,6 +371,19 @@ def CompareWithLibrary(onlinelist):
     return onlinelist
 
 
+def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
+    base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
+    url = '&query=artist:%s' % urllib.quote_plus(artist)
+    results = Get_JSON_response(base_url, url, 30)
+    prettyprint(results)
+    if len(results["artist"]) > 0:
+        mbid = results["artist"][0]["id"]
+        log("found artist id for " + artist + ": " + mbid)
+        return mbid
+    else:
+        return None
+
+
 def CompareAlbumWithLibrary(onlinelist):
     global locallist
     if not locallist:
@@ -412,6 +427,24 @@ def GetStringFromUrl(encurl):
             xbmc.sleep(1000)
             succeed += 1
     return ""
+
+
+def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
+    xbmc.executebuiltin("ActivateWindow(busydialog)")
+    filename = b64encode(custom_url).replace("/", "XXXX")
+    path = Addon_Data_Path + "\\&" + filename + ".txt"
+    cache_seconds = int(cache_days * 86400.0)
+    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
+        results = read_from_file(path)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return results
+    else:
+        url = base_url + custom_url
+        response = GetStringFromUrl(url)
+        results = simplejson.loads(response)
+        save_to_file(results, filename, Addon_Data_Path)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return results
 
 
 def log(txt):
@@ -558,6 +591,10 @@ def SetWindowProperties(name, data, prefix="", debug=False):
 
 
 def CreateListItems(data, controlwindow, controlnumber):
+    log(str(xbmcgui.getCurrentWindowId()))
+    log(str(xbmcgui.getCurrentWindowDialogId()))
+    log(str(controlwindow))
+    xbmc.sleep(200)
     itemlist = controlwindow.getControl(controlnumber)
     if data is not None:
         for (count, result) in enumerate(data):
@@ -568,8 +605,12 @@ def CreateListItems(data, controlwindow, controlnumber):
                 if str(key).lower() in ["thumb"]:
                     listitem.setThumbnailImage(unicode(value))
                 listitem.setProperty('%s' % (str(key)), unicode(value))
-            itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
+            itempath = "ActivateWindow(home)"
+           # itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
             listitem.setPath(path=itempath)
+            listitem.setProperty("target_url", itempath)
+            listitem.setProperty("node:target_url", itempath)
+            listitem.setProperty("node.target_url", itempath)
             itemlist.addItem(listitem)
 
 def cleanText(text):

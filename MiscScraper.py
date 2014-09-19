@@ -22,9 +22,9 @@ def GetXKCDInfo():
     items = []
     for i in range(0, 10):
         try:
-            url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1190)
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
+            base_url = 'http://xkcd.com/'
+            url = '%i/info.0.json' % random.randrange(1, 1190)
+            results = Get_JSON_response(base_url, url)
             item = {'Image': results["img"],
                     'Title': results["title"],
                     'Description': results["alt"]}
@@ -39,18 +39,19 @@ def GetCandHInfo():
     images = []
     for i in range(1, 30):
         try:
-            url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
-            response = GetStringFromUrl(url)
+            base_url = 'http://www.explosm.net/comics/'
+            url = '%i/' % random.randrange(1, 3128)
+            results = Get_JSON_response(base_url, url)
         except:
             log("Error when fetching CandH data from net")
         if response:
             regex = ur'src="([^"]+)"'
-            matches = re.findall(regex, response)
+            matches = re.findall(regex, results)
             if matches:
                 for item in matches:
                     if item.startswith('http://www.explosm.net/db/files/Comics/'):
                         dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
-                        datematches = re.findall(dateregex, response)
+                        datematches = re.findall(dateregex, results)
                         newitem = {'Image': item,
                                    'Title': datematches[0]}
                         images.append(newitem)
@@ -65,9 +66,9 @@ def GetFlickrImages():
     images = []
     results = ""
     try:
-        url = 'http://pipes.yahoo.com/pipes/pipe.run?_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
+        url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
+        results = Get_JSON_response(base_url, url)
     except:
         log("Error when fetching Flickr data from net")
     count = 1
@@ -82,8 +83,7 @@ def GetFlickrImages():
 def GetYoutubeVideos(jsonurl, prefix=""):
     results = []
     try:
-        response = GetStringFromUrl(jsonurl)
-        results = simplejson.loads(response)
+        results = Get_JSON_response("", url)
     except:
         log("Error when fetching JSON data from net")
     count = 1
@@ -123,10 +123,9 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="a
         hd_string = ""
     search_string = urllib.quote(search_string.replace('"', ''))
     try:
-        url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
-        log(url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        base_url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json'
+        url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
+        results = Get_JSON_response(base_url, url)
     except:
         log("Error when fetching JSON data from net")
     count = 1
@@ -148,10 +147,9 @@ def GetYoutubeUserVideos(userid=""):
     results = []
     userid = urllib.quote(userid.replace('"', ''))
     try:
-        url = 'https://gdata.youtube.com/feeds/api/users/%s/uploads?v=2&alt=json' % (userid)
-        log(url)
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        base_url = 'https://gdata.youtube.com/feeds/api/users/'
+        url = '%s/uploads?v=2&alt=json' % (userid)
+        results = Get_JSON_response(base_url, url)
     except:
         log("Error when fetching JSON data from net")
     count = 1
@@ -215,9 +213,9 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
                 ArtistStr = ArtistStr + '&'
             ArtistStr = ArtistStr + 'artists[]=' + artist
             count += 1
-    url = 'http://api.bandsintown.com/events/search?%sformat=json&location=use_geoip&radius=50&per_page=100&api_version=2.0&app_id=%s' % (ArtistStr, bandsintown_apikey)
-    response = GetStringFromUrl(url)
-    results = simplejson.loads(response)
+    base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
+    url = '&%sapp_id=%s' % (ArtistStr, bandsintown_apikey)
+    results = Get_JSON_response(base_url, url)
   #   prettyprint(results)
     return HandleBandsInTownResult(results)
     if False:
