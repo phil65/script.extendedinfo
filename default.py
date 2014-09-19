@@ -212,14 +212,26 @@ class Main:
                     writerid = GetPersonID(self.writer)
                     if writerid:
                         passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control)
-            elif info == 'similar':
+            elif info == 'similarmoviestrakt':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
-                if self.type and (self.id or self.dbid):
+                if (self.id or self.dbid):
                     if self.dbid:
-                        id = GetImdbID(self.type, self.dbid)
+                        id = GetImdbID("movie", self.dbid)
+                #        Notify("GetIMDBID: " + str(self.id))
                     else:
                         id = self.id
-                    passDataToSkin('SimilarMovies', GetSimilarTrakt(self.type, id), self.prop_prefix, self.window, self.control)
+                #        Notify("self.id: " + str(self.id))
+                    passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control)
+            elif info == 'similartvshowstrakt':
+                passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control)
+                if (self.id or self.dbid):
+                    if self.dbid:
+                        id = GetImdbID("tvshow", self.dbid)
+              #          Notify("GetIMDBID: " + str(self.id))
+                    else:
+                        id = self.id
+               #         Notify("self.id: " + str(self.id))
+                    passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", id), self.prop_prefix, self.window, self.control)
             elif info == 'airingshows':
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control)
             elif info == 'premiereshows':

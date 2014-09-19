@@ -429,7 +429,7 @@ def GetStringFromUrl(encurl):
     return None
 
 
-def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
+def Get_JSON_response(base_url="", custom_url="", cache_days=7):
 #    xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = b64encode(custom_url).replace("/", "XXXX")
     path = Addon_Data_Path + "\\&" + filename + ".txt"
@@ -441,6 +441,7 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):
     else:
         url = base_url + custom_url
         response = GetStringFromUrl(url)
+        log(response)
         results = simplejson.loads(response)
         save_to_file(results, filename, Addon_Data_Path)
 #        xbmc.executebuiltin("Dialog.Close(busydialog)")

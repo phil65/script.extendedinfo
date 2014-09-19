@@ -140,8 +140,6 @@ def GetTrendingMovies():
 
 def GetSimilarTrakt(mediatype, imdb_id):
     if imdb_id is not None:
-        if mediatype == "tvshow":
-            mediatype = "show"
         url = '%s/related.json/%s/%s/' % (mediatype, trakt_key, imdb_id)
         results = Get_JSON_response(base_url, url)
         if results is not None:
