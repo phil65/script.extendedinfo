@@ -426,7 +426,7 @@ def GetStringFromUrl(encurl):
             log("GetStringFromURL: could not get data from %s" % encurl)
             xbmc.sleep(1000)
             succeed += 1
-    return ""
+    return None
 
 
 def Get_JSON_response(base_url="", custom_url="", cache_days=0.5):

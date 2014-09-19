@@ -1,7 +1,4 @@
-import xbmcvfs
 import datetime
-import time
-import os
 import sys
 from Utils import *
 if sys.version_info < (2, 7):
