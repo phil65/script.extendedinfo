@@ -15,7 +15,7 @@ def GetTraktCalendarShows(Type):
     results = ""
     url = 'calendar/%s.json/%s/today/14' % (Type, trakt_key)
     try:
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url, url, 0.5)
     except:
         log("Error when fetching Trakt data from net")
         log("Json Query: " + url)
@@ -139,14 +139,16 @@ def GetTrendingMovies():
 
 
 def GetSimilarTrakt(mediatype, imdb_id):
-    results = ""
-    if mediatype == "tvshow":
-        mediatype = "show"
-    url = '%s/related.json/%s/%s/' % (mediatype, trakt_key, imdb_id)
-    results = Get_JSON_response(base_url, url)
-    if results is not None:
-        if mediatype == "show":
-            return HandleTraktTVShowResult(results)
-        elif mediatype == "movie":
-            return HandleTraktMovieResult(results)
-    return[]
+    if imdb_id is not None:
+        if mediatype == "tvshow":
+            mediatype = "show"
+        url = '%s/related.json/%s/%s/' % (mediatype, trakt_key, imdb_id)
+        results = Get_JSON_response(base_url, url)
+        if results is not None:
+            if mediatype == "show":
+                return HandleTraktTVShowResult(results)
+            elif mediatype == "movie":
+                return HandleTraktMovieResult(results)
+    else:
+        Notify("Error when fetching info from Trakt.TV")
+        return[]
