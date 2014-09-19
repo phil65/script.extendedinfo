@@ -39,9 +39,8 @@ def GetCandHInfo():
     images = []
     for i in range(1, 30):
         try:
-            base_url = 'http://www.explosm.net/comics/'
-            url = '%i/' % random.randrange(1, 3128)
-            results = Get_JSON_response(base_url, url)
+            url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
+            response = GetStringFromUrl(url)
         except:
             log("Error when fetching CandH data from net")
         if response:
