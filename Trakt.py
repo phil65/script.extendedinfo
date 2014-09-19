@@ -10,20 +10,21 @@ else:
     import json as simplejson
 
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
+base_url = "http://api.trakt.tv/"
 
 
 def GetTraktCalendarShows(Type):
     shows = []
     results = ""
-    url = 'http://api.trakt.tv/calendar/%s.json/%s/today/14' % (Type, trakt_key)
+    url = 'calendar/%s.json/%s/today/14' % (Type, trakt_key)
     try:
-        response = GetStringFromUrl(url)
-        results = simplejson.loads(response)
+        results = Get_JSON_response(base_url, url)
     except:
         log("Error when fetching Trakt data from net")
         log("Json Query: " + url)
+        results = None
     count = 1
-    if results:
+    if results is not None:
         for day in results:
             for episode in day["episodes"]:
                 show = {'Title': episode["episode"]["title"],
@@ -120,87 +121,35 @@ def HandleTraktTVShowResult(results):
 
 
 def GetTrendingShows():
-    results = ""
-    filename = Addon_Data_Path + "/trendingshows.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
+    url = 'shows/trending.json/%s' % trakt_key
+    results = Get_JSON_response(base_url, url)
+    if results is not None:
         return HandleTraktTVShowResult(results)
-    else:
-        url = 'http://api.trakt.tv/shows/trending.json/%s' % trakt_key
-        try:
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-            save_to_file(results, "trendingshows", Addon_Data_Path)
-        except Exception as e:
-            log("Error when fetching  trending data from Trakt.tv")
-            log(e)
-            log(url)
-        if results:
-            return HandleTraktTVShowResult(results)
 
 
 def GetTVShowInfo(id):
-    results = ""
-    filename = Addon_Data_Path + "/tvshow" + id + ".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
+    url = 'show/summary.json/%s/%s' % (trakt_key, id)
+    results = Get_JSON_response(base_url, url)
+    if results is not None:
         return HandleTraktTVShowResult([results])
-    else:
-        url = 'http://api.trakt.tv/show/summary.json/%s/%s' % (trakt_key, id)
-        try:
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-            save_to_file(results, "tvshow" + id, Addon_Data_Path)
-        except Exception as e:
-            log("Error when fetching  trending data from Trakt.tv (GetTVShowInfo)")
-            log(e)
-            log(url)
-        if results:
-            return HandleTraktTVShowResult([results])
 
 
 def GetTrendingMovies():
-    results = ""
-    filename = Addon_Data_Path + "/trendingmovies.txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 86400:
-        results = read_from_file(filename)
+    url = 'movies/trending.json/%s' % trakt_key
+    results = Get_JSON_response(base_url, url)
+    if results is not None:
         return HandleTraktMovieResult(results)
-    else:
-        url = 'http://api.trakt.tv/movies/trending.json/%s' % trakt_key
-        try:
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-        except Exception as e:
-            log("Error when fetching  trending data from Trakt.tv (GetTrendingMovies). URL and exception:")
-            log(url)
-            log(e)
-        if results:
-            return HandleTraktMovieResult(results)
 
 
-def GetSimilarTrakt(type, imdb_id):
+def GetSimilarTrakt(mediatype, imdb_id):
     results = ""
-    if type == "tvshow":
-        type = "show"
-    filename = Addon_Data_Path + "/similar" + type + imdb_id + ".txt"
-    if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
-        results = read_from_file(filename)
-        if type == "show":
+    if mediatype == "tvshow":
+        mediatype = "show"
+    url = '%s/related.json/%s/%s/' % (mediatype, trakt_key, imdb_id)
+    results = Get_JSON_response(base_url, url)
+    if results is not None:
+        if mediatype == "show":
             return HandleTraktTVShowResult(results)
-        elif type == "movie":
+        elif mediatype == "movie":
             return HandleTraktMovieResult(results)
-    else:
-        url = 'http://api.trakt.tv/%s/related.json/%s/%s/' % (type, trakt_key, imdb_id)
-        try:
-            response = GetStringFromUrl(url)
-            results = simplejson.loads(response)
-            save_to_file(results, "similar" + type + imdb_id, Addon_Data_Path)
-        except:
-            log("Error when fetching  trending data from Trakt.tv")
-            log(url)
-        if results:
-            if type == "show":
-                return HandleTraktTVShowResult(results)
-            elif type == "movie":
-                return HandleTraktMovieResult(results)
     return[]
