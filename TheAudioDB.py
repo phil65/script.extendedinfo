@@ -1,8 +1,6 @@
 import xbmcaddon
 import os
 import xbmc
-import xbmcvfs
-import time
 import simplejson as json
 from Utils import *
 import urllib
@@ -10,25 +8,7 @@ import urllib
 AudioDB_apikey = '58353d43204d68753987fl'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 __addon__ = xbmcaddon.Addon()
-
-
-def GetAudioDBData(url="", cache_days=0):
-    from base64 import b64encode
-    filename = b64encode(url).replace("/", "XXXX")
-    path = Addon_Data_Path + "/" + filename + ".txt"
-    log("trying to load " + path)
-    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-        return read_from_file(path)
-    else:
-        try:
-            url = 'http://www.theaudiodb.com/api/v1/json/%s/%s' % (AudioDB_apikey, url)
-            response = GetStringFromUrl(url)
-            results = json.loads(response)
-            save_to_file(results, filename, Addon_Data_Path)
-            return results
-        except:
-            log("GetAudioDBData failed with answer: " + response)
-            return []
+base_url = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AudioDB_apikey)
 
 
 def HandleAudioDBAlbumResult(results):
@@ -168,13 +148,13 @@ def GetExtendedAudioDBInfo(results):
 
 def GetDiscography(search_string):
     url = 'searchalbum.php?s=%s' % (urllib.quote_plus(search_string))
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
     return HandleAudioDBAlbumResult(results)
 
 
 def GetArtistDetails(search_string):
     url = 'search.php?s=%s' % (urllib.quote_plus(search_string))
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
    # prettyprint(results)
     return GetExtendedAudioDBInfo(results)
 
@@ -185,7 +165,7 @@ def GetMostLovedTracks(search_string="", mbid=""):
     else:
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
     log("GetMostLoveTracks URL:" + url)
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
     return HandleAudioDBTrackResult(results)
 
 
@@ -194,18 +174,18 @@ def GetAlbumDetails(audiodbid="", mbid=""):
         url = 'album.php?m=%s' % (audiodbid)
     elif mbid:
         url = 'album-mb.php?i=%s' % (mbid)
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
   #  prettyprint(results)
     return HandleAudioDBAlbumResult(results)[0]
 
 
 def GetMusicVideos(audiodbid):
     url = 'mvid.php?i=%s' % (audiodbid)
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
     return HandleAudioDBMusicVideoResult(results)
 
 
 def GetTrackDetails(audiodbid):
     url = 'track.php?m=%s' % (audiodbid)
-    results = GetAudioDBData(url)
+    results = Get_JSON_response(base_url, url)
     return HandleAudioDBTrackResult(results)
