@@ -558,6 +558,14 @@ def GetImdbID(type, dbid):
         else:
             return []
 
+def GetImdbIDfromEpisode(dbid):
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    prettyprint(json_response)
+    if "episodedetails" in json_response["result"]:
+        tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
+        return GetImdbID("tvshow", tvshowid)
 
 def passHomeDataToSkin(data, debug=True):
     if data is not None:

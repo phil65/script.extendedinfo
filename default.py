@@ -217,21 +217,24 @@ class Main:
                 if (self.id or self.dbid):
                     if self.dbid:
                         id = GetImdbID("movie", self.dbid)
-                #        Notify("GetIMDBID: " + str(self.id))
+                        Notify("GetIMDBID: " + str(self.id))
                     else:
                         id = self.id
-                #        Notify("self.id: " + str(self.id))
+                        Notify("self.id: " + str(self.id))
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control)
             elif info == 'similartvshowstrakt':
                 passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control)
                 if (self.id or self.dbid):
                     if self.dbid:
-                        id = GetImdbID("tvshow", self.dbid)
-              #          Notify("GetIMDBID: " + str(self.id))
+                        if self.type == "episode":
+                            tvshowid = GetImdbIDfromEpisode(self.dbid)
+                        else:
+                            tvshowid = GetImdbID("tvshow", self.dbid)
+                        Notify("GetIMDBID: " + str(self.id))
                     else:
-                        id = self.id
-               #         Notify("self.id: " + str(self.id))
-                    passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", id), self.prop_prefix, self.window, self.control)
+                        tvshowid = self.id
+                        Notify("self.id: " + str(self.id))
+                    passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), self.prop_prefix, self.window, self.control, True)
             elif info == 'airingshows':
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control)
             elif info == 'premiereshows':
