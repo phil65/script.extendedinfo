@@ -127,7 +127,6 @@ class Main:
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control)
             elif info == 'cyanide':
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control)
-
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
                 passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix, self.window, self.control)
@@ -139,7 +138,6 @@ class Main:
                 passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix, self.window, self.control)
             elif info == 'toprentals':
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control)
-
             ### The MovieDB ##########################################################################################
             elif info == 'incinemas':
                 passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, self.window, self.control)
@@ -149,7 +147,6 @@ class Main:
                 passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, self.window, self.control)
             elif info == 'popularmovies':
                 passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, self.window, self.control)
-
             elif info == 'airingtodaytvshows':
                 passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix, self.window, self.control)
             elif info == 'onairtvshows':
@@ -231,7 +228,7 @@ class Main:
             elif info == 'trendingshows':
                 passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix, self.window, self.control)
             elif info == 'trendingmovies':
-                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control, True)
+                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control)
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtists', None, self.prop_prefix, self.window, self.control)
                 passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control)
@@ -375,7 +372,12 @@ class Main:
             elif param.startswith('username='):
                 self.UserName = arg[9:].replace('"', '')
             elif param.startswith('window='):
-                self.window = xbmcgui.Window(int(arg[7:]))
+                if arg[7:] == "currentdialog":
+                    self.window = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
+                elif arg[7:] == "current":
+                    self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+                else:
+                    self.window = xbmcgui.Window(int(arg[7:]))
             elif param.startswith('control='):
                 self.control = int(arg[8:])
             elif param.startswith('setuplocation'):
