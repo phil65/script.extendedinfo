@@ -299,6 +299,8 @@ class Main:
         self.window.clearProperty('SongToMusicVideo.Path')
 
     def _parse_argv(self):
+        if not self.silent:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
         try:
             params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
         except:
@@ -399,6 +401,8 @@ class Main:
                 log('done with settings')
             else:
                 AdditionalParams.append(param)
+        if not self.silent:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def _selection_dialog(self):
         modeselect = []
