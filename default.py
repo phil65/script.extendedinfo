@@ -219,10 +219,8 @@ class Main:
                 if (self.id or self.dbid):
                     if self.dbid:
                         id = GetImdbID("movie", self.dbid)
-                        Notify("GetIMDBID: " + str(self.id))
                     else:
                         id = self.id
-                        Notify("self.id: " + str(self.id))
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control)
             elif info == 'similartvshowstrakt':
                 passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control)
@@ -232,10 +230,8 @@ class Main:
                             tvshowid = GetImdbIDfromEpisode(self.dbid)
                         else:
                             tvshowid = GetImdbID("tvshow", self.dbid)
-                        Notify("GetIMDBID: " + str(self.id))
                     else:
                         tvshowid = self.id
-                        Notify("self.id: " + str(self.id))
                     passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), self.prop_prefix, self.window, self.control, True)
             elif info == 'airingshows':
                 passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control)
@@ -329,7 +325,6 @@ class Main:
             base_url = sys.argv[0]
             log(args)
             self.control = "plugin"
-            Notify(str(args))
             params = {}
         else:
             args = sys.argv
