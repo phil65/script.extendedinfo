@@ -25,6 +25,8 @@ def HandleTheMovieDBMovieResult(results):
         try:
             newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path', "")),
                         'Art(poster)': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'Poster': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'fanart': base_url + fanart_size + str(movie.get('backdrop_path', "")),
                         'Title': movie.get('title', ""),
                         'OriginalTitle': movie.get('original_title', ""),
                         'ID': movie.get('id', ""),
