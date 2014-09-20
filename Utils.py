@@ -4,6 +4,7 @@ import xbmcaddon
 import xbmcgui
 import xbmcvfs
 import datetime
+import xbmcplugin
 import urllib2
 import os
 import sys
@@ -576,9 +577,18 @@ def passHomeDataToSkin(data, debug=True):
 
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, debug=False):
-    if controlnumber is not None:
+    if controlnumber is "plugin":
+        items = CreateListItems(data)
+        xbmcplugin.setContent(1, 'movies')
+        for item in items:
+            xbmcplugin.addDirectoryItem(handle=1, url="", listitem=item, isFolder=False)
+        xbmcplugin.endOfDirectory(1)
+    elif controlnumber is not None:
         log("creatin listitems for list with id " + str(controlnumber))
-        CreateListItems(data, controlwindow, controlnumber)
+        xbmc.sleep(200)
+        itemlist = controlwindow.getControl(controlnumber)
+        items = CreateListItems(data)
+        itemlist.addItems(items)
     else:
         SetWindowProperties(name, data, prefix, debug)
 
@@ -599,12 +609,11 @@ def SetWindowProperties(name, data, prefix="", debug=False):
         log("%s%s.Count = None" % (prefix, name))
 
 
-def CreateListItems(data, controlwindow, controlnumber):
-    log(str(xbmcgui.getCurrentWindowId()))
-    log(str(xbmcgui.getCurrentWindowDialogId()))
-    log(str(controlwindow))
-    xbmc.sleep(200)
-    itemlist = controlwindow.getControl(controlnumber)
+def CreateListItems(data):
+    # log(str(xbmcgui.getCurrentWindowId()))
+    # log(str(xbmcgui.getCurrentWindowDialogId()))
+    # log(str(controlwindow))
+    itemlist = []
     if data is not None:
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
@@ -620,7 +629,9 @@ def CreateListItems(data, controlwindow, controlnumber):
             listitem.setProperty("target_url", itempath)
             listitem.setProperty("node:target_url", itempath)
             listitem.setProperty("node.target_url", itempath)
-            itemlist.addItem(listitem)
+            itemlist.append(listitem)
+    return itemlist
+
 
 def cleanText(text):
     import re

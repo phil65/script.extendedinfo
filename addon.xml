@@ -5,6 +5,7 @@
 		<import addon="script.module.simplejson" version="2.0.10"/>
 	</requires>
 	<extension point="xbmc.python.library"          library="default.py" />
+	<extension point="xbmc.python.pluginsource"     library="default.py" />
     <extension point="xbmc.python.script"           library="default.py">
         <provides>executable</provides>
     </extension>

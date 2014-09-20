@@ -3,6 +3,8 @@ import os
 import xbmc
 import xbmcgui
 import xbmcaddon
+import urlparse
+import urllib
 from LastFM import *
 from MiscScraper import *
 from TheAudioDB import *
@@ -128,13 +130,13 @@ class Main:
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control)
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
-                passDataToSkin('InTheatersMovies', GetRottenTomatoesMoviesInTheaters("in_theaters"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix, self.window, self.control)
             elif info == 'boxoffice':
-                passDataToSkin('BoxOffice', GetRottenTomatoesMoviesBoxOffice("box_office"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix, self.window, self.control)
             elif info == 'opening':
-                passDataToSkin('Opening', GetRottenTomatoesMoviesOpening("opening"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix, self.window, self.control)
             elif info == 'comingsoon':
-                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMoviesComingSoon("upcoming"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, self.window, self.control)
             elif info == 'toprentals':
                 passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control)
             ### The MovieDB ##########################################################################################
@@ -308,18 +310,35 @@ class Main:
         self.writer = ""
         self.studio = ""
         self.silent = True
+        self.addon_handle = 0
         self.festivalsonly = False
         self.prop_prefix = ""
         self.Artist_mbid = None
+        self.pluginmode = False
         self.window.clearProperty('SongToMusicVideo.Path')
 
+    def _build_url(self, query):
+        return base_url + '?' + urllib.urlencode(query)
+
     def _parse_argv(self):
+        if sys.argv[0] == 'plugin://script.extendedinfo/':
+            self.pluginmode = True
+            args = sys.argv[2][1:].split("&")
+            dict_args = urlparse.parse_qs(sys.argv[2][1:])
+            self.addon_handle = int(sys.argv[1])
+            base_url = sys.argv[0]
+            log(args)
+            self.control = "plugin"
+            Notify(str(args))
+            params = {}
+        else:
+            args = sys.argv
+            try:
+                params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
+            except:
+                params = {}
         if not self.silent:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        try:
-            params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
-        except:
-            params = {}
         self.exportsettings = params.get("exportsettings", False)
         self.importsettings = params.get("importsettings", False)
         self.importextrathumb = params.get("importextrathumb", False)
@@ -327,7 +346,7 @@ class Main:
         self.importextrafanart = params.get("importextrafanart", False)
         self.importextrafanarttv = params.get("importextrafanarttv", False)
         self.importallartwork = params.get("importallartwork", False)
-        for arg in sys.argv:
+        for arg in args:
             log(arg)
             if arg == 'script.extendedinfo':
                 continue
