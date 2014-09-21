@@ -583,9 +583,12 @@ def passHomeDataToSkin(data, debug=True):
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
     if controlnumber is "plugin":
         items = CreateListItems(data)
-        xbmcplugin.setContent(handle, 'movies')
+        xbmcplugin.setContent(handle, 'url')
+        itemlist = list()
         for item in items:
-            xbmcplugin.addDirectoryItem(handle=handle, url="", listitem=item, isFolder=False)
+            log(item.getProperty("path"))
+            itemlist.append((item.getProperty("path"), item, False))
+        xbmcplugin.addDirectoryItems(handle, itemlist, False)
         xbmcplugin.endOfDirectory(handle)
     elif controlnumber is not None:
         log("creatin listitems for list with id " + str(controlnumber))
@@ -623,6 +626,7 @@ def CreateListItems(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
             for (key, value) in result.iteritems():
+                log("key: " + unicode(key) + "  value: " + unicode(value))
                 if str(key).lower() in ["name", "label", "title"]:
                     listitem.setLabel(unicode(value))
                 if str(key).lower() in ["thumb"]:
