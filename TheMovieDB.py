@@ -291,6 +291,7 @@ def GetExtendedMovieInfo(Id):
                 'Rating': response.get('vote_average', ""),
                 'Play': '',
                 'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
+                'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
                 'ReleaseDate': response.get('release_date', ""),
                 'Premiered': response.get('release_date', ""),
                 'Country': Country,

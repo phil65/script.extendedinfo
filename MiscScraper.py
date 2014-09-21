@@ -5,6 +5,7 @@ import sys
 import urllib
 import xbmc
 import xbmcaddon
+import datetime
 from Utils import *
 if sys.version_info < (2, 7):
     import simplejson
@@ -18,20 +19,35 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 
 
 def GetXKCDInfo():
-    settings = xbmcaddon.Addon(id='script.extendedinfo')
-    items = []
-    for i in range(0, 10):
-        try:
-            base_url = 'http://xkcd.com/'
-            url = '%i/info.0.json' % random.randrange(1, 1190)
-            results = Get_JSON_response(base_url, url)
-            item = {'Image': results["img"],
-                    'Title': results["title"],
-                    'Description': results["alt"]}
-            items.append(item)
-        except:
-            log("Error when setting XKCD info")
-    return items
+    now = datetime.datetime.now()
+    filename = str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    path = Addon_Data_Path + "\\" + filename + ".txt"
+    log(path)
+    if xbmcvfs.exists(path):
+        results = read_from_file(path)
+        Notify("read from file")
+  #      xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return results
+    else:
+        Notify("Downloading")
+        items = []
+        for i in range(0, 10):
+            try:
+                base_url = 'http://xkcd.com/'
+                url = '%i/info.0.json' % random.randrange(1, 1190)
+                results = Get_JSON_response(base_url, url, 9999)
+                item = {'Image': results["img"],
+                        'Title': results["title"],
+                        'Description': results["alt"]}
+                items.append(item)
+            except:
+                log("Error when setting XKCD info")
+    #    results = simplejson.loads(items)
+        save_to_file(items, filename, Addon_Data_Path)
+        return items
+        # except:
+        #     log("Could not get JSON data from " + base_url + url)
+        #     Notify("Could not get JSON data.")
 
 
 def GetCandHInfo():
