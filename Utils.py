@@ -627,7 +627,7 @@ def CreateListItems(data):
                 if str(key).lower() in ["thumb"]:
                     listitem.setThumbnailImage(unicode(value))
                 if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart"]:
-                    listitem.setArt({key: unicode(value)})
+                    listitem.setArt({str(key).lower(): unicode(value)})
                 listitem.setProperty('%s' % (str(key)), unicode(value))
             itempath = "ActivateWindow(home)"
            # itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
