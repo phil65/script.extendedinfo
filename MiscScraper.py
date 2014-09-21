@@ -37,6 +37,8 @@ def GetXKCDInfo():
                 url = '%i/info.0.json' % random.randrange(1, 1190)
                 results = Get_JSON_response(base_url, url, 9999)
                 item = {'Image': results["img"],
+                        'Thumb': results["img"],
+                        'Poster': results["img"],
                         'Title': results["title"],
                         'Description': results["alt"]}
                 items.append(item)
