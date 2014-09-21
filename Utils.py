@@ -443,10 +443,14 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=7):
         url = base_url + custom_url
         response = GetStringFromUrl(url)
         log(response)
-        results = simplejson.loads(response)
-        save_to_file(results, filename, Addon_Data_Path)
-#        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return results
+        try:
+            results = simplejson.loads(response)
+            save_to_file(results, filename, Addon_Data_Path)
+            return results
+        except:
+            log("Could not get JSON data.")
+            Notify("Could not get JSON data.")
+            log(response)
 
 
 def log(txt):
@@ -576,13 +580,13 @@ def passHomeDataToSkin(data, debug=True):
                 log('%s' % (str(key)) + unicode(value))
 
 
-def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, debug=False):
+def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
     if controlnumber is "plugin":
         items = CreateListItems(data)
-        xbmcplugin.setContent(1, 'movies')
+        xbmcplugin.setContent(handle, 'movies')
         for item in items:
-            xbmcplugin.addDirectoryItem(handle=1, url="", listitem=item, isFolder=False)
-        xbmcplugin.endOfDirectory(1)
+            xbmcplugin.addDirectoryItem(handle=handle, url="", listitem=item, isFolder=False)
+        xbmcplugin.endOfDirectory(handle)
     elif controlnumber is not None:
         log("creatin listitems for list with id " + str(controlnumber))
         xbmc.sleep(200)
@@ -622,6 +626,8 @@ def CreateListItems(data):
                     listitem.setLabel(unicode(value))
                 if str(key).lower() in ["thumb"]:
                     listitem.setThumbnailImage(unicode(value))
+                if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart"]:
+                    listitem.setArt({key: unicode(value)})
                 listitem.setProperty('%s' % (str(key)), unicode(value))
             itempath = "ActivateWindow(home)"
            # itempath = "SetFocus(" + str((controlnumber + 1)) + ")"

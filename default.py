@@ -68,29 +68,29 @@ class Main:
         for info in self.infos:
             if info == 'json':
                 videos = GetYoutubeVideos(self.feed, self.prop_prefix)
-                passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control)
+                passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarlocal' and self.dbid:
-                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'xkcd':
-                passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'flickr':
-                passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'discography':
-                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix, self.window, self.control)
+                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'mostlovedtracks':
-                passDataToSkin('MostLovedTracks', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix, self.window, self.control)
+                passDataToSkin('MostLovedTracks', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'artistdetails':
-                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('MusicVideos', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('MusicVideos', None, self.prop_prefix, self.window, self.control, self.handle)
                 ArtistDetails = GetArtistDetails(self.ArtistName)
                 if "audiodbid" in ArtistDetails:
                     MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
-                    passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix, self.window, self.control)
+                    passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix, self.window, self.control, self.handle)
             #    GetAudioDBData("search.php?s=Blur")
-                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control)
+                passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
                 passHomeDataToSkin(ArtistDetails)
             elif info == 'albuminfo':
                 passHomeDataToSkin(None)
@@ -98,23 +98,23 @@ class Main:
                     AlbumDetails = GetAlbumDetails(self.id)
                     Trackinfo = GetTrackDetails(self.id)
                     passHomeDataToSkin(AlbumDetails)
-                    passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix, self.window, self.control)
+                    passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'albumshouts':
-                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.ArtistName and self.AlbumName:
-                    passDataToSkin('Shout', GetAlbumShouts(self.ArtistName, self.AlbumName), self.prop_prefix, self.window, self.control)
+                    passDataToSkin('Shout', GetAlbumShouts(self.ArtistName, self.AlbumName), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'artistshouts':
-                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.ArtistName:
-                    passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, self.window, self.control)
+                    passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'studio':
-                passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.studio:
                     if self.studio:
                         CompanyId = SearchforCompany(self.studio)
-                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control)
+                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'set':
-                passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid and not "show" in str(self.type):
                     name = GetMovieSetName(self.dbid)
                     if name:
@@ -122,42 +122,42 @@ class Main:
                 if self.setid:
                     SetData = GetSetMovies(self.setid)
                     if SetData:
-                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control)
+                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topartists':
-                passDataToSkin('TopArtists', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopArtists', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'cyanide':
-                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control, self.handle)
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
-                passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'boxoffice':
-                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'opening':
-                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'comingsoon':
-                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'toprentals':
-                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control, self.handle)
             ### The MovieDB ##########################################################################################
             elif info == 'incinemas':
-                passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'upcoming':
-                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topratedmovies':
-                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'popularmovies':
-                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('PopularMovies', GetMovieDBMovies("popular"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'airingtodaytvshows':
-                passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'onairtvshows':
-                passDataToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topratedtvshows':
-                passDataToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'populartvshows':
-                passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarmovies':
-                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control, self.handle)
                 # MovieId = GetImdbID(self.id)
                 if self.id:
                     MovieId = self.id
@@ -167,21 +167,21 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix, self.window, self.control)
+                    passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'movielists':
-                passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid:
                     id = GetImdbID("movie", self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix, self.window, self.control)
+                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'keywords':
-                passDataToSkin('Keywords', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('Keywords', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid:
                     id = GetImdbID("movie", self.dbid)
                     log("MovieDB Id:" + str(id))
                     if id:
-                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix, self.window, self.control)
+                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'extendedinfo':
                 log("startin GetExtendedMovieInfo")
                 if self.id:
@@ -197,33 +197,33 @@ class Main:
                 if self.id:
                     passHomeDataToSkin(GetTVShowInfo(self.id)[0])
             elif info == 'seasoninfo':
-                passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control)
+                passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.tvshow and self.season:
                     seasoninfo, videos = GetSeasonInfo(self.tvshow, self.season)
                     passHomeDataToSkin(seasoninfo)
-                    passDataToSkin("SeasonVideos", videos, self.prop_prefix, self.window, self.control)
+                    passDataToSkin("SeasonVideos", videos, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'directormovies':
-                passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.director:
                     directorid = GetPersonID(self.director)
                     if directorid:
-                        passDataToSkin('DirectorMovies', GetDirectorMovies(directorid), self.prop_prefix, self.window, self.control)
+                        passDataToSkin('DirectorMovies', GetDirectorMovies(directorid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'writermovies':
-                passDataToSkin('WriterMovies', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('WriterMovies', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.writer and not self.writer.split(" / ")[0] == self.director.split(" / ")[0]:
                     writerid = GetPersonID(self.writer)
                     if writerid:
-                        passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control)
+                        passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarmoviestrakt':
-                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
                     if self.dbid:
                         id = GetImdbID("movie", self.dbid)
                     else:
                         id = self.id
-                    passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control)
+                    passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similartvshowstrakt':
-                passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
                     if self.dbid:
                         if self.type == "episode":
@@ -232,43 +232,43 @@ class Main:
                             tvshowid = GetImdbID("tvshow", self.dbid)
                     else:
                         tvshowid = self.id
-                    passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), self.prop_prefix, self.window, self.control, True)
+                    passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'airingshows':
-                passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('AiringShows', GetTraktCalendarShows("shows"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'premiereshows':
-                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix, self.window, self.control)
+                passDataToSkin('PremiereShows', GetTraktCalendarShows("premieres"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'trendingshows':
-                passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TrendingShows', GetTrendingShows(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'trendingmovies':
-                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control)
+                passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarartistsinlibrary':
-                passDataToSkin('SimilarArtists', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control)
+                passDataToSkin('SimilarArtists', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'artistevents':
-                passDataToSkin('ArtistEvents', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control)
+                passDataToSkin('ArtistEvents', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubesearch':
                 wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
-                passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby, self.time), self.prop_prefix, self.window, self.control)
+                passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby, self.time), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubeusersearch':
-                passDataToSkin('YoutubeUserSearch', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control)
+                passDataToSkin('YoutubeUserSearch', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'nearevents':
-                passDataToSkin('NearEvents', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix, self.window, self.control)
+                passDataToSkin('NearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'trackinfo':
-                passDataToSkin('TrackInfo', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('TrackInfo', None, self.prop_prefix, self.window, self.control, self.handle)
                 TrackInfo = GetTrackInfo(self.ArtistName, self.TrackName)
                 wnd.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
             elif info == 'venueevents':
-                passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control)
-                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control)
+                passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topartistsnearevents':
-                passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 artists = GetXBMCArtists()
                 events = GetArtistNearEvents(artists["result"]["artists"][0:49])
-                passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix, self.window, self.control)
+                passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'updatexbmcdatabasewithartistmbid':
@@ -276,7 +276,7 @@ class Main:
             elif info == 'getlocationevents':
                 lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
                 lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, lat, lon), self.prop_prefix, self.window, self.control)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, lat, lon), self.prop_prefix, self.window, self.control, self.handle)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -306,7 +306,7 @@ class Main:
         self.writer = ""
         self.studio = ""
         self.silent = True
-        self.addon_handle = 0
+        self.handle = 0
         self.festivalsonly = False
         self.prop_prefix = ""
         self.Artist_mbid = None
@@ -321,7 +321,7 @@ class Main:
             self.pluginmode = True
             args = sys.argv[2][1:].split("&")
             dict_args = urlparse.parse_qs(sys.argv[2][1:])
-            self.addon_handle = int(sys.argv[1])
+            self.handle = int(sys.argv[1])
             base_url = sys.argv[0]
             log(args)
             self.control = "plugin"
