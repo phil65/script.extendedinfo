@@ -20,9 +20,12 @@ def GetRottenTomatoesMovies(movietype):
     count = 1
     if results is not None:
         for item in results["movies"]:
+            poster = item["posters"]["original"].replace("tmb", "ori")
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
-                     'Poster': item["posters"]["original"],
+                     'ID': item["alternate_ids"]["imdb"],
+                     'Thumb': poster,
+                     'Poster': poster,
                      'Runtime': item["runtime"],
                      'Year': item["year"],
                      'Premiered': item["release_dates"]["theater"],
