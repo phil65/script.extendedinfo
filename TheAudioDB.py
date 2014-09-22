@@ -190,12 +190,18 @@ def GetAlbumDetails(audiodbid="", mbid=""):
 
 
 def GetMusicVideos(audiodbid):
-    url = 'mvid.php?i=%s' % (audiodbid)
-    results = Get_JSON_response(base_url, url)
-    return HandleAudioDBMusicVideoResult(results)
+    if audiodbid:
+        url = 'mvid.php?i=%s' % (audiodbid)
+        results = Get_JSON_response(base_url, url)
+        return HandleAudioDBMusicVideoResult(results)
+    else:
+        return []
 
 
 def GetTrackDetails(audiodbid):
-    url = 'track.php?m=%s' % (audiodbid)
-    results = Get_JSON_response(base_url, url)
-    return HandleAudioDBTrackResult(results)
+    if audiodbid:
+        url = 'track.php?m=%s' % (audiodbid)
+        results = Get_JSON_response(base_url, url)
+        return HandleAudioDBTrackResult(results)
+    else:
+        return []

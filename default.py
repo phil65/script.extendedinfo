@@ -90,7 +90,6 @@ class Main:
                 if "audiodbid" in ArtistDetails:
                     MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
                     passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix, self.window, self.control, self.handle)
-            #    GetAudioDBData("search.php?s=Blur")
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
                 passHomeDataToSkin(ArtistDetails)
             elif info == 'albuminfo':
@@ -111,9 +110,8 @@ class Main:
             elif info == 'studio':
                 passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.studio:
-                    if self.studio:
-                        CompanyId = SearchforCompany(self.studio)
-                        passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control, self.handle)
+                    CompanyId = SearchforCompany(self.studio)
+                    passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'set':
                 passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid and not "show" in str(self.type):

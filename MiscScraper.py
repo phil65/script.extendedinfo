@@ -134,6 +134,7 @@ def GetYoutubeVideos(jsonurl, prefix=""):
                 video = {'Thumb': item["media:thumbnail"][0]["url"],
                          'Media': ConvertYoutubeURL(item["link"]),
                          'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
+                         'Path': ConvertYoutubeURL(item["link"]),
                          'Title': item["title"],
                          'Description': item["content"]["content"],
                          'Date': item["pubDate"]}
@@ -173,6 +174,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="a
         for item in results["feed"]["entry"]:
             video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
                      'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
                      'Description': item["media$group"]["media$description"]["$t"],
                      'Title': item["title"]["$t"],
                      'Author': item["author"][0]["name"]["$t"],
