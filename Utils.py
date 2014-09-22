@@ -582,13 +582,14 @@ def passHomeDataToSkin(data, debug=True):
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
     if controlnumber is "plugin":
-        items = CreateListItems(data)
-        xbmcplugin.setContent(handle, 'url')
-        itemlist = list()
-        for item in items:
-            itemlist.append((item.getProperty("path"), item, False))
-        xbmcplugin.addDirectoryItems(handle, itemlist, False)
-        xbmcplugin.endOfDirectory(handle)
+        if data is not None:
+            items = CreateListItems(data)
+            xbmcplugin.setContent(handle, 'url')
+            itemlist = list()
+            for item in items:
+                itemlist.append((item.getProperty("path"), item, False))
+            xbmcplugin.addDirectoryItems(handle, itemlist, False)
+            xbmcplugin.endOfDirectory(handle)
     elif controlnumber is not None:
         log("creatin listitems for list with id " + str(controlnumber))
         xbmc.sleep(200)
