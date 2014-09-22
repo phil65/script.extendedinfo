@@ -20,16 +20,12 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 
 def GetXKCDInfo():
     now = datetime.datetime.now()
-    filename = str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    filename = "xkcd" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = Addon_Data_Path + "\\" + filename + ".txt"
- #   log(path)
     if xbmcvfs.exists(path):
         results = read_from_file(path)
-    #    Notify("read from file")
-  #      xbmc.executebuiltin("Dialog.Close(busydialog)")
         return results
     else:
- #       Notify("Downloading")
         items = []
         for i in range(0, 10):
             try:
@@ -44,39 +40,67 @@ def GetXKCDInfo():
                 items.append(item)
             except:
                 log("Error when setting XKCD info")
-    #    results = simplejson.loads(items)
         save_to_file(items, filename, Addon_Data_Path)
         return items
-        # except:
-        #     log("Could not get JSON data from " + base_url + url)
-        #     Notify("Could not get JSON data.")
 
 
 def GetCandHInfo():
     count = 1
-    images = []
-    for i in range(1, 30):
-        try:
-            url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
-            response = GetStringFromUrl(url)
-        except:
-            log("Error when fetching CandH data from net")
-        if response:
-            regex = ur'src="([^"]+)"'
-            matches = re.findall(regex, results)
-            if matches:
-                for item in matches:
-                    if item.startswith('http://www.explosm.net/db/files/Comics/'):
-                        dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
-                        datematches = re.findall(dateregex, results)
-                        newitem = {'Image': item,
-                                   'Title': datematches[0]}
-                        images.append(newitem)
-                        count += 1
-              #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
-                if count > 10:
-                    break
-    return images
+    now = datetime.datetime.now()
+    filename = "cyanide" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    path = Addon_Data_Path + "\\" + filename + ".txt"
+    if xbmcvfs.exists(path):
+        results = read_from_file(path)
+        return results
+    else:
+        items = []
+        for i in range(1, 10):
+            try:
+                url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
+                response = GetStringFromUrl(url)
+            except:
+                log("Error when fetching CandH data from net")
+            if response:
+                regex = ur'src="([^"]+)"'
+                matches = re.findall(regex, response)
+                if matches:
+                    for item in matches:
+                        if item.startswith('http://www.explosm.net/db/files/Comics/'):
+                            dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
+                            datematches = re.findall(dateregex, response)
+                            newitem = {'Image': item,
+                                       'Thumb': item,
+                                       'Poster': item,
+                                       'Title': datematches[0]}
+                            items.append(newitem)
+                            count += 1
+                  #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
+                    if count > 10:
+                        break
+        save_to_file(items, filename, Addon_Data_Path)
+        return items
+
+
+def GetDailyBabes():
+    now = datetime.datetime.now()
+    filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    path = Addon_Data_Path + "\\" + filename + ".txt"
+    if xbmcvfs.exists(path):
+        results = read_from_file(path)
+        return results
+    else:
+        items = []
+        for i in range(1, 10):
+            month = random.randrange(1, 9)
+            day = random.randrange(1, 28)
+            image = random.randrange(1, 8)
+            url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
+            log(url)
+            newitem = {'Thumb': url,
+                       'Title': "2014 / " + str(month) + " / " + str(day)}
+            items.append(newitem)
+        save_to_file(items, filename, Addon_Data_Path)
+        return items
 
 
 def GetFlickrImages():

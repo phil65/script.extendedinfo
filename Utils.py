@@ -586,7 +586,6 @@ def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None
         xbmcplugin.setContent(handle, 'url')
         itemlist = list()
         for item in items:
-            log(item.getProperty("path"))
             itemlist.append((item.getProperty("path"), item, False))
         xbmcplugin.addDirectoryItems(handle, itemlist, False)
         xbmcplugin.endOfDirectory(handle)
