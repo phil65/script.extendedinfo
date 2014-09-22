@@ -158,6 +158,7 @@ def GetMovieDBData(url="", cache_days=14):
     path = Addon_Data_Path + "/" + filename + ".txt"
     log("trying to load " + path)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
+      #  prettyprint(read_from_file(path))
         return read_from_file(path)
     else:
         url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
@@ -218,6 +219,12 @@ def GetSeasonInfo(tvshowname, seasonnumber):
                  'type': item["type"]}
         videos.append(video)
     return season, videos
+
+
+def GetMovieDBID(imdbid):
+    response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid, __addon__.getSetting("LanguageID")), 30)
+    prettyprint(response)
+    return response["movie_results"][0]["id"]
 
 
 def GetExtendedMovieInfo(Id):

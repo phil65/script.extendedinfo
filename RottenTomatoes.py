@@ -23,7 +23,7 @@ def GetRottenTomatoesMovies(movietype):
             poster = item["posters"]["original"].replace("tmb", "ori")
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
-                     'ID': item["alternate_ids"]["imdb"],
+                     'imdbid': item["alternate_ids"]["imdb"],
                      'Thumb': poster,
                      'Poster': poster,
                      'Runtime': item["runtime"],

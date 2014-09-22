@@ -190,6 +190,8 @@ class Main:
                 elif self.dbid:
                     MovieId = GetImdbID("movie", self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
+                elif self.imdbid:
+                    MovieId = GetMovieDBID(self.imdbid)
                 else:
                     MovieId = ""
                 if MovieId:
@@ -295,6 +297,7 @@ class Main:
         self.feed = None
         self.id = None
         self.dbid = None
+        self.imdbid = None
         self.setid = None
         self.type = False
         self.hd = ""
@@ -379,6 +382,8 @@ class Main:
                 self.id = param[3:]
             elif param.startswith('dbid='):
                 self.dbid = param[5:]
+            elif param.startswith('imdbid='):
+                self.imdbid = param[7:]
             elif param.startswith('setid='):
                 self.setid = param[6:]
             elif param.startswith('hd='):
