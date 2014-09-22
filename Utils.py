@@ -442,14 +442,14 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=7):
     else:
         url = base_url + custom_url
         response = GetStringFromUrl(url)
-        log(response)
+     #   log(response)
         try:
             results = simplejson.loads(response)
             save_to_file(results, filename, Addon_Data_Path)
             return results
         except:
             log("Could not get JSON data.")
-            Notify("Could not get JSON data.")
+      #      Notify("Could not get JSON data.")
             log(response)
 
 
@@ -567,7 +567,7 @@ def GetImdbIDfromEpisode(dbid):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
-    prettyprint(json_response)
+ #   prettyprint(json_response)
     if "episodedetails" in json_response["result"]:
         tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
         return GetImdbID("tvshow", tvshowid)
@@ -626,7 +626,7 @@ def CreateListItems(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
             for (key, value) in result.iteritems():
-                log("key: " + unicode(key) + "  value: " + unicode(value))
+           #     log("key: " + unicode(key) + "  value: " + unicode(value))
                 if str(key).lower() in ["name", "label", "title"]:
                     listitem.setLabel(unicode(value))
                 if str(key).lower() in ["thumb"]:

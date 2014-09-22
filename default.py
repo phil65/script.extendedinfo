@@ -67,6 +67,7 @@ class Main:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         for info in self.infos:
             if info == 'json':
+                passDataToSkin('RSS', None, self.prop_prefix, self.window, self.control, self.handle)
                 videos = GetYoutubeVideos(self.feed, self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarlocal' and self.dbid:

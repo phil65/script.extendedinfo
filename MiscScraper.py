@@ -22,14 +22,14 @@ def GetXKCDInfo():
     now = datetime.datetime.now()
     filename = str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = Addon_Data_Path + "\\" + filename + ".txt"
-    log(path)
+ #   log(path)
     if xbmcvfs.exists(path):
         results = read_from_file(path)
-        Notify("read from file")
+    #    Notify("read from file")
   #      xbmc.executebuiltin("Dialog.Close(busydialog)")
         return results
     else:
-        Notify("Downloading")
+ #       Notify("Downloading")
         items = []
         for i in range(0, 10):
             try:
@@ -99,10 +99,8 @@ def GetFlickrImages():
 
 def GetYoutubeVideos(jsonurl, prefix=""):
     results = []
-    try:
-        results = Get_JSON_response("", url)
-    except:
-        log("Error when fetching JSON data from net")
+    jsonurl = jsonurl.replace("???", "&")
+    results = Get_JSON_response("", jsonurl)
     count = 1
     log("found youtube vids: " + jsonurl)
     videos = []
