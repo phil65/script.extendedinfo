@@ -162,7 +162,7 @@ class Main:
                 # MovieId = GetImdbID(self.id)
                 if self.id:
                     MovieId = self.id
-                elif self.dbid:
+                elif self.dbid and (int(self.dbid) > -1):
                     MovieId = GetImdbID("movie", self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
@@ -187,7 +187,7 @@ class Main:
                 log("startin GetExtendedMovieInfo")
                 if self.id:
                     MovieId = self.id
-                elif self.dbid:
+                elif self.dbid and (int(self.dbid) > -1):
                     MovieId = GetImdbID("movie", self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 elif self.imdbid:
