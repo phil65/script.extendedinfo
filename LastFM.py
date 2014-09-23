@@ -61,6 +61,7 @@ def HandleLastFMEventResult(results):
                          'artists': my_arts,
                          'googlemap': googlemap,
                          'artist_image': event['image'][-1]['#text'],
+                         'thumb': event['image'][-1]['#text'],
                          'venue_image': event['venue']['image'][-1]['#text'],
                          'headliner': event['artists']['headliner']}
                 events.append(event)
@@ -186,6 +187,17 @@ def GetArtistShouts(artistname):
         return []
 
 
+def GetImages(mbid):
+    url = 'method=artist.getimages&mbid=%s' % (id)
+    results = Get_JSON_response(base_url, url, 0)
+    prettyprint(results)
+    try:
+        return HandleLastFMEventResult(results)
+    except:
+        log("Error in GetEvents()")
+        return []
+
+
 def GetTrackShouts(artistname, tracktitle):
     url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(tracktitle))
     results = Get_JSON_response(base_url, url)
@@ -240,14 +252,14 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
     if lat:
         url = url + '&lat=%s&long=%s' % (lat, lon)  # &distance=60
-    results = Get_JSON_response(base_url, url, 1)
+    results = Get_JSON_response(base_url, url, 0.5)
  #   prettyprint(results)
     return HandleLastFMEventResult(results)
 
 
 def GetVenueEvents(id=""):
     url = 'method=venue.getevents&venue=%s' % (id)
-    results = Get_JSON_response(base_url, url, 1)
+    results = Get_JSON_response(base_url, url, 0.5)
     try:
         return HandleLastFMEventResult(results)
     except:

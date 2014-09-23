@@ -106,7 +106,7 @@ def GetDailyBabes(single=False):
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             log(url)
             newitem = {'Thumb': url,
-                       'Title': "2014 / " + str(month) + " / " + str(day)}
+                       'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
         save_to_file(items, filename, Addon_Data_Path)
         return items
@@ -115,17 +115,20 @@ def GetDailyBabes(single=False):
 def GetFlickrImages():
     images = []
     results = ""
+    log("GetFlickrImages")
     try:
         base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
         url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url, url,0)
+        prettyprint(results)
     except:
         log("Error when fetching Flickr data from net")
     count = 1
     if results:
         for item in results["value"]["items"]:
-            image = {'Background': item["link"]}
+            image = {'Fanart': item["link"]}
             images.append(image)
+            log(image)
             count += 1
     return images
 
