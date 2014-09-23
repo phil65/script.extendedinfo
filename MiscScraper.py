@@ -83,7 +83,10 @@ def GetCandHInfo():
 
 def GetDailyBabes(single=False):
     now = datetime.datetime.now()
-    filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    if single is True:
+        filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    else:
+        filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = Addon_Data_Path + "\\" + filename + ".txt"
     if xbmcvfs.exists(path):
         results = read_from_file(path)
