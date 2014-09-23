@@ -81,7 +81,7 @@ def GetCandHInfo():
         return items
 
 
-def GetDailyBabes():
+def GetDailyBabes(single=False):
     now = datetime.datetime.now()
     filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = Addon_Data_Path + "\\" + filename + ".txt"
@@ -91,9 +91,15 @@ def GetDailyBabes():
     else:
         items = []
         for i in range(1, 10):
-            month = random.randrange(1, 9)
-            day = random.randrange(1, 28)
-            image = random.randrange(1, 8)
+
+            if single is True:
+                month = now.month
+                day = now.day
+                image = i
+            else:
+                month = random.randrange(1, 9)
+                day = random.randrange(1, 28)
+                image = random.randrange(1, 8)
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             log(url)
             newitem = {'Thumb': url,
