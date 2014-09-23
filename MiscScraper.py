@@ -130,7 +130,7 @@ def GetFlickrImages():
 def GetYoutubeVideos(jsonurl, prefix=""):
     results = []
     jsonurl = jsonurl.replace("???", "&")
-    results = Get_JSON_response("", jsonurl)
+    results = Get_JSON_response("", jsonurl, 0.5)
     count = 1
     log("found youtube vids: " + jsonurl)
     videos = []
@@ -152,6 +152,7 @@ def GetYoutubeVideos(jsonurl, prefix=""):
                     if entry.get('href', '').startswith('http://www.youtube.com/watch'):
                         video = {'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href', '')) + "/0.jpg",
                                  'Media': ConvertYoutubeURL(entry.get('href', '')),
+                                 'Path': ConvertYoutubeURL(entry.get('href', '')),
                                  'Play': "PlayMedia(" + ConvertYoutubeURL(entry.get('href', '')) + ")",
                                  'Title': item["title"]["$t"],
                                  'Description': "To Come",
@@ -171,7 +172,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="a
     try:
         base_url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json'
         url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url, url, 0.5)
     except:
         log("Error when fetching JSON data from net")
     count = 1
@@ -179,7 +180,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="a
     if results:
         for item in results["feed"]["entry"]:
             video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
-                     'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Play': "PlayMedia(" + ConvertYoutubeURL(item["media$group"]["media$player"]["url"]) + ")",
                      'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
                      'Description': item["media$group"]["media$description"]["$t"],
                      'Title': item["title"]["$t"],

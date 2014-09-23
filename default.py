@@ -276,7 +276,6 @@ class Main:
             elif info == 'dailybabe':
                 passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
-
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'updatexbmcdatabasewithartistmbid':
