@@ -129,7 +129,6 @@ def GetFlickrImages():
 
 def GetYoutubeVideos(jsonurl, prefix=""):
     results = []
-    jsonurl = jsonurl.replace("???", "&")
     results = Get_JSON_response("", jsonurl, 0.5)
     count = 1
     log("found youtube vids: " + jsonurl)
