@@ -327,7 +327,7 @@ class Main:
     def _parse_argv(self):
         if sys.argv[0] == 'plugin://script.extendedinfo/':
             self.pluginmode = True
-            args = sys.argv[2][1:].split("&")
+            args = sys.argv[2][1:].split("&&")
             dict_args = urlparse.parse_qs(sys.argv[2][1:])
             self.handle = int(sys.argv[1])
             base_url = sys.argv[0]
