@@ -401,7 +401,7 @@ class Main:
                 if not self.prop_prefix.endswith('.') and self.prop_prefix is not "":
                     self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
-                self.ArtistName = arg[11:].replace('"', '')
+                self.ArtistName = arg[11:].replace('"', '').split(" feat. ")[0]
                 if self.ArtistName:
                     # todo: look up local mbid first -->xbmcid for parameter
                     self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
