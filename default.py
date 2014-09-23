@@ -129,15 +129,21 @@ class Main:
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control, self.handle)
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
-                passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("in_theaters"), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("movies/in_theaters"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'boxoffice':
-                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("box_office"), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('BoxOffice', GetRottenTomatoesMovies("movies/box_office"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'opening':
-                passDataToSkin('Opening', GetRottenTomatoesMovies("opening"), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('Opening', GetRottenTomatoesMovies("movies/opening"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'comingsoon':
-                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMovies("upcoming"), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('ComingSoonMovies', GetRottenTomatoesMovies("movies/upcoming"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'toprentals':
-                passDataToSkin('TopRentals', GetRottenTomatoesMovies("top_rentals"), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('TopRentals', GetRottenTomatoesMovies("dvds/top_rentals"), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'currentdvdreleases':
+                passDataToSkin('CurrentDVDs', GetRottenTomatoesMovies("dvds/current_releases"), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'newdvdreleases':
+                passDataToSkin('NewDVDs', GetRottenTomatoesMovies("dvds/new_releases"), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'upcomingdvds':
+                passDataToSkin('UpcomingDVDs', GetRottenTomatoesMovies("dvds/upcoming"), self.prop_prefix, self.window, self.control, self.handle)
             ### The MovieDB ##########################################################################################
             elif info == 'incinemas':
                 passDataToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), self.prop_prefix, self.window, self.control, self.handle)

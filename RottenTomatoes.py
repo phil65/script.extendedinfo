@@ -12,7 +12,7 @@ base_url = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
 def GetRottenTomatoesMovies(movietype):
     movies = []
     try:
-        url = 'movies/' + movietype + '.json?apikey=%s' % (rottentomatoes_key)
+        url = movietype + '.json?apikey=%s' % (rottentomatoes_key)
         results = Get_JSON_response(base_url, url)
     except:
         results = None
