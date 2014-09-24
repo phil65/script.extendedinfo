@@ -17,6 +17,8 @@ base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&' % (lastfm
 
 def HandleLastFMEventResult(results):
     events = []
+    if results is None:
+        return []
     if "events" in results:
         if "@attr" in results["events"]:
             if int(results["events"]["@attr"]["total"]) == 1:
@@ -76,6 +78,8 @@ def HandleLastFMEventResult(results):
 def HandleLastFMAlbumResult(results):
     albums = []
     log("starting HandleLastFMAlbumResult")
+    if results is None:
+        return []
     if 'topalbums' in results:
         for album in results['topalbums']['album']:
             album = {'artist': album['artist']['name'],
@@ -92,54 +96,45 @@ def HandleLastFMAlbumResult(results):
 def HandleLastFMShoutResult(results):
     shouts = []
     log("starting HandleLastFMShoutResult")
-    try:
-        for shout in results['shouts']['shout']:
-            newshout = {'comment': shout['body'],
-                        'author': shout['author'],
-                        'date': shout['date'][4:]}
-            shouts.append(newshout)
-    except Exception as e:
-        log("Error when handling LastFM Shout results")
-        log(e)
-        prettyprint(results)
+    if results is None:
+        return []
+    for shout in results['shouts']['shout']:
+        newshout = {'comment': shout['body'],
+                    'author': shout['author'],
+                    'date': shout['date'][4:]}
+        shouts.append(newshout)
     return shouts
 
 
 def HandleLastFMTrackResult(results):
     log("starting HandleLastFMTrackResult")
-    try:
-       # prettyprint(results)
-        if "wiki" in results['track']:
-            summary = cleanText(results['track']['wiki']['summary'])
-        else:
-            summary = ""
-        TrackInfo = {'playcount': str(results['track']['playcount']),
-                     'Thumb': str(results['track']['playcount']),
-                     'summary': summary}
-    except Exception as e:
-        log("Error when handling LastFM Track results")
-        log(e)
-        prettyprint(results)
+   # prettyprint(results)
+    if results is None:
+        return []
+    if "wiki" in results['track']:
+        summary = cleanText(results['track']['wiki']['summary'])
+    else:
+        summary = ""
+    TrackInfo = {'playcount': str(results['track']['playcount']),
+                 'Thumb': str(results['track']['playcount']),
+                 'summary': summary}
     return TrackInfo
 
 
 def HandleLastFMArtistResult(results):
+    if results is None:
+        return []
     artists = []
     log("starting HandleLastFMArtistResult")
-    try:
-        for artist in results['artist']:
-            if 'name' in artist:
-                listeners = int(artist.get('listeners', 0))
-                artist = {'Title': artist['name'],
-                          'name': artist['name'],
-                          'mbid': artist['mbid'],
-                          'Thumb': artist['image'][-1]['#text'],
-                          'Listeners': format(listeners, ",d")}
-                artists.append(artist)
-    except Exception as e:
-        log("Error when handling LastFM TopArtists results")
-        log(e)
-        prettyprint(results)
+    for artist in results['artist']:
+        if 'name' in artist:
+            listeners = int(artist.get('listeners', 0))
+            artist = {'Title': artist['name'],
+                      'name': artist['name'],
+                      'mbid': artist['mbid'],
+                      'Thumb': artist['image'][-1]['#text'],
+                      'Listeners': format(listeners, ",d")}
+            artists.append(artist)
     return artists
 
 
@@ -149,97 +144,56 @@ def GetEvents(id, pastevents=False):
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
     results = Get_JSON_response(base_url, url, 1)
-    try:
-        return HandleLastFMEventResult(results)
-    except:
-        log("Error in GetEvents()")
-        return []
+    return HandleLastFMEventResult(results)
 
 
 def GetTopArtists():
     results = Get_JSON_response(base_url, "method=chart.getTopArtists&limit=100")
-    if "artists" in results:
-        return HandleLastFMArtistResult(results['artists'])
-    else:
-        log("Error when finding artist top-tracks.")
-        return []
+    return HandleLastFMArtistResult(results['artists'])
 
 
 def GetAlbumShouts(artistname, albumtitle):
     url = 'method=album.GetAlbumShouts&artist=%s&album=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(albumtitle))
     results = Get_JSON_response(base_url, url)
-    try:
-        return HandleLastFMShoutResult(results)
-    except Exception as e:
-        log(e)
-        log("Error when finding shouts from" + url)
-        return []
+    return HandleLastFMShoutResult(results)
 
 
 def GetArtistShouts(artistname):
     url = 'method=artist.GetShouts&artist=%s' % (urllib.quote_plus(artistname))
     results = Get_JSON_response(base_url, url)
-    try:
-        return HandleLastFMShoutResult(results)
-    except Exception as e:
-        log(e)
-        log("Error when finding shouts from" + url)
-        return []
+    return HandleLastFMShoutResult(results)
 
 
 def GetImages(mbid):
     url = 'method=artist.getimages&mbid=%s' % (id)
     results = Get_JSON_response(base_url, url, 0)
     prettyprint(results)
-    try:
-        return HandleLastFMEventResult(results)
-    except:
-        log("Error in GetEvents()")
-        return []
+    return HandleLastFMEventResult(results)
 
 
 def GetTrackShouts(artistname, tracktitle):
     url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(tracktitle))
     results = Get_JSON_response(base_url, url)
-    try:
-        return HandleLastFMShoutResult(results)
-    except Exception as e:
-        log(e)
-        log("Error when finding shouts from" + url)
-        return []
+    return HandleLastFMShoutResult(results)
 
 
 def GetEventShouts(eventid):
     url = 'method=event.GetShouts&event=%s' % (eventid)
     results = Get_JSON_response(base_url, url)
-    try:
-        return HandleLastFMShoutResult(results)
-    except Exception as e:
-        log(e)
-        log("Error when finding shouts from" + url)
-        return []
+    return HandleLastFMShoutResult(results)
 
 
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
     results = Get_JSON_response(base_url, url)
-    try:
-        return HandleLastFMAlbumResult(results)
-    except Exception as e:
-        log(e)
-        log("Error when finding topalbums from" + url)
-        return []
+    return HandleLastFMAlbumResult(results)
 
 
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
     results = Get_JSON_response(base_url, url)
-    try:
+    if results is not None and "similarartists" in results:
         return HandleLastFMArtistResult(results['similarartists'])
-    except Exception as e:
-        log(e)
-        log("Error when finding SimilarById from" + url)
-        return []
 
 
 def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
@@ -253,26 +207,18 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
     if lat:
         url = url + '&lat=%s&long=%s' % (lat, lon)  # &distance=60
     results = Get_JSON_response(base_url, url, 0.5)
- #   prettyprint(results)
     return HandleLastFMEventResult(results)
 
 
 def GetVenueEvents(id=""):
     url = 'method=venue.getevents&venue=%s' % (id)
     results = Get_JSON_response(base_url, url, 0.5)
-    try:
-        return HandleLastFMEventResult(results)
-    except:
-        log("GetVenueEvents: error getting concert data from " + url)
-        return []
+    return HandleLastFMEventResult(results)
 
 
 def GetTrackInfo(artist="", track=""):
     url = 'method=track.getInfo&artist=%s&track=%s' % (urllib.quote_plus(artist), urllib.quote_plus(track))
     results = Get_JSON_response(base_url, url)
-    if True:
-        return HandleLastFMTrackResult(results)
-    else:
-        log("GetVenueEvents: error getting TrackInfo data from " + url)
-        return []
+    return HandleLastFMTrackResult(results)
+
 
