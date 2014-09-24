@@ -285,6 +285,7 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'playtrailer':
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 log("startin playtrailer")
                 if self.id:
                     MovieId = self.id
@@ -297,6 +298,7 @@ class Main:
                     MovieId = ""
                 if MovieId:
                     movie = GetExtendedMovieInfo(MovieId)
+                    xbmc.executebuiltin("Dialog.Close(busydialog)")
                     if "Trailer" is not "":
                         xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
                     else:
