@@ -298,7 +298,10 @@ class Main:
                 if MovieId:
                     movie = GetExtendedMovieInfo(MovieId)
                     prettyprint(movie)
-                    xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
+                    if "Trailer" in movie:
+                        xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
+                    else:
+                        Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getlocationevents':
