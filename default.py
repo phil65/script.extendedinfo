@@ -290,15 +290,14 @@ class Main:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
                     MovieId = GetImdbID("movie", self.dbid)
-                    log("IMDBId from local DB:" + str(MovieId))
+                    log("MovieDBID from local DB:" + str(MovieId))
                 elif self.imdbid:
                     MovieId = GetMovieDBID(self.imdbid)
                 else:
                     MovieId = ""
                 if MovieId:
                     movie = GetExtendedMovieInfo(MovieId)
-                    prettyprint(movie)
-                    if "Trailer" in movie:
+                    if "Trailer" is not "":
                         xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
                     else:
                         Notify("Error", "No Trailer available")
