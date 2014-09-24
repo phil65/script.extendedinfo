@@ -31,7 +31,7 @@ def HandleTheMovieDBMovieResult(results):
                         'Title': movie.get('title', ""),
                         'OriginalTitle': movie.get('original_title', ""),
                         'ID': movie.get('id', ""),
-                        'Path': "",
+                        'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', "")),
                         'Play': "",
                         'DBID': "",
                         'Rating': movie.get('vote_average', ""),

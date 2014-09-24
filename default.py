@@ -284,6 +284,21 @@ class Main:
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
+            elif info == 'playtrailer':
+                log("startin playtrailer")
+                if self.id:
+                    MovieId = self.id
+                elif self.dbid and (int(self.dbid) > -1):
+                    MovieId = GetImdbID("movie", self.dbid)
+                    log("IMDBId from local DB:" + str(MovieId))
+                elif self.imdbid:
+                    MovieId = GetMovieDBID(self.imdbid)
+                else:
+                    MovieId = ""
+                if MovieId:
+                    movie = GetExtendedMovieInfo(MovieId)
+                    prettyprint(movie)
+                    xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getlocationevents':

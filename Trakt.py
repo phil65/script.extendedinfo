@@ -59,6 +59,7 @@ def HandleTraktMovieResult(results):
                      'Trailer': ConvertYoutubeURL(movie["trailer"]),
                      'Year': movie["year"],
                      'ID': movie["tmdb_id"],
+                     'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('tmdb_id', "")),
                      'mpaa': movie["certification"],
                      'Plot': movie["overview"],
                      'Premiered': premiered,
