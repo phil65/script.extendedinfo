@@ -34,6 +34,7 @@ def GetXKCDInfo():
                 results = Get_JSON_response(base_url, url, 9999)
                 item = {'Image': results["img"],
                         'Thumb': results["img"],
+                        'Path': "plugin://script.extendedinfo?info=setfocus",
                         'Poster': results["img"],
                         'Title': results["title"],
                         'Description': results["alt"]}
@@ -70,6 +71,7 @@ def GetCandHInfo():
                             datematches = re.findall(dateregex, response)
                             newitem = {'Image': item,
                                        'Thumb': item,
+                                       'Path': "plugin://script.extendedinfo?info=setfocus",
                                        'Poster': item,
                                        'Title': datematches[0]}
                             items.append(newitem)
@@ -106,6 +108,7 @@ def GetDailyBabes(single=False):
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             log(url)
             newitem = {'Thumb': url,
+                       'Path': "plugin://script.extendedinfo?info=setfocus",
                        'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
         save_to_file(items, filename, Addon_Data_Path)
@@ -126,7 +129,8 @@ def GetFlickrImages():
     count = 1
     if results:
         for item in results["value"]["items"]:
-            image = {'Fanart': item["link"]}
+            image = {'Fanart': item["link"],
+                     'Path': "plugin://script.extendedinfo?info=setfocus"}
             images.append(image)
             log(image)
             count += 1
@@ -211,6 +215,7 @@ def GetYoutubeUserVideos(userid=""):
         for item in results["feed"]["entry"]:
             video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
                      'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
                      'Description': item["media$group"]["media$description"]["$t"],
                      'Title': item["title"]["$t"],
                      'Author': item["author"][0]["name"]["$t"],
