@@ -284,6 +284,8 @@ class Main:
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
+            elif info == 'setfocus':
+                xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 log("startin playtrailer")
