@@ -308,8 +308,8 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'getlocationevents':
-                lat = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lat')
-                lon = xbmcgui.Window(xbmcgui.getCurrentWindowId()).getProperty('lon')
+                lat = self.lat
+                lon = self.lon
                 passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, lat, lon), self.prop_prefix, self.window, self.control, self.handle)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
