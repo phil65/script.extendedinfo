@@ -318,6 +318,18 @@ def GetXBMCAlbums():
         return []
 
 
+def create_channel_list():
+    json_response = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "PVR.GetChannels", "params": {"properties": ["thumbnail","channeltype", "hidden", "locked", "channel", "lastplayed"], "channelgroupid": "alltv" }, "id": 1}')
+    json_response = unicode(json_response, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_response)
+    prettyprint(json_response)
+    if json_response['result'] is not None and "movies" in json_response["result"]:
+        return json_response
+    else:
+        return False
+
+
 def media_path(path):
     # Check for stacked movies
     try:
@@ -393,8 +405,7 @@ def CompareAlbumWithLibrary(onlinelist):
         for localitem in locallist:
             if onlineitem["name"] == localitem["title"]:
                 log("compare success: " + onlineitem["name"])
-                json_query = xbmc.executeJSONRPC(
-                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
                 album = json_query["result"]["albumdetails"]
@@ -449,6 +460,35 @@ def Get_JSON_response(base_url="", custom_url="", cache_days=7):
             log("Could not get JSON data.")
       #      Notify("Could not get JSON data.")
             log(response)
+
+
+def GetFavourites():
+    items = []
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    prettyprint(json_query)
+    for fav in json_query["result"]["favourites"]:
+        if "path" in fav:
+            path = fav["path"]
+        else:
+            path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+        newitem = {'Label': fav["title"],
+                   'Thumb': fav["thumbnail"],
+                   'Path': path}
+        items.append(newitem)
+    return items
+
+def GetIconPanel(number):
+    items = []
+    for i in range(1, 10):
+        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Label)"),
+                   'Path': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Path)"),
+                   'Thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Icon)"),
+                   'ID': "IconPanelitem" + str(i),
+                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Type)")}
+        items.append(newitem)
+    return items
 
 
 def log(txt):

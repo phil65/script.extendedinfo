@@ -70,11 +70,11 @@ def HandleTheMovieDBTVShowResult(results):
 
 def HandleTheMovieDBListResult(results):
     lists = []
-    for list in results["lists"]["results"]:
-        newlist = {'Art(poster)': base_url + poster_size + str(list.get('poster_path', "")),
-                   'Title': list['name'],
-                   'ID': list['id'],
-                   'Description': list['description']}
+    for movielist in results["lists"]["results"]:
+        newlist = {'Art(poster)': base_url + poster_size + str(movielist.get('poster_path', "")),
+                   'Title': movielist['name'],
+                   'ID': movielist['id'],
+                   'Description': movielist['description']}
         lists.append(newlist)
     return lists
 
@@ -82,15 +82,24 @@ def HandleTheMovieDBListResult(results):
 def HandleTheMovieDBPeopleResult(results):
     people = []
     for person in results:
-        newperson = {'adult': person['adult'],
+        description = "[B]Known for[/B]:[CR][CR]"
+        if "known_for" in results:
+            for movie in results["known_for"]:
+                description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
+        newperson = {'adult': str(person['adult']),
                      'name': person['name'],
-                     'also_known_as': person['also_known_as'],
-                     'biography': person['biography'],
-                     'birthday': person['birthday'],
-                     'id': person['id'],
-                     'deathday': person['deathday'],
-                     'place_of_birth': person['place_of_birth'],
-                     'thumb': person['profile_path']}
+                     'also_known_as': person.get('also_known_as', ""),
+                     'biography': person.get('biography', ""),
+                     'birthday': person.get('birthday', ""),
+                     'description': description,
+                     'plot': description,
+                     'id': str(person['id']),
+                     'path': "plugin://script.extendedinfo/?info=startactorinfo&&id=" + str(person.get('name', "")),
+                     'deathday': person.get('deathday', ""),
+                     'place_of_birth': person.get('place_of_birth', ""),
+                     'thumb': base_url + poster_size + person.get('profile_path', ""),
+                     'icon': base_url + poster_size + person.get('profile_path', ""),
+                     'poster': base_url + poster_size + person.get('profile_path', "")}
         people.append(newperson)
     return people
 
@@ -319,6 +328,12 @@ def GetExtendedMovieInfo(Id):
 def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTheMovieDBListResult(response)
+
+
+def GetPopularActorList():
+    response = GetMovieDBData("person/popular?", 0)
+    prettyprint(response)
+    return HandleTheMovieDBPeopleResult(response["results"])
 
 
 def GetMovieKeywords(Id):

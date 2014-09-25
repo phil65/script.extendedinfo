@@ -187,6 +187,8 @@ class Main:
                     log("MovieDB Id:" + str(id))
                     if id:
                         passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'popularpeople':
+                passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'extendedinfo':
                 log("startin GetExtendedMovieInfo")
                 if self.id:
@@ -282,10 +284,14 @@ class Main:
             elif info == 'dailybabe':
                 passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'favourites':
+                passDataToSkin('Favourites', GetFavourites(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
+            elif info == 'startactorinfo':
+                xbmc.executebuiltin("RunScript(script.metadata.actors,%s)" % (self.id))
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 log("startin playtrailer")
