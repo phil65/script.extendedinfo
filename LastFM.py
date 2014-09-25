@@ -204,8 +204,8 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
     url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
-    if lat:
-        url = url + '&lat=%s&long=%s' % (lat, lon)  # &distance=60
+    if lat is not "":
+        url = url + '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
     results = Get_JSON_response(base_url, url, 0.5)
     return HandleLastFMEventResult(results)
 
