@@ -332,7 +332,7 @@ def GetMovieLists(Id):
 
 
 def GetPopularActorList():
-    response = GetMovieDBData("person/popular?", 0)
+    response = GetMovieDBData("person/popular?", 1)
     prettyprint(response)
     return HandleTheMovieDBPeopleResult(response["results"])
 
