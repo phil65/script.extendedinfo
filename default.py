@@ -79,7 +79,10 @@ class Main:
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'discography':
                 passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('Discography', GetArtistTopAlbums(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
+                Discography = GetDiscography(self.ArtistName)
+                if len(Discography) == 0:
+                    Discography = GetArtistTopAlbums(self.Artist_mbid)
+                passDataToSkin('Discography', Discography, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'mostlovedtracks':
                 passDataToSkin('MostLovedTracks', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('MostLovedTracks', GetMostLovedTracks(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
@@ -290,6 +293,15 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
+            elif info == 'slideshow':
+                windowid = xbmcgui.getCurrentWindowId()
+                Window = xbmcgui.Window(windowid)
+                focusid = Window.getFocusId()
+                itemlist = Window.getFocus()
+                numitems = itemlist.getSelectedPosition()
+                log("items:" + str(numitems))
+                for i in range(0, numitems):
+                    Notify(item.getProperty("Image"))
             elif info == 'action':
                 xbmc.executebuiltin(self.id)
             elif info == 'playtrailer':
