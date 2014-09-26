@@ -20,7 +20,7 @@ def GetRottenTomatoesMovies(movietype):
     count = 1
     if results is not None:
         for item in results["movies"]:
-            if "alternate_ids" in imdbid:
+            if "alternate_ids" in item:
                 imdbid = item["alternate_ids"]["imdb"]
             else:
                 imdbid = False
