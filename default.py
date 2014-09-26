@@ -290,8 +290,8 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
-            elif info == 'startactorinfo':
-                xbmc.executebuiltin("RunScript(script.metadata.actors,%s)" % (self.id))
+            elif info == 'action':
+                xbmc.executebuiltin(self.id)
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 log("startin playtrailer")

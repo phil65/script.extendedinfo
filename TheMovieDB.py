@@ -86,6 +86,7 @@ def HandleTheMovieDBPeopleResult(results):
         if "known_for" in results:
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
+        builtin = 'RunScript(script.metadata.actors,"%s")' % (str(person.get('name', "")))
         newperson = {'adult': str(person['adult']),
                      'name': person['name'],
                      'also_known_as': person.get('also_known_as', ""),
@@ -94,7 +95,7 @@ def HandleTheMovieDBPeopleResult(results):
                      'description': description,
                      'plot': description,
                      'id': str(person['id']),
-                     'path': "plugin://script.extendedinfo/?info=startactorinfo&&id=" + str(person.get('name', "")),
+                     'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
                      'deathday': person.get('deathday', ""),
                      'place_of_birth': person.get('place_of_birth', ""),
                      'thumb': base_url + poster_size + person.get('profile_path', ""),

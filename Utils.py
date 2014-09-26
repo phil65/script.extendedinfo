@@ -469,13 +469,15 @@ def GetFavourites():
     json_query = simplejson.loads(json_query)
     prettyprint(json_query)
     for fav in json_query["result"]["favourites"]:
-        if "path" in fav:
+        if fav["type"] == "media":
             path = fav["path"]
+        elif fav["type"] == "script":
+            path = "RunScript(%s)" % (fav["path"])
         else:
             path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
         newitem = {'Label': fav["title"],
                    'Thumb': fav["thumbnail"],
-                   'Path': path}
+                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
         items.append(newitem)
     return items
 
