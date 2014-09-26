@@ -20,10 +20,14 @@ def GetRottenTomatoesMovies(movietype):
     count = 1
     if results is not None:
         for item in results["movies"]:
+            if "alternate_ids" in imdbid:
+                imdbid = item["alternate_ids"]["imdb"]
+            else:
+                imdbid = False
             poster = item["posters"]["original"].replace("tmb", "ori")
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
-                     'imdbid': item["alternate_ids"]["imdb"],
+                     'imdbid': imdbid,
                      'Thumb': poster,
                      'Poster': poster,
                      'Runtime': item["runtime"],
@@ -33,7 +37,8 @@ def GetRottenTomatoesMovies(movietype):
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"] / 10.0,
                      'Plot': item["synopsis"]}
-            movies.append(movie)
+            if imdbid:
+                movies.append(movie)
             count += 1
             if count > 20:
                 break

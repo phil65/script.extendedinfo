@@ -146,12 +146,13 @@ def GetYoutubeVideos(jsonurl, prefix=""):
     if results:
         try:
             for item in results["value"]["items"]:
-                video = {'Thumb': item["media:thumbnail"][0]["url"],
+                thumb = item["media:group"]["media:thumbnail"][0]["url"]
+                video = {'Thumb': thumb,
                          'Media': ConvertYoutubeURL(item["link"]),
                          'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
                          'Path': ConvertYoutubeURL(item["link"]),
                          'Title': item["title"],
-                         'Description': item["content"]["content"],
+                         'Description': item["content"].get("content", ""),
                          'Date': item["pubDate"]}
                 videos.append(video)
                 count += 1
