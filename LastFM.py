@@ -44,6 +44,7 @@ def HandleLastFMEventResult(results):
                         search_string = urllib.quote_plus(event['venue']['name'])
                 except:
                     search_string = ""
+                builtin = 'RunScript(script.maps.browser,venueid=%s)' % (str(event['venue']['id']))
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
                 event = {'date': event['startDate'][:-3],
                          'name': event['venue']['name'],
@@ -62,6 +63,7 @@ def HandleLastFMEventResult(results):
                          'lon': event['venue']['location']['geo:point']['geo:long'],
                          'artists': my_arts,
                          'googlemap': googlemap,
+                         'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
                          'artist_image': event['image'][-1]['#text'],
                          'thumb': event['image'][-1]['#text'],
                          'venue_image': event['venue']['image'][-1]['#text'],
