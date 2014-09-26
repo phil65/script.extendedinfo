@@ -358,6 +358,7 @@ def GetSimilarMovies(Id):
     else:
         log("No JSON Data available")
 
+
 def GetMovieDBTVShows(type):
     response = GetMovieDBData("tv/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
     if "results" in response:
@@ -365,10 +366,11 @@ def GetMovieDBTVShows(type):
     else:
         log("No JSON Data available")
 
+
 def GetMovieDBMovies(type):
     response = GetMovieDBData("movie/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
     if "results" in response:
-      return HandleTheMovieDBMovieResult(response["results"])
+        return HandleTheMovieDBMovieResult(response["results"])
     else:
         log("No JSON Data available")
 
@@ -380,6 +382,7 @@ def GetSetMovies(Id):
     else:
         log("No JSON Data available")
 
+
 def GetDirectorMovies(Id):
     response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
     # return HandleTheMovieDBMovieResult(response["crew"]) + HandleTheMovieDBMovieResult(response["cast"])
@@ -387,6 +390,7 @@ def GetDirectorMovies(Id):
         return HandleTheMovieDBMovieResult(response["crew"])
     else:
         log("No JSON Data available")
+
 
 def search_movie(medianame, year=''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))
