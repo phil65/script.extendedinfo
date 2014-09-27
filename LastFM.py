@@ -169,7 +169,7 @@ def GetArtistShouts(artistname):
 def GetImages(mbid):
     url = 'method=artist.getimages&mbid=%s' % (id)
     results = Get_JSON_response(base_url, url, 0)
-    prettyprint(results)
+#    prettyprint(results)
     return HandleLastFMEventResult(results)
 
 

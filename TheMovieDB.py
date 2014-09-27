@@ -215,11 +215,8 @@ def millify(n):
 
 def GetSeasonInfo(tvshowname, seasonnumber):
     response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), __addon__.getSetting("LanguageID")), 30)
- #   prettyprint(response)
     tvshowid = str(response['results'][0]['id'])
-  #  log(tvshowid)
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos&language=%s&" % (tvshowid, seasonnumber, __addon__.getSetting("LanguageID")), 30)
-  #  prettyprint(response)
     season = {'SeasonDescription': response["overview"],
               'AirDate': response["air_date"]}
     videos = []
@@ -233,13 +230,11 @@ def GetSeasonInfo(tvshowname, seasonnumber):
 
 def GetMovieDBID(imdbid):
     response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid, __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
     return response["movie_results"][0]["id"]
 
 
 def GetExtendedMovieInfo(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
-#    prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -333,7 +328,6 @@ def GetMovieLists(Id):
 
 def GetPopularActorList():
     response = GetMovieDBData("person/popular?", 1)
-    prettyprint(response)
     return HandleTheMovieDBPeopleResult(response["results"])
 
 
