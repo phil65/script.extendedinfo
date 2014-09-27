@@ -31,6 +31,7 @@ def GetRottenTomatoesMovies(movietype):
                      'Thumb': poster,
                      'Poster': poster,
                      'Runtime': item["runtime"],
+                     'Duration': item["runtime"],
                      'Year': item["year"],
                      'path': "plugin://script.extendedinfo/?info=playtrailer&&imdbid=" + item["alternate_ids"]["imdb"],
                      'Premiered': item["release_dates"]["theater"],

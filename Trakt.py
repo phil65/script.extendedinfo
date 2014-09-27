@@ -28,6 +28,7 @@ def GetTraktCalendarShows(Type):
                         'TVShowTitle': episode["show"]["title"],
                         'ID': episode["show"]["tvdb_id"],
                         'Runtime': episode["show"]["runtime"],
+                        'Duration': episode["show"]["runtime"],
                         'Year': episode["show"].get("year"),
                         'Certification': episode["show"]["certification"],
                         'Studio': episode["show"]["network"],
@@ -58,6 +59,7 @@ def HandleTraktMovieResult(results):
         try:
             movie = {'Title': movie["title"],
                      'Runtime': movie["runtime"],
+                     'Duration': movie["runtime"],
                      'Tagline': movie["tagline"],
                      'Trailer': ConvertYoutubeURL(movie["trailer"]),
                      'Year': movie["year"],
@@ -93,6 +95,7 @@ def HandleTraktTVShowResult(results):
                 'Label': tvshow["title"],
                 'TVShowTitle': tvshow["title"],
                 'Runtime': tvshow["runtime"],
+                'Duration': tvshow["runtime"],
                 'Year': tvshow["year"],
                 'Status': tvshow.get("status", ""),
                 'mpaa': tvshow["certification"],
