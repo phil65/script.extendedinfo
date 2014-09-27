@@ -14,6 +14,7 @@ else:
 
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
+youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 bandsintown_apikey = 'xbmc_open_source_media_center'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 
@@ -172,30 +173,28 @@ def GetYoutubeVideos(jsonurl, prefix=""):
     return videos
 
 
-def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", time="all_time"):
+def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
     search_string = urllib.quote(search_string.replace('"', ''))
-    try:
-        base_url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json'
-        url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
-        results = Get_JSON_response(base_url, url, 0.5)
-    except:
-        log("Error when fetching JSON data from net")
+    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=20&type=video'
+    url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
+    results = Get_JSON_response(base_url, url, 0)
+    # prettyprint(results)
     count = 1
     videos = []
     if results:
-        for item in results["feed"]["entry"]:
-            video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
-                     'Play': "PlayMedia(" + ConvertYoutubeURL(item["media$group"]["media$player"]["url"]) + ")",
-                     'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
-                     'Description': item["media$group"]["media$description"]["$t"],
-                     'Title': item["title"]["$t"],
-                     'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
+        for item in results["items"]:
+            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
+                     'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
+                     'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
+                     'Description': item["snippet"]["description"],
+                     'Title': item["snippet"]["title"],
+                     # 'Author': item["author"][0]["name"]["$t"],
+                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
             videos.append(video)
             count += 1
     return videos
