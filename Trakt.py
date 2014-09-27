@@ -35,8 +35,11 @@ def GetTraktCalendarShows(Type):
                         'Genre': " / ".join(episode["show"]["genres"]),
                         'Thumb': episode["episode"]["images"]["screen"],
                         'Art(poster)': episode["show"]["images"]["poster"],
+                        'Poster': episode["show"]["images"]["poster"],
                         'Art(banner)': episode["show"]["images"]["banner"],
-                        'Art(fanart)': episode["show"]["images"]["fanart"]}
+                        'Banner': episode["show"]["images"]["banner"],
+                        'Art(fanart)': episode["show"]["images"]["fanart"],
+                        'Fanart': episode["show"]["images"]["fanart"]}
                 shows.append(show)
                 count += 1
                 if count > 20:
