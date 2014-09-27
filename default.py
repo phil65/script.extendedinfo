@@ -289,6 +289,8 @@ class Main:
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'favourites':
                 passDataToSkin('Favourites', GetFavourites(), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'iconpanel':
+                passDataToSkin('Favourites', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':

@@ -481,14 +481,16 @@ def GetFavourites():
         items.append(newitem)
     return items
 
+
 def GetIconPanel(number):
     items = []
-    for i in range(1, 10):
-        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Label)"),
-                   'Path': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Path)"),
-                   'Thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Icon)"),
-                   'ID': "IconPanelitem" + str(i),
-                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i) + ".Type)")}
+    offset = number * 5 - 5
+    for i in range(1, 6):
+        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Label)").decode("utf-8"),
+                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
+                   'Thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
+                   'ID': "IconPanelitem" + str(i + offset).decode("utf-8"),
+                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Type)").decode("utf-8")}
         items.append(newitem)
     return items
 
@@ -622,7 +624,9 @@ def passHomeDataToSkin(data, debug=True):
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
     if controlnumber is "plugin":
+        window.clearProperty(name)
         if data is not None:
+            window.setProperty(name + ".Count", str(len(data)))
             items = CreateListItems(data)
             xbmcplugin.setContent(handle, 'url')
             itemlist = list()
