@@ -295,6 +295,25 @@ class Main:
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
+            elif info == 'playliststats':
+                if ".xsp" in self.id:
+                    startindex = self.id.find("special://")
+                    endindex = self.id.find(".xsp")
+  #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
+                    if (startindex > 0) and (endindex > 0):
+                        playlistpath = self.id[startindex:endindex + 4]
+                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+                        json_query = unicode(json_query, 'utf-8', errors='ignore')
+                        json_response = json.loads(json_query)
+                        prettyprint(json_response)
+                        played = 0
+                        numitems = json_response["result"]["limits"]["total"]
+                        for item in json_response["result"]["files"]:
+                            if item["playcount"] > 0:
+                                played += 1
+                        wnd.setProperty('PlaylistWatched', str(played))
+                        wnd.setProperty('PlaylistUnWatched', str(numitems - played))
+                        wnd.setProperty('PlaylistCount', str(numitems))
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
                 Window = xbmcgui.Window(windowid)
