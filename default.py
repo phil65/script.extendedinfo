@@ -316,7 +316,7 @@ class Main:
                                 inprogress += 1
                         wnd.setProperty('PlaylistWatched', str(played))
                         wnd.setProperty('PlaylistUnWatched', str(numitems - played))
-                        wnd.setProperty('PlaylistInProgress', str(numitems - played))
+                        wnd.setProperty('PlaylistInProgress', inprogress)
                         wnd.setProperty('PlaylistCount', str(numitems))
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
