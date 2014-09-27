@@ -296,7 +296,7 @@ class Main:
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
-                if ".xsp" in self.id:
+                if (".xsp" in self.id) and ("special://" in self.id):
                     startindex = self.id.find("special://")
                     endindex = self.id.find(".xsp")
   #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
@@ -307,12 +307,16 @@ class Main:
                         json_response = json.loads(json_query)
                         prettyprint(json_response)
                         played = 0
+                        inprogress = 0
                         numitems = json_response["result"]["limits"]["total"]
                         for item in json_response["result"]["files"]:
                             if item["playcount"] > 0:
                                 played += 1
+                            if item["resume"]["position"] > 0:
+                                inprogress += 1
                         wnd.setProperty('PlaylistWatched', str(played))
                         wnd.setProperty('PlaylistUnWatched', str(numitems - played))
+                        wnd.setProperty('PlaylistInProgress', str(numitems - played))
                         wnd.setProperty('PlaylistCount', str(numitems))
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
