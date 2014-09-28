@@ -292,7 +292,11 @@ class Main:
                 passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'favourites':
-                passDataToSkin('Favourites', GetFavourites(), self.prop_prefix, self.window, self.control, self.handle)
+                favourites = GetFavourites()
+                wnd.setProperty('favourite.count', str(len(GetFavourites())))
+                if len(GetFavourites()) > 0:
+                    wnd.setProperty('favourite.1.name', favourites[-1]["Label"])
+                passDataToSkin('Favourites', favourites, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'iconpanel':
                 passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
