@@ -45,6 +45,25 @@ def GetYoutubeVideos(jsonurl, prefix=""):
     return videos
 
 
+def HandleYouTubeVideoResults(results):
+    videos = []
+    log("starting HandleYouTubeVideoResults")
+    for item in results:
+            try:
+                videoid = item["id"]["videoId"]
+            except:
+                videoid = item["snippet"]["resourceId"]["videoId"]
+            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
+                     'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % videoid,
+                     'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % videoid,
+                     'Description': item["snippet"]["description"],
+                     'Title': item["snippet"]["title"],
+                     # 'Author': item["author"][0]["name"]["$t"],
+                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
+            videos.append(video)
+    return videos
+
+
 def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
     results = []
     if hd and not hd == "false":
@@ -55,21 +74,10 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
     base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=20&type=video'
     url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
     results = Get_JSON_response(base_url, url, 0)
-    # prettyprint(results)
-    count = 1
-    videos = []
     if results:
-        for item in results["items"]:
-            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
-                     'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Description': item["snippet"]["description"],
-                     'Title': item["snippet"]["title"],
-                     # 'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
-            videos.append(video)
-            count += 1
-    return videos
+        return HandleYouTubeVideoResults(results["items"])
+    else:
+        return []
 
 
 def GetYoutubePlaylistVideos(playlistid=""):
@@ -77,20 +85,10 @@ def GetYoutubePlaylistVideos(playlistid=""):
     url = '&playlistId=%s&key=%s' % (playlistid, youtube_key2)
     results = Get_JSON_response(base_url, url, 0)
     prettyprint(results)
-    count = 1
-    videos = []
     if results:
-        for item in results["items"]:
-            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
-                     'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Description': item["snippet"]["description"],
-                     'Title': item["snippet"]["title"],
-                     # 'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
-            videos.append(video)
-            count += 1
-    return videos
+        return HandleYouTubeVideoResults(results["items"])
+    else:
+        return []
 
 
 def GetYoutubeUserVideos(userid=""):
