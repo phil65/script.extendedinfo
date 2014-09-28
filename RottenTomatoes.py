@@ -21,9 +21,9 @@ def GetRottenTomatoesMovies(movietype):
     if results is not None:
         for item in results["movies"]:
             if "alternate_ids" in item:
-                imdbid = item["alternate_ids"]["imdb"]
+                imdbid = str(item["alternate_ids"]["imdb"])
             else:
-                imdbid = False
+                imdbid = ""
             poster = item["posters"]["original"].replace("tmb", "ori")
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
