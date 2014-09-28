@@ -11,6 +11,7 @@ from TheAudioDB import *
 from TheMovieDB import *
 from Utils import *
 from RottenTomatoes import *
+from YouTube import *
 from Trakt import *
 if sys.version_info < (2, 7):
     import simplejson
@@ -263,6 +264,9 @@ class Main:
                 wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'youtubeplaylist':
+                passDataToSkin('YoutubePlaylist', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubeusersearch':
                 passDataToSkin('YoutubeUserSearch', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
@@ -290,22 +294,28 @@ class Main:
             elif info == 'favourites':
                 passDataToSkin('Favourites', GetFavourites(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'iconpanel':
-                passDataToSkin('Favourites', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
+                startindex = -1
+                endindex = -1
                 if (".xsp" in self.id) and ("special://" in self.id):
                     startindex = self.id.find("special://")
                     endindex = self.id.find(".xsp")
+                elif ("videodb://" in self.id):
+                    pass
+
   #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
-                    if (startindex > 0) and (endindex > 0):
-                        playlistpath = self.id[startindex:endindex + 4]
-                        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-                        json_query = unicode(json_query, 'utf-8', errors='ignore')
-                        json_response = json.loads(json_query)
-                        prettyprint(json_response)
+                if (startindex > 0) and (endindex > 0):
+                    playlistpath = self.id[startindex:endindex + 4]
+                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+                    json_query = unicode(json_query, 'utf-8', errors='ignore')
+                    json_response = json.loads(json_query)
+               #     prettyprint(json_response)
+                    if "result" in json_response:
                         played = 0
                         inprogress = 0
                         numitems = json_response["result"]["limits"]["total"]
@@ -423,7 +433,7 @@ class Main:
             log(arg)
             if arg == 'script.extendedinfo':
                 continue
-            param = arg.lower()
+            param = arg
             if param.startswith('info='):
                 self.infos.append(param[5:])
             elif param.startswith('type='):
