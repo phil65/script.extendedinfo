@@ -33,7 +33,7 @@ def GetRottenTomatoesMovies(movietype):
                      'Runtime': item["runtime"],
                      'Duration': item["runtime"],
                      'Year': item["year"],
-                     'path': "plugin://script.extendedinfo/?info=playtrailer&&imdbid=" + item["alternate_ids"]["imdb"],
+                     'path': "plugin://script.extendedinfo/?info=playtrailer&&imdbid=" + imdbid,
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"] / 10.0,
