@@ -13,8 +13,6 @@ else:
     import json as simplejson
 
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
-youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
-youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 bandsintown_apikey = 'xbmc_open_source_media_center'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 
@@ -123,7 +121,7 @@ def GetFlickrImages():
     try:
         base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
         url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        results = Get_JSON_response(base_url, url,0)
+        results = Get_JSON_response(base_url, url, 0)
         prettyprint(results)
     except:
         log("Error when fetching Flickr data from net")
@@ -136,93 +134,6 @@ def GetFlickrImages():
             log(image)
             count += 1
     return images
-
-
-def GetYoutubeVideos(jsonurl, prefix=""):
-    results = []
-    results = Get_JSON_response("", jsonurl, 0.5)
-    count = 1
-    log("found youtube vids: " + jsonurl)
-    videos = []
-    if results:
-        try:
-            for item in results["value"]["items"]:
-                thumb = item["media:group"]["media:thumbnail"][0]["url"]
-                video = {'Thumb': thumb,
-                         'Media': ConvertYoutubeURL(item["link"]),
-                         'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
-                         'Path': ConvertYoutubeURL(item["link"]),
-                         'Title': item["title"],
-                         'Description': item["content"].get("content", ""),
-                         'Date': item["pubDate"]}
-                videos.append(video)
-                count += 1
-        except:
-            for item in results["feed"]["entry"]:
-                for entry in item["link"]:
-                    if entry.get('href', '').startswith('http://www.youtube.com/watch'):
-                        video = {'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href', '')) + "/0.jpg",
-                                 'Media': ConvertYoutubeURL(entry.get('href', '')),
-                                 'Path': ConvertYoutubeURL(entry.get('href', '')),
-                                 'Play': "PlayMedia(" + ConvertYoutubeURL(entry.get('href', '')) + ")",
-                                 'Title': item["title"]["$t"],
-                                 'Description': "To Come",
-                                 'Date': "To Come"}
-                        videos.append(video)
-                        count += 1
-    return videos
-
-
-def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
-    results = []
-    if hd and not hd == "false":
-        hd_string = "&hd=true"
-    else:
-        hd_string = ""
-    search_string = urllib.quote(search_string.replace('"', ''))
-    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=20&type=video'
-    url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
-    results = Get_JSON_response(base_url, url, 0)
-    # prettyprint(results)
-    count = 1
-    videos = []
-    if results:
-        for item in results["items"]:
-            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
-                     'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % item["id"]["videoId"],
-                     'Description': item["snippet"]["description"],
-                     'Title': item["snippet"]["title"],
-                     # 'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
-            videos.append(video)
-            count += 1
-    return videos
-
-
-def GetYoutubeUserVideos(userid=""):
-    results = []
-    userid = urllib.quote(userid.replace('"', ''))
-    try:
-        base_url = 'https://gdata.youtube.com/feeds/api/users/'
-        url = '%s/uploads?v=2&alt=json' % (userid)
-        results = Get_JSON_response(base_url, url)
-    except:
-        log("Error when fetching JSON data from net")
-    count = 1
-    videos = []
-    if results:
-        for item in results["feed"]["entry"]:
-            video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
-                     'Play': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
-                     'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
-                     'Description': item["media$group"]["media$description"]["$t"],
-                     'Title': item["title"]["$t"],
-                     'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
-            videos.append(video)
-            count += 1
-    return videos
 
 
 def HandleBandsInTownResult(results):
