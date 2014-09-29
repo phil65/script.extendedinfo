@@ -73,7 +73,9 @@ def HandleTraktMovieResult(results):
                      'Watchers': movie["watchers"],
                      'Genre': " / ".join(movie["genres"]),
                      'Art(poster)': movie["images"]["poster"],
-                     'Art(fanart)': movie["images"]["fanart"]}
+                     'Poster': movie["images"]["poster"],
+                     'Art(fanart)': movie["images"]["fanart"],
+                     'Fanart': movie["images"]["fanart"]}
             movies.append(movie)
         except Exception as e:
             log(e)
