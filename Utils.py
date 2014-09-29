@@ -24,7 +24,6 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 
 window = xbmcgui.Window(10000)
 wnd = xbmcgui.Window(12003)
-locallist = []
 
 
 def AddArtToLibrary(type, media, folder, limit, silent=False):
@@ -350,9 +349,7 @@ def media_path(path):
 
 
 def CompareWithLibrary(onlinelist):
-    global locallist
-    if not locallist:
-        locallist = create_light_movielist()
+    locallist = create_light_movielist()
     a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
@@ -370,7 +367,7 @@ def CompareWithLibrary(onlinelist):
                         streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
                         onlineitem.update({"Play": localitem["movieid"]})
                         onlineitem.update({"DBID": localitem["movieid"]})
-                        onlineitem.update({"Path": localitem["movieid"]})
+                        onlineitem.update({"Path": localitem['file']})
                         onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
                         onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
                         onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
@@ -396,9 +393,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
 
 
 def CompareAlbumWithLibrary(onlinelist):
-    global locallist
-    if not locallist:
-        locallist = GetXBMCAlbums()
+    locallist = GetXBMCAlbums()
     a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
