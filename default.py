@@ -228,7 +228,7 @@ class Main:
                     if writerid:
                         passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarmoviestrakt':
-                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
                     if self.dbid:
                         id = GetImdbID("movie", self.dbid)
@@ -236,7 +236,7 @@ class Main:
                         id = self.id
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similartvshowstrakt':
-                passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
                     if self.dbid:
                         if self.type == "episode":
@@ -318,7 +318,6 @@ class Main:
                     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_response = json.loads(json_query)
-               #     prettyprint(json_response)
                     if "result" in json_response:
                         played = 0
                         inprogress = 0
