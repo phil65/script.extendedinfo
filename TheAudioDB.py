@@ -86,7 +86,7 @@ def HandleAudioDBMusicVideoResult(results):
                     'Description': mvid['strDescriptionEN'],
                     'id': mvid['idTrack'],
                     'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(mvid.get('strMusicVid', '')) + "/0.jpg",
-                    'Path': ConvertYoutubeURL(mvid['strMusicVid']),
+                    'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % ConvertYoutubeURL(mvid['strMusicVid']),
                     'Label': mvid['strTrack']}
             mvids.append(mvid)
     else:
