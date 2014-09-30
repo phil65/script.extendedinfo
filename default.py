@@ -234,7 +234,7 @@ class Main:
                         movieid = GetImdbID("movie", self.dbid)
                     else:
                         movieid = self.id
-                    passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control, self.handle)
+                    passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", movieid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similartvshowstrakt':
                 passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
