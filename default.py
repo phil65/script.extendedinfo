@@ -180,17 +180,17 @@ class Main:
             elif info == 'movielists':
                 passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid:
-                    id = GetImdbID("movie", self.dbid)
-                    log("MovieDB Id:" + str(id))
-                    if id:
-                        passDataToSkin('MovieLists', GetMovieLists(id), self.prop_prefix, self.window, self.control, self.handle)
+                    movieid = GetImdbID("movie", self.dbid)
+                    log("MovieDB Id:" + str(movieid))
+                    if movieid:
+                        passDataToSkin('MovieLists', GetMovieLists(movieid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'keywords':
                 passDataToSkin('Keywords', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid:
-                    id = GetImdbID("movie", self.dbid)
-                    log("MovieDB Id:" + str(id))
-                    if id:
-                        passDataToSkin('Keywords', GetMovieKeywords(id), self.prop_prefix, self.window, self.control, self.handle)
+                    movieid = GetImdbID("movie", self.dbid)
+                    log("MovieDB Id:" + str(movieid))
+                    if movieid:
+                        passDataToSkin('Keywords', GetMovieKeywords(movieid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'popularpeople':
                 passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'extendedinfo':
@@ -231,9 +231,9 @@ class Main:
                 passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle)
                 if (self.id or self.dbid):
                     if self.dbid:
-                        id = GetImdbID("movie", self.dbid)
+                        movieid = GetImdbID("movie", self.dbid)
                     else:
-                        id = self.id
+                        movieid = self.id
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similartvshowstrakt':
                 passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle)
