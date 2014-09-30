@@ -462,18 +462,19 @@ def GetFavourites():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
-   # prettyprint(json_query)
-    for fav in json_query["result"]["favourites"]:
-        if fav["type"] == "media":
-            path = fav["path"]
-        elif fav["type"] == "script":
-            path = "RunScript(%s)" % (fav["path"])
-        else:
-            path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
-        newitem = {'Label': fav["title"],
-                   'Thumb': fav["thumbnail"],
-                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
-        items.append(newitem)
+    prettyprint(json_query)
+    if json_query["result"]["limits"]["total"] > 0:
+        for fav in json_query["result"]["favourites"]:
+            if fav["type"] == "media":
+                path = fav["path"]
+            elif fav["type"] == "script":
+                path = "RunScript(%s)" % (fav["path"])
+            else:
+                path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+            newitem = {'Label': fav["title"],
+                       'Thumb': fav["thumbnail"],
+                       'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
+            items.append(newitem)
     return items
 
 
