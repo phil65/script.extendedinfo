@@ -671,6 +671,8 @@ def CreateListItems(data):
                     listitem.setLabel(unicode(value))
                 if str(key).lower() in ["thumb"]:
                     listitem.setThumbnailImage(unicode(value))
+                if str(key).lower() in ["icon"]:
+                    listitem.setIcon(unicode(value))
                 if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                     listitem.setArt({str(key).lower(): unicode(value)})
                 if str(key).lower() in ["path"]:
