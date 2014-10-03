@@ -4,7 +4,7 @@ import xbmc
 import xbmcvfs
 import time
 import simplejson as json
-from Utils import log, prettyprint, read_from_file, save_to_file, CompareWithLibrary
+from Utils import *
 import urllib
 from urllib2 import Request, urlopen
 
@@ -288,7 +288,7 @@ def GetExtendedMovieInfo(Id):
                 'Label': response.get('title', ""),
                 'Tagline': response.get('tagline', ""),
                 'RunningTime': response.get('runtime', ""),
-                'Budget': response.get('budget', ""),
+                'Duration': response.get('runtime', ""),
                 'mpaa': mpaa,
                 'Director': Director,
                 'Writer': Writer,
