@@ -238,6 +238,8 @@ def GetExtendedMovieInfo(Id):
     authors = []
     directors = []
     genres = []
+    if response == []:
+        return {}
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['casts']['crew']:
