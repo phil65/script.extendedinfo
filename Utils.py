@@ -466,7 +466,7 @@ def GetFavourites():
     if json_query["result"]["limits"]["total"] > 0:
         for fav in json_query["result"]["favourites"]:
             if fav["type"] == "media":
-                path = fav["path"]
+                path = "PlayMedia(%s)" % (fav["path"])
             elif fav["type"] == "script":
                 path = "RunScript(%s)" % (fav["path"])
             else:
@@ -657,7 +657,9 @@ def SetWindowProperties(name, data, prefix="", debug=False):
 
 
 def CreateListItems(data):
-    # log(str(xbmcgui.getCurrentWindowId()))
+    InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
+                  "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
+                  "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]    # log(str(xbmcgui.getCurrentWindowId()))
     # log(str(xbmcgui.getCurrentWindowDialogId()))
     # log(str(controlwindow))
     itemlist = []
@@ -677,6 +679,8 @@ def CreateListItems(data):
                     listitem.setArt({str(key).lower(): unicode(value)})
                 if str(key).lower() in ["path"]:
                     itempath = unicode(value)
+                # if str(key).lower() in InfoLabels:
+                #     listitem.setInfo('video', {str(key).lower(): unicode(value)})
        #             Notify(value)
                 listitem.setProperty('%s' % (str(key)), unicode(value))
            # itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
