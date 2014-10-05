@@ -73,7 +73,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
     search_string = urllib.quote(search_string.replace('"', ''))
     base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=20&type=video'
     url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
-    results = Get_JSON_response(base_url, url, 0)
+    results = Get_JSON_response(base_url, url, 0.5)
     if results:
         return HandleYouTubeVideoResults(results["items"])
     else:
@@ -83,7 +83,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
 def GetYoutubePlaylistVideos(playlistid=""):
     base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=20'
     url = '&playlistId=%s&key=%s' % (playlistid, youtube_key2)
-    results = Get_JSON_response(base_url, url, 0)
+    results = Get_JSON_response(base_url, url, 0.5)
     prettyprint(results)
     if results:
         return HandleYouTubeVideoResults(results["items"])
@@ -95,7 +95,7 @@ def GetYoutubeUserVideos(userid=""):
     userid = urllib.quote(userid.replace('"', ''))
     base_url = 'https://gdata.youtube.com/feeds/api/users/'
     url = '%s/uploads?v=2&alt=json' % (userid)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url, url, 0.5)
     count = 1
     videos = []
     if results:
