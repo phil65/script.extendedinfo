@@ -206,6 +206,16 @@ class Main:
                     MovieId = ""
                 if MovieId:
                     passHomeDataToSkin(GetExtendedMovieInfo(MovieId))
+            elif info == 'extendedactorinfo':
+                log("startin GetExtendedActorInfo")
+                if self.id:
+                    ActorID = self.id
+                elif self.name:
+                    ActorID = GetPersonID(self.name)
+                else:
+                    ActorID = ""
+                if ActorID:
+                    passHomeDataToSkin(GetExtendedActorInfo(ActorID))
             elif info == 'extendedtvinfo':
                 if self.id:
                     passHomeDataToSkin(GetTVShowInfo(self.id)[0])
@@ -315,7 +325,8 @@ class Main:
   #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
                 if (startindex > 0) and (endindex > 0):
                     playlistpath = self.id[startindex:endindex + 4]
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+#                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume", "art"]}, "id": 1}' % (playlistpath))
                     json_query = unicode(json_query, 'utf-8', errors='ignore')
                     json_response = json.loads(json_query)
                     if "result" in json_response:
@@ -392,6 +403,7 @@ class Main:
         self.time = "all_time"
         self.director = ""
         self.tag = ""
+        self.name = ""
         self.tvshow = ""
         self.season = ""
         self.writer = ""
@@ -465,6 +477,8 @@ class Main:
                 self.festivalsonly = (param[14:])
             elif param.startswith('feed='):
                 self.feed = param[5:]
+            elif param.startswith('name='):
+                self.name = param[5:]
             elif param.startswith('id='):
                 self.id = param[3:]
             elif param.startswith('dbid='):
