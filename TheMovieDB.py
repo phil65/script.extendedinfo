@@ -46,6 +46,34 @@ def HandleTheMovieDBMovieResult(results):
     movies = CompareWithLibrary(movies)
     return movies
 
+def HandleTheMovieDBActorMovieResult(results):
+    movies = []
+    log("starting HandleTheMovieDBActorMovieResult")
+    for movie in results:
+        try:
+            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path', "")),
+                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'Thumb': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'Poster': base_url + poster_size + str(movie.get('poster_path', "")),
+                        'fanart': base_url + fanart_size + str(movie.get('backdrop_path', "")),
+                        'Title': movie.get('title', ""),
+                        'OriginalTitle': movie.get('original_title', ""),
+                        'ID': movie.get('id', ""),
+                        'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', "")),
+                        'Play': "",
+                        'DBID': "",
+                        'Rating': movie.get('vote_average', ""),
+                        'Votes': movie.get('vote_count', ""),
+                        'Year': movie.get('release_date', "")[:4],
+                        'Premiered': movie.get('release_date', "")}
+            if not str(movie['id']) in str(movies):  # too dirty
+                movies.append(newmovie)
+        except Exception as e:
+            log("Exception:" + e)
+            prettyprint(movie)
+    movies = CompareWithLibrary(movies)
+    return movies
+
 
 def HandleTheMovieDBTVShowResult(results):
     tvshows = []
@@ -137,8 +165,8 @@ def SearchforCompany(Company):
 
 def GetPersonID(person):
     Persons = person.split(" / ")
-    person = Persons[0]
-    response = GetMovieDBData("search/person?query=%s&" % urllib.quote_plus(person), 30)
+    person = Persons[0]  # todo: dialogselect
+    response = GetMovieDBData("search/person?query=%s&include_adult=true&" % urllib.quote_plus(person), 30)
     try:
         return response["results"][0]["id"]
     except:
@@ -323,6 +351,12 @@ def GetExtendedMovieInfo(Id):
     return newmovie[0]
 
 
+def GetExtendedActorInfo(actorid):
+    response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,images,tagged_images&" % (actorid), 1)
+    prettyprint(response)
+    return HandleTheMovieDBMovieResult(response["cast"])
+
+
 def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTheMovieDBListResult(response)
@@ -331,6 +365,16 @@ def GetMovieLists(Id):
 def GetPopularActorList():
     response = GetMovieDBData("person/popular?", 1)
     return HandleTheMovieDBPeopleResult(response["results"])
+
+
+def GetActorMovieCredits(actorid):
+    response = GetMovieDBData("person/%s/movie_credits?" % (actorid), 1)
+    return HandleTheMovieDBMovieResult(response["cast"])
+
+
+def GetActorTVShowCredits(actorid):
+    response = GetMovieDBData("person/%s/tv_credits?" % (actorid), 1)
+    return HandleTheMovieDBMovieResult(response["cast"])
 
 
 def GetMovieKeywords(Id):
