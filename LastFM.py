@@ -44,12 +44,13 @@ def HandleLastFMEventResult(results):
                         search_string = urllib.quote_plus(event['venue']['name'])
                 except:
                     search_string = ""
-                builtin = 'RunScript(script.maps.browser,venueid=%s)' % (str(event['venue']['id']))
+                builtin = 'RunScript(script.maps.browser,eventid=%s)' % (str(event['id']))
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
                 event = {'date': event['startDate'][:-3],
                          'name': event['venue']['name'],
                          'id': event['venue']['id'],
                          'venue_id': event['venue']['id'],
+                         'event_id': event['id'],
                          'street': event['venue']['location']['street'],
                          'eventname': event['title'],
                          'website': event['website'],
@@ -147,6 +148,15 @@ def GetEvents(id, pastevents=False):
         url = 'method=artist.getevents&mbid=%s' % (id)
     results = Get_JSON_response(base_url, url, 1)
     return HandleLastFMEventResult(results)
+
+
+def GetArtistPodcast(artist):
+    results = Get_JSON_response(base_url, "method=artist.getPodcast&limit=100")
+    return HandleLastFMArtistResult(results['artists'])
+
+def GetHypedArtists():
+    results = Get_JSON_response(base_url, "method=chart.gethypedartists&limit=100")
+    return HandleLastFMArtistResult(results['artists'])
 
 
 def GetTopArtists():

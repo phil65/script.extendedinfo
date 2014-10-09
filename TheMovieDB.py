@@ -80,7 +80,9 @@ def HandleTheMovieDBTVShowResult(results):
     log("starting HandleTheMovieDBTVShowResult")
     for tv in results:
         newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path', "")),
+                 'Fanart': base_url + fanart_size + str(tv.get('backdrop_path', "")),
                  'Art(poster)': base_url + poster_size + str(tv.get('poster_path', "")),
+                 'Poster': base_url + poster_size + str(tv.get('poster_path', "")),
                  'Title': tv.get('name', ""),
                  'OriginalTitle': tv.get('original_name', ""),
                  'ID': tv.get('id', ""),

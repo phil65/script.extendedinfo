@@ -129,6 +129,9 @@ class Main:
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'hypedartists':
+                passDataToSkin('HypedArtists', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('HypedArtists', GetHypedArtists(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'cyanide':
                 passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control, self.handle)
             ### RottenTomatoesMovies #################################################################################
@@ -301,6 +304,9 @@ class Main:
             elif info == 'dailybabe':
                 passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'channels':
+                channels = create_channel_list()
+                prettyprint(channels)
             elif info == 'favourites':
                 favourites = GetFavourites()
                 wnd.setProperty('favourite.count', str(len(GetFavourites())))
