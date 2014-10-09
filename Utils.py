@@ -383,8 +383,8 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = Get_JSON_response(base_url, url, 30)
   #  prettyprint(results)
-    if results and len(results["artist"]) > 0:
-        mbid = results["artist"][0]["id"]
+    if results and len(results["artists"]) > 0:
+        mbid = results["artists"][0]["id"]
         log("found artist id for " + artist + ": " + mbid)
         return mbid
     else:
@@ -609,7 +609,7 @@ def GetImdbIDfromEpisode(dbid):
         tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
         return GetImdbID("tvshow", tvshowid)
 
-def passHomeDataToSkin(data, debug=True):
+def passHomeDataToSkin(data, debug=False):
     if data is not None:
         for (key, value) in data.iteritems():
             window.setProperty('%s' % (str(key)), unicode(value))
