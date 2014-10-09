@@ -318,12 +318,11 @@ def GetXBMCAlbums():
 
 
 def create_channel_list():
-    json_response = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "PVR.GetChannels", "params": {"properties": ["thumbnail","channeltype", "hidden", "locked", "channel", "lastplayed"], "channelgroupid": "alltv" }, "id": 1}')
+    json_response = xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
     json_response = unicode(json_response, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_response)
     prettyprint(json_response)
-    if json_response['result'] is not None and "movies" in json_response["result"]:
+    if ('result' in json_response) and ("movies" in json_response["result"]):
         return json_response
     else:
         return False
@@ -674,7 +673,7 @@ def CreateListItems(data):
                 if str(key).lower() in ["thumb"]:
                     listitem.setThumbnailImage(unicode(value))
                 if str(key).lower() in ["icon"]:
-                    listitem.setIcon(unicode(value))
+                    listitem.setIconImage(unicode(value))
                 if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                     listitem.setArt({str(key).lower(): unicode(value)})
                 if str(key).lower() in ["path"]:
