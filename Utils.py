@@ -9,7 +9,7 @@ import urllib2
 import os
 import sys
 import time
-from base64 import b64encode
+import hashlib
 
 
 if sys.version_info < (2, 7):
@@ -432,10 +432,9 @@ def GetStringFromUrl(encurl):
             succeed += 1
     return None
 
-
 def Get_JSON_response(base_url="", custom_url="", cache_days=7):
 #    xbmc.executebuiltin("ActivateWindow(busydialog)")
-    filename = b64encode(custom_url).replace("/", "XXXX")[:120]
+    filename = hashlib.md5(custom_url).hexdigest()
     path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):

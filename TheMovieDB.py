@@ -7,6 +7,7 @@ import simplejson as json
 from Utils import *
 import urllib
 from urllib2 import Request, urlopen
+import hashlib
 
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 __addon__ = xbmcaddon.Addon()
@@ -186,7 +187,6 @@ def SearchForSet(setname):
 
 
 def GetMovieDBData(url="", cache_days=14):
-    from base64 import b64encode
     global base_url
     global poster_size
     global fanart_size
@@ -194,7 +194,7 @@ def GetMovieDBData(url="", cache_days=14):
         log("fetching base_url and size (MovieDB config)")
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    filename = b64encode(url).replace("/", "XXXX")
+    filename = hashlib.md5(url).hexdigest()
     path = Addon_Data_Path + "/" + filename + ".txt"
     log("trying to load " + path)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
