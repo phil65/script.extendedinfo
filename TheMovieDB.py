@@ -117,7 +117,7 @@ def HandleTheMovieDBPeopleResult(results):
         if "known_for" in results:
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
-        builtin = 'RunScript(script.metadata.actors,"%s")' % (str(person.get('name', "")))
+        builtin = 'RunScript(script.metadata.actors,"%s")' % (unicode(person.get('name', "")))
         newperson = {'adult': str(person['adult']),
                      'name': person['name'],
                      'also_known_as': person.get('also_known_as', ""),
