@@ -20,7 +20,7 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 def GetXKCDInfo():
     now = datetime.datetime.now()
     filename = "xkcd" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = Addon_Data_Path + "\\" + filename + ".txt"
+    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
@@ -48,7 +48,7 @@ def GetCandHInfo():
     count = 1
     now = datetime.datetime.now()
     filename = "cyanide" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = Addon_Data_Path + "\\" + filename + ".txt"
+    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
@@ -88,7 +88,7 @@ def GetDailyBabes(single=False):
         filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     else:
         filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = Addon_Data_Path + "\\" + filename + ".txt"
+    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
