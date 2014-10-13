@@ -75,7 +75,6 @@ def GetCandHInfo():
                                        'Title': datematches[0]}
                             items.append(newitem)
                             count += 1
-                  #  wnd.setProperty('CyanideHappiness.%i.Title' % count, item["title"])
                     if count > 10:
                         break
         save_to_file(items, filename, Addon_Data_Path)

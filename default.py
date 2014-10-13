@@ -24,9 +24,8 @@ __addonid__ = __addon__.getAddonInfo('id')
 __addonversion__ = __addon__.getAddonInfo('version')
 __language__ = __addon__.getLocalizedString
 
-TrackTitle = None
 AdditionalParams = []
-wnd = xbmcgui.Window(10000)
+homewindow = xbmcgui.Window(10000)
 extrathumb_limit = 4
 extrafanart_limit = 10
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
@@ -274,7 +273,7 @@ class Main:
                 passDataToSkin('ArtistEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubesearch':
-                wnd.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
+                homewindow.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubeplaylist':
@@ -289,7 +288,7 @@ class Main:
             elif info == 'trackinfo':
                 passDataToSkin('TrackInfo', None, self.prop_prefix, self.window, self.control, self.handle)
                 TrackInfo = GetTrackInfo(self.ArtistName, self.TrackName)
-                wnd.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
+                homewindow.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control, self.handle)
@@ -309,9 +308,9 @@ class Main:
                 prettyprint(channels)
             elif info == 'favourites':
                 favourites = GetFavourites()
-                wnd.setProperty('favourite.count', str(len(GetFavourites())))
+                homewindow.setProperty('favourite.count', str(len(GetFavourites())))
                 if len(GetFavourites()) > 0:
-                    wnd.setProperty('favourite.1.name', favourites[-1]["Label"])
+                    homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
                 passDataToSkin('Favourites', favourites, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'iconpanel':
                 passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
@@ -327,7 +326,6 @@ class Main:
                     endindex = self.id.find(".xsp")
                 elif ("videodb://" in self.id):
                     pass
-
   #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
                 if (startindex > 0) and (endindex > 0):
                     playlistpath = self.id[startindex:endindex + 4]
@@ -344,10 +342,11 @@ class Main:
                                 played += 1
                             if item["resume"]["position"] > 0:
                                 inprogress += 1
-                        wnd.setProperty('PlaylistWatched', str(played))
-                        wnd.setProperty('PlaylistUnWatched', str(numitems - played))
-                        wnd.setProperty('PlaylistInProgress', str(inprogress))
-                        wnd.setProperty('PlaylistCount', str(numitems))
+                        homewindow.setProperty('PlaylistWatched', str(played))
+                        homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
+                        homewindow.setProperty('PlaylistInProgress', str(inprogress))
+                        homewindow.setProperty('PlaylistCount', str(numitems))
+                xbmcplugin.endOfDirectory(self.handle)
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
                 Window = xbmcgui.Window(windowid)
@@ -415,7 +414,7 @@ class Main:
         self.writer = ""
         self.studio = ""
         self.silent = True
-        self.handle = 0
+        self.handle = None
         self.festivalsonly = False
         self.prop_prefix = ""
         self.Artist_mbid = None
@@ -458,29 +457,29 @@ class Main:
             if param.startswith('info='):
                 self.infos.append(param[5:])
             elif param.startswith('type='):
-                self.type = (param[5:])
+                self.type = param[5:]
             elif param.startswith('tag='):
-                self.tag = (param[4:])
+                self.tag = param[4:]
             elif param.startswith('studio='):
-                self.studio = (param[7:])
+                self.studio = param[7:]
             elif param.startswith('orderby='):
-                self.orderby = (param[8:])
+                self.orderby = param[8:]
             elif param.startswith('time='):
-                self.time = (param[5:])
+                self.time = param[5:]
             elif param.startswith('director='):
-                self.director = (param[9:])
+                self.director = param[9:]
             elif param.startswith('writer='):
-                self.writer = (param[7:])
+                self.writer = param[7:]
             elif param.startswith('lat='):
-                self.lat = (param[4:])
+                self.lat = param[4:]
             elif param.startswith('lon='):
-                self.lon = (param[4:])
+                self.lon = param[4:]
             elif param.startswith('silent='):
-                self.silent = (param[7:])
+                self.silent = param[7:]
                 if self.silent == "false":
                     self.silent = False
             elif param.startswith('festivalsonly='):
-                self.festivalsonly = (param[14:])
+                self.festivalsonly = param[14:]
             elif param.startswith('feed='):
                 self.feed = param[5:]
             elif param.startswith('name='):
@@ -501,7 +500,7 @@ class Main:
                 self.season = param[7:]
             elif param.startswith('prefix='):
                 self.prop_prefix = param[7:]
-                if not self.prop_prefix.endswith('.') and self.prop_prefix is not "":
+                if (not self.prop_prefix.endswith('.')) and (self.prop_prefix is not ""):
                     self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
                 self.ArtistName = arg[11:].replace('"', '').split(" feat. ")[0]

@@ -21,9 +21,7 @@ __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
-
 window = xbmcgui.Window(10000)
-wnd = xbmcgui.Window(12003)
 
 
 def AddArtToLibrary(type, media, folder, limit, silent=False):
@@ -120,9 +118,9 @@ def GetXBMCArtists():
         return json_query
 
 
-def GetSimilarArtistsInLibrary(id):
+def GetSimilarArtistsInLibrary(artistid):
     from LastFM import GetSimilarById
-    simi_artists = GetSimilarById(id)
+    simi_artists = GetSimilarById(artistid)
     if simi_artists is None:
         log('Last.fm didn\'t return proper response')
         return None
@@ -161,20 +159,17 @@ def GetSimilarArtistsInLibrary(id):
 
 
 def create_light_movielist():
-    # if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
-        # return read_from_file(filename)
-    if True:
-        a = datetime.datetime.now()
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = simplejson.loads(json_query)
-        b = datetime.datetime.now() - a
-        log('Processing Time for fetching JSON light movielist: %s' % b)
-        a = datetime.datetime.now()
-        b = datetime.datetime.now() - a
-        log('Processing Time for save light movielist: %s' % b)
-        return json_query
+    a = datetime.datetime.now()
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_query = simplejson.loads(json_query)
+    b = datetime.datetime.now() - a
+    log('Processing Time for fetching JSON light movielist: %s' % b)
+    a = datetime.datetime.now()
+    b = datetime.datetime.now() - a
+    log('Processing Time for save light movielist: %s' % b)
+    return json_query
 
 
 def GetSimilarFromOwnLibrary(dbid):
@@ -186,7 +181,7 @@ def GetSimilarFromOwnLibrary(dbid):
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response['result']:
-        id = json_response['result']['moviedetails']['movieid']
+        movieid = json_response['result']['moviedetails']['movieid']
         genres = json_response['result']['moviedetails']['genre']
         year = int(json_response['result']['moviedetails']['year'])
         countries = json_response['result']['moviedetails']['country']
@@ -224,30 +219,29 @@ def GetSimilarFromOwnLibrary(dbid):
                 if directors[0] == item['director'][0]:
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
-            if True:
-                quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
-                count = 1
-                for list_movie in quotalist:
-                    if id is not list_movie[1]:
-                        json_query = xbmc.executeJSONRPC(
-                            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
-                        json_query = unicode(json_query, 'utf-8', errors='ignore')
-                        json_response = simplejson.loads(json_query)
-                        movie = json_response["result"]["moviedetails"]
-                        newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
-                                    'Art(poster)': movie["art"].get('poster', ""),
-                                    'Title': movie.get('label', ""),
-                                    'OriginalTitle': movie.get('originaltitle', ""),
-                                    'ID': movie.get('imdbnumber', ""),
-                                    'Path': "",
-                                    'Play': "",
-                                    'DBID': str(movie['movieid']),
-                                    'Rating': str(round(float(movie['rating']), 1)),
-                                    'Premiered': movie.get('year', "")}
-                        movies.append(newmovie)
-                        count += 1
-                        if count > 20:
-                            break
+            quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
+            count = 1
+            for list_movie in quotalist:
+                if movieid is not list_movie[1]:
+                    json_query = xbmc.executeJSONRPC(
+                        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
+                    json_query = unicode(json_query, 'utf-8', errors='ignore')
+                    json_response = simplejson.loads(json_query)
+                    movie = json_response["result"]["moviedetails"]
+                    newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
+                                'Art(poster)': movie["art"].get('poster', ""),
+                                'Title': movie.get('label', ""),
+                                'OriginalTitle': movie.get('originaltitle', ""),
+                                'ID': movie.get('imdbnumber', ""),
+                                'Path': "",
+                                'Play': "",
+                                'DBID': str(movie['movieid']),
+                                'Rating': str(round(float(movie['rating']), 1)),
+                                'Premiered': movie.get('year', "")}
+                    movies.append(newmovie)
+                    count += 1
+                    if count > 20:
+                        break
             return movies
 
 
