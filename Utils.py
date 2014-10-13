@@ -159,16 +159,10 @@ def GetSimilarArtistsInLibrary(artistid):
 
 
 def create_light_movielist():
-    a = datetime.datetime.now()
     json_query = xbmc.executeJSONRPC(
         '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["set", "originaltitle", "imdbnumber", "file"], "sort": { "method": "random" } }, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
-    b = datetime.datetime.now() - a
-    log('Processing Time for fetching JSON light movielist: %s' % b)
-    a = datetime.datetime.now()
-    b = datetime.datetime.now() - a
-    log('Processing Time for save light movielist: %s' % b)
     return json_query
 
 
@@ -343,7 +337,7 @@ def media_path(path):
 
 def CompareWithLibrary(onlinelist):
     locallist = create_light_movielist()
-    a = datetime.datetime.now()
+    # a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
@@ -367,8 +361,8 @@ def CompareWithLibrary(onlinelist):
                         onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
                         onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
                 break
-    b = datetime.datetime.now() - a
-    log('Processing Time for comparing: %s' % b)
+    # b = datetime.datetime.now() - a
+    # log('Processing Time for comparing: %s' % b)
     return onlinelist
 
 
@@ -387,7 +381,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
 
 def CompareAlbumWithLibrary(onlinelist):
     locallist = GetXBMCAlbums()
-    a = datetime.datetime.now()
+    # a = datetime.datetime.now()
     log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist:
@@ -405,8 +399,8 @@ def CompareAlbumWithLibrary(onlinelist):
                     onlineitem.update({"Icon": album["thumbnail"]})
                # onlineitem.update({"Path": localitem["movieid"]})
                 break
-    b = datetime.datetime.now() - a
-    log('Processing Time for comparing: %s' % b)
+    # b = datetime.datetime.now() - a
+    # log('Processing Time for comparing: %s' % b)
     return onlinelist
 
 
