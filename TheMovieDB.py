@@ -24,11 +24,19 @@ def HandleTheMovieDBMovieResult(results):
     log("starting HandleTheMovieDBMovieResult")
     for movie in results:
         try:
-            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path', "")),
-                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'Thumb': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'Poster': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'fanart': base_url + fanart_size + str(movie.get('backdrop_path', "")),
+            if ("backdrop_path" in movie) and (movie["backdrop_path"]):
+                backdrop_path = base_url + fanart_size + movie['backdrop_path']
+            else:
+                backdrop_path = ""
+            if ("poster_path" in movie) and (movie["poster_path"]):
+                poster_path = base_url + poster_size + movie['poster_path']
+            else:
+                poster_path = ""
+            newmovie = {'Art(fanart)': backdrop_path,
+                        'Art(poster)': poster_path,
+                        'Thumb': poster_path,
+                        'Poster': poster_path,
+                        'fanart': backdrop_path,
                         'Title': movie.get('title', ""),
                         'OriginalTitle': movie.get('original_title', ""),
                         'ID': movie.get('id', ""),
@@ -52,11 +60,19 @@ def HandleTheMovieDBActorMovieResult(results):
     log("starting HandleTheMovieDBActorMovieResult")
     for movie in results:
         try:
-            newmovie = {'Art(fanart)': base_url + fanart_size + str(movie.get('backdrop_path', "")),
-                        'Art(poster)': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'Thumb': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'Poster': base_url + poster_size + str(movie.get('poster_path', "")),
-                        'fanart': base_url + fanart_size + str(movie.get('backdrop_path', "")),
+            if ("backdrop_path" in movie) and (movie["backdrop_path"]):
+                backdrop_path = base_url + fanart_size + movie['backdrop_path']
+            else:
+                backdrop_path = ""
+            if ("poster_path" in movie) and (movie["poster_path"]):
+                poster_path = base_url + poster_size + movie['poster_path']
+            else:
+                poster_path = ""
+            newmovie = {'Art(fanart)': backdrop_path,
+                        'Art(poster)': poster_path,
+                        'Thumb': poster_path,
+                        'Poster': poster_path,
+                        'fanart': backdrop_path,
                         'Title': movie.get('title', ""),
                         'OriginalTitle': movie.get('original_title', ""),
                         'ID': movie.get('id', ""),
@@ -80,10 +96,19 @@ def HandleTheMovieDBTVShowResult(results):
     tvshows = []
     log("starting HandleTheMovieDBTVShowResult")
     for tv in results:
-        newtv = {'Art(fanart)': base_url + fanart_size + str(tv.get('backdrop_path', "")),
-                 'Fanart': base_url + fanart_size + str(tv.get('backdrop_path', "")),
-                 'Art(poster)': base_url + poster_size + str(tv.get('poster_path', "")),
-                 'Poster': base_url + poster_size + str(tv.get('poster_path', "")),
+        if ("backdrop_path" in tv) and (tv["backdrop_path"]):
+            backdrop_path = base_url + fanart_size + tv['backdrop_path']
+        else:
+            backdrop_path = ""
+        if ("poster_path" in tv) and (tv["poster_path"]):
+            poster_path = base_url + poster_size + tv['poster_path']
+        else:
+            poster_path = ""
+        newtv = {'Art(fanart)': backdrop_path,
+                 'Art(poster)': poster_path,
+                 'Thumb': poster_path,
+                 'Poster': poster_path,
+                 'fanart': backdrop_path,
                  'Title': tv.get('name', ""),
                  'OriginalTitle': tv.get('original_name', ""),
                  'ID': tv.get('id', ""),
@@ -312,10 +337,19 @@ def GetExtendedMovieInfo(Id):
         Budget = millify(float(BudgetValue))
     else:
         Budget = ""
-    newmovie = {'Art(fanart)': base_url + fanart_size + str(response.get('backdrop_path', "")),
-                'Fanart': base_url + fanart_size + str(response.get('backdrop_path', "")),
-                'Art(poster)': base_url + poster_size + str(response.get('poster_path', "")),
-                'Poster': base_url + poster_size + str(response.get('poster_path', "")),
+    if ("backdrop_path" in movie) and (movie["backdrop_path"]):
+        backdrop_path = base_url + fanart_size + movie['backdrop_path']
+    else:
+        backdrop_path = ""
+    if ("poster_path" in movie) and (movie["poster_path"]):
+        poster_path = base_url + poster_size + movie['poster_path']
+    else:
+        poster_path = ""
+    newmovie = {'Art(fanart)': backdrop_path,
+                'Art(poster)': poster_path,
+                'Thumb': poster_path,
+                'Poster': poster_path,
+                'fanart': backdrop_path,
                 'Title': response.get('title', ""),
                 'Label': response.get('title', ""),
                 'Tagline': response.get('tagline', ""),
