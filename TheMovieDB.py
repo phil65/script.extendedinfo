@@ -50,7 +50,8 @@ def HandleTheMovieDBMovieResult(results):
             if not str(movie['id']) in str(movies):  # too dirty
                 movies.append(newmovie)
         except Exception as e:
-            log("Exception:" + e)
+            log("Exception:")
+            log(e)
             prettyprint(movie)
     movies = CompareWithLibrary(movies)
     return movies
@@ -86,7 +87,8 @@ def HandleTheMovieDBActorMovieResult(results):
             if not str(movie['id']) in str(movies):  # too dirty
                 movies.append(newmovie)
         except Exception as e:
-            log("Exception:" + e)
+            log("Exception:")
+            log(e)
             prettyprint(movie)
     movies = CompareWithLibrary(movies)
     return movies
