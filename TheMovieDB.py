@@ -339,12 +339,12 @@ def GetExtendedMovieInfo(Id):
         Budget = millify(float(BudgetValue))
     else:
         Budget = ""
-    if ("backdrop_path" in movie) and (movie["backdrop_path"]):
-        backdrop_path = base_url + fanart_size + movie['backdrop_path']
+    if ("backdrop_path" in response) and (response["backdrop_path"]):
+        backdrop_path = base_url + fanart_size + response['backdrop_path']
     else:
         backdrop_path = ""
-    if ("poster_path" in movie) and (movie["poster_path"]):
-        poster_path = base_url + poster_size + movie['poster_path']
+    if ("poster_path" in response) and (response["poster_path"]):
+        poster_path = base_url + poster_size + response['poster_path']
     else:
         poster_path = ""
     newmovie = {'Art(fanart)': backdrop_path,
