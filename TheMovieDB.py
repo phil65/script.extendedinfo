@@ -437,20 +437,22 @@ def GetSimilarMovies(Id):
         log("No JSON Data available")
 
 
-def GetMovieDBTVShows(type):
-    response = GetMovieDBData("tv/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
+def GetMovieDBTVShows(tvshowtype):
+    response = GetMovieDBData("tv/%s?language=%s&" % (tvshowtype, __addon__.getSetting("LanguageID")), 2)
     if "results" in response:
         return HandleTheMovieDBTVShowResult(response["results"])
     else:
-        log("No JSON Data available")
+        log("No JSON Data available for GetMovieDBMovies(%s)" % tvshowtype)
+        log(response)
 
 
-def GetMovieDBMovies(type):
-    response = GetMovieDBData("movie/%s?language=%s&" % (type, __addon__.getSetting("LanguageID")), 2)
+def GetMovieDBMovies(movietype):
+    response = GetMovieDBData("movie/%s?language=%s&" % (movietype, __addon__.getSetting("LanguageID")), 2)
     if "results" in response:
         return HandleTheMovieDBMovieResult(response["results"])
     else:
-        log("No JSON Data available")
+        log("No JSON Data available for GetMovieDBMovies(%s)" % movietype)
+        log(response)
 
 
 def GetSetMovies(Id):
