@@ -413,7 +413,6 @@ class Main:
             dict_args = urlparse.parse_qs(sys.argv[2][1:])
             self.handle = int(sys.argv[1])
             base_url = sys.argv[0]
-            log(args)
             self.control = "plugin"
             params = {}
         else:
