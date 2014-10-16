@@ -110,12 +110,17 @@ def GetPlaylistStats(path):
     endindex = -1
     if (".xsp" in path) and ("special://" in path):
         startindex = path.find("special://")
-        endindex = path.find(".xsp")
+        endindex = path.find(".xsp") + 4
+    elif ("library://" in path):
+        startindex = path.find("library://")
+        endindex = path.rfind("/") + 1
     elif ("videodb://" in path):
-        pass
+        startindex = path.find("videodb://")
+        endindex = path.rfind("/") + 1
     if (startindex > 0) and (endindex > 0):
-        playlistpath = path[startindex:endindex + 4]
-#                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+        playlistpath = path[startindex:endindex]
+    #    Notify(playlistpath)
+    #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume", "art"]}, "id": 1}' % (playlistpath))
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
