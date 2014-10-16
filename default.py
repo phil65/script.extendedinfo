@@ -60,6 +60,8 @@ class Main:
             AddArtToLibrary("extrafanart", "TVShow", "extrafanart", extrafanart_limit, True)
         elif not len(sys.argv) > 1:
             self._selection_dialog()
+        if self.control == "plugin":
+            xbmcplugin.endOfDirectory(self.handle)
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _StartInfoActions(self):
@@ -268,30 +270,37 @@ class Main:
                 passDataToSkin('TrendingMovies', GetTrendingMovies(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarartistsinlibrary':
                 passDataToSkin('SimilarArtists', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
+                if self.Artist_mbid:
+                    passDataToSkin('SimilarArtists', GetSimilarArtistsInLibrary(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'artistevents':
                 passDataToSkin('ArtistEvents', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
+                if self.Artist_mbid:
+                    passDataToSkin('ArtistEvents', GetEvents(self.Artist_mbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubesearch':
                 homewindow.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle)
+                if self.id:
+                    passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubeplaylist':
                 passDataToSkin('YoutubePlaylist', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
+                if self.id:
+                    passDataToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'youtubeusersearch':
                 passDataToSkin('YoutubeUserSearch', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
+                if self.id:
+                    passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'trackinfo':
-                passDataToSkin('TrackInfo', None, self.prop_prefix, self.window, self.control, self.handle)
-                TrackInfo = GetTrackInfo(self.ArtistName, self.TrackName)
-                homewindow.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
+                homewindow.setProperty('%sSummary' % self.prop_prefix, "")  # set properties
+                if self.ArtistName and self.TrackName:
+                    TrackInfo = GetTrackInfo(self.ArtistName, self.TrackName)
+                    homewindow.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control, self.handle)
+                if self.id:
+                    passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topartistsnearevents':
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 artists = GetXBMCArtists()
@@ -319,34 +328,7 @@ class Main:
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
-                startindex = -1
-                endindex = -1
-                if (".xsp" in self.id) and ("special://" in self.id):
-                    startindex = self.id.find("special://")
-                    endindex = self.id.find(".xsp")
-                elif ("videodb://" in self.id):
-                    pass
-  #                  Notify("found smart playlist. start: %i end: %i" % (startindex, endindex))
-                if (startindex > 0) and (endindex > 0):
-                    playlistpath = self.id[startindex:endindex + 4]
-#                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume", "art"]}, "id": 1}' % (playlistpath))
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_response = json.loads(json_query)
-                    if "result" in json_response:
-                        played = 0
-                        inprogress = 0
-                        numitems = json_response["result"]["limits"]["total"]
-                        for item in json_response["result"]["files"]:
-                            if item["playcount"] > 0:
-                                played += 1
-                            if item["resume"]["position"] > 0:
-                                inprogress += 1
-                        homewindow.setProperty('PlaylistWatched', str(played))
-                        homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
-                        homewindow.setProperty('PlaylistInProgress', str(inprogress))
-                        homewindow.setProperty('PlaylistCount', str(numitems))
-                xbmcplugin.endOfDirectory(self.handle)
+                GetPlaylistStats(self.id)
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
                 Window = xbmcgui.Window(windowid)

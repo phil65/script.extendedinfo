@@ -3,7 +3,6 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 import xbmcvfs
-import datetime
 import xbmcplugin
 import urllib2
 import os
@@ -21,7 +20,7 @@ __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
-window = xbmcgui.Window(10000)
+homewindow = xbmcgui.Window(10000)
 
 
 def AddArtToLibrary(type, media, folder, limit, silent=False):
@@ -104,6 +103,35 @@ def export_skinsettings():
     else:
         xbmcgui.Dialog().ok(__language__(32007), __language__(32008))
         log("guisettings.xml not found")
+
+
+def GetPlaylistStats(path):
+    startindex = -1
+    endindex = -1
+    if (".xsp" in path) and ("special://" in path):
+        startindex = path.find("special://")
+        endindex = path.find(".xsp")
+    elif ("videodb://" in path):
+        pass
+    if (startindex > 0) and (endindex > 0):
+        playlistpath = path[startindex:endindex + 4]
+#                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume", "art"]}, "id": 1}' % (playlistpath))
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "result" in json_response:
+            played = 0
+            inprogress = 0
+            numitems = json_response["result"]["limits"]["total"]
+            for item in json_response["result"]["files"]:
+                if item["playcount"] > 0:
+                    played += 1
+                if item["resume"]["position"] > 0:
+                    inprogress += 1
+            homewindow.setProperty('PlaylistWatched', str(played))
+            homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
+            homewindow.setProperty('PlaylistInProgress', str(inprogress))
+            homewindow.setProperty('PlaylistCount', str(numitems))
 
 
 def GetXBMCArtists():
@@ -406,7 +434,7 @@ def CompareAlbumWithLibrary(onlinelist):
 
 def GetStringFromUrl(encurl):
     succeed = 0
-    while succeed < 5:
+    while (succeed < 5) and (not xbmc.abortRequested):
         try:
             request = urllib2.Request(encurl)
             request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
@@ -599,16 +627,16 @@ def GetImdbIDfromEpisode(dbid):
 def passHomeDataToSkin(data, debug=False):
     if data is not None:
         for (key, value) in data.iteritems():
-            window.setProperty('%s' % (str(key)), unicode(value))
+            homewindow.setProperty('%s' % (str(key)), unicode(value))
             if debug:
                 log('%s' % (str(key)) + unicode(value))
 
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
     if controlnumber is "plugin":
-        window.clearProperty(name)
+        homewindow.clearProperty(name)
         if data is not None:
-            window.setProperty(name + ".Count", str(len(data)))
+            homewindow.setProperty(name + ".Count", str(len(data)))
             items = CreateListItems(data)
             xbmcplugin.setContent(handle, 'url')
             itemlist = list()
@@ -633,12 +661,12 @@ def SetWindowProperties(name, data, prefix="", debug=False):
             if debug:
                 log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
             for (key, value) in result.iteritems():
-                window.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+                homewindow.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
                 if debug:
                     log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + unicode(value))
-        window.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+        homewindow.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
-        window.setProperty('%s%s.Count' % (prefix, name), '0')
+        homewindow.setProperty('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
 
 
