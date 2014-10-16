@@ -643,7 +643,6 @@ def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None
             for item in items:
                 itemlist.append((item.getProperty("path"), item, False))
             xbmcplugin.addDirectoryItems(handle, itemlist, False)
-            xbmcplugin.endOfDirectory(handle)
     elif controlnumber is not None:
         log("creatin listitems for list with id " + str(controlnumber))
         xbmc.sleep(200)
