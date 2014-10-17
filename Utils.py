@@ -141,32 +141,36 @@ def GetPlaylistStats(path):
 
 def GetSortLetters(path, focusedletter):
     listitems = []
+    letterlist = []
     if __addon__.getSetting("FolderPath") == path:
         letterlist = __addon__.getSetting("LetterList")
         letterlist = letterlist.split()
     else:
-        letterlist = []
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": []}, "id": 1}' % (path))
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
-        if "result" in json_response:
-            for movie in json_response["result"]["files"]:
-                sortletter = movie["label"][0]
-                if not sortletter in letterlist:
-                    letterlist.append(sortletter)
-        __addon__.setSetting("LetterList", " ".join(letterlist))
-        __addon__.setSetting("FolderPath", path)
-    startord = ord("A")
-    for i in range (0,26):
-        letter = chr(startord + i)
-        if letter == focusedletter:
-            label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-        elif letter in letterlist:
-            label = letter
-        else:
-            label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
-        listitem = {"label": label}
-        listitems.append(listitem)
+        if path:
+            Notify("2" + path)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_response = simplejson.loads(json_query)
+            if "result" in json_response:
+                for movie in json_response["result"]["files"]:
+                    sortletter = movie["label"][0]
+                    if not sortletter in letterlist:
+                        letterlist.append(sortletter)
+            __addon__.setSetting("LetterList", " ".join(letterlist))
+            __addon__.setSetting("FolderPath", path)
+    if letterlist:
+        startord = ord("A")
+        for i in range (0,26):
+            letter = chr(startord + i)
+            if letter == focusedletter:
+                label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
+            elif letter in letterlist:
+                label = letter
+            else:
+                label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
+            listitem = {"label": label}
+            listitems.append(listitem)
+    return listitems
 
 
 def GetXBMCArtists():
