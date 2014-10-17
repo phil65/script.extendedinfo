@@ -150,7 +150,7 @@ def GetSortLetters(path, focusedletter):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
-            if "result" in json_response:
+            if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
                     sortletter = movie["label"][0]
                     if not sortletter in letterlist:
@@ -158,6 +158,7 @@ def GetSortLetters(path, focusedletter):
             __addon__.setSetting("LetterList", " ".join(letterlist))
             __addon__.setSetting("FolderPath", path)
     if letterlist:
+        homewindow.setProperty("LetterList", "".join(letterlist))
         startord = ord("A")
         for i in range (0,26):
             letter = chr(startord + i)

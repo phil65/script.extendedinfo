@@ -1,17 +1,5 @@
-NOTICE (for v0.0.5):
-- All credits for this script goes to phil65. I just fixed or added some stuff.
-
-- All the info below were added by Nessus and are relevant ONLY to functions that i wanted to use and i made
-the changes/fixes to the script. They are not including all the possibilities and functions of the script.
-
-- Some of the old info labels have changed in order to avoid confusing between the different
-services. So if something is not working for you read the info bellow for the apropiriate info labels.
-
-
-
-
-
 #########################################################################################
+
 Rotten Tomatoes
 
 Run:
@@ -34,15 +22,12 @@ $INFO[Window(Home).Property(InTheatersMovies.%d.Year)]
 $INFO[Window(Home).Property(InTheatersMovies.%d.Premiered)]
 $INFO[Window(Home).Property(InTheatersMovies.%d.Runtime)]
 $INFO[Window(Home).Property(InTheatersMovies.%d.Art(poster))]
-#########################################################################################
-
-
-
-
-
 
 
 #########################################################################################
+#########################################################################################
+
+
 The MovieDB
 
 Run:
@@ -83,15 +68,12 @@ $INFO[Window(Home).Property(PopularTVShows.%d.Rating)]
 $INFO[Window(Home).Property(PopularTVShows.%d.Premiered)]
 $INFO[Window(Home).Property(PopularTVShows.%d.Art(poster))]
 $INFO[Window(Home).Property(PopularTVShows.%d.Art(fanart))]
-#########################################################################################
-
-
-
-
-
 
 
 #########################################################################################
+#########################################################################################
+
+
 Trakt.tv
 
 Run:
@@ -153,4 +135,6 @@ $INFO[Window(Home).Property(AiringShows.%d.Thumb)] ----------> (Episode Thumb)
 $INFO[Window(Home).Property(AiringShows.%d.Art(poster))] ----> (TVShow Poster)
 $INFO[Window(Home).Property(AiringShows.%d.Art(banner))] ----> (TVShow Banner)
 $INFO[Window(Home).Property(AiringShows.%d.Art(fanart))] ----> (TVShow Fanart)
+
+
 #########################################################################################
