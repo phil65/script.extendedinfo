@@ -147,7 +147,6 @@ def GetSortLetters(path, focusedletter):
         letterlist = letterlist.split()
     else:
         if path:
-            Notify("2" + path)
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
