@@ -350,7 +350,7 @@ class Main:
                     __addon__.setSetting("LetterList", " ".join(letterlist))
                     __addon__.setSetting("FolderPath", self.path)
                 startord = ord("A")
-                for i in range (0,25):
+                for i in range (0,26):
                     letter = chr(startord + i)
                     if letter == self.id:
                         label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
