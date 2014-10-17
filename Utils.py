@@ -139,6 +139,36 @@ def GetPlaylistStats(path):
             homewindow.setProperty('PlaylistCount', str(numitems))
 
 
+def GetSortLetters(path, focusedletter):
+    listitems = []
+    if __addon__.getSetting("FolderPath") == path:
+        letterlist = __addon__.getSetting("LetterList")
+        letterlist = letterlist.split()
+    else:
+        letterlist = []
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": []}, "id": 1}' % (path))
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        json_response = simplejson.loads(json_query)
+        if "result" in json_response:
+            for movie in json_response["result"]["files"]:
+                sortletter = movie["label"][0]
+                if not sortletter in letterlist:
+                    letterlist.append(sortletter)
+        __addon__.setSetting("LetterList", " ".join(letterlist))
+        __addon__.setSetting("FolderPath", path)
+    startord = ord("A")
+    for i in range (0,26):
+        letter = chr(startord + i)
+        if letter == focusedletter:
+            label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
+        elif letter in letterlist:
+            label = letter
+        else:
+            label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
+        listitem = {"label": label}
+        listitems.append(listitem)
+
+
 def GetXBMCArtists():
     filename = Addon_Data_Path + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
@@ -342,7 +372,6 @@ def create_channel_list():
     json_response = xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
     json_response = unicode(json_response, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_response)
-    prettyprint(json_response)
     if ('result' in json_response) and ("movies" in json_response["result"]):
         return json_response
     else:
@@ -370,13 +399,10 @@ def media_path(path):
 
 def CompareWithLibrary(onlinelist):
     locallist = create_light_movielist()
-    # a = datetime.datetime.now()
-    log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"], localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
-       #         log("compare success" + onlineitem["Title"])
                 json_query = xbmc.executeJSONRPC(
                     '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -394,8 +420,6 @@ def CompareWithLibrary(onlinelist):
                         onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
                         onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
                 break
-    # b = datetime.datetime.now() - a
-    # log('Processing Time for comparing: %s' % b)
     return onlinelist
 
 
@@ -403,7 +427,6 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = Get_JSON_response(base_url, url, 30)
-  #  prettyprint(results)
     if results and len(results["artists"]) > 0:
         mbid = results["artists"][0]["id"]
         log("found artist id for " + artist + ": " + mbid)
@@ -414,12 +437,9 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
 
 def CompareAlbumWithLibrary(onlinelist):
     locallist = GetXBMCAlbums()
-    # a = datetime.datetime.now()
-    log("startin compare")
     for onlineitem in onlinelist:
         for localitem in locallist:
             if onlineitem["name"] == localitem["title"]:
-                log("compare success: " + onlineitem["name"])
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
@@ -427,7 +447,6 @@ def CompareAlbumWithLibrary(onlinelist):
                 onlineitem.update({"DBID": album["albumid"]})
                 onlineitem.update({"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
                 if album["thumbnail"]:
-                    log("updating " + album["thumbnail"])
                     onlineitem.update({"thumb": album["thumbnail"]})
                     onlineitem.update({"Icon": album["thumbnail"]})
                # onlineitem.update({"Path": localitem["movieid"]})
@@ -437,18 +456,17 @@ def CompareAlbumWithLibrary(onlinelist):
     return onlinelist
 
 
-def GetStringFromUrl(encurl):
+def GetStringFromUrl(url):
     succeed = 0
     while (succeed < 5) and (not xbmc.abortRequested):
         try:
-            request = urllib2.Request(encurl)
+            request = urllib2.Request(url)
             request.add_header('User-agent', 'XBMC/13.2 ( ptemming@gmx.net )')
             response = urllib2.urlopen(request)
             data = response.read()
-       #     log("URL String: " + data)
             return data
         except:
-            log("GetStringFromURL: could not get data from %s" % encurl)
+            log("GetStringFromURL: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return None
@@ -481,7 +499,6 @@ def GetFavourites():
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
-#    prettyprint(json_query)
     if json_query["result"]["limits"]["total"] > 0:
         for fav in json_query["result"]["favourites"]:
             if fav["type"] == "media":
@@ -540,7 +557,6 @@ def save_to_file(content, filename, path=""):
 
 def read_from_file(path=""):
     import xbmcvfs
-    log("trying to load " + path)
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     if xbmcvfs.exists(path):
@@ -624,10 +640,10 @@ def GetImdbIDfromEpisode(dbid):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
- #   prettyprint(json_response)
     if "episodedetails" in json_response["result"]:
         tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
         return GetImdbID("tvshow", tvshowid)
+
 
 def passHomeDataToSkin(data, debug=False):
     if data is not None:

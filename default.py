@@ -330,37 +330,7 @@ class Main:
             elif info == 'playliststats':
                 GetPlaylistStats(self.id)
             elif info == "sortletters":
-                listitems = []
-        #        if False:
-                if __addon__.getSetting("FolderPath") == self.path:
-                    letterlist = __addon__.getSetting("LetterList")
-                    letterlist = letterlist.split()
-                else:
-                    letterlist = []
-                    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["sorttitle"]}, "id": 1}' % (self.path))
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_response = simplejson.loads(json_query)
-                    prettyprint(json_response)
-                    if "result" in json_response:
-                        for movie in json_response["result"]["files"]:
-                            sortletter = movie["label"][0]
-                            if not sortletter in letterlist:
-                                letterlist.append(sortletter)
-                    log(",".join(letterlist))
-                    __addon__.setSetting("LetterList", " ".join(letterlist))
-                    __addon__.setSetting("FolderPath", self.path)
-                startord = ord("A")
-                for i in range (0,26):
-                    letter = chr(startord + i)
-                    if letter == self.id:
-                        label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-                    elif letter in letterlist:
-                        label = letter
-                    else:
-                        label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
-                    listitem = {"label": label}
-
-                    listitems.append(listitem)
+                listitems = GetSortLetters(self.path, self.id)
                 passDataToSkin('SortLetters', listitems, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
