@@ -329,6 +329,22 @@ class Main:
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
                 GetPlaylistStats(self.id)
+            elif info == "sortletters":
+                items = []
+                Notify(self.path)
+                sortletter = xbmc.getInfoLabel("ListItem.SortLetter")
+                startord = ord("A")
+                for i in range (0,25):
+                    letter = chr(startord + i)
+                    if letter == sortletter:
+                        label = "[COLOR FFFF3333]%s[/COLOR]" % letter
+                    else:
+                        label = letter
+                    test = {"label": label,
+                            "path": "test"}
+
+                    items.append(test)
+                passDataToSkin('Favourites', items, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'slideshow':
                 windowid = xbmcgui.getCurrentWindowId()
                 Window = xbmcgui.Window(windowid)
@@ -391,6 +407,7 @@ class Main:
         self.director = ""
         self.tag = ""
         self.name = ""
+        self.path = ""
         self.tvshow = ""
         self.season = ""
         self.writer = ""
@@ -465,6 +482,8 @@ class Main:
                 self.feed = param[5:]
             elif param.startswith('name='):
                 self.name = param[5:]
+            elif param.startswith('path='):
+                self.path = param[5:]
             elif param.startswith('id='):
                 self.id = param[3:]
             elif param.startswith('dbid='):
