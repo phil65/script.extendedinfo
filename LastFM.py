@@ -80,7 +80,6 @@ def HandleLastFMEventResult(results):
 
 def HandleLastFMAlbumResult(results):
     albums = []
-    log("starting HandleLastFMAlbumResult")
     if results is None:
         return []
     if 'topalbums' in results:
@@ -98,7 +97,6 @@ def HandleLastFMAlbumResult(results):
 
 def HandleLastFMShoutResult(results):
     shouts = []
-    log("starting HandleLastFMShoutResult")
     if results is None:
         return []
     for shout in results['shouts']['shout']:
@@ -110,8 +108,6 @@ def HandleLastFMShoutResult(results):
 
 
 def HandleLastFMTrackResult(results):
-    log("starting HandleLastFMTrackResult")
-   # prettyprint(results)
     if results is None:
         return []
     if "wiki" in results['track']:
@@ -128,7 +124,6 @@ def HandleLastFMArtistResult(results):
     if results is None:
         return []
     artists = []
-    log("starting HandleLastFMArtistResult")
     for artist in results['artist']:
         if 'name' in artist:
             listeners = int(artist.get('listeners', 0))

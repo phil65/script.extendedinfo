@@ -211,7 +211,6 @@ class Main:
                 if MovieId:
                     passHomeDataToSkin(GetExtendedMovieInfo(MovieId))
             elif info == 'extendedactorinfo':
-                log("startin GetExtendedActorInfo")
                 if self.id:
                     ActorID = self.id
                 elif self.name:
@@ -345,7 +344,6 @@ class Main:
                 xbmc.executebuiltin(self.id)
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                log("startin playtrailer")
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
