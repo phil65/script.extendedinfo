@@ -358,6 +358,7 @@ class Main:
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
                     if "Trailer" is not "":
                         xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
+                        self.control = ""  # workaround to avoid breaking PlayMedia
                     else:
                         Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
