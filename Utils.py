@@ -142,6 +142,7 @@ def GetPlaylistStats(path):
 def GetSortLetters(path, focusedletter):
     listitems = []
     letterlist = []
+    homewindow.clearProperty("LetterList")
     if __addon__.getSetting("FolderPath") == path:
         letterlist = __addon__.getSetting("LetterList")
         letterlist = letterlist.split()
@@ -152,13 +153,13 @@ def GetSortLetters(path, focusedletter):
             json_response = simplejson.loads(json_query)
             if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
-                    sortletter = movie["label"][0]
+                    sortletter = movie["label"].replace("The ", "")[0]
                     if not sortletter in letterlist:
                         letterlist.append(sortletter)
             __addon__.setSetting("LetterList", " ".join(letterlist))
             __addon__.setSetting("FolderPath", path)
-    if letterlist:
-        homewindow.setProperty("LetterList", "".join(letterlist))
+    homewindow.setProperty("LetterList", "".join(letterlist))
+    if letterlist and focusedletter:
         startord = ord("A")
         for i in range (0,26):
             letter = chr(startord + i)
@@ -476,26 +477,25 @@ def GetStringFromUrl(url):
     return None
 
 def Get_JSON_response(base_url="", custom_url="", cache_days=7):
-#    xbmc.executebuiltin("ActivateWindow(busydialog)")
     filename = hashlib.md5(custom_url).hexdigest()
     path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
-  #      xbmc.executebuiltin("Dialog.Close(busydialog)")
         return results
     else:
         url = base_url + custom_url
         response = GetStringFromUrl(url)
-     #   log(response)
         try:
             results = simplejson.loads(response)
             save_to_file(results, filename, Addon_Data_Path)
             return results
         except:
-            log("Could not get JSON data.")
-      #      Notify("Could not get JSON data.")
+            log("Exception: Could not get new JSON data. Tryin to fallback to cache")
             log(response)
+            if xbmcvfs.exists(path):
+                results = read_from_file(path)
+                return results
 
 
 def GetFavourites():
