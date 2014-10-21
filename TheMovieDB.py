@@ -223,28 +223,28 @@ def GetMovieDBData(url="", cache_days=14):
         base_url, poster_size, fanart_size = GetMovieDBConfig()
     filename = hashlib.md5(url).hexdigest()
     path = Addon_Data_Path + "/" + filename + ".txt"
-    log("trying to load " + path)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-      #  prettyprint(read_from_file(path))
         return read_from_file(path)
     else:
         url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
         log("Downloading MovieDB Data: " + url)
         headers = {"Accept": "application/json"}
-        succeed = 0
-        while succeed < 3:
+        i = 0
+        while i < 3:
             try:
                 request = Request(url, headers=headers)
                 response = urlopen(request).read()
-                log("saved file " + filename)
                 response = json.loads(response)
                 save_to_file(response, filename, Addon_Data_Path)
                 return response
             except:
-                log("could not get data from %s" % url)
+                log("could not get data from %s (%i. try)" % (url, i))
                 xbmc.sleep(1000)
-                succeed += 1
-        return []
+                i += 1
+        if xbmcvfs.exists(path):
+            return read_from_file(path)
+        else:
+            return []
 
 
 def GetMovieDBConfig():
