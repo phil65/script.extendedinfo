@@ -363,6 +363,35 @@ class Main:
                         Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
+            elif info == 'jumptoletter':
+                xbmc.executebuiltin("SetFocus(50)")
+                xbmc.sleep(10)
+                if self.id in ["A", "B", "C", "2"]:
+                    jumpsms_id = "2"
+                elif self.id in ["D", "E", "F", "3"]:
+                    jumpsms_id = "3"
+                elif self.id in ["G", "H", "I", "4"]:
+                    jumpsms_id = "4"
+                elif self.id in ["J", "K", "L", "5"]:
+                    jumpsms_id = "5"
+                elif self.id in ["M", "N", "O", "6"]:
+                    jumpsms_id = "6"
+                elif self.id in ["P", "Q", "R", "S", "7"]:
+                    jumpsms_id = "7"
+                elif self.id in ["T", "U", "V", "8"]:
+                    jumpsms_id = "8"
+                elif self.id in ["W", "X", "Y", "Z", "9"]:
+                    jumpsms_id = "9"
+                for i in range (1, 5):
+                  #  Notify("JumpSMS" + jumpsms_id)
+                  #  xbmc.executebuiltin("jumpsms" + jumpsms_id)
+                    xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "jumpsms%s" }, "id": 1 }' % (jumpsms_id))
+               #     prettyprint(response)
+                    xbmc.sleep(10)
+                    if xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
+                        break
+                xbmc.executebuiltin("SetFocus(24000)")
+
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
