@@ -387,7 +387,7 @@ class Main:
                   #  xbmc.executebuiltin("jumpsms" + jumpsms_id)
                     xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "jumpsms%s" }, "id": 1 }' % (jumpsms_id))
                #     prettyprint(response)
-                    xbmc.sleep(10)
+                    xbmc.sleep(20)
                     if xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
                         break
                 xbmc.executebuiltin("SetFocus(24000)")
