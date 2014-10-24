@@ -228,23 +228,14 @@ def GetMovieDBData(url="", cache_days=14):
     else:
         url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
         log("Downloading MovieDB Data: " + url)
-        headers = {"Accept": "application/json"}
-        i = 0
-        while i < 3:
-            try:
-                request = Request(url, headers=headers)
-                response = urlopen(request).read()
-                response = json.loads(response)
-                save_to_file(response, filename, Addon_Data_Path)
-                return response
-            except:
-                log("could not get data from %s (%i. try)" % (url, i))
-                xbmc.sleep(1000)
-                i += 1
+        response = GetStringFromUrl(url)
+        response = json.loads(response)
+        prettyprint(response)
+        if response:
+            return response
         if xbmcvfs.exists(path):
             return read_from_file(path)
-        else:
-            return []
+        return []
 
 
 def GetMovieDBConfig():
