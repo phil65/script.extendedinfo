@@ -1,9 +1,4 @@
 from Utils import *
-import sys
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 rottentomatoes_key = '63sbsudx936yedd2wdmt6tkn'
 base_url = "http://api.rottentomatoes.com/api/public/v1.0/lists/"

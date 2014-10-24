@@ -1,10 +1,5 @@
 import datetime
-import sys
 from Utils import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 trakt_key = '7b2281f0d441ab1bf4fdc39fd6cccf15'
 base_url = "http://api.trakt.tv/"

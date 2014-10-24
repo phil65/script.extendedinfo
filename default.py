@@ -13,10 +13,6 @@ from Utils import *
 from RottenTomatoes import *
 from YouTube import *
 from Trakt import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 
 __addon__ = xbmcaddon.Addon()

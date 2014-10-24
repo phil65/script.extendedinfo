@@ -7,10 +7,7 @@ import xbmc
 import xbmcaddon
 import datetime
 from Utils import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
+import simplejson
 
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 bandsintown_apikey = 'xbmc_open_source_media_center'

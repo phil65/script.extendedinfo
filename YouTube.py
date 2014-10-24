@@ -1,10 +1,5 @@
-import sys
 import urllib
 from Utils import *
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
 youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'

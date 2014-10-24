@@ -1,11 +1,6 @@
 import xbmcaddon
 import os
 import xbmc
-import sys
-if sys.version_info < (2, 7):
-    import simplejson
-else:
-    import json as simplejson
 from Utils import *
 import urllib
 
