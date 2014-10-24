@@ -214,7 +214,7 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon="", location="", d
     if lat:
         url = url + '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
     if location:
-        url = url + '&location=%s' % (location)
+        url = url + '&location=%s' % (urllib.quote_plus(location))
     if distance:
         url = url + '&distance=%s' % (distance)
     results = Get_JSON_response(base_url, url, 0.5)
