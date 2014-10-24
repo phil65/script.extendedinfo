@@ -214,6 +214,7 @@ def SearchForSet(setname):
 
 
 def GetMovieDBData(url="", cache_days=14):
+    url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
     global base_url
     global poster_size
     global fanart_size
@@ -221,20 +222,8 @@ def GetMovieDBData(url="", cache_days=14):
         log("fetching base_url and size (MovieDB config)")
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    filename = hashlib.md5(url).hexdigest()
-    path = Addon_Data_Path + "/" + filename + ".txt"
-    if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < (cache_days * 86400)):
-        return read_from_file(path)
-    else:
-        url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
-        log("Downloading MovieDB Data: " + url)
-        response = GetStringFromUrl(url)
-        response = json.loads(response)
-        if response:
-            return response
-        if xbmcvfs.exists(path):
-            return read_from_file(path)
-        return []
+    results = Get_JSON_response(url, cache_days)
+    return results
 
 
 def GetMovieDBConfig():
