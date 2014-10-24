@@ -141,64 +141,64 @@ def GetEvents(id, pastevents=False):
         url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
         url = 'method=artist.getevents&mbid=%s' % (id)
-    results = Get_JSON_response(base_url, url, 1)
+    results = Get_JSON_response(base_url + url, 1)
     return HandleLastFMEventResult(results)
 
 
 def GetArtistPodcast(artist):
-    results = Get_JSON_response(base_url, "method=artist.getPodcast&limit=100")
+    results = Get_JSON_response(base_url + "method=artist.getPodcast&limit=100")
     return HandleLastFMArtistResult(results['artists'])
 
 def GetHypedArtists():
-    results = Get_JSON_response(base_url, "method=chart.gethypedartists&limit=100")
+    results = Get_JSON_response(base_url + "method=chart.gethypedartists&limit=100")
     return HandleLastFMArtistResult(results['artists'])
 
 
 def GetTopArtists():
-    results = Get_JSON_response(base_url, "method=chart.getTopArtists&limit=100")
+    results = Get_JSON_response(base_url + "method=chart.getTopArtists&limit=100")
     return HandleLastFMArtistResult(results['artists'])
 
 
 def GetAlbumShouts(artistname, albumtitle):
     url = 'method=album.GetAlbumShouts&artist=%s&album=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(albumtitle))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMShoutResult(results)
 
 
 def GetArtistShouts(artistname):
     url = 'method=artist.GetShouts&artist=%s' % (urllib.quote_plus(artistname))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMShoutResult(results)
 
 
 def GetImages(mbid):
     url = 'method=artist.getimages&mbid=%s' % (id)
-    results = Get_JSON_response(base_url, url, 0)
+    results = Get_JSON_response(base_url + url, 0)
 #    prettyprint(results)
     return HandleLastFMEventResult(results)
 
 
 def GetTrackShouts(artistname, tracktitle):
     url = 'method=album.GetAlbumShouts&artist=%s&track=%s' % (urllib.quote_plus(artistname), urllib.quote_plus(tracktitle))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMShoutResult(results)
 
 
 def GetEventShouts(eventid):
     url = 'method=event.GetShouts&event=%s' % (eventid)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMShoutResult(results)
 
 
 def GetArtistTopAlbums(mbid):
     url = 'method=artist.gettopalbums&mbid=%s' % (mbid)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMAlbumResult(results)
 
 
 def GetSimilarById(m_id):
     url = 'method=artist.getsimilar&mbid=%s&limit=400' % (m_id)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     if results is not None and "similarartists" in results:
         return HandleLastFMArtistResult(results['similarartists'])
 
@@ -217,19 +217,19 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon="", location="", d
         url = url + '&location=%s' % (urllib.quote_plus(location))
     if distance:
         url = url + '&distance=%s' % (distance)
-    results = Get_JSON_response(base_url, url, 0.5)
+    results = Get_JSON_response(base_url + url, 0.5)
     return HandleLastFMEventResult(results)
 
 
 def GetVenueEvents(venueid=""):
     url = 'method=venue.getevents&venue=%s' % (venueid)
-    results = Get_JSON_response(base_url, url, 0.5)
+    results = Get_JSON_response(base_url + url, 0.5)
     return HandleLastFMEventResult(results)
 
 
 def GetTrackInfo(artist="", track=""):
     url = 'method=track.getInfo&artist=%s&track=%s' % (urllib.quote_plus(artist), urllib.quote_plus(track))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleLastFMTrackResult(results)
 
 

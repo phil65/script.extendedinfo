@@ -158,13 +158,13 @@ def GetExtendedAudioDBInfo(results):
 
 def GetDiscography(search_string):
     url = 'searchalbum.php?s=%s' % (urllib.quote_plus(search_string))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleAudioDBAlbumResult(results)
 
 
 def GetArtistDetails(search_string):
     url = 'search.php?s=%s' % (urllib.quote_plus(search_string))
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
    # prettyprint(results)
     return GetExtendedAudioDBInfo(results)
 
@@ -175,7 +175,7 @@ def GetMostLovedTracks(search_string="", mbid=""):
     else:
         url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string))
     log("GetMostLoveTracks URL:" + url)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
     return HandleAudioDBTrackResult(results)
 
 
@@ -184,7 +184,7 @@ def GetAlbumDetails(audiodbid="", mbid=""):
         url = 'album.php?m=%s' % (audiodbid)
     elif mbid:
         url = 'album-mb.php?i=%s' % (mbid)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
   #  prettyprint(results)
     return HandleAudioDBAlbumResult(results)[0]
 
@@ -192,7 +192,7 @@ def GetAlbumDetails(audiodbid="", mbid=""):
 def GetMusicVideos(audiodbid):
     if audiodbid:
         url = 'mvid.php?i=%s' % (audiodbid)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         return HandleAudioDBMusicVideoResult(results)
     else:
         return []
@@ -201,7 +201,7 @@ def GetMusicVideos(audiodbid):
 def GetTrackDetails(audiodbid):
     if audiodbid:
         url = 'track.php?m=%s' % (audiodbid)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
         return HandleAudioDBTrackResult(results)
     else:
         return []

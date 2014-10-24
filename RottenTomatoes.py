@@ -13,7 +13,7 @@ def GetRottenTomatoesMovies(movietype):
     movies = []
     try:
         url = movietype + '.json?apikey=%s' % (rottentomatoes_key)
-        results = Get_JSON_response(base_url, url)
+        results = Get_JSON_response(base_url + url)
     except:
         results = None
         Notify("Error when fetching RottenTomatoes data from net")

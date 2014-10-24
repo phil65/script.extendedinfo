@@ -431,7 +431,7 @@ def CompareWithLibrary(onlinelist):
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = Get_JSON_response(base_url, url, 30)
+    results = Get_JSON_response(base_url + url, 30)
     if results and len(results["artists"]) > 0:
         mbid = results["artists"][0]["id"]
         log("found artist id for " + artist + ": " + mbid)
@@ -476,15 +476,14 @@ def GetStringFromUrl(url):
             succeed += 1
     return None
 
-def Get_JSON_response(base_url="", custom_url="", cache_days=7):
-    filename = hashlib.md5(custom_url).hexdigest()
+def Get_JSON_response(url="", cache_days=7):
+    filename = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
         return results
     else:
-        url = base_url + custom_url
         response = GetStringFromUrl(url)
         try:
             results = simplejson.loads(response)

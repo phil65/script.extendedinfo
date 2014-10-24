@@ -30,7 +30,7 @@ def GetXKCDInfo():
             try:
                 base_url = 'http://xkcd.com/'
                 url = '%i/info.0.json' % random.randrange(1, 1190)
-                results = Get_JSON_response(base_url, url, 9999)
+                results = Get_JSON_response(base_url + url, 9999)
                 item = {'Image': results["img"],
                         'Thumb': results["img"],
                         'Path': "plugin://script.extendedinfo?info=setfocus",
@@ -120,7 +120,7 @@ def GetFlickrImages():
     try:
         base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
         url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        results = Get_JSON_response(base_url, url, 0)
+        results = Get_JSON_response(base_url + url, 0)
         prettyprint(results)
     except:
         log("Error when fetching Flickr data from net")
@@ -183,7 +183,7 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
             count += 1
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
     url = '&%sapp_id=%s' % (ArtistStr, bandsintown_apikey)
-    results = Get_JSON_response(base_url, url)
+    results = Get_JSON_response(base_url + url)
   #   prettyprint(results)
     return HandleBandsInTownResult(results)
     if False:
