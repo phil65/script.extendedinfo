@@ -1,13 +1,8 @@
 import xbmcaddon
 import os
 import xbmc
-import xbmcvfs
-import time
-import simplejson as json
 from Utils import *
 import urllib
-from urllib2 import Request, urlopen
-import hashlib
 
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 __addon__ = xbmcaddon.Addon()
