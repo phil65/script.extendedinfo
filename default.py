@@ -290,7 +290,7 @@ class Main:
                     passDataToSkin('YoutubeUserSearch', GetYoutubeUserVideos(self.id), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'nearevents':
                 passDataToSkin('NearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly), self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, self.lat, self.lon, self.location, self.distance), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'trackinfo':
                 homewindow.setProperty('%sSummary' % self.prop_prefix, "")  # set properties
                 if self.ArtistName and self.TrackName:
@@ -363,10 +363,6 @@ class Main:
                         Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
-            elif info == 'getlocationevents':
-                if self.lat is "":
-                    pass  # todo: geocode
-                passDataToSkin('NearEvents', GetNearEvents(self.tag, self.festivalsonly, self.lat, self.lon), self.prop_prefix, self.window, self.control, self.handle)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -398,6 +394,10 @@ class Main:
         self.season = ""
         self.writer = ""
         self.studio = ""
+        self.lat = ""
+        self.lon = ""
+        self.location = ""
+        self.distance = ""
         self.silent = True
         self.handle = None
         self.festivalsonly = False
@@ -458,6 +458,10 @@ class Main:
                 self.lat = param[4:]
             elif param.startswith('lon='):
                 self.lon = param[4:]
+            elif param.startswith('location='):
+                self.location = param[9:]
+            elif param.startswith('distance='):
+                self.distance = param[9:]
             elif param.startswith('silent='):
                 self.silent = param[7:]
                 if self.silent == "false":

@@ -203,7 +203,7 @@ def GetSimilarById(m_id):
         return HandleLastFMArtistResult(results['similarartists'])
 
 
-def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
+def GetNearEvents(tag=False, festivalsonly=False, lat="", lon="", location="", distance=""):
     if festivalsonly:
         festivalsonly = "1"
     else:
@@ -211,14 +211,18 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon=""):
     url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
         url = url + '&tag=%s' % (urllib.quote_plus(tag))
-    if lat is not "":
+    if lat:
         url = url + '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
+    if location:
+        url = url + '&location=%s' % (location)
+    if distance:
+        url = url + '&distance=%s' % (distance)
     results = Get_JSON_response(base_url, url, 0.5)
     return HandleLastFMEventResult(results)
 
 
-def GetVenueEvents(id=""):
-    url = 'method=venue.getevents&venue=%s' % (id)
+def GetVenueEvents(venueid=""):
+    url = 'method=venue.getevents&venue=%s' % (venueid)
     results = Get_JSON_response(base_url, url, 0.5)
     return HandleLastFMEventResult(results)
 
