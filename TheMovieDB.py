@@ -230,7 +230,6 @@ def GetMovieDBData(url="", cache_days=14):
         log("Downloading MovieDB Data: " + url)
         response = GetStringFromUrl(url)
         response = json.loads(response)
-        prettyprint(response)
         if response:
             return response
         if xbmcvfs.exists(path):
