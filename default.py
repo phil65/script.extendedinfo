@@ -327,15 +327,15 @@ class Main:
             elif info == "sortletters":
                 listitems = GetSortLetters(self.path, self.id)
                 passDataToSkin('SortLetters', listitems, self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'slideshow':
-                windowid = xbmcgui.getCurrentWindowId()
-                Window = xbmcgui.Window(windowid)
-                focusid = Window.getFocusId()
-                itemlist = Window.getFocus()
-                numitems = itemlist.getSelectedPosition()
-                log("items:" + str(numitems))
-                for i in range(0, numitems):
-                    Notify(item.getProperty("Image"))
+            # elif info == 'slideshow':
+            #     windowid = xbmcgui.getCurrentWindowId()
+            #     Window = xbmcgui.Window(windowid)
+            #     focusid = Window.getFocusId()
+            #     itemlist = Window.getFocus()
+            #     numitems = itemlist.getSelectedPosition()
+            #     log("items:" + str(numitems))
+            #     for i in range(0, numitems):
+            #         Notify(item.getProperty("Image"))
             elif info == 'action':
                 xbmc.executebuiltin(self.id)
             elif info == 'playtrailer':
@@ -360,33 +360,36 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'jumptoletter':
-                xbmc.executebuiltin("SetFocus(50)")
-                xbmc.sleep(10)
-                if self.id in ["A", "B", "C", "2"]:
-                    jumpsms_id = "2"
-                elif self.id in ["D", "E", "F", "3"]:
-                    jumpsms_id = "3"
-                elif self.id in ["G", "H", "I", "4"]:
-                    jumpsms_id = "4"
-                elif self.id in ["J", "K", "L", "5"]:
-                    jumpsms_id = "5"
-                elif self.id in ["M", "N", "O", "6"]:
-                    jumpsms_id = "6"
-                elif self.id in ["P", "Q", "R", "S", "7"]:
-                    jumpsms_id = "7"
-                elif self.id in ["T", "U", "V", "8"]:
-                    jumpsms_id = "8"
-                elif self.id in ["W", "X", "Y", "Z", "9"]:
-                    jumpsms_id = "9"
-                for i in range (1, 5):
-                  #  Notify("JumpSMS" + jumpsms_id)
-                  #  xbmc.executebuiltin("jumpsms" + jumpsms_id)
-                    xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "jumpsms%s" }, "id": 1 }' % (jumpsms_id))
-               #     prettyprint(response)
-                    xbmc.sleep(20)
-                    if xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
-                        break
-                xbmc.executebuiltin("SetFocus(24000)")
+                if not xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
+                    xbmc.executebuiltin("SetFocus(50)")
+                    if self.id in ["A", "B", "C", "2"]:
+                        jumpsms_id = "2"
+                    elif self.id in ["D", "E", "F", "3"]:
+                        jumpsms_id = "3"
+                    elif self.id in ["G", "H", "I", "4"]:
+                        jumpsms_id = "4"
+                    elif self.id in ["J", "K", "L", "5"]:
+                        jumpsms_id = "5"
+                    elif self.id in ["M", "N", "O", "6"]:
+                        jumpsms_id = "6"
+                    elif self.id in ["P", "Q", "R", "S", "7"]:
+                        jumpsms_id = "7"
+                    elif self.id in ["T", "U", "V", "8"]:
+                        jumpsms_id = "8"
+                    elif self.id in ["W", "X", "Y", "Z", "9"]:
+                        jumpsms_id = "9"
+                    else:
+                        jumpsms_id = None
+                    if jumpsms_id:
+                        for i in range(1, 5):
+                          #  Notify("JumpSMS" + jumpsms_id)
+                          #  xbmc.executebuiltin("jumpsms" + jumpsms_id)
+                            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "jumpsms%s" }, "id": 1 }' % (jumpsms_id))
+                       #     prettyprint(response)
+                            xbmc.sleep(15)
+                            if xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
+                                break
+                    xbmc.executebuiltin("SetFocus(24000)")
 
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")

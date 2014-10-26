@@ -12,7 +12,7 @@ base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&' % (lastfm
 
 def HandleLastFMEventResult(results):
     events = []
-    if results is None:
+    if not results:
         return []
     if "events" in results:
         if "@attr" in results["events"]:
@@ -75,7 +75,7 @@ def HandleLastFMEventResult(results):
 
 def HandleLastFMAlbumResult(results):
     albums = []
-    if results is None:
+    if not results:
         return []
     if 'topalbums' in results:
         for album in results['topalbums']['album']:
@@ -92,7 +92,7 @@ def HandleLastFMAlbumResult(results):
 
 def HandleLastFMShoutResult(results):
     shouts = []
-    if results is None:
+    if not results:
         return []
     for shout in results['shouts']['shout']:
         newshout = {'comment': shout['body'],
@@ -103,7 +103,7 @@ def HandleLastFMShoutResult(results):
 
 
 def HandleLastFMTrackResult(results):
-    if results is None:
+    if not results:
         return []
     if "wiki" in results['track']:
         summary = cleanText(results['track']['wiki']['summary'])
@@ -116,18 +116,21 @@ def HandleLastFMTrackResult(results):
 
 
 def HandleLastFMArtistResult(results):
-    if results is None:
+    if not results:
         return []
     artists = []
     for artist in results['artist']:
-        if 'name' in artist:
-            listeners = int(artist.get('listeners', 0))
-            artist = {'Title': artist['name'],
-                      'name': artist['name'],
-                      'mbid': artist['mbid'],
-                      'Thumb': artist['image'][-1]['#text'],
-                      'Listeners': format(listeners, ",d")}
-            artists.append(artist)
+        try:
+            if 'name' in artist:
+                listeners = int(artist.get('listeners', 0))
+                artist = {'Title': artist['name'],
+                          'name': artist['name'],
+                          'mbid': artist['mbid'],
+                          'Thumb': artist['image'][-1]['#text'],
+                          'Listeners': format(listeners, ",d")}
+                artists.append(artist)
+        except:
+            prettyprint(artist)
     return artists
 
 

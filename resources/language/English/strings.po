@@ -1,0 +1,91 @@
+# XBMC Media Center language file
+# Addon Name: ExtendedInfo Script
+# Addon id: script.extendedinfo
+# Addon version: 1.0.0
+# Addon Provider: phil65
+msgid ""
+msgstr ""
+"Project-Id-Version: XBMC-Addons\n"
+"Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
+"POT-Creation-Date: 2014-10-26 17:05+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Language: en\n"
+"Plural-Forms: nplurals=2; plural=(n != 1)\n"
+
+msgctxt "Addon Summary"
+msgid "Extended Info Script"
+msgstr ""
+
+msgctxt "Addon Description"
+msgid "This script offers various possibilities to display online content inside skins. Used services are themoviedb.org, theaudiodb.org, rottentomatoes.com, Trakt.TV and a lot more. Can also be used for importing / exporting skin settings, adding additional fanart stuff to library and cooking eggs. Needs skin support for most functions."
+msgstr ""
+
+
+msgctxt "#32001"
+msgid "Export Skin Settings"
+msgstr ""
+
+msgctxt "#32002"
+msgid "Import Skin Settings"
+msgstr ""
+
+msgctxt "#32003"
+msgid "Reset Skin Settings"
+msgstr ""
+
+msgctxt "#32004"
+msgid "Choose action"
+msgstr ""
+
+msgctxt "#32005"
+msgid "Completed"
+msgstr ""
+
+msgctxt "#32006"
+msgid "Export successful"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Error"
+msgstr ""
+
+msgctxt "#32008"
+msgid "guisettings.xml not found"
+msgstr ""
+
+msgctxt "#32009"
+msgid "Import successful"
+msgstr ""
+
+msgctxt "#32010"
+msgid "Importing skin settings"
+msgstr ""
+
+msgctxt "#32011"
+msgid "Updating"
+msgstr ""
+
+msgctxt "#32012"
+msgid "City"
+msgstr ""
+
+msgctxt "#32013"
+msgid "Country"
+msgstr ""
+
+msgctxt "#32014"
+msgid "Add extrathumbs to library"
+msgstr ""
+
+msgctxt "#32015"
+msgid "Add extrafanart to library"
+msgstr ""
+
+msgctxt "#32016"
+msgid "Updating database with local art"
+msgstr ""
