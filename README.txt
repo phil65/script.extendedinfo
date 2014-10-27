@@ -1,66 +1,62 @@
 #########################################################################################
-
 Rotten Tomatoes
+#########################################################################################
 
 Run:
-RunScript(script.extendedinfo,info=intheaters)
-RunScript(script.extendedinfo,info=comingsoon)
-RunScript(script.extendedinfo,info=opening)
-RunScript(script.extendedinfo,info=boxoffice)
+RunScript(script.extendedinfo,info=intheaters)          --> InTheatersMovies.%d.xxx
+RunScript(script.extendedinfo,info=comingsoon)          --> ComingSoonMovies.%d.xxx
+RunScript(script.extendedinfo,info=opening)             --> Opening.%d.xxx
+RunScript(script.extendedinfo,info=boxoffice)           --> BoxOffice.%d.xxx
+RunScript(script.extendedinfo,info=toprentals)          --> TopRentals.%d.xxx
+RunScript(script.extendedinfo,info=currentdvdreleases)  --> TopRentals.%d.xxx
+RunScript(script.extendedinfo,info=newdvdreleases)      --> TopRentals.%d.xxx
+RunScript(script.extendedinfo,info=upcomingdvds)        --> TopRentals.%d.xxx
 
-Available labels:
-info=intheaters --> InTheatersMovies.%d
-info=comingsoon --> ComingSoonMovies.%d
-info=opening 		--> Opening.%d
-info=boxoffice 	--> BoxOffice.%d
+Available Properties:
 
-$INFO[Window(Home).Property(InTheatersMovies.%d.Title)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Plot)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Rating)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.mpaa)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Year)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Premiered)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Runtime)]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Art(poster))]
+'Title':        Movie Title
+'Art(poster)':  Movie Poster
+'imdbid':       IMDB ID
+'Duration':     Movie Duration
+'Year':         Release Year
+'Premiered':    Release Date
+'mpaa':         MPAA Rating
+'Rating':       Audience Rating (0-10)
+'Plot':         Movie Plot
 
 
 #########################################################################################
-#########################################################################################
-
-
 The MovieDB
+#########################################################################################
 
 Run:
-RunScript(script.extendedinfo,info=incinemas)
-RunScript(script.extendedinfo,info=upcoming)
-RunScript(script.extendedinfo,info=popularmovies)
-RunScript(script.extendedinfo,info=topratedmovies)
+RunScript(script.extendedinfo,info=incinemas)           --> InCinemasMovies.%d
+RunScript(script.extendedinfo,info=upcoming)            --> UpcomingMovies.%d
+RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
+RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
 RunScript(script.extendedinfo,info=populartvshows)
 RunScript(script.extendedinfo,info=topratedtvshows)
 RunScript(script.extendedinfo,info=onairtvshows)
 RunScript(script.extendedinfo,info=airingtodaytvshows)
 
+Available Properties:
 
-Available labels for Movies:
-info=incinemas					--> InCinemasMovies.%d
-info=upcoming						--> UpcomingMovies.%d
-info=popularmovies			--> PopularMovies.%d
-info=topratedmovies			--> TopRatedMovies.%d
-
-$INFO[Window(Home).Property(InCinemasMovies.%d.Title)]
-$INFO[Window(Home).Property(InCinemasMovies.%d.OriginalTitle)]
-$INFO[Window(Home).Property(InCinemasMovies.%d.Rating)]
-$INFO[Window(Home).Property(InCinemasMovies.%d.Year)]
-$INFO[Window(Home).Property(InCinemasMovies.%d.Premiered)]
-$INFO[Window(Home).Property(InCinemasMovies.%d.Art(poster))]
-$INFO[Window(Home).Property(InTheatersMovies.%d.Art(fanart))]
+'Art(fanart)':      Movie Fanart
+'Art(poster)':      Movie Poster
+'Title':            Movie Title
+'OriginalTitle':    Movie OriginalTitle
+'ID':               TheMovieDB ID
+'Rating':           Movie Rating (0-10)
+'Votes':            Vote Count for Rating
+'Year':             Release Year
+'Premiered':        Release Date
 
 
 Available labels for TVShows:
-info=populartvshows			--> PopularTVShows.%d
-info=topratedtvshows		--> TopRatedTVShows.%d
-info=onairtvshows 			--> OnAirTVShows.%d
-info=airingtodaytvshows --> AiringTodayTVShows.%d
+info=populartvshows         --> PopularTVShows.%d
+info=topratedtvshows        --> TopRatedTVShows.%d
+info=onairtvshows           --> OnAirTVShows.%d
+info=airingtodaytvshows     --> AiringTodayTVShows.%d
 
 $INFO[Window(Home).Property(PopularTVShows.%d.Title)]
 $INFO[Window(Home).Property(PopularTVShows.%d.OriginalTitle)]
@@ -71,10 +67,8 @@ $INFO[Window(Home).Property(PopularTVShows.%d.Art(fanart))]
 
 
 #########################################################################################
-#########################################################################################
-
-
 Trakt.tv
+#########################################################################################
 
 Run:
 RunScript(script.extendedinfo,info=trendingmovies)
@@ -82,7 +76,7 @@ RunScript(script.extendedinfo,info=trendingshows)
 RunScript(script.extendedinfo,info=airingshows)
 
 Available labels for Trending Movies:
-info=trendingmovies	--> TrendingMovies.%d
+info=trendingmovies --> TrendingMovies.%d
 
 $INFO[Window(Home).Property(TrendingMovies.%d.Title)]
 $INFO[Window(Home).Property(TrendingMovies.%d.Plot)]
@@ -100,7 +94,7 @@ $INFO[Window(Home).Property(TrendingMovies.%d.Art(fanart))]
 
 
 Available labels for Trending TVShows:
-info=trendingshows	--> TrendingShows.%d
+info=trendingshows  --> TrendingShows.%d
 
 $INFO[Window(Home).Property(TrendingShows.%d.Title)]
 $INFO[Window(Home).Property(TrendingShows.%d.Plot)]
@@ -121,7 +115,7 @@ $INFO[Window(Home).Property(TrendingShows.%d.Art(fanart))]
 
 
 Available labels for Airing TVShows:
-info=airingshows		--> AiringShows.%d
+info=airingshows        --> AiringShows.%d
 
 $INFO[Window(Home).Property(AiringShows.%d.Title)] ----------> (Episode Title)
 $INFO[Window(Home).Property(AiringShows.%d.TVShowTitle)]
@@ -135,6 +129,3 @@ $INFO[Window(Home).Property(AiringShows.%d.Thumb)] ----------> (Episode Thumb)
 $INFO[Window(Home).Property(AiringShows.%d.Art(poster))] ----> (TVShow Poster)
 $INFO[Window(Home).Property(AiringShows.%d.Art(banner))] ----> (TVShow Banner)
 $INFO[Window(Home).Property(AiringShows.%d.Art(fanart))] ----> (TVShow Fanart)
-
-
-#########################################################################################
