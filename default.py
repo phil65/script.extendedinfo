@@ -294,8 +294,12 @@ class Main:
                     homewindow.setProperty('%sSummary' % self.prop_prefix, TrackInfo["summary"])  # set properties
             elif info == 'venueevents':
                 passDataToSkin('VenueEvents', None, self.prop_prefix, self.window, self.control, self.handle)
+                if self.location:
+                    self.id = GetVenueID(self.location)
                 if self.id:
                     passDataToSkin('VenueEvents', GetVenueEvents(self.id), self.prop_prefix, self.window, self.control, self.handle)
+                else:
+                    Notify("Error", "Could not find venue")
             elif info == 'topartistsnearevents':
                 passDataToSkin('TopArtistsNearEvents', None, self.prop_prefix, self.window, self.control, self.handle)
                 artists = GetXBMCArtists()
