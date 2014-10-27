@@ -16,7 +16,7 @@ def HandleLastFMEventResult(results):
         return []
     if "events" in results:
         if "@attr" in results["events"]:
-            if int(results["events"]["@attr"]["total"]) == 1:
+            if not isinstance(results['events']['event'], list):
                 results['events']['event'] = [results['events']['event']]
             for event in results['events']['event']:
                 artists = event['artists']['artist']

@@ -79,7 +79,7 @@ def GetYoutubePlaylistVideos(playlistid=""):
     base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=20'
     url = '&playlistId=%s&key=%s' % (playlistid, youtube_key2)
     results = Get_JSON_response(base_url + url, 0.5)
-    prettyprint(results)
+  #  prettyprint(results)
     if results:
         return HandleYouTubeVideoResults(results["items"])
     else:
