@@ -19,6 +19,12 @@ def GetTraktCalendarShows(Type):
     if results is not None:
         for day in results:
             for episode in day["episodes"]:
+                banner = episode["show"]["images"]["banner"]
+                fanart = episode["show"]["images"]["fanart"]
+                if "banner.jpg" in banner:
+                    banner = ""
+                if "fanart-dark.jpg" in fanart:
+                    fanart = ""
                 show = {'Title': episode["episode"]["title"],
                         'TVShowTitle': episode["show"]["title"],
                         'ID': episode["show"]["tvdb_id"],
@@ -32,10 +38,10 @@ def GetTraktCalendarShows(Type):
                         'Thumb': episode["episode"]["images"]["screen"],
                         'Art(poster)': episode["show"]["images"]["poster"],
                         'Poster': episode["show"]["images"]["poster"],
-                        'Art(banner)': episode["show"]["images"]["banner"],
-                        'Banner': episode["show"]["images"]["banner"],
-                        'Art(fanart)': episode["show"]["images"]["fanart"],
-                        'Fanart': episode["show"]["images"]["fanart"]}
+                        'Art(banner)': banner,
+                        'Banner': banner,
+                        'Art(fanart)': fanart,
+                        'Fanart': fanart}
                 shows.append(show)
                 count += 1
                 if count > 20:
@@ -88,6 +94,12 @@ def HandleTraktTVShowResult(results):
             premiered = str(datetime.datetime.fromtimestamp(int(tvshow["first_aired"])))[:10]
         except:
             premiered = ""
+        banner = tvshow["images"]["banner"]
+        fanart = tvshow["images"]["fanart"]
+        if "banner.jpg" in banner:
+            banner = ""
+        if "fanart-dark.jpg" in fanart:
+            fanart = ""
         show = {'Title': tvshow["title"],
                 'Label': tvshow["title"],
                 'TVShowTitle': tvshow["title"],
@@ -110,9 +122,10 @@ def HandleTraktTVShowResult(results):
                 'Genre': " / ".join(tvshow["genres"]),
                 'Art(poster)': tvshow["images"]["poster"],
                 'Poster': tvshow["images"]["poster"],
-                'Art(banner)': tvshow["images"]["banner"],
-                'Art(fanart)': tvshow["images"]["fanart"],
-                'Fanart': tvshow["images"]["fanart"],
+                'Art(banner)': banner,
+                'Banner': banner,
+                'Art(fanart)': fanart,
+                'Fanart': fanart,
                 'Thumb': tvshow["images"]["fanart"]}
         shows.append(show)
         count += 1
