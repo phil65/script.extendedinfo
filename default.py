@@ -64,17 +64,20 @@ class Main:
         if not self.silent:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         for info in self.infos:
-            if info == 'json':
-                passDataToSkin('RSS', None, self.prop_prefix, self.window, self.control, self.handle)
-                videos = GetYoutubeVideos(self.feed, self.prop_prefix)
-                passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'similarlocal' and self.dbid:
-                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control, self.handle)
+            ########### Images #####################
             elif info == 'xkcd':
                 passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'flickr':
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'cyanide':
+                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'dailybabes':
+                passDataToSkin('DailyBabes', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('DailyBabes', GetDailyBabes(), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'dailybabe':
+                passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
+            ########### Audio #####################
             elif info == 'discography':
                 passDataToSkin('Discography', None, self.prop_prefix, self.window, self.control, self.handle)
                 Discography = GetDiscography(self.ArtistName)
@@ -108,29 +111,12 @@ class Main:
                 passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.ArtistName:
                     passDataToSkin('Shout', GetArtistShouts(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'studio':
-                passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control, self.handle)
-                if self.studio:
-                    CompanyId = SearchforCompany(self.studio)
-                    passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'set':
-                passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control, self.handle)
-                if self.dbid and not "show" in str(self.type):
-                    name = GetMovieSetName(self.dbid)
-                    if name:
-                        self.setid = SearchForSet(name)
-                if self.setid:
-                    SetData = GetSetMovies(self.setid)
-                    if SetData:
-                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'topartists':
                 passDataToSkin('TopArtists', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('TopArtists', GetTopArtists(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'hypedartists':
                 passDataToSkin('HypedArtists', None, self.prop_prefix, self.window, self.control, self.handle)
                 passDataToSkin('HypedArtists', GetHypedArtists(), self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'cyanide':
-                passDataToSkin('CyanideHappiness', GetCandHInfo(), self.prop_prefix, self.window, self.control, self.handle)
             ### RottenTomatoesMovies #################################################################################
             elif info == 'intheaters':
                 passDataToSkin('InTheatersMovies', GetRottenTomatoesMovies("movies/in_theaters"), self.prop_prefix, self.window, self.control, self.handle)
@@ -167,7 +153,6 @@ class Main:
                 passDataToSkin('PopularTVShows', GetMovieDBTVShows("popular"), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'similarmovies':
                 passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control, self.handle)
-                # MovieId = GetImdbID(self.id)
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
@@ -177,6 +162,21 @@ class Main:
                     MovieId = ""
                 if MovieId:
                     passDataToSkin('SimilarMovies', GetSimilarMovies(MovieId), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'studio':
+                passDataToSkin('StudioInfo', None, self.prop_prefix, self.window, self.control, self.handle)
+                if self.studio:
+                    CompanyId = SearchforCompany(self.studio)
+                    passDataToSkin('StudioInfo', GetCompanyInfo(CompanyId), self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'set':
+                passDataToSkin('MovieSetItems', None, self.prop_prefix, self.window, self.control, self.handle)
+                if self.dbid and not "show" in str(self.type):
+                    name = GetMovieSetName(self.dbid)
+                    if name:
+                        self.setid = SearchForSet(name)
+                if self.setid:
+                    SetData = GetSetMovies(self.setid)
+                    if SetData:
+                        passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'movielists':
                 passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.dbid:
@@ -217,7 +217,9 @@ class Main:
                     passHomeDataToSkin(GetExtendedActorInfo(ActorID))
             elif info == 'extendedtvinfo':
                 if self.id:
-                    passHomeDataToSkin(GetTVShowInfo(self.id)[0])
+                    tvshowinfo = GetTVShowInfo(self.id)
+                    prettyprint(tvshowinfo)
+                    passHomeDataToSkin(tvshowinfo[0])
             elif info == 'seasoninfo':
                 passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle)
                 if self.tvshow and self.season:
@@ -305,12 +307,6 @@ class Main:
                 artists = GetXBMCArtists()
                 events = GetArtistNearEvents(artists["result"]["artists"][0:49])
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'dailybabes':
-                passDataToSkin('DailyBabes', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('DailyBabes', GetDailyBabes(), self.prop_prefix, self.window, self.control, self.handle)
-            elif info == 'dailybabe':
-                passDataToSkin('DailyBabe', None, self.prop_prefix, self.window, self.control, self.handle)
-                passDataToSkin('DailyBabe', GetDailyBabes(single=True), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'channels':
                 channels = create_channel_list()
                 prettyprint(channels)
@@ -320,6 +316,13 @@ class Main:
                 if len(GetFavourites()) > 0:
                     homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
                 passDataToSkin('Favourites', favourites, self.prop_prefix, self.window, self.control, self.handle)
+            if info == 'json':
+                passDataToSkin('RSS', None, self.prop_prefix, self.window, self.control, self.handle)
+                videos = GetYoutubeVideos(self.feed, self.prop_prefix)
+                passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control, self.handle)
+            elif info == 'similarlocal' and self.dbid:
+                passDataToSkin('SimilarLocalMovies', None, self.prop_prefix, self.window, self.control, self.handle)
+                passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'iconpanel':
                 passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
@@ -364,36 +367,7 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
             elif info == 'jumptoletter':
-                if not xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
-                    xbmc.executebuiltin("SetFocus(50)")
-                    if self.id in ["A", "B", "C", "2"]:
-                        jumpsms_id = "2"
-                    elif self.id in ["D", "E", "F", "3"]:
-                        jumpsms_id = "3"
-                    elif self.id in ["G", "H", "I", "4"]:
-                        jumpsms_id = "4"
-                    elif self.id in ["J", "K", "L", "5"]:
-                        jumpsms_id = "5"
-                    elif self.id in ["M", "N", "O", "6"]:
-                        jumpsms_id = "6"
-                    elif self.id in ["P", "Q", "R", "S", "7"]:
-                        jumpsms_id = "7"
-                    elif self.id in ["T", "U", "V", "8"]:
-                        jumpsms_id = "8"
-                    elif self.id in ["W", "X", "Y", "Z", "9"]:
-                        jumpsms_id = "9"
-                    else:
-                        jumpsms_id = None
-                    if jumpsms_id:
-                        for i in range(1, 5):
-                          #  Notify("JumpSMS" + jumpsms_id)
-                          #  xbmc.executebuiltin("jumpsms" + jumpsms_id)
-                            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Input.ExecuteAction", "params": { "action": "jumpsms%s" }, "id": 1 }' % (jumpsms_id))
-                       #     prettyprint(response)
-                            xbmc.sleep(15)
-                            if xbmc.getInfoLabel("ListItem.Sortletter")[0] == self.id:
-                                break
-                    xbmc.executebuiltin("SetFocus(24000)")
+                JumpToLetter(self.id)
 
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
