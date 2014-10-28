@@ -65,7 +65,7 @@ class Main:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         for info in self.infos:
             ########### Images #####################
-            elif info == 'xkcd':
+            if info == 'xkcd':
                 passDataToSkin('XKCD', GetXKCDInfo(), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'flickr':
                 passDataToSkin('Flickr', GetFlickrImages(), self.prop_prefix, self.window, self.control, self.handle)
@@ -316,7 +316,7 @@ class Main:
                 if len(GetFavourites()) > 0:
                     homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
                 passDataToSkin('Favourites', favourites, self.prop_prefix, self.window, self.control, self.handle)
-            if info == 'json':
+            elif info == 'json':
                 passDataToSkin('RSS', None, self.prop_prefix, self.window, self.control, self.handle)
                 videos = GetYoutubeVideos(self.feed, self.prop_prefix)
                 passDataToSkin('RSS', videos, self.prop_prefix, self.window, self.control, self.handle)
