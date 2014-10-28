@@ -143,7 +143,7 @@ def GetEvents(id, pastevents=False):
     return HandleLastFMEventResult(results)
 
 
-def GetArtistPodcast(artist):
+def GetArtistPodcast(artist):   #todo
     results = Get_JSON_response(base_url + "method=artist.getPodcast&limit=100")
     return HandleLastFMArtistResult(results['artists'])
 

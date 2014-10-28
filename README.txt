@@ -43,6 +43,8 @@ RunScript(script.extendedinfo,info=incinemas)           --> InCinemasMovies.%d
 RunScript(script.extendedinfo,info=upcoming)            --> UpcomingMovies.%d
 RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
 RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
+RunScript(script.extendedinfo,info=similarmovies)       --> SimilarMovies.%d
+RunScript(script.extendedinfo,info=set)                 --> MovieSetItems.%d
 
 Available Properties:
 
@@ -191,6 +193,19 @@ RunScript(script.extendedinfo,info=artistshouts)
 'comment':  Tweet Content
 'author':   Tweet Author
 'date':     Tweet Date
+
+
+RunScript(script.extendedinfo,info=topartists)
+RunScript(script.extendedinfo,info=hypedartists)
+
+
+'Title':        Artist Name
+'mbid':         Artist MBID
+'Thumb':        Artist Thumb
+'Listeners':    actual Listeners
+
+
+RunScript(script.extendedinfo,info=hypedartists)
 
 
 #########################################################################################
