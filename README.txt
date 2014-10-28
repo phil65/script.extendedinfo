@@ -1,3 +1,11 @@
+List of possible ExtendedInfo script calls.
+All calls can also be done by using a plugin path.
+
+Example:
+<content>plugin://script.extendedinfo?info=discography&amp;&amp;artistname=INSERT_ARTIST_NAME_HERE</content>
+- keep Attention to the parameter separators ("&amp;&amp;")
+
+
 #########################################################################################
 Rotten Tomatoes
 #########################################################################################
@@ -8,9 +16,9 @@ RunScript(script.extendedinfo,info=comingsoon)          --> ComingSoonMovies.%d.
 RunScript(script.extendedinfo,info=opening)             --> Opening.%d.xxx
 RunScript(script.extendedinfo,info=boxoffice)           --> BoxOffice.%d.xxx
 RunScript(script.extendedinfo,info=toprentals)          --> TopRentals.%d.xxx
-RunScript(script.extendedinfo,info=currentdvdreleases)  --> TopRentals.%d.xxx
-RunScript(script.extendedinfo,info=newdvdreleases)      --> TopRentals.%d.xxx
-RunScript(script.extendedinfo,info=upcomingdvds)        --> TopRentals.%d.xxx
+RunScript(script.extendedinfo,info=currentdvdreleases)  --> CurrentDVDs.%d.xxx
+RunScript(script.extendedinfo,info=newdvdreleases)      --> NewDVDs.%d.xxx
+RunScript(script.extendedinfo,info=upcomingdvds)        --> UpcomingDVDs.%d.xxx
 
 Available Properties:
 
@@ -30,14 +38,11 @@ The MovieDB
 #########################################################################################
 
 Run:
+
 RunScript(script.extendedinfo,info=incinemas)           --> InCinemasMovies.%d
 RunScript(script.extendedinfo,info=upcoming)            --> UpcomingMovies.%d
 RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
 RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
-RunScript(script.extendedinfo,info=populartvshows)
-RunScript(script.extendedinfo,info=topratedtvshows)
-RunScript(script.extendedinfo,info=onairtvshows)
-RunScript(script.extendedinfo,info=airingtodaytvshows)
 
 Available Properties:
 
@@ -52,18 +57,23 @@ Available Properties:
 'Premiered':        Release Date
 
 
-Available labels for TVShows:
-info=populartvshows         --> PopularTVShows.%d
-info=topratedtvshows        --> TopRatedTVShows.%d
-info=onairtvshows           --> OnAirTVShows.%d
-info=airingtodaytvshows     --> AiringTodayTVShows.%d
+Run:
 
-$INFO[Window(Home).Property(PopularTVShows.%d.Title)]
-$INFO[Window(Home).Property(PopularTVShows.%d.OriginalTitle)]
-$INFO[Window(Home).Property(PopularTVShows.%d.Rating)]
-$INFO[Window(Home).Property(PopularTVShows.%d.Premiered)]
-$INFO[Window(Home).Property(PopularTVShows.%d.Art(poster))]
-$INFO[Window(Home).Property(PopularTVShows.%d.Art(fanart))]
+RunScript(script.extendedinfo,info=populartvshows)      --> PopularTVShows.%d
+RunScript(script.extendedinfo,info=topratedtvshows)     --> TopRatedTVShows.%d
+RunScript(script.extendedinfo,info=onairtvshows)        --> OnAirTVShows.%d
+RunScript(script.extendedinfo,info=airingtodaytvshows)  --> AiringTodayTVShows.%d
+
+Available Properties:
+
+'Title':            TVShow Title
+'ID':               TVShow MovieDB ID
+'OriginalTitle':    TVShow OriginalTitle
+'Rating':           TVShow Rating
+'Votes':            Number of Votes for Rating
+'Premiered':        TV Show First Air Date
+'Art(poster)':      TVShow Poster
+'Art(fanart)':      TVShow Fanart
 
 
 #########################################################################################
@@ -71,61 +81,133 @@ Trakt.tv
 #########################################################################################
 
 Run:
-RunScript(script.extendedinfo,info=trendingmovies)
-RunScript(script.extendedinfo,info=trendingshows)
-RunScript(script.extendedinfo,info=airingshows)
+RunScript(script.extendedinfo,info=trendingmovies)  --> TrendingMovies.%d
 
-Available labels for Trending Movies:
-info=trendingmovies --> TrendingMovies.%d
-
-$INFO[Window(Home).Property(TrendingMovies.%d.Title)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Plot)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Tagline)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Genre)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Rating)]
-$INFO[Window(Home).Property(TrendingMovies.%d.mpaa)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Year)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Premiered)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Runtime)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Trailer)]
-$INFO[Window(Home).Property(TrendingMovies.%d.Art(poster))]
-$INFO[Window(Home).Property(TrendingMovies.%d.Art(fanart))]
+'Title'
+'Plot'
+'Tagline'
+'Genre'
+'Rating'
+'mpaa'
+'Year'
+'Premiered'
+'Runtime'
+'Trailer'
+'Art(poster)'
+'Art(fanart)'
 
 
+Run:
 
-Available labels for Trending TVShows:
-info=trendingshows  --> TrendingShows.%d
+RunScript(script.extendedinfo,info=trendingshows)           --> TrendingShows.%d
+RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%d
 
-$INFO[Window(Home).Property(TrendingShows.%d.Title)]
-$INFO[Window(Home).Property(TrendingShows.%d.Plot)]
-$INFO[Window(Home).Property(TrendingShows.%d.Genre)]
-$INFO[Window(Home).Property(TrendingShows.%d.Runtime)]
-$INFO[Window(Home).Property(TrendingShows.%d.Rating)]
-$INFO[Window(Home).Property(TrendingShows.%d.mpaa)]
-$INFO[Window(Home).Property(TrendingShows.%d.Year)]
-$INFO[Window(Home).Property(TrendingShows.%d.Premiered)]
-$INFO[Window(Home).Property(TrendingShows.%d.Studio)]
-$INFO[Window(Home).Property(TrendingShows.%d.Country)]
-$INFO[Window(Home).Property(TrendingShows.%d.AirDay)]
-$INFO[Window(Home).Property(TrendingShows.%d.AirShortTime)]
-$INFO[Window(Home).Property(TrendingShows.%d.Label2)] -------> (AirDay & AirShortTime)
-$INFO[Window(Home).Property(TrendingShows.%d.Art(poster))]
-$INFO[Window(Home).Property(TrendingShows.%d.Art(banner))]
-$INFO[Window(Home).Property(TrendingShows.%d.Art(fanart))]
+'TVShowTitle':      TVShow Title
+'Duration':         Duration (?)
+'Plot':             Plot
+'ID':               ID
+'Genre':            Genre
+'Rating':           Rating
+'mpaa':             mpaa
+'Year':             Release Year
+'Premiered':        First Air Date
+'Status':           TVShow Status
+'Studio':           TVShow Studio
+'Country':          Production Country
+'Votes':            Amount of Votes
+'Watchers':         Amount of Watchers
+'AirDay':           Day episode is aired
+'AirShortTime':     Time episode is aired
+'Art(poster)':      TVShow Poster
+'Art(banner)':      TVShow Banner
+'Art(fanart)':      TVShow Fanart
 
 
-Available labels for Airing TVShows:
-info=airingshows        --> AiringShows.%d
+RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
+RunScript(script.extendedinfo,info=premiereshows)       --> PremiereShows.%d
 
-$INFO[Window(Home).Property(AiringShows.%d.Title)] ----------> (Episode Title)
-$INFO[Window(Home).Property(AiringShows.%d.TVShowTitle)]
-$INFO[Window(Home).Property(AiringShows.%d.Plot)] -----------> (TVShow Plot)
-$INFO[Window(Home).Property(AiringShows.%d.Genre)]
-$INFO[Window(Home).Property(AiringShows.%d.Runtime)]
-$INFO[Window(Home).Property(AiringShows.%d.Year)] -----------> (TVShow Year)
-$INFO[Window(Home).Property(AiringShows.%d.Certification)] --> (TVShow MPAA)
-$INFO[Window(Home).Property(AiringShows.%d.Studio)]
-$INFO[Window(Home).Property(AiringShows.%d.Thumb)] ----------> (Episode Thumb)
-$INFO[Window(Home).Property(AiringShows.%d.Art(poster))] ----> (TVShow Poster)
-$INFO[Window(Home).Property(AiringShows.%d.Art(banner))] ----> (TVShow Banner)
-$INFO[Window(Home).Property(AiringShows.%d.Art(fanart))] ----> (TVShow Fanart)
+'Title':         Episode Title
+'TVShowTitle':   TVShow Title
+'Plot':          Episode Plot
+'Genre':         TVShow Genre
+'Runtime':       Episode Duration
+'Year':          Episode Release Year
+'Certification': TVShow Mpaa Rating
+'Studio':        TVShow Studio
+'Thumb':         Episode Thumb
+'Art(poster)':   TVShow Poster
+'Art(banner)':   TVShow Banner
+'Art(fanart)':   TVShow Fanart
+
+
+#########################################################################################
+TheAudioDB
+#########################################################################################
+
+RunScript(script.extendedinfo,info=discography)         --> Discography.%d
+-- required additional parameters: artistname=
+
+'Label':           Album Title
+'artist':          Album Artist
+'mbid':            Album MBID
+'id':              Album AudioDB ID
+'Description':     Album Description
+'Genre':           Album Genre
+'Mood':            Album Mood
+'Speed':           Album Speed
+'Theme':           Album Theme
+'Type':            Album Type
+'thumb':           Album Thumb
+'year':            Album Release Year
+'Sales':           Album Sales
+
+
+RunScript(script.extendedinfo,info=mostlovedtracks)         --> MostLovedTracks.%d
+-- required additional parameters: artistname=
+RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
+-- required additional parameters: id= ???
+
+'Label':       Track Name
+'Artist':      Artist Name
+'mbid':        Track MBID
+'Album':       Album Title
+'Thumb':       Album Thumb
+'Path':        Link to Youtube Video
+
+
+RunScript(script.extendedinfo,info=artistdetails) ???
+
+
+
+#########################################################################################
+LastFM
+#########################################################################################
+
+RunScript(script.extendedinfo,info=albumshouts)
+-- required additional parameters: artistname=, albumname=
+RunScript(script.extendedinfo,info=artistshouts)
+-- required additional parameters: artistname=
+
+'comment':  Tweet Content
+'author':   Tweet Author
+'date':     Tweet Date
+
+
+#########################################################################################
+YouTube
+#########################################################################################
+ToDo
+
+#########################################################################################
+Misc Images
+#########################################################################################
+
+RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
+RunScript(script.extendedinfo,info=cyanide)       --> CyanideHappiness.%d
+RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
+RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
+
+'Thumb':        Image
+'Title':        Image Title
+'Description':  Image Description (only XKCD)
+
