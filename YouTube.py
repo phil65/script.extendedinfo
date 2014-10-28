@@ -54,7 +54,7 @@ def HandleYouTubeVideoResults(results):
                      'Description': item["snippet"]["description"],
                      'Title': item["snippet"]["title"],
                      # 'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")}
+                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             videos.append(video)
     return videos
 
@@ -101,7 +101,7 @@ def GetYoutubeUserVideos(userid=""):
                      'Description': item["media$group"]["media$description"]["$t"],
                      'Title': item["title"]["$t"],
                      'Author': item["author"][0]["name"]["$t"],
-                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
+                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")[:-3]}
             videos.append(video)
             count += 1
     return videos
