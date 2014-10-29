@@ -5,6 +5,15 @@ import xbmcgui
 import xbmcaddon
 import urlparse
 import urllib
+
+__addon__ = xbmcaddon.Addon()
+__addonid__ = __addon__.getAddonInfo('id')
+__addonversion__ = __addon__.getAddonInfo('version')
+__language__ = __addon__.getLocalizedString
+__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
+__resource__ = xbmc.translatePath(os.path.join(__cwd__, 'resources', 'lib')).decode("utf-8")
+sys.path.append(__resource__)
+
 from LastFM import *
 from MiscScraper import *
 from TheAudioDB import *
@@ -13,12 +22,6 @@ from Utils import *
 from RottenTomatoes import *
 from YouTube import *
 from Trakt import *
-
-
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__ = __addon__.getLocalizedString
 
 AdditionalParams = []
 homewindow = xbmcgui.Window(10000)
