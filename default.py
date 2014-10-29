@@ -334,6 +334,8 @@ class Main:
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
                 GetPlaylistStats(self.id)
+            elif info == 'dialog':
+                CreateSelectionDialog()
             elif info == "sortletters":
                 listitems = GetSortLetters(self.path, self.id)
                 passDataToSkin('SortLetters', listitems, self.prop_prefix, self.window, self.control, self.handle)

@@ -166,6 +166,22 @@ def GetPlaylistStats(path):
             homewindow.setProperty('PlaylistCount', str(numitems))
 
 
+def CreateSelectionDialog():
+    numitems = xbmc.getInfoLabel("Window.Property(Dialog.Numitems)")
+    target = xbmc.getInfoLabel("Window.Property(Dialog.Target)")
+    header = xbmc.getInfoLabel("Window.Property(Dialog.Header)")
+    selectionlist = []
+    for i in range(1, int(numitems) + 1):
+        label = xbmc.getInfoLabel("Window.Property(Dialog.%i.Label)" % (i))
+        selectionlist.append(label)
+    if selectionlist:
+        select_dialog = xbmcgui.Dialog()
+        index = select_dialog.select(header, selectionlist)
+        value = xbmc.getInfoLabel("Window.Property(Dialog.%i.Value)" % (index + 1))
+        xbmc.executebuiltin("Skin.SetString(%s,%s)" % (target, value))
+
+
+
 def GetSortLetters(path, focusedletter):
     listitems = []
     letterlist = []
