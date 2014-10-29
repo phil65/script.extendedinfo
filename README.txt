@@ -45,6 +45,14 @@ RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
 RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
 RunScript(script.extendedinfo,info=similarmovies)       --> SimilarMovies.%d
 RunScript(script.extendedinfo,info=set)                 --> MovieSetItems.%d
+-- required additional parameters: dbid=
+RunScript(script.extendedinfo,info=directormovies)      --> DirectorMovies.%d
+-- required additional parameters: director=
+RunScript(script.extendedinfo,info=writermovies)        --> WriterMovies.%d
+-- required additional parameters: writer=
+RunScript(script.extendedinfo,info=studio)              --> StudioInfo.%d
+-- required additional parameters: studio=
+
 
 Available Properties:
 
@@ -205,13 +213,45 @@ RunScript(script.extendedinfo,info=hypedartists)
 'Listeners':    actual Listeners
 
 
-RunScript(script.extendedinfo,info=hypedartists)
+RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
+-- optional parameters: lat=, lon=, location=, distance=, festivalsonly=, tag=
+
+'date':         Event Date
+'name':         Venue Name
+'venue_id':     Venue ID
+'event_id':     Event ID
+'street':       Venue Street
+'eventname':    Event Title
+'website':      Event Website
+'description':  Event description
+'postalcode':   Venue PostalCode
+'city':         Venue city
+'country':      Venue country
+'lat':          Venue latitude
+'lon':          Venue longitude
+'artists':      Event artists
+'headliner':    Event Headliner
+'googlemap':    GoogleMap of venue location
+'artist_image': Artist image
+'venue_image':  Venue image
 
 
 #########################################################################################
 YouTube
 #########################################################################################
-ToDo
+
+RunScript(script.extendedinfo,info=youtubesearch)           --> YoutubeSearch.%d
+-- required additional parameters: id=
+RunScript(script.extendedinfo,info=youtubeplaylist)         --> YoutubePlaylist.%d
+-- required additional parameters: id=
+RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearch.%d
+-- required additional parameters: id=
+
+'Thumb':        Video Thumbnail
+'Description':  Video Description
+'Title':        Video Title
+'Date':         Video Upload Date
+
 
 #########################################################################################
 Misc Images
