@@ -448,7 +448,9 @@ class Main:
             log(arg)
             if arg == 'script.extendedinfo':
                 continue
-            param = arg
+            param = arg.strip('"')
+            if param[0] == "'" and param[-1] == "'":
+                param = param[1:-1]
             if param.startswith('info='):
                 self.infos.append(param[5:])
             elif param.startswith('type='):
