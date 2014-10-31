@@ -449,7 +449,7 @@ class Main:
             if arg == 'script.extendedinfo':
                 continue
             param = arg.replace('"', '')
-            if param[0] == "'" and param[-1] == "'":
+            if param.startswith("'") and param.endswith("'"):
                 param = param[1:-1]
             if param.startswith('info='):
                 self.infos.append(param[5:])
