@@ -477,7 +477,7 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     results = Get_JSON_response(base_url + url, 30)
     if results and len(results["artists"]) > 0:
         mbid = results["artists"][0]["id"]
-        log("found artist id for " + artist + ": " + mbid)
+        log("found artist id for " + artist.decode("utf-8") + ": " + mbid)
         return mbid
     else:
         return None

@@ -448,9 +448,8 @@ class Main:
             log(arg)
             if arg == 'script.extendedinfo':
                 continue
-            param = arg.replace('"', '')
-            if param.startswith("'") and param.endswith("'"):
-                param = param[1:-1]
+            param = arg.replace('"', '').replace("'", " ")
+            log(param)
             if param.startswith('info='):
                 self.infos.append(param[5:])
             elif param.startswith('type='):
@@ -506,16 +505,16 @@ class Main:
                 if (not self.prop_prefix.endswith('.')) and (self.prop_prefix is not ""):
                     self.prop_prefix = self.prop_prefix + '.'
             elif param.startswith('artistname='):
-                self.ArtistName = arg[11:].replace('"', '').split(" feat. ")[0]
+                self.ArtistName = arg[11:].split(" feat. ")[0].strip()
                 if self.ArtistName:
                     # todo: look up local mbid first -->xbmcid for parameter
                     self.Artist_mbid = GetMusicBrainzIdFromNet(self.ArtistName)
             elif param.startswith('albumname='):
-                self.AlbumName = arg[10:].replace('"', '')
+                self.AlbumName = arg[10:].strip()
             elif param.startswith('trackname='):
-                self.TrackName = arg[10:].replace('"', '')
+                self.TrackName = arg[10:].strip()
             elif param.startswith('username='):
-                self.UserName = arg[9:].replace('"', '')
+                self.UserName = arg[9:].strip()
             elif param.startswith('window='):
                 if arg[7:] == "currentdialog":
                     xbmc.sleep(300)
