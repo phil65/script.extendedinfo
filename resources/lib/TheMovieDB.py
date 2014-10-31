@@ -140,6 +140,10 @@ def HandleTheMovieDBPeopleResult(results):
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
         builtin = 'RunScript(script.metadata.actors,"%s")' % (unicode(person.get('name', "")))
+        if "profile_path" in person and person["profile_path"] is not None:
+            image = base_url + poster_size + person["profile_path"]
+        else:
+            image = ""
         newperson = {'adult': str(person['adult']),
                      'name': person['name'],
                      'also_known_as': person.get('also_known_as', ""),
@@ -151,9 +155,9 @@ def HandleTheMovieDBPeopleResult(results):
                      'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
                      'deathday': person.get('deathday', ""),
                      'place_of_birth': person.get('place_of_birth', ""),
-                     'thumb': base_url + poster_size + person.get('profile_path', ""),
-                     'icon': base_url + poster_size + person.get('profile_path', ""),
-                     'poster': base_url + poster_size + person.get('profile_path', "")}
+                     'thumb': image,
+                     'icon': image,
+                     'poster': image}
         people.append(newperson)
     return people
 
