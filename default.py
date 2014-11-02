@@ -315,8 +315,8 @@ class Main:
                 prettyprint(channels)
             elif info == 'favourites':
                 favourites = GetFavourites()
-                homewindow.setProperty('favourite.count', str(len(GetFavourites())))
-                if len(GetFavourites()) > 0:
+                homewindow.setProperty('favourite.count', str(len(favourites)))
+                if len(favourites) > 0:
                     homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
                 passDataToSkin('Favourites', favourites, self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'json':
