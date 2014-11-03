@@ -181,6 +181,15 @@ def CreateSelectionDialog():
         xbmc.executebuiltin("Skin.SetString(%s,%s)" % (target, value))
 
 
+def CreateDialogOK(header, line1, line2, line3):
+    header = xbmc.getInfoLabel("Window.Property(Dialog.Header)")
+    line1 = xbmc.getInfoLabel("Window.Property(Dialog.Line1)")
+    line2 = xbmc.getInfoLabel("Window.Property(Dialog.Line2)")
+    line3 = xbmc.getInfoLabel("Window.Property(Dialog.Line3)")
+  #  select_dialog = xbmcgui.Dialog()
+  #  index = select_dialog.select(header, selectionlist)
+
+
 
 def GetSortLetters(path, focusedletter):
     listitems = []
