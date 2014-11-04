@@ -549,6 +549,24 @@ def Get_JSON_response(url="", cache_days=7):
                 return results
 
 
+def GetFavouriteswithType(favtype):
+    favs = GetFavourites()
+    favlist = []
+    for fav in favs:
+        if fav["Type"] == favtype:
+            favlist.append(fav)
+    return favlist
+
+
+def GetFavPath(fav):
+    if fav["type"] == "media":
+        path = "PlayMedia(%s)" % (fav["path"])
+    elif fav["type"] == "script":
+        path = "RunScript(%s)" % (fav["path"])
+    else:
+        path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+    return path
+
 def GetFavourites():
     items = []
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
@@ -556,14 +574,11 @@ def GetFavourites():
     json_query = simplejson.loads(json_query)
     if json_query["result"]["limits"]["total"] > 0:
         for fav in json_query["result"]["favourites"]:
-            if fav["type"] == "media":
-                path = "PlayMedia(%s)" % (fav["path"])
-            elif fav["type"] == "script":
-                path = "RunScript(%s)" % (fav["path"])
-            else:
-                path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+            path = GetFavPath(fav)
             newitem = {'Label': fav["title"],
                        'Thumb': fav["thumbnail"],
+                       'Type': fav["type"],
+                       'Builtin': path,
                        'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
             items.append(newitem)
     return items
