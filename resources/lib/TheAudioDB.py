@@ -24,7 +24,8 @@ def HandleAudioDBAlbumResult(results):
                 Description = album['strDescription']
             else:
                 Description = ""
-            if album.get('strReview') is not None and album['strReview']:
+            review = album.get('strReview')
+            if review and str(review) != "null":
                 Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + album["strReview"]
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
