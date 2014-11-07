@@ -181,16 +181,6 @@ def CreateSelectionDialog():
         xbmc.executebuiltin("Skin.SetString(%s,%s)" % (target, value))
 
 
-def CreateDialogOK(header, line1, line2, line3):
-    header = xbmc.getInfoLabel("Window.Property(Dialog.Header)")
-    line1 = xbmc.getInfoLabel("Window.Property(Dialog.Line1)")
-    line2 = xbmc.getInfoLabel("Window.Property(Dialog.Line2)")
-    line3 = xbmc.getInfoLabel("Window.Property(Dialog.Line3)")
-  #  select_dialog = xbmcgui.Dialog()
-  #  index = select_dialog.select(header, selectionlist)
-
-
-
 def GetSortLetters(path, focusedletter):
     listitems = []
     letterlist = []
@@ -611,7 +601,6 @@ def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", 
 
 
 def save_to_file(content, filename, path=""):
-    import xbmcvfs
     if path == "":
         text_file_path = get_browse_dialog() + filename + ".txt"
     else:
@@ -626,7 +615,6 @@ def save_to_file(content, filename, path=""):
 
 
 def read_from_file(path=""):
-    import xbmcvfs
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     if xbmcvfs.exists(path):
