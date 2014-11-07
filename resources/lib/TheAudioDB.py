@@ -26,7 +26,7 @@ def HandleAudioDBAlbumResult(results):
                 Description = ""
             review = album.get('strReview')
             if review and str(review) != "null":
-                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + album["strReview"]
+                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + str(review)
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
