@@ -57,7 +57,7 @@ def HandleAudioDBTrackResult(results):
  #   prettyprint(results)
     if 'track' in results and results['track']:
         for track in results['track']:
-            if 'strMusicVid' in track and track['strMusicVid'] is not None:
+            if 'strMusicVid' in track and track['strMusicVid']:
                 Thumb = "http://i.ytimg.com/vi/" + ExtractYoutubeID(track.get('strMusicVid', '')) + "/0.jpg"
                 Path = ConvertYoutubeURL(track['strMusicVid'])
             else:
@@ -99,19 +99,19 @@ def GetExtendedAudioDBInfo(results):
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
             localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
-            if localbio in artist and artist[localbio] is not None:
+            if localbio in artist and artist[localbio]:
                 Description = artist.get(localbio, "")
-            elif 'strBiographyEN' in artist and artist['strBiographyEN'] is not None:
+            elif 'strBiographyEN' in artist and artist['strBiographyEN']:
                 Description = artist.get('strBiographyEN', "")
-            elif 'strBiography' in artist:
+            elif 'strBiography' in artist and artist['strBiography']:
                 Description = artist.get('strBiography', "")
             else:
                 Description = ""
-            if 'strArtistBanner' in artist and artist['strArtistBanner'] is not None:
+            if 'strArtistBanner' in artist and artist['strArtistBanner']:
                 banner = artist['strArtistBanner']
             else:
                 banner = ""
-            if "strReview" in artist:
+            if 'strReview' in artist and artist['strReview']:
                 Description += "[CR]" + artist.get('strReview', "")
             artist = {'artist': artist.get('strArtist', ""),
                       'mbid': artist.get('strMusicBrainzID', ""),
