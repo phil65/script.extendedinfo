@@ -16,17 +16,16 @@ def HandleAudioDBAlbumResult(results):
     if 'album' in results and results['album']:
         for album in results['album']:
             localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
-            if localdescription in album and album[localdescription] is not None:
+            if localdescription in album and album[localdescription]:
                 Description = album.get(localdescription, "")
-            elif 'strDescriptionEN' in album:
+            elif 'strDescriptionEN' in album and album['strDescriptionEN']:
                 Description = album['strDescriptionEN']
-            elif 'strDescription' in album:
+            elif 'strDescription' in album and album['strDescription']:
                 Description = album['strDescription']
             else:
                 Description = ""
-            review = album.get('strReview')
-            if review and str(review) != "null":
-                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + str(review)
+            if 'strReview' in album and album['strReview']:
+                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + album['strReview']
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
