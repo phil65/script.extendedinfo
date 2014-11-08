@@ -317,8 +317,6 @@ class Main:
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
                 GetPlaylistStats(self.id)
-            elif info == 'dialog':
-                CreateSelectionDialog()
             elif info == "sortletters":
                 listitems = GetSortLetters(self.path, self.id)
                 passDataToSkin('SortLetters', listitems, self.prop_prefix, self.window, self.control, self.handle)
@@ -354,8 +352,6 @@ class Main:
                         Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, False)
-            elif info == 'jumptoletter':
-                JumpToLetter(self.id)
 
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
