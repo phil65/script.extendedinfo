@@ -23,10 +23,7 @@ from RottenTomatoes import *
 from YouTube import *
 from Trakt import *
 
-AdditionalParams = []
 homewindow = xbmcgui.Window(10000)
-extrathumb_limit = 4
-extrafanart_limit = 10
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir()).decode("utf-8"))
 
@@ -315,7 +312,7 @@ class Main:
             elif info == 'iconpanel':
                 passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
-                SetMusicBrainzIDsForAllArtists(False, 'forceupdate' in AdditionalParams)
+                SetMusicBrainzIDsForAllArtists(False, False)
             elif info == 'setfocus':
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
@@ -356,7 +353,7 @@ class Main:
                     else:
                         Notify("Error", "No Trailer available")
             elif info == 'updatexbmcdatabasewithartistmbid':
-                SetMusicBrainzIDsForAllArtists(True, 'forceupdate' in AdditionalParams)
+                SetMusicBrainzIDsForAllArtists(True, False)
             elif info == 'jumptoletter':
                 JumpToLetter(self.id)
 
@@ -512,24 +509,6 @@ class Main:
                     self.window = xbmcgui.Window(int(arg[7:]))
             elif param.startswith('control='):
                 self.control = int(arg[8:])
-            elif param.startswith('setuplocation'):
-                settings = xbmcaddon.Addon(id='script.extendedinfo')
-                country = settings.getSetting('country')
-                city = settings.getSetting('city')
-                log('stored country/city: %s/%s' % (country, city))
-                kb = xbmc.Keyboard('', __language__(32013) + ":")
-                kb.doModal()
-                country = kb.getText()
-                kb = xbmc.Keyboard('', __language__(32012) + ":")
-                kb.doModal()
-                city = kb.getText()
-                log('country/city: %s/%s' % (country, city))
-                settings.setSetting('location_method', 'country_city')
-                settings.setSetting('country', country)
-                settings.setSetting('city', city)
-                log('done with settings')
-            else:
-                AdditionalParams.append(param)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
 
