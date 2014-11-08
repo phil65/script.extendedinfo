@@ -17,64 +17,6 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 homewindow = xbmcgui.Window(10000)
 
 
-def AddArtToLibrary(type, media, folder, limit, silent=False):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Get%ss", "params": {"properties": ["art", "file"], "sort": { "method": "label" } }, "id": 1}' % media.lower())
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
-    if (json_response['result'] is not None) and ('%ss' % (media.lower()) in json_response['result']):
-        # iterate through the results
-        if not silent:
-            progressDialog = xbmcgui.DialogProgress(__language__(32016))
-            progressDialog.create(__language__(32016))
-        for count, item in enumerate(json_response['result']['%ss' % media.lower()]):
-            if not silent:
-                if progressDialog.iscanceled():
-                    return
-            path = os.path.join(media_path(item['file']).encode("utf-8"), folder)
-            file_list = xbmcvfs.listdir(path)[1]
-            for i, file in enumerate(file_list):
-                if i + 1 > limit:
-                    break
-                if not silent:
-                    progressDialog.update((count * 100) / json_response['result']['limits']['total'], __language__(32011) + ' %s: %s %i' % (item["label"], type, i + 1))
-                    if progressDialog.iscanceled():
-                        return
-                # just in case someone uses backslahes in the path
-                # fixes problems mentioned on some german forum
-                file_path = os.path.join(path, file).encode('string-escape')
-                if xbmcvfs.exists(file_path) and item['art'].get('%s%i' % (type, i), '') == "":
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.Set%sDetails", "params": { "%sid": %i, "art": { "%s%i": "%s" }}, "id": 1 }' %
-                                        (media, media.lower(), item.get('%sid' % media.lower()), type, i + 1, file_path))
-
-
-def import_skinsettings():
-    importstring = read_from_file()
-    if importstring:
-        progressDialog = xbmcgui.DialogProgress(__language__(32010))
-        progressDialog.create(__language__(32010))
-        xbmc.sleep(200)
-        for count, skinsetting in enumerate(importstring):
-            if progressDialog.iscanceled():
-                return
-            if skinsetting[1].startswith(xbmc.getSkinDir()):
-                progressDialog.update((count * 100) / len(importstring), __language__(32011) + ' %s' % skinsetting[1])
-                setting = skinsetting[1].replace(xbmc.getSkinDir() + ".", "")
-                if skinsetting[0] == "string":
-                    if skinsetting[2] is not "":
-                        xbmc.executebuiltin("Skin.SetString(%s,%s)" % (setting, skinsetting[2]))
-                    else:
-                        xbmc.executebuiltin("Skin.Reset(%s)" % setting)
-                elif skinsetting[0] == "bool":
-                    if skinsetting[2] == "true":
-                        xbmc.executebuiltin("Skin.SetBool(%s)" % setting)
-                    else:
-                        xbmc.executebuiltin("Skin.Reset(%s)" % setting)
-            xbmc.sleep(30)
-        xbmcgui.Dialog().ok(__language__(32005), __language__(32009))
-    else:
-        log("backup not found")
-
-
 def JumpToLetter(letter):
     if not xbmc.getInfoLabel("ListItem.Sortletter")[0] == letter:
         xbmc.executebuiltin("SetFocus(50)")
@@ -106,30 +48,6 @@ def JumpToLetter(letter):
                 if xbmc.getInfoLabel("ListItem.Sortletter")[0] == letter:
                     break
         xbmc.executebuiltin("SetFocus(24000)")
-
-
-def export_skinsettings():
-    from xml.dom.minidom import parse
-    # Set path
-    guisettings_path = xbmc.translatePath('special://profile/guisettings.xml').decode("utf-8")
-    # Check to see if file exists
-    if xbmcvfs.exists(guisettings_path):
-        log("guisettings.xml found")
-        doc = parse(guisettings_path)
-        skinsettings = doc.documentElement.getElementsByTagName('setting')
-        newlist = []
-        for count, skinsetting in enumerate(skinsettings):
-            if skinsetting.childNodes:
-                value = skinsetting.childNodes[0].nodeValue
-            else:
-                value = ""
-            if skinsetting.attributes['name'].nodeValue.startswith(xbmc.getSkinDir()):
-                newlist.append((skinsetting.attributes['type'].nodeValue, skinsetting.attributes['name'].nodeValue, value))
-        if save_to_file(newlist, xbmc.getSkinDir() + ".backup"):
-            xbmcgui.Dialog().ok(__language__(32005), __language__(32006))
-    else:
-        xbmcgui.Dialog().ok(__language__(32007), __language__(32008))
-        log("guisettings.xml not found")
 
 
 def GetPlaylistStats(path):
@@ -164,21 +82,6 @@ def GetPlaylistStats(path):
             homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
             homewindow.setProperty('PlaylistInProgress', str(inprogress))
             homewindow.setProperty('PlaylistCount', str(numitems))
-
-
-def CreateSelectionDialog():
-    numitems = xbmc.getInfoLabel("Window.Property(Dialog.Numitems)")
-    target = xbmc.getInfoLabel("Window.Property(Dialog.Target)")
-    header = xbmc.getInfoLabel("Window.Property(Dialog.Header)")
-    selectionlist = []
-    for i in range(1, int(numitems) + 1):
-        label = xbmc.getInfoLabel("Window.Property(Dialog.%i.Label)" % (i))
-        selectionlist.append(label)
-    if selectionlist:
-        select_dialog = xbmcgui.Dialog()
-        index = select_dialog.select(header, selectionlist)
-        value = xbmc.getInfoLabel("Window.Property(Dialog.%i.Value)" % (index + 1))
-        xbmc.executebuiltin("Skin.SetString(%s,%s)" % (target, value))
 
 
 def GetSortLetters(path, focusedletter):

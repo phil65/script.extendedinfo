@@ -41,24 +41,6 @@ class Main:
         # run in backend if parameter was set
         if self.infos:
             self._StartInfoActions()
-        elif self.exportsettings:
-            export_skinsettings()
-        elif self.importsettings:
-            import_skinsettings()
-        elif self.importextrathumb:
-            AddArtToLibrary("extrathumb", "Movie", "extrathumbs", extrathumb_limit, True)
-        elif self.importextrafanart:
-            AddArtToLibrary("extrafanart", "Movie", "extrafanart", extrafanart_limit, True)
-   #     elif self.importextrathumbtv:
-  #          AddArtToLibrary("extrathumb","TVShow","extrathumbs")
-        elif self.importextrafanarttv:
-            AddArtToLibrary("extrafanart", "TVShow", "extrafanart", extrafanart_limit, True)
-        elif self.importallartwork:
-            AddArtToLibrary("extrathumb", "Movie", "extrathumbs", extrathumb_limit, True)
-            AddArtToLibrary("extrafanart", "Movie", "extrafanart", extrafanart_limit, True)
-            AddArtToLibrary("extrafanart", "TVShow", "extrafanart", extrafanart_limit, True)
-        elif not len(sys.argv) > 1:
-            self._selection_dialog()
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
@@ -550,37 +532,6 @@ class Main:
                 AdditionalParams.append(param)
         if not self.silent:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-
-    def _selection_dialog(self):
-        modeselect = []
-        modeselect.append(__language__(32001))
-        modeselect.append(__language__(32002))
-        modeselect.append(__language__(32003))
-        modeselect.append(__language__(32014))
-        modeselect.append(__language__(32015))
-     #   modeselect.append( __language__(32014) + " (TV)" )
-        modeselect.append(__language__(32015) + " (TV)")
-        modeselect.append("Update All")
-        dialogSelection = xbmcgui.Dialog()
-        selection = dialogSelection.select(__language__(32004), modeselect)
-        if selection == 0:
-            export_skinsettings()
-        elif selection == 1:
-            import_skinsettings()
-        elif selection == 2:
-            xbmc.executebuiltin("Skin.ResetSettings")
-        elif selection == 3:
-            AddArtToLibrary("extrathumb", "Movie", "extrathumbs", extrathumb_limit)
-        elif selection == 4:
-            AddArtToLibrary("extrafanart", "Movie", "extrafanart", extrafanart_limit)
-   #     elif selection == 5:
-    #        AddArtToLibrary("extrathumb","TVShow", "extrathumbs")
-        elif selection == 5:
-            AddArtToLibrary("extrafanart", "TVShow", "extrafanart", extrafanart_limit)
-        elif selection == 6:
-            AddArtToLibrary("extrathumb", "Movie", "extrathumbs", extrathumb_limit)
-            AddArtToLibrary("extrafanart", "Movie", "extrafanart", extrafanart_limit)
-            AddArtToLibrary("extrafanart", "TVShow", "extrafanart", extrafanart_limit)
 
 if (__name__ == "__main__"):
     Main()
