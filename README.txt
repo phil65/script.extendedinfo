@@ -111,6 +111,7 @@ Run:
 
 RunScript(script.extendedinfo,info=trendingshows)           --> TrendingShows.%d
 RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%d
+-- required additional parameters: dbid=
 
 'TVShowTitle':      TVShow Title
 'Duration':         Duration (?)
