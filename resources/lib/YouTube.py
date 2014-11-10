@@ -66,7 +66,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
     else:
         hd_string = ""
     search_string = urllib.quote(search_string.replace('"', ''))
-    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=20&type=video'
+    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=50&type=video'
     url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
     results = Get_JSON_response(base_url + url, 0.5)
     if results:
@@ -76,7 +76,7 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
 
 
 def GetYoutubePlaylistVideos(playlistid=""):
-    base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=20'
+    base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=50'
     url = '&playlistId=%s&key=%s' % (playlistid, youtube_key2)
     results = Get_JSON_response(base_url + url, 0.5)
   #  prettyprint(results)
