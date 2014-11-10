@@ -148,8 +148,6 @@ def create_light_movielist():
 
 def GetSimilarFromOwnLibrary(dbid):
     movies = []
-# if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 1:
-        # return read_from_file(filename)
     json_query = xbmc.executeJSONRPC(
         '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
@@ -366,10 +364,7 @@ def CompareAlbumWithLibrary(onlinelist):
                 if album["thumbnail"]:
                     onlineitem.update({"thumb": album["thumbnail"]})
                     onlineitem.update({"Icon": album["thumbnail"]})
-               # onlineitem.update({"Path": localitem["movieid"]})
                 break
-    # b = datetime.datetime.now() - a
-    # log('Processing Time for comparing: %s' % b)
     return onlinelist
 
 
@@ -583,7 +578,8 @@ def passHomeDataToSkin(data, debug=False):
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
     if limit and data:
-        data = data[:limit]
+        if limit < len(data):
+            data = data[:limit]
     if controlnumber is "plugin":
         homewindow.clearProperty(name)
         if data is not None:
