@@ -581,7 +581,9 @@ def passHomeDataToSkin(data, debug=False):
                 log('%s' % (str(key)) + unicode(value))
 
 
-def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, debug=False):
+def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
+    if limit and data:
+        data = data[:limit]
     if controlnumber is "plugin":
         homewindow.clearProperty(name)
         if data is not None:
@@ -621,46 +623,40 @@ def SetWindowProperties(name, data, prefix="", debug=False):
 def CreateListItems(data):
     InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
                   "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
-                  "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]    # log(str(xbmcgui.getCurrentWindowId()))
-    # log(str(xbmcgui.getCurrentWindowDialogId()))
-    # log(str(controlwindow))
+                  "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
     itemlist = []
     if data is not None:
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
             for (key, value) in result.iteritems():
+                value = unicode(value)
+                if key.lower() in ["name", "label", "title"]:
+                    listitem.setLabel(value)
+                if key.lower() in ["thumb"]:
+                    listitem.setThumbnailImage(value)
+                if key.lower() in ["icon"]:
+                    listitem.setIconImage(value)
+                if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                    listitem.setArt({key.lower(): value})
+                if key.lower() in ["path"]:
+                    itempath = value
            #     log("key: " + unicode(key) + "  value: " + unicode(value))
-                if str(key).lower() in ["name", "label", "title"]:
-                    listitem.setLabel(unicode(value))
-                if str(key).lower() in ["thumb"]:
-                    listitem.setThumbnailImage(unicode(value))
-                if str(key).lower() in ["icon"]:
-                    listitem.setIconImage(unicode(value))
-                if str(key).lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                    listitem.setArt({str(key).lower(): unicode(value)})
-                if str(key).lower() in ["path"]:
-                    itempath = unicode(value)
-                # if str(key).lower() in InfoLabels:
-                #     listitem.setInfo('video', {str(key).lower(): unicode(value)})
-       #             Notify(value)
-                listitem.setProperty('%s' % (str(key)), unicode(value))
-           # itempath = "SetFocus(" + str((controlnumber + 1)) + ")"
+                # if key.lower() in InfoLabels:
+                #     listitem.setInfo('video', {key.lower(): value})
+                listitem.setProperty('%s' % (key), value)
             listitem.setPath(path=itempath)
-            listitem.setProperty("target_url", itempath)
-            listitem.setProperty("node:target_url", itempath)
-            listitem.setProperty("node.target_url", itempath)
             itemlist.append(listitem)
     return itemlist
 
 
 def cleanText(text):
     import re
-    text = re.sub('<br \/>', '[CR]', text)
+    text = text.replace('<br \/>', '[CR]')
     text = re.sub('<(.|\n|\r)*?>', '', text)
-    text = re.sub('&quot;', '"', text)
-    text = re.sub('&amp;', '&', text)
-    text = re.sub('&gt;', '>', text)
-    text = re.sub('&lt;', '<', text)
-    text = re.sub('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '', text)
+    text = text.replace('&quot;', '"')
+    text = text.replace('&amp;', '&')
+    text = text.replace('&gt;', '>')
+    text = text.replace('&lt;', '<')
+    text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
     return text.strip()
