@@ -452,6 +452,18 @@ def GetIconPanel(number):
     return items
 
 
+def GetWeatherImages():
+    items = []
+    for i in range(1, 6):
+        newitem = {'Label': "bla",
+                   'Path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
+                   'Thumb': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Area)"),
+                   'Layer': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Layer)"),
+                   'Legend': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Legend)")}
+        items.append(newitem)
+    return items
+
+
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")

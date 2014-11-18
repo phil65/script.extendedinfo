@@ -311,6 +311,8 @@ class Main:
                 passDataToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(self.dbid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'iconpanel':
                 passDataToSkin('IconPanel', GetIconPanel(1), self.prop_prefix, self.window, self.control, self.handle, self.limit)
+            elif info == 'weather':
+                passDataToSkin('WeatherImages', GetWeatherImages(), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, False)
             elif info == 'setfocus':
