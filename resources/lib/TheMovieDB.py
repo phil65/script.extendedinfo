@@ -230,7 +230,7 @@ def GetMovieDBConfig():
     if response:
         return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
-        return ("", "")
+        return ("", "", "")
 
 
 def GetCompanyInfo(Id):
