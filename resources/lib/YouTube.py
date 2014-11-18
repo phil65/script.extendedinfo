@@ -44,11 +44,14 @@ def HandleYouTubeVideoResults(results):
     videos = []
     log("starting HandleYouTubeVideoResults")
     for item in results:
+            thumb = ""
+            if "thumbnails" in item["snippet"]:
+                thumb = item["snippet"]["thumbnails"]["high"]["url"]
             try:
                 videoid = item["id"]["videoId"]
             except:
                 videoid = item["snippet"]["resourceId"]["videoId"]
-            video = {'Thumb': item["snippet"]["thumbnails"]["high"]["url"],
+            video = {'Thumb': thumb,
                      'Play': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % videoid,
                      'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % videoid,
                      'Description': item["snippet"]["description"],
