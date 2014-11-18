@@ -213,7 +213,7 @@ def SearchForSet(setname):
 
 
 def GetMovieDBData(url="", cache_days=14):
-    url = "http://api.themoviedb.org/3/" + url + "api_key=%s" % moviedb_key
+    url = "http://api.themoviedb.org/3/%sapi_key=%s" % (url, moviedb_key)
     global base_url
     global poster_size
     global fanart_size
