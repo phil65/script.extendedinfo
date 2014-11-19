@@ -28,10 +28,9 @@ def GetXKCDInfo():
                 base_url = 'http://xkcd.com/'
                 url = '%i/info.0.json' % random.randrange(1, 1190)
                 results = Get_JSON_response(base_url + url, 9999)
-                builtin = "ShowPicture(%s)" % (results["img"])
                 item = {'Image': results["img"],
                         'Thumb': results["img"],
-                        'Path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
+                        'Path': "plugin://script.extendedinfo?info=setfocus",
                         'Poster': results["img"],
                         'Title': results["title"],
                         'Description': results["alt"]}
@@ -66,10 +65,9 @@ def GetCandHInfo():
                         if item.startswith('http://www.explosm.net/db/files/Comics/'):
                             dateregex = '[0-9][0-9]\.[0-9][0-9]\.[0-9][0-9][0-9][0-9]'
                             datematches = re.findall(dateregex, response)
-                            builtin = "ShowPicture(%s)" % (item)
                             newitem = {'Image': item,
                                        'Thumb': item,
-                                       'Path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
+                                       'Path': "plugin://script.extendedinfo?info=setfocus",
                                        'Poster': item,
                                        'Title': datematches[0]}
                             items.append(newitem)
@@ -103,9 +101,9 @@ def GetDailyBabes(single=False):
                 day = random.randrange(1, 28)
                 image = random.randrange(1, 8)
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
-            builtin = "ShowPicture(%s)" % (url)
+            log(url)
             newitem = {'Thumb': url,
-                       'Path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
+                       'Path': "plugin://script.extendedinfo?info=setfocus",
                        'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
         save_to_file(items, filename, Addon_Data_Path)
