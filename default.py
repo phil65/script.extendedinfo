@@ -79,7 +79,6 @@ class Main:
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 passHomeDataToSkin(ArtistDetails)
             elif info == 'albuminfo':
-                passHomeDataToSkin(None)
                 if self.id:
                     AlbumDetails = GetAlbumDetails(self.id)
                     Trackinfo = GetTrackDetails(self.id)
@@ -189,14 +188,11 @@ class Main:
                 if MovieId:
                     passHomeDataToSkin(GetExtendedMovieInfo(MovieId))
             elif info == 'extendedactorinfo':
-                if self.id:
-                    ActorID = self.id
-                elif self.name:
-                    ActorID = GetPersonID(self.name)
-                else:
-                    ActorID = ""
-                if ActorID:
-                    passHomeDataToSkin(GetExtendedActorInfo(ActorID))
+                    # dialog = ActorInfoDialog(u'script-%s-ActorInfoDialog.xml' % addon_name, addon_path, data=data)
+                    from DialogActorInfo import DialogActorInfo
+                    dialog = DialogActorInfo(u'script-Actors-DialogInfo.xml', __cwd__, id=self.id, name=self.name)
+                    dialog.doModal()
+
             elif info == 'extendedtvinfo':
                 if self.id:
                     tvshowinfo = GetTVShowInfo(self.id)
