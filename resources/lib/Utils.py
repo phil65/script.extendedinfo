@@ -9,11 +9,13 @@ import os
 import time
 import hashlib
 import simplejson
+import re
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __language__ = __addon__.getLocalizedString
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
+Addon_Data_Path = os.path.join(xbmc.translatePath(
+    "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 
 
@@ -33,7 +35,8 @@ def GetPlaylistStats(path):
         playlistpath = path[startindex:endindex]
     #    Notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "result" in json_response:
@@ -60,7 +63,8 @@ def GetSortLetters(path, focusedletter):
         letterlist = letterlist.split()
     else:
         if path:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
+            json_query = xbmc.executeJSONRPC(
+                '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             if "result" in json_response and "files" in json_response["result"]:
@@ -73,7 +77,7 @@ def GetSortLetters(path, focusedletter):
     homewindow.setProperty("LetterList", "".join(letterlist))
     if letterlist and focusedletter:
         startord = ord("A")
-        for i in range (0,26):
+        for i in range(0, 26):
             letter = chr(startord + i)
             if letter == focusedletter:
                 label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
@@ -91,7 +95,8 @@ def GetXBMCArtists():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}, "id": 1}')
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         save_to_file(json_query, "XBMCartists", Addon_Data_Path)
@@ -134,7 +139,8 @@ def GetSimilarArtistsInLibrary(artistid):
                              "Instrument": " / ".join(item['instrument']),
                              "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'}
                 artists.append(newartist)
-    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
+    log('%i of %i artists found in last.FM is in XBMC database' %
+        (len(artists), len(simi_artists)))
     return artists
 
 
@@ -191,7 +197,8 @@ def GetSimilarFromOwnLibrary(dbid):
                 if directors[0] == item['director'][0]:
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
-            quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
+            quotalist = sorted(
+                quotalist, key=lambda quota: quota[0], reverse=True)
             count = 1
             for list_movie in quotalist:
                 if movieid is not list_movie[1]:
@@ -274,7 +281,8 @@ def media_streamdetails(filename, streamdetails):
 
 def GetXBMCAlbums():
     albums = []
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
     if "result" in json_query and "albums" in json_query['result']:
@@ -284,7 +292,8 @@ def GetXBMCAlbums():
 
 
 def create_channel_list():
-    json_response = xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
+    json_response = xbmc.executeJSONRPC(
+        '{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
     json_response = unicode(json_response, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_response)
     if ('result' in json_response) and ("movies" in json_response["result"]):
@@ -301,7 +310,8 @@ def media_path(path):
         path = os.path.split(path)[0]
     # Fixes problems with rared movies and multipath
     if path.startswith("rar://"):
-        path = [os.path.split(urllib.url2pathname(path.replace("rar://", "")))[0]]
+        path = [
+            os.path.split(urllib.url2pathname(path.replace("rar://", "")))[0]]
     elif path.startswith("multipath://"):
         temp_path = path.replace("multipath://", "").split('%2f/')
         path = []
@@ -323,17 +333,24 @@ def CompareWithLibrary(onlinelist):
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
-                    difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
+                    difference = int(onlineitem["Premiered"][
+                                     :4]) - int(json_response['result']['moviedetails']['year'])
                     if difference > -2 and difference < 2:
-                        streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
+                        streaminfo = media_streamdetails(localitem['file'].encode(
+                            'utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
                         onlineitem.update({"Play": localitem["movieid"]})
                         onlineitem.update({"DBID": localitem["movieid"]})
                         onlineitem.update({"Path": localitem['file']})
-                        onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
-                        onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
-                        onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
-                        onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
-                        onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                        onlineitem.update(
+                            {"VideoCodec": streaminfo["videocodec"]})
+                        onlineitem.update(
+                            {"VideoResolution": streaminfo["videoresolution"]})
+                        onlineitem.update(
+                            {"VideoAspect": streaminfo["videoaspect"]})
+                        onlineitem.update(
+                            {"AudioCodec": streaminfo["audiocodec"]})
+                        onlineitem.update(
+                            {"AudioChannels": str(streaminfo["audiochannels"])})
                 break
     return onlinelist
 
@@ -355,12 +372,14 @@ def CompareAlbumWithLibrary(onlinelist):
     for onlineitem in onlinelist:
         for localitem in locallist:
             if onlineitem["name"] == localitem["title"]:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
+                json_query = xbmc.executeJSONRPC(
+                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
                 album = json_query["result"]["albumdetails"]
                 onlineitem.update({"DBID": album["albumid"]})
-                onlineitem.update({"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
+                onlineitem.update(
+                    {"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
                 if album["thumbnail"]:
                     onlineitem.update({"thumb": album["thumbnail"]})
                     onlineitem.update({"Icon": album["thumbnail"]})
@@ -382,6 +401,7 @@ def GetStringFromUrl(url):
             xbmc.sleep(1000)
             succeed += 1
     return None
+
 
 def Get_JSON_response(url="", cache_days=7):
     filename = hashlib.md5(url).hexdigest()
@@ -419,12 +439,15 @@ def GetFavPath(fav):
     elif fav["type"] == "script":
         path = "RunScript(%s)" % (fav["path"])
     else:
-        path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+        path = "ActivateWindow(%s,%s)" % (
+            fav["window"], fav["windowparameter"])
     return path
+
 
 def GetFavourites():
     items = []
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
     if json_query["result"]["limits"]["total"] > 0:
@@ -473,7 +496,8 @@ def log(txt):
 
 def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
     dialog = xbmcgui.Dialog()
-    value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
+    value = dialog.browse(
+        dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
     return value
 
 
@@ -506,12 +530,14 @@ def read_from_file(path=""):
 def ConvertYoutubeURL(string):
     import re
     if 'youtube.com/v' in string:
-        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
+        vid_ids = re.findall(
+            'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
             convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return convertedstring
     if 'youtube.com/watch' in string:
-        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
+        vid_ids = re.findall(
+            'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
             convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
             return convertedstring
@@ -521,28 +547,33 @@ def ConvertYoutubeURL(string):
 def ExtractYoutubeID(string):
     import re
     if 'youtube.com/v' in string:
-        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
+        vid_ids = re.findall(
+            'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
             return id
     if 'youtube.com/watch' in string:
-        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
+        vid_ids = re.findall(
+            'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
             return id
     return ""
 
 
 def Notify(header, line='', line2='', line3=''):
-    xbmc.executebuiltin('Notification(%s, %s, %s, %s)' % (header, line, line2, line3))
+    xbmc.executebuiltin('Notification(%s, %s, %s, %s)' %
+                        (header, line, line2, line3))
 
 
 def GetMovieSetName(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid', "")
         if dbsetid:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
+            json_query = xbmc.executeJSONRPC(
+                '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             return json_response['result']['setdetails'].get('label', "")
@@ -550,12 +581,14 @@ def GetMovieSetName(dbid):
 
 
 def prettyprint(string):
-    log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
+    log(simplejson.dumps(
+        string, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
 def GetImdbID(type, dbid):
     if type == "movie":
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response["result"]:
@@ -563,7 +596,8 @@ def GetImdbID(type, dbid):
         else:
             return []
     elif type == "tvshow":
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
+        json_query = xbmc.executeJSONRPC(
+            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "tvshowdetails" in json_response["result"]:
@@ -571,8 +605,10 @@ def GetImdbID(type, dbid):
         else:
             return []
 
+
 def GetImdbIDfromEpisode(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC(
+        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "episodedetails" in json_response["result"]:
@@ -619,9 +655,11 @@ def SetWindowProperties(name, data, prefix="", debug=False):
             if debug:
                 log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
             for (key, value) in result.iteritems():
-                homewindow.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+                homewindow.setProperty(
+                    '%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
                 if debug:
-                    log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + unicode(value))
+                    log('%s%s.%i.%s --> ' %
+                        (prefix, name, count + 1, str(key)) + unicode(value))
         homewindow.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         homewindow.setProperty('%s%s.Count' % (prefix, name), '0')
@@ -658,13 +696,36 @@ def CreateListItems(data):
     return itemlist
 
 
+# def clean_bio(bio):
+#     if not bio:
+#         return bio
+#     while True:
+#         s = bio[0]
+#         e = bio[-1]
+#         if s == u'\u200b':
+#             bio = bio[1:]
+#         if e == u'\u200b':
+#             bio = bio[:-1]
+#         if s == " " or e == " ":
+#             bio = bio.strip()
+#         elif s == "." or e == ".":
+#             bio = bio.strip(".")
+#         elif s == "\n" or e == "\n":
+#             bio = bio.strip("\n")
+#         else:
+#             break
+#     # print repr( bio )
+#     return bio.strip() + "."
+
+
 def cleanText(text):
-    import re
+    text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
     text = text.replace('<br \/>', '[CR]')
     text = re.sub('<(.|\n|\r)*?>', '', text)
     text = text.replace('&quot;', '"')
     text = text.replace('&amp;', '&')
     text = text.replace('&gt;', '>')
     text = text.replace('&lt;', '<')
-    text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+    text = text.replace(
+        'User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
     return text.strip()
