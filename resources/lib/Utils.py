@@ -13,6 +13,7 @@ import re
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
+__addonicon__ = __addon__.getAddonInfo('icon')
 __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath(
     "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
@@ -559,9 +560,9 @@ def ExtractYoutubeID(string):
     return ""
 
 
-def Notify(header, line='', line2='', line3=''):
-    xbmc.executebuiltin('Notification(%s, %s, %s, %s)' %
-                        (header, line, line2, line3))
+def Notify(header="", message="", icon=__addonicon__, time=5000, sound=True):
+    dialog = xbmcgui.Dialog()
+    dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
 def GetMovieSetName(dbid):
