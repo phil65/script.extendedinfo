@@ -5,19 +5,11 @@ import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
-from DialogVideoInfo import DialogVideoInfo
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonname__ = __addon__.getAddonInfo('name')
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__ = __addon__.getLocalizedString
-__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
 
-
-class DialogActorInfo(xbmcgui.WindowXMLDialog):
+class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
@@ -73,10 +65,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-        if controlID == 150:
-            listitem = self.getControl(150).getSelectedItem()
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-            dialog.doModal()
+        if controlID == 1002:
+            pass
 
     def onFocus(self, controlID):
         pass
