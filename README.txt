@@ -44,6 +44,7 @@ RunScript(script.extendedinfo,info=upcoming)            --> UpcomingMovies.%d
 RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
 RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
 RunScript(script.extendedinfo,info=similarmovies)       --> SimilarMovies.%d
+-- required additional parameters: dbid=
 RunScript(script.extendedinfo,info=set)                 --> MovieSetItems.%d
 -- required additional parameters: dbid=
 RunScript(script.extendedinfo,info=directormovies)      --> DirectorMovies.%d
