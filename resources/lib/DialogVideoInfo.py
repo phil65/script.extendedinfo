@@ -32,19 +32,19 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             name = self.movie["Title"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
             passHomeDataToSkin(self.movie, "movie.")
-            homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
+         #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        movie_listitems = CreateListItems(self.movie_roles)
-        tvshow_listitems = CreateListItems(self.tvshow_roles)
-        image_listitems = CreateListItems(self.images)
-        youtube_listitems = CreateListItems(self.youtube_vids)
-        self.getControl(150).addItems(movie_listitems)
+      #  actor_listitems = CreateListItems(self.movie_roles)
+        # tvshow_listitems = CreateListItems(self.tvshow_roles)
+        # image_listitems = CreateListItems(self.images)
+        # youtube_listitems = CreateListItems(self.youtube_vids)
+   #     self.getControl(150).addItems(movie_listitems)
         # self.getControl(250).addItems(image_listitems)
-        self.getControl(350).addItems(youtube_listitems)
+    #    self.getControl(350).addItems(youtube_listitems)
         xbmc.executebuiltin("SetFocus(150)")
     #    self.getControl(150).addItems(tvshow_listitems)
 
