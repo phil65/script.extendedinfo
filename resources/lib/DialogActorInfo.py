@@ -23,7 +23,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
-        name = kwargs.get('name')
+        name = kwargs.get('name').split(" as ")[0]
         if not self.id and name:
             names = name.split(" / ")
             if len(names) > 1:
@@ -32,32 +32,27 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 if ret == -1:
                     return False
                 name = names[ret]
-            clean_name = name.split(" as ")[0]
-            self.id = GetPersonID(clean_name)
+            self.id = GetPersonID(name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.person = None
+        self.movie_roles = None
+        self.tvshow_roles = None
+        self.images = None
         if self.id:
             self.person, self.movie_roles, self.tvshow_roles, self.images = GetExtendedActorInfo(self.id)
             name = self.person["name"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
-            homewindow.setProperty("actor.Title", name)
+            prettyprint(self.person)
+            passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
-            homewindow.setProperty("actor.Biography", self.person["biography"])
-            homewindow.setProperty("actor.Birthday", self.person["birthday"])
-            homewindow.setProperty("actor.Thumb", self.person["thumb"])
-            homewindow.setProperty("actor.id", self.person["id"])
-            homewindow.setProperty("actor.AlsoKnownAs", self.person["also_known_as"])
-            homewindow.setProperty("actor.Description", self.person["description"])
-            homewindow.setProperty("actor.PlaceOfBirth", self.person["place_of_birth"])
-            homewindow.setProperty("actor.DeathDay", self.person["deathday"])
-            homewindow.setProperty("actor.Homepage", self.person["homepage"])
         else:
             Notify("No ID found")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         movie_listitems = CreateListItems(self.movie_roles)
-        tvshow_listitems = CreateListItems(self.tvshow_roles)
-        image_listitems = CreateListItems(self.images)
+      #  tvshow_listitems = CreateListItems(self.tvshow_roles)
+      #  image_listitems = CreateListItems(self.images)
         youtube_listitems = CreateListItems(self.youtube_vids)
         self.getControl(150).addItems(movie_listitems)
         # self.getControl(250).addItems(image_listitems)

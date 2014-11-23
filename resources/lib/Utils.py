@@ -617,12 +617,12 @@ def GetImdbIDfromEpisode(dbid):
         return GetImdbID("tvshow", tvshowid)
 
 
-def passHomeDataToSkin(data=None, prefix="", debug=False):
+def passHomeDataToSkin(data=None, prefix="", debug=True):
     if data is not None:
         for (key, value) in data.iteritems():
-            homewindow.setProperty('%s' % (str(key)), unicode(value))
+            homewindow.setProperty('%s%s' % (prefix, str(key)), unicode(value))
             if debug:
-                log('%s' % (str(key)) + unicode(value))
+                log('%s%s' % (prefix, str(key)) + unicode(value))
 
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):

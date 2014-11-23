@@ -28,20 +28,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.id = GetPersonID(clean_name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
-            self.person, self.movie_roles, self.tvshow_roles, self.images = GetExtendedActorInfo(self.id)
-            name = self.person["name"]
+            self.movie = GetExtendedMovieInfo(self.id)
+            name = self.movie["name"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
-            homewindow.setProperty("actor.Title", name)
+            passHomeDataToSkin(self.movie, "movie.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
-            homewindow.setProperty("actor.Biography", self.person["biography"])
-            homewindow.setProperty("actor.Birthday", self.person["birthday"])
-            homewindow.setProperty("actor.Thumb", self.person["thumb"])
-            homewindow.setProperty("actor.id", self.person["id"])
-            homewindow.setProperty("actor.AlsoKnownAs", self.person["also_known_as"])
-            homewindow.setProperty("actor.Description", self.person["description"])
-            homewindow.setProperty("actor.PlaceOfBirth", self.person["place_of_birth"])
-            homewindow.setProperty("actor.DeathDay", self.person["deathday"])
-            homewindow.setProperty("actor.Homepage", self.person["homepage"])
         else:
             Notify("No ID found")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
