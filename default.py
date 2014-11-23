@@ -78,12 +78,12 @@ class Main:
                     MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
                     passDataToSkin('MusicVideos', MusicVideos, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 passDataToSkin('Discography', GetDiscography(self.ArtistName), self.prop_prefix, self.window, self.control, self.handle, self.limit)
-                passHomeDataToSkin(ArtistDetails)
+                passHomeDataToSkin(ArtistDetails, self.prefix)
             elif info == 'albuminfo':
                 if self.id:
                     AlbumDetails = GetAlbumDetails(self.id)
                     Trackinfo = GetTrackDetails(self.id)
-                    passHomeDataToSkin(AlbumDetails)
+                    passHomeDataToSkin(AlbumDetails, self.prefix)
                     passDataToSkin('Trackinfo', Trackinfo, self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'albumshouts':
                 passDataToSkin('Shout', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
@@ -187,7 +187,7 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    passHomeDataToSkin(GetExtendedMovieInfo(MovieId))
+                    passHomeDataToSkin(GetExtendedMovieInfo(MovieId), self.prefix)
             elif info == 'extendedactorinfo':
                     from DialogActorInfo import DialogActorInfo
                     dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=self.id, name=self.name)
@@ -197,12 +197,12 @@ class Main:
                 if self.id:
                     tvshowinfo = GetTVShowInfo(self.id)
                     prettyprint(tvshowinfo)
-                    passHomeDataToSkin(tvshowinfo[0])
+                    passHomeDataToSkin(tvshowinfo[0], self.prefix)
             elif info == 'seasoninfo':
                 passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.tvshow and self.season:
                     seasoninfo, videos = GetSeasonInfo(self.tvshow, self.season)
-                    passHomeDataToSkin(seasoninfo)
+                    passHomeDataToSkin(seasoninfo, self.prefix)
                     passDataToSkin("SeasonVideos", videos, self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'directormovies':
                 passDataToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
