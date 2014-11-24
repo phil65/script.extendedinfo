@@ -187,8 +187,9 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    movie, actors = GetExtendedMovieInfo(MovieId)
-                    passHomeDataToSkin(movie, self.prop_prefix)
+                    from DialogVideoInfo import DialogVideoInfo
+                    dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=MovieId, name=self.name)
+                    dialog.doModal()
             elif info == 'extendedactorinfo':
                     from DialogActorInfo import DialogActorInfo
                     dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=self.id, name=self.name)
@@ -197,8 +198,9 @@ class Main:
             elif info == 'extendedtvinfo':
                 if self.id:
                     tvshowinfo = GetTVShowInfo(self.id)
-                    prettyprint(tvshowinfo)
-                    passHomeDataToSkin(tvshowinfo[0], self.prop_prefix)
+                    if tvshowinfo:
+                        prettyprint(tvshowinfo)
+                        passHomeDataToSkin(tvshowinfo[0], self.prop_prefix)
             elif info == 'seasoninfo':
                 passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.tvshow and self.season:
@@ -385,6 +387,7 @@ class Main:
         self.studio = ""
         self.lat = ""
         self.lon = ""
+        self.infodialog = False
         self.limit = False
         self.location = ""
         self.distance = ""
@@ -467,6 +470,9 @@ class Main:
                 self.path = param[5:]
             elif param.startswith('id='):
                 self.id = param[3:]
+            elif param.startswith('infodialog='):
+                if param[11:].lower() == "true":
+                    self.infodialog = True
             elif param.startswith('dbid='):
                 self.dbid = param[5:]
             elif param.startswith('imdbid='):
