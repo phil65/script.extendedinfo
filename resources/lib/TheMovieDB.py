@@ -29,6 +29,11 @@ def HandleTMDBMovieResult(results):
         year = movie.get('release_date', "")
         if year:
             year = year[:4]
+        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', ""))
+        if False:
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(movie.get('id', ""))
+        else:
+            path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
                     'Art(poster)': poster_path,
                     'Thumb': poster_path,
@@ -38,7 +43,8 @@ def HandleTMDBMovieResult(results):
                     'Label': movie.get('title', ""),
                     'OriginalTitle': movie.get('original_title', ""),
                     'ID': movie.get('id', ""),
-                    'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', "")),
+                    'Path': path,
+                    'Trailer': trailer,
                     'Play': "",
                     'DBID': "",
                     'Rating': movie.get('vote_average', ""),
@@ -259,6 +265,7 @@ def GetCompanyInfo(Id):
 def millify(n):
     import math
     millnames = ['', 'Thousand', 'Million', 'Billion', 'Trillion']
+    # millnames = ['', 'k', 'm', 'b', 't']
     millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
     return '%.0f %s' % (n / 10 ** (3 * millidx), millnames[millidx])
 
@@ -340,6 +347,10 @@ def GetExtendedMovieInfo(movieid):
         poster_path = base_url + poster_size + response['poster_path']
     else:
         poster_path = ""
+    if False:
+        path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(response.get('id', ""))
+    else:
+        path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer
     movie = {'Art(fanart)': backdrop_path,
                 'Art(poster)': poster_path,
                 'Thumb': poster_path,
@@ -364,7 +375,7 @@ def GetExtendedMovieInfo(movieid):
                 'Rating': response.get('vote_average', ""),
                 'Play': '',
                 'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
-                'Path': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
+                'Path': path,
                 'ReleaseDate': response.get('release_date', ""),
                 'Premiered': response.get('release_date', ""),
                 'Country': Country,
