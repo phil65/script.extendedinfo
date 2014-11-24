@@ -187,7 +187,8 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    passHomeDataToSkin(GetExtendedMovieInfo(MovieId), self.prop_prefix)
+                    movie, actors = GetExtendedMovieInfo(MovieId)
+                    passHomeDataToSkin(movie, self.prop_prefix)
             elif info == 'extendedactorinfo':
                     from DialogActorInfo import DialogActorInfo
                     dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=self.id, name=self.name)
@@ -341,7 +342,7 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    movie = GetExtendedMovieInfo(MovieId)
+                    movie, actors = GetExtendedMovieInfo(MovieId)
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
                     if "Trailer" is not "":
                         xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")

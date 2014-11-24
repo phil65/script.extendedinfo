@@ -15,20 +15,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
+        self.dbid = kwargs.get('dbid')
         name = kwargs.get('name')
-        if not self.id and name:
-            names = name.split(" / ")
-            if len(names) > 1:
-                Dialog = xbmcgui.Dialog()
-                ret = Dialog.select("Actor Info", names)
-                if ret == -1:
-                    return False
-                name = names[ret]
-            clean_name = name.split(" as ")[0]
-            self.id = GetPersonID(clean_name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
-            self.movie = GetExtendedMovieInfo(self.id)
+            self.movie, self.actors = GetExtendedMovieInfo(self.id)
             name = self.movie["Title"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
             passHomeDataToSkin(self.movie, "movie.")
@@ -38,18 +29,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-      #  actor_listitems = CreateListItems(self.movie_roles)
-        # tvshow_listitems = CreateListItems(self.tvshow_roles)
-        # image_listitems = CreateListItems(self.images)
-        # youtube_listitems = CreateListItems(self.youtube_vids)
-   #     self.getControl(150).addItems(movie_listitems)
-        # self.getControl(250).addItems(image_listitems)
-    #    self.getControl(350).addItems(youtube_listitems)
-        xbmc.executebuiltin("SetFocus(150)")
+        actor_listitems = CreateListItems(self.actors)
+        xbmc.executebuiltin("SetFocus(8)")
+        self.getControl(50).addItems(actor_listitems)
     #    self.getControl(150).addItems(tvshow_listitems)
 
-    def setControls(self):
-        pass
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

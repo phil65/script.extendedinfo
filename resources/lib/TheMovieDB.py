@@ -143,11 +143,12 @@ def HandleTMDBPeopleResult(results):
             image = base_url + poster_size + person["profile_path"]
         else:
             image = ""
-        newperson = {'adult': str(person['adult']),
+        alsoknownas = " / ".join(person.get('also_known_as', ""))
+        newperson = {'adult': str(person.get('adult', "")),
                      'name': person['name'],
                      'title': person['name'],
-                     'also_known_as': " / ".join(person['also_known_as']),
-                     'alsoknownas': " / ".join(person['also_known_as']),
+                     'also_known_as': alsoknownas,
+                     'alsoknownas': alsoknownas,
                      'biography': person.get('biography', ""),
                      'birthday': person.get('birthday', ""),
                      'description': description,
@@ -282,8 +283,8 @@ def GetMovieDBID(imdbid):
     return response["movie_results"][0]["id"]
 
 
-def GetExtendedMovieInfo(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+def GetExtendedMovieInfo(movieid):
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
     authors = []
     directors = []
     genres = []
@@ -339,7 +340,7 @@ def GetExtendedMovieInfo(Id):
         poster_path = base_url + poster_size + response['poster_path']
     else:
         poster_path = ""
-    newmovie = {'Art(fanart)': backdrop_path,
+    movie = {'Art(fanart)': backdrop_path,
                 'Art(poster)': poster_path,
                 'Thumb': poster_path,
                 'Poster': poster_path,
@@ -377,8 +378,9 @@ def GetExtendedMovieInfo(Id):
                 'DBID': "",
                 'Studio': Studio,
                 'Year': year}
-    newmovie = CompareWithLibrary([newmovie])
-    return newmovie[0]
+    movie = CompareWithLibrary([movie])[0]
+    actors = HandleTMDBPeopleResult(response["casts"]["cast"])
+    return movie, actors
 
 
 def GetExtendedActorInfo(actorid):
