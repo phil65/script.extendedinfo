@@ -26,12 +26,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
+        self.actor_listitems = CreateListItems(self.actors, 5)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        actor_listitems = CreateListItems(self.actors)
         xbmc.executebuiltin("SetFocus(8)")
-        self.getControl(50).addItems(actor_listitems)
+        self.getControl(50).addItems(self.actor_listitems)
     #    self.getControl(150).addItems(tvshow_listitems)
 
 

@@ -674,28 +674,31 @@ def SetWindowProperties(name, data, prefix="", debug=False):
             if debug:
                 log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
             for (key, value) in result.iteritems():
-                homewindow.setProperty(
-                    '%s%s.%i.%s' % (prefix, name, count + 1, str(key)), unicode(value))
+                value = unicode(value)
+                homewindow.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
                 if debug:
-                    log('%s%s.%i.%s --> ' %
-                        (prefix, name, count + 1, str(key)) + unicode(value))
+                    log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
         homewindow.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
         homewindow.setProperty('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
 
 
-def CreateListItems(data):
-    InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
-                  "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
-                  "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
+def CreateListItems(data=None, preload_images=0):
+    # InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
+    #               "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
+    #               "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
     itemlist = []
     if data is not None:
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
+            counter = 1
             for (key, value) in result.iteritems():
                 value = unicode(value)
+                if counter <= preload_images:
+                    if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                        value = Download_File(value)
                 if key.lower() in ["name", "label", "title"]:
                     listitem.setLabel(value)
                 if key.lower() in ["thumb"]:
@@ -712,6 +715,7 @@ def CreateListItems(data):
                 listitem.setProperty('%s' % (key), value)
             listitem.setPath(path=itempath)
             itemlist.append(listitem)
+            counter += 1
     return itemlist
 
 
