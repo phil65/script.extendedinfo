@@ -408,17 +408,15 @@ def Get_JSON_response(url="", cache_days=7):
 
 def Download_File(url):
     filename = hashlib.md5(url).hexdigest()
-    chache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + url[-4:]))
+    cache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + url[-4:]))
     cachedthumb = xbmc.getCacheThumbName(url)
     xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
     if xbmcvfs.exists(xbmc_cache_file):
+        log("Cached Image: " + url)
         return xbmc_cache_file
-    if xbmcvfs.exists(chache_file):
-      #  Notify("Cache File: " + chache_file)
-        return chache_file
     else:
         try:
-      #      Notify("Download: " + url)
+            log("Download: " + url)
             request = urllib2.Request(url)
             request.add_header('Accept-encoding', 'gzip')
             response = urllib2.urlopen(request)
@@ -430,10 +428,11 @@ def Download_File(url):
             return ""
         if data != '':
             try:
-                tmpfile = open(chache_file, 'wb')
+                tmpfile = open(cache_file, 'wb')
                 tmpfile.write(data)
                 tmpfile.close()
-                return chache_file
+                xbmcvfs.copy(cache_file, xbmc_cache_file)
+                return xbmc_cache_file
             except:
                 log('failed to save image')
                 return ""
