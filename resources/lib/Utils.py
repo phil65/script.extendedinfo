@@ -10,6 +10,8 @@ import time
 import hashlib
 import simplejson
 import re
+import binascii
+
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
@@ -386,7 +388,7 @@ def GetStringFromUrl(url):
 
 def Get_JSON_response(url="", cache_days=7):
     filename = hashlib.md5(url).hexdigest()
-    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
+    path = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + ".txt"))
     cache_seconds = int(cache_days * 86400.0)
     if xbmcvfs.exists(path) and ((time.time() - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
@@ -403,6 +405,38 @@ def Get_JSON_response(url="", cache_days=7):
             if xbmcvfs.exists(path):
                 results = read_from_file(path)
                 return results
+
+
+def Download_File(url):
+    filename = hashlib.md5(url).hexdigest()
+    xbmc_cachename = binascii.crc32(url)
+    chache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + url[-4:]))
+    if xbmcvfs.exists(chache_file):
+      #  Notify("Cache File: " + chache_file)
+        return chache_file
+    else:
+        try:
+      #      Notify("Download: " + url)
+            request = urllib2.Request(url)
+            request.add_header('Accept-encoding', 'gzip')
+            response = urllib2.urlopen(request)
+            data = response.read()
+            response.close()
+            log('image downloaded')
+        except:
+            log('image download failed')
+            return ""
+        if data != '':
+            try:
+                tmpfile = open(chache_file, 'wb')
+                tmpfile.write(data)
+                tmpfile.close()
+                return chache_file
+            except:
+                log('failed to save image')
+                return ""
+        else:
+            return ""
 
 
 def GetFavouriteswithType(favtype):
@@ -600,9 +634,12 @@ def GetImdbIDfromEpisode(dbid):
 def passHomeDataToSkin(data=None, prefix="", debug=True):
     if data is not None:
         for (key, value) in data.iteritems():
-            homewindow.setProperty('%s%s' % (prefix, str(key)), unicode(value))
+            value = unicode(value)
+            if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                value = Download_File(value)
+            homewindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
-                log('%s%s' % (prefix, str(key)) + unicode(value))
+                log('%s%s' % (prefix, str(key)) + value)
 
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):

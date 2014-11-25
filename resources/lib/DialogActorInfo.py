@@ -6,7 +6,7 @@ from Utils import *
 from TheMovieDB import *
 from YouTube import *
 from DialogVideoInfo import DialogVideoInfo
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
+Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
