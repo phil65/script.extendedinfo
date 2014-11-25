@@ -10,7 +10,6 @@ import time
 import hashlib
 import simplejson
 import re
-import binascii
 
 
 __addon__ = xbmcaddon.Addon()
@@ -409,8 +408,11 @@ def Get_JSON_response(url="", cache_days=7):
 
 def Download_File(url):
     filename = hashlib.md5(url).hexdigest()
-    xbmc_cachename = binascii.crc32(url)
     chache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + url[-4:]))
+    cachedthumb = xbmc.getCacheThumbName(url)
+    xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
+    if xbmcvfs.exists(xbmc_cache_file):
+        return xbmc_cache_file
     if xbmcvfs.exists(chache_file):
       #  Notify("Cache File: " + chache_file)
         return chache_file
