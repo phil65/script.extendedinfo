@@ -21,7 +21,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
-    #    Notify(self.id)
         if not self.id:
             name = kwargs.get('name').split(xbmc.getLocalizedString(20347))[0].strip()
             names = name.split(" / ")
