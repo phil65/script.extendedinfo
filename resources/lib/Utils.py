@@ -693,6 +693,8 @@ def CreateListItems(data=None, preload_images=0):
     #               "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
     Int_InfoLabels = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
     Float_InfoLabels = ["rating"]
+    String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
+                         "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
     itemlist = []
     if data is not None:
         threads = []
@@ -722,6 +724,11 @@ def CreateListItems(data=None, preload_images=0):
                     itempath = value
            #     log("key: " + unicode(key) + "  value: " + unicode(value))
                 if key.lower() in Int_InfoLabels:
+                    try:
+                        listitem.setInfo('video', {key.lower(): int(value)})
+                    except:
+                        pass
+                if key.lower() in String_InfoLabels:
                     listitem.setInfo('video', {key.lower(): value})
                 if key.lower() in Float_InfoLabels:
                     try:
