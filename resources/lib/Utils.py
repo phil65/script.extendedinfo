@@ -10,7 +10,7 @@ import time
 import hashlib
 import simplejson
 import re
-
+import threading
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
@@ -406,38 +406,44 @@ def Get_JSON_response(url="", cache_days=7):
                 return results
 
 
-def Download_File(url):
-    filename = hashlib.md5(url).hexdigest()
-    cache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + url[-4:]))
-    cachedthumb = xbmc.getCacheThumbName(url)
-    xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
-    if xbmcvfs.exists(xbmc_cache_file):
-        log("Cached Image: " + url)
-        return xbmc_cache_file
-    else:
-        try:
-            log("Download: " + url)
-            request = urllib2.Request(url)
-            request.add_header('Accept-encoding', 'gzip')
-            response = urllib2.urlopen(request)
-            data = response.read()
-            response.close()
-            log('image downloaded')
-        except:
-            log('image download failed')
-            return ""
-        if data != '':
-            try:
-                tmpfile = open(cache_file, 'wb')
-                tmpfile.write(data)
-                tmpfile.close()
-                xbmcvfs.copy(cache_file, xbmc_cache_file)
-                return xbmc_cache_file
-            except:
-                log('failed to save image')
-                return ""
+class Download_File(threading.Thread):
+
+    def __init__(self, url):
+        threading.Thread.__init__(self)
+        self.url = url
+
+    def run(self):
+        filename = hashlib.md5(self.url).hexdigest()
+        cache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + self.url[-4:]))
+        cachedthumb = xbmc.getCacheThumbName(self.url)
+        xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
+        if xbmcvfs.exists(xbmc_cache_file):
+            log("Cached Image: " + self.url)
+            return xbmc_cache_file
         else:
-            return ""
+            try:
+                log("Download: " + self.url)
+                request = urllib2.Request(self.url)
+                request.add_header('Accept-encoding', 'gzip')
+                response = urllib2.urlopen(request)
+                data = response.read()
+                response.close()
+                log('image downloaded')
+            except:
+                log('image download failed')
+                return ""
+            if data != '':
+                try:
+                    tmpfile = open(cache_file, 'wb')
+                    tmpfile.write(data)
+                    tmpfile.close()
+                    xbmcvfs.copy(cache_file, xbmc_cache_file)
+                    return xbmc_cache_file
+                except:
+                    log('failed to save image')
+                    return ""
+            else:
+                return ""
 
 
 def GetFavouriteswithType(favtype):
@@ -634,13 +640,18 @@ def GetImdbIDfromEpisode(dbid):
 
 def passHomeDataToSkin(data=None, prefix="", debug=True):
     if data is not None:
+        threads = []
         for (key, value) in data.iteritems():
             value = unicode(value)
             if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                value = Download_File(value)
+                thread = Download_File(value)
+                threads += [thread]
+                thread.start()
             homewindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)
+        for x in threads:
+            x.join()
 
 
 def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
@@ -690,6 +701,7 @@ def CreateListItems(data=None, preload_images=0):
     #               "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
     itemlist = []
     if data is not None:
+        threads = []
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
@@ -698,7 +710,9 @@ def CreateListItems(data=None, preload_images=0):
                 value = unicode(value)
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                        value = Download_File(value)
+                        thread = Download_File(value)
+                        threads += [thread]
+                        thread.start()
                 if key.lower() in ["name", "label", "title"]:
                     listitem.setLabel(value)
                 if key.lower() in ["thumb"]:
@@ -716,6 +730,8 @@ def CreateListItems(data=None, preload_images=0):
             listitem.setPath(path=itempath)
             itemlist.append(listitem)
             counter += 1
+        for x in threads:
+            x.join()
     return itemlist
 
 
