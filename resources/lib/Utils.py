@@ -627,7 +627,7 @@ def GetImdbIDfromEpisode(dbid):
         return GetImdbID("tvshow", tvshowid)
 
 
-def passHomeDataToSkin(data=None, prefix="", debug=True):
+def passHomeDataToSkin(data=None, prefix="", debug=False):
     if data is not None:
         threads = []
         image_requests = []
@@ -691,6 +691,8 @@ def CreateListItems(data=None, preload_images=0):
     # InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
     #               "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
     #               "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
+    Int_InfoLabels = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
+    Float_InfoLabels = ["rating"]
     itemlist = []
     if data is not None:
         threads = []
@@ -719,8 +721,13 @@ def CreateListItems(data=None, preload_images=0):
                 if key.lower() in ["path"]:
                     itempath = value
            #     log("key: " + unicode(key) + "  value: " + unicode(value))
-                # if key.lower() in InfoLabels:
-                #     listitem.setInfo('video', {key.lower(): value})
+                if key.lower() in Int_InfoLabels:
+                    listitem.setInfo('video', {key.lower(): value})
+                if key.lower() in Float_InfoLabels:
+                    try:
+                        listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
+                    except:
+                        pass
                 listitem.setProperty('%s' % (key), value)
             listitem.setPath(path=itempath)
             itemlist.append(listitem)
