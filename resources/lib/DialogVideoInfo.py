@@ -48,8 +48,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if controlID == 50:
             actorid = self.getControl(50).getSelectedItem().getProperty("id")
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
-            dialog.doModal()
             self.close()
+            dialog.doModal()
 
     def onFocus(self, controlID):
         pass
