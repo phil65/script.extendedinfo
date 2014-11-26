@@ -268,3 +268,140 @@ RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
 'Title':        Image Title
 'Description':  Image Description (only XKCD)
 
+
+
+
+
+
+
+#########################################################################################
+ActorInfo / MovieInfo Dialogs (script.metadata.actors replacement)
+#########################################################################################
+
+
+
+XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,name=ACTORNAME)
+XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+List of Built In Controls Available In script-ExtendedInfo Script-DialogInfo.xml:
+
+150 -> container -> movies list
+250 -> container -> youtube videos
+
+
+Labels Available In script-Actors-DialogInfo.xml:
+
+Labels of the currently selected actor / director / writer / artist.
+Window(home).Property(Title) --------------------> Name
+Window(home).Property(Label) --------------------> Same as Title
+Window(home).Property(Poster)---------------------> Poster
+Window(home).Property(Plot)---------------------> Biography
+Window(home).Property(Biography) ------> Same as Plot
+Window(home).Property(Biooutline) -----> (currently not used)
+Window(home).Property(TotalMovies) ----> Total of Known Movies (acting / directing / writing)
+Window(home).Property(Birthday) -------> Date of Birthday
+Window(home).Property(HappyBirthday) --> return true or empty
+Window(home).Property(Age) ------------> Age (30)
+Window(home).Property(AgeLong) --------> Age long format (age 30)
+Window(home).Property(Deathday) -------> Date of Deathday
+Window(home).Property(Deathage) -------> Age of dead (30)
+Window(home).Property(DeathageLong) ---> Age of dead long format (age 30)
+Window(home).Property(PlaceOfBirth) ---> Place of birth
+Window(home).Property(AlsoKnownAs) ----> Also Known Name
+Window(home).Property(Homepage) -------> Link of homepage, you can use onclick for open web browser directly on homepage: RunScript(script.metadata.actors,homepage=$INFO[Window(home).Property(Homepage)])
+Window(home).Property(Adult) ----------> Is Adult Actor (no / yes)
+Window(home).Property(fanart) ---> Fanart
+
+
+Labels of Known Movies list
+Container(150).ListItem.Label ---------------------> Title of movie
+Container(150).ListItem.Title ---------------------> same as label
+Container(150).ListItem.originaltitle -------------> originaltitle
+Container(150).ListItem.Year ----------------------> year
+Container(150).Listitem.Icon ----------------------> icon of movie
+Container(150).ListItem.Property(role) ------------> role in currently slected movie
+Container(150).ListItem.Property(job) -------------> job in currently slected movie (director / writer / etc)
+Container(150).ListItem.Property(releasedate) -----> release date of movie
+Container(150).ListItem.Property(year) ------------> same as year, but not return empty
+Container(150).ListItem.Property(DBID)             -> return 1 or empty, if movie exists in library
+Container(150).ListItem.Property(Playcount) -------> Playcount of movie (default is 0)
+Container(150).ListItem.Property(file) ------------> media to play
+
+Labels of thumbs list
+Container(250).ListItem.Label --------------------> Image résolution (512x720)
+Container(250).Listitem.Icon ---------------------> Image
+Container(250).ListItem.Property(aspect_ratio) ---> Aspect Ratio (0.66)
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+List of Built In Controls Available In script-Actors-DialogVideoInfo.xml:
+
+150 -> container -> actor / director / writer / artist listing
+
+
+Labels Available In script-Actors-DialogVideoInfo.xml:
+
+Labels of the currently selected movie.
+Window(home).Property(Title) --------------------> Name
+Window(home).Property(Label) --------------------> Same as Title
+Window(home).Property(Icon) ---------------------> icon
+Window(home).Property(Plot) ---------------------> plot
+Window(home).Property(year) ---------------------> year
+Window(home).Property(Date) ---------------------> same as Window(home).Property(Property(releasedate)
+Window(home).Property(originaltitle) ------------> originaltitle
+Window(home).Property(director) -----------------> director
+Window(home).Property(trailer) ------------------> trailer
+Window(home).Property(genre) --------------------> genre
+Window(home).Property(mpaa) ---------------------> mpaa
+Window(home).Property(playcount) ----------------> playcount
+Window(home).Property(plotoutline) --------------> plotoutline
+Window(home).Property(rating) -------------------> rating
+Window(home).Property(duration) -----------------> duration
+Window(home).Property(studio) -------------------> studio
+Window(home).Property(tagline) ------------------> tagline
+Window(home).Property(top250) -------------------> top250
+Window(home).Property(votes) --------------------> votes
+Window(home).Property(writer) -------------------> writer
+Window(home).Property(lastplayed) ---------------> lastplayed
+Window(home).Property(FilenameAndPath) ----------> path of your movie
+Window(home).Property(Fanart_Image) ---> fanart
+Window(home).Property(set) ------------> Title of Movie Set (return empty if not exists)
+Window(home).Property(country) --------> country
+Window(home).Property(releasedate) ----> release date of movie
+Window(home).Property(lastupdated) ----> last update info
+Window(home).Property(Homepage) -------> Link of homepage
+
+
+Labels of the list actor / director / writer / artist.
+Container(150).Listitem.Title -------------------> Name
+Container(150).Listitem.Label -------------------> Same as Title
+Container(150).Listitem.Label2-------------------> Role
+Container(150).ListItem.Icon --------------------> icon
+Container(150).ListItem.Plot --------------------> Biography
+Container(150).ListItem.Property(Biography) -----> Same as Plot
+Container(150).ListItem.Property(Biooutline) ----> (currently not used)
+Container(150).ListItem.Property(TotalMovies) ---> Total of Known Movies (acting / directing / writing)
+Container(150).ListItem.Property(Birthday) ------> Date of Birthday
+Container(150).ListItem.Property(HappyBirthday) -> return true or empty
+Container(150).ListItem.Property(Age) -----------> Age (30)
+Container(150).ListItem.Property(Deathday) ------> Date of Deathday
+Container(150).ListItem.Property(Deathage) ------> Age of dead (30)
+Container(150).ListItem.Property(PlaceOfBirth) --> Place of birth
+Container(150).ListItem.Property(AlsoKnownAs) ---> Also Known Name
+Container(150).ListItem.Property(Homepage) ------> Link of homepage, you can use onclick for open web browser directly on homepage: RunScript(script.metadata.actors,homepage=$INFO[ListItem.Property(Homepage)])
+Container(150).ListItem.Property(Adult) ---------> Is Adult Actor (no / yes)
+Container(150).ListItem.Property(fanart) --> Fanart
+
+
+
+
+
+
+
+
+
+
+
