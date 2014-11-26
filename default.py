@@ -198,7 +198,7 @@ class Main:
                 if self.id:
                     tvshowinfo = GetTVShowInfo(self.id)
                     if tvshowinfo:
-                        prettyprint(tvshowinfo)
+             #           prettyprint(tvshowinfo)
                         passHomeDataToSkin(tvshowinfo[0], self.prop_prefix)
             elif info == 'seasoninfo':
                 passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
@@ -289,7 +289,7 @@ class Main:
                 passDataToSkin('TopArtistsNearEvents', events, self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'channels':
                 channels = create_channel_list()
-                prettyprint(channels)
+          #      prettyprint(channels)
             elif info == 'favourites':
                 if self.id:
                     favourites = GetFavouriteswithType(self.id)

@@ -118,7 +118,7 @@ def GetFlickrImages():
         base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
         url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
         results = Get_JSON_response(base_url + url, 0)
-        prettyprint(results)
+#        prettyprint(results)
     except:
         log("Error when fetching Flickr data from net")
     count = 1
