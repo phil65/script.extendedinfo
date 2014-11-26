@@ -702,11 +702,11 @@ def CreateListItems(data=None, preload_images=0):
     itemlist = []
     if data is not None:
         threads = []
+        image_requests = []
         for (count, result) in enumerate(data):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
             counter = 1
-            image_requests = []
             for (key, value) in result.iteritems():
                 value = unicode(value)
                 if counter <= preload_images:
