@@ -1,4 +1,3 @@
-import os
 import xbmc
 import xbmcaddon
 import xbmcgui
@@ -14,7 +13,6 @@ __addonname__ = __addon__.getAddonInfo('name')
 __addonversion__ = __addon__.getAddonInfo('version')
 __language__ = __addon__.getLocalizedString
 __cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 
 
 class DialogActorInfo(xbmcgui.WindowXMLDialog):
@@ -24,6 +22,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
         name = kwargs.get('name').split(" as ")[0]
+        Notify(self.id)
         if not self.id and name:
             names = name.split(" / ")
             if len(names) > 1:
@@ -42,8 +41,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.person, self.movie_roles, self.tvshow_roles, self.images = GetExtendedActorInfo(self.id)
             name = self.person["name"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
-            self.youtube_listitems = CreateListItems(self.youtube_vids, 5)
-            self.movie_listitems = CreateListItems(self.movie_roles, 5)
+            self.youtube_listitems = CreateListItems(self.youtube_vids, 3)
+            self.movie_listitems = CreateListItems(self.movie_roles, 4)
             prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))

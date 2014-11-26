@@ -214,8 +214,15 @@ def SearchforCompany(Company):
 
 
 def GetPersonID(person):
-    Persons = person.split(" / ")
-    person = Persons[0]  # todo: dialogselect
+    persons = person.split(" / ")
+    # if len(persons) > 1:
+    #     personlist = []
+    #     for item in persons:
+    #         personlist.append(item["name"])
+    #     dialog = xbmcgui.Dialog()
+    #     selection = dialog.select("Select Actor", personlist)
+    # else:
+    person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=true&" % urllib.quote_plus(person), 30)
     try:
         return response["results"][0]["id"]
@@ -296,7 +303,7 @@ def GetExtendedMovieInfo(movieid):
     directors = []
     genres = []
     if not response:
-        return {}
+        return {}, []
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['casts']['crew']:
