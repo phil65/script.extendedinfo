@@ -638,12 +638,15 @@ def GetImdbIDfromEpisode(dbid):
 def passHomeDataToSkin(data=None, prefix="", debug=True):
     if data is not None:
         threads = []
+        image_requests = []
         for (key, value) in data.iteritems():
             value = unicode(value)
             if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                thread = Get_File(value)
-                threads += [thread]
-                thread.start()
+                if not value in image_requests:
+                    thread = Get_File(value)
+                    threads += [thread]
+                    thread.start()
+                    image_requests.append(value)
             homewindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)
@@ -703,13 +706,16 @@ def CreateListItems(data=None, preload_images=0):
             listitem = xbmcgui.ListItem('%s' % (str(count)))
             itempath = ""
             counter = 1
+            image_requests = []
             for (key, value) in result.iteritems():
                 value = unicode(value)
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                        thread = Get_File(value)
-                        threads += [thread]
-                        thread.start()
+                        if not value in image_requests:
+                            thread = Get_File(value)
+                            threads += [thread]
+                            thread.start()
+                            image_requests.append(value)
                 if key.lower() in ["name", "label", "title"]:
                     listitem.setLabel(value)
                 if key.lower() in ["thumb"]:
