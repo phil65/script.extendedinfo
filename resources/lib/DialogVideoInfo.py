@@ -4,7 +4,6 @@ import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
-from DialogActorInfo import DialogActorInfo
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
