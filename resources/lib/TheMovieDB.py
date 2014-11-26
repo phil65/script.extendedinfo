@@ -144,7 +144,7 @@ def HandleTMDBPeopleResult(results):
         if "known_for" in results:
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
-        builtin = 'RunScript(script.metadata.actors,"%s")' % (unicode(person.get('name', "")))
+        builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s")' % str(person['id'])
         if "profile_path" in person and person["profile_path"] is not None:
             image = base_url + poster_size + person["profile_path"]
         else:
