@@ -406,15 +406,13 @@ def Get_JSON_response(url="", cache_days=7):
                 return results
 
 
-class Download_File(threading.Thread):
+class Get_File(threading.Thread):
 
     def __init__(self, url):
         threading.Thread.__init__(self)
         self.url = url
 
     def run(self):
-        filename = hashlib.md5(self.url).hexdigest()
-        cache_file = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + self.url[-4:]))
         cachedthumb = xbmc.getCacheThumbName(self.url)
         xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
         if xbmcvfs.exists(xbmc_cache_file):
@@ -434,10 +432,9 @@ class Download_File(threading.Thread):
                 return ""
             if data != '':
                 try:
-                    tmpfile = open(cache_file, 'wb')
+                    tmpfile = open(xbmc_cache_file, 'wb')
                     tmpfile.write(data)
                     tmpfile.close()
-                    xbmcvfs.copy(cache_file, xbmc_cache_file)
                     return xbmc_cache_file
                 except:
                     log('failed to save image')
@@ -644,7 +641,7 @@ def passHomeDataToSkin(data=None, prefix="", debug=True):
         for (key, value) in data.iteritems():
             value = unicode(value)
             if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                thread = Download_File(value)
+                thread = Get_File(value)
                 threads += [thread]
                 thread.start()
             homewindow.setProperty('%s%s' % (prefix, str(key)), value)
@@ -710,7 +707,7 @@ def CreateListItems(data=None, preload_images=0):
                 value = unicode(value)
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                        thread = Download_File(value)
+                        thread = Get_File(value)
                         threads += [thread]
                         thread.start()
                 if key.lower() in ["name", "label", "title"]:
