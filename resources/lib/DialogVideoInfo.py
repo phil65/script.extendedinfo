@@ -4,6 +4,7 @@ import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
+import DialogActorInfo
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
@@ -46,7 +47,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onClick(self, controlID):
         if controlID == 50:
             listitem = self.getControl(50).getSelectedItem()
-            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"))
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"))
             dialog.doModal()
 
     def onFocus(self, controlID):
