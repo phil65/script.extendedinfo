@@ -303,6 +303,7 @@ def GetExtendedMovieInfo(movieid):
     directors = []
     genres = []
     if not response:
+        Notify("Could not get movie information")
         return {}, []
     for item in response['genres']:
         genres.append(item["name"])
