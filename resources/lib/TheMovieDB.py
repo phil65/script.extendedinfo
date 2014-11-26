@@ -297,7 +297,7 @@ def GetMovieDBID(imdbid):
     return response["movie_results"][0]["id"]
 
 
-def GetExtendedMovieInfo(movieid):
+def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
     authors = []
     directors = []

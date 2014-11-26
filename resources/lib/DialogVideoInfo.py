@@ -25,7 +25,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         name = kwargs.get('name')
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
-            self.movie, self.actors = GetExtendedMovieInfo(self.id)
+            self.movie, self.actors = GetExtendedMovieInfo(self.id, self.dbid)
             name = self.movie["Title"]
             self.youtube_vids = GetYoutubeSearchVideos(name)
             passHomeDataToSkin(self.movie, "movie.")

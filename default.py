@@ -176,7 +176,6 @@ class Main:
             elif info == 'popularpeople':
                 passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'extendedinfo':
-                log("startin GetExtendedMovieInfo")
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
