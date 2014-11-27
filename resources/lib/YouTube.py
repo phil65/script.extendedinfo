@@ -62,7 +62,7 @@ def HandleYouTubeVideoResults(results):
     return videos
 
 
-def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
+def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance"):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
@@ -76,6 +76,32 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance"):
         return HandleYouTubeVideoResults(results["items"])
     else:
         return []
+
+
+
+def GetYoutubeSearchVideosV2(search_string="", hd="", orderby="relevance", time="all_time"):
+    results = []
+    if hd and not hd == "false":
+        hd_string = "&hd=true"
+    else:
+        hd_string = ""
+    search_string = urllib.quote(search_string.replace('"', ''))
+    base_url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json'
+    url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
+    results = Get_JSON_response(base_url + url, 0.5)
+    videos = []
+    if results:
+        for item in results["feed"]["entry"]:
+            video = {'Thumb': item["media$group"]["media$thumbnail"][2]["url"],
+                     'Play': "PlayMedia(" + ConvertYoutubeURL(item["media$group"]["media$player"]["url"]) + ")",
+                     'Path': ConvertYoutubeURL(item["media$group"]["media$player"]["url"]),
+                     'Description': item["media$group"]["media$description"]["$t"],
+                     'Title': item["title"]["$t"],
+                     'Author': item["author"][0]["name"]["$t"],
+                     'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
+            videos.append(video)
+    return videos
+
 
 
 def GetYoutubePlaylistVideos(playlistid=""):

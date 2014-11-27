@@ -257,7 +257,7 @@ class Main:
                 homewindow.setProperty('%sSearchValue' % self.prop_prefix, self.id)  # set properties
                 passDataToSkin('YoutubeSearch', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.id:
-                    passDataToSkin('YoutubeSearch', GetYoutubeSearchVideos(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle, self.limit)
+                    passDataToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(self.id, self.hd, self.orderby), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'youtubeplaylist':
                 passDataToSkin('YoutubePlaylist', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.id:
