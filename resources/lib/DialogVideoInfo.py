@@ -26,8 +26,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
             self.movie, self.actors = GetExtendedMovieInfo(self.id, self.dbid)
-            name = self.movie["Title"]
-            self.youtube_vids = GetYoutubeSearchVideos(name)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/", "media": "files"}, "id": 1}')
+            json_query = unicode(json_query, 'utf-8', errors='ignore')
+            json_response = simplejson.loads(json_query)
+         #   prettyprint(json_response)
+            for db_actor in json_response["result"]["files"]:
+                for movie_actor in self.actors:
+                    if db_actor["label"] == movie_actor["name"]:
+                        movie_actor.update({"dbid": db_actor["id"]})
+            self.youtube_vids = GetYoutubeSearchVideos(self.movie["Title"])
             passHomeDataToSkin(self.movie, "movie.")
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
