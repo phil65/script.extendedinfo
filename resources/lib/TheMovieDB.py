@@ -155,7 +155,7 @@ def HandleTMDBPeopleResult(results):
                      'title': person['name'],
                      'also_known_as': alsoknownas,
                      'alsoknownas': alsoknownas,
-                     'biography': person.get('biography', ""),
+                     'biography': cleanText(person.get('biography', "")),
                      'birthday': person.get('birthday', ""),
                      'description': description,
                      'plot': description,
@@ -312,9 +312,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
             authors.append(item["name"])
         if item["job"] == "Director":
             directors.append(item["name"])
-    Writer = " / ".join(authors)
-    Director = " / ".join(directors)
-    Genre = " / ".join(genres)
     if len(response['trailers']['youtube']) > 0:
         Trailer = response['trailers']['youtube'][0]['source']
     else:
@@ -370,8 +367,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'RunningTime': response.get('runtime', ""),
              'Duration': response.get('runtime', ""),
              'mpaa': mpaa,
-             'Director': Director,
-             'Writer': Writer,
+             'Director': " / ".join(directors),
+             'Writer': " / ".join(authors),
              'Budget': Budget,
              'Homepage': response.get('homepage', ""),
              'Set': SetName,
@@ -379,8 +376,9 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'ID': response.get('id', ""),
              'Plot': response.get('overview', ""),
              'OriginalTitle': response.get('original_title', ""),
-             'Genre': Genre,
+             'Genre': " / ".join(genres),
              'Rating': response.get('vote_average', ""),
+             'Popularity': response.get('popularity', ""),
              'Play': '',
              'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
              'Path': path,
@@ -403,11 +401,12 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
 
 
 def GetExtendedActorInfo(actorid):
-    response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,images,tagged_images&" % (actorid), 1)
+    response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
     images = HandleTMDBPeopleImagesResult(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBMovieResult(response["tv_credits"]["cast"])
+    combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
     return person[0], movie_roles, tvshow_roles, images
 
 
