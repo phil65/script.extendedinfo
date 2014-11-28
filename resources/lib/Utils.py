@@ -542,7 +542,6 @@ def read_from_file(path=""):
 
 
 def ConvertYoutubeURL(string):
-    import re
     if 'youtube.com/v' in string:
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
@@ -559,7 +558,6 @@ def ConvertYoutubeURL(string):
 
 
 def ExtractYoutubeID(string):
-    import re
     if 'youtube.com/v' in string:
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
@@ -746,29 +744,6 @@ def CreateListItems(data=None, preload_images=0):
             x.join()
     return itemlist
 
-
-# def clean_bio(bio):
-#     if not bio:
-#         return bio
-#     while True:
-#         s = bio[0]
-#         e = bio[-1]
-#         if s == u'\u200b':
-#             bio = bio[1:]
-#         if e == u'\u200b':
-#             bio = bio[:-1]
-#         if s == " " or e == " ":
-#             bio = bio.strip()
-#         elif s == "." or e == ".":
-#             bio = bio.strip(".")
-#         elif s == "\n" or e == "\n":
-#             bio = bio.strip("\n")
-#         else:
-#             break
-#     # print repr( bio )
-#     return bio.strip() + "."
-
-
 def cleanText(text):
     if text:
         text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
@@ -778,8 +753,7 @@ def cleanText(text):
         text = text.replace('&amp;', '&')
         text = text.replace('&gt;', '>')
         text = text.replace('&lt;', '<')
-        text = text.replace(
-            'User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+        text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
         return text.strip()
     else:
         return ""
