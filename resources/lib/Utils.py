@@ -770,13 +770,16 @@ def CreateListItems(data=None, preload_images=0):
 
 
 def cleanText(text):
-    text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
-    text = text.replace('<br \/>', '[CR]')
-    text = re.sub('<(.|\n|\r)*?>', '', text)
-    text = text.replace('&quot;', '"')
-    text = text.replace('&amp;', '&')
-    text = text.replace('&gt;', '>')
-    text = text.replace('&lt;', '<')
-    text = text.replace(
-        'User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-    return text.strip()
+    if text:
+        text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
+        text = text.replace('<br \/>', '[CR]')
+        text = re.sub('<(.|\n|\r)*?>', '', text)
+        text = text.replace('&quot;', '"')
+        text = text.replace('&amp;', '&')
+        text = text.replace('&gt;', '>')
+        text = text.replace('&lt;', '<')
+        text = text.replace(
+            'User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+        return text.strip()
+    else:
+        return ""
