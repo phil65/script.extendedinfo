@@ -388,7 +388,7 @@ def Get_JSON_response(url="", cache_days=7):
     path = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + ".txt"))
     cache_seconds = int(cache_days * 86400.0)
     prop = homewindow.getProperty(filename)
-    if prop != "":
+    if prop:
         prop_time = float(homewindow.getProperty(filename + "_timestamp"))
         if now - prop_time < cache_seconds:
             log("prop load. time: " + str(time.time() - now))
