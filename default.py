@@ -426,7 +426,6 @@ class Main:
         self.importextrafanarttv = params.get("importextrafanarttv", False)
         self.importallartwork = params.get("importallartwork", False)
         for arg in args:
-            log(arg)
             if arg == 'script.extendedinfo':
                 continue
             param = arg.replace('"', '').replace("'", " ")
