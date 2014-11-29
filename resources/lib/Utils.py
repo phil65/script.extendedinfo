@@ -384,22 +384,22 @@ def GetStringFromUrl(url):
 
 def Get_JSON_response(url="", cache_days=7):
     now = time.time()
-    filename = hashlib.md5(url).hexdigest()
-    path = xbmc.translatePath(os.path.join(Addon_Data_Path, filename + ".txt"))
+    hashed_url = hashlib.md5(url).hexdigest()
+    path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))
     cache_seconds = int(cache_days * 86400.0)
-    prop = homewindow.getProperty(filename)
+    prop = simplejson.loads(homewindow.getProperty(hashed_url))
     if prop:
-        prop_time = float(homewindow.getProperty(filename + "_timestamp"))
+        prop_time = float(homewindow.getProperty(hashed_url + "_timestamp"))
         if now - prop_time < cache_seconds:
             log("prop load. time: " + str(time.time() - now))
-            return simplejson.loads(prop)
+            return prop
     elif xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
     else:
         response = GetStringFromUrl(url)
         try:
             results = simplejson.loads(response)
-            save_to_file(results, filename, Addon_Data_Path)
+            save_to_file(results, hashed_url, Addon_Data_Path)
         except:
             log("Exception: Could not get new JSON data. Tryin to fallback to cache")
             log(response)
@@ -408,8 +408,8 @@ def Get_JSON_response(url="", cache_days=7):
             else:
                 results = []
     log("file load. time: " + str(time.time() - now))
-    homewindow.setProperty(filename + "_timestamp", str(now))
-    homewindow.setProperty(filename, simplejson.dumps(results))
+    homewindow.setProperty(hashed_url + "_timestamp", str(now))
+    homewindow.setProperty(hashed_url, simplejson.dumps(results))
     return results
 
 
