@@ -154,9 +154,7 @@ def create_light_movielist():
 
 
 def GetSimilarFromOwnLibrary(dbid):
-    movies = []
-    json_query = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response['result']:
@@ -198,31 +196,35 @@ def GetSimilarFromOwnLibrary(dbid):
                 if directors[0] == item['director'][0]:
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
-            quotalist = sorted(
-                quotalist, key=lambda quota: quota[0], reverse=True)
+            quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
             count = 1
             for list_movie in quotalist:
                 if movieid is not list_movie[1]:
-                    json_query = xbmc.executeJSONRPC(
-                        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(list_movie[1]))
-                    json_query = unicode(json_query, 'utf-8', errors='ignore')
-                    json_response = simplejson.loads(json_query)
-                    movie = json_response["result"]["moviedetails"]
-                    newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
-                                'Art(poster)': movie["art"].get('poster', ""),
-                                'Title': movie.get('label', ""),
-                                'OriginalTitle': movie.get('originaltitle', ""),
-                                'ID': movie.get('imdbnumber', ""),
-                                'Path': "",
-                                'Play': "",
-                                'DBID': str(movie['movieid']),
-                                'Rating': str(round(float(movie['rating']), 1)),
-                                'Premiered': movie.get('year', "")}
+                    movies = []
+                    newmovie = GetMovieFromDB(list_movie[1])
                     movies.append(newmovie)
                     count += 1
                     if count > 20:
                         break
             return movies
+
+def GetMovieFromDB(movieid):
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre", "imdbnumber", "year", "art", "rating"], "movieid":%s }, "id": 1}' % str(movieid))
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    movie = json_response["result"]["moviedetails"]
+    newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
+                'Art(poster)': movie["art"].get('poster', ""),
+                'Fanart': movie["art"].get('fanart', ""),
+                'Poster': movie["art"].get('poster', ""),
+                'Title': movie.get('label', ""),
+                'OriginalTitle': movie.get('originaltitle', ""),
+                'ID': movie.get('imdbnumber', ""),
+                'Path': "",
+                'Play': "",
+                'DBID': str(movie['movieid']),
+                'Rating': str(round(float(movie['rating']), 1)),
+                'Premiered': movie.get('year', "")}
 
 
 def media_streamdetails(filename, streamdetails):
@@ -689,9 +691,6 @@ def SetWindowProperties(name, data, prefix="", debug=False):
 
 
 def CreateListItems(data=None, preload_images=0):
-    # InfoLabels = ["genre", "year", "episode", "season", "top250", "tracknumber", "year", "plot", "tagline", "originaltitle", "tvshowtitle",
-    #               "director", "rating", "studio", "starrating", "country", "percentplayed", "audiochannels", "audiocodec", "videocodec", "videoaspect",
-    #               "mpaa", "genre", "premiered", "duration", "folder", "episode", "dbid", "plotoutline", "trailer", "top250", "writer", "watched", "videoresolution"]
     Int_InfoLabels = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
     Float_InfoLabels = ["rating"]
     String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
