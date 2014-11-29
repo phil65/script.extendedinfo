@@ -314,6 +314,7 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbidbg':
                 SetMusicBrainzIDsForAllArtists(False, False)
             elif info == 'setfocus':
+                self.control = ""  # workaround to avoid breaking PlayMedia
                 xbmc.executebuiltin("SetFocus(22222)")
             elif info == 'playliststats':
                 GetPlaylistStats(self.id)
