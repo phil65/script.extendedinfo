@@ -387,13 +387,11 @@ def Get_JSON_response(url="", cache_days=7):
     hashed_url = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))
     cache_seconds = int(cache_days * 86400.0)
-    prop = homewindow.getProperty(hashed_url)
-    if prop and prop != "[]":
-        prop = simplejson.loads(prop)
-        prop_time = float(homewindow.getProperty(hashed_url + "_timestamp"))
-        if now - prop_time < cache_seconds:
-            log("prop load. time: " + str(time.time() - now))
-            return prop
+    prop_time = float(homewindow.getProperty(hashed_url + "_timestamp"))
+    if now - prop_time < cache_seconds:
+        prop = simplejson.loads(homewindow.getProperty(hashed_url))
+        log("prop load. time: " + str(time.time() - now))
+        return prop
     elif xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
     else:
