@@ -382,7 +382,7 @@ def GetStringFromUrl(url):
     return None
 
 
-def Get_JSON_response(url="", cache_days=7):
+def Get_JSON_response(url="", cache_days=7.0):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))
@@ -763,6 +763,21 @@ def cleanText(text):
         text = text.replace('&gt;', '>')
         text = text.replace('&lt;', '<')
         text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+        while True:
+            s = text[0]
+            e = text[-1]
+            if s == u'\u200b':
+                text = text[1:]
+            if e == u'\u200b':
+                text = text[:-1]
+            if s == " " or e == " ":
+                text = text.strip()
+            elif s == "." or e == ".":
+                text = text.strip(".")
+            elif s == "\n" or e == "\n":
+                text = text.strip("\n")
+            else:
+                break
         return text.strip()
     else:
         return ""
