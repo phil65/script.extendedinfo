@@ -45,6 +45,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
             self.youtube_listitems = CreateListItems(self.youtube_vids, 3)
             self.movie_listitems = CreateListItems(self.movie_roles, 4)
+            self.tvshow_listitems = CreateListItems(self.tvshow_roles, 4)
      #       prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
@@ -58,6 +59,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         if not self.id:
             self.close()
         self.getControl(150).addItems(self.movie_listitems)
+        self.getControl(250).addItems(self.tvshow_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
         xbmc.executebuiltin("SetFocus(150)")
     #    self.getControl(150).addItems(tvshow_listitems)
@@ -70,11 +72,16 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-        if controlID == 150:
-            listitem = self.getControl(150).getSelectedItem()
+        if controlID in [150, 250]:
+            listitem = self.getControl(controlID).getSelectedItem()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
+        # elif controlID == 350:
+        #     listitem = self.getControl(350).getSelectedItem()
+        #     dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+        #     self.close()
+        #     dialog.doModal()
 
 
     def onFocus(self, controlID):
