@@ -405,7 +405,7 @@ def GetExtendedActorInfo(actorid):
     person = HandleTMDBPeopleResult([response])
     images = HandleTMDBPeopleImagesResult(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
-    tvshow_roles = HandleTMDBMovieResult(response["tv_credits"]["cast"])
+    tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
     return person[0], movie_roles, tvshow_roles, images
 
