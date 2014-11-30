@@ -20,7 +20,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        xbmc.sleep(400)
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
