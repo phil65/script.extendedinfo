@@ -176,6 +176,7 @@ class Main:
             elif info == 'popularpeople':
                 passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'extendedinfo':
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
@@ -185,6 +186,7 @@ class Main:
                     MovieId = GetMovieDBID(self.imdbid)
                 else:
                     MovieId = ""
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 if MovieId:
                     from DialogVideoInfo import DialogVideoInfo
                     dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=MovieId, name=self.name)
