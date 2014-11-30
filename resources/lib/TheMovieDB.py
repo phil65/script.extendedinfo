@@ -271,6 +271,7 @@ def GetMovieDBID(imdbid):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -316,6 +317,11 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         Budget = millify(float(BudgetValue))
     else:
         Budget = ""
+    RevenueValue = response.get('revenue', "")
+    if not RevenueValue in [0, ""]:
+        Revenue = millify(float(RevenueValue))
+    else:
+        Revenue = ""
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     else:
@@ -342,6 +348,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Director': " / ".join(directors),
              'Writer': " / ".join(authors),
              'Budget': Budget,
+             'Revenue': Revenue,
              'Homepage': response.get('homepage', ""),
              'Set': SetName,
              'SetId': SetID,
