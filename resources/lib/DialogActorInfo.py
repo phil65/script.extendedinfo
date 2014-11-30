@@ -45,8 +45,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             name = self.person["name"]
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
-            self.movie_listitems = CreateListItems(self.movie_roles, 4)
-            self.tvshow_listitems = CreateListItems(self.tvshow_roles, 4)
+            self.movie_listitems = CreateListItems(self.movie_roles, 0)
+            self.tvshow_listitems = CreateListItems(self.tvshow_roles, 0)
             self.image_listitems = CreateListItems(self.images)
      #       prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
