@@ -79,6 +79,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
             self.close()
             dialog.doModal()
+        elif controlID in [150, 250]:
+            movieid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            self.close()
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
+            dialog.doModal()
         elif controlID == 350:
             listitem = self.getControl(350).getSelectedItem()
             self.close()
