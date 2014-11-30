@@ -44,8 +44,6 @@ class Main:
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _StartInfoActions(self):
-        if not self.silent:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
         for info in self.infos:
             ########### Images #####################
             if info == 'xkcd':
@@ -356,9 +354,6 @@ class Main:
             elif info == 'updatexbmcdatabasewithartistmbid':
                 SetMusicBrainzIDsForAllArtists(True, False)
 
-        if not self.silent:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-
     def _init_vars(self):
         self.window = xbmcgui.Window(10000)  # Home Window
         self.control = None
@@ -393,7 +388,6 @@ class Main:
         self.limit = False
         self.location = ""
         self.distance = ""
-        self.silent = True
         self.handle = None
         self.festivalsonly = False
         self.prop_prefix = ""
@@ -419,8 +413,6 @@ class Main:
                 params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
             except:
                 params = {}
-        if not self.silent:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.exportsettings = params.get("exportsettings", False)
         self.importsettings = params.get("importsettings", False)
         self.importextrathumb = params.get("importextrathumb", False)
@@ -457,10 +449,6 @@ class Main:
                 self.location = param[9:]
             elif param.startswith('distance='):
                 self.distance = param[9:]
-            elif param.startswith('silent='):
-                self.silent = param[7:]
-                if self.silent == "false":
-                    self.silent = False
             elif param.startswith('festivalsonly='):
                 self.festivalsonly = param[14:]
             elif param.startswith('feed='):
@@ -514,8 +502,6 @@ class Main:
                     self.window = xbmcgui.Window(int(arg[7:]))
             elif param.startswith('control='):
                 self.control = int(arg[8:])
-        if not self.silent:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
 if (__name__ == "__main__"):
     Main()
