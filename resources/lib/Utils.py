@@ -311,7 +311,7 @@ def CompareWithLibrary(onlinelist):
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"], localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
@@ -321,10 +321,12 @@ def CompareWithLibrary(onlinelist):
                             break
                     except:
                         pass
-                    streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), json_response['result']['moviedetails']['streamdetails'])
+                    response = json_response['result']['moviedetails']
+                    streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), response['streamdetails'])
                     onlineitem.update({"Play": localitem["movieid"]})
                     onlineitem.update({"DBID": localitem["movieid"]})
                     onlineitem.update({"Path": localitem['file']})
+                    onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
                     onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
                     onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
                     onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
@@ -640,7 +642,7 @@ def GetImdbIDfromEpisode(dbid):
         return GetImdbID("tvshow", tvshowid)
 
 
-def passHomeDataToSkin(data=None, prefix="", debug=False):
+def passHomeDataToSkin(data=None, prefix="", debug=True):
     if data is not None:
         threads = []
         image_requests = []

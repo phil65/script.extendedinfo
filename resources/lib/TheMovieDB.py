@@ -131,6 +131,7 @@ def HandleTMDBListResult(results):
     lists = []
     for movielist in results["lists"]["results"]:
         newlist = {'Art(poster)': base_url + poster_size + str(movielist.get('poster_path', "")),
+                   'Thumb': base_url + poster_size + str(movielist.get('poster_path', "")),
                    'Title': movielist['name'],
                    'ID': movielist['id'],
                    'Description': movielist['description']}
@@ -397,9 +398,11 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Studio': Studio,
              'Year': year}
     movie = CompareWithLibrary([movie])[0]
+    prettyprint(response)
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
-    return movie, actors, similar_movies
+    lists = HandleTMDBListResult(response)
+    return movie, actors, similar_movies, lists
 
 
 def GetExtendedActorInfo(actorid):
