@@ -25,7 +25,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         name = kwargs.get('name')
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
-            self.movie, self.actors = GetExtendedMovieInfo(self.id, self.dbid)
+            self.movie, self.actors, self.similar_movies = GetExtendedMovieInfo(self.id, self.dbid)
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/", "media": "files"}, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
@@ -44,12 +44,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             Notify("No ID found")
         self.actor_listitems = CreateListItems(self.actors, 4)
+        self.similar_movies_listitems = CreateListItems(self.similar_movies, 4)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        xbmc.executebuiltin("SetFocus(8)")
         self.getControl(50).addItems(self.actor_listitems)
-    #    self.getControl(150).addItems(tvshow_listitems)
+        self.getControl(150).addItems(self.similar_movies_listitems)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

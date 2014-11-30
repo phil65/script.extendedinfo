@@ -398,7 +398,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Year': year}
     movie = CompareWithLibrary([movie])[0]
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
-    return movie, actors
+    similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
+    return movie, actors, similar_movies
 
 
 def GetExtendedActorInfo(actorid):
