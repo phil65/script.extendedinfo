@@ -114,6 +114,7 @@ def HandleTMDBTVShowResult(results):
                  'Title': tv.get('name', ""),
                  'OriginalTitle': tv.get('original_name', ""),
                  'ID': tv.get('id', ""),
+                 'credit_id': tv.get('credit_id', ""),
                  'Path': "",
                  'Play': "",
                  'DBID': "",
