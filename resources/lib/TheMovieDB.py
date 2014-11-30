@@ -398,7 +398,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Studio': Studio,
              'Year': year}
     movie = CompareWithLibrary([movie])[0]
-    prettyprint(response)
+   # prettyprint(response)
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
     lists = HandleTMDBListResult(response)
