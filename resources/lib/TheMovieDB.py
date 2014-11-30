@@ -24,8 +24,10 @@ def HandleTMDBMovieResult(results):
             backdrop_path = ""
         if ("poster_path" in movie) and (movie["poster_path"]):
             poster_path = base_url + poster_size + movie['poster_path']
+            small_poster_path = base_url + "w342" + movie["poster_path"]
         else:
             poster_path = ""
+            small_poster_path = ""
         year = movie.get('release_date', "")
         if year:
             year = year[:4]
@@ -36,7 +38,7 @@ def HandleTMDBMovieResult(results):
             path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
                     'Art(poster)': poster_path,
-                    'Thumb': poster_path,
+                    'Thumb': small_poster_path,
                     'Poster': poster_path,
                     'fanart': backdrop_path,
                     'Title': movie.get('title', ""),
@@ -53,43 +55,6 @@ def HandleTMDBMovieResult(results):
                     'Premiered': movie.get('release_date', "")}
         if not str(movie['id']) in str(movies):  # too dirty
             movies.append(newmovie)
-    movies = CompareWithLibrary(movies)
-    return movies
-
-def HandleTMDBActorMovieResult(results):
-    movies = []
-    log("starting HandleTMDBActorMovieResult")
-    for movie in results:
-        try:
-            if ("backdrop_path" in movie) and (movie["backdrop_path"]):
-                backdrop_path = base_url + fanart_size + movie['backdrop_path']
-            else:
-                backdrop_path = ""
-            if ("poster_path" in movie) and (movie["poster_path"]):
-                poster_path = base_url + poster_size + movie['poster_path']
-            else:
-                poster_path = ""
-            newmovie = {'Art(fanart)': backdrop_path,
-                        'Art(poster)': poster_path,
-                        'Thumb': poster_path,
-                        'Poster': poster_path,
-                        'fanart': backdrop_path,
-                        'Title': movie.get('title', ""),
-                        'OriginalTitle': movie.get('original_title', ""),
-                        'ID': movie.get('id', ""),
-                        'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', "")),
-                        'Play': "",
-                        'DBID': "",
-                        'Rating': movie.get('vote_average', ""),
-                        'Votes': movie.get('vote_count', ""),
-                        'Year': movie.get('release_date', "")[:4],
-                        'Premiered': movie.get('release_date', "")}
-            if not str(movie['id']) in str(movies):  # too dirty
-                movies.append(newmovie)
-        except Exception as e:
-            log("Exception:")
-            log(e)
-            prettyprint(movie)
     movies = CompareWithLibrary(movies)
     return movies
 
@@ -147,10 +112,12 @@ def HandleTMDBPeopleResult(results):
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
         builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s")' % str(person['id'])
-        if "profile_path" in person and person["profile_path"] is not None:
+        if "profile_path" in person and person["profile_path"]:
             image = base_url + poster_size + person["profile_path"]
+            image_small = base_url + "w342" + person["profile_path"]
         else:
             image = ""
+            image_small = ""
         alsoknownas = " / ".join(person.get('also_known_as', ""))
         newperson = {'adult': str(person.get('adult', "")),
                      'name': person['name'],
@@ -167,8 +134,8 @@ def HandleTMDBPeopleResult(results):
                      'place_of_birth': person.get('place_of_birth', ""),
                      'placeofbirth': person.get('place_of_birth', ""),
                      'homepage': person.get('homepage', ""),
-                     'thumb': image,
-                     'icon': image,
+                     'thumb': image_small,
+                     'icon': image_small,
                      'poster': image}
         people.append(newperson)
     return people
@@ -256,7 +223,10 @@ def GetMovieDBData(url="", cache_days=14):
 
 
 def GetMovieDBConfig():
+    return ("http://image.tmdb.org/t/p/", "w780", "w1280")
     response = GetMovieDBData("configuration?", 60)
+    log("MovieDBConfig:")
+    prettyprint(response)
     if response:
         return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
