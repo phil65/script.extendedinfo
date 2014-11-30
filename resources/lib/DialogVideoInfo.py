@@ -27,7 +27,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if self.id:
             self.movie, self.actors, self.similar_movies = GetExtendedMovieInfo(self.id, self.dbid)
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"])
+            self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
+            if self.movie["SetId"]:
+                self.set_listitems = CreateListItems(GetSetMovies(self.movie["SetId"]))
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/", "media": "files"}, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
@@ -52,6 +55,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         self.getControl(50).addItems(self.actor_listitems)
         self.getControl(150).addItems(self.similar_movies_listitems)
+        self.getControl(250).addItems(self.set_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
 
     def onAction(self, action):
