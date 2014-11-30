@@ -281,7 +281,6 @@ class Main:
             elif info == 'favourites':
                 if self.id:
                     favourites = GetFavouriteswithType(self.id)
-                    Notify("here")
                 else:
                     favourites = GetFavourites()
                     homewindow.setProperty('favourite.count', str(len(favourites)))

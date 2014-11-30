@@ -649,7 +649,7 @@ def passHomeDataToSkin(data=None, prefix="", debug=True):
         for (key, value) in data.iteritems():
             value = unicode(value)
             if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                if not value in image_requests:
+                if not value in image_requests and value:
                     thread = Get_File(value)
                     threads += [thread]
                     thread.start()

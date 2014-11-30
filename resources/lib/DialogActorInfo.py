@@ -35,6 +35,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 name = names[ret]
             self.id = GetPersonID(name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
+        xbmc.sleep(500)
         self.person = None
         self.movie_roles = None
         self.tvshow_roles = None
@@ -46,6 +47,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             self.movie_listitems = CreateListItems(self.movie_roles, 4)
             self.tvshow_listitems = CreateListItems(self.tvshow_roles, 4)
+            self.image_listitems = CreateListItems(self.images)
      #       prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
@@ -54,13 +56,12 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-      #  tvshow_listitems = CreateListItems(self.tvshow_roles)
-      #  image_listitems = CreateListItems(self.images)
         if not self.id:
             self.close()
         self.getControl(150).addItems(self.movie_listitems)
         self.getControl(250).addItems(self.tvshow_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
+        self.getControl(450).addItems(self.image_listitems)
         xbmc.executebuiltin("SetFocus(150)")
     #    self.getControl(150).addItems(tvshow_listitems)
 
