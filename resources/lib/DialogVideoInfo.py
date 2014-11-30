@@ -19,13 +19,24 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        xbmc.sleep(400)
         xbmcgui.WindowXMLDialog.__init__(self)
         self.id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
+        self.imdbid = kwargs.get('imdbid')
         name = kwargs.get('name')
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
-            self.movie, self.actors, self.similar_movies, self.lists = GetExtendedMovieInfo(self.id, self.dbid)
+            MovieId = self.id
+        elif self.dbid and (int(self.dbid) > -1):
+            MovieId = GetImdbID("movie", self.dbid)
+            log("IMDBId from local DB:" + str(MovieId))
+        elif self.imdbid:
+            MovieId = GetMovieDBID(self.imdbid)
+        else:
+            MovieId = ""
+        if MovieId:
+            self.movie, self.actors, self.similar_movies, self.lists = GetExtendedMovieInfo(MovieId, self.dbid)
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"], "", "relevance", 15)
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)

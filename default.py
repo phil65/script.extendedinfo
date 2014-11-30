@@ -174,21 +174,9 @@ class Main:
             elif info == 'popularpeople':
                 passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'extendedinfo':
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                if self.id:
-                    MovieId = self.id
-                elif self.dbid and (int(self.dbid) > -1):
-                    MovieId = GetImdbID("movie", self.dbid)
-                    log("IMDBId from local DB:" + str(MovieId))
-                elif self.imdbid:
-                    MovieId = GetMovieDBID(self.imdbid)
-                else:
-                    MovieId = ""
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                if MovieId:
-                    from DialogVideoInfo import DialogVideoInfo
-                    dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=MovieId, name=self.name)
-                    dialog.doModal()
+                from DialogVideoInfo import DialogVideoInfo
+                dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=self.id, dbid=self.dbid, imdbid=self.imdbid, name=self.name)
+                dialog.doModal()
             elif info == 'extendedactorinfo':
                     from DialogActorInfo import DialogActorInfo
                     dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=self.id, name=self.name)
@@ -334,6 +322,7 @@ class Main:
                 xbmc.executebuiltin(self.id)
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
+                xbmc.sleep(500)
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
