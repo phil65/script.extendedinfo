@@ -144,10 +144,9 @@ def HandleTMDBPeopleResult(results):
 def HandleTMDBPeopleImagesResult(results):
     images = []
     for item in results["images"]["profiles"]:
-        image_path = base_url + poster_size + item['file_path']
         image = {'aspectratio': item['aspect_ratio'],
-                 'thumb': image_path,
-                 'poster': image_path}
+                 'thumb': base_url + "w342" + item['file_path'],
+                 'poster': base_url + poster_size + item['file_path']}
         images.append(image)
     return images
 
@@ -380,6 +379,7 @@ def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
     images = HandleTMDBPeopleImagesResult(response)
+    prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
