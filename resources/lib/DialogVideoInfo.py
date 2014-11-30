@@ -43,7 +43,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                         json_response2 = simplejson.loads(json_query2)
                         numfiles = len(json_response2["result"]["files"])
                         movie_actor.update({"moviecount": numfiles})
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Title"])
             passHomeDataToSkin(self.movie, "movie.")
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:

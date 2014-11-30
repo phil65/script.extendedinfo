@@ -62,15 +62,15 @@ def HandleYouTubeVideoResults(results):
     return videos
 
 
-def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance"):
+def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance", limit=50):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
     search_string = urllib.quote(search_string.replace('"', '').encode("utf-8"))
-    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&maxResults=50&type=video'
-    url = '&q=%s&order=%s&key=%s%s' % (search_string, orderby, youtube_key2, hd_string)
+    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=video'
+    url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, youtube_key2, hd_string, int(limit))
     results = Get_JSON_response(base_url + url, 0.5)
     if results:
         return HandleYouTubeVideoResults(results["items"])
