@@ -77,12 +77,11 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
-        # elif controlID == 350:
-        #     listitem = self.getControl(350).getSelectedItem()
-        #     dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-        #     self.close()
-        #     dialog.doModal()
-
+        elif controlID == 350:
+            listitem = self.getControl(350).getSelectedItem()
+            self.close()
+            xbmc.executebuiltin("Dialog.Close(movieinformation)")
+            xbmc.executebuiltin("PlayMedia(%s)" % listitem.getProperty("Path"))
 
     def onFocus(self, controlID):
         pass
