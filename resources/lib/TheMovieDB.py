@@ -96,7 +96,8 @@ def HandleTMDBListResult(results):
     lists = []
     for movielist in results["lists"]["results"]:
         newlist = {'Art(poster)': base_url + poster_size + str(movielist.get('poster_path', "")),
-                   'Thumb': base_url + poster_size + str(movielist.get('poster_path', "")),
+                   'Poster': base_url + poster_size + str(movielist.get('poster_path', "")),
+                   'Thumb': base_url + "w342" + str(movielist.get('poster_path', "")),
                    'Title': movielist['name'],
                    'ID': movielist['id'],
                    'Description': movielist['description']}
