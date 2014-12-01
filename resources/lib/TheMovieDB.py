@@ -92,17 +92,20 @@ def HandleTMDBTVShowResult(results):
     return tvshows
 
 
-def HandleTMDBListResult(results):
-    lists = []
-    for movielist in results:
-        newlist = {'Art(poster)': base_url + poster_size + str(movielist.get('poster_path', "")),
-                   'Poster': base_url + poster_size + str(movielist.get('poster_path', "")),
-                   'Thumb': base_url + "w342" + str(movielist.get('poster_path', "")),
-                   'Title': movielist['name'],
-                   'ID': movielist['id'],
-                   'Description': movielist.get('description', "")}
-        lists.append(newlist)
-    return lists
+def HandleTMDBMiscResult(results):
+    listitems = []
+    for item in results:
+        listitem = {'Art(poster)': base_url + poster_size + str(item.get('poster_path', "")),
+                   'Poster': base_url + poster_size + str(item.get('poster_path', "")),
+                   'Thumb': base_url + "w342" + str(item.get('poster_path', "")),
+                   'Title': item.get('name', ""),
+                   'certification': item.get('certification', ""),
+                   'release_date': item.get('release_date', ""),
+                   'iso_3166_1': item.get('iso_3166_1', ""),
+                   'ID': item.get('id', ""),
+                   'Description': item.get('description', "")}
+        listitems.append(listitem)
+    return listitems
 
 
 def HandleTMDBPeopleResult(results):
@@ -345,7 +348,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Title': response.get('title', ""),
              'Label': response.get('title', ""),
              'Tagline': response.get('tagline', ""),
-             'RunningTime': response.get('runtime', ""),
              'Duration': response.get('runtime', ""),
              'mpaa': mpaa,
              'Director': " / ".join(directors),
@@ -361,6 +363,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Genre': " / ".join(genres),
              'Rating': response.get('vote_average', ""),
              'Popularity': response.get('popularity', ""),
+             'Status': response.get('status', ""),
              'Play': '',
              'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
              'Path': path,
@@ -385,9 +388,10 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
    # prettyprint(response)
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
-    lists = HandleTMDBListResult(response["lists"]["results"])
-    production_companies = HandleTMDBListResult(response["production_companies"])
-    return movie, actors, similar_movies, lists, production_companies
+    lists = HandleTMDBMiscResult(response["lists"]["results"])
+    production_companies = HandleTMDBMiscResult(response["production_companies"])
+    releases = HandleTMDBMiscResult(response["releases"]["countries"])
+    return movie, actors, similar_movies, lists, production_companies, releases
 
 
 def GetExtendedActorInfo(actorid):
@@ -403,7 +407,7 @@ def GetExtendedActorInfo(actorid):
 
 def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
-    return HandleTMDBListResult(response["lists"]["results"])
+    return HandleTMDBMiscResult(response["lists"]["results"])
 
 
 def GetPopularActorList():

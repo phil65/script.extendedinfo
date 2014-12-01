@@ -334,7 +334,7 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    movie, actors, similarmovies, lists, production_companies = GetExtendedMovieInfo(MovieId)
+                    movie, actors, similarmovies, lists, production_companies, releases = GetExtendedMovieInfo(MovieId)
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
                     if "Trailer" is not "":
                         xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")

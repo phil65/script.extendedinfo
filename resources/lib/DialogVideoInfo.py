@@ -35,7 +35,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             MovieId = ""
         if MovieId:
-            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies = GetExtendedMovieInfo(MovieId, self.dbid)
+            self.movie, actors, similar_movies, lists, production_companies, releases = GetExtendedMovieInfo(MovieId, self.dbid)
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"], "", "relevance", 15)
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
@@ -45,7 +45,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             for db_actor in json_response["result"]["files"]:
-                for movie_actor in self.actors:
+                for movie_actor in actors:
                     if db_actor["label"] == movie_actor["name"]:
                         movie_actor.update({"dbid": db_actor["id"]})
                         json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/%i/", "media": "files"}, "id": 1}' % db_actor["id"])
@@ -57,10 +57,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
-        self.actor_listitems = CreateListItems(self.actors, 0)
-        self.similar_movies_listitems = CreateListItems(self.similar_movies, 0)
-        self.list_listitems = CreateListItems(self.lists, 0)
-        self.studio_listitems = CreateListItems(self.production_companies, 0)
+        self.actor_listitems = CreateListItems(actors, 0)
+        self.similar_movies_listitems = CreateListItems(similar_movies, 0)
+        self.list_listitems = CreateListItems(lists, 0)
+        self.studio_listitems = CreateListItems(production_companies, 0)
+        self.releases_listitems = CreateListItems(releases, 0)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -70,6 +71,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(350).addItems(self.youtube_listitems)
         self.getControl(450).addItems(self.list_listitems)
         self.getControl(550).addItems(self.studio_listitems)
+        self.getControl(650).addItems(self.releases_listitems)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
