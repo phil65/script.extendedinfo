@@ -334,10 +334,10 @@ class Main:
                 else:
                     MovieId = ""
                 if MovieId:
-                    movie, actors, similarmovies, lists, production_companies, releases = GetExtendedMovieInfo(MovieId)
+                    trailer = GetTrailer(MovieId)
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
-                    if "Trailer" is not "":
-                        xbmc.executebuiltin("PlayMedia(" + movie["Trailer"] + ")")
+                    if trailer:
+                        xbmc.executebuiltin("PlayMedia(%s)" % trailer)
                         self.control = ""  # workaround to avoid breaking PlayMedia
                     else:
                         Notify("Error", "No Trailer available")

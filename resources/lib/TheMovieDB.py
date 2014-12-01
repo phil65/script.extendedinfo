@@ -131,6 +131,8 @@ def HandleTMDBPeopleResult(results):
                      'biography': cleanText(person.get('biography', "")),
                      'birthday': person.get('birthday', ""),
                      'character': person.get('character', ""),
+                     'department': person.get('department', ""),
+                     'job': person.get('job', ""),
                      'description': description,
                      'plot': description,
                      'id': str(person['id']),
@@ -275,6 +277,19 @@ def GetMovieDBID(imdbid):
     return response["movie_results"][0]["id"]
 
 
+def GetTrailer(movieid=None):
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    if not response:
+        Notify("Could not get trailer")
+        return ""
+    if len(response['trailers']['youtube']) > 0:
+        Trailer = response['trailers']['youtube'][0]['source']
+        return 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer
+    else:
+        Trailer = ""
+        Notify("Could not get trailer")
+
+
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
     prettyprint(response)
@@ -387,11 +402,13 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     movie = CompareWithLibrary([movie])[0]
    # prettyprint(response)
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
+    crew = HandleTMDBPeopleResult(response["casts"]["crew"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
     lists = HandleTMDBMiscResult(response["lists"]["results"])
+    genres = HandleTMDBMiscResult(response["genres"])
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     releases = HandleTMDBMiscResult(response["releases"]["countries"])
-    return movie, actors, similar_movies, lists, production_companies, releases
+    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres
 
 
 def GetExtendedActorInfo(actorid):
