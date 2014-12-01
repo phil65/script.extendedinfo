@@ -439,6 +439,11 @@ def GetMoviesWithCertification(country, rating):
     response = GetMovieDBData("discover/movie?sort_by=popularity.asc&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
+def GetMoviesFromList(listid):
+    response = GetMovieDBData("list/%s?language=%s&" % (str(listid), __addon__.getSetting("LanguageID")), 30)
+    prettyprint(response)
+    return HandleTMDBMovieResult(response["items"])
+
 def GetPopularActorList():
     response = GetMovieDBData("person/popular?", 1)
     return HandleTMDBPeopleResult(response["results"])
