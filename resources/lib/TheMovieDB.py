@@ -94,13 +94,13 @@ def HandleTMDBTVShowResult(results):
 
 def HandleTMDBListResult(results):
     lists = []
-    for movielist in results["lists"]["results"]:
+    for movielist in results:
         newlist = {'Art(poster)': base_url + poster_size + str(movielist.get('poster_path', "")),
                    'Poster': base_url + poster_size + str(movielist.get('poster_path', "")),
                    'Thumb': base_url + "w342" + str(movielist.get('poster_path', "")),
                    'Title': movielist['name'],
                    'ID': movielist['id'],
-                   'Description': movielist['description']}
+                   'Description': movielist.get('description', "")}
         lists.append(newlist)
     return lists
 
@@ -385,8 +385,9 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
    # prettyprint(response)
     actors = HandleTMDBPeopleResult(response["casts"]["cast"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
-    lists = HandleTMDBListResult(response)
-    return movie, actors, similar_movies, lists
+    lists = HandleTMDBListResult(response["lists"]["results"])
+    production_companies = HandleTMDBListResult(response["production_companies"])
+    return movie, actors, similar_movies, lists, production_companies
 
 
 def GetExtendedActorInfo(actorid):
@@ -402,7 +403,7 @@ def GetExtendedActorInfo(actorid):
 
 def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
-    return HandleTMDBListResult(response)
+    return HandleTMDBListResult(response["lists"]["results"])
 
 
 def GetPopularActorList():
