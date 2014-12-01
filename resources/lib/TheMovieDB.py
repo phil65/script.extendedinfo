@@ -375,6 +375,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'VideoAspect': "",
              'Logo': "",
              'DBID': "",
+             'FilenameAndPath': "",
              'Banner': "",
              'DiscArt': "",
              'Logo': "",

@@ -326,6 +326,7 @@ def CompareWithLibrary(onlinelist):
                     onlineitem.update({"Play": localitem["movieid"]})
                     onlineitem.update({"DBID": localitem["movieid"]})
                     onlineitem.update({"Path": localitem['file']})
+                    onlineitem.update({"FilenameAndPath": localitem['file']})
                     onlineitem.update({"Writer": " / ".join(response['writer'])})
                     onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
                     onlineitem.update({"DiscArt": response['art'].get("discart", "")})
@@ -335,6 +336,29 @@ def CompareWithLibrary(onlinelist):
                     onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
                     onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
                     onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                    audio = response['streamdetails']['audio']
+                    subtitles = response['streamdetails']['subtitle']
+                    count = 1
+                    subs = []
+                    streams = []
+                    for item in audio:
+                        if item['language'] not in streams:
+                            streams.append(item['language'])
+                            onlineitem.update({'AudioLanguage.%d' % count: item['language']})
+                            onlineitem.update({'AudioCodec.%d' % count: item['codec']})
+                            onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
+                            count += 1
+                    count = 1
+                    for item in subtitles:
+                        if item['language'] not in subtitles:
+                            subs.append(item['language'])
+                            onlineitem.update({'SubtitleLanguage.%d' % count: item['language']})
+                            count += 1
+                    onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
+                    onlineitem.update({'AudioLanguage': " / ".join(streams)})
+
+
+
                 break
     return onlinelist
 
