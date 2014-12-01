@@ -175,6 +175,8 @@ class Main:
                 passDataToSkin('PopularPeople', GetPopularActorList(), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'extendedinfo':
                 from DialogVideoInfo import DialogVideoInfo
+                if self.handle:
+                    xbmcplugin.endOfDirectory(self.handle)
                 dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=self.id, dbid=self.dbid, imdbid=self.imdbid, name=self.name)
                 dialog.doModal()
             elif info == 'extendedactorinfo':

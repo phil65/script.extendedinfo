@@ -37,9 +37,9 @@ def HandleTMDBMovieResult(results):
         else:
             path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
-                    'Art(poster)': poster_path,
+                    'Art(poster)': small_poster_path,
                     'Thumb': small_poster_path,
-                    'Poster': poster_path,
+                    'Poster': small_poster_path,
                     'fanart': backdrop_path,
                     'Title': movie.get('title', ""),
                     'Label': movie.get('title', ""),

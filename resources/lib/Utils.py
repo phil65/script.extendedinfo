@@ -311,7 +311,7 @@ def CompareWithLibrary(onlinelist):
         for localitem in locallist["result"]["movies"]:
             comparators = [localitem["originaltitle"], localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
@@ -326,6 +326,7 @@ def CompareWithLibrary(onlinelist):
                     onlineitem.update({"Play": localitem["movieid"]})
                     onlineitem.update({"DBID": localitem["movieid"]})
                     onlineitem.update({"Path": localitem['file']})
+                    onlineitem.update({"Writer": " / ".join(response['writer'])})
                     onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
                     onlineitem.update({"DiscArt": response['art'].get("discart", "")})
                     onlineitem.update({"Banner": response['art'].get("banner", "")})
