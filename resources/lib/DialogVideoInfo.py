@@ -5,6 +5,7 @@ from Utils import *
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
+import DialogVideoList
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
@@ -99,6 +100,31 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.close()
             # xbmc.executebuiltin("Dialog.Close(movieinformation)")
             xbmc.executebuiltin("PlayMedia(%s)" % listitem.getProperty("Path"))
+        elif controlID == 550:
+            studioid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            studioitems = GetCompanyInfo(studioid)
+            self.close()
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=studioitems)
+            dialog.doModal()
+        elif controlID == 950:
+            keywordid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            keyworditems = GetMoviesWithKeyword(keywordid)
+            self.close()
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=keyworditems)
+            dialog.doModal()
+        elif controlID == 850:
+            genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            genreitems = GetMoviesWithGenre(genreid)
+            self.close()
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=genreitems)
+            dialog.doModal()
+        elif controlID == 650:
+            country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
+            certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
+            cert_items = GetMoviesWithCertification(country, certification)
+            self.close()
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=cert_items)
+            dialog.doModal()
 
     def onFocus(self, controlID):
         pass

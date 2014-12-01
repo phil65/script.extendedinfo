@@ -427,6 +427,17 @@ def GetMovieLists(Id):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMiscResult(response["lists"]["results"])
 
+def GetMoviesWithKeyword(keywordid):
+    response = GetMovieDBData("discover/movie?sort_by=popularity.asc&with_keywords=%s&language=%s&" % (str(keywordid), __addon__.getSetting("LanguageID")), 30)
+    return HandleTMDBMovieResult(response["results"])
+
+def GetMoviesWithGenre(genreid):
+    response = GetMovieDBData("discover/movie?sort_by=popularity.asc&with_genres=%s&language=%s&" % (str(genreid), __addon__.getSetting("LanguageID")), 30)
+    return HandleTMDBMovieResult(response["results"])
+
+def GetMoviesWithCertification(country, rating):
+    response = GetMovieDBData("discover/movie?sort_by=popularity.asc&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
+    return HandleTMDBMovieResult(response["results"])
 
 def GetPopularActorList():
     response = GetMovieDBData("person/popular?", 1)
