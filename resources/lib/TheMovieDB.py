@@ -408,7 +408,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     genres = HandleTMDBMiscResult(response["genres"])
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     releases = HandleTMDBMiscResult(response["releases"]["countries"])
-    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres
+    keywords = HandleTMDBMiscResult(response["keywords"]["keywords"])
+    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords
 
 
 def GetExtendedActorInfo(actorid):
