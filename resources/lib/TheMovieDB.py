@@ -297,10 +297,10 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         Country = response['production_countries'][0]["name"]
     else:
         Country = ""
-    if len(response['production_companies']) > 0:
-        Studio = response['production_companies'][0]["name"]
-    else:
-        Studio = ""
+    Studio = []
+    for item in response['production_companies']:
+        Studio.append(item["name"])
+    Studio = " / ".join(Studio)
     Set = response.get("belongs_to_collection", "")
     if Set:
         SetName = Set.get("name", "")
@@ -372,6 +372,9 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'VideoAspect': "",
              'Logo': "",
              'DBID': "",
+             'Banner': "",
+             'DiscArt': "",
+             'Logo': "",
              'Studio': Studio,
              'Year': year}
     movie = CompareWithLibrary([movie])[0]

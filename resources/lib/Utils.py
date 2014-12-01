@@ -327,6 +327,8 @@ def CompareWithLibrary(onlinelist):
                     onlineitem.update({"DBID": localitem["movieid"]})
                     onlineitem.update({"Path": localitem['file']})
                     onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
+                    onlineitem.update({"DiscArt": response['art'].get("discart", "")})
+                    onlineitem.update({"Banner": response['art'].get("banner", "")})
                     onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
                     onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
                     onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
@@ -661,7 +663,7 @@ def passHomeDataToSkin(data=None, prefix="", debug=True):
             x.join()
 
 
-def passDataToSkin(name, data, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
+def passDataToSkin(name="", data=None, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
     if limit and data:
         if limit < len(data):
             data = data[:limit]
