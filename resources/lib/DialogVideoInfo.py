@@ -58,6 +58,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
+            self.close()
         self.actor_listitems = CreateListItems(actors, 0)
         self.crew_listitems = CreateListItems(crew, 0)
         self.similar_movies_listitems = CreateListItems(similar_movies, 0)
