@@ -30,7 +30,7 @@ def HandleTMDBMovieResult(results):
             small_poster_path = ""
         release_date = fetch(movie, 'release_date')
         if release_date:
-            year = year[:4]
+            year = release_date[:4]
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'id'))
         if False:
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie, 'id'))
