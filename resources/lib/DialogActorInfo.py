@@ -62,7 +62,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.getControl(250).addItems(self.tvshow_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
         self.getControl(450).addItems(self.image_listitems)
-        xbmc.executebuiltin("SetFocus(150)")
     #    self.getControl(150).addItems(tvshow_listitems)
 
     def setControls(self):
@@ -81,7 +80,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 350:
             listitem = self.getControl(350).getSelectedItem()
             self.close()
-            xbmc.executebuiltin("Dialog.Close(movieinformation)")
             xbmc.executebuiltin("PlayMedia(%s)" % listitem.getProperty("Path"))
 
     def onFocus(self, controlID):

@@ -22,21 +22,24 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
-        self.id = kwargs.get('id')
-        self.dbid = kwargs.get('dbid')
-        self.imdbid = kwargs.get('imdbid')
-        name = kwargs.get('name')
-        if self.id:
-            MovieId = self.id
-        elif self.dbid and (int(self.dbid) > -1):
-            MovieId = GetImdbID("movie", self.dbid)
+        tmdb_id = kwargs.get('id')
+        dbid = kwargs.get('dbid')
+        imdb_id = kwargs.get('imdbid')
+        if tmdb_id:
+            MovieId = tmdb_id
+        elif dbid and (int(dbid) > -1):
+            MovieId = GetImdbID("movie", dbid)
             log("IMDBId from local DB:" + str(MovieId))
-        elif self.imdbid:
-            MovieId = GetMovieDBID(self.imdbid)
+        elif imdb_id:
+            MovieId = GetMovieDBID(imdb_id)
+        elif self.name:
+            MovieId = search_movie(kwargs.get('name'))
         else:
             MovieId = ""
         if MovieId:
-            self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords = GetExtendedMovieInfo(MovieId, self.dbid)
+            self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords = GetExtendedMovieInfo(MovieId, dbid)
+            if not self.movie:
+                self.close()
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"], "", "relevance", 15)
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)

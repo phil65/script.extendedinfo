@@ -115,7 +115,7 @@ def HandleTMDBPeopleResult(results):
         if "known_for" in results:
             for movie in results["known_for"]:
                 description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
-        builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s")' % str(person['id'])
+        builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s)' % str(person['id'])
         if "profile_path" in person and person["profile_path"]:
             image = base_url + poster_size + person["profile_path"]
             image_small = base_url + "w342" + person["profile_path"]
@@ -298,7 +298,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     genres = []
     if not response:
         Notify("Could not get movie information")
-        return {}, []
+        return {}, [], [], [], [], [], [], [], []
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['casts']['crew']:
