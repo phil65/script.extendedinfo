@@ -428,15 +428,15 @@ def GetMovieLists(Id):
     return HandleTMDBMiscResult(response["lists"]["results"])
 
 def GetMoviesWithKeyword(keywordid):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&with_keywords=%s&language=%s&" % (str(keywordid), __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&" % (str(keywordid), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
 def GetMoviesWithGenre(genreid):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&with_genres=%s&language=%s&" % (str(genreid), __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_genres=%s&language=%s&" % (str(genreid), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
 def GetMoviesWithCertification(country, rating):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
 def GetMoviesFromList(listid):
