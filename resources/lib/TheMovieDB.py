@@ -28,12 +28,12 @@ def HandleTMDBMovieResult(results):
         else:
             poster_path = ""
             small_poster_path = ""
-        year = movie.get('release_date', "")
-        if year:
+        release_date = fetch(movie, 'release_date')
+        if release_date:
             year = year[:4]
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(movie.get('id', ""))
+        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'id'))
         if False:
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(movie.get('id', ""))
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie, 'id'))
         else:
             path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
@@ -41,18 +41,18 @@ def HandleTMDBMovieResult(results):
                     'Thumb': small_poster_path,
                     'Poster': small_poster_path,
                     'fanart': backdrop_path,
-                    'Title': movie.get('title', ""),
-                    'Label': movie.get('title', ""),
-                    'OriginalTitle': movie.get('original_title', ""),
-                    'ID': movie.get('id', ""),
+                    'Title': fetch(movie, 'title'),
+                    'Label': fetch(movie, 'title'),
+                    'OriginalTitle': fetch(movie, 'original_title'),
+                    'ID': fetch(movie, 'id'),
                     'Path': path,
                     'Trailer': trailer,
                     'Play': "",
                     'DBID': "",
-                    'Rating': movie.get('vote_average', ""),
-                    'Votes': movie.get('vote_count', ""),
+                    'Rating': fetch(movie, 'vote_average'),
+                    'Votes': fetch(movie, 'vote_count'),
                     'Year': year,
-                    'Premiered': movie.get('release_date', "")}
+                    'Premiered': release_date}
         if not str(movie['id']) in str(movies):  # too dirty
             movies.append(newmovie)
     movies = CompareWithLibrary(movies)
