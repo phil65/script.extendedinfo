@@ -19,7 +19,7 @@ __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath(
     "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
-locallist = None
+movie_compare_list = None
 
 
 def GetPlaylistStats(path):
@@ -307,11 +307,11 @@ def create_channel_list():
 
 
 def CompareWithLibrary(onlinelist):
-    global locallist
-    if not locallist:
-        locallist = create_light_movielist()
+    global movie_compare_list
+    if not movie_compare_list:
+        movie_compare_list = create_light_movielist()
     for onlineitem in onlinelist:
-        for localitem in locallist["result"]["movies"]:
+        for localitem in movie_compare_list["result"]["movies"]:
             comparators = [localitem["originaltitle"], localitem["label"]]
             if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
