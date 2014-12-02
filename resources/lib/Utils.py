@@ -309,7 +309,10 @@ def create_channel_list():
 def CompareWithLibrary(onlinelist):
     global movie_compare_list
     if not movie_compare_list:
+        now = time.time()
         movie_compare_list = create_light_movielist()
+        log("create_light_movielist: " + str(now - time.time()))
+    now = time.time()
     for onlineitem in onlinelist:
         for localitem in movie_compare_list["result"]["movies"]:
             comparators = [localitem["originaltitle"], localitem["label"]]
@@ -359,10 +362,8 @@ def CompareWithLibrary(onlinelist):
                             count += 1
                     onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
                     onlineitem.update({'AudioLanguage': " / ".join(streams)})
-
-
-
                 break
+    log("compare time: " + str(now - time.time()))
     return onlinelist
 
 
