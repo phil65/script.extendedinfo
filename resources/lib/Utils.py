@@ -306,6 +306,13 @@ def create_channel_list():
         return False
 
 
+def fetch(dictionary, key):
+    if key in dictionary:
+        if dictionary[key] is not None:
+            return dictionary[key]
+    return ""
+
+
 def CompareWithLibrary(onlinelist):
     global movie_compare_list
     if not movie_compare_list:

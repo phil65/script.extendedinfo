@@ -383,7 +383,6 @@ class Main:
         self.prop_prefix = ""
         self.Artist_mbid = None
         self.pluginmode = False
-        self.window.clearProperty('SongToMusicVideo.Path')
 
     def _build_url(self, query):
         return base_url + '?' + urllib.urlencode(query)
