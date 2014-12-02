@@ -240,7 +240,7 @@ def GetMovieDBConfig():
     return ("http://image.tmdb.org/t/p/", "w780", "w1280")
     response = GetMovieDBData("configuration?", 60)
     log("MovieDBConfig:")
-    prettyprint(response)
+  #  prettyprint(response)
     if response:
         return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
@@ -298,7 +298,7 @@ def GetTrailer(movieid=None):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
+  #  prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -422,7 +422,7 @@ def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
     images = HandleTMDBPeopleImagesResult(response)
-    prettyprint(response)
+ #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
@@ -447,7 +447,7 @@ def GetMoviesWithCertification(country, rating):
 
 def GetMoviesFromList(listid):
     response = GetMovieDBData("list/%s?language=%s&" % (str(listid), __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
+  #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"])
 
 def GetPopularActorList():
