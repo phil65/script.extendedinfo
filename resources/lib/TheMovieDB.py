@@ -95,9 +95,15 @@ def HandleTMDBTVShowResult(results):
 def HandleTMDBMiscResult(results):
     listitems = []
     for item in results:
-        listitem = {'Art(poster)': base_url + poster_size + str(item.get('poster_path', "")),
-                   'Poster': base_url + poster_size + str(item.get('poster_path', "")),
-                   'Thumb': base_url + "w342" + str(item.get('poster_path', "")),
+        if ("poster_path" in item) and (item["poster_path"]):
+            poster_path = base_url + poster_size + item['poster_path']
+            small_poster_path = base_url + "w342" + item["poster_path"]
+        else:
+            poster_path = ""
+            small_poster_path = ""
+        listitem = {'Art(poster)': poster_path,
+                   'Poster': poster_path,
+                   'Thumb': small_poster_path,
                    'Title': item.get('name', ""),
                    'certification': item.get('certification', ""),
                    'release_date': item.get('release_date', ""),
