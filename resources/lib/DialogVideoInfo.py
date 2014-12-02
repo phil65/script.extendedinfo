@@ -47,16 +47,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.set_listitems = CreateListItems(GetSetMovies(self.movie["SetId"]))
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/", "media": "files"}, "id": 1}')
             json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_response = simplejson.loads(json_query)
-            for db_actor in json_response["result"]["files"]:
-                for movie_actor in actors:
-                    if db_actor["label"] == movie_actor["name"]:
-                        movie_actor.update({"dbid": db_actor["id"]})
-                        json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/%i/", "media": "files"}, "id": 1}' % db_actor["id"])
-                        json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-                        json_response2 = simplejson.loads(json_query2)
-                        numfiles = len(json_response2["result"]["files"])
-                        movie_actor.update({"moviecount": numfiles})
+            # json_response = simplejson.loads(json_query)
+            # for db_actor in json_response["result"]["files"]:
+            #     for movie_actor in actors:
+            #         if db_actor["label"] == movie_actor["name"]:
+            #             movie_actor.update({"dbid": db_actor["id"]})
+            #             json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/%i/", "media": "files"}, "id": 1}' % db_actor["id"])
+            #             json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
+            #             json_response2 = simplejson.loads(json_query2)
+            #             numfiles = len(json_response2["result"]["files"])
+            #             movie_actor.update({"moviecount": numfiles})
             passHomeDataToSkin(self.movie, "movie.")
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
