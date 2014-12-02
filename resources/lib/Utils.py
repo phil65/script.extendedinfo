@@ -147,11 +147,14 @@ def GetSimilarArtistsInLibrary(artistid):
 
 
 def create_light_movielist():
-    json_query = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
-    return json_query
+    movielist = xbmc.getInfoLabel("Window(home).Property(MovieList.JSON)")
+    if movielist:
+        return simplejson.loads(movielist)
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        homewindow.setProperty("MovieList.JSON", json_query)
+        return simplejson.loads(json_query)
 
 
 def GetSimilarFromOwnLibrary(dbid):
