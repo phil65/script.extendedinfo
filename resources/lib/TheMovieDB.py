@@ -260,7 +260,7 @@ def millify(n):
 def GetSeasonInfo(tvshowname, seasonnumber):
     response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), __addon__.getSetting("LanguageID")), 30)
     tvshowid = str(response['results'][0]['id'])
-    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos&language=%s&" % (tvshowid, seasonnumber, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&" % (tvshowid, seasonnumber, __addon__.getSetting("LanguageID")), 30)
     season = {'SeasonDescription': response["overview"],
               'AirDate': response["air_date"]}
     videos = []
