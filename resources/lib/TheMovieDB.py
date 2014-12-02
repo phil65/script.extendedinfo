@@ -31,6 +31,8 @@ def HandleTMDBMovieResult(results):
         release_date = fetch(movie, 'release_date')
         if release_date:
             year = release_date[:4]
+        else:
+            year = ""
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'id'))
         if False:
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie, 'id'))
