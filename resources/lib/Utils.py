@@ -377,19 +377,27 @@ def CompareWithLibrary(onlinelist):
                 subtitles = response['streamdetails']['subtitle']
                 count = 1
                 streams = []
+                for i in range(1, 20):
+                    onlineitem.update({'AudioLanguage.%d' % i: ""})
+                    onlineitem.update({'SubtitleLanguage.%d' % i: ""})
+                    # Notify(str(count))
                 for item in audio:
-                    if item['language'] not in streams:
-                        streams.append(item['language'])
-                        onlineitem.update({'AudioLanguage.%d' % count: item['language']})
+                    language = item['language']
+                    if language not in streams and language != "und":
+                        streams.append(language)
+                        onlineitem.update({'AudioLanguage.%d' % count: language})
                         onlineitem.update({'AudioCodec.%d' % count: item['codec']})
                         onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
                         count += 1
                 count = 1
                 subs = []
+                prettyprint(subtitles)
                 for item in subtitles:
-                    if item['language'] not in subtitles:
-                        subs.append(item['language'])
-                        onlineitem.update({'SubtitleLanguage.%d' % count: item['language']})
+                    language = item['language']
+                    if language not in subs and language != "und":
+                        subs.append(language)
+                        # Notify(str(count))
+                        onlineitem.update({'SubtitleLanguage.%d' % count: language})
                         count += 1
                 onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
                 onlineitem.update({'AudioLanguage': " / ".join(streams)})
