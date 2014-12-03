@@ -40,7 +40,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords = GetExtendedMovieInfo(MovieId, dbid)
             if not self.movie:
                 self.close()
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"], "", "relevance", 15)
+            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             if self.movie["SetId"]:
