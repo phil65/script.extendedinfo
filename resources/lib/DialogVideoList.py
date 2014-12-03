@@ -17,13 +17,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.listitems = CreateListItems(kwargs.get('listitems'))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         self.getControl(500).addItems(self.listitems)
+        xbmc.sleep(200)
+        xbmc.executebuiltin("SetFocus(500)")
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
