@@ -292,7 +292,7 @@ def GetTrailer(movieid=None):
         return ""
     if len(response['trailers']['youtube']) > 0:
         Trailer = response['trailers']['youtube'][0]['source']
-        return 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer
+        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer
     else:
         Trailer = ""
         Notify("Could not get trailer")
@@ -359,10 +359,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         poster_path = base_url + poster_size + response['poster_path']
     else:
         poster_path = ""
-    if False:
-        path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(response.get('id', ""))
-    else:
-        path = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer
+    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(response.get('id', ""))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
              'Thumb': poster_path,
@@ -388,7 +385,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Popularity': fetch(response, 'popularity'),
              'Status': fetch(response, 'status'),
              'Play': '',
-             'Trailer': 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % Trailer,
+             'Trailer': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer,
              'Path': path,
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),

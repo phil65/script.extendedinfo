@@ -3,6 +3,7 @@
 	<requires>
 		<import addon="xbmc.python" version="2.1.0"/>
 		<import addon="script.module.simplejson" version="2.0.10"/>
+		<import addon="script.module.youtube.dl" version="14.519.1"/>
 	</requires>
 	<extension point="xbmc.python.library"          library="default.py" />
 	<extension point="xbmc.python.pluginsource"     library="default.py" />
