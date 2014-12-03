@@ -391,7 +391,6 @@ def CompareWithLibrary(onlinelist):
                         count += 1
                 onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
                 onlineitem.update({'AudioLanguage': " / ".join(streams)})
-            break
     log("compare time: " + str(now - time.time()))
     return onlinelist
 
