@@ -90,17 +90,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID in [50, 750]:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
             self.close()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID in [150, 250]:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             movieid = self.getControl(controlID).getSelectedItem().getProperty("id")
             self.close()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
             dialog.doModal()
         elif controlID == 350:
@@ -109,8 +105,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("PlayMedia(%s)" % listitem.getProperty("Path"))
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            studioid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            studioitems = GetCompanyInfo(studioid)
+            studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             self.close()
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=studioitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
