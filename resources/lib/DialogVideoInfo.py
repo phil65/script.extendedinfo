@@ -89,6 +89,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
+        homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [50, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
