@@ -336,11 +336,11 @@ def CompareWithLibrary(onlinelist):
     for onlineitem in onlinelist:
         found = False
         if onlineitem["Title"].lower() in title_list:
-            index = title_list.index(onlineitem["Title"])
+            index = title_list.index(onlineitem["Title"].lower())
             found = True
             # Notify("found title " + onlineitem["Title"])
         elif onlineitem["OriginalTitle"].lower() in originaltitle_list:
-            index = originaltitle_list.index(onlineitem["OriginalTitle"])
+            index = originaltitle_list.index(onlineitem["OriginalTitle"].lower())
             found = True
             # Notify("found originaltitle_list " + onlineitem["Title"])
         if found:
