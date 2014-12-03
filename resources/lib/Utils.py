@@ -19,9 +19,7 @@ __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath(
     "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
-id_list = []
-title_list = []
-originaltitle_list = []
+movie_compare_list = None
 
 
 def GetPlaylistStats(path):
@@ -146,6 +144,17 @@ def GetSimilarArtistsInLibrary(artistid):
     log('%i of %i artists found in last.FM is in XBMC database' %
         (len(artists), len(simi_artists)))
     return artists
+
+
+def create_light_movielist():
+    movielist = xbmc.getInfoLabel("Window(home).Property(MovieList.JSON)")
+    if movielist:
+        return simplejson.loads(movielist)
+    else:
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
+        json_query = unicode(json_query, 'utf-8', errors='ignore')
+        homewindow.setProperty("MovieList.JSON", json_query)
+        return simplejson.loads(json_query)
 
 
 def GetSimilarFromOwnLibrary(dbid):
@@ -307,91 +316,62 @@ def fetch(dictionary, key):
 
 
 def CompareWithLibrary(onlinelist):
-    global id_list
-    global originaltitle_list
-    global title_list
-    if not title_list:
+    global movie_compare_list
+    if not movie_compare_list:
         now = time.time()
-        title_list = xbmc.getInfoLabel("Window(home).Property(title_list.JSON)")
-        if title_list:
-            title_list = simplejson.loads(title_list)
-            originaltitle_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(originaltitle_list.JSON)"))
-            id_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(id_list.JSON)"))
-        else:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
-            json_query = simplejson.loads(unicode(json_query, 'utf-8', errors='ignore'))
-            id_list = []
-            originaltitle_list = []
-            title_list = []
-            for item in json_query["result"]["movies"]:
-                id_list.append(item["movieid"])
-                originaltitle_list.append(item["originaltitle"])
-                title_list.append(item["label"])
-
-            homewindow.setProperty("id_list.JSON", simplejson.dumps(id_list))
-            homewindow.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
-            homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
+        movie_compare_list = create_light_movielist()
         log("create_light_movielist: " + str(now - time.time()))
     now = time.time()
     for onlineitem in onlinelist:
-        found = False
-        if onlineitem["Title"] in title_list:
-            index = title_list.index(onlineitem["Title"])
-            found = True
-            Notify("found title " + onlineitem["Title"])
-        elif onlineitem["OriginalTitle"] in originaltitle_list:
-            index = originaltitle_list.index(onlineitem["OriginalTitle"])
-            found = True
-            Notify("found originaltitle_list " + onlineitem["Title"])
-        if found:
-            dbid = str(id_list[index])
-            Notify(dbid)
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_response = simplejson.loads(json_query)
-            if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
-                # try:
-                #     difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
-                #     if difference < -2 or difference > 2:
-                #         break
-                # except:
-                #     pass
-                response = json_response['result']['moviedetails']
-                streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
-                onlineitem.update({"Play": response["movieid"]})
-                onlineitem.update({"DBID": response["movieid"]})
-                onlineitem.update({"Path": response['file']})
-                onlineitem.update({"FilenameAndPath": response['file']})
-                onlineitem.update({"Writer": " / ".join(response['writer'])})
-                onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
-                onlineitem.update({"DiscArt": response['art'].get("discart", "")})
-                onlineitem.update({"Banner": response['art'].get("banner", "")})
-                onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
-                onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
-                onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
-                onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
-                onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
-                audio = response['streamdetails']['audio']
-                subtitles = response['streamdetails']['subtitle']
-                count = 1
-                subs = []
-                streams = []
-                for item in audio:
-                    if item['language'] not in streams:
-                        streams.append(item['language'])
-                        onlineitem.update({'AudioLanguage.%d' % count: item['language']})
-                        onlineitem.update({'AudioCodec.%d' % count: item['codec']})
-                        onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
-                        count += 1
-                count = 1
-                for item in subtitles:
-                    if item['language'] not in subtitles:
-                        subs.append(item['language'])
-                        onlineitem.update({'SubtitleLanguage.%d' % count: item['language']})
-                        count += 1
-                onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
-                onlineitem.update({'AudioLanguage': " / ".join(streams)})
-            break
+        for localitem in movie_compare_list["result"]["movies"]:
+            comparators = [localitem["originaltitle"], localitem["label"]]
+            if onlineitem["OriginalTitle"] in comparators or onlineitem["Title"] in comparators:
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer"], "movieid":%s }, "id": 1}' % str(localitem["movieid"]))
+                json_query = unicode(json_query, 'utf-8', errors='ignore')
+                json_response = simplejson.loads(json_query)
+                if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
+                    try:
+                        difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
+                        if difference < -2 or difference > 2:
+                            break
+                    except:
+                        pass
+                    response = json_response['result']['moviedetails']
+                    streaminfo = media_streamdetails(localitem['file'].encode('utf-8').lower(), response['streamdetails'])
+                    onlineitem.update({"Play": localitem["movieid"]})
+                    onlineitem.update({"DBID": localitem["movieid"]})
+                    onlineitem.update({"Path": localitem['file']})
+                    onlineitem.update({"FilenameAndPath": localitem['file']})
+                    onlineitem.update({"Writer": " / ".join(response['writer'])})
+                    onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
+                    onlineitem.update({"DiscArt": response['art'].get("discart", "")})
+                    onlineitem.update({"Banner": response['art'].get("banner", "")})
+                    onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
+                    onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
+                    onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
+                    onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
+                    onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                    audio = response['streamdetails']['audio']
+                    subtitles = response['streamdetails']['subtitle']
+                    count = 1
+                    subs = []
+                    streams = []
+                    for item in audio:
+                        if item['language'] not in streams:
+                            streams.append(item['language'])
+                            onlineitem.update({'AudioLanguage.%d' % count: item['language']})
+                            onlineitem.update({'AudioCodec.%d' % count: item['codec']})
+                            onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
+                            count += 1
+                    count = 1
+                    for item in subtitles:
+                        if item['language'] not in subtitles:
+                            subs.append(item['language'])
+                            onlineitem.update({'SubtitleLanguage.%d' % count: item['language']})
+                            count += 1
+                    onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
+                    onlineitem.update({'AudioLanguage': " / ".join(streams)})
+                break
     log("compare time: " + str(now - time.time()))
     return onlinelist
 
