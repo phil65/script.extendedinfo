@@ -16,8 +16,10 @@ fanart_size = ""
 
 def HandleTMDBMovieResult(results):
     movies = []
+    ids = []
     log("starting HandleTMDBMovieResult")
     for movie in results:
+        tmdb_id = fetch(movie, 'id')
         if ("backdrop_path" in movie) and (movie["backdrop_path"]):
             backdrop_path = base_url + fanart_size + movie['backdrop_path']
         else:
@@ -33,9 +35,9 @@ def HandleTMDBMovieResult(results):
             year = release_date[:4]
         else:
             year = ""
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'id'))
+        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(tmdb_id)
         if False:
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie, 'id'))
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(tmdb_id)
         else:
             path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
@@ -46,7 +48,7 @@ def HandleTMDBMovieResult(results):
                     'Title': fetch(movie, 'title'),
                     'Label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
-                    'ID': fetch(movie, 'id'),
+                    'ID': tmdb_id,
                     'Path': path,
                     'Trailer': trailer,
                     'Play': "",
@@ -55,7 +57,8 @@ def HandleTMDBMovieResult(results):
                     'Votes': fetch(movie, 'vote_count'),
                     'Year': year,
                     'Premiered': release_date}
-        if not str(movie['id']) in str(movies):  # too dirty
+        if not tmdb_id in ids:
+            ids.append(tmdb_id)
             movies.append(newmovie)
     movies = CompareWithLibrary(movies)
     return movies
@@ -130,27 +133,28 @@ def HandleTMDBPeopleResult(results):
         else:
             image = ""
             image_small = ""
-        alsoknownas = " / ".join(person.get('also_known_as', ""))
-        newperson = {'adult': str(person.get('adult', "")),
+        alsoknownas = " / ".join(fetch(person, 'also_known_as'))
+        newperson = {'adult': str(fetch(person, 'adult')),
                      'name': person['name'] ,
                      'title': person['name'],
                      'also_known_as': alsoknownas,
                      'alsoknownas': alsoknownas,
-                     'biography': cleanText(person.get('biography', "")),
-                     'birthday': person.get('birthday', ""),
-                     'character': person.get('character', ""),
-                     'department': person.get('department', ""),
-                     'job': person.get('job', ""),
+                     'biography': cleanText(fetch(person, 'biography')),
+                     'birthday': fetch(person, 'birthday'),
+                     'age': calculate_age(fetch(person, 'birthday')),
+                     'character': fetch(person, 'character'),
+                     'department': fetch(person, 'department'),
+                     'job': fetch(person, 'job'),
                      'description': description,
                      'plot': description,
                      'id': str(person['id']),
-                     'cast_id': str(person.get('cast_id', "")),
-                     'credit_id': str(person.get('credit_id', "")),
+                     'cast_id': str(fetch(person, 'cast_id')),
+                     'credit_id': str(fetch(person, 'credit_id')),
                      'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
-                     'deathday': person.get('deathday', ""),
-                     'place_of_birth': person.get('place_of_birth', ""),
-                     'placeofbirth': person.get('place_of_birth', ""),
-                     'homepage': person.get('homepage', ""),
+                     'deathday': fetch(person, 'deathday'),
+                     'place_of_birth': fetch(person, 'place_of_birth'),
+                     'placeofbirth': fetch(person, 'place_of_birth'),
+                     'homepage': fetch(person, 'homepage'),
                      'thumb': image_small,
                      'icon': image_small,
                      'poster': image}

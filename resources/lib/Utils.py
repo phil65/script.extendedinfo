@@ -11,6 +11,7 @@ import hashlib
 import simplejson
 import re
 import threading
+import datetime
 
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
@@ -23,6 +24,16 @@ id_list = []
 title_list = []
 originaltitle_list = []
 
+
+
+def calculate_age(born_string):
+    try:
+        born = datetime.datetime.strptime(born_string, '%Y-%m-%d')
+        today = datetime.date.today()
+        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+        return age
+    except:
+        return ""
 
 def GetPlaylistStats(path):
     startindex = -1
