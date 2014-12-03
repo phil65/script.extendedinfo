@@ -366,6 +366,8 @@ def CompareWithLibrary(onlinelist):
                 onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
                 onlineitem.update({"DiscArt": response['art'].get("discart", "")})
                 onlineitem.update({"Banner": response['art'].get("banner", "")})
+                onlineitem.update({"Poster": response['art'].get("poster", "")})
+                onlineitem.update({"Thumb": response['art'].get("poster", "")})
                 onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
                 onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
                 onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
@@ -374,7 +376,6 @@ def CompareWithLibrary(onlinelist):
                 audio = response['streamdetails']['audio']
                 subtitles = response['streamdetails']['subtitle']
                 count = 1
-                subs = []
                 streams = []
                 for item in audio:
                     if item['language'] not in streams:
@@ -384,6 +385,7 @@ def CompareWithLibrary(onlinelist):
                         onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
                         count += 1
                 count = 1
+                subs = []
                 for item in subtitles:
                     if item['language'] not in subtitles:
                         subs.append(item['language'])
