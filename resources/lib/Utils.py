@@ -159,8 +159,7 @@ def GetSimilarFromOwnLibrary(dbid):
         countries = json_response['result']['moviedetails']['country']
         directors = json_response['result']['moviedetails']['director']
         mpaa = json_response['result']['moviedetails']['mpaa']
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         if "movies" in json_query['result']:
@@ -462,6 +461,7 @@ def Get_JSON_response(url="", cache_days=7.0):
         response = GetStringFromUrl(url)
         try:
             results = simplejson.loads(response)
+            log("save to file: " + url)
             save_to_file(results, hashed_url, Addon_Data_Path)
         except:
             log("Exception: Could not get new JSON data. Tryin to fallback to cache")
@@ -703,18 +703,19 @@ def GetImdbIDfromEpisode(dbid):
         return GetImdbID("tvshow", tvshowid)
 
 
-def passHomeDataToSkin(data=None, prefix="", debug=True):
+def passHomeDataToSkin(data=None, prefix="", debug=False, precache=False):
     if data is not None:
         threads = []
         image_requests = []
         for (key, value) in data.iteritems():
             value = unicode(value)
-            if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                if not value in image_requests and value:
-                    thread = Get_File(value)
-                    threads += [thread]
-                    thread.start()
-                    image_requests.append(value)
+            if precache:
+                if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                    if not value in image_requests and value:
+                        thread = Get_File(value)
+                        threads += [thread]
+                        thread.start()
+                        image_requests.append(value)
             homewindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)

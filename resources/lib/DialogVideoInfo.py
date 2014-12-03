@@ -57,7 +57,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             #             json_response2 = simplejson.loads(json_query2)
             #             numfiles = len(json_response2["result"]["files"])
             #             movie_actor.update({"moviecount": numfiles})
-            passHomeDataToSkin(self.movie, "movie.")
+            passHomeDataToSkin(self.movie, "movie.", False, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
