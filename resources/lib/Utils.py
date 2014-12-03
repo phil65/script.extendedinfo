@@ -338,14 +338,14 @@ def CompareWithLibrary(onlinelist):
         if onlineitem["Title"] in title_list:
             index = title_list.index(onlineitem["Title"])
             found = True
-            # Notify("found title " + onlineitem["Title"])
+            Notify("found title " + onlineitem["Title"])
         elif onlineitem["OriginalTitle"] in originaltitle_list:
             index = originaltitle_list.index(onlineitem["OriginalTitle"])
             found = True
-            # Notify("found originaltitle_list " + onlineitem["Title"])
+            Notify("found originaltitle_list " + onlineitem["Title"])
         if found:
             dbid = str(id_list[index])
-            # Notify(dbid)
+            Notify(dbid)
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
