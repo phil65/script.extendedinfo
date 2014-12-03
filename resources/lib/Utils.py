@@ -620,13 +620,13 @@ def ConvertYoutubeURL(string):
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
-            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            convertedstring = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
             return convertedstring
     if 'youtube.com/watch' in string:
         vid_ids = re.findall(
             'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
-            convertedstring = 'plugin://plugin.video.youtube/?action=play_video&videoid=%s' % id
+            convertedstring = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
             return convertedstring
     return ""
 
