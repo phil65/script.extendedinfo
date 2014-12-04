@@ -166,9 +166,25 @@ def HandleTMDBPeopleImagesResult(results):
     for item in results["images"]["profiles"]:
         image = {'aspectratio': item['aspect_ratio'],
                  'thumb': base_url + "w342" + item['file_path'],
+                 'vote_average': fetch(item, "vote_average"),
+                 'iso_639_1': fetch(item, "iso_639_1"),
                  'poster': base_url + poster_size + item['file_path']}
         images.append(image)
     return images
+
+def HandleTMDBPeopleTaggedImagesResult(results):
+    images = []
+    if "tagged_images" in results:
+        for item in results["tagged_images"]["results"]:
+            image = {'aspectratio': item['aspect_ratio'],
+                     'thumb': base_url + "w342" + item['file_path'],
+                     'vote_average': fetch(item, "vote_average"),
+                     'iso_639_1': fetch(item, "iso_639_1"),
+                     'poster': base_url + poster_size + item['file_path']}
+            images.append(image)
+        return images
+    else:
+        return []
 
 
 
@@ -424,7 +440,9 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
+    prettyprint(response)
     images = HandleTMDBPeopleImagesResult(response)
+    tagged_images = HandleTMDBPeopleTaggedImagesResult(response)
  #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
