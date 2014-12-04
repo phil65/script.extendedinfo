@@ -81,16 +81,16 @@ def HandleTMDBTVShowResult(results):
                  'Thumb': poster_path,
                  'Poster': poster_path,
                  'fanart': backdrop_path,
-                 'Title': tv.get('name', ""),
-                 'OriginalTitle': tv.get('original_name', ""),
-                 'ID': tv.get('id', ""),
-                 'credit_id': tv.get('credit_id', ""),
+                 'Title': fetch(tv, 'name'),
+                 'OriginalTitle': fetch(tv, 'original_name'),
+                 'ID': fetch(tv, 'id'),
+                 'credit_id': fetch(tv, 'credit_id'),
                  'Path': "",
                  'Play': "",
                  'DBID': "",
-                 'Rating': tv.get('vote_average', ""),
-                 'Votes': tv.get('vote_count', ""),
-                 'Premiered': tv.get('first_air_date', "")}
+                 'Rating': fetch(tv, 'vote_average'),
+                 'Votes': fetch(tv, 'vote_count'),
+                 'Premiered': fetch(tv, 'first_air_date')}
         if not str(tv['id']) in str(tvshows):  # too dirty
             tvshows.append(newtv)
     tvshows = CompareWithLibrary(tvshows)
@@ -109,12 +109,12 @@ def HandleTMDBMiscResult(results):
         listitem = {'Art(poster)': poster_path,
                    'Poster': poster_path,
                    'Thumb': small_poster_path,
-                   'Title': item.get('name', ""),
-                   'certification': item.get('certification', ""),
-                   'release_date': item.get('release_date', ""),
-                   'iso_3166_1': item.get('iso_3166_1', ""),
-                   'ID': item.get('id', ""),
-                   'Description': item.get('description', "")}
+                   'Title': fetch(item, 'name'),
+                   'certification': fetch(item, 'certification'),
+                   'release_date': fetch(item, 'release_date'),
+                   'iso_3166_1': fetch(item, 'iso_3166_1'),
+                   'ID': fetch(item, 'id'),
+                   'Description': fetch(item, 'description')}
         listitems.append(listitem)
     return listitems
 
@@ -320,7 +320,7 @@ def GetTrailer(movieid=None):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-  #  prettyprint(response)
+    prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -350,23 +350,23 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     for item in response['production_companies']:
         Studio.append(item["name"])
     Studio = " / ".join(Studio)
-    Set = response.get("belongs_to_collection", "")
+    Set = fetch(response, "belongs_to_collection")
     if Set:
-        SetName = Set.get("name", "")
-        SetID = Set.get("id", "")
+        SetName = fetch(Set, "name")
+        SetID = fetch(Set, "id")
     else:
         SetName = ""
         SetID = ""
-    if 'release_date' in response and response.get('release_date') is not None:
-        year = response.get('release_date', "")[:4]
+    if 'release_date' in response and fetch(response, 'release_date') is not None:
+        year = fetch(response, 'release_date')[:4]
     else:
         year = ""
-    BudgetValue = response.get('budget', "")
+    BudgetValue = fetch(response, 'budget')
     if not BudgetValue in [0, ""]:
         Budget = millify(float(BudgetValue))
     else:
         Budget = ""
-    RevenueValue = response.get('revenue', "")
+    RevenueValue = fetch(response, 'revenue')
     if not RevenueValue in [0, ""]:
         Revenue = millify(float(RevenueValue))
     else:
@@ -379,7 +379,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         poster_path = base_url + poster_size + response['poster_path']
     else:
         poster_path = ""
-    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(response.get('id', ""))
+    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
              'Thumb': poster_path,
@@ -491,7 +491,7 @@ def GetMovieKeywords(Id):
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
-            newkeyword = {'id': keyword.get('id', ""),
+            newkeyword = {'id': fetch(keyword, 'id'),
                           'name': keyword['name']}
             keywords.append(newkeyword)
         return keywords
