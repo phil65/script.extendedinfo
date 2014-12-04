@@ -100,11 +100,11 @@ def GetExtendedAudioDBInfo(results):
         for artist in results['artists']:
             localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
             if localbio in artist and artist[localbio]:
-                Description = artist.get(localbio, "")
+                Description = fetch(artist, localbio)
             elif 'strBiographyEN' in artist and artist['strBiographyEN']:
-                Description = artist.get('strBiographyEN', "")
+                Description = fetch(artist, 'strBiographyEN')
             elif 'strBiography' in artist and artist['strBiography']:
-                Description = artist.get('strBiography', "")
+                Description = fetch(artist, 'strBiography')
             else:
                 Description = ""
             if 'strArtistBanner' in artist and artist['strArtistBanner']:
@@ -112,41 +112,41 @@ def GetExtendedAudioDBInfo(results):
             else:
                 banner = ""
             if 'strReview' in artist and artist['strReview']:
-                Description += "[CR]" + artist.get('strReview', "")
-            artist = {'artist': artist.get('strArtist', ""),
-                      'mbid': artist.get('strMusicBrainzID', ""),
+                Description += "[CR]" + fetch(artist, 'strReview')
+            artist = {'artist': fetch(artist, 'strArtist'),
+                      'mbid': fetch(artist, 'strMusicBrainzID'),
                       'Banner': banner,
-                      'Logo': artist.get('strArtistLogo', ""),
-                      'Fanart': artist.get('strArtistFanart', ""),
-                      'Fanart2': artist.get('strArtistFanart2', ""),
-                      'Fanart3': artist.get('strArtistFanart3', ""),
-                      'Born': artist.get('intBornYear', ""),
-                      'Formed': artist.get('intFormedYear', ""),
-                      'Died': artist.get('intDiedYear', ""),
-                      'Disbanded': artist.get('intDiedYear', ""),
-                      'Mood': artist.get('strMood', ""),
-                      'Artist_Born': artist.get('intBornYear', ""),
-                      'Artist_Formed': artist.get('intFormedYear', ""),
-                      'Artist_Died': artist.get('intDiedYear', ""),
-                      'Artist_Disbanded': artist.get('strDisbanded', ""),
-                      'Artist_Mood': artist.get('strMood', ""),
-                      'Country': artist.get('strCountryCode', ""),
-                      'CountryName': artist.get('strCountry', ""),
-                      'Website': artist.get('strWebsite', ""),
-                      'Twitter': artist.get('strTwitter', ""),
-                      'Facebook': artist.get('strFacebook', ""),
-                      'LastFMChart': artist.get('strLastFMChart', ""),
-                      'Gender': artist.get('strGender', ""),
-                      'audiodbid': artist.get('idArtist', ""),
+                      'Logo': fetch(artist, 'strArtistLogo'),
+                      'Fanart': fetch(artist, 'strArtistFanart'),
+                      'Fanart2': fetch(artist, 'strArtistFanart2'),
+                      'Fanart3': fetch(artist, 'strArtistFanart3'),
+                      'Born': fetch(artist, 'intBornYear'),
+                      'Formed': fetch(artist, 'intFormedYear'),
+                      'Died': fetch(artist, 'intDiedYear'),
+                      'Disbanded': fetch(artist, 'intDiedYear'),
+                      'Mood': fetch(artist, 'strMood'),
+                      'Artist_Born': fetch(artist, 'intBornYear'),
+                      'Artist_Formed': fetch(artist, 'intFormedYear'),
+                      'Artist_Died': fetch(artist, 'intDiedYear'),
+                      'Artist_Disbanded': fetch(artist, 'strDisbanded'),
+                      'Artist_Mood': fetch(artist, 'strMood'),
+                      'Country': fetch(artist, 'strCountryCode'),
+                      'CountryName': fetch(artist, 'strCountry'),
+                      'Website': fetch(artist, 'strWebsite'),
+                      'Twitter': fetch(artist, 'strTwitter'),
+                      'Facebook': fetch(artist, 'strFacebook'),
+                      'LastFMChart': fetch(artist, 'strLastFMChart'),
+                      'Gender': fetch(artist, 'strGender'),
+                      'audiodbid': fetch(artist, 'idArtist'),
                       'Description': Description,
                       'Plot': Description,
                       'Path': "",
-                      'Genre': artist.get('strSubGenre', ""),
-                      'Style': artist.get('strGenre', ""),
-                      'Label2': artist.get('strSubGenre', ""),
-                      'Thumb': artist.get('strArtistThumb', ""),
-                      'Art(Thumb)': artist.get('strArtistThumb', ""),
-                      'Members': artist.get('intMembers', "")}
+                      'Genre': fetch(artist, 'strSubGenre'),
+                      'Style': fetch(artist, 'strGenre'),
+                      'Label2': fetch(artist, 'strSubGenre'),
+                      'Thumb': fetch(artist, 'strArtistThumb'),
+                      'Art(Thumb)': fetch(artist, 'strArtistThumb'),
+                      'Members': fetch(artist, 'intMembers')}
             artists.append(artist)
     else:
         log("Error when handling GetExtendedAudioDBInfo results")
