@@ -55,6 +55,11 @@ def PopWindowStack():
             from DialogActorInfo import DialogActorInfo
             dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=content_id)
             dialog.doModal()
+        elif window_type == "list":
+            from DialogVideoList import DialogVideoList
+            dialog = DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=content_id)
+            dialog.doModal()
+
 
 def GetPlaylistStats(path):
     startindex = -1

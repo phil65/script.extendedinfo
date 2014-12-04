@@ -19,7 +19,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.listitems = CreateListItems(kwargs.get('listitems'))
+        self.listitem_list = kwargs.get('listitems')
+        self.listitems = CreateListItems(self.listitem_list)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -30,9 +31,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
+            PopWindowStack()
 
     def onClick(self, controlID):
         if controlID in [500]:
+            AddToWindowStack("list", self.listitem_list)
             movieid = self.getControl(controlID).getSelectedItem().getProperty("id")
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
