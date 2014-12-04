@@ -70,11 +70,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
+            PopWindowStack()
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 250]:
             listitem = self.getControl(controlID).getSelectedItem()
+            AddToWindowStack("actor", self.id)
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()

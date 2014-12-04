@@ -17,13 +17,18 @@ __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
 __addonicon__ = __addon__.getAddonInfo('icon')
 __language__ = __addon__.getLocalizedString
+__addonname__ = __addon__.getAddonInfo('name')
+__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
+
+
 Addon_Data_Path = os.path.join(xbmc.translatePath(
     "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 id_list = []
 title_list = []
 originaltitle_list = []
-
+windowstack = []
+global windowstack
 
 
 def calculate_age(born_string):
@@ -34,6 +39,22 @@ def calculate_age(born_string):
         return age
     except:
         return ""
+
+
+def AddToWindowStack(window_type, content_id):
+    windowstack.append((window_type, content_id))
+
+def PopWindowStack():
+    if windowstack:
+        window_type, content_id = windowstack.pop()
+        if window_type == "video":
+            from DialogVideoInfo import DialogVideoInfo
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog.doModal()
+        elif window_type == "actor":
+            from DialogActorInfo import DialogActorInfo
+            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog.doModal()
 
 def GetPlaylistStats(path):
     startindex = -1

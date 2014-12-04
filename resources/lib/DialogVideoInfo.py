@@ -26,18 +26,18 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
         if tmdb_id:
-            MovieId = tmdb_id
+            self.MovieId = tmdb_id
         elif dbid and (int(dbid) > -1):
-            MovieId = GetImdbID("movie", dbid)
-            log("IMDBId from local DB:" + str(MovieId))
+            self.MovieId = GetImdbID("movie", dbid)
+            log("IMDBId from local DB:" + str(self.MovieId))
         elif imdb_id:
-            MovieId = GetMovieDBID(imdb_id)
+            self.MovieId = GetMovieDBID(imdb_id)
         elif self.name:
-            MovieId = search_movie(kwargs.get('name'))
+            self.MovieId = search_movie(kwargs.get('name'))
         else:
-            MovieId = ""
-        if MovieId:
-            self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords = GetExtendedMovieInfo(MovieId, dbid)
+            self.MovieId = ""
+        if self.MovieId:
+            self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords = GetExtendedMovieInfo(self.MovieId, dbid)
             if not self.movie:
                 self.close()
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
@@ -87,17 +87,20 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
+            PopWindowStack()
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [50, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            AddToWindowStack("video", self.MovieId)
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
             self.close()
             dialog.doModal()
         elif controlID in [150, 250]:
             movieid = self.getControl(controlID).getSelectedItem().getProperty("id")
             self.close()
+            AddToWindowStack("video", self.MovieId)
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
             dialog.doModal()
         elif controlID == 350:
