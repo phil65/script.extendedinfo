@@ -25,67 +25,82 @@ msgctxt "Addon Description"
 msgid "This script offers various possibilities to display online content inside skins. Used services are themoviedb.org, theaudiodb.org, rottentomatoes.com, Trakt.TV and a lot more. Can also be used for importing / exporting skin settings, adding additional fanart stuff to library and cooking eggs. Needs skin support for most functions."
 msgstr ""
 
-
-msgctxt "#32001"
-msgid "Export Skin Settings"
-msgstr ""
-
-msgctxt "#32002"
-msgid "Import Skin Settings"
-msgstr ""
-
-msgctxt "#32003"
-msgid "Reset Skin Settings"
-msgstr ""
-
-msgctxt "#32004"
-msgid "Choose action"
-msgstr ""
-
-msgctxt "#32005"
-msgid "Completed"
-msgstr ""
-
-msgctxt "#32006"
-msgid "Export successful"
-msgstr ""
-
-msgctxt "#32007"
-msgid "Error"
-msgstr ""
-
-msgctxt "#32008"
-msgid "guisettings.xml not found"
-msgstr ""
-
-msgctxt "#32009"
-msgid "Import successful"
-msgstr ""
-
 msgctxt "#32010"
-msgid "Importing skin settings"
+msgid "Filmography"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Updating"
+msgid "Known Movies"
 msgstr ""
 
 msgctxt "#32012"
-msgid "City"
+msgid "Birthday"
 msgstr ""
 
 msgctxt "#32013"
-msgid "Country"
+msgid "Day of Death"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Add extrathumbs to library"
+msgid "Place of Birth"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Add extrafanart to library"
+msgid "Adult Actor"
 msgstr ""
 
 msgctxt "#32016"
-msgid "Updating database with local art"
+msgid "Also Known As"
+msgstr ""
+
+msgctxt "#32017"
+msgid "Homepage"
+msgstr ""
+
+msgctxt "#32018"
+msgid "Role"
+msgstr ""
+
+msgctxt "#32019"
+msgid "Job"
+msgstr ""
+
+msgctxt "#32020"
+msgid "Age"
+msgstr ""
+
+msgctxt "#32022"
+msgid "Release Date"
+msgstr ""
+
+msgctxt "#32030"
+msgid "Movie Appearances"
+msgstr ""
+
+msgctxt "#32031"
+msgid "TV Show Appearances"
+msgstr ""
+
+msgctxt "#32033"
+msgid "Enter Person Name"
+msgstr ""
+
+msgctxt "#32034"
+msgid "Person results for "%s"
+msgstr ""
+
+msgctxt "#32050"
+msgid "Online information"
+msgstr ""
+
+msgctxt "#32051"
+msgid "Trailer"
+msgstr ""
+
+msgctxt "#32052"
+msgid "No trailers found"
+msgstr ""
+
+msgctxt "#32099"
+msgid "Include Pornstars"
 msgstr ""
