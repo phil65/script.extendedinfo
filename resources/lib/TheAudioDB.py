@@ -14,8 +14,8 @@ base_url = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AudioDB_apikey)
 def HandleAudioDBAlbumResult(results):
     albums = []
     if 'album' in results and results['album']:
+        localdescription = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
         for album in results['album']:
-            localdescription = 'strDescription' + __addon__.getSetting("LanguageID").upper()
             if localdescription in album and album[localdescription]:
                 Description = album.get(localdescription, "")
             elif 'strDescriptionEN' in album and album['strDescriptionEN']:
