@@ -362,12 +362,12 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     else:
         year = ""
     BudgetValue = fetch(response, 'budget')
-    if not BudgetValue in [0, ""]:
+    if not BudgetValue in [0, 1, ""]:
         Budget = millify(float(BudgetValue))
     else:
         Budget = ""
     RevenueValue = fetch(response, 'revenue')
-    if not RevenueValue in [0, ""]:
+    if not RevenueValue in [0, 1, ""]:
         Revenue = millify(float(RevenueValue))
     else:
         Revenue = ""
