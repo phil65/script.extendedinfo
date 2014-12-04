@@ -43,6 +43,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         if self.id:
             self.person, self.movie_roles, self.tvshow_roles, self.images = GetExtendedActorInfo(self.id)
             name = self.person["name"]
+            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             self.movie_listitems = CreateListItems(self.movie_roles, 0)

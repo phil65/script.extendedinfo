@@ -377,12 +377,14 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         backdrop_path = ""
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + poster_size + response['poster_path']
+        poster_path_small = base_url + "w342" + response['poster_path']
     else:
         poster_path = ""
+        poster_path_small = ""
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
-             'Thumb': poster_path,
+             'Thumb': poster_path_small,
              'Poster': poster_path,
              'fanart': backdrop_path,
              'Title': fetch(response, 'title'),
