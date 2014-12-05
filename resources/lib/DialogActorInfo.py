@@ -83,8 +83,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 350:
             listitem = self.getControl(350).getSelectedItem()
+            import YDStreamExtractor
+            YDStreamExtractor.disableDASHVideo(True)
+            vid = YDStreamExtractor.getVideoInfo(listitem.getProperty("youtube_id"), quality=1)
+            stream_url = vid.streamURL()
             self.close()
-            xbmc.executebuiltin("PlayMedia(%s)" % listitem.getProperty("Path"))
+            log("Youtube Trailer:" + stream_url)
+            xbmc.executebuiltin("PlayMedia(%s)" % stream_url)
 
     def onFocus(self, controlID):
         pass
