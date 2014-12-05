@@ -14,7 +14,8 @@ __cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
 
 
 class DialogVideoList(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
+    ACTION_PREVIOUS_MENU = [92, 9]
+    ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -32,6 +33,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
+        elif action in self.ACTION_EXIT_SCRIPT:
+            self.close()
 
     def onClick(self, controlID):
         if controlID in [500]:
