@@ -18,6 +18,7 @@ __cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
 
 class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
+    ACTION_EXIT_SCRIPT = [13]
 
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -89,6 +90,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
+        elif action in self.ACTION_EXIT_SCRIPT:
+            self.close()
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
