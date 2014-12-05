@@ -17,8 +17,8 @@ __cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
 
 
 class DialogVideoInfo(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    ACTION_EXIT_SCRIPT = [13]
+    ACTION_PREVIOUS_MENU = [92, 9]
+    ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
