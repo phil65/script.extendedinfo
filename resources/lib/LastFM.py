@@ -4,7 +4,7 @@ import xbmc
 from Utils import *
 import urllib
 
-lastfm_apikey = '6c14e451cd2d480d503374ff8c8f4e2b'
+lastfm_apikey = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 googlemaps_key_old = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 base_url = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&' % (lastfm_apikey)
