@@ -534,11 +534,11 @@ class Get_File(threading.Thread):
         xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".jpg")
         # xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
         if xbmcvfs.exists(xbmc_cache_file):
-            Notify(xbmc_cache_file)
+            # Notify(xbmc_cache_file)
             log("xbmc_cache_file Image: " + self.url)
             return xbmc_cache_file
         elif xbmcvfs.exists(xbmc_vid_cache_file):
-            Notify(xbmc_vid_cache_file)
+            # Notify(xbmc_vid_cache_file)
             log("xbmc_vid_cache_file Image: " + self.url)
             return xbmc_vid_cache_file
         else:
