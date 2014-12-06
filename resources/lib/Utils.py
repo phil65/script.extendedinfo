@@ -530,10 +530,17 @@ class Get_File(threading.Thread):
 
     def run(self):
         cachedthumb = xbmc.getCacheThumbName(self.url)
-        xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
+        xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+        xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".jpg")
+        # xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
         if xbmcvfs.exists(xbmc_cache_file):
-            log("Cached Image: " + self.url)
+            Notify(xbmc_cache_file)
+            log("xbmc_cache_file Image: " + self.url)
             return xbmc_cache_file
+        elif xbmcvfs.exists(xbmc_vid_cache_file):
+            Notify(xbmc_vid_cache_file)
+            log("xbmc_vid_cache_file Image: " + self.url)
+            return xbmc_vid_cache_file
         else:
             try:
                 log("Download: " + self.url)
@@ -542,18 +549,18 @@ class Get_File(threading.Thread):
                 response = urllib2.urlopen(request)
                 data = response.read()
                 response.close()
-                log('image downloaded')
+                log('image downloaded: ' + self.url)
             except:
-                log('image download failed')
+                log('image download failed: ' + self.url)
                 return ""
             if data != '':
                 try:
-                    tmpfile = open(xbmc_cache_file, 'wb')
+                    tmpfile = open(xbmc.translatePath(xbmc_cache_file), 'wb')
                     tmpfile.write(data)
                     tmpfile.close()
                     return xbmc_cache_file
                 except:
-                    log('failed to save image')
+                    log('failed to save image ' + self.url)
                     return ""
             else:
                 return ""
