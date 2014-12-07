@@ -88,6 +88,13 @@ def HandleTMDBTVShowResult(results):
             poster_path = base_url + poster_size + tv['poster_path']
         else:
             poster_path = ""
+        if "episode_run_time" in tv:
+            runtimes = []
+            for item in tv["episode_run_time"]:
+                runtimes.append(str(item))
+            duration = " / ".join(runtimes)
+        else:
+            duration = ""
         newtv = {'Art(fanart)': backdrop_path,
                  'Art(poster)': poster_path,
                  'Thumb': poster_path,
@@ -95,6 +102,7 @@ def HandleTMDBTVShowResult(results):
                  'fanart': backdrop_path,
                  'Title': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
+                 'Duration': duration,
                  'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Path': "",
