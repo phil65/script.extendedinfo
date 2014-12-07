@@ -14,6 +14,16 @@ poster_size = ""
 fanart_size = ""
 
 
+def RateMovie():
+    start_guest_session()
+
+def start_guest_session():
+    response = GetMovieDBData("authentication/guest_session/new?", 99999)
+    log("start_guest_session:")
+    prettyprint(response)
+
+    # http://api.themoviedb.org/3/
+
 def HandleTMDBMovieResult(results):
     movies = []
     ids = []
@@ -66,8 +76,10 @@ def HandleTMDBMovieResult(results):
 
 def HandleTMDBTVShowResult(results):
     tvshows = []
+    ids = []
     log("starting HandleTMDBTVShowResult")
     for tv in results:
+        tmdb_id = fetch(tv, 'id')
         if ("backdrop_path" in tv) and (tv["backdrop_path"]):
             backdrop_path = base_url + fanart_size + tv['backdrop_path']
         else:
@@ -83,7 +95,7 @@ def HandleTMDBTVShowResult(results):
                  'fanart': backdrop_path,
                  'Title': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
-                 'ID': fetch(tv, 'id'),
+                 'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Path': "",
                  'Play': "",
@@ -91,7 +103,8 @@ def HandleTMDBTVShowResult(results):
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
                  'Premiered': fetch(tv, 'first_air_date')}
-        if not str(tv['id']) in str(tvshows):  # too dirty
+        if not tmdb_id in ids:
+            ids.append(tmdb_id)
             tvshows.append(newtv)
     tvshows = CompareWithLibrary(tvshows)
     return tvshows
@@ -319,8 +332,9 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
+    RateMovie()
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
+   # prettyprint(response)
     authors = []
     directors = []
     genres = []
