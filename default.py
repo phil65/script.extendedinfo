@@ -324,12 +324,7 @@ class Main:
             elif info == "youtubevideo":
                 if self.id:
                     self.control = ""  # workaround to avoid breaking PlayMedia
-                    import YDStreamExtractor
-                    YDStreamExtractor.disableDASHVideo(True)
-                    vid = YDStreamExtractor.getVideoInfo(self.id, quality=1)
-                    stream_url = vid.streamURL()
-                    log("Youtube Trailer:" + stream_url)
-                    xbmc.executebuiltin("PlayMedia(%s)" % stream_url)
+                    PlayTrailer(self.id)
             elif info == 'playtrailer':
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 xbmc.sleep(500)
