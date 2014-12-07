@@ -95,6 +95,11 @@ def HandleTMDBTVShowResult(results):
             duration = " / ".join(runtimes)
         else:
             duration = ""
+        release_date = fetch(tv, 'first_air_date')
+        if release_date:
+            year = release_date[:4]
+        else:
+            year = ""
         newtv = {'Art(fanart)': backdrop_path,
                  'Art(poster)': poster_path,
                  'Thumb': poster_path,
@@ -108,9 +113,11 @@ def HandleTMDBTVShowResult(results):
                  'Path': "",
                  'Play': "",
                  'DBID': "",
+                 'year': year,
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
-                 'Premiered': fetch(tv, 'first_air_date')}
+                 'Release_Date': release_date,
+                 'Premiered': release_date}
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             tvshows.append(newtv)
