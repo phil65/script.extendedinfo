@@ -453,6 +453,20 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords
 
 
+def GetExtendedTVSHowInfo(tvshow_id):
+    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" % (str(tvshow_id), __addon__.getSetting("LanguageID")), 2)
+    prettyprint(response)
+    tvshow = HandleTMDBTVShowResult([response])
+    actors = HandleTMDBPeopleResult(response["credits"]["cast"])
+    crew = HandleTMDBPeopleResult(response["credits"]["crew"])
+    similar_shows = HandleTMDBMovieResult(response["similar"]["results"])
+    genres = HandleTMDBMiscResult(response["genres"])
+    production_companies = HandleTMDBMiscResult(response["production_companies"])
+    # releases = HandleTMDBMiscResult(response["releases"]["countries"])
+    keywords = HandleTMDBMiscResult(response["keywords"]["results"])
+    return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords
+
+
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])

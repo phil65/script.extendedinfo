@@ -136,7 +136,7 @@ class Main:
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
-                    MovieId = GetImdbID("movie", self.dbid)
+                    MovieId = GetImdbIDFromDatabase("movie", self.dbid)
                     log("IMDBId from local DB:" + str(MovieId))
                 else:
                     MovieId = ""
@@ -160,14 +160,14 @@ class Main:
             elif info == 'movielists':
                 passDataToSkin('MovieLists', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.dbid:
-                    movieid = GetImdbID("movie", self.dbid)
+                    movieid = GetImdbIDFromDatabase("movie", self.dbid)
                     log("MovieDB Id:" + str(movieid))
                     if movieid:
                         passDataToSkin('MovieLists', GetMovieLists(movieid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'keywords':
                 passDataToSkin('Keywords', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.dbid:
-                    movieid = GetImdbID("movie", self.dbid)
+                    movieid = GetImdbIDFromDatabase("movie", self.dbid)
                     log("MovieDB Id:" + str(movieid))
                     if movieid:
                         passDataToSkin('Keywords', GetMovieKeywords(movieid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
@@ -212,7 +212,7 @@ class Main:
                 passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if (self.id or self.dbid):
                     if self.dbid:
-                        movieid = GetImdbID("movie", self.dbid)
+                        movieid = GetImdbIDFromDatabase("movie", self.dbid)
                     else:
                         movieid = self.id
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", movieid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
@@ -221,9 +221,9 @@ class Main:
                 if (self.id or self.dbid):
                     if self.dbid:
                         if self.type == "episode":
-                            tvshowid = GetImdbIDfromEpisode(self.dbid)
+                            tvshowid = GetImdbIDFromDatabasefromEpisode(self.dbid)
                         else:
-                            tvshowid = GetImdbID("tvshow", self.dbid)
+                            tvshowid = GetImdbIDFromDatabase("tvshow", self.dbid)
                     else:
                         tvshowid = self.id
                     passDataToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
@@ -331,7 +331,7 @@ class Main:
                 if self.id:
                     MovieId = self.id
                 elif self.dbid and (int(self.dbid) > -1):
-                    MovieId = GetImdbID("movie", self.dbid)
+                    MovieId = GetImdbIDFromDatabase("movie", self.dbid)
                     log("MovieDBID from local DB:" + str(MovieId))
                 elif self.imdbid:
                     MovieId = GetMovieDBID(self.imdbid)

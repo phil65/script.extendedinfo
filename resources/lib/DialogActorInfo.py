@@ -5,6 +5,7 @@ from Utils import *
 from TheMovieDB import *
 from YouTube import *
 import DialogVideoInfo
+import DialogTVShowInfo
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
@@ -79,10 +80,16 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
-        if controlID in [150, 250]:
+        if controlID in [150]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack("actor", self.id)
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+            self.close()
+            dialog.doModal()
+        elif controlID in [250]:
+            listitem = self.getControl(controlID).getSelectedItem()
+            AddToWindowStack("actor", self.id)
+            dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
         elif controlID == 350:

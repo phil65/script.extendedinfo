@@ -732,7 +732,7 @@ def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
-def GetImdbID(type, dbid):
+def GetImdbIDFromDatabase(type, dbid):
     if type == "movie":
         json_query = xbmc.executeJSONRPC(
             '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
@@ -753,14 +753,14 @@ def GetImdbID(type, dbid):
             return []
 
 
-def GetImdbIDfromEpisode(dbid):
+def GetImdbIDFromDatabasefromEpisode(dbid):
     json_query = xbmc.executeJSONRPC(
         '{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "episodedetails" in json_response["result"]:
         tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
-        return GetImdbID("tvshow", tvshowid)
+        return GetImdbIDFromDatabase("tvshow", tvshowid)
 
 
 def passHomeDataToSkin(data=None, prefix="", debug=False, precache=False):
