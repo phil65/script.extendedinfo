@@ -27,8 +27,8 @@ homewindow = xbmcgui.Window(10000)
 id_list = []
 title_list = []
 originaltitle_list = []
-windowstack = []
 global windowstack
+windowstack = []
 
 
 def calculate_age(born_string):
