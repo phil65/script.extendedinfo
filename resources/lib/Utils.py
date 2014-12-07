@@ -59,6 +59,10 @@ def PopWindowStack():
             from DialogVideoInfo import DialogVideoInfo
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=content_id)
             dialog.doModal()
+        elif window_type == "tvshow":
+            from DialogTVShowInfo import DialogTVShowInfo
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog.doModal()
         elif window_type == "actor":
             from DialogActorInfo import DialogActorInfo
             dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=content_id)
