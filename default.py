@@ -185,11 +185,11 @@ class Main:
                     dialog.doModal()
 
             elif info == 'extendedtvinfo':
-                if self.id:
-                    tvshowinfo = GetTVShowInfo(self.id)
-                    if tvshowinfo:
-             #           prettyprint(tvshowinfo)
-                        passHomeDataToSkin(tvshowinfo[0], self.prop_prefix)
+                from DialogTVShowInfo import DialogTVShowInfo
+                if self.handle:
+                    xbmcplugin.endOfDirectory(self.handle)
+                dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=self.id, dbid=self.dbid, imdbid=self.imdbid, name=self.name)
+                dialog.doModal()
             elif info == 'seasoninfo':
                 passDataToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.tvshow and self.season:
