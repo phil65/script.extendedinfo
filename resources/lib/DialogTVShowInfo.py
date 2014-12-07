@@ -45,7 +45,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["Title"], "", "relevance", 15)
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
-            passHomeDataToSkin(self.tvshow, "tvshow.", True, True)
+            passHomeDataToSkin(self.tvshow, "movie.", True, True)
         else:
             Notify("No ID found")
             self.close()
