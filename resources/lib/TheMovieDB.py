@@ -111,6 +111,7 @@ def HandleTMDBTVShowResult(results):
                  'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Path': "",
+                 'Plot': fetch(tv, "overview"),
                  'Play': "",
                  'DBID': "",
                  'year': year,
