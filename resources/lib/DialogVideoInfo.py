@@ -123,6 +123,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=studioitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
+        elif controlID == 1050:
+            author = self.getControl(controlID).getSelectedItem().getProperty("author")
+            text = "[B]" + author + "[/B][CR]" + self.getControl(controlID).getSelectedItem().getProperty("content")
+            xbmc.executebuiltin("RunScript(script.toolbox,info=textviewer,text=%s)" % text)
+            dialog.doModal()
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             keywordid = self.getControl(controlID).getSelectedItem().getProperty("id")
