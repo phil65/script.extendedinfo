@@ -420,7 +420,7 @@ def GetMovieDBID(imdbid):
 
 
 def GetTrailer(movieid=None):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
     if not response:
         Notify("Could not get trailer")
         return ""
@@ -433,7 +433,7 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
    # prettyprint(response)
     authors = []
     directors = []
@@ -583,7 +583,7 @@ def GetExtendedActorInfo(actorid):
 
 
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMiscResult(response["lists"]["results"])
 
 def GetMoviesWithKeyword(keywordid):
@@ -636,7 +636,7 @@ def GetActorTVShowCredits(actorid):
 
 
 def GetMovieKeywords(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -650,7 +650,7 @@ def GetMovieKeywords(Id):
 
 
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
     if "similar_movies" in response:
         return HandleTMDBMovieResult(response["similar_movies"]["results"])
     else:
