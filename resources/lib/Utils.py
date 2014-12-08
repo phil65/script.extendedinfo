@@ -395,7 +395,7 @@ def CompareWithLibrary(onlinelist):
         if found:
             dbid = str(id_list[index])
             # Notify(dbid)
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails","year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
@@ -406,9 +406,18 @@ def CompareWithLibrary(onlinelist):
                 # except:
                 #     pass
                 response = json_response['result']['moviedetails']
+                if (response['resume']['position'] and response['resume']['total']) > 0:
+                    resume = "true"
+                    played = '%s'%int((float(response['resume']['position']) / float(response['resume']['total'])) * 100)
+                else:
+                    resume = "false"
+                    played = '0'
                 streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
                 onlineitem.update({"Play": response["movieid"]})
                 onlineitem.update({"DBID": response["movieid"]})
+                onlineitem.update({"Path": response['file']})
+                onlineitem.update({"PercentPlayed": played})
+                onlineitem.update({"Resume": resume})
                 onlineitem.update({"Path": response['file']})
                 onlineitem.update({"FilenameAndPath": response['file']})
                 onlineitem.update({"Writer": " / ".join(response['writer'])})
