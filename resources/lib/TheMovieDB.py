@@ -17,10 +17,10 @@ fanart_size = ""
 
 
 def RateMovie(movieid, rating):
-    if __addon__.getSetting("tmdb_username") and False:
-        session_id = get_session_id()
+    if __addon__.getSetting("tmdb_username"):
+        session_id_string = "session_id=" + get_session_id()
     else:
-        session_id = get_guest_session_id()
+        session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     # values = '{"value": 5.5}'
     log(values)
@@ -28,7 +28,7 @@ def RateMovie(movieid, rating):
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     }
-    url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&guest_session_id=%s" % (str(movieid), moviedb_key, session_id)
+    url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&%s" % (str(movieid), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -40,6 +40,7 @@ def CreateList():
     name = "Test"
     desctiption = ""
     values = '{"name": "%s", "description": "%s"}' % (name, description)
+    log(values)
     headers = {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
@@ -56,7 +57,7 @@ def get_account_info():
     session_id = get_session_id()
     response = GetMovieDBData("account?session_id=%s&" % session_id, 0)
     prettyprint(response)
-    return response["guest_session_id"]
+    return response["id"]
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
@@ -580,8 +581,13 @@ def GetMoviesWithCertification(country, rating):
     return HandleTMDBMovieResult(response["results"])
 
 def GetRatedMovies():
-    session_id = get_guest_session_id()
-    response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 0)
+    if __addon__.getSetting("tmdb_username"):
+        session_id = get_session_id()
+        account_id = get_account_info()
+        response = GetMovieDBData("account/%s/rated/movies?session_id=%s&language=%s&" % (str(account_id), str(session_id), __addon__.getSetting("LanguageID")), 0)
+    else:
+        session_id = get_guest_session_id()
+        response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 0)
     return HandleTMDBMovieResult(response["results"])
 
 
