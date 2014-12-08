@@ -73,7 +73,7 @@ def CreateList():
 
 def get_account_info():
     session_id = get_session_id()
-    response = GetMovieDBData("account?session_id=%s&" % session_id, 0)
+    response = GetMovieDBData("account?session_id=%s&" % session_id, 999999)
     prettyprint(response)
     return response["id"]
 
@@ -84,12 +84,12 @@ def get_guest_session_id():
 
 def get_session_id():
     request_token = auth_request_token()
-    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0)
+    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0.1)
     prettyprint(response)
     return response["session_id"]
 
 def get_request_token():
-    response = GetMovieDBData("authentication/token/new?", 0)
+    response = GetMovieDBData("authentication/token/new?", 0.1)
     prettyprint(response)
     return response["request_token"]
 
@@ -97,7 +97,7 @@ def auth_request_token():
     request_token = get_request_token()
     username = __addon__.getSetting("tmdb_username")
     password = __addon__.getSetting("tmdb_password")
-    response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0)
+    response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0.1)
     prettyprint(response)
     if response["success"]:
       return response["request_token"]
