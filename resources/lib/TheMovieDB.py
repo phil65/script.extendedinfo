@@ -3,6 +3,8 @@ import os
 import xbmc
 from Utils import *
 import urllib
+from urllib2 import Request, urlopen
+
 
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 __addon__ = xbmcaddon.Addon()
@@ -14,13 +16,28 @@ poster_size = ""
 fanart_size = ""
 
 
-def RateMovie():
-    start_guest_session()
+def RateMovie(movieid, rating):
+    session_id = get_guest_session_id()
+    values = """
+      {
+        "value": 7.5
+      }
+    """
+    headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&guest_session_id=%s" % (str(movieid), moviedb_key, session_id)
+    log(url)
+    request = Request(url, data=values, headers=headers)
+    response_body = urlopen(request).read()
+    log("RateMovie Answer:" + response_body)
 
-def start_guest_session():
-    response = GetMovieDBData("authentication/guest_session/new?", 99999)
-    log("start_guest_session:")
+
+def get_guest_session_id():
+    response = GetMovieDBData("authentication/guest_session/new?", 999999)
     prettyprint(response)
+    return response["guest_session_id"]
 
     # http://api.themoviedb.org/3/
 
@@ -348,7 +365,6 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
-    RateMovie()
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
    # prettyprint(response)
     authors = []
@@ -511,6 +527,12 @@ def GetMoviesWithGenre(genreid):
 def GetMoviesWithCertification(country, rating):
     response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
+
+def GetRatedMovies():
+    session_id = get_guest_session_id()
+    response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 30)
+    return HandleTMDBMovieResult(response["results"])
+
 
 def GetMoviesFromList(listid):
     response = GetMovieDBData("list/%s?language=%s&" % (str(listid), __addon__.getSetting("LanguageID")), 30)

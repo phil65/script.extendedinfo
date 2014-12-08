@@ -155,6 +155,18 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
+        elif controlID == 6001:
+            rating = xbmcgui.Dialog().input( __language__( 30311 ), "", type=xbmcgui.INPUT_NUMERIC )
+            RateMovie(self.MovieId, rating)
+        elif controlID == 6002:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            list_items = GetRatedMovies()
+            self.close()
+            AddToWindowStack("video", self.MovieId)
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            dialog.doModal()
+
 
     def onFocus(self, controlID):
         pass
