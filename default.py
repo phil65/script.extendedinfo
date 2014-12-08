@@ -209,7 +209,7 @@ class Main:
                     if writerid:
                         passDataToSkin('WriterMovies', GetDirectorMovies(writerid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'similarmoviestrakt':
-                passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
+                passDataToSkin('SimilarMovies', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if (self.id or self.dbid):
                     if self.dbid:
                         movieid = GetImdbIDFromDatabase("movie", self.dbid)
@@ -217,7 +217,7 @@ class Main:
                         movieid = self.id
                     passDataToSkin('SimilarMovies', GetSimilarTrakt("movie", movieid), self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'similartvshowstrakt':
-                passDataToSkin('SimilarTrakt', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
+                passDataToSkin('SimilarTVShows', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if (self.id or self.dbid):
                     if self.dbid:
                         if self.type == "episode":
