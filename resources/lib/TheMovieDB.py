@@ -454,6 +454,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Status': fetch(response, 'status'),
              'Play': '',
              'Trailer': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer,
+             'TrailerImage': "http://i.ytimg.com/vi/" + Trailer + "/0.jpg",
              'Path': path,
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
