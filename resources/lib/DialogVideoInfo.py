@@ -125,7 +125,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
-            text = "[B]" + author + "[/B][CR]" + self.getControl(controlID).getSelectedItem().getProperty("content")
+            text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
             xbmc.executebuiltin("RunScript(script.toolbox,info=textviewer,text='\"%s\"')" % text)
             dialog.doModal()
         elif controlID == 950:
