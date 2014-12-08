@@ -93,6 +93,8 @@ Trakt.tv
 
 Run:
 RunScript(script.extendedinfo,info=trendingmovies)  --> TrendingMovies.%d
+RunScript(script.extendedinfo,info=similarmoviestrakt)     --> SimilarMovies.%d
+-- required additional parameters: dbid= (database id) or id= (imdb id)
 
 'Title'
 'Plot'
