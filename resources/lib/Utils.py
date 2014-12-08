@@ -896,6 +896,8 @@ def cleanText(text):
         text = text.replace('<br \/>', '[CR]')
         text = re.sub('<(.|\n|\r)*?>', '', text)
         text = text.replace('&quot;', '"')
+        text = text.replace('<em>', '[I]')
+        text = text.replace('</em>', '[/I]')
         text = text.replace('&amp;', '&')
         text = text.replace('&gt;', '>')
         text = text.replace('&lt;', '<')
