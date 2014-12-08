@@ -227,7 +227,10 @@ def HandleTMDBMiscResult(results):
                    'certification': fetch(item, 'certification'),
                    'release_date': fetch(item, 'release_date'),
                    'iso_3166_1': fetch(item, 'iso_3166_1'),
+                   'author': fetch(item, 'author'),
+                   'content': fetch(item, 'content'),
                    'ID': fetch(item, 'id'),
+                   'url': fetch(item, 'url'),
                    'Description': fetch(item, 'description')}
         listitems.append(listitem)
     return listitems
@@ -434,13 +437,13 @@ def GetTrailer(movieid=None):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-   # prettyprint(response)
+    prettyprint(response)
     authors = []
     directors = []
     genres = []
     if not response:
         Notify("Could not get movie information")
-        return {}, [], [], [], [], [], [], [], []
+        return {}, [], [], [], [], [], [], [], [], []
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['casts']['crew']:
@@ -548,11 +551,12 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     crew = HandleTMDBPeopleResult(response["casts"]["crew"])
     similar_movies = HandleTMDBMovieResult(response["similar_movies"]["results"])
     lists = HandleTMDBMiscResult(response["lists"]["results"])
+    reviews = HandleTMDBMiscResult(response["reviews"]["results"])
     genres = HandleTMDBMiscResult(response["genres"])
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     releases = HandleTMDBMiscResult(response["releases"]["countries"])
     keywords = HandleTMDBMiscResult(response["keywords"]["keywords"])
-    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords
+    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews
 
 
 def GetExtendedTVSHowInfo(tvshow_id):
