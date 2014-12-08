@@ -30,22 +30,33 @@ def RateMovie(movieid, rating):
     }
     url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&guest_session_id=%s" % (str(movieid), moviedb_key, session_id)
     request = Request(url, data=values, headers=headers)
-    response_body = urlopen(request).read()
-    results = simplejson.loads(response_body)
+    response = urlopen(request).read()
+    results = simplejson.loads(response)
+    prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
-# def CreateList():
-#     session_id = get_session_id()
-#     values = '{"value": %.1f}' % rating
-#     headers = {
-#       'Accept': 'application/json',
-#       'Content-Type': 'application/json'
-#     }
-#     url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (str(movieid), moviedb_key, session_id)
-#     request = Request(url, data=values, headers=headers)
-#     response_body = urlopen(request).read()
-#     results = simplejson.loads(response_body)
-#     Notify("ExtendedInfo Script", results["status_message"])
+def CreateList():
+    session_id = get_session_id()
+    name = "Test"
+    desctiption = ""
+    values = '{"name": "%s", "description": "%s"}' % (name, description)
+    headers = {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    }
+    url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
+    request = Request(url, data=values, headers=headers)
+    response = urlopen(request).read()
+    results = simplejson.loads(response)
+    prettyprint(results)
+    Notify("ExtendedInfo Script", results["status_message"])
+
+
+def get_account_info():
+    session_id = get_session_id()
+    response = GetMovieDBData("account?session_id=%s&" % session_id, 0)
+    prettyprint(response)
+    return response["guest_session_id"]
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
@@ -54,7 +65,7 @@ def get_guest_session_id():
 
 def get_session_id():
     request_token = auth_request_token()
-    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 999999)
+    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0)
     prettyprint(response)
     return response["session_id"]
 
