@@ -46,7 +46,7 @@ def HandleTMDBMovieResult(results):
     ids = []
     log("starting HandleTMDBMovieResult")
     for movie in results:
-        tmdb_id = fetch(movie, 'id')
+        tmdb_id = str(fetch(movie, 'id'))
         if ("backdrop_path" in movie) and (movie["backdrop_path"]):
             backdrop_path = base_url + fanart_size + movie['backdrop_path']
         else:
@@ -62,9 +62,9 @@ def HandleTMDBMovieResult(results):
             year = release_date[:4]
         else:
             year = ""
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(tmdb_id)
+        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if False:
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(tmdb_id)
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
         else:
             path = trailer
         newmovie = {'Art(fanart)': backdrop_path,
@@ -78,6 +78,7 @@ def HandleTMDBMovieResult(results):
                     'ID': tmdb_id,
                     'Path': path,
                     'Trailer': trailer,
+                    'TrailerImage': "http://i.ytimg.com/vi/" + tmdb_id + "/0.jpg",
                     'Play': "",
                     'DBID': "",
                     'Rating': fetch(movie, 'vote_average'),
