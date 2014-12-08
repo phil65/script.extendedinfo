@@ -156,7 +156,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 6001:
-            rating = xbmcgui.Dialog().input( __language__( 30311 ), "", type=xbmcgui.INPUT_NUMERIC )
+            rating = xbmcgui.Dialog().input( "Enter Rating (0 - 100)", "", type=xbmcgui.INPUT_NUMERIC )
+            rating = float(rating) / 10.0
             RateMovie(self.MovieId, rating)
         elif controlID == 6002:
             xbmc.executebuiltin("ActivateWindow(busydialog)")

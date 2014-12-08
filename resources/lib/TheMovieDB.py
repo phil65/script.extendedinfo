@@ -28,10 +28,10 @@ def RateMovie(movieid, rating):
       'Content-Type': 'application/json'
     }
     url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&guest_session_id=%s" % (str(movieid), moviedb_key, session_id)
-    log(url)
     request = Request(url, data=values, headers=headers)
     response_body = urlopen(request).read()
-    log("RateMovie Answer:" + response_body)
+    results = simplejson.loads(response_body)
+    Notify("ExtendedInfo Script", results["status_message"])
 
 
 def get_guest_session_id():
@@ -530,7 +530,7 @@ def GetMoviesWithCertification(country, rating):
 
 def GetRatedMovies():
     session_id = get_guest_session_id()
-    response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 0)
     return HandleTMDBMovieResult(response["results"])
 
 
