@@ -578,7 +578,10 @@ def GetExtendedActorInfo(actorid):
     person = HandleTMDBPeopleResult([response])
     # prettyprint(response)
     images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
-    tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
+    if "tagged_images" in response:
+        tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
+    else:
+        tagged_images = []
  #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
