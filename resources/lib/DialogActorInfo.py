@@ -43,7 +43,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.tvshow_roles = None
         self.images = None
         if self.id:
-            self.person, self.movie_roles, self.tvshow_roles, self.images = GetExtendedActorInfo(self.id)
+            self.person, self.movie_roles, self.tvshow_roles, self.images, self.tagged_images = GetExtendedActorInfo(self.id)
+            prettyprint(self.tagged_images)
             name = self.person["name"]
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
@@ -51,6 +52,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.movie_listitems = CreateListItems(self.movie_roles, 0)
             self.tvshow_listitems = CreateListItems(self.tvshow_roles, 0)
             self.image_listitems = CreateListItems(self.images)
+            self.tagged_image_listitems = CreateListItems(self.tagged_images)
+            # log(str(len(self.tagged_image_listitems)))
      #       prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
@@ -65,6 +68,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.getControl(250).addItems(self.tvshow_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
         self.getControl(450).addItems(self.image_listitems)
+        self.getControl(750).addItems(self.tagged_image_listitems)
     #    self.getControl(150).addItems(tvshow_listitems)
 
     def setControls(self):

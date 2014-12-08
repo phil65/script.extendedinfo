@@ -32,7 +32,7 @@ def RateMovie(movieid, rating):
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    prettyprint(results)
+    # prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
 def AddItemToFavourites(media_id=None, media_type="movie"):
@@ -50,7 +50,7 @@ def AddItemToFavourites(media_id=None, media_type="movie"):
       request = Request(url, data=values, headers=headers)
       response = urlopen(request).read()
       results = simplejson.loads(response)
-      prettyprint(results)
+      # prettyprint(results)
       Notify("ExtendedInfo Script", results["status_message"])
 
 def CreateList():
@@ -67,30 +67,30 @@ def CreateList():
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    prettyprint(results)
+    # prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
 
 def get_account_info():
     session_id = get_session_id()
     response = GetMovieDBData("account?session_id=%s&" % session_id, 999999)
-    prettyprint(response)
+    # prettyprint(response)
     return response["id"]
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
-    prettyprint(response)
+    # prettyprint(response)
     return response["guest_session_id"]
 
 def get_session_id():
     request_token = auth_request_token()
     response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0.1)
-    prettyprint(response)
+    # prettyprint(response)
     return response["session_id"]
 
 def get_request_token():
     response = GetMovieDBData("authentication/token/new?", 0.1)
-    prettyprint(response)
+    # prettyprint(response)
     return response["request_token"]
 
 def auth_request_token():
@@ -98,7 +98,7 @@ def auth_request_token():
     username = __addon__.getSetting("tmdb_username")
     password = __addon__.getSetting("tmdb_password")
     response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0.1)
-    prettyprint(response)
+    # prettyprint(response)
     if response["success"]:
       return response["request_token"]
     else:
@@ -280,7 +280,7 @@ def HandleTMDBPeopleResult(results):
 
 def HandleTMDBPeopleImagesResult(results):
     images = []
-    for item in results["images"]["profiles"]:
+    for item in results:
         image = {'aspectratio': item['aspect_ratio'],
                  'thumb': base_url + "w342" + item['file_path'],
                  'vote_average': fetch(item, "vote_average"),
@@ -437,7 +437,7 @@ def GetTrailer(movieid=None):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=trailers,casts,releases,keywords,similar_movies,lists,reviews&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-    prettyprint(response)
+    # prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -561,7 +561,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
 
 def GetExtendedTVSHowInfo(tvshow_id):
     response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" % (str(tvshow_id), __addon__.getSetting("LanguageID")), 2)
-    prettyprint(response)
+    # prettyprint(response)
     tvshow = HandleTMDBTVShowResult([response])
     actors = HandleTMDBPeopleResult(response["credits"]["cast"])
     crew = HandleTMDBPeopleResult(response["credits"]["crew"])
@@ -576,14 +576,14 @@ def GetExtendedTVSHowInfo(tvshow_id):
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
-    prettyprint(response)
-    images = HandleTMDBPeopleImagesResult(response)
-    tagged_images = HandleTMDBPeopleTaggedImagesResult(response)
+    # prettyprint(response)
+    images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
+    tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
  #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
-    return person[0], movie_roles, tvshow_roles, images
+    return person[0], movie_roles, tvshow_roles, images, tagged_images
 
 
 def GetMovieLists(Id):
