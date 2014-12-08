@@ -35,6 +35,24 @@ def RateMovie(movieid, rating):
     prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
+def AddItemToFavourites(media_id=None, media_type="movie"):
+      session_id = get_session_id()
+      account_id = get_account_info()
+      values = '{"media_type": "%s", "media_id": %s, "favorite": true}' % (media_type, str(media_id))
+      # values = '{"value": 5.5}'
+      log(values)
+      headers = {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      }
+      url = "http://api.themoviedb.org/3/account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
+      log(url)
+      request = Request(url, data=values, headers=headers)
+      response = urlopen(request).read()
+      results = simplejson.loads(response)
+      prettyprint(results)
+      Notify("ExtendedInfo Script", results["status_message"])
+
 def CreateList():
     session_id = get_session_id()
     name = "Test"
@@ -588,6 +606,12 @@ def GetRatedMovies():
     else:
         session_id = get_guest_session_id()
         response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 0)
+    return HandleTMDBMovieResult(response["results"])
+
+def GetFavMovies():
+    session_id = get_session_id()
+    account_id = get_account_info()
+    response = GetMovieDBData("account/%s/favorite/movies?session_id=%s&language=%s&" % (str(account_id), str(session_id), __addon__.getSetting("LanguageID")), 0)
     return HandleTMDBMovieResult(response["results"])
 
 

@@ -169,6 +169,17 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
+        elif controlID == 6003:
+            AddItemToFavourites(self.movie["ID"])
+        elif controlID == 6004:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            list_items = GetFavMovies()
+            self.close()
+            AddToWindowStack("video", self.MovieId)
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            dialog.doModal()
+
 
 
     def onFocus(self, controlID):
