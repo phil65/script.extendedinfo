@@ -83,6 +83,7 @@ def HandleTMDBMovieResult(results):
                     'DBID': "",
                     'Rating': fetch(movie, 'vote_average'),
                     'Votes': fetch(movie, 'vote_count'),
+                    'User_Rating': fetch(movie, 'rating'),
                     'Year': year,
                     'Premiered': release_date}
         if not tmdb_id in ids:
