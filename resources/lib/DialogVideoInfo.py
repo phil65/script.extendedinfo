@@ -50,6 +50,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 youtube_id_list.append(item["key"])
                 log("self.videos: " + item["key"])
             self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
+            self.crew_list = []
+            crew_id_list = []
+            for item in self.crew:
+                if item["id"] not in crew_id_list:
+                    crew_id_list.append(item["id"])
+                    self.crew_list.append(item)
+                else:
+                    index = crew_id_list.index(item["id"])
+                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             if self.movie["SetId"]:
@@ -81,7 +90,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(450).addItems(CreateListItems(self.lists, 0))
         self.getControl(550).addItems(CreateListItems(self.production_companies, 0))
         self.getControl(650).addItems(CreateListItems(self.releases, 0))
-        self.getControl(750).addItems(CreateListItems(self.crew, 0))
+        self.getControl(750).addItems(CreateListItems(self.crew_list, 0))
         self.getControl(850).addItems(CreateListItems(self.genres, 0))
         self.getControl(950).addItems(CreateListItems(self.keywords, 0))
         self.getControl(1050).addItems(CreateListItems(self.reviews, 0))
