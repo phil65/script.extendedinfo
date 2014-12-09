@@ -463,7 +463,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     authors = []
     directors = []
     genres = []
-    prettyprint(response)
     if not response:
         Notify("Could not get movie information")
         return {}, [], [], [], [], [], [], [], [], [], [], [], []
@@ -573,7 +572,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Studio': Studio,
              'Year': year}
     movie = CompareWithLibrary([movie])[0]
-   # prettyprint(response)
     actors = HandleTMDBPeopleResult(response["credits"]["cast"])
     crew = HandleTMDBPeopleResult(response["credits"]["crew"])
     similar_movies = HandleTMDBMovieResult(response["similar"]["results"])

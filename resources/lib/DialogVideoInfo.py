@@ -45,6 +45,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
+            youtube_id_list = []
+            for item in self.videos:
+                youtube_id_list.append(item["key"])
+                log("self.videos: " + item["key"])
+            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
             self.set_listitems = []
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             if self.movie["SetId"]:
