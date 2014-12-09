@@ -158,7 +158,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 6001:
             ratings = []
-            for i in range(0,20):
+            for i in range(0,21):
                 label = str(float(i * 0.5))
                 ratings.append(label)
             rating = xbmcgui.Dialog().select("Enter Rating", ratings )
