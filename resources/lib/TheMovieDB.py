@@ -592,7 +592,6 @@ def GetExtendedTVSHowInfo(tvshow_id):
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     # releases = HandleTMDBMiscResult(response["releases"]["countries"])
     keywords = HandleTMDBMiscResult(response["keywords"]["results"])
-    keywords = HandleTMDBMiscResult(response["keywords"]["results"])
     return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords
 
 
