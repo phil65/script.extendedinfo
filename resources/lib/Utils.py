@@ -21,8 +21,7 @@ __addonname__ = __addon__.getAddonInfo('name')
 __cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
 
 
-Addon_Data_Path = os.path.join(xbmc.translatePath(
-    "special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
+Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 id_list = []
 title_list = []
@@ -51,6 +50,7 @@ def PlayTrailer(youtube_id):
 
 def AddToWindowStack(window_type, content_id):
     windowstack.append((window_type, content_id))
+
 
 def PopWindowStack():
     if windowstack:
@@ -89,8 +89,7 @@ def GetPlaylistStats(path):
         playlistpath = path[startindex:endindex]
     #    Notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "result" in json_response:
@@ -274,59 +273,26 @@ def media_streamdetails(filename, streamdetails):
     info = {}
     video = streamdetails['video']
     audio = streamdetails['audio']
-    if '3d' in filename:
-        info['videoresolution'] = '3d'
-    elif video:
-        videowidth = video[0]['width']
-        videoheight = video[0]['height']
-        if (videowidth <= 720 and videoheight <= 480):
-            info['videoresolution'] = "480"
-        elif (videowidth <= 768 and videoheight <= 576):
-            info['videoresolution'] = "576"
-        elif (videowidth <= 960 and videoheight <= 544):
-            info['videoresolution'] = "540"
-        elif (videowidth <= 1280 and videoheight <= 720):
-            info['videoresolution'] = "720"
-        elif (videowidth >= 1281 or videoheight >= 721):
-            info['videoresolution'] = "1080"
-        elif (videowidth >= 1921 or videoheight >= 1081):
-            info['videoresolution'] = "4k"
-        else:
-            info['videoresolution'] = ""
+    info['videocodec'] = ''
+    info['videoaspect'] = ''
+    info['videoresolution'] = ''
+    info['audiocodec'] = ''
+    info['audiochannels'] = ''
+    if video:
+        info['videoresolution'] = video[0]['width']
+        info['videocodec'] = video[0]['codec']
+        info['videoaspect'] = video[0]['aspect']
     elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
         info['videoresolution'] = '576'
     elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
         info['videoresolution'] = '1080'
-    else:
-        info['videoresolution'] = '1080'
-    if video:
-        info['videocodec'] = video[0]['codec']
-        if (video[0]['aspect'] < 1.4859):
-            info['videoaspect'] = "1.33"
-        elif (video[0]['aspect'] < 1.7190):
-            info['videoaspect'] = "1.66"
-        elif (video[0]['aspect'] < 1.8147):
-            info['videoaspect'] = "1.78"
-        elif (video[0]['aspect'] < 2.0174):
-            info['videoaspect'] = "1.85"
-        elif (video[0]['aspect'] < 2.2738):
-            info['videoaspect'] = "2.20"
-        else:
-            info['videoaspect'] = "2.35"
-    else:
-        info['videocodec'] = ''
-        info['videoaspect'] = ''
     if audio:
         info['audiocodec'] = audio[0]['codec']
         info['audiochannels'] = audio[0]['channels']
-    else:
-        info['audiocodec'] = ''
-        info['audiochannels'] = ''
     return info
 
 
 def GetXBMCAlbums():
-    albums = []
     json_query = xbmc.executeJSONRPC(
         '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
