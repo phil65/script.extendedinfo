@@ -40,7 +40,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             self.MovieId = ""
         if self.MovieId:
-            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos = GetExtendedMovieInfo(self.MovieId, dbid)
+            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, dbid)
             if not self.movie:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
@@ -81,6 +81,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(950).addItems(CreateListItems(self.keywords, 0))
         self.getControl(1050).addItems(CreateListItems(self.reviews, 0))
         self.getControl(1150).addItems(CreateListItems(self.videos, 0))
+        self.getControl(1250).addItems(CreateListItems(self.images, 0))
+        self.getControl(1350).addItems(CreateListItems(self.backdrops, 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

@@ -457,7 +457,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     prettyprint(response)
     if not response:
         Notify("Could not get movie information")
-        return {}, [], [], [], [], [], [], [], [], []
+        return {}, [], [], [], [], [], [], [], [], [], [], [], []
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['credits']['crew']:
@@ -574,11 +574,13 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     releases = HandleTMDBMiscResult(response["releases"]["countries"])
     keywords = HandleTMDBMiscResult(response["keywords"]["keywords"])
+    images = HandleTMDBPeopleImagesResult(response["images"]["posters"])
+    backdrops = HandleTMDBPeopleImagesResult(response["images"]["backdrops"])
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     else:
         videos = []
-    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews, videos
+    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews, videos, images, backdrops
 
 
 def GetExtendedTVSHowInfo(tvshow_id):
