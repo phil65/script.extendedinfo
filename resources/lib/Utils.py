@@ -293,8 +293,7 @@ def media_streamdetails(filename, streamdetails):
 
 
 def GetXBMCAlbums():
-    json_query = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_query = simplejson.loads(json_query)
     if "result" in json_query and "albums" in json_query['result']:
@@ -304,8 +303,7 @@ def GetXBMCAlbums():
 
 
 def create_channel_list():
-    json_response = xbmc.executeJSONRPC(
-        '{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
+    json_response = xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
     json_response = unicode(json_response, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_response)
     if ('result' in json_response) and ("movies" in json_response["result"]):
@@ -445,8 +443,7 @@ def CompareAlbumWithLibrary(onlinelist):
     for onlineitem in onlinelist:
         for localitem in locallist:
             if onlineitem["name"] == localitem["title"]:
-                json_query = xbmc.executeJSONRPC(
-                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
                 album = json_query["result"]["albumdetails"]
@@ -517,12 +514,17 @@ class Get_File(threading.Thread):
     def run(self):
         cachedthumb = xbmc.getCacheThumbName(self.url)
         xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-        xbmc_cache_file = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".jpg")
-        # xbmc_cache_file = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
-        if xbmcvfs.exists(xbmc_cache_file):
-            # Notify(xbmc_cache_file)
-            log("xbmc_cache_file Image: " + self.url)
-            return xbmc_cache_file
+        xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".jpg")
+        xbmc_cache_file_png = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".png")
+        # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
+        if xbmcvfs.exists(xbmc_cache_file_jpg):
+            Notify(xbmc_cache_file_jpg)
+            log("xbmc_cache_file_jpg Image: " + self.url)
+            return xbmc_cache_file_jpg
+        elif xbmcvfs.exists(xbmc_cache_file_png):
+            Notify(xbmc_cache_file_png)
+            log("xbmc_cache_file_png Image: " + self.url)
+            return xbmc_cache_file_png
         elif xbmcvfs.exists(xbmc_vid_cache_file):
             # Notify(xbmc_vid_cache_file)
             log("xbmc_vid_cache_file Image: " + self.url)
@@ -541,10 +543,13 @@ class Get_File(threading.Thread):
                 return ""
             if data != '':
                 try:
-                    tmpfile = open(xbmc.translatePath(xbmc_cache_file), 'wb')
+                    if self.url.endswith(".png"):
+                        tmpfile = open(xbmc.translatePath(xbmc_cache_file_png), 'wb')
+                    else:
+                        tmpfile = open(xbmc.translatePath(xbmc_cache_file_jpg), 'wb')
                     tmpfile.write(data)
                     tmpfile.close()
-                    return xbmc_cache_file
+                    return xbmc_cache_file_jpg
                 except:
                     log('failed to save image ' + self.url)
                     return ""
@@ -691,15 +696,13 @@ def Notify(header="", message="", icon=__addonicon__, time=5000, sound=True):
 
 
 def GetMovieSetName(dbid):
-    json_query = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid', "")
         if dbsetid:
-            json_query = xbmc.executeJSONRPC(
-                '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             return json_response['result']['setdetails'].get('label', "")
@@ -712,8 +715,7 @@ def prettyprint(string):
 
 def GetImdbIDFromDatabase(type, dbid):
     if type == "movie":
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response["result"]:
