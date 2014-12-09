@@ -544,12 +544,13 @@ class Get_File(threading.Thread):
             if data != '':
                 try:
                     if self.url.endswith(".png"):
-                        tmpfile = open(xbmc.translatePath(xbmc_cache_file_png), 'wb')
+                        image = xbmc_cache_file_png
                     else:
-                        tmpfile = open(xbmc.translatePath(xbmc_cache_file_jpg), 'wb')
+                        image = xbmc_cache_file_jpg
+                    tmpfile = open(xbmc.translatePath(image), 'wb')
                     tmpfile.write(data)
                     tmpfile.close()
-                    return xbmc_cache_file_jpg
+                    return image
                 except:
                     log('failed to save image ' + self.url)
                     return ""
