@@ -157,9 +157,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 6001:
-            rating = xbmcgui.Dialog().input( "Enter Rating (0 - 20)", "", type=xbmcgui.INPUT_NUMERIC )
-            rating = float(rating) / 2.0
-            RateMovie(self.MovieId, rating)
+            ratings = []
+            for i in range(0,20):
+                label = str(float(i * 0.5))
+                ratings.append(label)
+            rating = xbmcgui.Dialog().select("Enter Rating", ratings )
+            if rating > -1:
+                rating = float(rating) * 0.5
+                RateMovie(self.MovieId, rating)
         elif controlID == 6002:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             list_items = GetRatedMovies()
