@@ -106,9 +106,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
             dialog.doModal()
         elif controlID == 350:
-            listitem = self.getControl(350).getSelectedItem()
+            listitem = self.getControl(controlID).getSelectedItem()
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
+        elif controlID == 1150:
+            listitem = self.getControl(controlID).getSelectedItem()
+            self.close()
+            PlayTrailer(listitem.getProperty("key"))
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
