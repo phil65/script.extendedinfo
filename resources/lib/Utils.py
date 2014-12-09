@@ -449,7 +449,6 @@ def CompareWithLibrary(onlinelist):
                         count += 1
                 count = 1
                 subs = []
-                prettyprint(subtitles)
                 for item in subtitles:
                     language = item['language']
                     if language not in subs and language != "und":

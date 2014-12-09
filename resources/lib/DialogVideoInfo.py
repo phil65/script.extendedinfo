@@ -40,7 +40,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             self.MovieId = ""
         if self.MovieId:
-            self.movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews = GetExtendedMovieInfo(self.MovieId, dbid)
+            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos = GetExtendedMovieInfo(self.MovieId, dbid)
             if not self.movie:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
@@ -66,29 +66,21 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             Notify("No ID found")
             self.close()
-        self.actor_listitems = CreateListItems(actors, 0)
-        self.crew_listitems = CreateListItems(crew, 0)
-        self.similar_movies_listitems = CreateListItems(similar_movies, 0)
-        self.list_listitems = CreateListItems(lists, 0)
-        self.studio_listitems = CreateListItems(production_companies, 0)
-        self.releases_listitems = CreateListItems(releases, 0)
-        self.genre_listitems = CreateListItems(genres, 0)
-        self.keyword_listitems = CreateListItems(keywords, 0)
-        self.review_listitems = CreateListItems(reviews, 0)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        self.getControl(50).addItems(self.actor_listitems)
-        self.getControl(150).addItems(self.similar_movies_listitems)
+        self.getControl(50).addItems(CreateListItems(self.actors, 0))
+        self.getControl(150).addItems(CreateListItems(self.similar_movies, 0))
         self.getControl(250).addItems(self.set_listitems)
         self.getControl(350).addItems(self.youtube_listitems)
-        self.getControl(450).addItems(self.list_listitems)
-        self.getControl(550).addItems(self.studio_listitems)
-        self.getControl(650).addItems(self.releases_listitems)
-        self.getControl(750).addItems(self.crew_listitems)
-        self.getControl(850).addItems(self.genre_listitems)
-        self.getControl(950).addItems(self.keyword_listitems)
-        self.getControl(1050).addItems(self.review_listitems)
+        self.getControl(450).addItems(CreateListItems(self.lists, 0))
+        self.getControl(550).addItems(CreateListItems(self.production_companies, 0))
+        self.getControl(650).addItems(CreateListItems(self.releases, 0))
+        self.getControl(750).addItems(CreateListItems(self.crew, 0))
+        self.getControl(850).addItems(CreateListItems(self.genres, 0))
+        self.getControl(950).addItems(CreateListItems(self.keywords, 0))
+        self.getControl(1050).addItems(CreateListItems(self.reviews, 0))
+        self.getControl(1150).addItems(CreateListItems(self.videos, 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -186,6 +178,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
+        elif controlID == 6005:
+            CreateList()
 
 
 

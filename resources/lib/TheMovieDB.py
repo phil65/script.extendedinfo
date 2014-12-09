@@ -144,7 +144,7 @@ def HandleTMDBMovieResult(results):
                     'ID': tmdb_id,
                     'Path': path,
                     'Trailer': trailer,
-                    'TrailerImage': "http://i.ytimg.com/vi/" + tmdb_id + "/0.jpg",
+                    'trailerimage': "http://i.ytimg.com/vi/" + tmdb_id + "/0.jpg",
                     'Play': "",
                     'DBID': "",
                     'Rating': fetch(movie, 'vote_average'),
@@ -235,6 +235,20 @@ def HandleTMDBMiscResult(results):
         listitems.append(listitem)
     return listitems
 
+def HandleTMDBVideoResult(results):
+    listitems = []
+    for item in results:
+        image = "http://i.ytimg.com/vi/" + fetch(item, 'key') + "/0.jpg"
+        listitem = {'Thumb': image,
+                    'Title': fetch(item, 'name'),
+                    'iso_639_1': fetch(item, 'iso_639_1'),
+                    'type': fetch(item, 'type'),
+                    'key': fetch(item, 'key'),
+                    'site': fetch(item, 'site'),
+                    'ID': fetch(item, 'id'),
+                    'size': fetch(item, 'size')}
+        listitems.append(listitem)
+    return listitems
 
 def HandleTMDBPeopleResult(results):
     people = []
@@ -437,7 +451,6 @@ def GetTrailer(movieid=None):
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
     response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
-    # prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -453,10 +466,12 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
         if item["job"] == "Director":
             directors.append(item["name"])
     Trailer = ""
+    trailerimage = ""
     if "videos" in response:
       for item in response['videos']['results']:
           if item["type"] == "Trailer" and item["site"] == "YouTube":
               Trailer = item["key"]
+              trailerimage = "http://i.ytimg.com/vi/" + Trailer + "/0.jpg"
               break
     if len(response['releases']['countries']) > 0:
         mpaa = response['releases']['countries'][0]['certification']
@@ -529,7 +544,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
              'Status': fetch(response, 'status'),
              'Play': '',
              'Trailer': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer,
-             'TrailerImage': "http://i.ytimg.com/vi/" + Trailer + "/0.jpg",
+             'trailerimage': trailerimage,
              'Path': path,
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
@@ -559,7 +574,11 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     releases = HandleTMDBMiscResult(response["releases"]["countries"])
     keywords = HandleTMDBMiscResult(response["keywords"]["keywords"])
-    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews
+    if "videos" in response:
+        videos = HandleTMDBVideoResult(response["videos"]["results"])
+    else:
+        videos = []
+    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews, videos
 
 
 def GetExtendedTVSHowInfo(tvshow_id):
@@ -572,6 +591,7 @@ def GetExtendedTVSHowInfo(tvshow_id):
     genres = HandleTMDBMiscResult(response["genres"])
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     # releases = HandleTMDBMiscResult(response["releases"]["countries"])
+    keywords = HandleTMDBMiscResult(response["keywords"]["results"])
     keywords = HandleTMDBMiscResult(response["keywords"]["results"])
     return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords
 
