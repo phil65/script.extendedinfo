@@ -25,8 +25,8 @@ def RateMovie(movieid, rating):
     # values = '{"value": 5.5}'
     log(values)
     headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
     }
     url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&%s" % (str(movieid), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
@@ -35,23 +35,25 @@ def RateMovie(movieid, rating):
     # prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
+
 def AddItemToFavourites(media_id=None, media_type="movie"):
-      session_id = get_session_id()
-      account_id = get_account_info()
-      values = '{"media_type": "%s", "media_id": %s, "favorite": true}' % (media_type, str(media_id))
-      # values = '{"value": 5.5}'
-      log(values)
-      headers = {
+    session_id = get_session_id()
+    account_id = get_account_info()
+    values = '{"media_type": "%s", "media_id": %s, "favorite": true}' % (media_type, str(media_id))
+    # values = '{"value": 5.5}'
+    log(values)
+    headers = {
         'Accept': 'application/json',
         'Content-Type': 'application/json'
-      }
-      url = "http://api.themoviedb.org/3/account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
-      log(url)
-      request = Request(url, data=values, headers=headers)
-      response = urlopen(request).read()
-      results = simplejson.loads(response)
-      # prettyprint(results)
-      Notify("ExtendedInfo Script", results["status_message"])
+    }
+    url = "http://api.themoviedb.org/3/account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
+    log(url)
+    request = Request(url, data=values, headers=headers)
+    response = urlopen(request).read()
+    results = simplejson.loads(response)
+    # prettyprint(results)
+    Notify("ExtendedInfo Script", results["status_message"])
+
 
 def CreateList():
     session_id = get_session_id()
@@ -60,8 +62,8 @@ def CreateList():
     values = '{"name": "%s", "description": "%s"}' % (name, description)
     log(values)
     headers = {
-      'Accept': 'application/json',
-      'Content-Type': 'application/json'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
     }
     url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
     request = Request(url, data=values, headers=headers)
@@ -77,10 +79,12 @@ def get_account_info():
     # prettyprint(response)
     return response["id"]
 
+
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
     # prettyprint(response)
     return response["guest_session_id"]
+
 
 def get_session_id():
     request_token = auth_request_token()
@@ -88,10 +92,12 @@ def get_session_id():
     # prettyprint(response)
     return response["session_id"]
 
+
 def get_request_token():
     response = GetMovieDBData("authentication/token/new?", 0.1)
     # prettyprint(response)
     return response["request_token"]
+
 
 def auth_request_token():
     request_token = get_request_token()
@@ -100,11 +106,9 @@ def auth_request_token():
     response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0.1)
     # prettyprint(response)
     if response["success"]:
-      return response["request_token"]
+        return response["request_token"]
     else:
-      return "bla"
-
-
+        return "bla"
 
 
 def HandleTMDBMovieResult(results):
@@ -221,19 +225,20 @@ def HandleTMDBMiscResult(results):
             poster_path = ""
             small_poster_path = ""
         listitem = {'Art(poster)': poster_path,
-                   'Poster': poster_path,
-                   'Thumb': small_poster_path,
-                   'Title': fetch(item, 'name'),
-                   'certification': fetch(item, 'certification'),
-                   'release_date': fetch(item, 'release_date'),
-                   'iso_3166_1': fetch(item, 'iso_3166_1'),
-                   'author': fetch(item, 'author'),
-                   'content': fetch(item, 'content'),
-                   'ID': fetch(item, 'id'),
-                   'url': fetch(item, 'url'),
-                   'Description': fetch(item, 'description')}
+                    'Poster': poster_path,
+                    'Thumb': small_poster_path,
+                    'Title': fetch(item, 'name'),
+                    'certification': fetch(item, 'certification'),
+                    'release_date': fetch(item, 'release_date'),
+                    'iso_3166_1': fetch(item, 'iso_3166_1'),
+                    'author': fetch(item, 'author'),
+                    'content': fetch(item, 'content'),
+                    'ID': fetch(item, 'id'),
+                    'url': fetch(item, 'url'),
+                    'Description': fetch(item, 'description')}
         listitems.append(listitem)
     return listitems
+
 
 def HandleTMDBVideoResult(results):
     listitems = []
@@ -249,6 +254,7 @@ def HandleTMDBVideoResult(results):
                     'size': fetch(item, 'size')}
         listitems.append(listitem)
     return listitems
+
 
 def HandleTMDBPeopleResult(results):
     people = []
@@ -266,7 +272,7 @@ def HandleTMDBPeopleResult(results):
             image_small = ""
         alsoknownas = " / ".join(fetch(person, 'also_known_as'))
         newperson = {'adult': str(fetch(person, 'adult')),
-                     'name': person['name'] ,
+                     'name': person['name'],
                      'title': person['name'],
                      'also_known_as': alsoknownas,
                      'alsoknownas': alsoknownas,
@@ -292,6 +298,7 @@ def HandleTMDBPeopleResult(results):
         people.append(newperson)
     return people
 
+
 def HandleTMDBPeopleImagesResult(results):
     images = []
     for item in results:
@@ -302,6 +309,7 @@ def HandleTMDBPeopleImagesResult(results):
                  'poster': base_url + poster_size + item['file_path']}
         images.append(image)
     return images
+
 
 def HandleTMDBPeopleTaggedImagesResult(results):
     images = []
@@ -316,7 +324,6 @@ def HandleTMDBPeopleTaggedImagesResult(results):
         return images
     else:
         return []
-
 
 
 def HandleTMDBCompanyResult(results):
@@ -437,7 +444,8 @@ def GetMovieDBID(imdbid):
 
 
 def GetTrailer(movieid=None):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (movieid, __addon__.getSetting("LanguageID")), 30)
     if not response:
         Notify("Could not get trailer")
         return ""
@@ -450,7 +458,8 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (movieid, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (movieid, __addon__.getSetting("LanguageID")), 30)
     authors = []
     directors = []
     genres = []
@@ -468,11 +477,11 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     Trailer = ""
     trailerimage = ""
     if "videos" in response:
-      for item in response['videos']['results']:
-          if item["type"] == "Trailer" and item["site"] == "YouTube":
-              Trailer = item["key"]
-              trailerimage = "http://i.ytimg.com/vi/" + Trailer + "/0.jpg"
-              break
+        for item in response['videos']['results']:
+            if item["type"] == "Trailer" and item["site"] == "YouTube":
+                Trailer = item["key"]
+                trailerimage = "http://i.ytimg.com/vi/" + Trailer + "/0.jpg"
+                break
     if len(response['releases']['countries']) > 0:
         mpaa = response['releases']['countries'][0]['certification']
     else:
@@ -584,7 +593,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
 
 
 def GetExtendedTVSHowInfo(tvshow_id):
-    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" % (str(tvshow_id), __addon__.getSetting("LanguageID")), 2)
+    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" %
+                              (str(tvshow_id), __addon__.getSetting("LanguageID")), 2)
     # prettyprint(response)
     tvshow = HandleTMDBTVShowResult([response])
     actors = HandleTMDBPeopleResult(response["credits"]["cast"])
@@ -614,20 +624,26 @@ def GetExtendedActorInfo(actorid):
 
 
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMiscResult(response["lists"]["results"])
+
 
 def GetMoviesWithKeyword(keywordid):
     response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&" % (str(keywordid), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
+
 def GetMoviesWithGenre(genreid):
     response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_genres=%s&language=%s&" % (str(genreid), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
 
+
 def GetMoviesWithCertification(country, rating):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&" % (country, str(rating), __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&" %
+                              (country, str(rating), __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"])
+
 
 def GetRatedMovies():
     if __addon__.getSetting("tmdb_username"):
@@ -638,6 +654,7 @@ def GetRatedMovies():
         session_id = get_guest_session_id()
         response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), __addon__.getSetting("LanguageID")), 0)
     return HandleTMDBMovieResult(response["results"])
+
 
 def GetFavMovies():
     session_id = get_session_id()
@@ -650,6 +667,7 @@ def GetMoviesFromList(listid):
     response = GetMovieDBData("list/%s?language=%s&" % (str(listid), __addon__.getSetting("LanguageID")), 30)
   #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"])
+
 
 def GetPopularActorList():
     response = GetMovieDBData("person/popular?", 1)
@@ -667,7 +685,8 @@ def GetActorTVShowCredits(actorid):
 
 
 def GetMovieKeywords(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (Id, __addon__.getSetting("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -681,7 +700,8 @@ def GetMovieKeywords(Id):
 
 
 def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" % (Id, __addon__.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (Id, __addon__.getSetting("LanguageID")), 30)
     if "similar_movies" in response:
         return HandleTMDBMovieResult(response["similar_movies"]["results"])
     else:
