@@ -30,6 +30,12 @@ global windowstack
 windowstack = []
 
 
+def WaitForVideoEnd():
+    xbmc.sleep(1000)
+    while xbmc.getCondVisibility("Player.HasVideo"):
+        xbmc.sleep(400)
+
+
 def calculate_age(born_string):
     try:
         born = datetime.datetime.strptime(born_string, '%Y-%m-%d')

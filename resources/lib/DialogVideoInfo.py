@@ -198,8 +198,3 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlID):
         pass
 
-
-def WaitForVideoEnd():
-    xbmc.sleep(1000)
-    while xbmc.getCondVisibility("Player.HasVideo"):
-        xbmc.sleep(400)
