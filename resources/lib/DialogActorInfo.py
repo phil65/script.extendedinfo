@@ -73,7 +73,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
 
-
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 550]:
@@ -89,10 +88,12 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.close()
             dialog.doModal()
         elif controlID == 350:
-            listitem = self.getControl(350).getSelectedItem()
+            listitem = self.getControl(controlID).getSelectedItem()
+            AddToWindowStack("actor", self.id)
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
-
+            WaitForVideoEnd()
+            PopWindowStack()
 
     def onFocus(self, controlID):
         pass
