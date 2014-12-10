@@ -49,7 +49,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             youtube_id_list = []
             for item in self.videos:
                 youtube_id_list.append(item["key"])
-                log("self.videos: " + item["key"])
             self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
             self.crew_list = []
             crew_id_list = []
@@ -64,18 +63,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             if self.movie["SetId"]:
                 self.set_listitems = CreateListItems(GetSetMovies(self.movie["SetId"]))
-            # json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/", "media": "files"}, "id": 1}')
-            # json_query = unicode(json_query, 'utf-8', errors='ignore')
-            # json_response = simplejson.loads(json_query)
-            # for db_actor in json_response["result"]["files"]:
-            #     for movie_actor in actors:
-            #         if db_actor["label"] == movie_actor["name"]:
-            #             movie_actor.update({"dbid": db_actor["id"]})
-            #             json_query2 = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "videodb://movies/actors/%i/", "media": "files"}, "id": 1}' % db_actor["id"])
-            #             json_query2 = unicode(json_query2, 'utf-8', errors='ignore')
-            #             json_response2 = simplejson.loads(json_query2)
-            #             numfiles = len(json_response2["result"]["files"])
-            #             movie_actor.update({"moviecount": numfiles})
             passHomeDataToSkin(self.movie, "movie.", False, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
@@ -120,14 +107,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("video", self.MovieId)
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
             dialog.doModal()
-        elif controlID == 350:
+        elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
+            AddToWindowStack("video", self.MovieId)
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
-        elif controlID == 1150:
-            listitem = self.getControl(controlID).getSelectedItem()
-            self.close()
-            PlayTrailer(listitem.getProperty("key"))
+            WaitForVideoEnd()
+            PopWindowStack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
@@ -211,6 +197,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         pass
 
 
+def WaitForVideoEnd():
+    xbmc.sleep(1000)
+    while xbmc.getCondVisibility("Player.HasVideo"):
+        xbmc.sleep(400)
+
 class Get_Youtube_Vids_Thread(threading.Thread):
 
     def __init__(self, search_string, hd, orderby, limit):
@@ -218,4 +209,16 @@ class Get_Youtube_Vids_Thread(threading.Thread):
         self.search_string = search_string
 
     def run(self):
-        GetYoutubeSearchVideosV3(self.search_string, "", "relevance", 15)
+        self.videos = GetYoutubeSearchVideosV3(self.search_string, "", "relevance", 15)
+
+
+class Movie_Info_Thread(threading.Thread):
+
+    def __init__(self, MovieId, dbid):
+        threading.Thread.__init__(self)
+        self.MovieId = MovieId
+        self.dbid = dbid
+
+    def run(self):
+        self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid)
+

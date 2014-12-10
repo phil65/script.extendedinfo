@@ -39,6 +39,7 @@ def calculate_age(born_string):
     except:
         return ""
 
+
 def PlayTrailer(youtube_id):
     import YDStreamExtractor
     YDStreamExtractor.disableDASHVideo(True)
@@ -46,7 +47,21 @@ def PlayTrailer(youtube_id):
     if vid:
         stream_url = vid.streamURL()
         log("Youtube Trailer:" + stream_url)
-        xbmc.executebuiltin("PlayMedia(%s)" % stream_url)
+        player = VideoPlayer()
+        player.play(stream_url)
+
+
+class VideoPlayer(xbmc.Player):
+
+    def __init__(self):
+        xbmc.Player.__init__(self)
+
+    def onPlayBackEnded(self):
+        pass
+
+    def onPlayBackStopped(self):
+        pass
+
 
 def AddToWindowStack(window_type, content_id):
     windowstack.append((window_type, content_id))
