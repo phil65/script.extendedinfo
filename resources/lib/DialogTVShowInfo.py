@@ -38,7 +38,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         else:
             self.tmdb_id = ""
         if self.tmdb_id:
-            self.tvshow, actors, crew, similar_shows, genres, production_companies, keywords = GetExtendedTVShowInfo(self.tmdb_id)
+            self.tvshow, self.actors, self.crew, self.similar_shows, self.genres, self.studios, self.keywords, self.videos = GetExtendedTVShowInfo(self.tmdb_id)
             if not self.tvshow:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["Thumb"])
@@ -49,27 +49,17 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         else:
             Notify("No ID found")
             self.close()
-        self.actor_listitems = CreateListItems(actors, 0)
-        self.crew_listitems = CreateListItems(crew, 0)
-        self.similar_shows_listitems = CreateListItems(similar_shows, 0)
-        # self.list_listitems = CreateListItems(lists, 0)
-        self.studio_listitems = CreateListItems(production_companies, 0)
-        # self.releases_listitems = CreateListItems(releases, 0)
-        self.genre_listitems = CreateListItems(genres, 0)
-        self.keyword_listitems = CreateListItems(keywords, 0)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        self.getControl(50).addItems(self.actor_listitems)
-        self.getControl(150).addItems(self.similar_shows_listitems)
-        # self.getControl(250).addItems(self.set_listitems)
+        self.getControl(50).addItems(CreateListItems(self.actors, 0))
+        self.getControl(150).addItems(CreateListItems(self.similar_shows, 0))
         self.getControl(350).addItems(self.youtube_listitems)
-        # self.getControl(450).addItems(self.list_listitems)
-        self.getControl(550).addItems(self.studio_listitems)
-        # self.getControl(650).addItems(self.releases_listitems)
-        self.getControl(750).addItems(self.crew_listitems)
-        self.getControl(850).addItems(self.genre_listitems)
-        self.getControl(950).addItems(self.keyword_listitems)
+        self.getControl(550).addItems(CreateListItems(self.studios, 0))
+        self.getControl(750).addItems(CreateListItems(self.crew, 0))
+        self.getControl(850).addItems(CreateListItems(self.genres, 0))
+        self.getControl(950).addItems(CreateListItems(self.keywords, 0))
+        self.getControl(1150).addItems(CreateListItems(self.videos, 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -92,8 +82,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("tvshow", self.tmdb_id)
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=tmdb_id)
             dialog.doModal()
-        elif controlID == 350:
-            listitem = self.getControl(350).getSelectedItem()
+        elif controlID in [350, 1150]:
+            listitem = self.getControl(controlID).getSelectedItem()
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
         elif controlID == 550:
