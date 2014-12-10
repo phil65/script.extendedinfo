@@ -38,7 +38,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         else:
             self.tmdb_id = ""
         if self.tmdb_id:
-            self.tvshow, actors, crew, similar_shows, genres, production_companies, keywords = GetExtendedTVSHowInfo(self.tmdb_id)
+            self.tvshow, actors, crew, similar_shows, genres, production_companies, keywords = GetExtendedTVShowInfo(self.tmdb_id)
             if not self.tvshow:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["Thumb"])

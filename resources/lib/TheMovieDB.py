@@ -590,7 +590,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None):
     return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews, videos, images, backdrops
 
 
-def GetExtendedTVSHowInfo(tvshow_id):
+def GetExtendedTVShowInfo(tvshow_id):
     response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" %
                               (str(tvshow_id), __addon__.getSetting("LanguageID")), 2)
     # prettyprint(response)
