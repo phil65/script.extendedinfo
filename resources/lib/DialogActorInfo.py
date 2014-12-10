@@ -76,13 +76,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
-        if controlID in [150]:
+        if controlID in [150, 550]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack("actor", self.id)
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
-        elif controlID in [250]:
+        elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack("actor", self.id)
             dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
