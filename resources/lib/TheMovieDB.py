@@ -449,7 +449,7 @@ def GetTrailer(movieid=None):
     if not response:
         Notify("Could not get trailer")
         return ""
-    if "videos" in results and len(response['videos']['results']) > 0:
+    if "videos" in response and len(response['videos']['results']) > 0:
         Trailer = response['videos']['results'][0]['key']
         return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer
     else:

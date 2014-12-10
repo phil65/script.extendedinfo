@@ -514,8 +514,8 @@ class Get_File(threading.Thread):
     def run(self):
         cachedthumb = xbmc.getCacheThumbName(self.url)
         xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-        xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".jpg")
-        xbmc_cache_file_png = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] +".png")
+        xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+        xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
         # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
         if xbmcvfs.exists(xbmc_cache_file_jpg):
             # Notify(xbmc_cache_file_jpg)
