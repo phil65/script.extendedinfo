@@ -6,7 +6,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
-import threading
+# import threading
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
@@ -25,14 +25,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
         tmdb_id = kwargs.get('id')
-        dbid = kwargs.get('dbid')
+        self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
         if __addon__.getSetting("tmdb_username"):
             get_session_id()
         if tmdb_id:
             self.MovieId = tmdb_id
-        elif dbid and (int(dbid) > -1):
-            self.MovieId = GetImdbIDFromDatabase("movie", dbid)
+        elif self.dbid and (int(self.dbid) > -1):
+            self.MovieId = GetImdbIDFromDatabase("movie", self.dbid)
             log("IMDBId from local DB:" + str(self.MovieId))
         elif imdb_id:
             self.MovieId = GetMovieDBID(imdb_id)
@@ -41,10 +41,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             self.MovieId = ""
         if self.MovieId:
-            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, dbid)
+            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid)
             if not self.movie:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
+            youtube_id_list = []
+            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
+            for item in self.videos:
+                youtube_id_list.append(item["key"])
+            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
             self.crew_list = []
             crew_id_list = []
             for item in self.crew:
@@ -78,11 +83,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1150).addItems(CreateListItems(self.videos, 0))
         self.getControl(1250).addItems(CreateListItems(self.images, 0))
         self.getControl(1350).addItems(CreateListItems(self.backdrops, 0))
-        self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
-        youtube_id_list = []
-        for item in self.videos:
-            youtube_id_list.append(item["key"])
-        self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
 
     def onAction(self, action):
@@ -110,8 +110,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("video", self.MovieId)
             self.close()
             if controlID in [350, 1150]:
-                listitem = self.getControl(controlID).getSelectedItem()
-                PlayTrailer(listitem.getProperty("youtube_id"))
+                youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
+                if youtube_id:
+                    PlayTrailer(youtube_id)
+                else:
+                    Notify("No trailer found")
             else:
                 PlayTrailer(self.movie["youtube_id"])
             WaitForVideoEnd()
@@ -174,6 +177,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMovie(self.MovieId, rating)
+                # xbmc.sleep(2000)
+                # self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
+                # passHomeDataToSkin(self.movie, "movie.")
         elif controlID == 6002:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             list_items = GetRatedMovies()
@@ -197,4 +203,3 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlID):
         pass
-

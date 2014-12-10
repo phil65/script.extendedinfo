@@ -464,9 +464,9 @@ def GetTrailer(movieid=None):
         Notify("Could not get trailer for movie with id " + str(movieid))
 
 
-def GetExtendedMovieInfo(movieid=None, dbid=None):
+def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
-                              (movieid, __addon__.getSetting("LanguageID")), 30)
+                              (movieid, __addon__.getSetting("LanguageID")), cache_time)
     authors = []
     directors = []
     genres = []
