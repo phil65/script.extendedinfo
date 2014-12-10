@@ -505,57 +505,61 @@ def Get_JSON_response(url="", cache_days=7.0):
     return results
 
 
-class Get_File(threading.Thread):
+class Get_File_Thread(threading.Thread):
 
     def __init__(self, url):
         threading.Thread.__init__(self)
         self.url = url
 
     def run(self):
-        cachedthumb = xbmc.getCacheThumbName(self.url)
-        xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-        xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-        xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
-        # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
-        if xbmcvfs.exists(xbmc_cache_file_jpg):
-            # Notify(xbmc_cache_file_jpg)
-            log("xbmc_cache_file_jpg Image: " + self.url)
-            return xbmc_cache_file_jpg
-        elif xbmcvfs.exists(xbmc_cache_file_png):
-            # Notify(xbmc_cache_file_png)
-            log("xbmc_cache_file_png Image: " + self.url)
-            return xbmc_cache_file_png
-        elif xbmcvfs.exists(xbmc_vid_cache_file):
-            # Notify(xbmc_vid_cache_file)
-            log("xbmc_vid_cache_file Image: " + self.url)
-            return xbmc_vid_cache_file
-        else:
+        Get_File(self.url)
+
+
+def Get_File(url):
+    cachedthumb = xbmc.getCacheThumbName(url)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
+    # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
+    if xbmcvfs.exists(xbmc_cache_file_jpg):
+        # Notify("1: " + xbmc_cache_file_jpg)
+        log("xbmc_cache_file_jpg Image: " + url)
+        return xbmc_cache_file_jpg
+    elif xbmcvfs.exists(xbmc_cache_file_png):
+        # Notify("2: " + xbmc_cache_file_png)
+        log("xbmc_cache_file_png Image: " + url)
+        return xbmc_cache_file_png
+    elif xbmcvfs.exists(xbmc_vid_cache_file):
+        # Notify("3: " + xbmc_vid_cache_file)
+        log("xbmc_vid_cache_file Image: " + url)
+        return xbmc_vid_cache_file
+    else:
+        try:
+            log("Download: " + url)
+            request = urllib2.Request(url)
+            request.add_header('Accept-encoding', 'gzip')
+            response = urllib2.urlopen(request)
+            data = response.read()
+            response.close()
+            log('image downloaded: ' + url)
+        except:
+            log('image download failed: ' + url)
+            return ""
+        if data != '':
             try:
-                log("Download: " + self.url)
-                request = urllib2.Request(self.url)
-                request.add_header('Accept-encoding', 'gzip')
-                response = urllib2.urlopen(request)
-                data = response.read()
-                response.close()
-                log('image downloaded: ' + self.url)
+                if url.endswith(".png"):
+                    image = xbmc_cache_file_png
+                else:
+                    image = xbmc_cache_file_jpg
+                tmpfile = open(xbmc.translatePath(image), 'wb')
+                tmpfile.write(data)
+                tmpfile.close()
+                return image
             except:
-                log('image download failed: ' + self.url)
+                log('failed to save image ' + url)
                 return ""
-            if data != '':
-                try:
-                    if self.url.endswith(".png"):
-                        image = xbmc_cache_file_png
-                    else:
-                        image = xbmc_cache_file_jpg
-                    tmpfile = open(xbmc.translatePath(image), 'wb')
-                    tmpfile.write(data)
-                    tmpfile.close()
-                    return image
-                except:
-                    log('failed to save image ' + self.url)
-                    return ""
-            else:
-                return ""
+        else:
+            return ""
 
 
 def GetFavouriteswithType(favtype):
@@ -753,7 +757,7 @@ def passHomeDataToSkin(data=None, prefix="", debug=False, precache=False):
             if precache:
                 if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
                     if not value in image_requests and value:
-                        thread = Get_File(value)
+                        thread = Get_File_Thread(value)
                         threads += [thread]
                         thread.start()
                         image_requests.append(value)
@@ -823,7 +827,7 @@ def CreateListItems(data=None, preload_images=0):
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
                         if not value in image_requests:
-                            thread = Get_File(value)
+                            thread = Get_File_Thread(value)
                             threads += [thread]
                             thread.start()
                             image_requests.append(value)

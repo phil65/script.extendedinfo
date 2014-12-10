@@ -6,6 +6,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
+import threading
 homewindow = xbmcgui.Window(10000)
 
 __addon__ = xbmcaddon.Addon()
@@ -178,10 +179,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 6001:
             ratings = []
-            for i in range(0,21):
+            for i in range(0, 21):
                 label = str(float(i * 0.5))
                 ratings.append(label)
-            rating = xbmcgui.Dialog().select("Enter Rating", ratings )
+            rating = xbmcgui.Dialog().select("Enter Rating", ratings)
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMovie(self.MovieId, rating)
@@ -206,7 +207,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 6005:
             CreateList()
 
-
-
     def onFocus(self, controlID):
         pass
+
+
+class Get_Youtube_Vids_Thread(threading.Thread):
+
+    def __init__(self, search_string, hd, orderby, limit):
+        threading.Thread.__init__(self)
+        self.search_string = search_string
+
+    def run(self):
+        GetYoutubeSearchVideosV3(self.search_string, "", "relevance", 15)

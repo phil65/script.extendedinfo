@@ -79,7 +79,6 @@ def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance", limit
         return []
 
 
-
 def GetYoutubeSearchVideosV2(search_string="", hd="", orderby="relevance", time="all_time"):
     results = []
     if hd and not hd == "false":
@@ -102,7 +101,6 @@ def GetYoutubeSearchVideosV2(search_string="", hd="", orderby="relevance", time=
                      'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")}
             videos.append(video)
     return videos
-
 
 
 def GetYoutubePlaylistVideos(playlistid=""):
