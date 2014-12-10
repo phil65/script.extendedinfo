@@ -249,6 +249,7 @@ def HandleTMDBVideoResult(results):
                     'iso_639_1': fetch(item, 'iso_639_1'),
                     'type': fetch(item, 'type'),
                     'key': fetch(item, 'key'),
+                    'youtube_id': fetch(item, 'key'),
                     'site': fetch(item, 'site'),
                     'ID': fetch(item, 'id'),
                     'size': fetch(item, 'size')}
@@ -602,7 +603,11 @@ def GetExtendedTVShowInfo(tvshow_id):
     production_companies = HandleTMDBMiscResult(response["production_companies"])
     # releases = HandleTMDBMiscResult(response["releases"]["countries"])
     keywords = HandleTMDBMiscResult(response["keywords"]["results"])
-    return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords
+    if "videos" in response:
+        videos = HandleTMDBVideoResult(response["videos"]["results"])
+    else:
+        videos = []
+    return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords, videos
 
 
 def GetExtendedActorInfo(actorid):
