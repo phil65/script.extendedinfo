@@ -44,7 +44,6 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["Thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["Title"], "", "relevance", 15)
             self.set_listitems = []
-            self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             passHomeDataToSkin(self.tvshow, "movie.", True, True)
         else:
             Notify("No ID found")
@@ -54,12 +53,12 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         self.getControl(50).addItems(CreateListItems(self.actors, 0))
         self.getControl(150).addItems(CreateListItems(self.similar_shows, 0))
-        self.getControl(350).addItems(self.youtube_listitems)
         self.getControl(550).addItems(CreateListItems(self.studios, 0))
         self.getControl(750).addItems(CreateListItems(self.crew, 0))
         self.getControl(850).addItems(CreateListItems(self.genres, 0))
         self.getControl(950).addItems(CreateListItems(self.keywords, 0))
         self.getControl(1150).addItems(CreateListItems(self.videos, 0))
+        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

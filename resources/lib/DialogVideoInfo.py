@@ -45,11 +45,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if not self.movie:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
-            youtube_id_list = []
-            for item in self.videos:
-                youtube_id_list.append(item["key"])
-            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
             self.crew_list = []
             crew_id_list = []
             for item in self.crew:
@@ -60,7 +55,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                     index = crew_id_list.index(item["id"])
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             self.set_listitems = []
-            self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
             if self.movie["SetId"]:
                 self.set_listitems = CreateListItems(GetSetMovies(self.movie["SetId"]))
             passHomeDataToSkin(self.movie, "movie.", False, True)
@@ -74,7 +68,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(50).addItems(CreateListItems(self.actors, 0))
         self.getControl(150).addItems(CreateListItems(self.similar_movies, 0))
         self.getControl(250).addItems(self.set_listitems)
-        self.getControl(350).addItems(self.youtube_listitems)
         self.getControl(450).addItems(CreateListItems(self.lists, 0))
         self.getControl(550).addItems(CreateListItems(self.production_companies, 0))
         self.getControl(650).addItems(CreateListItems(self.releases, 0))
@@ -85,6 +78,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1150).addItems(CreateListItems(self.videos, 0))
         self.getControl(1250).addItems(CreateListItems(self.images, 0))
         self.getControl(1350).addItems(CreateListItems(self.backdrops, 0))
+        self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
+        youtube_id_list = []
+        for item in self.videos:
+            youtube_id_list.append(item["key"])
+        self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
+        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -107,11 +106,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("video", self.MovieId)
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=movieid)
             dialog.doModal()
-        elif controlID in [350, 1150]:
-            listitem = self.getControl(controlID).getSelectedItem()
+        elif controlID in [350, 1150, 11]:
             AddToWindowStack("video", self.MovieId)
             self.close()
-            PlayTrailer(listitem.getProperty("youtube_id"))
+            if controlID in [350, 1150]:
+                listitem = self.getControl(controlID).getSelectedItem()
+                PlayTrailer(listitem.getProperty("youtube_id"))
+            else:
+                PlayTrailer(self.movie["youtube_id"])
             WaitForVideoEnd()
             PopWindowStack()
         elif controlID == 550:
@@ -201,24 +203,3 @@ def WaitForVideoEnd():
     xbmc.sleep(1000)
     while xbmc.getCondVisibility("Player.HasVideo"):
         xbmc.sleep(400)
-
-class Get_Youtube_Vids_Thread(threading.Thread):
-
-    def __init__(self, search_string, hd, orderby, limit):
-        threading.Thread.__init__(self)
-        self.search_string = search_string
-
-    def run(self):
-        self.videos = GetYoutubeSearchVideosV3(self.search_string, "", "relevance", 15)
-
-
-class Movie_Info_Thread(threading.Thread):
-
-    def __init__(self, MovieId, dbid):
-        threading.Thread.__init__(self)
-        self.MovieId = MovieId
-        self.dbid = dbid
-
-    def run(self):
-        self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid)
-
