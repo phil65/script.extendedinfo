@@ -388,16 +388,11 @@ class Main:
         self.Artist_mbid = None
         self.pluginmode = False
 
-    def _build_url(self, query):
-        return base_url + '?' + urllib.urlencode(query)
-
     def _parse_argv(self):
         if sys.argv[0] == 'plugin://script.extendedinfo/':
             self.pluginmode = True
             args = sys.argv[2][1:].split("&&")
-            dict_args = urlparse.parse_qs(sys.argv[2][1:])
             self.handle = int(sys.argv[1])
-            base_url = sys.argv[0]
             self.control = "plugin"
             params = {}
         else:
@@ -406,13 +401,6 @@ class Main:
                 params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
             except:
                 params = {}
-        self.exportsettings = params.get("exportsettings", False)
-        self.importsettings = params.get("importsettings", False)
-        self.importextrathumb = params.get("importextrathumb", False)
-        self.importextrathumbtv = params.get("importextrathumbtv", False)
-        self.importextrafanart = params.get("importextrafanart", False)
-        self.importextrafanarttv = params.get("importextrafanarttv", False)
-        self.importallartwork = params.get("importallartwork", False)
         for arg in args:
             if arg == 'script.extendedinfo':
                 continue
