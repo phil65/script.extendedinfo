@@ -37,38 +37,30 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 name = names[ret]
             self.id = GetPersonID(name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        xbmc.sleep(500)
         self.person = None
         self.movie_roles = None
         self.tvshow_roles = None
         self.images = None
         if self.id:
-            self.person, self.movie_roles, self.tvshow_roles, self.images, self.tagged_images = GetExtendedActorInfo(self.id)
-            prettyprint(self.tagged_images)
+            self.person, self.movie_roles, self.tvshow_roles, self.images, self.tagged_images, self.movie_crew_roles, self.tvshow_crew_roles = GetExtendedActorInfo(self.id)
             name = self.person["name"]
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
-            self.youtube_listitems = CreateListItems(self.youtube_vids, 0)
-            self.movie_listitems = CreateListItems(self.movie_roles, 0)
-            self.tvshow_listitems = CreateListItems(self.tvshow_roles, 0)
-            self.image_listitems = CreateListItems(self.images)
-            self.tagged_image_listitems = CreateListItems(self.tagged_images)
-            # log(str(len(self.tagged_image_listitems)))
-     #       prettyprint(self.person)
             passHomeDataToSkin(self.person, "actor.")
             homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
+            self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        if not self.id:
-            self.close()
-        self.getControl(150).addItems(self.movie_listitems)
-        self.getControl(250).addItems(self.tvshow_listitems)
-        self.getControl(350).addItems(self.youtube_listitems)
-        self.getControl(450).addItems(self.image_listitems)
-        self.getControl(750).addItems(self.tagged_image_listitems)
+        self.getControl(150).addItems(CreateListItems(self.movie_roles, 0))
+        self.getControl(250).addItems(CreateListItems(self.tvshow_roles, 0))
+        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
+        self.getControl(450).addItems(CreateListItems(self.images, 0))
+        self.getControl(550).addItems(CreateListItems(self.movie_crew_roles, 0))
+        self.getControl(650).addItems(CreateListItems(self.tvshow_crew_roles, 0))
+        self.getControl(750).addItems(CreateListItems(self.tagged_images, 0))
     #    self.getControl(150).addItems(tvshow_listitems)
 
     def setControls(self):

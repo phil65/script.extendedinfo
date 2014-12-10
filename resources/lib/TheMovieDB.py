@@ -58,7 +58,7 @@ def AddItemToFavourites(media_id=None, media_type="movie"):
 def CreateList():
     session_id = get_session_id()
     name = "Test"
-    desctiption = ""
+    description = ""
     values = '{"name": "%s", "description": "%s"}' % (name, description)
     log(values)
     headers = {
@@ -608,7 +608,7 @@ def GetExtendedTVSHowInfo(tvshow_id):
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
-    # prettyprint(response)
+    prettyprint(response)
     images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
@@ -617,8 +617,9 @@ def GetExtendedActorInfo(actorid):
  #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
-    combined_roles = HandleTMDBMovieResult(response["combined_credits"]["cast"])
-    return person[0], movie_roles, tvshow_roles, images, tagged_images
+    movie_crew_roles = HandleTMDBMovieResult(response["movie_credits"]["crew"])
+    tvshow_crew_roles = HandleTMDBMovieResult(response["tv_credits"]["crew"])
+    return person[0], movie_roles, tvshow_roles, images, tagged_images, movie_crew_roles, tvshow_crew_roles
 
 
 def GetMovieLists(Id):
