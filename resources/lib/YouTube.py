@@ -53,8 +53,8 @@ def HandleYouTubeVideoResults(results):
                 videoid = item["snippet"]["resourceId"]["videoId"]
             video = {'Thumb': thumb,
                      'youtube_id': videoid,
-                     'Play': 'plugin://script.extendedinfo/?action=youtubevideo&&id=%s' % videoid,
-                     'Path': 'plugin://script.extendedinfo/?action=youtubevideo&&id=%s' % videoid,
+                     'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
+                     'Path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
                      'Description': item["snippet"]["description"],
                      'Title': item["snippet"]["title"],
                      # 'Author': item["author"][0]["name"]["$t"],
