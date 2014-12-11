@@ -417,12 +417,21 @@ def GetMovieDBConfig():
         return ("", "", "")
 
 
-def GetCompanyInfo(Id):
-    response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (Id), 30)
+def GetCompanyInfo(company_id):
+    response = GetMovieDBData("company/%s/movies?append_to_response=movies&" % (company_id), 30)
     if response and "results" in response:
         return HandleTMDBMovieResult(response["results"])
     else:
         return []
+
+
+def GetCreditInfo(credit_id):
+    response = GetMovieDBData("credit/%s?language=%s&" % (str(credit_id), __addon__.getSetting("LanguageID")), 30)
+   # if response and "results" in response:
+    prettyprint(response)
+        # return HandleTMDBMovieResult(response["results"])
+    # else:
+    #     return []
 
 
 def millify(n):
