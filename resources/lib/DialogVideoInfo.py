@@ -189,17 +189,30 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 6003:
-            AddItemToFavourites(self.movie["ID"])
+            ChangeFavStatus(self.movie["ID"], "movie", "true")
         elif controlID == 6004:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            list_items = GetFavMovies()
+            list_items = GetFavItems("movies")
             self.close()
             AddToWindowStack("video", self.MovieId)
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 6005:
-            CreateList()
+            listitems = ["New List.."]
+            account_lists = GetAccountLists()
+            for item in account_lists:
+                listitems.append("%s (%i)" % (item["name"],item["item_count"]))
+            index = xbmcgui.Dialog().select("Choose List", listitems)
+            if index == 0:
+                listname = xbmcgui.Dialog().input( "Enter List Name", type=xbmcgui.INPUT_ALPHANUM )
+                if listname:
+                    list_id = CreateList(listname)
+                    xbmc.sleep(1000)
+                    AddItemToList(list_id, self.MovieId)
+            elif index > 0:
+                AddItemToList(account_lists[index - 1]["id"], self.MovieId)
+
 
     def onFocus(self, controlID):
         pass

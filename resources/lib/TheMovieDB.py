@@ -9,11 +9,17 @@ from urllib2 import Request, urlopen
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
 __addon__ = xbmcaddon.Addon()
 __addonid__ = __addon__.getAddonInfo('id')
+__addonname__ = __addon__.getAddonInfo('name')
 __language__ = __addon__.getLocalizedString
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
 base_url = ""
 poster_size = ""
 fanart_size = ""
+headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'User-agent': 'XBMC/13.2 ( ptemming@gmx.net )'
+}
 
 
 def RateMovie(movieid, rating):
@@ -24,57 +30,54 @@ def RateMovie(movieid, rating):
     values = '{"value": %.1f}' % rating
     # values = '{"value": 5.5}'
     log(values)
-    headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
     url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&%s" % (str(movieid), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
-    Notify("ExtendedInfo Script", results["status_message"])
+    Notify(__addonname__, results["status_message"])
 
 
-def AddItemToFavourites(media_id=None, media_type="movie"):
+def ChangeFavStatus(media_id=None, media_type="movie", status="true"):
     session_id = get_session_id()
     account_id = get_account_info()
-    values = '{"media_type": "%s", "media_id": %s, "favorite": true}' % (media_type, str(media_id))
-    # values = '{"value": 5.5}'
-    log(values)
-    headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
+    values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
     url = "http://api.themoviedb.org/3/account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
     log(url)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
-    Notify("ExtendedInfo Script", results["status_message"])
+    Notify(__addonname__, results["status_message"])
 
 
-def CreateList():
+def CreateList(listname):
     session_id = get_session_id()
-    name = "Test"
-    description = ""
-    values = '{"name": "%s", "description": "%s"}' % (name, description)
-    log(values)
-    headers = {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-    }
     url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
-
-    values = {'name': 'My Awesome List Test', 'description': 'This is my test list.'}
-    # req = urllib2.Request(url=url,data=simplejson.dumps(values))
-    # response = urllib2.urlopen(req).read()
+    values = {'name': '%s' % listname, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url, data=simplejson.dumps(values), headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    prettyprint(results)
-    Notify("ExtendedInfo Script", results["status_message"])
+    # prettyprint(results)
+    Notify(__addonname__, results["status_message"])
+    return results["list_id"]
+
+def AddItemToList(list_id, movie_id):
+    session_id = get_session_id()
+    url = "http://api.themoviedb.org/3/list/%s/add_item?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
+    values = {'media_id': movie_id}
+    request = Request(url, data=simplejson.dumps(values), headers=headers)
+    response = urlopen(request).read()
+    results = simplejson.loads(response)
+    Notify(__addonname__, results["status_message"])
+
+
+def GetAccountLists():
+    session_id = get_session_id()
+    account_id = get_account_info()
+    response = GetMovieDBData("account/%s/lists?session_id=%s&" % (str(account_id), session_id), 0)
+    # prettyprint(response)
+    return response["results"]
 
 
 def get_account_info():
@@ -100,7 +103,7 @@ def get_session_id():
     else:
         passHomeDataToSkin({"tmdb_logged_in": ""})
         Notify("login failed")
-        return False
+        return None
 
 
 def get_request_token():
@@ -118,7 +121,7 @@ def auth_request_token():
     if response["success"]:
         return response["request_token"]
     else:
-        return "bla"
+        return None
 
 
 def HandleTMDBMovieResult(results):
@@ -428,7 +431,7 @@ def GetCompanyInfo(company_id):
 def GetCreditInfo(credit_id):
     response = GetMovieDBData("credit/%s?language=%s&" % (str(credit_id), __addon__.getSetting("LanguageID")), 30)
    # if response and "results" in response:
-    prettyprint(response)
+    # prettyprint(response)
         # return HandleTMDBMovieResult(response["results"])
     # else:
     #     return []
@@ -463,7 +466,7 @@ def GetMovieDBID(imdbid):
 
 
 def GetTrailer(movieid=None):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
                               (movieid, __addon__.getSetting("LanguageID")), 30)
     if not response:
         Notify("Could not get trailer")
@@ -477,7 +480,7 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
                               (movieid, __addon__.getSetting("LanguageID")), cache_time)
     authors = []
     directors = []
@@ -632,13 +635,12 @@ def GetExtendedTVShowInfo(tvshow_id):
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
     person = HandleTMDBPeopleResult([response])
-    prettyprint(response)
+    # prettyprint(response)
     images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
     else:
         tagged_images = []
- #   prettyprint(response)
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     movie_crew_roles = HandleTMDBMovieResult(response["movie_credits"]["crew"])
@@ -647,7 +649,7 @@ def GetExtendedActorInfo(actorid):
 
 
 def GetMovieLists(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
                               (Id, __addon__.getSetting("LanguageID")), 30)
     return HandleTMDBMiscResult(response["lists"]["results"])
 
@@ -679,15 +681,15 @@ def GetRatedMovies():
     return HandleTMDBMovieResult(response["results"])
 
 
-def GetFavMovies():
+def GetFavItems(media_type):
     session_id = get_session_id()
     account_id = get_account_info()
-    response = GetMovieDBData("account/%s/favorite/movies?session_id=%s&language=%s&" % (str(account_id), str(session_id), __addon__.getSetting("LanguageID")), 0)
+    response = GetMovieDBData("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), __addon__.getSetting("LanguageID")), 0)
     return HandleTMDBMovieResult(response["results"])
 
 
-def GetMoviesFromList(listid):
-    response = GetMovieDBData("list/%s?language=%s&" % (str(listid), __addon__.getSetting("LanguageID")), 30)
+def GetMoviesFromList(list_id):
+    response = GetMovieDBData("list/%s?language=%s&" % (str(list_id), __addon__.getSetting("LanguageID")), 30)
   #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"])
 
@@ -697,19 +699,19 @@ def GetPopularActorList():
     return HandleTMDBPeopleResult(response["results"])
 
 
-def GetActorMovieCredits(actorid):
-    response = GetMovieDBData("person/%s/movie_credits?" % (actorid), 1)
+def GetActorMovieCredits(actor_id):
+    response = GetMovieDBData("person/%s/movie_credits?" % (actor_id), 1)
     return HandleTMDBMovieResult(response["cast"])
 
 
-def GetActorTVShowCredits(actorid):
-    response = GetMovieDBData("person/%s/tv_credits?" % (actorid), 1)
+def GetActorTVShowCredits(actor_id):
+    response = GetMovieDBData("person/%s/tv_credits?" % (actor_id), 1)
     return HandleTMDBMovieResult(response["cast"])
 
 
-def GetMovieKeywords(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
-                              (Id, __addon__.getSetting("LanguageID")), 30)
+def GetMovieKeywords(movie_id):
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (movie_id, __addon__.getSetting("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -722,9 +724,9 @@ def GetMovieKeywords(Id):
         return []
 
 
-def GetSimilarMovies(Id):
-    response = GetMovieDBData("movie/%s?append_to_response=alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
-                              (Id, __addon__.getSetting("LanguageID")), 30)
+def GetSimilarMovies(movie_id):
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&language=%s&" %
+                              (movie_id, __addon__.getSetting("LanguageID")), 30)
     if "similar_movies" in response:
         return HandleTMDBMovieResult(response["similar_movies"]["results"])
     else:
@@ -749,16 +751,16 @@ def GetMovieDBMovies(movietype):
         log(response)
 
 
-def GetSetMovies(Id):
-    response = GetMovieDBData("collection/%s?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
+def GetSetMovies(set_id):
+    response = GetMovieDBData("collection/%s?language=%s&" % (set_id, __addon__.getSetting("LanguageID")), 14)
     if "parts" in response:
         return HandleTMDBMovieResult(response["parts"])
     else:
         log("No JSON Data available")
 
 
-def GetDirectorMovies(Id):
-    response = GetMovieDBData("person/%s/credits?language=%s&" % (Id, __addon__.getSetting("LanguageID")), 14)
+def GetDirectorMovies(person_id):
+    response = GetMovieDBData("person/%s/credits?language=%s&" % (person_id, __addon__.getSetting("LanguageID")), 14)
     # return HandleTMDBMovieResult(response["crew"]) + HandleTMDBMovieResult(response["cast"])
     if "crew" in response:
         return HandleTMDBMovieResult(response["crew"])
