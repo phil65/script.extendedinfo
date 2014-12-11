@@ -66,10 +66,14 @@ def CreateList():
         'Content-Type': 'application/json'
     }
     url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
-    request = Request(url, data=values, headers=headers)
+
+    values = {'name': 'My Awesome List Test', 'description': 'This is my test list.'}
+    # req = urllib2.Request(url=url,data=simplejson.dumps(values))
+    # response = urllib2.urlopen(req).read()
+    request = Request(url, data=simplejson.dumps(values), headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    # prettyprint(results)
+    prettyprint(results)
     Notify("ExtendedInfo Script", results["status_message"])
 
 
@@ -154,10 +158,9 @@ def HandleTMDBMovieResult(results):
                     'ID': tmdb_id,
                     'Path': path,
                     'Trailer': trailer,
-                    'trailerimage': "http://i.ytimg.com/vi/" + tmdb_id + "/0.jpg",
-                    'Play': "",
-                    'DBID': "",
                     'Rating': fetch(movie, 'vote_average'),
+                    'credit_id': fetch(movie, 'credit_id'),
+                    'character': fetch(movie, 'character'),
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'Year': year,
