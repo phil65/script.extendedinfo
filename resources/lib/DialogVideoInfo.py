@@ -181,23 +181,37 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 # self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
                 # passHomeDataToSkin(self.movie, "movie.")
         elif controlID == 6002:
+            listitems = ["Favourites", "Rated Movies"]
+            account_lists = GetAccountLists()
+            for item in account_lists:
+                listitems.append("%s (%i)" % (item["name"],item["item_count"]))
+            index = xbmcgui.Dialog().select("Choose List", listitems)
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            list_items = GetRatedMovies()
-            self.close()
-            AddToWindowStack("video", self.MovieId)
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            if index == -1:
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+            elif index == 0:
+                list_items = GetFavItems("movies")
+                self.close()
+                AddToWindowStack("video", self.MovieId)
+                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                dialog.doModal()
+            elif index == 1:
+                list_items = GetRatedMovies()
+                self.close()
+                AddToWindowStack("video", self.MovieId)
+                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                dialog.doModal()
+            else:
+                list_items = GetMoviesFromList(account_lists[index - 2]["id"])
+                self.close()
+                AddToWindowStack("video", self.MovieId)
+                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                dialog.doModal()
         elif controlID == 6003:
             ChangeFavStatus(self.movie["ID"], "movie", "true")
-        elif controlID == 6004:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            list_items = GetFavItems("movies")
-            self.close()
-            AddToWindowStack("video", self.MovieId)
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
         elif controlID == 6005:
             listitems = ["New List.."]
             account_lists = GetAccountLists()
