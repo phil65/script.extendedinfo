@@ -294,22 +294,22 @@ def media_streamdetails(filename, streamdetails):
     info = {}
     video = streamdetails['video']
     audio = streamdetails['audio']
-    info['videocodec'] = ''
-    info['videoaspect'] = ''
-    info['videoresolution'] = ''
-    info['audiocodec'] = ''
-    info['audiochannels'] = ''
+    info['VideoCodec'] = ''
+    info['VideoAspect'] = ''
+    info['VideoResolution'] = ''
+    info['AudioCodec'] = ''
+    info['AudioChannels'] = ''
     if video:
-        info['videoresolution'] = str(video[0]['height'])
-        info['videocodec'] = str(video[0]['codec'])
-        info['videoaspect'] = "%.2f" % video[0]['aspect']
+        info['VideoResolution'] = str(video[0]['height'])
+        info['VideoCodec'] = str(video[0]['codec'])
+        info['VideoAspect'] = "%.2f" % video[0]['aspect']
     elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
-        info['videoresolution'] = '576'
+        info['VideoResolution'] = '576'
     elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
-        info['videoresolution'] = '1080'
+        info['VideoResolution'] = '1080'
     if audio:
-        info['audiocodec'] = audio[0]['codec']
-        info['audiochannels'] = audio[0]['channels']
+        info['AudioCodec'] = audio[0]['codec']
+        info['AudioChannels'] = audio[0]['channels']
     return info
 
 
@@ -413,11 +413,7 @@ def CompareWithLibrary(onlinelist):
                 onlineitem.update({"Banner": response['art'].get("banner", "")})
                 onlineitem.update({"Poster": response['art'].get("poster", "")})
                 onlineitem.update({"Thumb": response['art'].get("poster", "")})
-                onlineitem.update({"VideoCodec": streaminfo["videocodec"]})
-                onlineitem.update({"VideoResolution": streaminfo["videoresolution"]})
-                onlineitem.update({"VideoAspect": streaminfo["videoaspect"]})
-                onlineitem.update({"AudioCodec": streaminfo["audiocodec"]})
-                onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
+                onlineitem.update(streaminfo)
                 audio = response['streamdetails']['audio']
                 subtitles = response['streamdetails']['subtitle']
                 prettyprint(onlineitem)
