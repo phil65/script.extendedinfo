@@ -448,13 +448,26 @@ def GetCreditInfo(credit_id):
     # else:
     #     return []
 
+# def millify(n):
+#     import math
+#     millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
+#     millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
+#     if millidx == 3:
+#             return '%.1f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+#     else:
+#             return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+
 
 def millify(n):
-    import math
-    millnames = ['', 'Thousand', 'Million', 'Billion', 'Trillion']
-    # millnames = ['', 'k', 'm', 'b', 't']
-    millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
-    return '%.0f %s' % (n / 10 ** (3 * millidx), millnames[millidx])
+    millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
+    millidx = int(len(str(n)) / 3) - 1
+    if millidx > 1:
+        if millidx == 3:
+            return '%.1f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+        else:
+            return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+    else:
+        return ""
 
 
 def GetSeasonInfo(tvshowname, seasonnumber):
