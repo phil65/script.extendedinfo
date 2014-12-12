@@ -300,9 +300,9 @@ def media_streamdetails(filename, streamdetails):
     info['audiocodec'] = ''
     info['audiochannels'] = ''
     if video:
-        info['videoresolution'] = video[0]['width']
-        info['videocodec'] = video[0]['codec']
-        info['videoaspect'] = video[0]['aspect']
+        info['videoresolution'] = str(video[0]['height'])
+        info['videocodec'] = str(video[0]['codec'])
+        info['videoaspect'] = "%.2f" % video[0]['aspect']
     elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
         info['videoresolution'] = '576'
     elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
@@ -398,6 +398,8 @@ def CompareWithLibrary(onlinelist):
                     resume = "false"
                     played = '0'
                 streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
+                prettyprint(streaminfo)
+                prettyprint(onlineitem)
                 onlineitem.update({"Play": response["movieid"]})
                 onlineitem.update({"DBID": response["movieid"]})
                 onlineitem.update({"Path": response['file']})
@@ -418,6 +420,7 @@ def CompareWithLibrary(onlinelist):
                 onlineitem.update({"AudioChannels": str(streaminfo["audiochannels"])})
                 audio = response['streamdetails']['audio']
                 subtitles = response['streamdetails']['subtitle']
+                prettyprint(onlineitem)
                 count = 1
                 streams = []
                 for i in range(1, 20):
