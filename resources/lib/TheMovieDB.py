@@ -15,11 +15,20 @@ Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/
 base_url = ""
 poster_size = ""
 fanart_size = ""
+homewindow = xbmcgui.Window(10000)
 headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'User-agent': 'XBMC/13.2 ( ptemming@gmx.net )'
 }
+
+
+def checkLogin():
+    if __addon__.getSetting("tmdb_username"):
+        get_session_id()
+        homewindow.setProperty("tmdb_logged_in", "true")
+    else:
+        homewindow.setProperty("tmdb_logged_in", "")
 
 
 def RateMovie(movieid, rating):
@@ -397,6 +406,8 @@ def SearchForSet(setname):
 
 
 def GetMovieDBData(url="", cache_days=14):
+    # session_id = get_session_id()
+    # url = "http://api.themoviedb.org/3/%sapi_key=%s&session_id=%s" % (url, moviedb_key, session_id)
     url = "http://api.themoviedb.org/3/%sapi_key=%s" % (url, moviedb_key)
     global base_url
     global poster_size

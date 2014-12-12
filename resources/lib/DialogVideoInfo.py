@@ -24,11 +24,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.monitor = SettingsMonitor()
         tmdb_id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
-        if __addon__.getSetting("tmdb_username"):
-            get_session_id()
+        checkLogin()
         if tmdb_id:
             self.MovieId = tmdb_id
         elif self.dbid and (int(self.dbid) > -1):
@@ -184,7 +184,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             listitems = ["Favourites", "Rated Movies"]
             account_lists = GetAccountLists()
             for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"],item["item_count"]))
+                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             index = xbmcgui.Dialog().select("Choose List", listitems)
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if index == -1:
@@ -213,20 +213,32 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 6003:
             ChangeFavStatus(self.movie["ID"], "movie", "true")
         elif controlID == 6005:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = ["New List.."]
             account_lists = GetAccountLists()
             for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"],item["item_count"]))
+                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select("Choose List", listitems)
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             if index == 0:
-                listname = xbmcgui.Dialog().input( "Enter List Name", type=xbmcgui.INPUT_ALPHANUM )
+                listname = xbmcgui.Dialog().input("Enter List Name", type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
                     list_id = CreateList(listname)
                     xbmc.sleep(1000)
                     AddItemToList(list_id, self.MovieId)
             elif index > 0:
                 AddItemToList(account_lists[index - 1]["id"], self.MovieId)
-
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onFocus(self, controlID):
         pass
+
+
+class SettingsMonitor(xbmc.Monitor):
+
+    def __init__(self):
+        xbmc.Monitor.__init__(self)
+
+    def onSettingsChanged(self):
+        checkLogin()
