@@ -460,10 +460,11 @@ def GetCreditInfo(credit_id):
 
 def millify(n):
     millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
-    millidx = int(len(str(n)) / 3) - 1
-    if millidx > 1:
+    if n and n > 10:
+        n = float(n)
+        millidx = int(len(str(n)) / 3) - 1
         if millidx == 3:
-            return '%.1f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+            return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
         else:
             return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
     else:
@@ -551,16 +552,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         year = fetch(response, 'release_date')[:4]
     else:
         year = ""
-    BudgetValue = fetch(response, 'budget')
-    if not BudgetValue in [0, 1, ""]:
-        Budget = millify(float(BudgetValue))
-    else:
-        Budget = ""
-    RevenueValue = fetch(response, 'revenue')
-    if not RevenueValue in [0, 1, ""]:
-        Revenue = millify(float(RevenueValue))
-    else:
-        Revenue = ""
+    Budget = millify(fetch(response, 'budget'))
+    Revenue = millify(fetch(response, 'revenue'))
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     else:
