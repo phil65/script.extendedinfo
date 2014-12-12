@@ -239,4 +239,5 @@ class SettingsMonitor(xbmc.Monitor):
         xbmc.Monitor.__init__(self)
 
     def onSettingsChanged(self):
+        xbmc.sleep(300)
         checkLogin()

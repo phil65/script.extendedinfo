@@ -25,10 +25,11 @@ headers = {
 
 def checkLogin():
     if __addon__.getSetting("tmdb_username"):
-        get_session_id()
-        homewindow.setProperty("tmdb_logged_in", "true")
-    else:
-        homewindow.setProperty("tmdb_logged_in", "")
+        session_id = get_session_id()
+        if session_id:
+            homewindow.setProperty("tmdb_logged_in", "true")
+            return True
+    homewindow.setProperty("tmdb_logged_in", "")
 
 
 def RateMovie(movieid, rating):
