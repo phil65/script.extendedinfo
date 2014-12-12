@@ -300,9 +300,31 @@ def media_streamdetails(filename, streamdetails):
     info['AudioCodec'] = ''
     info['AudioChannels'] = ''
     if video:
-        info['VideoResolution'] = str(video[0]['height'])
+        if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
+            info['VideoResolution'] = "480"
+        elif (video[0]['width'] <= 768 and video[0]['height'] <= 576):
+            info['VideoResolution'] = "576"
+        elif (video[0]['width'] <= 960 and video[0]['height'] <= 544):
+            info['VideoResolution'] = "540"
+        elif (video[0]['width'] <= 1280 and video[0]['height'] <= 720):
+            info['VideoResolution'] = "720"
+        elif (video[0]['width'] >= 1281 or video[0]['height'] >= 721):
+            info['VideoResolution'] = "1080"
+        else:
+            info['videoresolution'] = ""
         info['VideoCodec'] = str(video[0]['codec'])
-        info['VideoAspect'] = "%.2f" % video[0]['aspect']
+        if (video[0]['aspect'] < 1.4859):
+            info['VideoAspect'] = "1.33"
+        elif (video[0]['aspect'] < 1.7190):
+            info['VideoAspect'] = "1.66"
+        elif (video[0]['aspect'] < 1.8147):
+            info['VideoAspect'] = "1.78"
+        elif (video[0]['aspect'] < 2.0174):
+            info['VideoAspect'] = "1.85"
+        elif (video[0]['aspect'] < 2.2738):
+            info['VideoAspect'] = "2.20"
+        else:
+            info['VideoAspect'] = "2.35"
     elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
         info['VideoResolution'] = '576'
     elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
