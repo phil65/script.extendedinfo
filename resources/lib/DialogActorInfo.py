@@ -8,12 +8,12 @@ import DialogVideoInfo
 import DialogTVShowInfo
 homewindow = xbmcgui.Window(10000)
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonname__ = __addon__.getAddonInfo('name')
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__ = __addon__.getLocalizedString
-__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
+addon = xbmcaddon.Addon()
+addon_id = addon.getAddonInfo('id')
+addon_name = addon.getAddonInfo('name')
+__addonversion__ = addon.getAddonInfo('version')
+addon_strings = addon.getLocalizedString
+addon_path = addon.getAddonInfo('path').decode("utf-8")
 
 
 class DialogActorInfo(xbmcgui.WindowXMLDialog):
@@ -83,7 +83,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         if controlID in [150, 550]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack("actor", self.id)
-            dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+            dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
         elif controlID in [250, 650]:
@@ -95,7 +95,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             if selection == 0:
                 GetCreditInfo(listitem.getProperty("credit_id"))
             if selection == 1:
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 self.close()
                 dialog.doModal()
         elif controlID == 350:

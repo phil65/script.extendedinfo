@@ -7,7 +7,7 @@ import urllib
 
 AudioDB_apikey = '58353d43204d68753987fl'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
-__addon__ = xbmcaddon.Addon()
+addon = xbmcaddon.Addon()
 base_url = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AudioDB_apikey)
 
 
@@ -99,7 +99,7 @@ def GetExtendedAudioDBInfo(results):
     artists = []
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
-            localbio = 'strBiography' + __addon__.getSetting("LanguageID").upper()
+            localbio = 'strBiography' + addon.getSetting("LanguageID").upper()
             if localbio in artist and artist[localbio]:
                 Description = fetch(artist, localbio)
             elif 'strBiographyEN' in artist and artist['strBiographyEN']:

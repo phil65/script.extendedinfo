@@ -13,15 +13,15 @@ import re
 import threading
 import datetime
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonicon__ = __addon__.getAddonInfo('icon')
-__language__ = __addon__.getLocalizedString
-__addonname__ = __addon__.getAddonInfo('name')
-__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
+addon = xbmcaddon.Addon()
+addon_id = addon.getAddonInfo('id')
+addon_icon = addon.getAddonInfo('icon')
+addon_strings = addon.getLocalizedString
+addon_name = addon.getAddonInfo('name')
+addon_path = addon.getAddonInfo('path').decode("utf-8")
 
 
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % __addonid__).decode("utf-8"))
+Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 id_list = []
 title_list = []
@@ -78,19 +78,19 @@ def PopWindowStack():
         window_type, content_id = windowstack.pop()
         if window_type == "video":
             from DialogVideoInfo import DialogVideoInfo
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=content_id)
             dialog.doModal()
         elif window_type == "tvshow":
             from DialogTVShowInfo import DialogTVShowInfo
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=content_id)
             dialog.doModal()
         elif window_type == "actor":
             from DialogActorInfo import DialogActorInfo
-            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=content_id)
+            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=content_id)
             dialog.doModal()
         elif window_type == "list":
             from DialogVideoList import DialogVideoList
-            dialog = DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=content_id)
+            dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=content_id)
             dialog.doModal()
 
 
@@ -132,8 +132,8 @@ def GetSortLetters(path, focusedletter):
     listitems = []
     letterlist = []
     homewindow.clearProperty("LetterList")
-    if __addon__.getSetting("FolderPath") == path:
-        letterlist = __addon__.getSetting("LetterList")
+    if addon.getSetting("FolderPath") == path:
+        letterlist = addon.getSetting("LetterList")
         letterlist = letterlist.split()
     else:
         if path:
@@ -145,8 +145,8 @@ def GetSortLetters(path, focusedletter):
                     sortletter = movie["label"].replace("The ", "")[0]
                     if not sortletter in letterlist:
                         letterlist.append(sortletter)
-            __addon__.setSetting("LetterList", " ".join(letterlist))
-            __addon__.setSetting("FolderPath", path)
+            addon.setSetting("LetterList", " ".join(letterlist))
+            addon.setSetting("FolderPath", path)
     homewindow.setProperty("LetterList", "".join(letterlist))
     if letterlist and focusedletter:
         startord = ord("A")
@@ -670,7 +670,7 @@ def GetWeatherImages():
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
-    message = u'%s: %s' % (__addonid__, txt)
+    message = u'%s: %s' % (addon_id, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 
@@ -737,7 +737,7 @@ def ExtractYoutubeID(string):
     return ""
 
 
-def Notify(header="", message="", icon=__addonicon__, time=5000, sound=True):
+def Notify(header="", message="", icon=addon_icon, time=5000, sound=True):
     dialog = xbmcgui.Dialog()
     dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 

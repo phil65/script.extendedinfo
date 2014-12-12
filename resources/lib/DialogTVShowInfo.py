@@ -8,12 +8,12 @@ import DialogActorInfo
 import DialogVideoList
 homewindow = xbmcgui.Window(10000)
 
-__addon__ = xbmcaddon.Addon()
-__addonid__ = __addon__.getAddonInfo('id')
-__addonname__ = __addon__.getAddonInfo('name')
-__addonversion__ = __addon__.getAddonInfo('version')
-__language__ = __addon__.getLocalizedString
-__cwd__ = __addon__.getAddonInfo('path').decode("utf-8")
+addon = xbmcaddon.Addon()
+addon_id = addon.getAddonInfo('id')
+addon_name = addon.getAddonInfo('name')
+__addonversion__ = addon.getAddonInfo('version')
+addon_strings = addon.getLocalizedString
+addon_path = addon.getAddonInfo('path').decode("utf-8")
 
 
 class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
@@ -72,14 +72,14 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         if controlID in [50, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack("tvshow", self.tmdb_id)
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % __addonname__, __cwd__, id=actorid)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
             dialog.doModal()
         elif controlID in [150]:
             tmdb_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             self.close()
             AddToWindowStack("tvshow", self.tmdb_id)
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % __addonname__, __cwd__, id=tmdb_id)
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=tmdb_id)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
@@ -93,7 +93,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             AddToWindowStack("tvshow", self.tmdb_id)
             self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=studioitems)
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=studioitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 950:
@@ -103,7 +103,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("tvshow", self.tmdb_id)
             self.close()
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=keyworditems)
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=keyworditems)
             dialog.doModal()
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -111,7 +111,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             genreitems = GetMoviesWithGenre(genreid)
             AddToWindowStack("tvshow", self.tmdb_id)
             self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=genreitems)
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=genreitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         # elif controlID == 650:
@@ -121,7 +121,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         #     cert_items = GetMoviesWithCertification(country, certification)
         #     AddToWindowStack("tvshow", self.tmdb_id)
         #     self.close()
-        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=cert_items)
+        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=cert_items)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     dialog.doModal()
         # elif controlID == 450:
@@ -129,7 +129,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         #     list_items = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
         #     self.close()
         #     AddToWindowStack("tvshow", self.tmdb_id)
-        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % __addonname__, __cwd__, listitems=list_items)
+        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     dialog.doModal()
 
