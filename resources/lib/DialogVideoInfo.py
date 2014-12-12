@@ -220,7 +220,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select("Choose List", listitems)
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             if index == 0:
                 listname = xbmcgui.Dialog().input("Enter List Name", type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
@@ -229,7 +228,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                     AddItemToList(list_id, self.MovieId)
             elif index > 0:
                 AddItemToList(account_lists[index - 1]["id"], self.MovieId)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onFocus(self, controlID):
         pass
