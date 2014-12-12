@@ -69,7 +69,8 @@ def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance", limit
         hd_string = "&hd=true"
     else:
         hd_string = ""
-    search_string = urllib.quote(search_string.replace('"', '').encode("utf-8"))
+    search_string = unicode(search_string.replace('"', ''), "utf-8")
+    search_string = urllib.quote(search_string.encode("utf-8"))
     base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=video'
     url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, youtube_key2, hd_string, int(limit))
     results = Get_JSON_response(base_url + url, 0.5)
