@@ -43,11 +43,16 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.images = None
         if self.id:
             self.person, self.movie_roles, self.tvshow_roles, self.images, self.tagged_images, self.movie_crew_roles, self.tvshow_crew_roles = GetExtendedActorInfo(self.id)
+            db_movies = 0
+            for item in self.movie_roles:
+                if "DBID" in item:
+                    db_movies += 1
+            homewindow.setProperty("actor.DBMovies", str(db_movies))
+            homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
             name = self.person["name"]
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
             passHomeDataToSkin(self.person, "actor.")
-            homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
         else:
             Notify("No ID found")
             self.close()

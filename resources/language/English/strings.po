@@ -69,6 +69,10 @@ msgctxt "#32020"
 msgid "Age"
 msgstr ""
 
+msgctxt "#32021"
+msgid "In Database"
+msgstr ""
+
 msgctxt "#32022"
 msgid "Release Date"
 msgstr ""
@@ -102,5 +106,17 @@ msgid "No trailers found"
 msgstr ""
 
 msgctxt "#32099"
+msgid "Include Pornstars"
+msgstr ""
+
+msgctxt "#32100"
+msgid "Include Pornstars"
+msgstr ""
+
+msgctxt "#32101"
+msgid "Include Pornstars"
+msgstr ""
+
+msgctxt "#32102"
 msgid "Include Pornstars"
 msgstr ""
