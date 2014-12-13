@@ -62,7 +62,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.set_listitems = []
             if self.movie["general"]["SetId"]:
                 self.set_listitems = CreateListItems(GetSetMovies(self.movie["general"]["SetId"]))
-            passHomeDataToSkin(self.movie["general"], "movie.", False, True)
+            passHomeDataToSkin(self.movie["general"], "movie.", True, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
             Notify("No ID found")
