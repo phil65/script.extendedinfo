@@ -27,9 +27,8 @@ def checkLogin():
     if addon.getSetting("tmdb_username"):
         session_id = get_session_id()
         if session_id:
-            homewindow.setProperty("tmdb_logged_in", "true")
-            return True
-    homewindow.setProperty("tmdb_logged_in", "")
+            return "True"
+    return ""
 
 
 def RateMovie(movieid, rating):
