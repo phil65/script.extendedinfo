@@ -181,7 +181,7 @@ def HandleTMDBMovieResult(results):
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             movies.append(newmovie)
-    movies = CompareWithLibrary(movies)
+    movies = CompareWithLibrary(movies, True, "Year")
     return movies
 
 
@@ -662,7 +662,7 @@ def GetExtendedActorInfo(actorid):
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     movie_crew_roles = HandleTMDBMovieResult(response["movie_credits"]["crew"])
-    tvshow_crew_roles = HandleTMDBMovieResult(response["tv_credits"]["crew"])
+    tvshow_crew_roles = HandleTMDBTVShowResult(response["tv_credits"]["crew"])
     return person[0], movie_roles, tvshow_roles, images, tagged_images, movie_crew_roles, tvshow_crew_roles
 
 

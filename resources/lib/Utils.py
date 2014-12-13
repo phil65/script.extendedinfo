@@ -362,7 +362,7 @@ def fetch(dictionary, key):
     return ""
 
 
-def CompareWithLibrary(onlinelist):
+def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     global id_list
     global originaltitle_list
     global title_list
@@ -461,11 +461,17 @@ def CompareWithLibrary(onlinelist):
                         count += 1
                 onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
                 onlineitem.update({'AudioLanguage': " / ".join(streams)})
-                local_items.append(onlineitem)
+                if library_first:
+                    local_items.append(onlineitem)
+                else:
+                    remote_items.append(onlineitem)
         else:
             remote_items.append(onlineitem)
     log("compare time: " + str(now - time.time()))
-    return local_items + remote_items
+    if sortkey:
+        return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+    else:
+        return local_items + remote_items
 
 
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
