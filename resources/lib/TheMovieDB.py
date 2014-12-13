@@ -187,7 +187,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
     return movies
 
 
-def HandleTMDBTVShowResult(results):
+def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
     tvshows = []
     ids = []
     log("starting HandleTMDBTVShowResult")
@@ -235,7 +235,7 @@ def HandleTMDBTVShowResult(results):
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             tvshows.append(newtv)
-    tvshows = CompareWithLibrary(tvshows)
+    tvshows = CompareWithLibrary(tvshows, local_first, sortkey)
     return tvshows
 
 
