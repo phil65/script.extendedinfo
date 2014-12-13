@@ -513,7 +513,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     genres = []
     if not response:
         Notify("Could not get movie information")
-        return {}, [], [], [], [], [], [], [], [], [], [], [], []
+        return {}
     for item in response['genres']:
         genres.append(item["name"])
     for item in response['credits']['crew']:
