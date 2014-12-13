@@ -6,6 +6,7 @@
  -->  <setting label="Language for MovieDB requests" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="LanguageID" default="en"/>
       <setting label="TMDB Username" type="text" id="tmdb_username" />
       <setting label="TMDB Password" type="text" id="tmdb_password" option="hidden"/>
+      <setting label="Debug Mode" type="bool" id="debug_mode"/>
       <setting type="sep"/>
   </category>
 </settings>
