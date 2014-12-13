@@ -389,6 +389,8 @@ def CompareWithLibrary(onlinelist):
             homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
         log("create_light_movielist: " + str(now - time.time()))
     now = time.time()
+    local_items = []
+    remote_items = []
     for onlineitem in onlinelist:
         found = False
         if onlineitem["Title"].lower() in title_list:
@@ -420,8 +422,6 @@ def CompareWithLibrary(onlinelist):
                     resume = "false"
                     played = '0'
                 streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
-                prettyprint(streaminfo)
-                prettyprint(onlineitem)
                 onlineitem.update({"Play": response["movieid"]})
                 onlineitem.update({"DBID": response["movieid"]})
                 onlineitem.update({"Path": response['file']})
@@ -438,13 +438,11 @@ def CompareWithLibrary(onlinelist):
                 onlineitem.update(streaminfo)
                 audio = response['streamdetails']['audio']
                 subtitles = response['streamdetails']['subtitle']
-                prettyprint(onlineitem)
-                count = 1
-                streams = []
                 for i in range(1, 20):
                     onlineitem.update({'AudioLanguage.%d' % i: ""})
                     onlineitem.update({'SubtitleLanguage.%d' % i: ""})
-                    # Notify(str(count))
+                count = 1
+                streams = []
                 for item in audio:
                     language = item['language']
                     if language not in streams and language != "und":
@@ -459,13 +457,15 @@ def CompareWithLibrary(onlinelist):
                     language = item['language']
                     if language not in subs and language != "und":
                         subs.append(language)
-                        # Notify(str(count))
                         onlineitem.update({'SubtitleLanguage.%d' % count: language})
                         count += 1
                 onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
                 onlineitem.update({'AudioLanguage': " / ".join(streams)})
+                local_items.append(onlineitem)
+        else:
+            remote_items.append(onlineitem)
     log("compare time: " + str(now - time.time()))
-    return onlinelist
+    return local_items + remote_items
 
 
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
