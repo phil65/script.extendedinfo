@@ -260,6 +260,7 @@ def HandleTMDBSeasonResult(results):
     for season in results:
         year = ""
         poster_path = ""
+        season_number = str(fetch(season, 'season_number'))
         small_poster_path = ""
         air_date = fetch(season, 'air_date')
         if air_date:
@@ -267,11 +268,15 @@ def HandleTMDBSeasonResult(results):
         if ("poster_path" in season) and season["poster_path"]:
             poster_path = base_url + poster_size + season['poster_path']
             small_poster_path = base_url + "w342" + season["poster_path"]
+        if season_number == "0":
+            Title = "Specials"
+        else:
+            Title = "Season %s" % season_number
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
-                    'Title': "Season %s" % str(fetch(season, 'season_number')),
-                    'Season': str(fetch(season, 'season_number')),
+                    'Title': Title,
+                    'Season': season_number,
                     'air_date': air_date,
                     'Year': year,
                     'ID': fetch(season, 'id')}
