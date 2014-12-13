@@ -686,8 +686,12 @@ def GetMoviesWithKeyword(keywordid):
 
 
 def GetMoviesWithGenre(genreid):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_genres=%s&language=%s&" % (str(genreid), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genreid), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
+
+def GetTVShowsWithGenre(genreid):
+    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genreid), addon.getSetting("LanguageID")), 30)
+    return HandleTMDBTVShowResult(response["results"], False, None)
 
 
 def GetMoviesWithCertification(country, rating):

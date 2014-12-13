@@ -112,7 +112,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            genreitems = GetMoviesWithGenre(genreid)
+            genreitems = GetTVShowsWithGenre(genreid)
             AddToWindowStack("tvshow", self.tmdb_id)
             self.close()
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=genreitems)
