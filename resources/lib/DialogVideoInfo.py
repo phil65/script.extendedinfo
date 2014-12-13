@@ -41,18 +41,18 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         else:
             self.MovieId = ""
         if self.MovieId:
-            self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid)
-            if not self.movie:
+            self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid)
+            if not self.movie["general"]:
                 self.close()
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["Thumb"])
+            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["general"]["Thumb"])
             youtube_id_list = []
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["Label"] + " " + self.movie["Year"] + ", movie", "", "relevance", 15)
-            for item in self.videos:
+            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
+            for item in self.movie["videos"]:
                 youtube_id_list.append(item["key"])
             self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
             self.crew_list = []
             crew_id_list = []
-            for item in self.crew:
+            for item in self.movie["crew"]:
                 if item["id"] not in crew_id_list:
                     crew_id_list.append(item["id"])
                     self.crew_list.append(item)
@@ -60,29 +60,29 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                     index = crew_id_list.index(item["id"])
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             self.set_listitems = []
-            if self.movie["SetId"]:
-                self.set_listitems = CreateListItems(GetSetMovies(self.movie["SetId"]))
-            passHomeDataToSkin(self.movie, "movie.", False, True)
-         #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
+            if self.movie["general"]["SetId"]:
+                self.set_listitems = CreateListItems(GetSetMovies(self.movie["general"]["SetId"]))
+            passHomeDataToSkin(self.movie["general"], "movie.", False, True)
+         #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
             Notify("No ID found")
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        self.getControl(50).addItems(CreateListItems(self.actors, 0))
-        self.getControl(150).addItems(CreateListItems(self.similar_movies, 0))
+        self.getControl(50).addItems(CreateListItems(self.movie["actors"], 0))
+        self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(self.set_listitems)
-        self.getControl(450).addItems(CreateListItems(self.lists, 0))
-        self.getControl(550).addItems(CreateListItems(self.production_companies, 0))
-        self.getControl(650).addItems(CreateListItems(self.releases, 0))
+        self.getControl(450).addItems(CreateListItems(self.movie["lists"], 0))
+        self.getControl(550).addItems(CreateListItems(self.movie["studios"], 0))
+        self.getControl(650).addItems(CreateListItems(self.movie["releases"], 0))
         self.getControl(750).addItems(CreateListItems(self.crew_list, 0))
-        self.getControl(850).addItems(CreateListItems(self.genres, 0))
-        self.getControl(950).addItems(CreateListItems(self.keywords, 0))
-        self.getControl(1050).addItems(CreateListItems(self.reviews, 0))
-        self.getControl(1150).addItems(CreateListItems(self.videos, 0))
-        self.getControl(1250).addItems(CreateListItems(self.images, 0))
-        self.getControl(1350).addItems(CreateListItems(self.backdrops, 0))
+        self.getControl(850).addItems(CreateListItems(self.movie["genres"], 0))
+        self.getControl(950).addItems(CreateListItems(self.movie["keywords"], 0))
+        self.getControl(1050).addItems(CreateListItems(self.movie["reviews"], 0))
+        self.getControl(1150).addItems(CreateListItems(self.movie["videos"], 0))
+        self.getControl(1250).addItems(CreateListItems(self.movie["images"], 0))
+        self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
 
     def onAction(self, action):
@@ -116,7 +116,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 else:
                     Notify("No trailer found")
             else:
-                PlayTrailer(self.movie["youtube_id"])
+                PlayTrailer(self.movie["general"]["youtube_id"])
             WaitForVideoEnd()
             PopWindowStack()
         elif controlID == 550:
@@ -177,9 +177,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMovie(self.MovieId, rating)
-                # xbmc.sleep(2000)
-                # self.movie, self.actors, self.similar_movies, self.lists, self.production_companies, self.releases, self.crew, self.genres, self.keywords, self.reviews, self.videos, self.images, self.backdrops = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
-                # passHomeDataToSkin(self.movie, "movie.")
         elif controlID == 6002:
             listitems = ["Favourites", "Rated Movies"]
             account_lists = GetAccountLists()
@@ -211,7 +208,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 dialog.doModal()
         elif controlID == 6003:
-            ChangeFavStatus(self.movie["ID"], "movie", "true")
+            ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
         elif controlID == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = ["New List.."]

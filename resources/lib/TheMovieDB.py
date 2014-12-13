@@ -612,23 +612,24 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'Logo': "",
              'Studio': Studio,
              'Year': year}
-    movie = CompareWithLibrary([movie])[0]
-    actors = HandleTMDBPeopleResult(response["credits"]["cast"])
-    crew = HandleTMDBPeopleResult(response["credits"]["crew"])
-    similar_movies = HandleTMDBMovieResult(response["similar"]["results"])
-    lists = HandleTMDBMiscResult(response["lists"]["results"])
-    reviews = HandleTMDBMiscResult(response["reviews"]["results"])
-    genres = HandleTMDBMiscResult(response["genres"])
-    production_companies = HandleTMDBMiscResult(response["production_companies"])
-    releases = HandleTMDBMiscResult(response["releases"]["countries"])
-    keywords = HandleTMDBMiscResult(response["keywords"]["keywords"])
-    images = HandleTMDBPeopleImagesResult(response["images"]["posters"])
-    backdrops = HandleTMDBPeopleImagesResult(response["images"]["backdrops"])
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     else:
         videos = []
-    return movie, actors, similar_movies, lists, production_companies, releases, crew, genres, keywords, reviews, videos, images, backdrops
+    answer = {"general": CompareWithLibrary([movie])[0],
+              "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
+              "similar": HandleTMDBMovieResult(response["similar"]["results"]),
+              "lists": HandleTMDBMiscResult(response["lists"]["results"]),
+              "studios": HandleTMDBMiscResult(response["production_companies"]),
+              "releases": HandleTMDBMiscResult(response["releases"]["countries"]),
+              "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
+              "genres": HandleTMDBMiscResult(response["genres"]),
+              "keywords": HandleTMDBMiscResult(response["keywords"]["keywords"]),
+              "reviews": HandleTMDBMiscResult(response["reviews"]["results"]),
+              "videos": videos,
+              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+    return answer
 
 
 def GetExtendedTVShowInfo(tvshow_id):
