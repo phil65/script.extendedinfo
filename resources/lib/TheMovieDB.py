@@ -193,26 +193,22 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
     log("starting HandleTMDBTVShowResult")
     for tv in results:
         tmdb_id = fetch(tv, 'id')
+        poster_path = ""
+        duration = ""
+        year = ""
+        backdrop_path = ""
         if ("backdrop_path" in tv) and (tv["backdrop_path"]):
             backdrop_path = base_url + fanart_size + tv['backdrop_path']
-        else:
-            backdrop_path = ""
         if ("poster_path" in tv) and (tv["poster_path"]):
             poster_path = base_url + poster_size + tv['poster_path']
-        else:
-            poster_path = ""
         if "episode_run_time" in tv:
             runtimes = []
             for item in tv["episode_run_time"]:
                 runtimes.append(str(item))
             duration = " / ".join(runtimes)
-        else:
-            duration = ""
         release_date = fetch(tv, 'first_air_date')
         if release_date:
             year = release_date[:4]
-        else:
-            year = ""
         newtv = {'Art(fanart)': backdrop_path,
                  'Art(poster)': poster_path,
                  'Thumb': poster_path,
@@ -223,10 +219,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Duration': duration,
                  'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
-                 'Path': "",
                  'Plot': fetch(tv, "overview"),
-                 'Play': "",
-                 'DBID': "",
                  'year': year,
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
@@ -243,12 +236,11 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
 def HandleTMDBMiscResult(results):
     listitems = []
     for item in results:
+        poster_path = ""
+        small_poster_path = ""
         if ("poster_path" in item) and (item["poster_path"]):
             poster_path = base_url + poster_size + item['poster_path']
             small_poster_path = base_url + "w342" + item["poster_path"]
-        else:
-            poster_path = ""
-            small_poster_path = ""
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
@@ -267,17 +259,15 @@ def HandleTMDBMiscResult(results):
 def HandleTMDBSeasonResult(results):
     listitems = []
     for season in results:
+        year = ""
+        poster_path = ""
+        small_poster_path = ""
         air_date = fetch(season, 'air_date')
         if air_date:
             year = air_date[:4]
-        else:
-            year = ""
         if ("poster_path" in season) and season["poster_path"]:
             poster_path = base_url + poster_size + season['poster_path']
             small_poster_path = base_url + "w342" + season["poster_path"]
-        else:
-            poster_path = ""
-            small_poster_path = ""
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
@@ -312,6 +302,8 @@ def HandleTMDBVideoResult(results):
 def HandleTMDBPeopleResult(results):
     people = []
     for person in results:
+        image = ""
+        image_small = ""
         description = "[B]Known for[/B]:[CR][CR]"
         if "known_for" in results:
             for movie in results["known_for"]:
@@ -320,9 +312,6 @@ def HandleTMDBPeopleResult(results):
         if "profile_path" in person and person["profile_path"]:
             image = base_url + poster_size + person["profile_path"]
             image_small = base_url + "w342" + person["profile_path"]
-        else:
-            image = ""
-            image_small = ""
         alsoknownas = " / ".join(fetch(person, 'also_known_as'))
         newperson = {'adult': str(fetch(person, 'adult')),
                      'name': person['name'],
@@ -395,8 +384,6 @@ def HandleTMDBCompanyResult(results):
 
 
 def SearchforCompany(Company):
-  #  Companies = Company.split(" / ")
-   # Company = Companies[0]
     import re
     regex = re.compile('\(.+?\)')
     Company = regex.sub('', Company)
@@ -444,7 +431,6 @@ def GetMovieDBData(url="", cache_days=14):
     global poster_size
     global fanart_size
     if not base_url:
-        log("fetching base_url and size (MovieDB config)")
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
     results = Get_JSON_response(url, cache_days)
@@ -454,8 +440,6 @@ def GetMovieDBData(url="", cache_days=14):
 def GetMovieDBConfig():
     return ("http://image.tmdb.org/t/p/", "w780", "w1280")
     response = GetMovieDBData("configuration?", 60)
-    log("MovieDBConfig:")
-  #  prettyprint(response)
     if response:
         return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
@@ -653,10 +637,9 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
 def GetExtendedTVShowInfo(tvshow_id):
     response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&" %
                               (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 2)
+    videos = []
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    else:
-        videos = []
     prettyprint(response)
     answer = {"general": HandleTMDBTVShowResult([response])[0],
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
@@ -677,10 +660,9 @@ def GetExtendedActorInfo(actorid):
     person = HandleTMDBPeopleResult([response])
     # prettyprint(response)
     images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
+    tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
-    else:
-        tagged_images = []
     movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
     tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
     movie_crew_roles = HandleTMDBMovieResult(response["movie_credits"]["crew"])
