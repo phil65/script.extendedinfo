@@ -47,9 +47,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["general"]["Thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             self.set_listitems = []
+            self.setinfo = {}
             if self.movie["general"]["SetId"]:
-                self.set_listitems, setinfo = GetSetMovies(self.movie["general"]["SetId"])
-                passDictToSkin(setinfo, "movie.set.", True, False)
+                self.set_listitems, self.setinfo = GetSetMovies(self.movie["general"]["SetId"])
             id_list = []
             for item in self.set_listitems:
                 id_list.append(item["ID"])
@@ -67,14 +67,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 else:
                     index = id_list.index(item["id"])
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
-            passDictToSkin(self.movie["general"], "movie.", False, True)
-         #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
             Notify("No ID found")
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        windowid = xbmcgui.getCurrentWindowDialogId()
+        passDictToSkin(self.setinfo, "movie.set.", True, False, windowid)
+        passDictToSkin(self.movie["general"], "movie.", False, True, windowid)
         self.getControl(50).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))

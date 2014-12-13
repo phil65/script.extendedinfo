@@ -43,13 +43,14 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["general"]["Thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
-            passDictToSkin(self.tvshow["general"], "movie.", False, True)
         else:
             Notify("No ID found")
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        windowid = xbmcgui.getCurrentWindowDialogId()
+        passDictToSkin(self.tvshow["general"], "movie.", False, True, windowid)
         self.getControl(50).addItems(CreateListItems(self.tvshow["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))

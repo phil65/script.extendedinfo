@@ -47,18 +47,19 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             for item in self.movie_roles:
                 if "DBID" in item:
                     db_movies += 1
-            homewindow.setProperty("actor.DBMovies", str(db_movies))
-            homewindow.setProperty("actor.TotalMovies", str(len(self.movie_roles)))
+            self.person["DBMovies"] = str(db_movies)
+            self.person["TotalMovies"] = str(len(self.movie_roles))
             name = self.person["name"]
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
-            passDictToSkin(self.person, "actor.")
         else:
             Notify("No ID found")
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        windowid = xbmcgui.getCurrentWindowDialogId()
+        passDictToSkin(self.person, "actor.", False, True, windowid)
         self.getControl(150).addItems(CreateListItems(self.movie_roles, 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow_roles, 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
