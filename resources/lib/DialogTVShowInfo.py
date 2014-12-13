@@ -95,30 +95,24 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
-            AddToWindowStack("tvshow", self.tmdb_id)
-            self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=studioitems)
+            listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(listitems)
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            keywordid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            keyworditems = GetMoviesWithKeyword(keywordid)
-            AddToWindowStack("tvshow", self.tmdb_id)
-            self.close()
+            listitems = GetMoviesWithKeyword(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=keyworditems)
-            dialog.doModal()
+            self.OpenVideoList(listitems)
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            genreitems = GetTVShowsWithGenre(genreid)
-            AddToWindowStack("tvshow", self.tmdb_id)
-            self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=genreitems)
+            listitems = GetTVShowsWithGenre(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(listitems)
+        elif controlID == 1450:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            listitems = GetTVShowsFromNetwork(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.OpenVideoList(listitems)
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
         # elif controlID == 650:
@@ -142,3 +136,9 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlID):
         pass
+
+    def OpenVideoList(self, listitems):
+        AddToWindowStack("tvshow", self.tmdb_id)
+        self.close()
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems)
+        dialog.doModal()

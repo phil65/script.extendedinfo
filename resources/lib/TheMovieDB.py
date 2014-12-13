@@ -675,23 +675,27 @@ def GetExtendedActorInfo(actorid):
     return person[0], movie_roles, tvshow_roles, images, tagged_images, movie_crew_roles, tvshow_crew_roles
 
 
-def GetMovieLists(Id):
+def GetMovieLists(list_id):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (Id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+                              (list_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMiscResult(response["lists"]["results"])
 
 
-def GetMoviesWithKeyword(keywordid):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&" % (str(keywordid), addon.getSetting("LanguageID")), 30)
+def GetMoviesWithKeyword(keyword_id):
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&" % (str(keyword_id), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
-def GetMoviesWithGenre(genreid):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genreid), addon.getSetting("LanguageID")), 30)
+def GetMoviesWithGenre(genre_id):
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
-def GetTVShowsWithGenre(genreid):
-    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genreid), addon.getSetting("LanguageID")), 30)
+def GetTVShowsWithGenre(genre_id):
+    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
+    return HandleTMDBTVShowResult(response["results"], False, None)
+
+def GetTVShowsFromNetwork(network_id):
+    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_networks=%s&language=%s&" % (str(network_id), addon.getSetting("LanguageID")), 30)
     return HandleTMDBTVShowResult(response["results"], False, None)
 
 
