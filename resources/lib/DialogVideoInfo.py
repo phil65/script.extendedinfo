@@ -45,24 +45,28 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if not self.movie["general"]:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["general"]["Thumb"])
-            youtube_id_list = []
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
-            for item in self.movie["videos"]:
-                youtube_id_list.append(item["key"])
-            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in youtube_id_list]
-            self.crew_list = []
-            crew_id_list = []
-            for item in self.movie["crew"]:
-                if item["id"] not in crew_id_list:
-                    crew_id_list.append(item["id"])
-                    self.crew_list.append(item)
-                else:
-                    index = crew_id_list.index(item["id"])
-                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             self.set_listitems = []
             if self.movie["general"]["SetId"]:
                 self.set_listitems, setinfo = GetSetMovies(self.movie["general"]["SetId"])
                 passHomeDataToSkin(setinfo, "movie.set.", True, False)
+            id_list = []
+            for item in self.set_listitems:
+                id_list.append(item["ID"])
+            self.movie["similar"] = [item for item in self.movie["similar"] if item["ID"] not in id_list]
+            id_list = []
+            for item in self.movie["videos"]:
+                id_list.append(item["key"])
+            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in id_list]
+            self.crew_list = []
+            id_list = []
+            for item in self.movie["crew"]:
+                if item["id"] not in id_list:
+                    id_list.append(item["id"])
+                    self.crew_list.append(item)
+                else:
+                    index = id_list.index(item["id"])
+                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             passHomeDataToSkin(self.movie["general"], "movie.", False, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
