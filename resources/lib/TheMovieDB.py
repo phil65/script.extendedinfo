@@ -134,7 +134,7 @@ def auth_request_token():
         return None
 
 
-def HandleTMDBMovieResult(results):
+def HandleTMDBMovieResult(results=[], sortkey="Year"):
     movies = []
     ids = []
     log("starting HandleTMDBMovieResult")
@@ -181,7 +181,7 @@ def HandleTMDBMovieResult(results):
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             movies.append(newmovie)
-    movies = CompareWithLibrary(movies, True, "Year")
+    movies = CompareWithLibrary(movies, True, sortkey)
     return movies
 
 
