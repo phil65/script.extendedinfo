@@ -152,8 +152,10 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
         release_date = fetch(movie, 'release_date')
         if release_date:
             year = release_date[:4]
+            time_comparer = release_date.replace("-", "")
         else:
             year = ""
+            time_comparer = ""
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if False:
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
@@ -176,6 +178,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'Year': year,
+                    'time_comparer': time_comparer,
                     'Premiered': release_date}
         if not tmdb_id in ids:
             ids.append(tmdb_id)
