@@ -11,7 +11,7 @@ homewindow = xbmcgui.Window(10000)
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
 addon_name = addon.getAddonInfo('name')
-__addonversion__ = addon.getAddonInfo('version')
+addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 

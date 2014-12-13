@@ -9,11 +9,11 @@ import urllib
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
 addon_name = addon.getAddonInfo('name')
-__addonversion__ = addon.getAddonInfo('version')
+addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
-__resource__ = xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8")
-sys.path.append(__resource__)
+addon_libs = xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8")
+sys.path.append(addon_libs)
 
 from LastFM import *
 from MiscScraper import *
@@ -32,7 +32,7 @@ Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%
 class Main:
 
     def __init__(self):
-        log("version %s started" % __addonversion__)
+        log("version %s started" % addon_version)
         xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
         self._init_vars()
         self._parse_argv()
