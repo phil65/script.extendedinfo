@@ -260,6 +260,33 @@ def HandleTMDBMiscResult(results):
         listitems.append(listitem)
     return listitems
 
+def HandleTMDBSeasonResult(results):
+    listitems = []
+    for season in results:
+        air_date = fetch(season, 'air_date')
+        if air_date:
+            year = air_date[:4]
+        else:
+            year = ""
+        if ("poster_path" in season) and season["poster_path"]:
+            poster_path = base_url + poster_size + season['poster_path']
+            small_poster_path = base_url + "w342" + season["poster_path"]
+        else:
+            poster_path = ""
+            small_poster_path = ""
+        listitem = {'Art(poster)': poster_path,
+                    'Poster': poster_path,
+                    'Thumb': small_poster_path,
+                    'Title': "Season %s" % str(fetch(season, 'season_number')),
+                    'Season': str(fetch(season, 'season_number')),
+                    'air_date': air_date,
+                    'Year': year,
+                    'ID': fetch(season, 'id')}
+        listitems.append(listitem)
+    return listitems
+
+
+
 
 def HandleTMDBVideoResult(results):
     listitems = []
@@ -638,6 +665,7 @@ def GetExtendedTVShowInfo(tvshow_id):
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     else:
         videos = []
+    prettyprint(response)
     answer = {"general": HandleTMDBTVShowResult([response])[0],
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
@@ -646,6 +674,7 @@ def GetExtendedTVShowInfo(tvshow_id):
               "genres": HandleTMDBMiscResult(response["genres"]),
               "keywords": HandleTMDBMiscResult(response["keywords"]["results"]),
               "videos": videos,
+              "seasons": HandleTMDBSeasonResult(response["seasons"]),
               "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer

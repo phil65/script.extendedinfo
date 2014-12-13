@@ -39,7 +39,6 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = ""
         if self.tmdb_id:
             self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
-            prettyprint(self.tvshow)
             if not self.tvshow:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["general"]["Thumb"])
@@ -53,6 +52,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         self.getControl(50).addItems(CreateListItems(self.tvshow["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
+        self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))
         self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))
         self.getControl(750).addItems(CreateListItems(self.tvshow["crew"], 0))
         self.getControl(850).addItems(CreateListItems(self.tvshow["genres"], 0))
