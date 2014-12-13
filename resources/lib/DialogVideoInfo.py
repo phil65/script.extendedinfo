@@ -61,8 +61,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
             self.set_listitems = []
             if self.movie["general"]["SetId"]:
-                self.set_listitems = CreateListItems(GetSetMovies(self.movie["general"]["SetId"]))
-            passHomeDataToSkin(self.movie["general"], "movie.", True, True)
+                self.set_listitems, setinfo = GetSetMovies(self.movie["general"]["SetId"])
+                prettyprint(setinfo)
+            passHomeDataToSkin(self.movie["general"], "movie.", False, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
             Notify("No ID found")
@@ -72,7 +73,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         self.getControl(50).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
-        self.getControl(250).addItems(self.set_listitems)
+        self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
         self.getControl(450).addItems(CreateListItems(self.movie["lists"], 0))
         self.getControl(550).addItems(CreateListItems(self.movie["studios"], 0))
         self.getControl(650).addItems(CreateListItems(self.movie["releases"], 0))
@@ -106,6 +107,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack("video", self.MovieId)
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=movieid)
             dialog.doModal()
+        elif controlID in [1250, 1350]:
+            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            xbmc.executebuiltin("ShowPicture(%s)" % image)
         elif controlID in [350, 1150, 11]:
             AddToWindowStack("video", self.MovieId)
             self.close()

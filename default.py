@@ -154,7 +154,7 @@ class Main:
                     if name:
                         self.setid = SearchForSet(name)
                 if self.setid:
-                    SetData = GetSetMovies(self.setid)
+                    SetData, info = GetSetMovies(self.setid)
                     if SetData:
                         passDataToSkin('MovieSetItems', SetData, self.prop_prefix, self.window, self.control, self.handle, self.limit)
             elif info == 'movielists':

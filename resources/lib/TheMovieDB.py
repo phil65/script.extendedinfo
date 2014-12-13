@@ -801,10 +801,29 @@ def GetMovieDBMovies(movietype):
 
 def GetSetMovies(set_id):
     response = GetMovieDBData("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 14)
-    if "parts" in response:
-        return HandleTMDBMovieResult(response["parts"])
+    if response:
+        # prettyprint(response)
+        if ("backdrop_path" in response) and (response["backdrop_path"]):
+            backdrop_path = base_url + fanart_size + response['backdrop_path']
+        else:
+            backdrop_path = ""
+        if ("poster_path" in response) and (response["poster_path"]):
+            poster_path = base_url + poster_size + response['poster_path']
+            small_poster_path = base_url + "w342" + response["poster_path"]
+        else:
+            poster_path = ""
+            small_poster_path = ""
+        info = {"label": response["name"],
+                "Poster": poster_path,
+                "Thumb": small_poster_path,
+                "Fanart": backdrop_path,
+                "overview": response["overview"],
+                "overview": response["overview"],
+                "ID": response["id"]}
+        return HandleTMDBMovieResult(response.get("parts", [])), info
     else:
         log("No JSON Data available")
+        return [], {}
 
 
 def GetDirectorMovies(person_id):

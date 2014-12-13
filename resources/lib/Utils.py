@@ -30,6 +30,22 @@ global windowstack
 windowstack = []
 
 
+class SlideShow(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+
+
+    def __init__(self, *args, **kwargs):
+        self.imagelist = kwargs.get('imagelist')
+        self.index = kwargs.get('index')
+
+    def onInit(self):
+        listitems = []
+        for item in self.imagelist:
+            listitems.append(image_listitem)
+        self.getControl(10000).addItems(listitems)
+        xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
+
+
 def WaitForVideoEnd():
     xbmc.sleep(1000)
     while xbmc.getCondVisibility("Player.HasVideo"):
