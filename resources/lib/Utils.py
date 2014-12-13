@@ -812,7 +812,8 @@ def GetImdbIDFromDatabasefromEpisode(dbid):
         return GetImdbIDFromDatabase("tvshow", tvshowid)
 
 
-def passHomeDataToSkin(data=None, prefix="", debug=False, precache=False):
+def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=10000):
+    skinwindow = xbmcgui.Window(window)
     if data is not None:
         threads = []
         image_requests = []
@@ -825,14 +826,14 @@ def passHomeDataToSkin(data=None, prefix="", debug=False, precache=False):
                         threads += [thread]
                         thread.start()
                         image_requests.append(value)
-            homewindow.setProperty('%s%s' % (prefix, str(key)), value)
+            skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)
         for x in threads:
             x.join()
 
 
-def passDataToSkin(name="", data=None, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
+def passListToSkin(name="", data=None, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
     if limit and data:
         if limit < len(data):
             data = data[:limit]

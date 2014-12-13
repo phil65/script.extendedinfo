@@ -107,10 +107,10 @@ def get_session_id():
     response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0.1)
     # prettyprint(response)
     if response and "success" in response:
-        passHomeDataToSkin({"tmdb_logged_in": "true"})
+        passDictToSkin({"tmdb_logged_in": "true"})
         return response["session_id"]
     else:
-        passHomeDataToSkin({"tmdb_logged_in": ""})
+        passDictToSkin({"tmdb_logged_in": ""})
         Notify("login failed")
         return None
 

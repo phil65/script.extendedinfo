@@ -52,7 +52,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             name = self.person["name"]
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
-            passHomeDataToSkin(self.person, "actor.")
+            passDictToSkin(self.person, "actor.")
         else:
             Notify("No ID found")
             self.close()
