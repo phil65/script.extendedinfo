@@ -649,6 +649,7 @@ def GetExtendedTVShowInfo(tvshow_id):
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
               "studios": HandleTMDBMiscResult(response["production_companies"]),
+              "networks": HandleTMDBMiscResult(response["networks"]),
               "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
               "genres": HandleTMDBMiscResult(response["genres"]),
               "keywords": HandleTMDBMiscResult(response["keywords"]["results"]),

@@ -56,6 +56,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))
         self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))
+        self.getControl(1450).addItems(CreateListItems(self.tvshow["networks"], 0))
         self.getControl(750).addItems(CreateListItems(self.tvshow["crew"], 0))
         self.getControl(850).addItems(CreateListItems(self.tvshow["genres"], 0))
         self.getControl(950).addItems(CreateListItems(self.tvshow["keywords"], 0))
