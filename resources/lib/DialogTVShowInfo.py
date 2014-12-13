@@ -119,7 +119,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
         elif controlID == 6003:
-            ChangeFavStatus(self.movie["general"]["ID"], "tv", "true")
+            ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
         #     country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
