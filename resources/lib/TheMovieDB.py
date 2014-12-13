@@ -617,6 +617,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'Genre': " / ".join(genres),
              'Rating': fetch(response, 'vote_average'),
              'Votes': fetch(response, 'vote_count'),
+             'Adult': str(fetch(response, 'adult')),
              'Popularity': fetch(response, 'popularity'),
              'Status': fetch(response, 'status'),
              'Play': '',
