@@ -231,6 +231,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
                  'Release_Date': release_date,
+                 'ReleaseDate': release_date,
                  'Premiered': release_date}
         if not tmdb_id in ids:
             ids.append(tmdb_id)
