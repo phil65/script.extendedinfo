@@ -117,6 +117,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=genreitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             dialog.doModal()
+        elif controlID == 6003:
+            ChangeFavStatus(self.movie["general"]["ID"], "tv", "true")
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
         #     country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
