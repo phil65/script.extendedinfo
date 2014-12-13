@@ -62,7 +62,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.set_listitems = []
             if self.movie["general"]["SetId"]:
                 self.set_listitems, setinfo = GetSetMovies(self.movie["general"]["SetId"])
-                prettyprint(setinfo)
+                passHomeDataToSkin(setinfo, "movie.set.", True, False)
             passHomeDataToSkin(self.movie["general"], "movie.", False, True)
          #   homewindow.setProperty("actor.TotalMovies", str(len(self.movie["general"]_roles)))
         else:
