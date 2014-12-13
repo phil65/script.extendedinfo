@@ -38,27 +38,29 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         else:
             self.tmdb_id = ""
         if self.tmdb_id:
-            self.tvshow, self.actors, self.crew, self.similar_shows, self.genres, self.studios, self.keywords, self.videos = GetExtendedTVShowInfo(self.tmdb_id)
+            self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
+            prettyprint(self.tvshow)
             if not self.tvshow:
                 self.close()
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["Thumb"])
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["Title"], "", "relevance", 15)
-            self.set_listitems = []
-            passHomeDataToSkin(self.tvshow, "movie.", True, True)
+            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["general"]["Thumb"])
+            self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["general"]["Title"], "", "relevance", 15)
+            passHomeDataToSkin(self.tvshow["general"], "movie.", True, True)
         else:
             Notify("No ID found")
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        self.getControl(50).addItems(CreateListItems(self.actors, 0))
-        self.getControl(150).addItems(CreateListItems(self.similar_shows, 0))
-        self.getControl(550).addItems(CreateListItems(self.studios, 0))
-        self.getControl(750).addItems(CreateListItems(self.crew, 0))
-        self.getControl(850).addItems(CreateListItems(self.genres, 0))
-        self.getControl(950).addItems(CreateListItems(self.keywords, 0))
-        self.getControl(1150).addItems(CreateListItems(self.videos, 0))
+        self.getControl(50).addItems(CreateListItems(self.tvshow["actors"], 0))
+        self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
+        self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))
+        self.getControl(750).addItems(CreateListItems(self.tvshow["crew"], 0))
+        self.getControl(850).addItems(CreateListItems(self.tvshow["genres"], 0))
+        self.getControl(950).addItems(CreateListItems(self.tvshow["keywords"], 0))
+        self.getControl(1150).addItems(CreateListItems(self.tvshow["videos"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
+        self.getControl(1250).addItems(CreateListItems(self.tvshow["images"], 0))
+        self.getControl(1350).addItems(CreateListItems(self.tvshow["backdrops"], 0))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

@@ -38,7 +38,6 @@ def RateMovie(movieid, rating):
     else:
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
-    # values = '{"value": 5.5}'
     log(values)
     url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&%s" % (str(movieid), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
@@ -474,7 +473,7 @@ def millify(n):
 def GetSeasonInfo(tvshowname, seasonnumber):
     response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
     tvshowid = str(response['results'][0]['id'])
-    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&" % (tvshowid, seasonnumber, addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshowid, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
     season = {'SeasonDescription': response["overview"],
               'AirDate': response["air_date"]}
     videos = []
@@ -633,22 +632,23 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
 
 
 def GetExtendedTVShowInfo(tvshow_id):
-    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&" %
-                              (str(tvshow_id), addon.getSetting("LanguageID")), 2)
-    # prettyprint(response)
-    tvshow = HandleTMDBTVShowResult([response])
-    actors = HandleTMDBPeopleResult(response["credits"]["cast"])
-    crew = HandleTMDBPeopleResult(response["credits"]["crew"])
-    similar_shows = HandleTMDBMovieResult(response["similar"]["results"])
-    genres = HandleTMDBMiscResult(response["genres"])
-    production_companies = HandleTMDBMiscResult(response["production_companies"])
-    # releases = HandleTMDBMiscResult(response["releases"]["countries"])
-    keywords = HandleTMDBMiscResult(response["keywords"]["results"])
+    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&" %
+                              (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 2)
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     else:
         videos = []
-    return tvshow[0], actors, crew, similar_shows, genres, production_companies, keywords, videos
+    answer = {"general": HandleTMDBTVShowResult([response])[0],
+              "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
+              "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
+              "studios": HandleTMDBMiscResult(response["production_companies"]),
+              "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
+              "genres": HandleTMDBMiscResult(response["genres"]),
+              "keywords": HandleTMDBMiscResult(response["keywords"]["results"]),
+              "videos": videos,
+              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+    return answer
 
 
 def GetExtendedActorInfo(actorid):
@@ -757,7 +757,7 @@ def GetMovieDBTVShows(tvshowtype):
     if "results" in response:
         return HandleTMDBTVShowResult(response["results"])
     else:
-        log("No JSON Data available for GetMovieDBMovies(%s)" % tvshowtype)
+        log("No JSON Data available for GetMovieDBTVShows(%s)" % tvshowtype)
         log(response)
 
 
@@ -771,7 +771,7 @@ def GetMovieDBMovies(movietype):
 
 
 def GetSetMovies(set_id):
-    response = GetMovieDBData("collection/%s?language=%s&" % (set_id, addon.getSetting("LanguageID")), 14)
+    response = GetMovieDBData("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 14)
     if "parts" in response:
         return HandleTMDBMovieResult(response["parts"])
     else:
