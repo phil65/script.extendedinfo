@@ -191,10 +191,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             index = xbmcgui.Dialog().select("Choose List", listitems)
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             if index == -1:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                pass
             elif index == 0:
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetFavItems("movies")
                 self.close()
                 AddToWindowStack("video", self.MovieId)
@@ -202,13 +202,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 dialog.doModal()
             elif index == 1:
-                list_items = GetRatedMovies()
-                self.close()
-                AddToWindowStack("video", self.MovieId)
-                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                dialog.doModal()
+                self.ShowRatedMovies()
             else:
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"])
                 self.close()
                 AddToWindowStack("video", self.MovieId)
@@ -217,6 +213,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 dialog.doModal()
         elif controlID == 6003:
             ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
+        elif controlID == 6006:
+            self.ShowRatedMovies()
         elif controlID == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = ["New List.."]
@@ -237,6 +235,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlID):
         pass
 
+    def ShowRatedMovies(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        list_items = GetRatedMovies()
+        self.close()
+        AddToWindowStack("video", self.MovieId)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        dialog.doModal()
 
 class SettingsMonitor(xbmc.Monitor):
 
