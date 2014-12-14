@@ -91,15 +91,16 @@
                             <bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
                             <bordersize>19.5</bordersize>
                         </control>
-                    <control type="image">
-                        <width>55</width>
-                        <height>55</height>
-                        <posy>30</posy>
-                        <posx>149</posx>
-                        <texture>flags/local.png</texture>
-                        <visible>!IsEmpty(ListItem.Property(DBID))</visible>
-                    </control>
+                        <control type="image">
+                            <width>55</width>
+                            <height>55</height>
+                            <posy>30</posy>
+                            <posx>149</posx>
+                            <texture>flags/local.png</texture>
+                            <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                        </control>
                         <control type="textbox">
+                            <posx>0</posx>
                             <width>228</width>
                             <height>69</height>
                             <posy>320</posy>
