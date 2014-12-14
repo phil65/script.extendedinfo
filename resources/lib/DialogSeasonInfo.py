@@ -6,6 +6,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
+from ImageTools import *
 homewindow = xbmcgui.Window(10000)
 
 addon = xbmcaddon.Addon()
@@ -31,7 +32,10 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             self.season = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.season:
                 self.close()
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.season["general"]["Thumb"])
+            log("Blur image %s with radius %i" % (self.season["general"]["Thumb"], 25))
+            image, imagecolor = Filter_Image(self.season["general"]["Thumb"], 25)
+            self.season["general"]['ImageFilter'] = image
+            self.season["general"]['ImageColor'] = imagecolor
             search_string = "%s %s tv" % (self.season["general"]["TVShowTitle"], self.season["general"]["Title"])
             self.youtube_vids = GetYoutubeSearchVideosV3(search_string, "", "relevance", 15)
         else:

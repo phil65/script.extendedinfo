@@ -2,6 +2,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from Utils import *
+from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
 import DialogVideoInfo
@@ -50,7 +51,10 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.person["DBMovies"] = str(db_movies)
             self.person["TotalMovies"] = str(len(self.movie_roles))
             name = self.person["name"]
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=ActorInfo)" % self.person["thumb"])
+            log("Blur image %s with radius %i" % (self.person["thumb"], 25))
+            image, imagecolor = Filter_Image(self.person["thumb"], 25)
+            self.person['ImageFilter'] = image
+            self.person['ImageColor'] = imagecolor
             self.youtube_vids = GetYoutubeSearchVideosV3(name)
         else:
             Notify("No ID found")

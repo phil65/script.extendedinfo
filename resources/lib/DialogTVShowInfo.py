@@ -2,6 +2,7 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from Utils import *
+from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
@@ -42,7 +43,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
             if not self.tvshow:
                 self.close()
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.tvshow["general"]["Thumb"])
+            log("Blur image %s with radius %i" % (self.tvshow["general"]["Thumb"], 25))
+            image, imagecolor = Filter_Image(self.tvshow["general"]["Thumb"], 25)
+            self.tvshow["general"]['ImageFilter'] = image
+            self.tvshow["general"]['ImageColor'] = imagecolor
             self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
         else:
             Notify("No ID found")

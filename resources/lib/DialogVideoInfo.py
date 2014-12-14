@@ -6,6 +6,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
+from ImageTools import *
 # import threading
 homewindow = xbmcgui.Window(10000)
 
@@ -43,7 +44,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid)
             if not self.movie["general"]:
                 self.close()
-            xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=25,prefix=movie)" % self.movie["general"]["Thumb"])
+            log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
+            image, imagecolor = Filter_Image(self.movie["general"]["Thumb"], 25)
+            self.movie["general"]['ImageFilter'] = image
+            self.movie["general"]['ImageColor'] = imagecolor
             self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             self.set_listitems = []
             self.setinfo = {}
