@@ -530,16 +530,16 @@ def Get_JSON_response(url="", cache_days=7.0):
     prop_time = homewindow.getProperty(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
         prop = simplejson.loads(homewindow.getProperty(hashed_url))
-        log("prop load. time: " + str(time.time() - now))
+        log("prop load for %s. time: %f" % (url, time.time() - now))
         return prop
     elif xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
-        log("file load. time: " + str(time.time() - now))
+        log("loaded file for %s. time: %f" % (url, time.time() - now))
     else:
         response = GetStringFromUrl(url)
         try:
             results = simplejson.loads(response)
-            log("download. time: " + str(time.time() - now))
+            log("download %s. time: %f" % (url, time.time() - now))
             log("save to file: " + url)
             save_to_file(results, hashed_url, Addon_Data_Path)
         except:
@@ -695,10 +695,11 @@ def save_to_file(content, filename, path=""):
         if not xbmcvfs.exists(path):
             xbmcvfs.mkdir(path)
         text_file_path = os.path.join(path, filename + ".txt")
-    log("save to textfile: " + text_file_path)
+    now = time.time()
     text_file = xbmcvfs.File(text_file_path, "w")
     simplejson.dump(content, text_file)
     text_file.close()
+    log("saved textfile %s. Time: %f" % (path, time.time() - now))
     return True
 
 
@@ -706,9 +707,10 @@ def read_from_file(path=""):
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     if xbmcvfs.exists(path):
+        now = time.time()
         f = open(path)
         fc = simplejson.load(f)
-        log("loaded textfile " + path)
+        log("loaded textfile %s. Time: %f" % (path, time.time() - now))
         return fc
     else:
         return False
@@ -805,6 +807,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             value = unicode(value)
             if precache:
                 if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                    # Notify("download")
                     if not value in image_requests and value:
                         thread = Get_File_Thread(value)
                         threads += [thread]

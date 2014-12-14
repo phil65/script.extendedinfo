@@ -28,14 +28,17 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         tmdb_id = kwargs.get('id')
         dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
+        tvdb_id = kwargs.get('tvdb_id')
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > -1):
             tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
             self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
             log("IMDBId from local DB:" + str(self.tmdb_id))
+        elif tvdb_id:
+            self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
         elif imdb_id:
-            self.tmdb_id = GetMovieDBID(imdb_id)
+            self.tmdb_id = Get_Show_TMDB_ID(imdb_id, "imdb_id")
         elif self.name:
             self.tmdb_id = search_movie(kwargs.get('name'))
         else:

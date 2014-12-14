@@ -112,6 +112,7 @@ def HandleTraktTVShowResult(results):
                 'Studio': tvshow["network"],
                 'Plot': tvshow["overview"],
                 'ID': tvshow["tvdb_id"],
+                'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&imdbid=%s' % tvshow["imdb_id"],
                 'AirDay': tvshow["air_day"],
                 'AirShortTime': tvshow["air_time"],
                 'Label2': tvshow["air_day"] + " " + tvshow["air_time"],

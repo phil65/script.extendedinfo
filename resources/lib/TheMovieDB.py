@@ -220,6 +220,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
                  'year': year,
+                 'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
                  'Release_Date': release_date,
@@ -493,7 +494,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    prettyprint(response)
+    # prettyprint(response)
     videos = []
     backdrops = []
     if ("poster_path" in response) and (response["poster_path"]):
@@ -527,8 +528,8 @@ def GetMovieDBID(imdbid):
     response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid.replace("tt", ""), addon.getSetting("LanguageID")), 30)
     return response["movie_results"][0]["id"]
 
-def Get_Show_TMDB_ID(tvdb_id):
-    response = GetMovieDBData("find/%s?external_source=tvdb_id&language=%s&" % (tvdb_id, addon.getSetting("LanguageID")), 30)
+def Get_Show_TMDB_ID(tvdb_id=None, source="tvdb_id"):
+    response = GetMovieDBData("find/%s?external_source=%s&language=%s&" % (tvdb_id, source, addon.getSetting("LanguageID")), 30)
     try:
         return response["tv_results"][0]["id"]
     except:
