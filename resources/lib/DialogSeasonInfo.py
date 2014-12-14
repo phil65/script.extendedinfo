@@ -61,13 +61,13 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            AddToWindowStack(self)
+            AddToWindowStack("season", self.tmdb_id)
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            AddToWindowStack("season", self.tmdb_id)
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
             WaitForVideoEnd()
@@ -77,7 +77,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         pass
 
     def OpenVideoList(self, listitems):
-        AddToWindowStack(self)
+        AddToWindowStack("season", self.tmdb_id)
         self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems)
         dialog.doModal()

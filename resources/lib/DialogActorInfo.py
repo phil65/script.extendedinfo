@@ -83,13 +83,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 550]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            AddToWindowStack("actor", self.id)
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
             dialog.doModal()
         elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            AddToWindowStack("actor", self.id)
             options = ["Show actor TV Show appearances", "Show TV Show Info"]
             dialog = xbmcgui.Dialog()
             selection = dialog.select("Choose Option", options)
@@ -101,7 +101,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 dialog.doModal()
         elif controlID == 350:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            AddToWindowStack("actor", self.id)
             self.close()
             PlayTrailer(listitem.getProperty("youtube_id"))
             WaitForVideoEnd()
