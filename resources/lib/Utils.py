@@ -30,6 +30,29 @@ global windowstack
 windowstack = []
 
 
+class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [9, 92, 10]
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+        self.text = kwargs.get('text')
+        self.header = kwargs.get('header')
+
+    def onInit(self):
+        self.getControl(1).setLabel(self.header)
+        self.getControl(5).setText(self.text)
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+
+    def onClick(self, controlID):
+        pass
+
+    def onFocus(self, controlID):
+        pass
+
+
 class SlideShow(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 

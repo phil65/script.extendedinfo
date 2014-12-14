@@ -64,8 +64,6 @@
                             <texturefocus border="40" colordiffuse="$INFO[Window.Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                             <texturenofocus border="40" colordiffuse="$INFO[Window.Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                             <label>-</label>
-                            <onclick>SetProperty(Text,[B]$ESCINFO[Window.Property(movie.TagLine),,[CR]][/B]$ESCINFO[Window.Property(movie.Plot)],home)</onclick>
-                            <onclick>RunScript(script.toolbox,info=textviewer,header=Plot,text='$ESCINFO[Window.Property(Text)]')</onclick>
                         </control>
                         <control type="textbox" id="800">
                             <posx>93</posx>
@@ -2769,9 +2767,15 @@
                 <width>749</width>
                 <height>1100</height>
                 <aspectratio aligny="top">scale</aspectratio>
-                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Poster)]</texture>
+                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Thumb)]</texture>
                 <bordertexture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" border="10">thumbs/homewidget_shadow.png</bordertexture>
                 <bordersize>10</bordersize>
+            </control>
+            <control type="image">
+                <width>729</width>
+                <height>1080</height>
+                <aspectratio aligny="top">scale</aspectratio>
+                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Poster)]</texture>
             </control>
         </control>
     </controls>

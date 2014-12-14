@@ -216,6 +216,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 dialog.doModal()
+        elif controlID == 132:
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"])
+            w.doModal()
         elif controlID == 6003:
             ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
         elif controlID == 6006:
