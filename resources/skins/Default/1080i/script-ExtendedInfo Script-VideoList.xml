@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+    <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,FFFFFFFF,home)</onload>
+<!--     <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload>
+ -->    <onunload>ClearProperty(WindowColor,home)</onunload>
+    <defaultcontrol always="true">500</defaultcontrol>
+    <controls>
+        <control type="image">
+            <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">common/white.png</texture>
+                  <width>1920</width>
+        <height>1080</height>
+            <animation effect="fade" end="100" time="560">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+        </control>
+        <control type="image">
+            <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">diffuseoverlay.png</texture>
+                <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation>
+          <width>1920</width>
+        <height>1080</height>
+            <animation effect="fade" end="100" time="360">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
+        </control>
+        <control type="group">
+            <posy>0</posy>
+            <visible>!Window.IsActive(busydialog)</visible>
+            <animation type="WindowOpen" reversible="false">
+                <effect type="zoom" start="80" end="100" center="960,540" delay="500" tween="back" time="240" />
+                <effect type="fade" delay="500" end="100" time="240" />
+            </animation>
+            <animation type="WindowClose" reversible="false">
+                <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
+                <effect type="fade" start="100" end="0" time="240" />
+            </animation>
+            <animation type="Visible" reversible="false">
+                <effect type="zoom" start="80" end="100" center="960,540" delay="500" tween="back" time="240" />
+                <effect type="fade" delay="500" end="100" time="240" />
+            </animation>
+            <animation type="Hidden" reversible="false">
+                <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
+                <effect type="fade" start="100" end="0" time="240" />
+            </animation>
+            <control type="image">
+                <posx>25</posx>
+                <posy>107</posy>
+                <width>330</width>
+                <height>432</height>
+                <animation effect="fade" time="320" delay="300">Visible</animation>
+                <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
+                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+            </control>
+            <control type="panel" id="500">
+                <posx>0</posx>
+                <posy>0</posy>
+                <width>1920</width>
+                <height>1080</height>
+                <viewtype label="31234">icon</viewtype>
+                <pagecontrol>72</pagecontrol>
+                <preloaditems>2</preloaditems>
+                <scrolltime tween="quadratic">300</scrolltime>
+                <onleft>9000</onleft>
+                <onright>72</onright>
+                <onup>500</onup>
+                <ondown>500</ondown>
+                <orientation>vertical</orientation>
+                <itemlayout width="384" height="425">
+                    <control type="group">
+                        <posy>150</posy>
+                        <posx>80</posx>
+                        <control type="image">
+                            <posx>11</posx>
+                            <posy>30</posy>
+                            <width>193</width>
+                            <height>290</height>
+                            <aspectratio scalediffuse="false">scale</aspectratio>
+                            <texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideoBigPoster.png">$INFO[ListItem.Art(poster)]</texture>
+                            <fadetime>IconCrossfadeTime</fadetime>
+                        </control>
+                        <control type="image">
+                            <posx>-8.5</posx>
+                            <posy>10.5</posy>
+                            <width>232</width>
+                            <height>328</height>
+                            <aspectratio scalediffuse="false">stretch</aspectratio>
+                            <texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
+                            <bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
+                            <bordersize>19.5</bordersize>
+                        </control>
+                    <control type="image">
+                        <width>55</width>
+                        <height>55</height>
+                        <posy>30</posy>
+                        <posx>149</posx>
+                        <texture>flags/local.png</texture>
+                        <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                    </control>
+                        <control type="textbox">
+                            <width>228</width>
+                            <height>69</height>
+                            <posy>320</posy>
+                            <align>center</align>
+                            <font>Font_Reg25_2</font>
+                            <label>$INFO[ListItem.Label]$INFO[ListItem.Property(User_Rating),[CR][COLOR grey],[/COLOR]]</label>
+                        </control>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="384" height="425">
+                    <control type="group">
+                        <posy>150</posy>
+                        <posx>80</posx>
+                        <animation effect="zoom" center="176,340" start="100" end="127" time="280" tween="back" reversible="false">Focus</animation>
+                        <animation effect="zoom" center="176,340" start="127" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
+                        <control type="image">
+                            <posx>11</posx>
+                            <posy>30</posy>
+                            <width>193</width>
+                            <height>290</height>
+                            <aspectratio scalediffuse="false">scale</aspectratio>
+                            <texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideoBigPoster.png">$INFO[ListItem.Art(poster)]</texture>
+                            <fadetime>IconCrossfadeTime</fadetime>
+                        </control>
+                        <control type="image">
+                            <posx>-8.5</posx>
+                            <posy>10.5</posy>
+                            <width>232</width>
+                            <height>328</height>
+                            <aspectratio scalediffuse="false">stretch</aspectratio>
+                            <texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
+                            <bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
+                            <bordersize>19.5</bordersize>
+                        </control>
+                    <control type="image">
+                        <width>55</width>
+                        <height>55</height>
+                        <posy>30</posy>
+                        <posx>149</posx>
+                        <texture>flags/local.png</texture>
+                        <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                    </control>
+                    </control>
+                    <control type="textbox">
+                        <posx>80</posx>
+                        <width>228</width>
+                        <height>69</height>
+                        <posy>470</posy>
+                        <align>center</align>
+                        <font>Font_Reg25_2</font>
+                            <label>$INFO[ListItem.Label]$INFO[ListItem.Property(User_Rating),[CR][COLOR grey],[/COLOR]]</label>
+                        <animation effect="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false">Focus</animation>
+                        <animation effect="slide" start="0,50" end="0" time="200" tween="cubic" reversible="false">UnFocus</animation>
+                    </control>
+                </focusedlayout>
+            </control>
+        </control>
+    </controls>
+</window>
