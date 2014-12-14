@@ -31,8 +31,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             name = name[0].strip().encode("utf-8")
             names = name.split(" / ")
             if len(names) > 1:
-                Dialog = xbmcgui.Dialog()
-                ret = Dialog.select("Actor Info", names)
+                ret = xbmcgui.Dialog().select("Actor Info", names)
                 if ret == -1:
                     return False
                 name = names[ret]
@@ -92,13 +91,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
             options = ["Show actor TV Show appearances", "Show TV Show Info"]
-            dialog = xbmcgui.Dialog()
-            selection = dialog.select("Choose Option", options)
+            selection = xbmcgui.Dialog().select("Choose Option", options)
             if selection == 0:
                 GetCreditInfo(listitem.getProperty("credit_id"))
+                #todo
             if selection == 1:
+                AddToWindowStack(self)
                 dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 self.close()
                 dialog.doModal()

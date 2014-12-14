@@ -406,8 +406,7 @@ def GetPersonID(person):
     #     personlist = []
     #     for item in persons:
     #         personlist.append(item["name"])
-    #     dialog = xbmcgui.Dialog()
-    #     selection = dialog.select("Select Actor", personlist)
+    #     selection = xbmcgui.Dialog().select("Select Actor", personlist)
     # else:
     person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=true&" % urllib.quote_plus(person), 30)

@@ -745,8 +745,7 @@ def ExtractYoutubeID(string):
 
 
 def Notify(header="", message="", icon=addon_icon, time=5000, sound=True):
-    dialog = xbmcgui.Dialog()
-    dialog.notification(heading=header, message=message, icon=icon, time=time, sound=sound)
+    xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
 def GetMovieSetName(dbid):
