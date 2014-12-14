@@ -525,8 +525,16 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
 
 
 def GetMovieDBID(imdbid):
-    response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid, addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid.replace("tt", ""), addon.getSetting("LanguageID")), 30)
     return response["movie_results"][0]["id"]
+
+def Get_Show_TMDB_ID(tvdb_id):
+    response = GetMovieDBData("find/%s?external_source=tvdb_id&language=%s&" % (tvdb_id, addon.getSetting("LanguageID")), 30)
+    try:
+        return response["tv_results"][0]["id"]
+    except:
+        Notify("TVShow Info not available.")
+        return None
 
 
 def GetTrailer(movieid=None):

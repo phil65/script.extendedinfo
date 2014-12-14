@@ -31,7 +31,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > -1):
-            self.tmdb_id = GetImdbIDFromDatabase("tvshow", dbid)
+            tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
+            self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
             log("IMDBId from local DB:" + str(self.tmdb_id))
         elif imdb_id:
             self.tmdb_id = GetMovieDBID(imdb_id)
