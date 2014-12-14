@@ -32,7 +32,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             if not self.season:
                 self.close()
             xbmc.executebuiltin("RunScript(script.toolbox,info=blur,id=%s,radius=20,prefix=movie)" % self.season["general"]["Thumb"])
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.season["general"]["Title"] + " tv", "", "relevance", 15)
+            search_string = "%s %s tv" % (self.season["general"]["TVShowTitle"], self.season["general"]["Title"])
+            self.youtube_vids = GetYoutubeSearchVideosV3(search_string, "", "relevance", 15)
         else:
             Notify("No ID found")
             self.close()

@@ -91,7 +91,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             season = self.getControl(controlID).getSelectedItem().getProperty("Season")
             self.close()
             AddToWindowStack("tvshow", self.tmdb_id)
-            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=self.tmdb_id, season=season)
+            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=self.tmdb_id, season=season, tvshow=self.tvshow["general"]["Title"])
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()

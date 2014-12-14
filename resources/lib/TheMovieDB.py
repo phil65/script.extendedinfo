@@ -505,6 +505,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
         poster_path_small = ""
     season = {'SeasonDescription': response["overview"],
               'Plot': response["overview"],
+              'TVShowTitle': tvshowname,
               'Thumb': poster_path_small,
               'Poster': poster_path,
               'Title': response["name"],
