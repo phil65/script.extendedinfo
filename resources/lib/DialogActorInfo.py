@@ -61,7 +61,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
-        passDictToSkin(self.person["general"], "actor.", False, True, windowid)
+        passDictToSkin(self.person["general"], "actor.", False, False, windowid)
         self.getControl(150).addItems(CreateListItems(self.person["movie_roles"], 0))
         self.getControl(250).addItems(CreateListItems(self.person["tvshow_roles"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))

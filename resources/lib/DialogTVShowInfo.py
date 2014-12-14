@@ -60,7 +60,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
-        passDictToSkin(self.tvshow["general"], "movie.", False, True, windowid)
+        passDictToSkin(self.tvshow["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))

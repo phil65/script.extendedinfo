@@ -78,8 +78,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
-        passDictToSkin(self.setinfo, "movie.set.", True, False, windowid)
-        passDictToSkin(self.movie["general"], "movie.", False, True, windowid)
+        passDictToSkin(self.setinfo, "movie.set.", False, False, windowid)
+        passDictToSkin(self.movie["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
