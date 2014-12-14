@@ -201,10 +201,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
         if ("poster_path" in tv) and (tv["poster_path"]):
             poster_path = base_url + poster_size + tv['poster_path']
         if "episode_run_time" in tv:
-            runtimes = []
-            for item in tv["episode_run_time"]:
-                runtimes.append(str(item))
-            duration = " / ".join(runtimes)
+            duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
         release_date = fetch(tv, 'first_air_date')
         if release_date:
             year = release_date[:4]
@@ -489,19 +486,37 @@ def millify(n):
         return ""
 
 
-def GetSeasonInfo(tvshowname, seasonnumber):
-    response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
-    tvshowid = str(response['results'][0]['id'])
-    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshowid, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    season = {'SeasonDescription': response["overview"],
-              'AirDate': response["air_date"]}
+def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
+    if not tmdb_tvshow_id:
+        response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
+        tmdb_tvshow_id = str(response['results'][0]['id'])
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+    prettyprint(response)
     videos = []
-    for item in response["videos"]["results"]:
-        video = {'key': item["key"],
-                 'name': item["name"],
-                 'type': item["type"]}
-        videos.append(video)
-    return season, videos
+    backdrops = []
+    if ("poster_path" in response) and (response["poster_path"]):
+        poster_path = base_url + poster_size + response['poster_path']
+        poster_path_small = base_url + "w342" + response['poster_path']
+    else:
+        poster_path = ""
+        poster_path_small = ""
+    season = {'SeasonDescription': response["overview"],
+              'Plot': response["overview"],
+              'Thumb': poster_path_small,
+              'Poster': poster_path,
+              'Title': response["name"],
+              'AirDate': response["air_date"]}
+    if "videos" in response:
+        videos = HandleTMDBVideoResult(response["videos"]["results"])
+    if "backdrops" in response["images"]:
+        backdrops = HandleTMDBPeopleImagesResult(response["images"]["backdrops"])
+    answer = {"general": season,
+              "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
+              "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
+              "videos": videos,
+              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "backdrops": backdrops}
+    return answer
 
 
 def GetMovieDBID(imdbid):

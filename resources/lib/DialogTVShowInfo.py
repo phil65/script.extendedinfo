@@ -6,6 +6,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
+import DialogSeasonInfo
 homewindow = xbmcgui.Window(10000)
 
 addon = xbmcaddon.Addon()
@@ -52,7 +53,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
         passDictToSkin(self.tvshow["general"], "movie.", False, True, windowid)
-        self.getControl(50).addItems(CreateListItems(self.tvshow["actors"], 0))
+        self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))
         self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))
@@ -74,7 +75,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
-        if controlID in [50, 750]:
+        if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack("tvshow", self.tmdb_id)
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
@@ -85,6 +86,12 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.close()
             AddToWindowStack("tvshow", self.tmdb_id)
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=tmdb_id)
+            dialog.doModal()
+        elif controlID in [250]:
+            season = self.getControl(controlID).getSelectedItem().getProperty("Season")
+            self.close()
+            AddToWindowStack("tvshow", self.tmdb_id)
+            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=self.tmdb_id, season=season)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()

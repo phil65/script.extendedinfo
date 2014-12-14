@@ -193,9 +193,9 @@ class Main:
             elif info == 'seasoninfo':
                 passListToSkin("SeasonVideos", None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.tvshow and self.season:
-                    seasoninfo, videos = GetSeasonInfo(self.tvshow, self.season)
-                    passDictToSkin(seasoninfo, self.prop_prefix)
-                    passListToSkin("SeasonVideos", videos, self.prop_prefix, self.window, self.control, self.handle, self.limit)
+                    from DialogSeasonInfo import DialogSeasonInfo
+                    dialog = DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, tvshow=self.tvshow, season=self.season)
+                    dialog.doModal()
             elif info == 'directormovies':
                 passListToSkin('DirectorMovies', None, self.prop_prefix, self.window, self.control, self.handle, self.limit)
                 if self.director:
