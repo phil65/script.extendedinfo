@@ -508,6 +508,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
               'Thumb': poster_path_small,
               'Poster': poster_path,
               'Title': response["name"],
+              'ReleaseDate': response["air_date"],
               'AirDate': response["air_date"]}
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
@@ -662,7 +663,7 @@ def GetExtendedTVShowInfo(tvshow_id):
     videos = []
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    prettyprint(response)
+    # prettyprint(response)
     answer = {"general": HandleTMDBTVShowResult([response])[0],
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
