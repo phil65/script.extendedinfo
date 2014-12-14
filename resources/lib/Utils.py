@@ -85,33 +85,14 @@ class VideoPlayer(xbmc.Player):
         pass
 
 
-def AddToWindowStack(window_type, content_id):
-    windowstack.append((window_type, content_id))
+def AddToWindowStack(window):
+    windowstack.append(window)
 
 
 def PopWindowStack():
     if windowstack:
-        window_type, content_id = windowstack.pop()
-        if window_type == "video":
-            from DialogVideoInfo import DialogVideoInfo
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=content_id)
-            dialog.doModal()
-        elif window_type == "tvshow":
-            from DialogTVShowInfo import DialogTVShowInfo
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=content_id)
-            dialog.doModal()
-        elif window_type == "season":
-            from DialogSeasonInfo import DialogSeasonInfo
-            dialog = DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=content_id)
-            dialog.doModal()
-        elif window_type == "actor":
-            from DialogActorInfo import DialogActorInfo
-            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=content_id)
-            dialog.doModal()
-        elif window_type == "list":
-            from DialogVideoList import DialogVideoList
-            dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=content_id)
-            dialog.doModal()
+        dialog = windowstack.pop()
+        dialog.doModal()
 
 
 def GetPlaylistStats(path):

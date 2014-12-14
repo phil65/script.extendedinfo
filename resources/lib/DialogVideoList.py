@@ -38,7 +38,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID in [500]:
-            AddToWindowStack("list", self.listitem_list)
+            AddToWindowStack(self)
             media_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=media_id)
