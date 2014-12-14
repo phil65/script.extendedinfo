@@ -640,7 +640,7 @@
                                         <height>24</height>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
-                                        <label>31003</label>
+                                        <label>N / A</label>
                                         <textcolor>grey</textcolor>
                                         <font>font10</font>
                                         <visible>IsEmpty(Window.Property(movie.SubtitleLanguage.1)) + IsEmpty(Window.Property(movie.SubtitleLanguage.2))</visible>
