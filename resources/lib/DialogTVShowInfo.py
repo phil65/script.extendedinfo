@@ -123,6 +123,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             listitems = GetTVShowsWithGenre(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(listitems)
+        elif controlID in [1250, 1350]:
+            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog.doModal()
         elif controlID == 1450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = GetTVShowsFromNetwork(self.getControl(controlID).getSelectedItem().getProperty("id"))

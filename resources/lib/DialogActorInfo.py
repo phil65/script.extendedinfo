@@ -101,6 +101,10 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 self.close()
                 dialog.doModal()
+        elif controlID in [450, 750]:
+            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog.doModal()
         elif controlID == 350:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)

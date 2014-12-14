@@ -76,6 +76,10 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             PlayTrailer(listitem.getProperty("youtube_id"))
             WaitForVideoEnd()
             PopWindowStack()
+        elif controlID in [1250, 1350]:
+            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog.doModal()
 
     def onFocus(self, controlID):
         pass
