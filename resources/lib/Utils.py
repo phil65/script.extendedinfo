@@ -37,13 +37,17 @@ class SlideShow(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         self.imagelist = kwargs.get('imagelist')
         self.index = kwargs.get('index')
+        self.image = kwargs.get('image')
 
     def onInit(self):
-        listitems = []
-        for item in self.imagelist:
-            listitems.append(image_listitem)
-        self.getControl(10000).addItems(listitems)
-        xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
+        if self.imagelist:
+            self.getControl(10000).addItems(CreateListItems(self.imagelist))
+            xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
+        else:
+            listitem = {"label": self.image,
+                        "Thumb": self.image}
+            self.getControl(10000).addItems(CreateListItems([listitem]))
+
 
 
 def WaitForVideoEnd():

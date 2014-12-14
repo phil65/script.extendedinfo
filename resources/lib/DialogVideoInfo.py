@@ -118,7 +118,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
-            xbmc.executebuiltin("ShowPicture(%s)" % image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog.doModal()
         elif controlID in [350, 1150, 11]:
             AddToWindowStack(self)
             self.close()
