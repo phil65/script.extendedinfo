@@ -43,19 +43,18 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.tvshow_roles = None
         self.images = None
         if self.id:
-            self.person, self.movie_roles, self.tvshow_roles, self.images, self.tagged_images, self.movie_crew_roles, self.tvshow_crew_roles = GetExtendedActorInfo(self.id)
+            self.person = GetExtendedActorInfo(self.id)
             db_movies = 0
-            for item in self.movie_roles:
+            for item in self.person["movie_roles"]:
                 if "DBID" in item:
                     db_movies += 1
-            self.person["DBMovies"] = str(db_movies)
-            self.person["TotalMovies"] = str(len(self.movie_roles))
-            name = self.person["name"]
-            log("Blur image %s with radius %i" % (self.person["thumb"], 25))
-            image, imagecolor = Filter_Image(self.person["thumb"], 25)
-            self.person['ImageFilter'] = image
-            self.person['ImageColor'] = imagecolor
-            self.youtube_vids = GetYoutubeSearchVideosV3(name)
+            self.person["general"]["DBMovies"] = str(db_movies)
+            self.person["general"]["TotalMovies"] = str(len(self.person["movie_roles"]))
+            log("Blur image %s with radius %i" % (self.person["general"]["thumb"], 25))
+            image, imagecolor = Filter_Image(self.person["general"]["thumb"], 25)
+            self.person["general"]['ImageFilter'] = image
+            self.person["general"]['ImageColor'] = imagecolor
+            self.youtube_vids = GetYoutubeSearchVideosV3(self.person["general"]["name"])
         else:
             Notify("No ID found")
             self.close()
@@ -63,14 +62,14 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
-        passDictToSkin(self.person, "actor.", False, True, windowid)
-        self.getControl(150).addItems(CreateListItems(self.movie_roles, 0))
-        self.getControl(250).addItems(CreateListItems(self.tvshow_roles, 0))
+        passDictToSkin(self.person["general"], "actor.", False, True, windowid)
+        self.getControl(150).addItems(CreateListItems(self.person["movie_roles"], 0))
+        self.getControl(250).addItems(CreateListItems(self.person["tvshow_roles"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
-        self.getControl(450).addItems(CreateListItems(self.images, 0))
-        self.getControl(550).addItems(CreateListItems(self.movie_crew_roles, 0))
-        self.getControl(650).addItems(CreateListItems(self.tvshow_crew_roles, 0))
-        self.getControl(750).addItems(CreateListItems(self.tagged_images, 0))
+        self.getControl(450).addItems(CreateListItems(self.person["images"], 0))
+        self.getControl(550).addItems(CreateListItems(self.person["movie_crew_roles"], 0))
+        self.getControl(650).addItems(CreateListItems(self.person["tvshow_crew_roles"], 0))
+        self.getControl(750).addItems(CreateListItems(self.person["tagged_images"], 0))
     #    self.getControl(150).addItems(tvshow_listitems)
 
     def setControls(self):

@@ -690,17 +690,17 @@ def GetExtendedTVShowInfo(tvshow_id):
 
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
-    person = HandleTMDBPeopleResult([response])
-    # prettyprint(response)
-    images = HandleTMDBPeopleImagesResult(response["images"]["profiles"])
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleImagesResult(response["tagged_images"]["results"])
-    movie_roles = HandleTMDBMovieResult(response["movie_credits"]["cast"])
-    tvshow_roles = HandleTMDBTVShowResult(response["tv_credits"]["cast"])
-    movie_crew_roles = HandleTMDBMovieResult(response["movie_credits"]["crew"])
-    tvshow_crew_roles = HandleTMDBTVShowResult(response["tv_credits"]["crew"])
-    return person[0], movie_roles, tvshow_roles, images, tagged_images, movie_crew_roles, tvshow_crew_roles
+    answer = {"general": HandleTMDBPeopleResult([response])[0],
+              "movie_roles": HandleTMDBMovieResult(response["movie_credits"]["cast"]),
+              "tvshow_roles": HandleTMDBTVShowResult(response["tv_credits"]["cast"]),
+              "movie_crew_roles": HandleTMDBMovieResult(response["movie_credits"]["crew"]),
+              "tvshow_crew_roles": HandleTMDBTVShowResult(response["tv_credits"]["crew"]),
+              "tagged_images": tagged_images,
+              "images": HandleTMDBPeopleImagesResult(response["images"]["profiles"])}
+    return answer
 
 
 def GetMovieLists(list_id):
