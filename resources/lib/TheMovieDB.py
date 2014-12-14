@@ -201,7 +201,10 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
         if ("poster_path" in tv) and (tv["poster_path"]):
             poster_path = base_url + poster_size + tv['poster_path']
         if "episode_run_time" in tv:
-            duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
+            if len(tv["episode_run_time"]) > 1:
+                duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
+            else:
+                duration = "%i" % (tv["episode_run_time"][0])
         release_date = fetch(tv, 'first_air_date')
         if release_date:
             year = release_date[:4]
