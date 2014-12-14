@@ -223,6 +223,13 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
+                 'Status': fetch(tv, 'status'),
+                 'homepage': fetch(tv, 'homepage'),
+                 'last_air_date': fetch(tv, 'last_air_date'),
+                 'first_air_date': release_date,
+                 'number_of_episodes': fetch(tv, 'number_of_episodes'),
+                 'number_of_seasons': fetch(tv, 'number_of_seasons'),
+                 'in_production': fetch(tv, 'in_production'),
                  'Release_Date': release_date,
                  'ReleaseDate': release_date,
                  'Premiered': release_date}
@@ -672,7 +679,7 @@ def GetExtendedTVShowInfo(tvshow_id):
     videos = []
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    # prettyprint(response)
+    prettyprint(response)
     answer = {"general": HandleTMDBTVShowResult([response])[0],
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
