@@ -57,29 +57,30 @@ def HandleTraktMovieResult(results):
             premiered = str(datetime.datetime.fromtimestamp(int(movie["released"])))[:10]
         except:
             premiered = ""
-        try:
-            movie = {'Title': movie["title"],
-                     'Runtime': movie["runtime"],
-                     'Duration': movie["runtime"],
-                     'Tagline': movie["tagline"],
-                     'Trailer': ConvertYoutubeURL(movie["trailer"]),
-                     'Year': movie["year"],
-                     'ID': movie["tmdb_id"],
-                     'Path': "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'tmdb_id')),
-                     'mpaa': movie["certification"],
-                     'Plot': movie["overview"],
-                     'Premiered': premiered,
-                     'Rating': movie["ratings"]["percentage"] / 10.0,
-                     'Votes': movie["ratings"]["votes"],
-                     'Watchers': movie["watchers"],
-                     'Genre': " / ".join(movie["genres"]),
-                     'Art(poster)': movie["images"]["poster"],
-                     'Poster': movie["images"]["poster"],
-                     'Art(fanart)': movie["images"]["fanart"],
-                     'Fanart': movie["images"]["fanart"]}
-            movies.append(movie)
-        except Exception as e:
-            log(e)
+        if addon.getSetting("infodialog_onclick"):
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie, 'tmdb_id'))
+        else:
+            path = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie, 'tmdb_id'))
+        movie = {'Title': movie["title"],
+                 'Runtime': movie["runtime"],
+                 'Duration': movie["runtime"],
+                 'Tagline': movie["tagline"],
+                 'Trailer': ConvertYoutubeURL(movie["trailer"]),
+                 'Year': movie["year"],
+                 'ID': movie["tmdb_id"],
+                 'Path': path,
+                 'mpaa': movie["certification"],
+                 'Plot': movie["overview"],
+                 'Premiered': premiered,
+                 'Rating': movie["ratings"]["percentage"] / 10.0,
+                 'Votes': movie["ratings"]["votes"],
+                 'Watchers': movie["watchers"],
+                 'Genre': " / ".join(movie["genres"]),
+                 'Art(poster)': movie["images"]["poster"],
+                 'Poster': movie["images"]["poster"],
+                 'Art(fanart)': movie["images"]["fanart"],
+                 'Fanart': movie["images"]["fanart"]}
+        movies.append(movie)
         count += 1
         if count > 20:
             break

@@ -20,6 +20,10 @@ def GetRottenTomatoesMovies(movietype):
             else:
                 imdbid = ""
             poster = item["posters"]["original"].replace("tmb", "ori")
+            if addon.getSetting("infodialog_onclick"):
+                path = 'plugin://script.extendedinfo/?info=extendedinfo&&imdbid=%s' % imdbid
+            else:
+                path = "plugin://script.extendedinfo/?info=playtrailer&&imdbid=" + imdbid
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
                      'imdbid': imdbid,
@@ -28,7 +32,7 @@ def GetRottenTomatoesMovies(movietype):
                      'Runtime': item["runtime"],
                      'Duration': item["runtime"],
                      'Year': item["year"],
-                     'path': "plugin://script.extendedinfo/?info=playtrailer&&imdbid=" + imdbid,
+                     'path': path,
                      'Premiered': item["release_dates"]["theater"],
                      'mpaa': item["mpaa_rating"],
                      'Rating': item["ratings"]["audience_score"] / 10.0,
