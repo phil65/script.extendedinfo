@@ -105,8 +105,6 @@
                             <texturefocus border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                             <texturenofocus border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                             <label>-</label>
-                            <onclick>SetProperty(Text,$ESCINFO[Window.Property(actor.Biography)],home)</onclick>
-                            <onclick>RunScript(script.toolbox,info=textviewer,header=Plot,text='$ESCINFO[Window.Property(Text)]')</onclick>
                         </control>
                         <control type="textbox" id="800">
                             <posx>93</posx>

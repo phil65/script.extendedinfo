@@ -112,6 +112,10 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             PlayTrailer(listitem.getProperty("youtube_id"))
             WaitForVideoEnd()
             PopWindowStack()
+        elif controlID == 132:
+            text = self.person["general"]["description"] + "[CR]" + self.person["general"]["biography"]
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=text)
+            w.doModal()
 
     def onFocus(self, controlID):
         pass

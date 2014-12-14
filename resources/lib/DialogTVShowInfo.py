@@ -134,6 +134,9 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.OpenVideoList(listitems)
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
+        elif controlID == 132:
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.tvshow["general"]["Plot"])
+            w.doModal()
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
         #     country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
