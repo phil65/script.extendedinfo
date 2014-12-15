@@ -21,10 +21,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.listitem_list = kwargs.get('listitems')
+        self.color = kwargs.get('dialogcolor')
+        if not self.color:
+            self.color = "FFAAAAAA"
         self.listitems = CreateListItems(self.listitem_list)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        windowid = xbmcgui.getCurrentWindowDialogId()
+        xbmcgui.Window(windowid).setProperty("WindowColor", self.color)
         self.getControl(500).addItems(self.listitems)
         xbmc.sleep(200)
         xbmc.executebuiltin("SetFocus(500)")

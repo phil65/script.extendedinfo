@@ -162,5 +162,5 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def OpenVideoList(self, listitems):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'])
         dialog.doModal()
