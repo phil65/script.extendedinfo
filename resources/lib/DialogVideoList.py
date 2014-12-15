@@ -4,6 +4,7 @@ import xbmcgui
 from Utils import *
 import DialogVideoInfo
 homewindow = xbmcgui.Window(10000)
+from TheMovieDB import *
 
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
@@ -21,11 +22,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.listitem_list = kwargs.get('listitems')
-        self.color = kwargs.get('color')
-        if not self.color:
-            self.color = "FFAAAAAA"
-        # Notify(self.color)
-        self.listitems = CreateListItems(self.listitem_list)
+        self.color = kwargs.get('color', "FFAAAAAA")
+        self.type = kwargs.get('type', "movie")
+        self.sort = kwargs.get('sort', "release_date")
+        self.order = kwargs.get('order', "desc")
+        self.filters = kwargs.get('filters', {})
+        if self.listitem_list:
+            self.listitems = CreateListItems(self.listitem_list)
+        else:
+            self.listitems, self.totalpages = self.fetch_data()
+            self.listitems = CreateListItems(self.listitems)
+            # Notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -49,6 +56,66 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=media_id)
             dialog.doModal()
+        elif controlID == 5001:
+            self.get_sort_type()
+            self.update_list()
+        elif controlID == 5002:
+            self.get_genre()
+            self.update_list()
 
     def onFocus(self, controlID):
         pass
+
+    def get_sort_type(self):
+        sort_list = {"Popularity": "popularity",
+                     "Release Date": "release_date",
+                     "Revenue": "revenue",
+                     "Release Date": "primary_release_date",
+                     "Original Title": "original_title",
+                     "Vote average": "vote_average",
+                     "Vote Count": "vote_count"}
+        listitems = []
+        sort_strings = []
+        for (key, value) in sort_list.iteritems():
+            listitems.append(key)
+            sort_strings.append(value)
+        index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
+        if index > -1:
+            self.sort = sort_strings[index]
+
+    def set_filter_url(self):
+        self.filter_url = ""
+        filter_list = []
+        for (key, value) in self.filters.iteritems():
+            filter_list.append("%s=%s" % (key, value))
+        self.filter_url = "&".join(filter_list)
+
+
+    def get_genre(self):
+        response = GetMovieDBData("genre/movie/list?language=%s&" % (addon.getSetting("LanguageID")), 10)
+        id_list = []
+        label_list = []
+        for item in response["genres"]:
+            id_list.append(item["id"])
+            label_list.append(item["name"])
+        index = xbmcgui.Dialog().select("Choose Genre", label_list)
+        if index > -1:
+            # return "with_genres=" + str(id_list[index])
+            self.filters["with_genres"] = str(id_list[index])
+
+    def update_list(self):
+        self.listitems, self.totalpages = self.fetch_data()
+        self.getControl(500).addItems(CreateListItems(self.listitems))
+
+    def fetch_data(self):
+        self.set_filter_url()
+        sortby = self.sort + "." + self.order
+        response = GetMovieDBData("discover/%s?sort_by=%s&%s&language=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID")), 10)
+    #    prettyprint(response)
+        if self.type == "movie":
+            return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"]
+        else:
+            return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"]
+
+
+

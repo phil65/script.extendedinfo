@@ -8,7 +8,9 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 # import threading
-homewindow = xbmcgui.Window(10000)
+# homewindow = xbmcgui.Window(10000)
+selectdialog = xbmcgui.Window(12000)
+busydialog = xbmcgui.Window(10138)
 
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
@@ -104,7 +106,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-        homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
+        # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
+        # busydialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack(self)
@@ -136,9 +139,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(studioitems)
+            filters = {"with_companies": self.getControl(controlID).getSelectedItem().getProperty("id")}
+            self.OpenVideoList(None, filters)
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
@@ -146,28 +149,27 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             w.doModal()
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            keywordid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            keyworditems = GetMoviesWithKeyword(keywordid)
-            self.OpenVideoList(keyworditems)
+            filters = {"with_keywords": self.getControl(controlID).getSelectedItem().getProperty("id")}
+            self.OpenVideoList(None, filters)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            genreitems = GetMoviesWithGenre(genreid)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(genreitems)
+            filters = {"with_genres": genreid}
+            self.OpenVideoList(None, filters)
         elif controlID == 650:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
             certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
             list_items = GetMoviesWithCertification(country, certification)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(list_items)
+            self.OpenVideoList(list_items, {})
         elif controlID == 450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             list_items = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(list_items)
+            self.OpenVideoList(list_items, {})
         elif controlID == 6001:
             ratings = []
             for i in range(0, 21):
@@ -188,14 +190,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetFavItems("movies")
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(list_items)
+                self.OpenVideoList(list_items, {})
             elif index == 1:
                 self.ShowRatedMovies()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"])
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(list_items)
+                self.OpenVideoList(list_items, {})
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"])
             w.doModal()
@@ -232,10 +234,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
-    def OpenVideoList(self, listitems):
+    def OpenVideoList(self, listitems, filters):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'])
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'], filters=filters)
         dialog.doModal()
 
 

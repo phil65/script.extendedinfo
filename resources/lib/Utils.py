@@ -37,6 +37,7 @@ class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.text = kwargs.get('text')
         self.header = kwargs.get('header')
+        self.color = kwargs.get('color')
 
     def onInit(self):
         self.getControl(1).setLabel(self.header)
@@ -411,7 +412,6 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                 id_list.append(item["movieid"])
                 originaltitle_list.append(item["originaltitle"].lower())
                 title_list.append(item["label"].lower())
-
             homewindow.setProperty("id_list.JSON", simplejson.dumps(id_list))
             homewindow.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
             homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
@@ -431,17 +431,10 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             # Notify("found originaltitle_list " + onlineitem["Title"])
         if found:
             dbid = str(id_list[index])
-            # Notify(dbid)
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
-                # try:
-                #     difference = int(onlineitem["Premiered"][:4]) - int(json_response['result']['moviedetails']['year'])
-                #     if difference < -2 or difference > 2:
-                #         break
-                # except:
-                #     pass
                 response = json_response['result']['moviedetails']
                 if (response['resume']['position'] and response['resume']['total']) > 0:
                     resume = "true"
@@ -450,34 +443,34 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                     resume = "false"
                     played = '0'
                 streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
-                onlineitem.update({"Play": response["movieid"]})
-                onlineitem.update({"DBID": response["movieid"]})
-                onlineitem.update({"Path": response['file']})
-                onlineitem.update({"PercentPlayed": played})
-                onlineitem.update({"Resume": resume})
-                onlineitem.update({"Path": response['file']})
-                onlineitem.update({"FilenameAndPath": response['file']})
-                onlineitem.update({"Writer": " / ".join(response['writer'])})
-                onlineitem.update({"Logo": response['art'].get("clearlogo", "")})
-                onlineitem.update({"DiscArt": response['art'].get("discart", "")})
-                onlineitem.update({"Banner": response['art'].get("banner", "")})
-                onlineitem.update({"Poster": response['art'].get("poster", "")})
-                onlineitem.update({"Thumb": response['art'].get("poster", "")})
+                onlineitem["Play"] = response["movieid"]
+                onlineitem["DBID"] = response["movieid"]
+                onlineitem["Path"] = response['file']
+                onlineitem["PercentPlayed"] = played
+                onlineitem["Resume"] = resume
+                onlineitem["Path"] = response['file']
+                onlineitem["FilenameAndPath"] = response['file']
+                onlineitem["Writer"] = " / ".join(response['writer'])
+                onlineitem["Logo"] = response['art'].get("clearlogo", "")
+                onlineitem["DiscArt"] = response['art'].get("discart", "")
+                onlineitem["Banner"] = response['art'].get("banner", "")
+                onlineitem["Poster"] = response['art'].get("poster", "")
+                onlineitem["Thumb"] = response['art'].get("poster", "")
                 onlineitem.update(streaminfo)
                 audio = response['streamdetails']['audio']
                 subtitles = response['streamdetails']['subtitle']
                 for i in range(1, 20):
-                    onlineitem.update({'AudioLanguage.%d' % i: ""})
-                    onlineitem.update({'SubtitleLanguage.%d' % i: ""})
+                    onlineitem['AudioLanguage.%d' % i] = ""
+                    onlineitem['SubtitleLanguage.%d' % i] = ""
                 count = 1
                 streams = []
                 for item in audio:
                     language = item['language']
                     if language not in streams and language != "und":
                         streams.append(language)
-                        onlineitem.update({'AudioLanguage.%d' % count: language})
-                        onlineitem.update({'AudioCodec.%d' % count: item['codec']})
-                        onlineitem.update({'AudioChannels.%d' % count: str(item['channels'])})
+                        onlineitem['AudioLanguage.%d' % count] = language
+                        onlineitem['AudioCodec.%d' % count] = item['codec']
+                        onlineitem['AudioChannels.%d' % count] = str(item['channels'])
                         count += 1
                 count = 1
                 subs = []
@@ -485,10 +478,10 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                     language = item['language']
                     if language not in subs and language != "und":
                         subs.append(language)
-                        onlineitem.update({'SubtitleLanguage.%d' % count: language})
+                        onlineitem['SubtitleLanguage.%d' % count] = language
                         count += 1
-                onlineitem.update({'SubtitleLanguage': " / ".join(subs)})
-                onlineitem.update({'AudioLanguage': " / ".join(streams)})
+                onlineitem['SubtitleLanguage'] = " / ".join(subs)
+                onlineitem['AudioLanguage'] = " / ".join(streams)
                 if library_first:
                     local_items.append(onlineitem)
                 else:
