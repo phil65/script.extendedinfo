@@ -72,7 +72,7 @@
                             <height>210</height>
                             <align>left</align>
                             <label fallback="No info available">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
-                            <font>Font_Reg28_2</font>
+                            <font>font12</font>
                             <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
                         </control>
                     </control>
@@ -2161,6 +2161,7 @@
                                         <height>100</height>
                                         <align>center</align>
                                         <aligny>center</aligny>
+                                        <font>font12</font>
                                         <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
@@ -2185,6 +2186,7 @@
                                         <height>100</height>
                                         <align>center</align>
                                         <aligny>center</aligny>
+                                        <font>font12</font>
                                         <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
@@ -2234,6 +2236,7 @@
                                         <width>550</width>
                                         <height>320</height>
                                         <align>center</align>
+                                        <font>font12</font>
                                         <label>$INFO[ListItem.Property(Author),[B],[/B][CR]]$INFO[ListItem.Property(Content)]</label>
                                     </control>
                                 </control>
@@ -2259,6 +2262,7 @@
                                         <width>550</width>
                                         <height>320</height>
                                         <align>center</align>
+                                        <font>font12</font>
                                         <label>$INFO[ListItem.Property(Author),[B],[/B][CR]]$INFO[ListItem.Property(Content)]</label>
                                     </control>
                                 </control>
@@ -2309,6 +2313,7 @@
                                         <align>center</align>
                                         <aligny>center</aligny>
                                         <label>$INFO[ListItem.Label]</label>
+                                        <font>font12</font>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -2334,6 +2339,7 @@
                                         <align>center</align>
                                         <aligny>center</aligny>
                                         <label>$INFO[ListItem.Label]</label>
+                                        <font>font12</font>
                                     </control>
                                 </control>
                             </focusedlayout>
@@ -2767,15 +2773,9 @@
                 <width>749</width>
                 <height>1100</height>
                 <aspectratio aligny="top">scale</aspectratio>
-                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Thumb)]</texture>
+                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Poster)]</texture>
                 <bordertexture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" border="10">thumbs/homewidget_shadow.png</bordertexture>
                 <bordersize>10</bordersize>
-            </control>
-            <control type="image">
-                <width>729</width>
-                <height>1080</height>
-                <aspectratio aligny="top">scale</aspectratio>
-                <texture background="true" fallback="info/movieinfogradient.png">$INFO[Window.Property(movie.Poster)]</texture>
             </control>
         </control>
     </controls>
