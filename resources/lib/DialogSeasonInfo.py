@@ -27,6 +27,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
+        self.logged_in = checkLogin()
         prettyprint(kwargs)
         if self.tmdb_id or (self.season and self.showname):
             self.season = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
@@ -45,8 +46,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
-        passDictToSkin(self.season["general"], "movie.", False, True, windowid)
+        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
+        passDictToSkin(self.season["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.season["actors"], 0))
         self.getControl(750).addItems(CreateListItems(self.season["crew"], 0))
         self.getControl(1150).addItems(CreateListItems(self.season["videos"], 0))

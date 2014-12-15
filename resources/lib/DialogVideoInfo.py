@@ -29,6 +29,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         tmdb_id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
+        self.logged_in = checkLogin()
         if tmdb_id:
             self.MovieId = tmdb_id
         elif self.dbid and (int(self.dbid) > -1):
@@ -77,7 +78,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
+        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
         passDictToSkin(self.setinfo, "movie.set.", False, False, windowid)
         passDictToSkin(self.movie["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
