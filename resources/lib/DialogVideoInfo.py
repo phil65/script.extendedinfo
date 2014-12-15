@@ -136,52 +136,37 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             studioitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
-            AddToWindowStack(self)
-            self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=studioitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(studioitems)
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
-            xbmc.executebuiltin("RunScript(script.toolbox,info=textviewer,text='\"%s\"')" % text)
-            dialog.doModal()
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Review", text=text)
+            w.doModal()
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             keywordid = self.getControl(controlID).getSelectedItem().getProperty("id")
             keyworditems = GetMoviesWithKeyword(keywordid)
-            AddToWindowStack(self)
-            self.close()
+            self.OpenVideoList(keyworditems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=keyworditems)
-            dialog.doModal()
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
             genreitems = GetMoviesWithGenre(genreid)
-            AddToWindowStack(self)
-            self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=genreitems)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(genreitems)
         elif controlID == 650:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
             certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
-            cert_items = GetMoviesWithCertification(country, certification)
-            AddToWindowStack(self)
-            self.close()
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=cert_items)
+            list_items = GetMoviesWithCertification(country, certification)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(list_items)
         elif controlID == 450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             list_items = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
-            self.close()
-            AddToWindowStack(self)
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            dialog.doModal()
+            self.OpenVideoList(list_items)
         elif controlID == 6001:
             ratings = []
             for i in range(0, 21):
@@ -201,21 +186,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             elif index == 0:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetFavItems("movies")
-                self.close()
-                AddToWindowStack(self)
-                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                dialog.doModal()
+                self.OpenVideoList(list_items)
             elif index == 1:
                 self.ShowRatedMovies()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"])
-                self.close()
-                AddToWindowStack(self)
-                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                dialog.doModal()
+                self.OpenVideoList(list_items)
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"])
             w.doModal()
@@ -248,9 +227,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         list_items = GetRatedMovies()
         self.close()
         AddToWindowStack(self)
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.movie["general"]['ImageColor'])
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
+
+    def OpenVideoList(self, listitems):
+        AddToWindowStack(self)
+        self.close()
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'])
+        dialog.doModal()
+
 
 class SettingsMonitor(xbmc.Monitor):
 
