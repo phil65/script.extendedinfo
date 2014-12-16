@@ -553,15 +553,11 @@ def Get_Show_TMDB_ID(tvdb_id=None, source="tvdb_id"):
 def GetTrailer(movieid=None):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                               (movieid, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    if not response:
-        Notify("Could not get trailer")
-        return ""
-    if "videos" in response and len(response['videos']['results']) > 0:
-        Trailer = response['videos']['results'][0]['key']
-        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer
-    else:
-        Trailer = ""
-        Notify("Could not get trailer for movie with id " + str(movieid))
+    if response and "videos" in response and response['videos']['results']:
+        youtube_id = response['videos']['results'][0]['key']
+        return youtube_id
+    Notify("Could not get trailer")
+    return ""
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):

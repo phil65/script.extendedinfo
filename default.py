@@ -341,7 +341,7 @@ class Main:
                     trailer = GetTrailer(MovieId)
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
                     if trailer:
-                        xbmc.executebuiltin("PlayMedia(%s)" % trailer)
+                        PlayTrailer(trailer)
                         self.control = ""  # workaround to avoid breaking PlayMedia
                     else:
                         Notify("Error", "No Trailer available")
