@@ -40,6 +40,8 @@ class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
         self.color = kwargs.get('color')
 
     def onInit(self):
+        windowid = xbmcgui.getCurrentWindowDialogId()
+        xbmcgui.Window(windowid).setProperty("WindowColor", self.color)
         self.getControl(1).setLabel(self.header)
         self.getControl(5).setText(self.text)
 

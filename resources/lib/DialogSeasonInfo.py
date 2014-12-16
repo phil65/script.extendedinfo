@@ -45,6 +45,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        homewindow.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
         passDictToSkin(self.season["general"], "movie.", False, False, windowid)
@@ -81,6 +82,10 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
+        elif controlID == 132:
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w.doModal()
+
 
     def onFocus(self, controlID):
         pass

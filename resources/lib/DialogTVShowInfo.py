@@ -58,6 +58,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        homewindow.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
         passDictToSkin(self.tvshow["general"], "movie.", False, False, windowid)
@@ -135,7 +136,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.tvshow["general"]["Plot"])
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.tvshow["general"]["Plot"], color=self.tvshow["general"]['ImageColor'])
             w.doModal()
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")

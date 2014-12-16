@@ -110,13 +110,17 @@ msgid "Include Pornstars"
 msgstr ""
 
 msgctxt "#32100"
-msgid "Include Pornstars"
+msgid "Get extrafanart"
 msgstr ""
 
 msgctxt "#32101"
-msgid "Include Pornstars"
+msgid "Get extrathumbs"
 msgstr ""
 
 msgctxt "#32102"
-msgid "Include Pornstars"
+msgid "Get tune"
+msgstr ""
+
+msgctxt "#32103"
+msgid "Change info labels"
 msgstr ""

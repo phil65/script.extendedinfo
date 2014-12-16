@@ -8,7 +8,7 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 # import threading
-# homewindow = xbmcgui.Window(10000)
+homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)
 
@@ -79,6 +79,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
         passDictToSkin(self.setinfo, "movie.set.", False, False, windowid)
@@ -145,7 +146,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Review", text=text)
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Review", text=text, color=self.movie["general"]['ImageColor'])
             w.doModal()
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -199,7 +200,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.OpenVideoList(list_items, {})
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"])
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"], color=self.movie["general"]['ImageColor'])
             w.doModal()
         elif controlID == 6003:
             ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")

@@ -60,6 +60,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        homewindow.setProperty("actor.ImageColor", self.person["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         passDictToSkin(self.person["general"], "actor.", False, False, windowid)
         self.getControl(150).addItems(CreateListItems(self.person["movie_roles"], 0))
@@ -114,7 +115,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID == 132:
             text = self.person["general"]["description"] + "[CR]" + self.person["general"]["biography"]
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=text)
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=text, color=self.person["general"]['ImageColor'])
             w.doModal()
 
     def onFocus(self, controlID):

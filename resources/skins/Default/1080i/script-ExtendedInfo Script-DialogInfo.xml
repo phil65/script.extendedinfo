@@ -38,7 +38,7 @@
                 <animation effect="fade" start="100" end="60" time="0" condition="true">Conditional</animation>
                 <height>1080</height>
                 <aspectratio align="center">scale</aspectratio>
-                <texture colordiffuse="$INFO[Window.Property(actor.ImageColor)]">diffuseoverlay.png</texture>
+                <texture colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">diffuseoverlay.png</texture>
             </control>
             <control type="group">
                 <posx>825</posx>
@@ -102,8 +102,8 @@
                                 <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
-                            <texturefocus border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                            <texturenofocus border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                            <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                            <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                             <label>-</label>
                         </control>
                         <control type="textbox" id="800">
@@ -169,7 +169,7 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="group">
                                         <posx>77</posx>
@@ -216,14 +216,14 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
@@ -320,7 +320,7 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="group">
                                         <posx>77</posx>
@@ -367,14 +367,14 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
@@ -471,7 +471,7 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="group">
                                         <posx>77</posx>
@@ -518,14 +518,14 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
@@ -622,7 +622,7 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="group">
                                         <posx>77</posx>
@@ -669,14 +669,14 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
@@ -772,7 +772,7 @@
                                     <posx>50</posx>
                                     <width>373</width>
                                     <height>380</height>
-                                    <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                    <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                 </control>
                                 <control type="group">
                                     <posx>77</posx>
@@ -802,7 +802,7 @@
                                     <posx>50</posx>
                                     <width>373</width>
                                     <height>380</height>
-                                    <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                    <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                 </control>
                                 <control type="image">
                                     <posy>0</posy>
@@ -811,7 +811,7 @@
                                     <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                     <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     <height>380</height>
-                                    <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                    <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                 </control>
                                 <control type="group">
                                     <posx>77</posx>
@@ -869,7 +869,7 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posx>77</posx>
@@ -889,14 +889,14 @@
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
@@ -948,7 +948,7 @@
                                         <posx>50</posx>
                                         <width>560</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posx>77</posx>
@@ -968,14 +968,14 @@
                                         <posx>50</posx>
                                         <width>560</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>560</width>
                                         <height>380</height>
-                                        <texture border="40" colordiffuse="$INFO[Window.Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
+                                        <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
