@@ -21,6 +21,11 @@ headers = {
     'Content-Type': 'application/json',
     'User-agent': 'XBMC/13.2 ( ptemming@gmx.net )'
 }
+poster_sizes = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
+logo_sizes = ["w45", "w92", "w154", "w185", "w300", "w500", "original"]
+backdrop_sizes = ["w300", "w780", "w1280", "original"]
+profile_sizes = ["w45", "w185", "h632", "original"]
+still_sizes = ["w92", "w185", "w300", "original"]
 
 
 def checkLogin():
@@ -449,8 +454,9 @@ def GetMovieDBData(url="", cache_days=14):
 
 
 def GetMovieDBConfig():
-    return ("http://image.tmdb.org/t/p/", "w780", "w1280")
+    return ("http://image.tmdb.org/t/p/", "w500", "w1280")
     response = GetMovieDBData("configuration?", 60)
+    # prettyprint(response)
     if response:
         return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
     else:
