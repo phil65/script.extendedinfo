@@ -561,8 +561,12 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
-    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (movieid, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), cache_time)
+    session_string = ""
+    if addon.getSetting("tmdb_username"):
+        session_string = "session_id=%s&" % (get_session_id())
+    response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
+                              (movieid, addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
+    prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -610,6 +614,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + poster_size + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
+        # path = Get_File(poster_path)
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
@@ -650,6 +655,10 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     else:
         videos = []
+    if "account_states" in response:
+        account_states = response["account_states"]
+    else:
+        account_states = None
     answer = {"general": CompareWithLibrary([movie])[0],
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "similar": HandleTMDBMovieResult(response["similar"]["results"]),
@@ -661,6 +670,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
               "keywords": HandleTMDBMiscResult(response["keywords"]["keywords"]),
               "reviews": HandleTMDBMiscResult(response["reviews"]["results"]),
               "videos": videos,
+              "account_states": account_states,
               "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
