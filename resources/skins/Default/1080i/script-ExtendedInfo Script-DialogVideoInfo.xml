@@ -131,8 +131,6 @@
                                 <radioposy>30</radioposy>
                                 <radiowidth>64</radiowidth>
                                 <radioheight>64</radioheight>
-                                <onclick>Action(Close)</onclick>
-                                <onclick>RunScript(script.toolbox,info=playmovie,dbid=$INFO[Window.Property(movie.DBID)])</onclick>
                                 <visible>!IsEmpty(Window.Property(movie.DBID))</visible>
                                 <onright>9</onright>
                             </control>

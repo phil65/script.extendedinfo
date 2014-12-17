@@ -153,6 +153,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 PlayTrailer(self.movie["general"]["youtube_id"])
             WaitForVideoEnd()
             PopWindowStack()
+        elif controlID in [8]:
+            AddToWindowStack(self)
+            self.close()
+            listitem = CreateListItems([self.movie["general"]])[0]
+            PlayMedia(self.movie["general"]['FilenameAndPath'], listitem, True)
+            # PlayMedia("movie", elf.movie["general"]['DBID'], "False")
+
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.executebuiltin("Dialog.Close(busydialog)")

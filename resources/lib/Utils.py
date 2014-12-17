@@ -102,17 +102,27 @@ def PlayTrailer(youtube_id):
         player = VideoPlayer()
         player.play(stream_url)
 
+def PlayMedia(path="", listitem=None, popstack=False):
+    player = VideoPlayer(popstack)
+    player.play(item=path, listitem=listitem)
+
+
 
 class VideoPlayer(xbmc.Player):
 
-    def __init__(self):
+    def __init__(self, popstack):
         xbmc.Player.__init__(self)
+        self.popstack = popstack
 
     def onPlayBackEnded(self):
-        pass
+        if self.popstack:
+            Notify("now")
+            PopWindowStack()
 
     def onPlayBackStopped(self):
-        pass
+        if self.popstack:
+            Notify("now2")
+            PopWindowStack()
 
 
 def AddToWindowStack(window):
@@ -123,7 +133,6 @@ def PopWindowStack():
     if windowstack:
         dialog = windowstack.pop()
         dialog.doModal()
-
 
 def GetPlaylistStats(path):
     startindex = -1
@@ -551,10 +560,13 @@ def Get_JSON_response(url="", cache_days=7.0):
     cache_seconds = int(cache_days * 86400.0)
     prop_time = homewindow.getProperty(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
-        prop = simplejson.loads(homewindow.getProperty(hashed_url))
-        log("prop load for %s. time: %f" % (url, time.time() - now))
-        return prop
-    elif xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
+        try:
+            prop = simplejson.loads(homewindow.getProperty(hashed_url))
+            log("prop load for %s. time: %f" % (url, time.time() - now))
+            return prop
+        except:
+            log("could not load prop data")
+    if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
         log("loaded file for %s. time: %f" % (url, time.time() - now))
     else:
