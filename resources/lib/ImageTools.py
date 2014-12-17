@@ -7,7 +7,6 @@ import os
 from Utils import *
 try:
     from PIL import Image, ImageFilter, ImageOps
-    from ImageOperations import MyGaussianBlur
 except:
     pass
 
@@ -19,6 +18,7 @@ addon_name = addon.getAddonInfo('name')
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
+THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 
 
 def Filter_Image(filterimage, radius):
@@ -47,7 +47,7 @@ def Filter_Image(filterimage, radius):
                     filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
-                    log("copy image from source: " + filterimage)
+                    # Notify("cp img: " + filterimage)
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break
@@ -66,6 +66,22 @@ def Filter_Image(filterimage, radius):
         img = Image.open(targetfile)
     imagecolor = Get_Colors(img)
     return targetfile, imagecolor
+
+
+def get_cached_thumb(filename):
+    if filename.startswith("stack://"):
+        filename = strPath[8:].split(" , ")[0]
+    if filename.endswith("folder.jpg"):
+        cachedthumb = xbmc.getCacheThumbName(filename)
+        thumbpath = os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
+    else:
+        cachedthumb = xbmc.getCacheThumbName(filename)
+        if ".jpg" in filename:
+            cachedthumb = cachedthumb.replace("tbn", "jpg")
+        elif ".png" in filename:
+            cachedthumb = cachedthumb.replace("tbn", "png")
+        thumbpath = os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
+    return thumbpath
 
 
 def Get_Colors(img):
@@ -112,8 +128,6 @@ def Get_Colors(img):
         imagecolor = "FFF0F0F0"
     log("Average Color: " + imagecolor)
     return imagecolor
-
-from PIL import ImageFilter
 
 
 class MyGaussianBlur(ImageFilter.Filter):
