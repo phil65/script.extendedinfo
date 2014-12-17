@@ -80,10 +80,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
-        passDictToSkin(self.setinfo, "movie.set.", False, False, windowid)
-        passDictToSkin(self.movie["general"], "movie.", False, False, windowid)
+        self.windowid = xbmcgui.getCurrentWindowDialogId()
+        xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", self.logged_in)
+        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
+        passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
@@ -98,7 +98,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1250).addItems(CreateListItems(self.movie["images"], 0))
         self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
-        self.UpdateStates()
+        self.UpdateStates(False)
 
 
     def onAction(self, action):
@@ -108,12 +108,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
 
-    def UpdateStates(self):
+    def UpdateStates(self, forceupdate=True):
+        if forceupdate:
+            xbmc.sleep(2000)
+            self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
         if self.movie["account_states"]:
-            xbmcgui.Window(windowid).setProperty("favorite", str(self.movie["account_states"]["favorite"]))
-            xbmcgui.Window(windowid).setProperty("rated", str(self.movie["account_states"]["rated"]))
-            xbmcgui.Window(windowid).setProperty("watchlist", str(self.movie["account_states"]["watchlist"]))
-            Notify(str(self.movie["account_states"]["favorite"]))
+            xbmcgui.Window(self.windowid).setProperty("favorite", str(self.movie["account_states"]["favorite"]))
+            xbmcgui.Window(self.windowid).setProperty("rated", str(self.movie["account_states"]["rated"]))
+            xbmcgui.Window(self.windowid).setProperty("watchlist", str(self.movie["account_states"]["watchlist"]))
+            Notify(str(self.movie["account_states"]["rated"]))
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
@@ -188,7 +191,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMovie(self.MovieId, rating)
-                self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
                 self.UpdateStates()
         elif controlID == 6002:
             listitems = ["Favourites", "Rated Movies"]
@@ -215,7 +217,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             w.doModal()
         elif controlID == 6003:
             ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
-            self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
             self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedMovies()
@@ -235,7 +236,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                     AddItemToList(list_id, self.MovieId)
             elif index > 0:
                 AddItemToList(account_lists[index - 1]["id"], self.MovieId)
-                self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
                 self.UpdateStates()
 
     def onFocus(self, controlID):
