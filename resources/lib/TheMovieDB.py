@@ -566,6 +566,17 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     authors = []
     directors = []
     genres = []
+    year = ""
+    Trailer = ""
+    trailerimage = ""
+    Country = ""
+    Studio = []
+    mpaa = ""
+    SetName = ""
+    SetID = ""
+    poster_path = ""
+    poster_path_small = ""
+    backdrop_path = ""
     if not response:
         Notify("Could not get movie information")
         return {}
@@ -576,49 +587,29 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
             authors.append(item["name"])
         if item["job"] == "Director":
             directors.append(item["name"])
-    Trailer = ""
-    trailerimage = ""
     if "videos" in response:
         for item in response['videos']['results']:
             if item["type"] == "Trailer" and item["site"] == "YouTube":
                 Trailer = item["key"]
                 trailerimage = "http://i.ytimg.com/vi/" + Trailer + "/0.jpg"
                 break
-    if len(response['releases']['countries']) > 0:
+    if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
-    else:
-        mpaa = ""
-    if len(response['production_countries']) > 0:
+    if response['production_countries']:
         Country = response['production_countries'][0]["name"]
-    else:
-        Country = ""
-    Studio = []
     for item in response['production_companies']:
         Studio.append(item["name"])
-    Studio = " / ".join(Studio)
     Set = fetch(response, "belongs_to_collection")
     if Set:
         SetName = fetch(Set, "name")
         SetID = fetch(Set, "id")
-    else:
-        SetName = ""
-        SetID = ""
-    if 'release_date' in response and fetch(response, 'release_date') is not None:
+    if 'release_date' in response and fetch(response, 'release_date'):
         year = fetch(response, 'release_date')[:4]
-    else:
-        year = ""
-    Budget = millify(fetch(response, 'budget'))
-    Revenue = millify(fetch(response, 'revenue'))
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
-    else:
-        backdrop_path = ""
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + poster_size + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
-    else:
-        poster_path = ""
-        poster_path_small = ""
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
@@ -632,8 +623,8 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'mpaa': mpaa,
              'Director': " / ".join(directors),
              'Writer': " / ".join(authors),
-             'Budget': Budget,
-             'Revenue': Revenue,
+             'Budget': millify(fetch(response, 'budget')),
+             'Revenue': millify(fetch(response, 'revenue')),
              'Homepage': fetch(response, 'homepage'),
              'Set': SetName,
              'SetId': SetID,
@@ -653,7 +644,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
              'Country': Country,
-             'Studio': Studio,
+             'Studio': " / ".join(Studio),
              'Year': year}
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
