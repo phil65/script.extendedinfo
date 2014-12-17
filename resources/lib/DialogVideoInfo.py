@@ -116,7 +116,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmcgui.Window(self.windowid).setProperty("favorite", str(self.movie["account_states"]["favorite"]))
             xbmcgui.Window(self.windowid).setProperty("rated", str(self.movie["account_states"]["rated"]))
             xbmcgui.Window(self.windowid).setProperty("watchlist", str(self.movie["account_states"]["watchlist"]))
-            Notify(str(self.movie["account_states"]["rated"]))
+            # Notify(str(self.movie["account_states"]["rated"]))
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
