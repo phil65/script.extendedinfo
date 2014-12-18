@@ -285,7 +285,7 @@
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
                             </control>
                             <control type="radiobutton" id="6006">
-                                <label>Show Rated Movies</label>
+                                <label>Already rated</label>
                                 <textureradioonfocus colordiffuse="grey">icons/list2.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/list2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/list2.png</textureradiooffnofocus>
