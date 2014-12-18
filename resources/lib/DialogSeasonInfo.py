@@ -24,6 +24,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.movieplayer = VideoPlayer(popstack=True)
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
@@ -75,8 +76,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)
             self.close()
-            PlayTrailer(listitem.getProperty("youtube_id"))
-            WaitForVideoEnd()
+            self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            self.movieplayer.WaitForVideoEnd()
             PopWindowStack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("Poster")

@@ -24,6 +24,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.movieplayer = VideoPlayer(popstack=True)
         xbmcgui.WindowXMLDialog.__init__(self)
         tmdb_id = kwargs.get('id')
         dbid = kwargs.get('dbid')
@@ -106,8 +107,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)
             self.close()
-            PlayTrailer(listitem.getProperty("youtube_id"))
-            WaitForVideoEnd()
+            self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            self.movieplayer.WaitForVideoEnd()
             PopWindowStack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")

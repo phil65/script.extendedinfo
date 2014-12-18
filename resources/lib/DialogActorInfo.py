@@ -23,6 +23,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id')
         if not self.id:
             name = kwargs.get('name')
@@ -43,6 +44,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.images = None
         if self.id:
             self.person = GetExtendedActorInfo(self.id)
+            prettyprint(self.person)
             db_movies = 0
             for item in self.person["movie_roles"]:
                 if "DBID" in item:
@@ -110,8 +112,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)
             self.close()
-            PlayTrailer(listitem.getProperty("youtube_id"))
-            WaitForVideoEnd()
+            self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            self.movieplayer.WaitForVideoEnd()
             PopWindowStack()
         elif controlID == 132:
             text = self.person["general"]["description"] + "[CR]" + self.person["general"]["biography"]
