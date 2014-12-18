@@ -92,37 +92,65 @@ def calculate_age(born_string):
         return ""
 
 
-def PlayTrailer(youtube_id):
+def PlayTrailer(youtube_id="", listitem=None, popstack=False):
+    if not listitem:
+        listitem =xbmcgui.ListItem ('Trailer')
+        listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
     import YDStreamExtractor
     YDStreamExtractor.disableDASHVideo(True)
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
     if vid:
         stream_url = vid.streamURL()
         log("Youtube Trailer:" + stream_url)
-        player = VideoPlayer()
-        player.play(stream_url)
+        PlayMedia(stream_url, listitem, popstack)
+
 
 def PlayMedia(path="", listitem=None, popstack=False):
-    player = VideoPlayer(popstack)
+    player = VideoPlayer(popstack=popstack)
     player.play(item=path, listitem=listitem)
 
 
 
 class VideoPlayer(xbmc.Player):
 
-    def __init__(self, popstack):
+    def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
-        self.popstack = popstack
+        self.stopped = False
+        self.popstack = kwargs.get("popstack", True)
 
     def onPlayBackEnded(self):
+        Notify("onPlayBackEnded")
+        self.stop = True
         if self.popstack:
-            Notify("now")
             PopWindowStack()
 
     def onPlayBackStopped(self):
+        self.stop = True
         if self.popstack:
-            Notify("now2")
             PopWindowStack()
+
+    def onPlayBackStarted(self):
+        self.stopped = False
+
+    def playYoutubeVideo(self, youtube_id="", listitem=None, popstack=True):
+        if not listitem:
+            listitem =xbmcgui.ListItem ('Trailer')
+            listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
+        import YDStreamExtractor
+        YDStreamExtractor.disableDASHVideo(True)
+        if youtube_id:
+            vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
+            if vid:
+                stream_url = vid.streamURL()
+                log("Youtube Trailer:" + stream_url)
+                self.play(stream_url, listitem)
+        else:
+            Notify("no youtube id found")
+
+    def WaitForVideoEnd(self):
+        while not self.stopped:
+            xbmc.sleep(200)
+
 
 
 def AddToWindowStack(window):

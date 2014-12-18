@@ -193,28 +193,6 @@
                                 <visible>system.hasaddon(script.cinema.experience) + !SubString(Container.FolderPath,plugin)</visible>
                                 <visible>!IsEmpty(Window.Property(movie.DBID))</visible>
                             </control>
-                            <control type="radiobutton" id="11">
-                                <label>$LOCALIZE[20410]</label>
-                                <width>280</width>
-                                <height>160</height>
-                                <textoffsetx>0</textoffsetx>
-                                <align>center</align>
-                                <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                                <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>Font_Reg30_2</font>
-                                <textcolor>grey</textcolor>
-                                <focusedcolor>white2</focusedcolor>
-                                <aligny>bottom</aligny>
-                                <textoffsety>97</textoffsety>
-                                <radioposx>108</radioposx>
-                                <radioposy>30</radioposy>
-                                <radiowidth>64</radiowidth>
-                                 <radioheight>64</radioheight>
-                               <textureradioonfocus colordiffuse="grey">icons/movieclap.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="grey">icons/movieclap.png</textureradioofffocus>
-                                <textureradiooffnofocus colordiffuse="grey">icons/movieclap.png</textureradiooffnofocus>
-                                <textureradioonnofocus colordiffuse="grey">icons/movieclap.png</textureradioonnofocus>
-                            </control>
                             <control type="radiobutton" id="6001">
                                 <label>Rate Movie</label>
                                 <textureradioonfocus colordiffuse="grey">icons/heart.png</textureradioonfocus>

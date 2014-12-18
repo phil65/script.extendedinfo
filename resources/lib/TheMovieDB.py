@@ -571,8 +571,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     directors = []
     genres = []
     year = ""
-    Trailer = ""
-    trailerimage = ""
     Country = ""
     Studio = []
     mpaa = ""
@@ -591,12 +589,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
             authors.append(item["name"])
         if item["job"] == "Director":
             directors.append(item["name"])
-    if "videos" in response:
-        for item in response['videos']['results']:
-            if item["type"] == "Trailer" and item["site"] == "YouTube":
-                Trailer = item["key"]
-                trailerimage = "http://i.ytimg.com/vi/" + Trailer + "/0.jpg"
-                break
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
     if response['production_countries']:
@@ -614,7 +606,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + poster_size + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
-        # path = Get_File(poster_path)
+        poster_path = Get_File(poster_path)
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
@@ -642,9 +634,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'Adult': str(fetch(response, 'adult')),
              'Popularity': fetch(response, 'popularity'),
              'Status': fetch(response, 'status'),
-             'Trailer': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % Trailer,
-             'trailerimage': trailerimage,
-             'youtube_id': Trailer,
              'Path': path,
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),

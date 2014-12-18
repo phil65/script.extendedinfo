@@ -25,6 +25,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
+        self.movieplayer = VideoPlayer(popstack=True)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
         self.monitor = SettingsMonitor()
@@ -140,26 +141,24 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
-        elif controlID in [350, 1150, 11]:
+        elif controlID in [350, 1150]:
             AddToWindowStack(self)
             self.close()
-            if controlID in [350, 1150]:
-                youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
-                if youtube_id:
-                    PlayTrailer(youtube_id)
-                else:
-                    Notify("No trailer found")
+            listitem =xbmcgui.ListItem ('Trailer')
+            listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
+            youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
+            if youtube_id:
+                self.movieplayer.playYoutubeVideo(youtube_id, self.getControl(controlID).getSelectedItem(), True)
+                self.movieplayer.WaitForVideoEnd()
             else:
-                PlayTrailer(self.movie["general"]["youtube_id"])
-            WaitForVideoEnd()
-            PopWindowStack()
+                Notify("No trailer found")
         elif controlID in [8]:
             AddToWindowStack(self)
             self.close()
             listitem = CreateListItems([self.movie["general"]])[0]
-            PlayMedia(self.movie["general"]['FilenameAndPath'], listitem, True)
-            # PlayMedia("movie", elf.movie["general"]['DBID'], "False")
-
+            self.movieplayer.play(item=self.movie["general"]['FilenameAndPath'], listitem=listitem)
+            self.movieplayer.WaitForVideoEnd()
+            Notify("here2")
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
