@@ -24,6 +24,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.listitem_list = kwargs.get('listitems')
         self.color = kwargs.get('color', "FFAAAAAA")
         self.type = kwargs.get('type', "movie")
+        self.page = 1
         self.sort = kwargs.get('sort', "release_date")
         self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', {})
@@ -48,6 +49,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+        # if xbmc.getCondVisibility("Container(500).Row(1)"):
+        #     self.page += 1
+        #     self.update_list(add=True)
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -103,14 +107,21 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             # return "with_genres=" + str(id_list[index])
             self.filters["with_genres"] = str(id_list[index])
 
-    def update_list(self):
+    def update_list(self, add=False):
+        if add:
+            self.old_items = self.listitems
+        else:
+            self.old_items = []
         self.listitems, self.totalpages = self.fetch_data()
-        self.getControl(500).addItems(CreateListItems(self.listitems))
+        self.listitems = self.old_items + CreateListItems(self.listitems)
+        self.getControl(500).addItems(self.listitems)
+        # for item in (self.page - 1) * 2:
+        #     xbmc.executebuiltin("Down")
 
     def fetch_data(self):
         self.set_filter_url()
         sortby = self.sort + "." + self.order
-        response = GetMovieDBData("discover/%s?sort_by=%s&%s&language=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID")), 10)
+        response = GetMovieDBData("discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page), 10)
     #    prettyprint(response)
         if self.type == "movie":
             return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"]
