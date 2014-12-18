@@ -260,6 +260,8 @@ def HandleTMDBMiscResult(results):
                     'Thumb': small_poster_path,
                     'Title': fetch(item, 'name'),
                     'certification': fetch(item, 'certification'),
+                    'item_count': fetch(item, 'item_count'),
+                    'favorite_count': fetch(item, 'favorite_count'),
                     'release_date': fetch(item, 'release_date'),
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),

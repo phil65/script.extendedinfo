@@ -2328,7 +2328,7 @@
                         </control>
                     </control>
                    <control type="group" id="50215">
-                        <height>440</height>
+                        <height>500</height>
                         <visible>IntegerGreaterThan(Container(450).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
@@ -2363,7 +2363,7 @@
                             <posx>-50</posx>
                             <posy>20</posy>
                             <width>1930</width>
-                            <height>400</height>
+                            <height>500</height>
                             <onleft>450</onleft>
                             <onright>450</onright>
                             <onup>1350</onup>
@@ -2410,12 +2410,22 @@
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
                                             <posx>0</posx>
+                                            <height>69</height>
                                             <posy>267</posy>
                                             <align>center</align>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="textbox">
+                                            <width>228</width>
+                                            <height>120</height>
+                                            <posx>0</posx>
+                                            <posy>350</posy>
+                                            <align>center</align>
+                                            <font>font10</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Description)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -2466,13 +2476,22 @@
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
                                             <posx>0</posx>
+                                            <height>69</height>
                                             <posy>267</posy>
                                             <align>center</align>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="textbox">
+                                            <width>228</width>
+                                            <height>120</height>
+                                            <posx>0</posx>
+                                            <posy>350</posy>
+                                            <align>center</align>
+                                            <font>font10</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Description)]</label>
                                         </control>
                                     </control>
                                 </control>
