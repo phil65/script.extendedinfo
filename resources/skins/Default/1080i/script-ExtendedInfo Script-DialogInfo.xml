@@ -197,14 +197,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
                                             <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Character)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -253,15 +263,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
-                                            <posx>0</posx>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Character)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -348,14 +367,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
-                                            <posx>0</posx>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Character)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -404,15 +433,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
                                             <posx>0</posx>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Character)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -499,14 +537,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
-                                            <posx>0</posx>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Job)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -555,15 +603,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
-                                            <posx>0</posx>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Job)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -650,14 +707,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
+                                            <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
-                                            <posx>0</posx>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Job)]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -706,15 +773,24 @@
                                             <texture>common/bgcolor.png</texture>
                                             <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                         </control>
-                                        <control type="textbox">
+                                        <control type="label">
                                             <width>228</width>
                                             <height>69</height>
                                             <posx>0</posx>
                                             <posy>267</posy>
                                             <align>center</align>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Year,, - ]$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <label>$INFO[ListItem.Label]</label>
+                                        </control>
+                                        <control type="label">
+                                            <width>228</width>
+                                            <height>69</height>
+                                            <posx>0</posx>
+                                            <posy>298</posy>
+                                            <align>center</align>
+                                            <font>font12</font>
+                                            <textcolor>grey</textcolor>
+                                            <label>$INFO[ListItem.Property(Job)]</label>
                                         </control>
                                     </control>
                                 </control>

@@ -179,6 +179,8 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
                     'Rating': fetch(movie, 'vote_average'),
                     'credit_id': fetch(movie, 'credit_id'),
                     'character': fetch(movie, 'character'),
+                    'job': fetch(movie, 'job'),
+                    'department': fetch(movie, 'department'),
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'Year': year,
