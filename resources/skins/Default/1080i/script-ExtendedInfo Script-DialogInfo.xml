@@ -82,7 +82,7 @@
                         <width>1000</width>
                         <height min="0" max="500">auto</height>
                         <label>$INFO[Window.Property(actor.AlsoKnownAs),$ADDON[script.extendedinfo 32016]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.Birthday),$ADDON[script.extendedinfo 32012]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.PlaceOfBirth),$ADDON[script.extendedinfo 32014]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.TotalMovies),$ADDON[script.extendedinfo 32011]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.DBMovies),$ADDON[script.extendedinfo 32021]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.Homepage),$ADDON[script.extendedinfo 32017]: [COLOR=white],[/COLOR][CR]]$INFO[Window.Property(actor.Deathday),$ADDON[script.extendedinfo 32013]: [COLOR=white],[/COLOR][CR]]</label>
-                        <font>Font_Reg30_2</font>
+                        <font>font12</font>
                         <textcolor>grey</textcolor>
                     </control>
                     <control type="group" id="140">
@@ -113,7 +113,7 @@
                             <height>210</height>
                             <align>left</align>
                             <label fallback="No info available">$INFO[Window.Property(actor.Biography)]</label>
-                            <font>Font_Reg28_2</font>
+                            <font>font12</font>
                             <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
                         </control>
                     </control>
@@ -125,7 +125,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Movie actor roles</label>
                         </control>
                         <control type="image">
@@ -299,7 +299,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>TV Show actor roles</label>
                         </control>
                         <control type="image">
@@ -473,7 +473,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Movie crew member</label>
                         </control>
                         <control type="image">
@@ -647,7 +647,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>TVShow crew member</label>
                         </control>
                         <control type="image">
@@ -821,7 +821,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Youtube Videos</label>
                         </control>
                         <control type="image">
@@ -937,7 +937,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Artwork</label>
                         </control>
                         <control type="panel" id="450">
@@ -1016,7 +1016,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Fanart</label>
                         </control>
                         <control type="panel" id="750">

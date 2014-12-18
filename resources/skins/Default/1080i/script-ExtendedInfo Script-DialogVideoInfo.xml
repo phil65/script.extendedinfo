@@ -722,7 +722,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Cast</label>
                         </control>
                         <control type="image">
@@ -858,7 +858,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Crew</label>
                         </control>
                         <control type="image">
@@ -1010,7 +1010,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Recommended by TMDB</label>
                         </control>
                         <control type="image">
@@ -1162,7 +1162,7 @@
                             <width>1900</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>$INFO[Window.Property(movie.set.label)]</label>
                         </control>
                         <control type="image">
@@ -1348,7 +1348,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Official Videos</label>
                         </control>
                         <control type="image">
@@ -1486,7 +1486,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Youtube Videos</label>
                         </control>
                         <control type="image">
@@ -1606,7 +1606,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Production Companies</label>
                         </control>
                         <control type="image">
@@ -1722,7 +1722,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Networks</label>
                         </control>
                         <control type="image">
@@ -1838,7 +1838,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Releases</label>
                         </control>
                         <control type="image">
@@ -1952,7 +1952,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Genres</label>
                         </control>
                         <control type="panel" id="850">
@@ -2026,7 +2026,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Reviews</label>
                         </control>
                         <control type="panel" id="1050">
@@ -2102,7 +2102,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Keywords</label>
                         </control>
                         <control type="panel" id="950">
@@ -2336,7 +2336,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold28</font>
+                            <font>font14</font>
                             <label>Lists from MovieDB Users</label>
                         </control>
                         <control type="image">
@@ -2552,7 +2552,7 @@
                                 <label>$INFO[Window.Property(movie.Top250)]</label>
                                 <textcolor>black</textcolor>
                                 <align>center</align>
-                                <font>Font_Bold28</font>
+                                <font>font14</font>
                             </control>
                         </control>
                         <control type="grouplist">
@@ -2705,7 +2705,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label>$INFO[Window.Property(movie.Budget),$]</label>
-                                    <font>Font_Bold28</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2741,7 +2741,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label fallback="?">$INFO[Window.Property(movie.Revenue),$]</label>
-                                    <font>Font_Bold28</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
