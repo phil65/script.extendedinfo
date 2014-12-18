@@ -44,7 +44,10 @@ def Filter_Image(filterimage, radius):
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
-                    filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    try:
+                        filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
+                    except:
+                        pass
                     if filterimage.endswith("/"):
                         filterimage = filterimage[:-1]
                     # Notify("cp img: " + filterimage)
