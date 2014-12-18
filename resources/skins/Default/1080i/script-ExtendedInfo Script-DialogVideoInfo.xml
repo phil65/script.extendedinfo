@@ -2328,7 +2328,7 @@
                         </control>
                     </control>
                    <control type="group" id="50215">
-                        <height>500</height>
+                        <height>600</height>
                         <visible>IntegerGreaterThan(Container(450).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
@@ -2363,7 +2363,7 @@
                             <posx>-50</posx>
                             <posy>20</posy>
                             <width>1930</width>
-                            <height>500</height>
+                            <height>600</height>
                             <onleft>450</onleft>
                             <onright>450</onright>
                             <onup>1350</onup>
@@ -2419,7 +2419,7 @@
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
-                                            <height>120</height>
+                                            <height>200</height>
                                             <posx>0</posx>
                                             <posy>350</posy>
                                             <align>center</align>
@@ -2485,7 +2485,7 @@
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
-                                            <height>120</height>
+                                            <height>200</height>
                                             <posx>0</posx>
                                             <posy>350</posy>
                                             <align>center</align>
