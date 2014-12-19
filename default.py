@@ -321,6 +321,10 @@ class Main:
                     Notify(item.getProperty("Image"))
             elif info == 'action':
                 xbmc.executebuiltin(self.id)
+            elif info == 'bounce':
+                homewindow.setProperty(self.name, "True")
+                xbmc.sleep(200)
+                homewindow.clearProperty(self.name)
             elif info == "youtubevideo":
                 if self.id:
                     self.control = ""  # workaround to avoid breaking PlayMedia
