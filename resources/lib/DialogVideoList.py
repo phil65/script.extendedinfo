@@ -31,15 +31,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if self.listitem_list:
             self.listitems = CreateListItems(self.listitem_list)
         else:
-            self.listitems, self.totalpages = self.fetch_data()
-            self.listitems = CreateListItems(self.listitems)
+            self.update_content()
             # Notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(windowid).setProperty("WindowColor", self.color)
-        self.getControl(500).addItems(self.listitems)
+        self.update_list()
         xbmc.sleep(200)
         xbmc.executebuiltin("SetFocus(500)")
 
@@ -51,7 +50,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.close()
         # if xbmc.getCondVisibility("Container(500).Row(1)"):
         #     self.page += 1
-        #     self.update_list(add=True)
+        #     self.update_content(add=True)
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -62,9 +61,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 5001:
             self.get_sort_type()
+            self.update_content()
             self.update_list()
         elif controlID == 5002:
             self.get_genre()
+            self.update_content()
             self.update_list()
 
     def onFocus(self, controlID):
@@ -107,16 +108,23 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             # return "with_genres=" + str(id_list[index])
             self.filters["with_genres"] = str(id_list[index])
 
-    def update_list(self, add=False):
+    def update_content(self, add=False):
         if add:
             self.old_items = self.listitems
         else:
             self.old_items = []
         self.listitems, self.totalpages = self.fetch_data()
-        self.listitems = self.old_items + CreateListItems(self.listitems)
-        self.getControl(500).addItems(self.listitems)
+        self.listitems_2 = []
+        if self.page < self.totalpages:
+            self.page += 1
+            self.listitems_2, self.totalpages = self.fetch_data()
+        self.listitems = self.old_items + CreateListItems(self.listitems) + CreateListItems(self.listitems_2)
         # for item in (self.page - 1) * 2:
         #     xbmc.executebuiltin("Down")
+
+    def update_list(self):
+        self.getControl(500).addItems(self.listitems)
+
 
     def fetch_data(self):
         self.set_filter_url()
