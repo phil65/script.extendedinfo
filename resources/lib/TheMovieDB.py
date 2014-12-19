@@ -908,6 +908,8 @@ class Get_ListItems_Thread(threading.Thread):
         threading.Thread.__init__(self)
         self.function = function
         self.param = param
+        self.setName(self.function.__name__)
+        log("init " + self.function.__name__)
 
     def run(self):
         self.listitems = self.function(self.param)
