@@ -394,18 +394,18 @@ class Main:
             args = sys.argv[2][1:].split("&&")
             self.handle = int(sys.argv[1])
             self.control = "plugin"
-            params = {}
         else:
             args = sys.argv
-            try:
-                params = dict(arg.split("=") for arg in sys.argv[1].split("&"))
-            except:
-                params = {}
+        params = {}
         for arg in args:
             if arg == 'script.extendedinfo':
                 continue
             param = arg.replace('"', '').replace("'", " ")
             log(param)
+            # try:
+            #     params[param.split("=")[0]] = param.split("=")[1]
+            # except:
+            #     pass
             if param.startswith('info='):
                 self.infos.append(param[5:])
             elif param.startswith('type='):
