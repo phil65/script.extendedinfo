@@ -3,6 +3,7 @@ import os
 import xbmc
 from Utils import *
 import urllib
+import threading
 from urllib2 import Request, urlopen
 
 
@@ -651,19 +652,34 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         account_states = response["account_states"]
     else:
         account_states = None
+    similar_thread = Get_ListItems_Thread(HandleTMDBMovieResult, response["similar"]["results"])
+    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
+    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
+    # general_thread = Get_ListItems_Thread(CompareWithLibrary, [movie])
+    similar_thread.start()
+    actor_thread.start()
+    crew_thread.start()
+    poster_thread.start()
+    # general_thread.start()
+    similar_thread.join()
+    actor_thread.join()
+    crew_thread.join()
+    poster_thread.join()
+    # general_thread.join()
     answer = {"general": CompareWithLibrary([movie])[0],
-              "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
-              "similar": HandleTMDBMovieResult(response["similar"]["results"]),
+              "actors": actor_thread.listitems,
+              "similar": similar_thread.listitems,
               "lists": HandleTMDBMiscResult(response["lists"]["results"]),
               "studios": HandleTMDBMiscResult(response["production_companies"]),
               "releases": HandleTMDBMiscResult(response["releases"]["countries"]),
-              "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
+              "crew": crew_thread.listitems,
               "genres": HandleTMDBMiscResult(response["genres"]),
               "keywords": HandleTMDBMiscResult(response["keywords"]["keywords"]),
               "reviews": HandleTMDBMiscResult(response["reviews"]["results"]),
               "videos": videos,
               "account_states": account_states,
-              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "images": poster_thread.listitems,
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
 
@@ -873,3 +889,13 @@ def search_movie(medianame, year=''):
     else:
         log('TMDB API search found ID: %s' % tmdb_id)
     return tmdb_id
+
+
+class Get_ListItems_Thread(threading.Thread):
+    def __init__(self, function=None, param=None):
+        threading.Thread.__init__(self)
+        self.function = function
+        self.param = param
+
+    def run(self):
+        self.listitems = self.function(self.param)
