@@ -252,15 +252,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             elif index > 0:
                 AddItemToList(account_lists[index - 1]["id"], self.MovieId)
                 self.UpdateStates()
-        elif controlID == 33400:
-            xbmc.sleep(260)
-            xbmc.executebuiltin("ClearProperty(Bounce.Down,home)")
+        # elif controlID == 33400:
+        #     xbmc.sleep(260)
+        #     xbmc.executebuiltin("ClearProperty(Bounce.Down,home)")
 
 
     def onFocus(self, controlID):
-        if controlID == 33300:
-            xbmc.sleep(260)
-            xbmc.executebuiltin("ClearProperty(Bounce.Up,home)")
+        # if controlID == 33300:
+        #     xbmc.sleep(260)
+        #     xbmc.executebuiltin("ClearProperty(Bounce.Up,home)")
+        pass
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
