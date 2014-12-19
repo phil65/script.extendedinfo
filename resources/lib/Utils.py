@@ -435,11 +435,11 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     global title_list
     if not title_list:
         now = time.time()
-        title_list = xbmc.getInfoLabel("Window(home).Property(title_list.JSON)")
-        if title_list:
-            title_list = simplejson.loads(title_list)
+        id_list = xbmc.getInfoLabel("Window(home).Property(id_list.JSON)")
+        if id_list and id_list != "[]":
+            id_list = simplejson.loads(id_list)
             originaltitle_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(originaltitle_list.JSON)"))
-            id_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(id_list.JSON)"))
+            title_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(title_list.JSON)"))
         else:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
             json_query = simplejson.loads(unicode(json_query, 'utf-8', errors='ignore'))
@@ -468,6 +468,8 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             found = True
             # Notify("found originaltitle_list " + onlineitem["Title"])
         if found:
+            prettyprint(id_list)
+            log(str(index))
             dbid = str(id_list[index])
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')

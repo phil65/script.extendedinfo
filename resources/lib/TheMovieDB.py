@@ -913,3 +913,4 @@ class Get_ListItems_Thread(threading.Thread):
 
     def run(self):
         self.listitems = self.function(self.param)
+        return True
