@@ -656,17 +656,11 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
-    # general_thread = Get_ListItems_Thread(CompareWithLibrary, [movie])
-    similar_thread.start()
-    actor_thread.start()
-    crew_thread.start()
-    poster_thread.start()
-    # general_thread.start()
-    similar_thread.join()
-    actor_thread.join()
-    crew_thread.join()
-    poster_thread.join()
-    # general_thread.join()
+    threads = [similar_thread, actor_thread, crew_thread, poster_thread]
+    for item in threads:
+        item.start()
+    for item in threads:
+        item.join()
     answer = {"general": CompareWithLibrary([movie])[0],
               "actors": actor_thread.listitems,
               "similar": similar_thread.listitems,
@@ -694,14 +688,11 @@ def GetExtendedTVShowInfo(tvshow_id):
     actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
-    similar_thread.start()
-    actor_thread.start()
-    crew_thread.start()
-    poster_thread.start()
-    similar_thread.join()
-    actor_thread.join()
-    crew_thread.join()
-    poster_thread.join()
+    threads = [similar_thread, actor_thread, crew_thread, poster_thread]
+    for item in threads:
+        item.start()
+    for item in threads:
+        item.join()
     answer = {"general": HandleTMDBTVShowResult([response])[0],
               "actors": actor_thread.listitems,
               "similar": similar_thread.listitems,
@@ -724,16 +715,11 @@ def GetExtendedActorInfo(actorid):
     movie_crew_roles = Get_ListItems_Thread(HandleTMDBMovieResult, response["movie_credits"]["crew"])
     tvshow_crew_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["profiles"])
-    movie_roles.start()
-    tvshow_roles.start()
-    movie_crew_roles.start()
-    tvshow_crew_roles.start()
-    poster_thread.start()
-    movie_roles.join()
-    tvshow_roles.join()
-    movie_crew_roles.join()
-    tvshow_crew_roles.join()
-    poster_thread.join()
+    threads = [movie_roles, tvshow_roles, movie_crew_roles, tvshow_crew_roles, poster_thread]
+    for item in threads:
+        item.start()
+    for item in threads:
+        item.join()
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
