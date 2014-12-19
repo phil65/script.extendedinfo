@@ -259,7 +259,7 @@ def HandleTMDBMiscResult(results):
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
-                    'Title': fetch(item, 'name'),
+                    'Title': cleanText(fetch(item, 'name')),
                     'certification': fetch(item, 'certification'),
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
@@ -269,7 +269,7 @@ def HandleTMDBMiscResult(results):
                     'content': fetch(item, 'content'),
                     'ID': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
-                    'Description': fetch(item, 'description')}
+                    'Description': cleanText(fetch(item, 'description'))}
         listitems.append(listitem)
     return listitems
 
