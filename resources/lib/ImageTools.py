@@ -133,6 +133,17 @@ def Get_Colors(img):
     return imagecolor
 
 
+class Filter_Image_Thread(threading.Thread):
+
+    def __init__(self, image="", radius=25):
+        threading.Thread.__init__(self)
+        self.filterimage = image
+        self.radius = radius
+
+    def run(self):
+        self.image, self.imagecolor = Filter_Image(self.filterimage, self.radius)
+
+
 class MyGaussianBlur(ImageFilter.Filter):
     name = "GaussianBlur"
 

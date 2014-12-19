@@ -7,7 +7,7 @@ from YouTube import *
 import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
-# import threading
+import threading
 homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)
@@ -49,14 +49,19 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if not self.movie["general"]:
                 self.close()
             log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
-            image, imagecolor = Filter_Image(self.movie["general"]["Thumb"], 25)
-            self.movie["general"]['ImageFilter'] = image
-            self.movie["general"]['ImageColor'] = imagecolor
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
-            self.set_listitems = []
-            self.setinfo = {}
-            if self.movie["general"]["SetId"]:
-                self.set_listitems, self.setinfo = GetSetMovies(self.movie["general"]["SetId"])
+            filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
+            youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
+            sets_thread = Get_Set_Items_Thread(self.movie["general"]["SetId"])
+            filter_thread.start()
+            sets_thread.start()
+            youtube_thread.start()
+            filter_thread.join()
+            youtube_thread.join()
+            sets_thread.join()
+            self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.youtube_vids = youtube_thread.listitems
+            self.set_listitems = sets_thread.listitems
+            self.setinfo = sets_thread.setinfo
             id_list = []
             for item in self.set_listitems:
                 id_list.append(item["ID"])
@@ -108,6 +113,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
@@ -246,9 +252,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             elif index > 0:
                 AddItemToList(account_lists[index - 1]["id"], self.MovieId)
                 self.UpdateStates()
+        elif controlID == 33400:
+            xbmc.sleep(260)
+            xbmc.executebuiltin("ClearProperty(Bounce.Down,home)")
+
 
     def onFocus(self, controlID):
-        pass
+        if controlID == 33300:
+            xbmc.sleep(260)
+            xbmc.executebuiltin("ClearProperty(Bounce.Up,home)")
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -266,6 +278,33 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dialog.doModal()
 
 
+class Get_Youtube_Vids_Thread(threading.Thread):
+
+    def __init__(self, search_string="", hd="", order="relevance", limit=15):
+        threading.Thread.__init__(self)
+        self.search_string = search_string
+        self.hd = hd
+        self.order = order
+        self.limit = limit
+
+    def run(self):
+        self.listitems = GetYoutubeSearchVideosV3(self.search_string, self.hd, self.order, self.limit)
+
+
+class Get_Set_Items_Thread(threading.Thread):
+
+    def __init__(self, set_id=""):
+        threading.Thread.__init__(self)
+        self.set_id = set_id
+
+    def run(self):
+        if self.set_id:
+            self.listitems, self.setinfo = GetSetMovies(self.set_id)
+        else:
+            self.listitems = []
+            self.setinfo = {}
+
+
 class SettingsMonitor(xbmc.Monitor):
 
     def __init__(self):
@@ -273,4 +312,5 @@ class SettingsMonitor(xbmc.Monitor):
 
     def onSettingsChanged(self):
         xbmc.sleep(300)
+
 
