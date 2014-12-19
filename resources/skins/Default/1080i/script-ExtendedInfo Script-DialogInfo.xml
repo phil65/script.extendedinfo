@@ -98,10 +98,10 @@
                             <radioheight>46</radioheight>
                             <onup>750</onup>
                             <ondown>150</ondown>
-                                <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
-                                <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
-                                <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
+                            <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
+                            <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
+                            <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
+                            <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
                             <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                             <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                             <label>-</label>
@@ -1051,6 +1051,15 @@
                                         <aspectratio aligny="center">scale</aspectratio>
                                         <fadetime>0</fadetime>
                                     </control>
+                                    <control type="label">
+                                        <posx>77</posx>
+                                        <posy>280</posy>
+                                        <height>60</height>
+                                        <width>555</width>
+                                        <label>$INFO[ListItem.Title]</label>
+                                        <font>font12_title</font>
+                                        <scroll>true</scroll>
+                                    </control>
                                 </control>
                             </itemlayout>
                             <focusedlayout height="400" width="540">
@@ -1082,6 +1091,15 @@
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
+                                    </control>
+                                    <control type="label">
+                                        <posx>77</posx>
+                                        <posy>280</posy>
+                                        <height>60</height>
+                                        <width>555</width>
+                                        <label>$INFO[ListItem.Title]</label>
+                                        <font>font12_title</font>
+                                        <scroll>true</scroll>
                                     </control>
                                 </control>
                             </focusedlayout>
