@@ -690,34 +690,60 @@ def GetExtendedTVShowInfo(tvshow_id):
     videos = []
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    prettyprint(response)
+    similar_thread = Get_ListItems_Thread(HandleTMDBTVShowResult, response["similar"]["results"])
+    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
+    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
+    similar_thread.start()
+    actor_thread.start()
+    crew_thread.start()
+    poster_thread.start()
+    similar_thread.join()
+    actor_thread.join()
+    crew_thread.join()
+    poster_thread.join()
     answer = {"general": HandleTMDBTVShowResult([response])[0],
-              "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
-              "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
+              "actors": actor_thread.listitems,
+              "similar": similar_thread.listitems,
               "studios": HandleTMDBMiscResult(response["production_companies"]),
               "networks": HandleTMDBMiscResult(response["networks"]),
-              "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
+              "crew": crew_thread.listitems,
               "genres": HandleTMDBMiscResult(response["genres"]),
               "keywords": HandleTMDBMiscResult(response["keywords"]["results"]),
               "videos": videos,
               "seasons": HandleTMDBSeasonResult(response["seasons"]),
-              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "images": poster_thread.listitems,
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
 
 
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
+    movie_roles = Get_ListItems_Thread(HandleTMDBMovieResult, response["movie_credits"]["cast"])
+    tvshow_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["cast"])
+    movie_crew_roles = Get_ListItems_Thread(HandleTMDBMovieResult, response["movie_credits"]["crew"])
+    tvshow_crew_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["crew"])
+    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["profiles"])
+    movie_roles.start()
+    tvshow_roles.start()
+    movie_crew_roles.start()
+    tvshow_crew_roles.start()
+    poster_thread.start()
+    movie_roles.join()
+    tvshow_roles.join()
+    movie_crew_roles.join()
+    tvshow_crew_roles.join()
+    poster_thread.join()
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
     answer = {"general": HandleTMDBPeopleResult([response])[0],
-              "movie_roles": HandleTMDBMovieResult(response["movie_credits"]["cast"]),
-              "tvshow_roles": HandleTMDBTVShowResult(response["tv_credits"]["cast"]),
-              "movie_crew_roles": HandleTMDBMovieResult(response["movie_credits"]["crew"]),
-              "tvshow_crew_roles": HandleTMDBTVShowResult(response["tv_credits"]["crew"]),
+              "movie_roles": movie_roles.listitems,
+              "tvshow_roles": tvshow_roles.listitems,
+              "movie_crew_roles": movie_crew_roles.listitems,
+              "tvshow_crew_roles": tvshow_crew_roles.listitems,
               "tagged_images": tagged_images,
-              "images": HandleTMDBPeopleImagesResult(response["images"]["profiles"])}
+              "images": poster_thread.listitems}
     return answer
 
 
