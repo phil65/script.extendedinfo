@@ -993,7 +993,8 @@ def cleanText(text):
         text = text.replace('&lt;', '<')
         text = text.replace('&#39;', "'")
         text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-        if text:
+        log(text)
+        if len(text) > 0:
             while True:
                 s = text[0]
                 e = text[-1]
