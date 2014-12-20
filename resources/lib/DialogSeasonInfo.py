@@ -78,7 +78,6 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.WaitForVideoEnd()
-            PopWindowStack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)

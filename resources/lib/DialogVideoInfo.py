@@ -168,7 +168,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             listitem = CreateListItems([self.movie["general"]])[0]
             self.movieplayer.play(item=self.movie["general"]['FilenameAndPath'], listitem=listitem)
             self.movieplayer.WaitForVideoEnd()
-            Notify("here2")
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.executebuiltin("Dialog.Close(busydialog)")

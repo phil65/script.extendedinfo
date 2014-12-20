@@ -114,7 +114,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.WaitForVideoEnd()
-            PopWindowStack()
         elif controlID == 132:
             text = self.person["general"]["description"] + "[CR]" + self.person["general"]["biography"]
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=text, color=self.person["general"]['ImageColor'])
