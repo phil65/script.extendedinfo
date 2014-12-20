@@ -633,19 +633,19 @@ def Get_File(url):
         clean_url = clean_url[:-1]
     cachedthumb = xbmc.getCacheThumbName(clean_url)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg").replace("\\", "/")
     xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
     # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
     if xbmcvfs.exists(xbmc_cache_file_jpg):
-        # Notify("1: " + xbmc_cache_file_jpg)
+        log("1: " + xbmc_cache_file_jpg)
         log("xbmc_cache_file_jpg Image: " + url)
-        return xbmc_cache_file_jpg
+        return xbmc.translatePath(xbmc_cache_file_jpg)
     elif xbmcvfs.exists(xbmc_cache_file_png):
-        # Notify("2: " + xbmc_cache_file_png)
+        log("2: " + xbmc_cache_file_png)
         log("xbmc_cache_file_png Image: " + url)
         return xbmc_cache_file_png
     elif xbmcvfs.exists(xbmc_vid_cache_file):
-        # Notify("3: " + xbmc_vid_cache_file)
+        log("3: " + xbmc_vid_cache_file)
         log("xbmc_vid_cache_file Image: " + url)
         return xbmc_vid_cache_file
     else:
@@ -669,7 +669,7 @@ def Get_File(url):
                 tmpfile = open(xbmc.translatePath(image), 'wb')
                 tmpfile.write(data)
                 tmpfile.close()
-                return image
+                return xbmc.translatePath(image)
             except:
                 log('failed to save image ' + url)
                 return ""

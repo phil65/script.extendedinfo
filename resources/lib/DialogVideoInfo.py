@@ -61,7 +61,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             youtube_thread.join()
             sets_thread.join()
             poster_thread.join()
-            log(poster_thread.listitems)
+            self.movie["general"]['Poster'] = poster_thread.listitems
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.youtube_vids = youtube_thread.listitems
             self.set_listitems = sets_thread.listitems
