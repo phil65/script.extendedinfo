@@ -52,12 +52,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
             youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.movie["general"]["SetId"])
+            poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
             filter_thread.start()
             sets_thread.start()
             youtube_thread.start()
+            poster_thread.start()
             filter_thread.join()
             youtube_thread.join()
             sets_thread.join()
+            poster_thread.join()
+            log(poster_thread.listitems)
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.youtube_vids = youtube_thread.listitems
             self.set_listitems = sets_thread.listitems

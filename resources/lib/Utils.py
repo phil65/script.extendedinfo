@@ -624,11 +624,14 @@ class Get_File_Thread(threading.Thread):
         self.url = url
 
     def run(self):
-        Get_File(self.url)
+        self.file = Get_File(self.url)
 
 
 def Get_File(url):
-    cachedthumb = xbmc.getCacheThumbName(url)
+    clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
+    if clean_url.endswith("/"):
+        clean_url = clean_url[:-1]
+    cachedthumb = xbmc.getCacheThumbName(clean_url)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
     xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg")
     xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
