@@ -119,12 +119,12 @@ class VideoPlayer(xbmc.Player):
         self.popstack = kwargs.get("popstack", True)
 
     def onPlayBackEnded(self):
-        self.stop = True
+        self.stopped = True
         if self.popstack:
             PopWindowStack()
 
     def onPlayBackStopped(self):
-        self.stop = True
+        self.stopped = True
         if self.popstack:
             PopWindowStack()
 
