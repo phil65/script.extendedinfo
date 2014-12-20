@@ -44,6 +44,7 @@
                     <ondown>4000</ondown>
                     <onup>4000</onup>
                     <width>2100</width>
+                    <height>896</height>
                     <control type="group" id="140">
                         <height>220</height>
                         <control type="radiobutton" id="132">
@@ -57,10 +58,10 @@
                             <radioheight>46</radioheight>
                             <onup>131</onup>
                             <ondown>5000</ondown>
-                                <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
-                                <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
-                                <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
+                            <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
+                            <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
+                            <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
+                            <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
                             <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                             <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                             <label>-</label>
@@ -153,7 +154,7 @@
                                     <radioposx>108</radioposx>
                                     <radioposy>30</radioposy>
                                     <radiowidth>64</radiowidth>
-                                <radioheight>64</radioheight>
+                                    <radioheight>64</radioheight>
                                     <onclick>Action(Close)</onclick>
                                     <onleft>8</onleft>
                                     <onright>20</onright>
@@ -186,37 +187,58 @@
                                 <radioposx>108</radioposx>
                                 <radioposy>30</radioposy>
                                 <radiowidth>64</radiowidth>
-                                 <radioheight>64</radioheight>
-                               <onclick>Playlist.Clear</onclick>
+                                <radioheight>64</radioheight>
+                                <onright>6001</onright>
+                                <onclick>Playlist.Clear</onclick>
                                 <onclick>Dialog.Close(MovieInformation)</onclick>
                                 <onclick>RunScript(script.cinema.experience)</onclick>
                                 <visible>system.hasaddon(script.cinema.experience) + !SubString(Container.FolderPath,plugin)</visible>
                                 <visible>!IsEmpty(Window.Property(movie.DBID))</visible>
                             </control>
-                            <control type="radiobutton" id="6001">
-                                <label>Rate Movie</label>
-                                <textureradioonfocus colordiffuse="grey">icons/heart.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="grey">icons/heart.png</textureradioofffocus>
-                                <textureradiooffnofocus colordiffuse="grey">icons/heart.png</textureradiooffnofocus>
-                                <textureradioonnofocus colordiffuse="grey">icons/heart.png</textureradioonnofocus>
+                            <control type="group" id="20000">
                                 <width>280</width>
-                                <height>160</height>
-                                <textoffsetx>0</textoffsetx>
-                                <align>center</align>
-                                <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                                <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>Font_Reg30_2</font>
-                                <textcolor>grey</textcolor>
-                                <focusedcolor>white2</focusedcolor>
-                                <aligny>bottom</aligny>
-                                <textoffsety>97</textoffsety>
-                                <radioposx>108</radioposx>
-                                <radioposy>30</radioposy>
-                                <radiowidth>64</radiowidth>
-                                 <radioheight>64</radioheight>
-                           </control>
+                                <control type="radiobutton" id="6001">
+                                    <label>Rate Movie</label>
+                                    <textureradioonfocus colordiffuse="grey">-</textureradioonfocus>
+                                    <textureradioofffocus colordiffuse="grey">icons/heart.png</textureradioofffocus>
+                                    <textureradiooffnofocus colordiffuse="grey">icons/heart.png</textureradiooffnofocus>
+                                    <textureradioonnofocus colordiffuse="grey">-</textureradioonnofocus>
+                                    <width>280</width>
+                                    <height>160</height>
+                                    <textoffsetx>0</textoffsetx>
+                                    <align>center</align>
+                                    <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                                    <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                                    <font>Font_Reg30_2</font>
+                                    <textcolor>grey</textcolor>
+                                    <focusedcolor>white2</focusedcolor>
+                                    <onleft>20</onleft>
+                                    <onright>6003</onright>
+                                    <onup>132</onup>
+                                    <ondown>1000</ondown>
+                                    <aligny>bottom</aligny>
+                                    <selected>!IsEmpty(Window.Property(movie.rated))</selected>
+                                    <textoffsety>97</textoffsety>
+                                    <radioposx>108</radioposx>
+                                    <radioposy>30</radioposy>
+                                    <radiowidth>64</radiowidth>
+                                    <radioheight>64</radioheight>
+                                </control>
+                                <control type="label">
+                                    <label>$INFO[Window.Property(movie.rated)]</label>
+                                    <posx>0</posx>
+                                    <align>center</align>
+                                    <aligny>center</aligny>
+                                    <posy>-275</posy>
+                                    <heigth>30</heigth>
+                                    <font>font30_title</font>
+                                    <width>280</width>
+                                    <textcolor>grey</textcolor>
+                                </control>
+                            </control>
                             <control type="radiobutton" id="6003">
                                 <label>Add to favourites</label>
+                                <onleft>6001</onleft>
                                 <textureradioonfocus colordiffuse="grey">icons/star.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/star.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/star.png</textureradiooffnofocus>
@@ -2327,7 +2349,7 @@
                             </focusedlayout>
                         </control>
                     </control>
-                   <control type="group" id="50215">
+                    <control type="group" id="50215">
                         <height>600</height>
                         <visible>IntegerGreaterThan(Container(450).NumItems,0)</visible>
                         <control type="label">

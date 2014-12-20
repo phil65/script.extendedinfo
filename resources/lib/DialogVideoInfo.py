@@ -92,8 +92,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", self.logged_in)
-        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
+        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
@@ -124,12 +124,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.sleep(2000)
             self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
         if self.movie["account_states"]:
-            xbmcgui.Window(self.windowid).setProperty("favorite", str(self.movie["account_states"]["favorite"]))
+            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
             if self.movie["account_states"]["rated"]:
-                xbmcgui.Window(self.windowid).setProperty("rated", str(self.movie["account_states"]["rated"]["value"]))
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
             else:
-                xbmcgui.Window(self.windowid).setProperty("rated", "")
-            xbmcgui.Window(self.windowid).setProperty("watchlist", str(self.movie["account_states"]["watchlist"]))
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
+            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
             # Notify(str(self.movie["account_states"]["rated"]["value"]))
 
     def onClick(self, controlID):
