@@ -990,21 +990,22 @@ def cleanText(text):
         text = text.replace('&lt;', '<')
         text = text.replace('&#39;', "'")
         text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-        while True:
-            s = text[0]
-            e = text[-1]
-            if s == u'\u200b':
-                text = text[1:]
-            if e == u'\u200b':
-                text = text[:-1]
-            if s == " " or e == " ":
-                text = text.strip()
-            elif s == "." or e == ".":
-                text = text.strip(".")
-            elif s == "\n" or e == "\n":
-                text = text.strip("\n")
-            else:
-                break
+        if text:
+            while True:
+                s = text[0]
+                e = text[-1]
+                if s == u'\u200b':
+                    text = text[1:]
+                if e == u'\u200b':
+                    text = text[:-1]
+                if s == " " or e == " ":
+                    text = text.strip()
+                elif s == "." or e == ".":
+                    text = text.strip(".")
+                elif s == "\n" or e == "\n":
+                    text = text.strip("\n")
+                else:
+                    break
         return text.strip()
     else:
         return ""
