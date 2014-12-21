@@ -370,7 +370,8 @@ def HandleTMDBPeopleImagesResult(results):
                  'thumb': base_url + "w342" + item['file_path'],
                  'vote_average': fetch(item, "vote_average"),
                  'iso_639_1': fetch(item, "iso_639_1"),
-                 'poster': base_url + poster_size + item['file_path']}
+                 'poster': base_url + poster_size + item['file_path'],
+                 'original': base_url + "original" + item['file_path']}
         images.append(image)
     return images
 
@@ -384,7 +385,8 @@ def HandleTMDBPeopleTaggedImagesResult(results):
                  'iso_639_1': fetch(item, "iso_639_1"),
                  'Title': fetch(item["media"], "title"),
                  'mediaposter': base_url + poster_size + fetch(item["media"], "poster_path"),
-                 'poster': base_url + poster_size + item['file_path']}
+                 'poster': base_url + poster_size + item['file_path'],
+                 'original': base_url + "original" + item['file_path']}
         images.append(image)
     return images
 

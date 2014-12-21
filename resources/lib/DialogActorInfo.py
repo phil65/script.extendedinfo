@@ -105,7 +105,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 self.close()
                 dialog.doModal()
         elif controlID in [450, 750]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            image = self.getControl(controlID).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
         elif controlID == 350:

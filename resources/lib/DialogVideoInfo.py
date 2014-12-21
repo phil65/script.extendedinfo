@@ -148,7 +148,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=movieid)
             dialog.doModal()
         elif controlID in [1250, 1350]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("Poster")
+            image = self.getControl(controlID).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
         elif controlID in [350, 1150]:
