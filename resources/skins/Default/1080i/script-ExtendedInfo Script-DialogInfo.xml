@@ -1009,7 +1009,7 @@
                         </control>
                     </control>
                     <control type="group" id="7500">
-                        <height>450</height>
+                        <height>550</height>
                         <visible>IntegerGreaterThan(Container(750).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
@@ -1049,15 +1049,15 @@
                                         <height>325</height>
                                         <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
-                                        <fadetime>0</fadetime>
                                     </control>
                                     <control type="label">
                                         <posx>77</posx>
-                                        <posy>280</posy>
+                                        <posy>350</posy>
                                         <height>60</height>
-                                        <width>555</width>
+                                        <width>505</width>
                                         <label>$INFO[ListItem.Title]</label>
                                         <font>font12_title</font>
+                                        <align>center</align>
                                         <scroll>true</scroll>
                                     </control>
                                 </control>
@@ -1080,25 +1080,22 @@
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
-                                    <control type="group">
+                                    <control type="image">
                                         <posx>77</posx>
-                                        <posy>18</posy>
-                                        <control type="image">
-                                            <posy>10</posy>
-                                            <width>505</width>
-                                            <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-                                            <aspectratio aligny="center">scale</aspectratio>
-                                            <fadetime>0</fadetime>
-                                        </control>
+                                        <posy>28</posy>
+                                        <width>505</width>
+                                        <height>325</height>
+                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="label">
                                         <posx>77</posx>
-                                        <posy>280</posy>
+                                        <posy>350</posy>
                                         <height>60</height>
-                                        <width>555</width>
+                                        <width>505</width>
                                         <label>$INFO[ListItem.Title]</label>
                                         <font>font12_title</font>
+                                        <align>center</align>
                                         <scroll>true</scroll>
                                     </control>
                                 </control>
