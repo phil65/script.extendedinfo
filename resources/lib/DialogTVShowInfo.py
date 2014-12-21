@@ -44,15 +44,27 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = search_movie(kwargs.get('name'))
         else:
             self.tmdb_id = ""
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.tmdb_id:
             self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
             if not self.tvshow:
                 self.close()
-            log("Blur image %s with radius %i" % (self.tvshow["general"]["Thumb"], 25))
-            image, imagecolor = Filter_Image(self.tvshow["general"]["Thumb"], 25)
-            self.tvshow["general"]['ImageFilter'] = image
-            self.tvshow["general"]['ImageColor'] = imagecolor
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
+            youtube_thread = Get_Youtube_Vids_Thread(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
+            youtube_thread.start()
+            if not "DBID" in self.tvshow["general"]: # need to add comparing for tvshows
+                # Notify("download Poster")
+                poster_thread = Get_ListItems_Thread(Get_File, self.tvshow["general"]["Poster"])
+                poster_thread.start()
+            if not "DBID" in self.tvshow["general"]:
+                poster_thread.join()
+                self.tvshow["general"]['Poster'] = poster_thread.listitems
+            filter_thread = Filter_Image_Thread(self.tvshow["general"]["Poster"], 25)
+            filter_thread.start()
+            youtube_thread.join()
+            self.youtube_vids = youtube_thread.listitems
+            filter_thread.join()
+            self.tvshow["general"]['ImageFilter'], self.tvshow["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
             Notify("No ID found")
             self.close()
@@ -61,9 +73,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
         passDictToSkin(self.tvshow["general"], "movie.", False, False, windowid)
+        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
         self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
+        xbmc.sleep(200)
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))
         self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))

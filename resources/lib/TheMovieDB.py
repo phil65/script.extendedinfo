@@ -1,6 +1,7 @@
 import xbmcaddon
 import os
 import xbmc
+from YouTube import *
 from Utils import *
 import urllib
 import threading
@@ -514,7 +515,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    # prettyprint(response)
+    prettyprint(response)
     videos = []
     backdrops = []
     if ("poster_path" in response) and (response["poster_path"]):
@@ -917,3 +918,16 @@ class Get_ListItems_Thread(threading.Thread):
     def run(self):
         self.listitems = self.function(self.param)
         return True
+
+
+class Get_Youtube_Vids_Thread(threading.Thread):
+
+    def __init__(self, search_string="", hd="", order="relevance", limit=15):
+        threading.Thread.__init__(self)
+        self.search_string = search_string
+        self.hd = hd
+        self.order = order
+        self.limit = limit
+
+    def run(self):
+        self.listitems = GetYoutubeSearchVideosV3(self.search_string, self.hd, self.order, self.limit)

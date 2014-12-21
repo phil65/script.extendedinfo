@@ -292,18 +292,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dialog.doModal()
 
 
-class Get_Youtube_Vids_Thread(threading.Thread):
-
-    def __init__(self, search_string="", hd="", order="relevance", limit=15):
-        threading.Thread.__init__(self)
-        self.search_string = search_string
-        self.hd = hd
-        self.order = order
-        self.limit = limit
-
-    def run(self):
-        self.listitems = GetYoutubeSearchVideosV3(self.search_string, self.hd, self.order, self.limit)
-
 class Join_Omdb_Thread(threading.Thread):
 
     def __init__(self, omdb_thread, windowid):

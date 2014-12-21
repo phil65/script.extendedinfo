@@ -34,12 +34,23 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             self.season = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.season:
                 self.close()
-            log("Blur image %s with radius %i" % (self.season["general"]["Thumb"], 25))
-            image, imagecolor = Filter_Image(self.season["general"]["Thumb"], 25)
-            self.season["general"]['ImageFilter'] = image
-            self.season["general"]['ImageColor'] = imagecolor
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             search_string = "%s %s tv" % (self.season["general"]["TVShowTitle"], self.season["general"]["Title"])
-            self.youtube_vids = GetYoutubeSearchVideosV3(search_string, "", "relevance", 15)
+            youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
+            youtube_thread.start()
+            if not "DBID" in self.season["general"]: # need to add comparing for seasons
+                # Notify("download Poster")
+                poster_thread = Get_ListItems_Thread(Get_File, self.season["general"]["Poster"])
+                poster_thread.start()
+            if not "DBID" in self.season["general"]:
+                poster_thread.join()
+                self.season["general"]['Poster'] = poster_thread.listitems
+            filter_thread = Filter_Image_Thread(self.season["general"]["Poster"], 25)
+            filter_thread.start()
+            youtube_thread.join()
+            self.youtube_vids = youtube_thread.listitems
+            filter_thread.join()
+            self.season["general"]['ImageFilter'], self.season["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
             Notify("No ID found")
             self.close()
