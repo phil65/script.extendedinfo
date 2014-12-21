@@ -130,15 +130,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)
-            self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
-        if self.movie["account_states"]:
-            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
-            if self.movie["account_states"]["rated"]:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
+            self.update = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
+            self.movie["account_states"] = self.update["account_states"]
+        if self.update["account_states"]:
+            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.update["account_states"]["favorite"]))
+            if self.update["account_states"]["rated"]:
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.update["account_states"]["rated"]["value"]))
             else:
                 xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
-            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
-            # Notify(str(self.movie["account_states"]["rated"]["value"]))
+            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.update["account_states"]["watchlist"]))
+            # Notify(str(self.update["account_states"]["rated"]["value"]))
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
