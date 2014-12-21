@@ -115,8 +115,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
         self.UpdateStates(False)
-        self.omdb_thread.join()
-        passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
+        # self.omdb_thread.join()
+        # passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
 
 
     def onAction(self, action):
