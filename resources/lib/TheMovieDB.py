@@ -571,7 +571,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         session_string = "session_id=%s&" % (get_session_id())
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
                               (movieid, addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
-    prettyprint(response)
     authors = []
     directors = []
     genres = []

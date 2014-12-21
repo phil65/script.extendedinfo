@@ -1984,7 +1984,7 @@
                             <posx>-45</posx>
                             <posy>30</posy>
                             <width>1940</width>
-                            <height>200</height>
+                            <height>100</height>
                             <onleft>850</onleft>
                             <onright>850</onright>
                             <onup>650</onup>
@@ -1992,8 +1992,7 @@
                             <pagecontrol>60</pagecontrol>
                             <scrolltime>300</scrolltime>
                             <focusposition>0</focusposition>
-                            <orientation>vertical</orientation>
-                            <preloaditems>2</preloaditems>
+                            <orientation>horizontal</orientation>
                             <itemlayout height="100" width="270">
                                 <control type="group">
                                     <posx>50</posx>
