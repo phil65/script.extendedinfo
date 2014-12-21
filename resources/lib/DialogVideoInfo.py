@@ -4,6 +4,7 @@ import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
+from omdb import *
 import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
@@ -49,40 +50,44 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if not self.movie["general"]:
                 self.close()
             log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
-            filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
             youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.movie["general"]["SetId"])
-            poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
-            filter_thread.start()
+            self.omdb_thread = Get_ListItems_Thread(GetOmdbMovieInfo, self.movie["general"]["imdb_id"])
+            self.omdb_thread.start()
             sets_thread.start()
             youtube_thread.start()
-            poster_thread.start()
-            filter_thread.join()
-            youtube_thread.join()
+            if not "DBID" in self.movie["general"]:
+                poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
+                poster_thread.start()
+            vid_id_list = []
+            for item in self.movie["videos"]:
+                vid_id_list.append(item["key"])
+            self.crew_list = []
+            crew_id_list = []
+            for item in self.movie["crew"]:
+                if item["id"] not in crew_id_list:
+                    crew_id_list.append(item["id"])
+                    self.crew_list.append(item)
+                else:
+                    index = crew_id_list.index(item["id"])
+                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
+            if not "DBID" in self.movie["general"]:
+                poster_thread.join()
+                self.movie["general"]['Poster'] = poster_thread.listitems
+            filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
+            filter_thread.start()
             sets_thread.join()
-            poster_thread.join()
-            self.movie["general"]['Poster'] = poster_thread.listitems
-            self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            self.youtube_vids = youtube_thread.listitems
             self.set_listitems = sets_thread.listitems
             self.setinfo = sets_thread.setinfo
             id_list = []
             for item in self.set_listitems:
                 id_list.append(item["ID"])
             self.movie["similar"] = [item for item in self.movie["similar"] if item["ID"] not in id_list]
-            id_list = []
-            for item in self.movie["videos"]:
-                id_list.append(item["key"])
-            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in id_list]
-            self.crew_list = []
-            id_list = []
-            for item in self.movie["crew"]:
-                if item["id"] not in id_list:
-                    id_list.append(item["id"])
-                    self.crew_list.append(item)
-                else:
-                    index = id_list.index(item["id"])
-                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
+            youtube_thread.join()
+            self.youtube_vids = youtube_thread.listitems
+            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in vid_id_list]
+            filter_thread.join()
+            self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
             Notify("No ID found")
             self.close()
@@ -93,6 +98,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", self.logged_in)
         passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
+        xbmc.sleep(200)
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
@@ -109,6 +115,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
         self.UpdateStates(False)
+        self.omdb_thread.join()
 
 
     def onAction(self, action):

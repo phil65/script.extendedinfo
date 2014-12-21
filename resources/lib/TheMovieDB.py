@@ -573,6 +573,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         session_string = "session_id=%s&" % (get_session_id())
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
                               (movieid, addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
+    # prettyprint(response)
     authors = []
     directors = []
     genres = []
@@ -612,7 +613,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + poster_size + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
-      #  poster_path = Get_File(poster_path)
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
@@ -632,6 +632,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
              'Set': SetName,
              'SetId': SetID,
              'ID': fetch(response, 'id'),
+             'imdb_id': fetch(response, 'imdb_id'),
              'Plot': fetch(response, 'overview'),
              'OriginalTitle': fetch(response, 'original_title'),
              'Genre': " / ".join(genres),
