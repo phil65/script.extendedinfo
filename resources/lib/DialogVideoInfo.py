@@ -311,7 +311,8 @@ class Join_Omdb_Thread(threading.Thread):
 
     def run(self):
         self.omdb_thread.join()
-        passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
+        if xbmcgui.getCurrentWindowDialogId() == self.windowid:
+            passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
 
 
 class Get_Set_Items_Thread(threading.Thread):
