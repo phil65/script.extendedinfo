@@ -998,7 +998,7 @@ def cleanText(text):
             e = text[-1]
             if s == u'\u200b':
                 text = text[1:]
-            if e == u'\u200b':
+            if text and e == u'\u200b':
                 text = text[:-1]
             if s == " " or e == " ":
                 text = text.strip()
