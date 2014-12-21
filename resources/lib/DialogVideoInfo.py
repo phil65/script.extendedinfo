@@ -115,8 +115,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
         self.UpdateStates(False)
-        # self.omdb_thread.join()
-        # passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
+        self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
+        self.join_omdb.start()
 
 
     def onAction(self, action):
@@ -301,6 +301,17 @@ class Get_Youtube_Vids_Thread(threading.Thread):
 
     def run(self):
         self.listitems = GetYoutubeSearchVideosV3(self.search_string, self.hd, self.order, self.limit)
+
+class Join_Omdb_Thread(threading.Thread):
+
+    def __init__(self, omdb_thread, windowid):
+        threading.Thread.__init__(self)
+        self.omdb_thread = omdb_thread
+        self.windowid = windowid
+
+    def run(self):
+        self.omdb_thread.join()
+        passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", True, False, self.windowid)
 
 
 class Get_Set_Items_Thread(threading.Thread):
