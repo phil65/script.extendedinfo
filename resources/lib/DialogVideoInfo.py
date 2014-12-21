@@ -168,6 +168,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if youtube_id:
                 self.movieplayer.playYoutubeVideo(youtube_id, self.getControl(controlID).getSelectedItem(), True)
                 self.movieplayer.WaitForVideoEnd()
+                PopWindowStack()
             else:
                 Notify("No trailer found")
         elif controlID in [8]:
