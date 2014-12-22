@@ -2659,7 +2659,7 @@
                 <control type="group" id="33000">
                     <posx>825</posx>
                     <posy>22</posy>
-                    <visible>!Control.HasFocus(132) + !ControlGroup(5000).HasFocus + !IsEmpty(Window.Property(movie.Logo))</visible>
+                    <visible>!Control.HasFocus(132) + !ControlGroup(5000).HasFocus</visible>
                     <animation effect="fade" time="250">VisibleChange</animation>
                     <!--
                     <control type="image">
@@ -2682,10 +2682,10 @@
                     <control type="image">
                         <posx>1020</posx>
                         <posy>-20</posy>
-                        <width>1078</width>
+                        <width>830</width>
                         <height>190</height>
-                        <aspectratio>keep</aspectratio>
-                        <texture background="true">$INFO[Window.Property(movie.Logo)]</texture>
+                        <aspectratio align="right">keep</aspectratio>
+                        <texture background="true" fallback="moviedb.png">$INFO[Window.Property(movie.Logo)]</texture>
                     </control>
                 </control>
                 <control type="group">
