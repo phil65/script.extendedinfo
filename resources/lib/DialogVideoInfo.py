@@ -26,6 +26,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
+        if not addon.getSetting("first_start_infodialog"):
+            addon.setSetting("first_start_infodialog", "True")
+            xbmcgui.Dialog().ok("ExtendedInfo Script", "For all features enter your TMDB credentials in addon settings. " "This product uses the TMDb API but is not endorsed or certified by TMDb.")
         self.movieplayer = VideoPlayer(popstack=True)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
