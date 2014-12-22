@@ -249,6 +249,30 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
     return tvshows
 
 
+def HandleTMDBEpisodesResult(results):
+    listitems = []
+    for item in results:
+        still_path = ""
+        still_path_small = ""
+        if "still_path" in item and item["still_path"]:
+            still_path = base_url + fanart_size + item['still_path']
+            still_path_small = base_url + fanart_size + item['still_path']
+        listitem = {'Art(poster)': still_path,
+                    'Poster': still_path,
+                    'Thumb': still_path_small,
+                    'Title': cleanText(fetch(item, 'name')),
+                    'release_date': fetch(item, 'air_date'),
+                    'episode': fetch(item, 'episode_number'),
+                    'production_code': fetch(item, 'production_code'),
+                    'season': fetch(item, 'season_number'),
+                    'Rating': fetch(item, 'vote_average'),
+                    'Votes': fetch(item, 'vote_count'),
+                    'ID': fetch(item, 'id'),
+                    'Description': cleanText(fetch(item, 'overview'))}
+        listitems.append(listitem)
+    return listitems
+
+
 def HandleTMDBMiscResult(results):
     listitems = []
     for item in results:
@@ -540,6 +564,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
               "actors": HandleTMDBPeopleResult(response["credits"]["cast"]),
               "crew": HandleTMDBPeopleResult(response["credits"]["crew"]),
               "videos": videos,
+              "episodes": HandleTMDBEpisodesResult(response["episodes"]),
               "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
               "backdrops": backdrops}
     return answer

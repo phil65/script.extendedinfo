@@ -67,6 +67,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
         self.getControl(1250).addItems(CreateListItems(self.season["images"], 0))
         self.getControl(1350).addItems(CreateListItems(self.season["backdrops"], 0))
+        self.getControl(2000).addItems(CreateListItems(self.season["episodes"], 0))
+
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
