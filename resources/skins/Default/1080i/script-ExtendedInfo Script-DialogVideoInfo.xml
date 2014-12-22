@@ -1554,7 +1554,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -1593,7 +1593,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </focusedlayout>
@@ -1672,7 +1672,7 @@
                                         <height>140</height>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -1708,7 +1708,7 @@
                                         <height>140</height>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                         <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
                                     </control>
                                 </control>
@@ -1788,7 +1788,7 @@
                                         <height>69</height>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -1824,7 +1824,7 @@
                                         <height>69</height>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Label]</label>
                                         <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
                                     </control>
                                 </control>
@@ -2207,7 +2207,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>Font_Bold37_Caps</font>
+                            <font>font14</font>
                             <label>Artwork</label>
                         </control>
                         <control type="panel" id="1250">
@@ -2547,7 +2547,7 @@
                     </control>
                     <control type="group">
                         <visible>IntegerGreaterThan(Container(2000).NumItems,0)</visible>
-                        <height>460</height>
+                        <height>896</height>
                         <control type="label">
                             <posx>25</posx>
                             <posy>6</posy>
@@ -2557,26 +2557,6 @@
                             <font>font14</font>
                             <label>Episode Index</label>
                         </control>
-                        <control type="image">
-                            <posx>-5</posx>
-                            <posy>150</posy>
-                            <width>28</width>
-                            <height>28</height>
-                            <texture colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
-                            <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
-                            <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
-                            <visible>Container(2000).HasPrevious + Control.HasFocus(2000)</visible>
-                        </control>
-                        <control type="image">
-                            <posx>1883</posx>
-                            <posy>150</posy>
-                            <width>28</width>
-                            <height>28</height>
-                            <texture colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">arrowright.png</texture>
-                            <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
-                            <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
-                            <visible>Container(2000).HasNext + Control.HasFocus(2000)</visible>
-                        </control>
                         <control type="panel" id="2000">
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
@@ -2584,7 +2564,7 @@
                             <posx>-45</posx>
                             <posy>30</posy>
                             <width>1940</width>
-                            <height>700</height>
+                            <height>896</height>
                             <onleft>2000</onleft>
                             <onright>2000</onright>
                             <onup>450</onup>
@@ -2592,9 +2572,9 @@
                             <pagecontrol>60</pagecontrol>
                             <scrolltime>300</scrolltime>
                             <focusposition>0</focusposition>
-                            <orientation>horizontal</orientation>
+                            <orientation>vertical</orientation>
                             <preloaditems>2</preloaditems>
-                            <itemlayout height="410" width="380">
+                            <itemlayout height="360" width="380">
                                 <control type="image">
                                     <posy>0</posy>
                                     <posx>50</posx>
@@ -2629,11 +2609,11 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Episode,[B],:[/B]] $INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </itemlayout>
-                            <focusedlayout height="410" width="380">
+                            <focusedlayout height="360" width="380">
                                 <control type="image">
                                     <posy>0</posy>
                                     <posx>50</posx>
@@ -2668,7 +2648,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <info>ListItem.Label</info>
+                                        <label>$INFO[ListItem.Episode,[B],:[/B]] $INFO[ListItem.Label]</label>
                                     </control>
                                 </control>
                             </focusedlayout>
