@@ -46,7 +46,8 @@ class Main:
             self.control = "plugin"
         else:
             args = sys.argv
-        self.params = {"handle": self.handle}
+        self.params = {"handle": self.handle,
+                       "control": self.control}
         for arg in args:
             if arg == 'script.extendedinfo':
                 continue
