@@ -498,7 +498,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             # prettyprint(id_list)
             # log(str(index))
             dbid = str(id_list[index])
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year","art","writer","file"], "movieid":%s }, "id": 1}' % dbid)
+            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
             if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
