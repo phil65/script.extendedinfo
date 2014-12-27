@@ -14,6 +14,7 @@ Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%
 def StartInfoActions(infos, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
+        params["artist_mbid"] = GetMusicBrainzIdFromNet(params["artistname"])
     if "window" in params:
         if params.get("window", "") == "currentdialog":
             xbmc.sleep(300)
@@ -239,7 +240,7 @@ def StartInfoActions(infos, params):
                 passListToSkin('YoutubeUserSearch', GetYoutubeUserVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'nearevents':
             passListToSkin('NearEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('NearEvents', GetNearEvents(params["tag"], params["festivalsonly"], params["lat"], params["lon"], params["location"], params["distance"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            passListToSkin('NearEvents', GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'trackinfo':
             homewindow.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
