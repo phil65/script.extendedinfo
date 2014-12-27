@@ -20,6 +20,8 @@ def StartInfoActions(infos, params):
         elif params.get("window", "") == "current":
             xbmc.sleep(300)
             self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+    prettyprint(params)
+    prettyprint(infos)
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
         params["prefix"] = params["prefix"] + '.'
     for info in infos:
