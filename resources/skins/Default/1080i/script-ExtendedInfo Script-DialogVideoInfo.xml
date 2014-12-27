@@ -382,6 +382,7 @@
                                 <onclick>SetProperty(Dialog.5.Label,none)</onclick>
                                 <onclick>SetProperty(Dialog.6.Label,none)</onclick>
                                 <onclick>SetProperty(Dialog.7.Label,none)</onclick>
+                                <onclick>SetProperty(Dialog.8.Label,none)</onclick>
                                 <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.1.Label,$LOCALIZE[413])</onclick>
                                 <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.1.BuiltIn,RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)]))</onclick>
                                 <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.2.Label,$LOCALIZE[14061])</onclick>
@@ -394,8 +395,8 @@
                                 <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.5.BuiltIn,RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs))</onclick>
                                 <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.Label,$LOCALIZE[32102])</onclick>
                                 <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.BuiltIn,RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)]))</onclick>
-                                <onclick condition="System.HasAddon(script.libraryeditor)">SetProperty(Dialog.7.Label,$LOCALIZE[32103])</onclick>
-                                <onclick condition="System.HasAddon(script.libraryeditor)">SetProperty(Dialog.7.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
+                                <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.Label,$LOCALIZE[32103])</onclick>
+                                <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
                                 <onclick>SetProperty(Dialog.8.Label,ExtendedInfo Settings)</onclick>
                                 <onclick>SetProperty(Dialog.8.BuiltIn,Addon.OpenSettings(script.extendedinfo))</onclick>
                                 <onclick>RunScript(script.toolbox,info=selectdialog,header=Choose Action)</onclick>

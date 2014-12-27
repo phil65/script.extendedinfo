@@ -59,7 +59,6 @@ class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
 class SlideShow(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
-
     def __init__(self, *args, **kwargs):
         self.imagelist = kwargs.get('imagelist')
         self.index = kwargs.get('index')
@@ -75,33 +74,50 @@ class SlideShow(xbmcgui.WindowXMLDialog):
             self.getControl(10000).addItems(CreateListItems([listitem]))
 
 
-
 def WaitForVideoEnd():
     xbmc.sleep(1000)
     while xbmc.getCondVisibility("Player.HasVideo"):
         xbmc.sleep(400)
 
 
+# def calculate_age(born):
+#     age = ""
+#     log(str(born))
+#     if born and born is not None:
+#         try:
+#             born = datetime.datetime.strptime(born, '%Y-%m-%d')
+#             today = datetime.date.today()
+#             birthday = datetime.date(today.year, born.month, born.day)
+#         except ValueError:
+#             birthday = datetime.date(today.year, born.month, born.day - 1)
+#         if birthday > today:
+#             age = today.year - born.year - 1
+#         else:
+#             age = today.year - born.year
+#     return age
+
+
 def calculate_age(born):
-    age = ""
-    log(str(born))
     if born and born is not None:
-        born = datetime.datetime.strptime(born, '%Y-%m-%d')
         today = datetime.date.today()
-        try:
-            birthday = datetime.date(today.year, born.month, born.day)
-        except ValueError:
-            birthday = datetime.date(today.year, born.month, born.day - 1)
-        if birthday > today:
-            age = today.year - born.year - 1
-        else:
-            age = today.year - born.year
-    return age
+        actor_born = born.split("-")
+        base_age = today.year - int(actor_born[0])
+        base_month = today.month - int(actor_born[1])
+        base_day = today.day - int(actor_born[2])
+        if base_month < 0:
+            Notify("one year younger")
+            base_age -= 1
+        elif base_month == 0 and base_day < 0:
+            Notify("one year younger")
+            base_age -= 1
+        elif base_month == 0 and base_day == 0:
+            Notify("Birthday Today! Age %i" % base_age)
+    return ""
 
 
 def PlayTrailer(youtube_id="", listitem=None, popstack=False):
     if not listitem:
-        listitem =xbmcgui.ListItem ('Trailer')
+        listitem = xbmcgui.ListItem('Trailer')
         listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
     import YDStreamExtractor
     YDStreamExtractor.disableDASHVideo(True)
@@ -117,7 +133,6 @@ def PlayMedia(path="", listitem=None, popstack=False):
     player.play(item=path, listitem=listitem)
 
 
-
 class VideoPlayer(xbmc.Player):
 
     def __init__(self, *args, **kwargs):
@@ -127,20 +142,24 @@ class VideoPlayer(xbmc.Player):
 
     def onPlayBackEnded(self):
         self.stopped = True
+        xbmc.sleep(500)
+        self.stopped = False
+        Notify("time")
         # if self.popstack:
         #     PopWindowStack()
 
     def onPlayBackStopped(self):
         self.stopped = True
-        # if self.popstack:
-        #     PopWindowStack()
+        xbmc.sleep(500)
+        self.stopped = False
+        Notify("time")
 
     def onPlayBackStarted(self):
         self.stopped = False
 
     def playYoutubeVideo(self, youtube_id="", listitem=None, popstack=True):
         if not listitem:
-            listitem =xbmcgui.ListItem ('Trailer')
+            listitem = xbmcgui.ListItem('Trailer')
             listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
         import YDStreamExtractor
         YDStreamExtractor.disableDASHVideo(True)
@@ -158,7 +177,6 @@ class VideoPlayer(xbmc.Player):
             xbmc.sleep(200)
 
 
-
 def AddToWindowStack(window):
     windowstack.append(window)
 
@@ -167,6 +185,7 @@ def PopWindowStack():
     if windowstack:
         dialog = windowstack.pop()
         dialog.doModal()
+
 
 def GetPlaylistStats(path):
     startindex = -1
@@ -362,6 +381,7 @@ def GetMovieFromDB(movieid):
                 'DBID': str(movie['movieid']),
                 'Rating': str(round(float(movie['rating']), 1)),
                 'Premiered': movie.get('year', "")}
+    return newmovie
 
 
 def media_streamdetails(filename, streamdetails):
@@ -485,7 +505,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                 response = json_response['result']['moviedetails']
                 if (response['resume']['position'] and response['resume']['total']) > 0:
                     resume = "true"
-                    played = '%s'%int((float(response['resume']['position']) / float(response['resume']['total'])) * 100)
+                    played = '%s' % int((float(response['resume']['position']) / float(response['resume']['total'])) * 100)
                 else:
                     resume = "false"
                     played = '0'
@@ -980,6 +1000,7 @@ def CreateListItems(data=None, preload_images=0):
         for x in threads:
             x.join()
     return itemlist
+
 
 def cleanText(text):
     if text:

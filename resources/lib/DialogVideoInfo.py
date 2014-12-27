@@ -243,6 +243,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"])
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.OpenVideoList(list_items, {})
+        elif controlID == 445:
+            self.ShowManageDialog()
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"], color=self.movie["general"]['ImageColor'])
             w.doModal()
@@ -294,6 +296,20 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'], filters=filters)
         dialog.doModal()
 
+    def ShowManageDialog(self):
+                                # <onclick condition="IsEmpty(Window.Property(movie.DBID)) + System.HasAddon(plugin.video.couchpotato_manager)">SetProperty(Dialog.4.Label,Add To Couch Potato)</onclick>
+                                # <onclick condition="IsEmpty(Window.Property(movie.DBID)) + System.HasAddon(plugin.video.couchpotato_manager)">SetProperty(Dialog.4.BuiltIn,RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))</onclick>
+                                # <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.Label,$LOCALIZE[32102])</onclick>
+                                # <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.BuiltIn,RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)]))</onclick>
+                                # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.Label,$LOCALIZE[32103])</onclick>
+                                # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
+                                # <onclick>SetProperty(Dialog.8.Label,ExtendedInfo Settings)</onclick>
+                                # <onclick>SetProperty(Dialog.8.BuiltIn,Addon.OpenSettings(script.extendedinfo))</onclick>
+        if "DBID" in self.movie:
+            manage_list = [["413", "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"],
+                           ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
+                           ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
+                           ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
 
 class Join_Omdb_Thread(threading.Thread):
 
