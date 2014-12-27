@@ -123,6 +123,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         #     xbmc.executebuiltin("Down")
 
     def update_list(self):
+        self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
 
 
