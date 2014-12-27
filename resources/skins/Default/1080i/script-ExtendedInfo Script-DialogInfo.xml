@@ -844,7 +844,7 @@
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>260</height>
+                                        <height>380</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
@@ -864,14 +864,14 @@
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>260</height>
+                                        <height>380</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>260</height>
+                                        <height>380</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
