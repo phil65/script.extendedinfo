@@ -44,7 +44,7 @@ def StartInfoActions(infos, params):
             passListToSkin('Discography', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             Discography = GetDiscography(params["artistname"])
             if len(Discography) == 0:
-                Discography = GetArtistTopAlbums(params["artist_mbid"])
+                Discography = GetArtistTopAlbums(params.get("artist_mbid"))
             passListToSkin('Discography', Discography, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'mostlovedtracks':
             passListToSkin('MostLovedTracks', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
@@ -218,12 +218,12 @@ def StartInfoActions(infos, params):
             passListToSkin('TrendingMovies', GetTrendingMovies(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'similarartistsinlibrary':
             passListToSkin('SimilarArtists', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            if params["artist_mbid"]:
-                passListToSkin('SimilarArtists', GetSimilarArtistsInLibrary(params["artist_mbid"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            if params.get("artist_mbid"):
+                passListToSkin('SimilarArtists', GetSimilarArtistsInLibrary(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'artistevents':
             passListToSkin('ArtistEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            if params["artist_mbid"]:
-                passListToSkin('ArtistEvents', GetEvents(params["artist_mbid"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            if params.get("artist_mbid"):
+                passListToSkin('ArtistEvents', GetEvents(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubesearch':
             homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             passListToSkin('YoutubeSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
