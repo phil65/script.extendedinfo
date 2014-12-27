@@ -156,6 +156,18 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 rating = float(rating) * 0.5
                 RateMedia("tv", self.tmdb_id, rating)
                 self.UpdateStates()
+        elif controlID == 6002:
+            listitems = ["Favourites", "Rated Movies"]
+            index = xbmcgui.Dialog().select("Choose List", listitems)
+            if index == -1:
+                pass
+            elif index == 0:
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                list_items = GetFavItems("tv")
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                self.OpenVideoList(list_items, {})
+            elif index == 1:
+                self.ShowRatedTVShows()
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
         elif controlID == 6006:
