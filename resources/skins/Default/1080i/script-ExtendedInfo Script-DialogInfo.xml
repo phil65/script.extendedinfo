@@ -126,7 +126,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Movie actor roles</label>
+                            <label>Movie actor roles$INFO[Container(150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -307,7 +307,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>TV Show actor roles</label>
+                            <label>TV Show actor roles$INFO[Container(250).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -488,7 +488,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Movie crew member</label>
+                            <label>Movie crew member$INFO[Container(550).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -669,7 +669,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>TVShow crew member</label>
+                            <label>TVShow crew member$INFO[Container(650).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
