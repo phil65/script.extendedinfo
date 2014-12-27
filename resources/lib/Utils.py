@@ -82,14 +82,20 @@ def WaitForVideoEnd():
         xbmc.sleep(400)
 
 
-def calculate_age(born_string):
-    try:
-        born = datetime.datetime.strptime(born_string, '%Y-%m-%d')
+def calculate_age(born):
+    age = ""
+    if born:
+        born = datetime.datetime.strptime(born, '%Y-%m-%d')
         today = datetime.date.today()
-        age = today.year - born.year - ((today.month, today.day) < (born.month, born.day))
-        return age
-    except:
-        return ""
+        try:
+            birthday = datetime.date(today.year, born.month, born.day)
+        except ValueError:
+            birthday = datetime.date(today.year, born.month, born.day - 1)
+        if birthday > today:
+            age = today.year - born.year - 1
+        else:
+            age = today.year - born.year
+    return age
 
 
 def PlayTrailer(youtube_id="", listitem=None, popstack=False):
