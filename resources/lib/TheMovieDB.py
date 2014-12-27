@@ -736,6 +736,34 @@ def GetExtendedTVShowInfo(tvshow_id):
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
 
+def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=2):
+    session_string = ""
+    if addon.getSetting("tmdb_username"):
+        session_string = "session_id=%s&" % (get_session_id())
+    response = GetMovieDBData("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
+                              (str(tvshow_id), str(season), str(episode), addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
+    videos = []
+    prettyprint(response)
+    if "videos" in response:
+        videos = HandleTMDBVideoResult(response["videos"]["results"])
+    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
+    still_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["stills"])
+    threads = [actor_thread, crew_thread, still_thread]
+    for item in threads:
+        item.start()
+    for item in threads:
+        item.join()
+    answer = {"general": HandleTMDBEpisodesResult([response])[0],
+              "actors": actor_thread.listitems,
+              # "studios": HandleTMDBMiscResult(response["production_companies"]),
+              "crew": crew_thread.listitems,
+              # "genres": HandleTMDBMiscResult(response["genres"]),
+              "videos": videos,
+              # "seasons": HandleTMDBSeasonResult(response["seasons"]),
+              "images": still_thread.listitems}
+    return answer
+
 
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
