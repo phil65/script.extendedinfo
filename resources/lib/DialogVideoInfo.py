@@ -221,7 +221,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             rating = xbmcgui.Dialog().select("Enter Rating", ratings)
             if rating > -1:
                 rating = float(rating) * 0.5
-                RateMovie(self.MovieId, rating)
+                RateMedia("movie", self.MovieId, rating)
                 self.UpdateStates()
         elif controlID == 6002:
             listitems = ["Favourites", "Rated Movies"]

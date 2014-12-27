@@ -38,14 +38,14 @@ def checkLogin():
     return ""
 
 
-def RateMovie(movieid, rating):
+def RateMedia(mediatype, movieid, rating):
     if addon.getSetting("tmdb_username"):
         session_id_string = "session_id=" + get_session_id()
     else:
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     log(values)
-    url = "http://api.themoviedb.org/3/movie/%s/rating?api_key=%s&%s" % (str(movieid), moviedb_key, session_id_string)
+    url = "http://api.themoviedb.org/3/%s/%s/rating?api_key=%s&%s" % (mediatype, str(movieid), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
