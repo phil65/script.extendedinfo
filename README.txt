@@ -46,12 +46,14 @@ RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
 RunScript(script.extendedinfo,info=similarmovies)       --> SimilarMovies.%d
 -- required additional parameters: dbid=
 RunScript(script.extendedinfo,info=set)                 --> MovieSetItems.%d
+- fetches a list of movies from the same Set
 -- required additional parameters: dbid=
 RunScript(script.extendedinfo,info=directormovies)      --> DirectorMovies.%d
 -- required additional parameters: director=
 RunScript(script.extendedinfo,info=writermovies)        --> WriterMovies.%d
 -- required additional parameters: writer=
 RunScript(script.extendedinfo,info=studio)              --> StudioInfo.%d
+- fetches a list of movies from the same studio
 -- required additional parameters: studio=
 
 
@@ -159,6 +161,7 @@ TheAudioDB
 #########################################################################################
 
 RunScript(script.extendedinfo,info=discography)         --> Discography.%d
+- fetches the artist discography (Last.FM)
 -- required additional parameters: artistname=
 
 'Label':           Album Title
@@ -177,6 +180,7 @@ RunScript(script.extendedinfo,info=discography)         --> Discography.%d
 
 
 RunScript(script.extendedinfo,info=mostlovedtracks)         --> MostLovedTracks.%d
+- fetches most loved tracks for the given artist (TheAudioDB)
 -- required additional parameters: artistname=
 RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
 -- required additional parameters: id= ???
@@ -198,8 +202,10 @@ LastFM
 #########################################################################################
 
 RunScript(script.extendedinfo,info=albumshouts)
+- fetches twitter shouts for given album
 -- required additional parameters: artistname=, albumname=
 RunScript(script.extendedinfo,info=artistshouts)
+- fetches twitter shouts for given artist
 -- required additional parameters: artistname=
 
 'comment':  Tweet Content
@@ -208,6 +214,7 @@ RunScript(script.extendedinfo,info=artistshouts)
 
 
 RunScript(script.extendedinfo,info=topartists)
+- fetches a lists of the most popular artists
 RunScript(script.extendedinfo,info=hypedartists)
 
 
@@ -262,13 +269,52 @@ Misc Images
 #########################################################################################
 
 RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
+- fetches a daily random list of XKCD webcomics
 RunScript(script.extendedinfo,info=cyanide)       --> CyanideHappiness.%d
+- fetches a daily random list of Cyanide & Happiness webcomics
 RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
 RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
 
 'Thumb':        Image
 'Title':        Image Title
 'Description':  Image Description (only XKCD)
+
+
+
+info=similarlocal
+    Property Prefix: SimilarLocalMovies
+    needed parameters:
+    -dbid: DBID of any movie in your library
+
+fetches similar movies from local database
+
+
+
+info=json
+    Property Prefix: RSS
+    needed parameters:
+    -feed: url to json feed
+
+fetches items from a json feed (yahoo pipes, youtube JSON API)
+
+
+
+Misc Calls:
+
+info=artistdetails
+    needed parameters:
+        artistname: Artist to search for
+
+- also fetches Discography and MusicVideos ATM
+
+info=albuminfo ## todo
+    needed parameters:
+        artistname: Artist to search for
+
+- also fetches Discography and MusicVideos ATM
+
+
+
 
 
 
@@ -393,11 +439,9 @@ Container(150).ListItem.Property(Deathday) ------> Date of Deathday
 Container(150).ListItem.Property(Deathage) ------> Age of dead (30)
 Container(150).ListItem.Property(PlaceOfBirth) --> Place of birth
 Container(150).ListItem.Property(AlsoKnownAs) ---> Also Known Name
-Container(150).ListItem.Property(Homepage) ------> Link of homepage, you can use onclick for open web browser directly on homepage: RunScript(script.metadata.actors,homepage=$INFO[ListItem.Property(Homepage)])
+Container(150).ListItem.Property(Homepage) ------> Link of homepage
 Container(150).ListItem.Property(Adult) ---------> Is Adult Actor (no / yes)
 Container(150).ListItem.Property(fanart) --> Fanart
-
-
 
 
 
