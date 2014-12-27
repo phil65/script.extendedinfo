@@ -36,11 +36,9 @@ class Main:
         self.control = None
         self.infos = []
         self.handle = None
-        self.pluginmode = False
 
     def _parse_argv(self):
         if sys.argv[0] == 'plugin://script.extendedinfo/':
-            self.pluginmode = True
             args = sys.argv[2][1:].split("&&")
             self.handle = int(sys.argv[1])
             self.control = "plugin"
