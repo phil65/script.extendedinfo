@@ -12,13 +12,12 @@ addon_version = addon.getAddonInfo('version')
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 sys.path.append(xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8"))
 from process import StartInfoActions
-from Utils import *
 
 
 class Main:
 
     def __init__(self):
-        log("version %s started" % addon_version)
+        xbmc.log("version %s started" % addon_version)
         xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
         self._init_vars()
         self._parse_argv()
@@ -47,7 +46,6 @@ class Main:
             if arg == 'script.extendedinfo':
                 continue
             param = arg.replace('"', '').replace("'", " ")
-            log(param)
             if param.startswith('info='):
                 self.infos.append(param[5:])
             else:
@@ -58,4 +56,4 @@ class Main:
 
 if (__name__ == "__main__"):
     Main()
-log('finished')
+xbmc.log('finished')
