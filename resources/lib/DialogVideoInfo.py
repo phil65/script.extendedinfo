@@ -281,7 +281,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        list_items = GetRatedMovies()
+        list_items = GetRatedMedia("movies")
         self.close()
         AddToWindowStack(self)
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.movie["general"]['ImageColor'])

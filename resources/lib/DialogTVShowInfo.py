@@ -158,6 +158,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.UpdateStates()
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
+        elif controlID == 6006:
+            self.ShowRatedTVShows()
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.tvshow["general"]["Plot"], color=self.tvshow["general"]['ImageColor'])
             w.doModal()
@@ -179,6 +181,15 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     dialog.doModal()
+
+    def ShowRatedTVShows(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        list_items = GetRatedMedia("tv")
+        self.close()
+        AddToWindowStack(self)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'])
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        dialog.doModal()
 
     def onFocus(self, controlID):
         pass
