@@ -472,10 +472,11 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             id_list = []
             originaltitle_list = []
             title_list = []
-            for item in json_query["result"]["movies"]:
-                id_list.append(item["movieid"])
-                originaltitle_list.append(item["originaltitle"].lower())
-                title_list.append(item["label"].lower())
+            if "movies" in json_query["result"]:
+                for item in json_query["result"]["movies"]:
+                    id_list.append(item["movieid"])
+                    originaltitle_list.append(item["originaltitle"].lower())
+                    title_list.append(item["label"].lower())
             homewindow.setProperty("id_list.JSON", simplejson.dumps(id_list))
             homewindow.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
             homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
