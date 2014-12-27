@@ -190,11 +190,29 @@
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
-                                     <control type="image">
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
+                                        </control>
+                                        <control type="image">
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <texture>common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(150)">Conditional</animation>
                                             <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
@@ -247,6 +265,24 @@
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                        </control>
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
@@ -335,11 +371,29 @@
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
-                                     <control type="image">
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
+                                        </control>
+                                        <control type="image">
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <texture>common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(250)">Conditional</animation>
                                             <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
@@ -392,6 +446,24 @@
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                        </control>
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
@@ -481,10 +553,28 @@
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
                                         <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
+                                        </control>
+                                        <control type="image">
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <texture>common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(550)">Conditional</animation>
                                             <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
@@ -537,6 +627,24 @@
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                        </control>
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
@@ -597,7 +705,7 @@
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
                             </animation>
-                             <itemlayout height="400" width="270">
+                            <itemlayout height="400" width="270">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
@@ -626,10 +734,28 @@
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
                                         <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
+                                        </control>
+                                        <control type="image">
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <texture>common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(650)">Conditional</animation>
                                             <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
@@ -682,6 +808,24 @@
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                        </control>
+                                        <control type="image">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <texture>common/black.png</texture>
+                                            <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
+                                            <visible>!IsEmpty(ListItem.Year)</visible>
+                                        </control>
+                                        <control type="label">
+                                            <posy>310</posy>
+                                            <width>54</width>
+                                            <height>25</height>
+                                            <font>font10</font>
+                                            <aligny>center</aligny>
+                                            <align>center</align>
+                                            <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
                                             <width>228</width>
