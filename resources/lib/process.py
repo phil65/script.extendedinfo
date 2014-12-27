@@ -12,6 +12,16 @@ Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%
 
 
 def StartInfoActions(infos, params):
+    params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
+    if "window" in params:
+        if params.get("window", "") == "currentdialog":
+            xbmc.sleep(300)
+            self.window = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
+        elif params.get("window", "") == "current":
+            xbmc.sleep(300)
+            self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
+    if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
+        params["prefix"] = params["prefix"] + '.'
     for info in infos:
         ########### Images #####################
         if info == 'xkcd':

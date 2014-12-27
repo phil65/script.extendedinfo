@@ -9,10 +9,8 @@ addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
 addon_name = addon.getAddonInfo('name')
 addon_version = addon.getAddonInfo('version')
-addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
-addon_libs = xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8")
-sys.path.append(addon_libs)
+sys.path.append(xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8"))
 from process import StartInfoActions
 from Utils import *
 
@@ -24,7 +22,6 @@ class Main:
         xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
         self._init_vars()
         self._parse_argv()
-        # run in backend if parameter was set
         if self.infos:
             StartInfoActions(self.infos, self.params)
         if self.control == "plugin":
