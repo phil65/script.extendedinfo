@@ -806,7 +806,8 @@
                                             <width>224</width>
                                             <height>325</height>
                                             <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                            <animation effect="fade" start="30" end="0" time="200" condition="!Control.HasFocus(1000)">Conditional</animation>
+                                            <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(1000)">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
                                         </control>
                                         <control type="textbox">
