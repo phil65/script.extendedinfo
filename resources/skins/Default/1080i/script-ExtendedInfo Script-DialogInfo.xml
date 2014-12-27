@@ -119,7 +119,7 @@
                     </control>
                     <control type="group" id="1500">
                         <visible>IntegerGreaterThan(Container(150).NumItems,0)</visible>
-                        <height>450</height>
+                        <height>540</height>
                         <control type="label">
                             <posx>25</posx>
                             <width>500</width>
@@ -207,16 +207,14 @@
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>280</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Character)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -275,16 +273,14 @@
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>280</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Character)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -292,7 +288,7 @@
                         </control>
                     </control>
                     <control type="group" id="2500">
-                        <height>450</height>
+                        <height>540</height>
                         <visible>IntegerGreaterThan(Container(250).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
@@ -381,16 +377,14 @@
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>280</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Character)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -449,16 +443,14 @@
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>280</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Character)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -467,7 +459,7 @@
                     </control>
                     <control type="group" id="5500">
                         <visible>IntegerGreaterThan(Container(550).NumItems,0)</visible>
-                        <height>450</height>
+                        <height>540</height>
                         <control type="label">
                             <posx>25</posx>
                             <width>500</width>
@@ -539,32 +531,22 @@
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
                                         <control type="image">
+                                            <posy>10</posy>
                                             <width>224</width>
-                                            <height>68</height>
-                                            <posy>267</posy>
-                                            <texture>common/bgcolor.png</texture>
-                                            <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
+                                            <height>325</height>
+                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(550)">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>252</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Label]</label>
-                                        </control>
-                                        <control type="label">
-                                            <width>228</width>
-                                            <height>69</height>
-                                            <posx>0</posx>
-                                            <posy>280</posy>
-                                            <align>center</align>
-                                            <aligny>center</aligny>
-                                            <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Job)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -606,33 +588,14 @@
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
-                                        <control type="image">
-                                            <width>224</width>
-                                            <height>68</height>
-                                            <posy>267</posy>
-                                            <texture>common/bgcolor.png</texture>
-                                            <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
-                                        </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>252</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Label]</label>
-                                        </control>
-                                        <control type="label">
-                                            <width>228</width>
-                                            <height>69</height>
-                                            <posx>0</posx>
-                                            <posy>280</posy>
-                                            <align>center</align>
-                                            <aligny>center</aligny>
-                                            <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Job)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -640,7 +603,7 @@
                         </control>
                     </control>
                     <control type="group" id="6500">
-                        <height>450</height>
+                        <height>540</height>
                         <visible>IntegerGreaterThan(Container(650).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
@@ -684,7 +647,7 @@
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
                             </animation>
-                            <itemlayout height="400" width="270">
+                             <itemlayout height="400" width="270">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
@@ -713,32 +676,22 @@
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
                                         <control type="image">
+                                            <posy>10</posy>
                                             <width>224</width>
-                                            <height>68</height>
-                                            <posy>267</posy>
-                                            <texture>common/bgcolor.png</texture>
-                                            <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
+                                            <height>325</height>
+                                            <texture fallback="DefaultVideo.png">common/black.png</texture>
+                                            <animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(650)">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                            <aspectratio aligny="center">scale</aspectratio>
                                         </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>252</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Label]</label>
-                                        </control>
-                                        <control type="label">
-                                            <width>228</width>
-                                            <height>69</height>
-                                            <posx>0</posx>
-                                            <posy>280</posy>
-                                            <align>center</align>
-                                            <aligny>center</aligny>
-                                            <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Job)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -780,33 +733,14 @@
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
-                                        <control type="image">
-                                            <width>224</width>
-                                            <height>68</height>
-                                            <posy>267</posy>
-                                            <texture>common/bgcolor.png</texture>
-                                            <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
-                                        </control>
-                                        <control type="label">
+                                        <control type="textbox">
                                             <width>228</width>
-                                            <height>69</height>
+                                            <height>140</height>
                                             <posx>0</posx>
-                                            <posy>252</posy>
+                                            <posy>340</posy>
                                             <align>center</align>
-                                            <aligny>center</aligny>
                                             <font>font12</font>
-                                            <label>$INFO[ListItem.Label]</label>
-                                        </control>
-                                        <control type="label">
-                                            <width>228</width>
-                                            <height>69</height>
-                                            <posx>0</posx>
-                                            <posy>280</posy>
-                                            <align>center</align>
-                                            <aligny>center</aligny>
-                                            <font>font12</font>
-                                            <textcolor>grey</textcolor>
-                                            <label>$INFO[ListItem.Property(Job)]</label>
+                                            <label>$INFO[ListItem.Label][CR][COLOR grey]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
                                 </control>
@@ -863,7 +797,7 @@
                                     <posy>0</posy>
                                     <posx>50</posx>
                                     <width>373</width>
-                                    <height>380</height>
+                                    <height>260</height>
                                     <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                 </control>
                                 <control type="group">
@@ -893,7 +827,7 @@
                                     <posy>0</posy>
                                     <posx>50</posx>
                                     <width>373</width>
-                                    <height>380</height>
+                                    <height>260</height>
                                     <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                 </control>
                                 <control type="image">
@@ -902,7 +836,7 @@
                                     <width>373</width>
                                     <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                     <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
-                                    <height>380</height>
+                                    <height>260</height>
                                     <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                 </control>
                                 <control type="group">
@@ -960,7 +894,7 @@
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>380</height>
+                                        <height>260</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
@@ -980,14 +914,14 @@
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>380</height>
+                                        <height>260</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
                                         <posy>0</posy>
                                         <posx>50</posx>
                                         <width>280</width>
-                                        <height>380</height>
+                                        <height>260</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">buttons/roundedbutton-focus.png</texture>
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
