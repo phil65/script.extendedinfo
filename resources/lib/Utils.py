@@ -886,11 +886,11 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             x.join()
 
 
-def passListToSkin(name="", data=None, prefix="", controlwindow=None, controlnumber=None, handle=None, limit=False, debug=False):
+def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=None, limit=False, debug=False):
     if limit and data:
         if limit < len(data):
             data = data[:limit]
-    if controlnumber is "plugin":
+    if handle:
         homewindow.clearProperty(name)
         if data is not None:
             homewindow.setProperty(name + ".Count", str(len(data)))
@@ -900,12 +900,6 @@ def passListToSkin(name="", data=None, prefix="", controlwindow=None, controlnum
             for item in items:
                 itemlist.append((item.getProperty("path"), item, False))
             xbmcplugin.addDirectoryItems(handle, itemlist, False)
-    elif controlnumber is not None:
-        log("creatin listitems for list with id " + str(controlnumber))
-        xbmc.sleep(200)
-        itemlist = controlwindow.getControl(controlnumber)
-        items = CreateListItems(data)
-        itemlist.addItems(items)
     else:
         SetWindowProperties(name, data, prefix, debug)
 
