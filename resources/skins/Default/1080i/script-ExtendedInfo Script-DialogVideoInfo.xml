@@ -946,7 +946,7 @@
                                             <height>325</height>
                                             <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(750)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
                                         </control>
                                         <control type="textbox">
@@ -1085,7 +1085,7 @@
                                             <height>325</height>
                                             <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(150)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -1232,7 +1232,7 @@
                                             <height>325</height>
                                             <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(250)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
                                         </control>
                                         <control type="image">
@@ -1415,7 +1415,7 @@
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1150)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -1544,7 +1544,7 @@
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
                                              <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(350)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -2249,7 +2249,7 @@
                                         <height>325</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1250)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                 </control>
@@ -2338,7 +2338,7 @@
                                         <height>325</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1350)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                 </control>
@@ -2457,7 +2457,7 @@
                                             <height>325</height>
                                             <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(450)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                             <aspectratio aligny="center">scale</aspectratio>
                                         </control>
                                         <control type="label">
@@ -2599,7 +2599,7 @@
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(2000)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="200" condition="true">Conditional</animation>
+                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">

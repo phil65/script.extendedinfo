@@ -228,7 +228,7 @@ def StartInfoActions(infos, params):
             homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             passListToSkin('YoutubeSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", ""):
-                passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params["hd"], params["orderby"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubeplaylist':
             passListToSkin('YoutubePlaylist', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", ""):
