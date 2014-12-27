@@ -24,9 +24,10 @@ THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 def Filter_Image(filterimage, radius):
     if not xbmcvfs.exists(Addon_Data_Path):
         xbmcvfs.mkdir(Addon_Data_Path)
-    filterimage = xbmc.translatePath(urllib.unquote(filterimage)).replace("image://", "")
+    filterimage = xbmc.translatePath(urllib.unquote(filterimage.encode("utf-8"))).replace("image://", "")
     if filterimage.endswith("/"):
         filterimage = filterimage[:-1]
+    filterimage = unicode(filterimage, 'utf-8', errors='ignore')
     cachedthumb = xbmc.getCacheThumbName(filterimage)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
     targetfile = os.path.join(Addon_Data_Path, filename)
@@ -47,11 +48,6 @@ def Filter_Image(filterimage, radius):
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
-                    try:
-                        filterimage = urllib.unquote(filterimage.replace("image://", "")).decode('utf8')
-                    except:
-                        pass
-                    # Notify("cp img: " + filterimage)
                     xbmcvfs.copy(filterimage, targetfile)
                     img = Image.open(targetfile)
                     break

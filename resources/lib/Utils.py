@@ -144,7 +144,7 @@ class VideoPlayer(xbmc.Player):
         self.stopped = True
         xbmc.sleep(500)
         self.stopped = False
-        Notify("time")
+        # Notify("time")
         # if self.popstack:
         #     PopWindowStack()
 
@@ -152,7 +152,7 @@ class VideoPlayer(xbmc.Player):
         self.stopped = True
         xbmc.sleep(500)
         self.stopped = False
-        Notify("time")
+        # Notify("time")
 
     def onPlayBackStarted(self):
         self.stopped = False
