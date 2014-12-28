@@ -231,8 +231,10 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
-            else:
+            elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
+            else:
+                duration = ""
         release_date = fetch(tv, 'first_air_date')
         if release_date:
             year = release_date[:4]
