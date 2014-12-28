@@ -36,6 +36,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         tmdb_id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
+        self.name = kwargs.get('name')
         self.logged_in = checkLogin()
         if tmdb_id:
             self.MovieId = tmdb_id
