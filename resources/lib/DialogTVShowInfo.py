@@ -52,7 +52,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.close()
             youtube_thread = Get_Youtube_Vids_Thread(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
             youtube_thread.start()
-            if not "DBID" in self.tvshow["general"]: # need to add comparing for tvshows
+            if not "DBID" in self.tvshow["general"]:  # need to add comparing for tvshows
                 # Notify("download Poster")
                 poster_thread = Get_ListItems_Thread(Get_File, self.tvshow["general"]["Poster"])
                 poster_thread.start()
@@ -72,9 +72,9 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        passDictToSkin(self.tvshow["general"], "movie.", False, False, windowid)
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", checkLogin())
+        self.windowid = xbmcgui.getCurrentWindowDialogId()
+        passDictToSkin(self.tvshow["general"], "movie.", False, False, self.windowid)
+        xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", checkLogin())
         self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
         xbmc.sleep(200)
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
@@ -88,6 +88,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
         self.getControl(1250).addItems(CreateListItems(self.tvshow["images"], 0))
         self.getControl(1350).addItems(CreateListItems(self.tvshow["backdrops"], 0))
+        self.UpdateStates(False)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -193,6 +194,20 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     dialog.doModal()
+
+    def UpdateStates(self, forceupdate=True):
+        if forceupdate:
+            xbmc.sleep(2000)
+            self.update = GetExtendedTVShowInfo(self.tmdb_id, 0)
+            self.tvshow["account_states"] = self.update["account_states"]
+        if self.tvshow["account_states"]:
+            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.tvshow["account_states"]["favorite"]))
+            if self.tvshow["account_states"]["rated"]:
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))
+            else:
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
+            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
+
 
     def ShowRatedTVShows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")

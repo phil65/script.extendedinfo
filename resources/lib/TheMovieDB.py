@@ -707,12 +707,14 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     return answer
 
 
-def GetExtendedTVShowInfo(tvshow_id):
-    response = GetMovieDBData("tv/%s?append_to_response=content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&" %
-                              (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 2)
+def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
+    session_string = ""
+    if addon.getSetting("tmdb_username"):
+        session_string = "session_id=%s&" % (get_session_id())
+    response = GetMovieDBData("tv/%s?append_to_response=account_states,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
+                              (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
+    # prettyprint(response)
     videos = []
-    if "videos" in response:
-        videos = HandleTMDBVideoResult(response["videos"]["results"])
     similar_thread = Get_ListItems_Thread(HandleTMDBTVShowResult, response["similar"]["results"])
     actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
@@ -720,6 +722,12 @@ def GetExtendedTVShowInfo(tvshow_id):
     threads = [similar_thread, actor_thread, crew_thread, poster_thread]
     for item in threads:
         item.start()
+    if "account_states" in response:
+        account_states = response["account_states"]
+    else:
+        account_states = None
+    if "videos" in response:
+        videos = HandleTMDBVideoResult(response["videos"]["results"])
     for item in threads:
         item.join()
     answer = {"general": HandleTMDBTVShowResult([response])[0],
@@ -731,6 +739,7 @@ def GetExtendedTVShowInfo(tvshow_id):
               "genres": HandleTMDBMiscResult(response["genres"]),
               "keywords": HandleTMDBMiscResult(response["keywords"]["results"]),
               "videos": videos,
+              "account_states": account_states,
               "seasons": HandleTMDBSeasonResult(response["seasons"]),
               "images": poster_thread.listitems,
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
