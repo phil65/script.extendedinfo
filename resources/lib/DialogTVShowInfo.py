@@ -171,6 +171,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.ShowRatedTVShows()
         elif controlID == 6003:
             ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
+            self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedTVShows()
         elif controlID == 132:
@@ -197,17 +198,22 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
-            xbmc.sleep(2000)
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             self.update = GetExtendedTVShowInfo(self.tmdb_id, 0)
             self.tvshow["account_states"] = self.update["account_states"]
         if self.tvshow["account_states"]:
-            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.tvshow["account_states"]["favorite"]))
+            if self.tvshow["account_states"]["favorite"]:
+                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "UnStar TVShow")
+                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "True")
+            else:
+                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "Star TVShow")
+                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "")
             if self.tvshow["account_states"]["rated"]:
                 xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))
             else:
                 xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
             xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
-
+            # Notify(str(self.tvshow["account_states"]["rated"]["value"]))
 
     def ShowRatedTVShows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
