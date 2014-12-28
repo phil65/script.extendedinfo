@@ -56,9 +56,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.movie["general"]["SetId"])
             self.omdb_thread = Get_ListItems_Thread(GetOmdbMovieInfo, self.movie["general"]["imdb_id"])
+            lists_thread = Get_ListItems_Thread(self.SortLists, self.movie["lists"])
             self.omdb_thread.start()
             sets_thread.start()
             youtube_thread.start()
+            lists_thread.start()
             if not "DBID" in self.movie["general"]:
                 poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
                 poster_thread.start()
@@ -67,13 +69,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 vid_id_list.append(item["key"])
             self.crew_list = []
             crew_id_list = []
-            account_list = GetAccountLists(10)
-            id_list = []
-            for item in account_list:
-                id_list.append(item["id"])
-            own_lists = [item for item in self.movie["lists"] if item["ID"] in id_list]
-            misc_lists = [item for item in self.movie["lists"] if item["ID"] not in id_list]
-            self.movie["lists"] = own_lists + misc_lists
             for item in self.movie["crew"]:
                 if item["id"] not in crew_id_list:
                     crew_id_list.append(item["id"])
@@ -86,6 +81,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.movie["general"]['Poster'] = poster_thread.listitems
             filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
             filter_thread.start()
+            lists_thread.join()
+            self.movie["lists"] = lists_thread.listitems
             sets_thread.join()
             self.set_listitems = sets_thread.listitems
             self.setinfo = sets_thread.setinfo
@@ -135,6 +132,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
 
+    def SortLists(self, lists):
+        account_list = GetAccountLists(10)
+        id_list = []
+        for item in account_list:
+            id_list.append(item["id"])
+        own_lists = [item for item in lists if item["ID"] in id_list]
+        misc_lists = [item for item in lists if item["ID"] not in id_list]
+        return own_lists + misc_lists
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
