@@ -324,8 +324,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dialog.doModal()
 
     def ShowManageDialog(self):
-                                # <onclick condition="IsEmpty(Window.Property(movie.DBID)) + System.HasAddon(plugin.video.couchpotato_manager)">SetProperty(Dialog.4.Label,Add To Couch Potato)</onclick>
-                                # <onclick condition="IsEmpty(Window.Property(movie.DBID)) + System.HasAddon(plugin.video.couchpotato_manager)">SetProperty(Dialog.4.BuiltIn,RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))</onclick>
+                                # <onclick condition="IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.4.Label,Add To Couch Potato)</onclick>
+                                # <onclick condition="IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.4.BuiltIn,RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))</onclick>
                                 # <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.Label,$LOCALIZE[32102])</onclick>
                                 # <onclick condition="system.hasaddon(script.tvtunes)">SetProperty(Dialog.6.BuiltIn,RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)]))</onclick>
                                 # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.Label,$LOCALIZE[32103])</onclick>
