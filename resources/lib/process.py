@@ -159,7 +159,7 @@ def StartInfoActions(infos, params):
             from DialogVideoInfo import DialogVideoInfo
             if params.get("handle", ""):
                 xbmcplugin.endOfDirectory(params.get("handle", ""))
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params["dbid"], imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'extendedactorinfo':
                 from DialogActorInfo import DialogActorInfo
@@ -170,7 +170,7 @@ def StartInfoActions(infos, params):
             from DialogTVShowInfo import DialogTVShowInfo
             if params.get("handle", ""):
                 xbmcplugin.endOfDirectory(params.get("handle", ""))
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params["dbid"], imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'seasoninfo':
             passListToSkin("SeasonVideos", None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
