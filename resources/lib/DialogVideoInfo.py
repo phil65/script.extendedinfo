@@ -273,6 +273,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         pass
 
     def SortLists(self, lists):
+        if not self.logged_in:
+            return lists
         account_list = GetAccountLists(10)  # use caching here, forceupdate everywhere else
         id_list = []
         own_lists = []
