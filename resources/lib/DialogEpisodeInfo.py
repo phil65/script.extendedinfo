@@ -37,7 +37,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             if not self.episode:
                 self.close()
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            search_string = "%s %s tv" % (self.episode["general"]["TVShowTitle"], self.episode["general"]["Title"])
+            search_string = "%s tv" % (self.episode["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if not "DBID" in self.episode["general"]: # need to add comparing for episodes
@@ -68,7 +68,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.getControl(750).addItems(CreateListItems(self.episode["crew"], 0))
         self.getControl(1150).addItems(CreateListItems(self.episode["videos"], 0))
         self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(CreateListItems(self.episode["images"], 0))
+        self.getControl(1350).addItems(CreateListItems(self.episode["images"], 0))
 
 
     def onAction(self, action):
@@ -83,14 +83,14 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack(self)
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             dialog.doModal()
         elif controlID in [2000]:
             episode = self.getControl(controlID).getSelectedItem().getProperty("episode")
             AddToWindowStack(self)
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
+            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()

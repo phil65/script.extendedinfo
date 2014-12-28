@@ -89,8 +89,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         if controlID in [150, 550]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)
-            dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             self.close()
+            dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
         elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
@@ -101,8 +101,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 #todo
             if selection == 1:
                 AddToWindowStack(self)
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 self.close()
+                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 dialog.doModal()
         elif controlID in [450, 750]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")

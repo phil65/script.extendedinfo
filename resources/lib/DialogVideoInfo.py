@@ -140,13 +140,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack(self)
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             dialog.doModal()
         elif controlID in [150, 250]:
             movieid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            self.close()
             AddToWindowStack(self)
+            self.close()
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=movieid)
             dialog.doModal()
         elif controlID in [1250, 1350]:
@@ -322,8 +322,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         list_items = GetRatedMedia("movies")
-        self.close()
         AddToWindowStack(self)
+        self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.movie["general"]['ImageColor'])
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()

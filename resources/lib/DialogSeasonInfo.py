@@ -85,8 +85,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         if controlID in [1000, 750]:
             actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
             AddToWindowStack(self)
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             self.close()
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             dialog.doModal()
         elif controlID in [2000]:
             episode = self.getControl(controlID).getSelectedItem().getProperty("episode")
@@ -95,9 +95,8 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
                 response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), addon.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
             AddToWindowStack(self)
-            Notify(self.tmdb_id)
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, show_id=self.tmdb_id, season=season, episode=episode)
             self.close()
+            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, show_id=self.tmdb_id, season=season, episode=episode)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
