@@ -60,7 +60,9 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
+        self.window = xbmcgui.Window(windowid)
+        self.window.setProperty("tmdb_logged_in", self.logged_in)
+        self.window.setProperty("type", "season")
         passDictToSkin(self.season["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.season["actors"], 0))
         self.getControl(750).addItems(CreateListItems(self.season["crew"], 0))

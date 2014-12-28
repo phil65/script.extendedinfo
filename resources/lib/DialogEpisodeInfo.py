@@ -61,7 +61,8 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.episode["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("tmdb_logged_in", self.logged_in)
+        self.window = xbmcgui.Window(windowid)
+        self.window.setProperty("type", "episode")
         passDictToSkin(self.episode["general"], "movie.", False, False, windowid)
         self.getControl(1000).addItems(CreateListItems(self.episode["actors"], 0))
         self.getControl(750).addItems(CreateListItems(self.episode["crew"], 0))

@@ -73,8 +73,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
+        self.window = xbmcgui.Window(self.windowid)
         passDictToSkin(self.tvshow["general"], "movie.", False, False, self.windowid)
-        xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", checkLogin())
+        self.window.setProperty("tmdb_logged_in", checkLogin())
+        self.window.setProperty("type", "tvshow")
         self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
         xbmc.sleep(200)
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
@@ -203,16 +205,16 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tvshow["account_states"] = self.update["account_states"]
         if self.tvshow["account_states"]:
             if self.tvshow["account_states"]["favorite"]:
-                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "UnStar TVShow")
-                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "True")
+                self.window.setProperty("FavButton_Label", "UnStar TVShow")
+                self.window.setProperty("movie.favorite", "True")
             else:
-                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "Star TVShow")
-                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "")
+                self.window.setProperty("FavButton_Label", "Star TVShow")
+                self.window.setProperty("movie.favorite", "")
             if self.tvshow["account_states"]["rated"]:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))
+                self.window.setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))
             else:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
-            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
+                self.window.setProperty("movie.rated", "")
+            self.window.setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
             # Notify(str(self.tvshow["account_states"]["rated"]["value"]))
 
     def ShowRatedTVShows(self):

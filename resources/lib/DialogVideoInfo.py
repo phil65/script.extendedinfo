@@ -101,7 +101,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(self.windowid).setProperty("tmdb_logged_in", self.logged_in)
+        self.window = xbmcgui.Window(self.windowid)
+        self.window.setProperty("tmdb_logged_in", self.logged_in)
+        self.window.setProperty("type", "movie")
         passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
         xbmc.sleep(200)
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
@@ -293,16 +295,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.movie["account_states"] = self.update["account_states"]
         if self.movie["account_states"]:
             if self.movie["account_states"]["favorite"]:
-                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "UnStar Movie")
-                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "True")
+                self.window.setProperty("FavButton_Label", "UnStar Movie")
+                self.window.setProperty("movie.favorite", "True")
             else:
-                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "Star Movie")
-                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "")
+                self.window.setProperty("FavButton_Label", "Star Movie")
+                self.window.setProperty("movie.favorite", "")
             if self.movie["account_states"]["rated"]:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
+                self.window.setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
             else:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
-            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
+                self.window.setProperty("movie.rated", "")
+            self.window.setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
             # Notify(str(self.movie["account_states"]["rated"]["value"]))
 
     def RemoveListDialog(self, account_lists):
