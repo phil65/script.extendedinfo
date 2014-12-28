@@ -156,7 +156,7 @@ def auth_request_token():
     password = addon.getSetting("tmdb_password")
     response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0.1)
     # prettyprint(response)
-    if response["success"]:
+    if "success" in response and response["success"]:
         return response["request_token"]
     else:
         return None
@@ -529,8 +529,8 @@ def GetCompanyInfo(company_id):
 
 def GetCreditInfo(credit_id):
     response = GetMovieDBData("credit/%s?language=%s&" % (str(credit_id), addon.getSetting("LanguageID")), 30)
-   # if response and "results" in response:
-    # prettyprint(response)
+    prettyprint(response)
+    # if response and "results" in response:
         # return HandleTMDBMovieResult(response["results"])
     # else:
     #     return []
