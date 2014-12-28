@@ -171,6 +171,7 @@
                                 </control>
                             </control>
                             <control type="group" id="20000">
+                                <visible>!StringCompare(Window.Property(type),season)</visible>
                                 <width>280</width>
                                 <control type="radiobutton" id="6001">
                                     <label>Rate Movie</label>
@@ -235,6 +236,7 @@
                                 <radioheight>64</radioheight>
                                 <selected>!IsEmpty(Window.Property(movie.favorite))</selected>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
+                                <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6005">
                                 <label>Add To List</label>
@@ -258,6 +260,7 @@
                                 <radiowidth>64</radiowidth>
                                 <radioheight>64</radioheight>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
+                                <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6002">
                                 <label>Show Lists</label>
@@ -281,6 +284,7 @@
                                 <radiowidth>64</radiowidth>
                                 <radioheight>64</radioheight>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
+                                <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6006">
                                 <label>Already rated</label>
@@ -304,6 +308,7 @@
                                 <radiowidth>64</radiowidth>
                                 <radioheight>64</radioheight>
                                 <visible>IsEmpty(Window.Property(tmdb_logged_in))</visible>
+                                <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="100">
                                 <width>280</width>
