@@ -44,7 +44,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.images = None
         if self.id:
             self.person = GetExtendedActorInfo(self.id)
-            prettyprint(self.person)
+            youtube_thread = Get_Youtube_Vids_Thread(self.person["general"]["name"], "", "relevance", 15)
+            youtube_thread.start()
             db_movies = 0
             for item in self.person["movie_roles"]:
                 if "DBID" in item:
@@ -55,7 +56,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             image, imagecolor = Filter_Image(self.person["general"]["thumb"], 25)
             self.person["general"]['ImageFilter'] = image
             self.person["general"]['ImageColor'] = imagecolor
-            self.youtube_vids = GetYoutubeSearchVideosV3(self.person["general"]["name"])
+            youtube_thread.join()
+            self.youtube_vids = youtube_thread.listitems
         else:
             Notify("No ID found")
             self.close()
