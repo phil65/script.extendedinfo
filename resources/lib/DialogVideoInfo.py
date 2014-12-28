@@ -67,6 +67,13 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 vid_id_list.append(item["key"])
             self.crew_list = []
             crew_id_list = []
+            account_list = GetAccountLists(10)
+            id_list = []
+            for item in account_list:
+                id_list.append(item["id"])
+            own_lists = [item for item in self.movie["lists"] if item["ID"] in id_list]
+            misc_lists = [item for item in self.movie["lists"] if item["ID"] not in id_list]
+            self.movie["lists"] = own_lists + misc_lists
             for item in self.movie["crew"]:
                 if item["id"] not in crew_id_list:
                     crew_id_list.append(item["id"])
