@@ -228,11 +228,11 @@ def StartInfoActions(infos, params):
         elif info == 'youtubesearch':
             homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             passListToSkin('YoutubeSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            if params.get("id", ""):
-                passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            if params.get("id", False):
+                passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubeplaylist':
             passListToSkin('YoutubePlaylist', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            if params.get("id", ""):
+            if params.get("id", False):
                 passListToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubeusersearch':
             passListToSkin('YoutubeUserSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
