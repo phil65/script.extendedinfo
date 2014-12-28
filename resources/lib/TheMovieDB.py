@@ -871,8 +871,8 @@ def GetFavItems(media_type):
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
-def GetMoviesFromList(list_id):
-    response = GetMovieDBData("list/%s?language=%s&" % (str(list_id), addon.getSetting("LanguageID")), 30)
+def GetMoviesFromList(list_id, cache_time=30):
+    response = GetMovieDBData("list/%s?language=%s&" % (str(list_id), addon.getSetting("LanguageID")), cache_time)
   #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"], False, None)
 

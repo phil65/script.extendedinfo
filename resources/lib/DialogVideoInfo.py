@@ -231,7 +231,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.ShowRatedMovies()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
-                list_items = GetMoviesFromList(account_lists[index - 2]["id"])
+                list_items = GetMoviesFromList(account_lists[index - 2]["id"], 0)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.OpenVideoList(list_items, {})
         elif controlID == 445:
