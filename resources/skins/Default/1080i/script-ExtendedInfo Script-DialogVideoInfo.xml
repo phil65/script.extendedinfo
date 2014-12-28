@@ -997,6 +997,47 @@
                             </focusedlayout>
                         </control>
                     </control>
+                    <control type="group">
+                        <height>100</height>
+                        <visible>!IsEmpty(Window.Property(movie.omdb.Awards)) | !IsEmpty(Window.Property(movie.omdb.tomatoConsensus))</visible>
+                        <!--
+                        <control type="radiobutton" id="241">
+                            <posx>0</posx>
+                            <posy>-30</posy>
+                            <width>1930</width>
+                            <height>130</height>
+                            <radioposx>30</radioposx>
+                            <radioposy>20</radioposy>
+                            <radiowidth>46</radiowidth>
+                            <radioheight>46</radioheight>
+                            <onup>750</onup>
+                            <ondown>150</ondown>
+                            <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
+                            <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
+                            <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
+                            <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
+                            <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                            <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                            <label>-</label>
+                        </control>-->
+                        <control type="image">
+                            <posx>30</posx>
+                            <posy>-20</posy>
+                            <width>70</width>
+                            <height>70</height>
+                            <texture>icons/info.png</texture>
+                        </control>
+                        <control type="textbox" id="800">
+                            <posx>130</posx>
+                            <posy>-20</posy>
+                            <width>1800</width>
+                            <height>70</height>
+                            <align>left</align>
+                            <label fallback="No info available">$INFO[Window.Property(movie.omdb.Awards),,[CR]]$INFO[Window.Property(movie.omdb.tomatoConsensus),,[CR]]</label>
+                            <font>font12</font>
+                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
+                        </control>
+                    </control>
                     <control type="group" id="50112">
                         <visible>IntegerGreaterThan(Container(150).NumItems,0)</visible>
                         <height>500</height>
@@ -1272,7 +1313,7 @@
                                             <align>center</align>
                                             <label>$INFO[ListItem.Year]</label>
                                         </control>
-                                       <control type="image">
+                                        <control type="image">
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
@@ -1470,8 +1511,8 @@
                                         <width>320</width>
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                            <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1150)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                        <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1150)">Conditional</animation>
+                                        <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -1599,8 +1640,8 @@
                                         <width>320</width>
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                             <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(350)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                        <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(350)">Conditional</animation>
+                                        <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -2086,42 +2127,13 @@
                             <font>font14</font>
                             <label>Reviews</label>
                         </control>
-                        <control type="radiobutton" id="241">
-                            <posx>0</posx>
-                            <posy>30</posy>
-                            <width>630</width>
-                            <height>400</height>
-                            <radioposx>30</radioposx>
-                            <radioposy>20</radioposy>
-                            <radiowidth>46</radiowidth>
-                            <radioheight>46</radioheight>
-                            <onup>750</onup>
-                            <ondown>150</ondown>
-                            <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
-                            <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
-                            <textureradiooffnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
-                            <textureradioonnofocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
-                            <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                            <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                            <label>-</label>
-                        </control>
-                        <control type="textbox" id="800">
-                            <posx>93</posx>
-                            <posy>70</posy>
-                            <width>465</width>
-                            <height>210</height>
-                            <align>left</align>
-                            <label fallback="No info available">$INFO[Window.Property(movie.omdb.Awards),,[CR]]$INFO[Window.Property(movie.omdb.tomatoConsensus),,[CR]]</label>
-                            <font>font12</font>
-                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
-                        </control>
                         <control type="panel" id="1050">
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
                             </animation>
-                            <posx>605</posx>
+                            <posx>-45</posx>
                             <posy>30</posy>
-                            <width>1310</width>
+                            <width>1940</width>
                             <height>400</height>
                             <onleft>1050</onleft>
                             <onright>1050</onright>
@@ -2304,8 +2316,8 @@
                                         <width>224</width>
                                         <height>325</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                            <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1250)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                        <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1250)">Conditional</animation>
+                                        <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                 </control>
@@ -2393,8 +2405,8 @@
                                         <width>505</width>
                                         <height>325</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                            <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1350)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                        <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1350)">Conditional</animation>
+                                        <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                 </control>
@@ -2654,8 +2666,8 @@
                                         <width>320</width>
                                         <height>200</height>
                                         <texture fallback="DefaultVideo.png">common/black.png</texture>
-                                            <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(2000)">Conditional</animation>
-                                            <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
+                                        <animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(2000)">Conditional</animation>
+                                        <animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="textbox">
