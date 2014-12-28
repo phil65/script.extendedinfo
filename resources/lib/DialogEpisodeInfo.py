@@ -86,12 +86,6 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
             dialog.doModal()
-        elif controlID in [2000]:
-            episode = self.getControl(controlID).getSelectedItem().getProperty("episode")
-            AddToWindowStack(self)
-            self.close()
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
-            dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
             AddToWindowStack(self)
@@ -116,6 +110,8 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
                 ids = [self.tmdb_id, self.season, self.episode["general"]["episode"]]
                 RateMedia("episode", ids, rating)
                 self.UpdateStates()
+        # elif controlID == 6006:
+        #     self.ShowRatedEpisodes()
 
 
     def onFocus(self, controlID):
@@ -140,6 +136,14 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             # self.window.setProperty("movie.watchlist", str(self.episode["account_states"]["watchlist"]))
             # Notify(str(self.episode["account_states"]["rated"]["value"]))
 
+    def ShowRatedEpisodes(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        list_items = GetRatedMedia("episode")
+        AddToWindowStack(self)
+        self.close()
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'])
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        dialog.doModal()
 
     def OpenVideoList(self, listitems):
         AddToWindowStack(self)

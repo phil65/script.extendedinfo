@@ -858,15 +858,15 @@ def GetMoviesWithCertification(country, rating):
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
-def GetRatedMedia(mediatype):
+def GetRatedMedia(media_type):
     if addon.getSetting("tmdb_username"):
         session_id = get_session_id()
         account_id = get_account_info()
-        response = GetMovieDBData("account/%s/rated/%s?session_id=%s&language=%s&" % (str(account_id), mediatype, str(session_id), addon.getSetting("LanguageID")), 0)
+        response = GetMovieDBData("account/%s/rated/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), addon.getSetting("LanguageID")), 0)
     else:
         session_id = get_guest_session_id()
         response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), addon.getSetting("LanguageID")), 0)
-    if mediatype == "tv":
+    if media_type == "tv":
         return HandleTMDBTVShowResult(response["results"], False, None)
     else:
         return HandleTMDBMovieResult(response["results"], False, None)
