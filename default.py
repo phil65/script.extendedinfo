@@ -22,7 +22,7 @@ class Main:
         self._init_vars()
         self._parse_argv()
         if self.infos:
-            StartInfoActions(self.infos, self.params)
+            self.control = StartInfoActions(self.infos, self.params)
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')

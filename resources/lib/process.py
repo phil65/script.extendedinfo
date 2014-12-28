@@ -310,6 +310,7 @@ def StartInfoActions(infos, params):
         elif info == "youtubevideo":
             if params.get("id", ""):
                 params["control"] = ""  # workaround to avoid breaking PlayMedia
+                xbmc.executebuiltin("Dialog.Close(all,true)")
                 PlayTrailer(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -333,3 +334,4 @@ def StartInfoActions(infos, params):
                     Notify("Error", "No Trailer available")
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
+    return params["control"]
