@@ -2822,6 +2822,7 @@
                             <posx>-25</posx>
                             <posy>91</posy>
                             <width>1200</width>
+                            <itemgap>0</itemgap>
                             <orientation>horizontal</orientation>
                             <usecontrolcoords>true</usecontrolcoords>
                             <control type="image">
@@ -2846,7 +2847,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label fallback="?">$INFO[Window.Property(movie.Rating)]</label>
-                                    <font>Font_Bold34</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2873,7 +2874,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label>$INFO[Window.Property(movie.Duration)]</label>
-                                    <font>Font_Bold34</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2901,7 +2902,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label fallback="?">$INFO[Window.Property(movie.ReleaseDate)]</label>
-                                    <font>Font_Bold34</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2929,7 +2930,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label>$INFO[Window.Property(movie.Budget),$]</label>
-                                    <font>Font_Bold34</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2940,14 +2941,6 @@
                                     <label>Budget</label>
                                     <font>font10</font>
                                 </control>
-                            </control>
-                            <control type="image">
-                                <posy>1</posy>
-                                <height>79</height>
-                                <width>2</width>
-                                <height>71</height>
-                                <texture>info/upright.png</texture>
-                                <visible>Control.IsVisible(3300)</visible>
                             </control>
                             <control type="group" id="3300">
                                 <width>220</width>
@@ -2965,7 +2958,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label fallback="?">$INFO[Window.Property(movie.Revenue),$]</label>
-                                    <font>Font_Bold34</font>
+                                    <font>font14</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
