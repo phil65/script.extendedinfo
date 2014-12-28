@@ -746,7 +746,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Cast</label>
+                            <label>Cast$INFO[Container(1000).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -878,7 +878,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Crew</label>
+                            <label>Crew$INFO[Container(750).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1025,7 +1025,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Recommended by TMDB</label>
+                            <label>Recommended By TMDB$INFO[Container(150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1209,7 +1209,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$INFO[Window.Property(movie.set.label)]</label>
+                            <label>$INFO[Window.Property(movie.set.label)]$INFO[Container(250).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -2461,7 +2461,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Lists from MovieDB Users</label>
+                            <label>Related TMDB Lists$INFO[Container(450).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
