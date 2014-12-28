@@ -212,9 +212,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.UpdateStates()
         elif controlID == 6002:
             listitems = ["Favourites", "Rated Movies"]
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = GetAccountLists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select("Choose List", listitems)
             if index == -1:
                 pass
