@@ -1100,6 +1100,7 @@
                                         <label>$INFO[ListItem.Title]</label>
                                         <font>font12_title</font>
                                         <align>center</align>
+                                        <aligny>center</aligny>
                                         <scroll>true</scroll>
                                     </control>
                                 </control>
@@ -1138,6 +1139,7 @@
                                         <label>$INFO[ListItem.Title]</label>
                                         <font>font12_title</font>
                                         <align>center</align>
+                                        <aligny>center</aligny>
                                         <scroll>true</scroll>
                                     </control>
                                 </control>
