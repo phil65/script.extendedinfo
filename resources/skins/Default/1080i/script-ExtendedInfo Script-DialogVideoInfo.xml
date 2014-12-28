@@ -179,6 +179,8 @@
                                     <textureradioofffocus colordiffuse="grey">icons/heart.png</textureradioofffocus>
                                     <textureradiooffnofocus colordiffuse="grey">icons/heart.png</textureradiooffnofocus>
                                     <textureradioonnofocus colordiffuse="grey">-</textureradioonnofocus>
+                                    <posx>0</posx>
+                                    <posy>0</posy>
                                     <width>280</width>
                                     <height>160</height>
                                     <textoffsetx>0</textoffsetx>
@@ -2915,7 +2917,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label>$INFO[Window.Property(movie.Budget),$]</label>
-                                    <font>font14</font>
+                                    <font>Font_Bold34</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
@@ -2951,7 +2953,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <label fallback="?">$INFO[Window.Property(movie.Revenue),$]</label>
-                                    <font>font14</font>
+                                    <font>Font_Bold34</font>
                                 </control>
                                 <control type="label">
                                     <posy>37</posy>
