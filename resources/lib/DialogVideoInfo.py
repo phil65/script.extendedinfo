@@ -238,7 +238,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Plot", text=self.movie["general"]["Plot"], color=self.movie["general"]['ImageColor'])
             w.doModal()
         elif controlID == 6003:
-            ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
+            if self.movie["account_states"]["favorite"]:
+                ChangeFavStatus(self.movie["general"]["ID"], "movie", "false")
+            else:
+                ChangeFavStatus(self.movie["general"]["ID"], "movie", "true")
             self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedMovies()
@@ -290,6 +293,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.movie["account_states"] = self.update["account_states"]
         if self.movie["account_states"]:
             xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
+            if self.movie["account_states"]["favorite"]:
+                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "UnStar Movie")
+            else:
+                xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "Star Movie")
             if self.movie["account_states"]["rated"]:
                 xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
             else:

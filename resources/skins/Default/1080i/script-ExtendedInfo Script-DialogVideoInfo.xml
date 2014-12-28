@@ -212,7 +212,7 @@
                                 </control>
                             </control>
                             <control type="radiobutton" id="6003">
-                                <label>Add to favourites</label>
+                                <label>$INFO[Window.Property(FavButton_Label)]</label>
                                 <onleft>6001</onleft>
                                 <textureradioonfocus colordiffuse="grey">icons/star.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/star.png</textureradioofffocus>
