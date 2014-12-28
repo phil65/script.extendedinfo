@@ -200,7 +200,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -276,7 +276,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -381,7 +381,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -457,7 +457,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -562,7 +562,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -638,7 +638,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -743,7 +743,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
@@ -819,7 +819,7 @@
                                             <width>55</width>
                                             <height>55</height>
                                             <posy>10</posy>
-                                            <posx>171</posx>
+                                            <posx>169</posx>
                                             <texture>flags/local.png</texture>
                                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                                         </control>
