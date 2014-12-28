@@ -82,9 +82,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             sets_thread.join()
             self.set_listitems = sets_thread.listitems
             self.setinfo = sets_thread.setinfo
-            id_list = []
-            for item in self.set_listitems:
-                id_list.append(item["ID"])
+            id_list = sets_thread.id_list
             self.movie["similar"] = [item for item in self.movie["similar"] if item["ID"] not in id_list]
             youtube_thread.join()
             self.youtube_vids = youtube_thread.listitems
@@ -106,6 +104,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
+        prettyprint(self.movie["lists"])
         self.getControl(450).addItems(CreateListItems(self.movie["lists"], 0))
         self.getControl(550).addItems(CreateListItems(self.movie["studios"], 0))
         self.getControl(650).addItems(CreateListItems(self.movie["releases"], 0))
@@ -273,14 +272,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             elif index > 0:
                 ChangeListStatus(account_lists[index - 1]["id"], self.MovieId, True)
                 self.UpdateStates()
-        # elif controlID == 33400:
-        #     xbmc.sleep(260)
-        #     xbmc.executebuiltin("ClearProperty(Bounce.Down,home)")
 
     def onFocus(self, controlID):
-        # if controlID == 33300:
-        #     xbmc.sleep(260)
-        #     xbmc.executebuiltin("ClearProperty(Bounce.Up,home)")
         pass
 
     def RemoveListDialog(self, account_lists):
@@ -293,7 +286,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             # ChangeListStatus(account_lists[index]["id"], self.MovieId, False)
             RemoveList(account_lists[index]["id"])
             self.UpdateStates()
-
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -346,8 +338,11 @@ class Get_Set_Items_Thread(threading.Thread):
         self.set_id = set_id
 
     def run(self):
+        self.id_list = []
         if self.set_id:
             self.listitems, self.setinfo = GetSetMovies(self.set_id)
+            for item in self.listitems:
+                self.id_list.append(item["ID"])
         else:
             self.listitems = []
             self.setinfo = {}

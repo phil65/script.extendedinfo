@@ -106,10 +106,10 @@ def ChangeListStatus(list_id, movie_id, status):
     Notify(addon_name, results["status_message"])
 
 
-def GetAccountLists():
+def GetAccountLists(cache_time=0):
     session_id = get_session_id()
     account_id = get_account_info()
-    response = GetMovieDBData("account/%s/lists?session_id=%s&" % (str(account_id), session_id), 0)
+    response = GetMovieDBData("account/%s/lists?session_id=%s&" % (str(account_id), session_id), cache_time)
     # prettyprint(response)
     return response["results"]
 
