@@ -259,6 +259,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             account_lists = GetAccountLists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            listitems.append("Remove list...")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select("Choose List", listitems)
             if index == 0:
@@ -266,20 +267,33 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 if listname:
                     list_id = CreateList(listname)
                     xbmc.sleep(1000)
-                    AddItemToList(list_id, self.MovieId)
+                    ChangeListStatus(list_id, self.MovieId, True)
+            elif index == len(listitems) - 1:
+                self.RemoveListDialog(account_lists)
             elif index > 0:
-                AddItemToList(account_lists[index - 1]["id"], self.MovieId)
+                ChangeListStatus(account_lists[index - 1]["id"], self.MovieId, True)
                 self.UpdateStates()
         # elif controlID == 33400:
         #     xbmc.sleep(260)
         #     xbmc.executebuiltin("ClearProperty(Bounce.Down,home)")
-
 
     def onFocus(self, controlID):
         # if controlID == 33300:
         #     xbmc.sleep(260)
         #     xbmc.executebuiltin("ClearProperty(Bounce.Up,home)")
         pass
+
+    def RemoveListDialog(self, account_lists):
+        listitems = []
+        for item in account_lists:
+            listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+        prettyprint(account_lists)
+        index = xbmcgui.Dialog().select("Delete movie list", listitems)
+        if index >= 0:
+            # ChangeListStatus(account_lists[index]["id"], self.MovieId, False)
+            RemoveList(account_lists[index]["id"])
+            self.UpdateStates()
+
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -310,6 +324,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                            ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
                            ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
                            ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+
 
 class Join_Omdb_Thread(threading.Thread):
 
@@ -345,5 +360,3 @@ class SettingsMonitor(xbmc.Monitor):
 
     def onSettingsChanged(self):
         xbmc.sleep(300)
-
-

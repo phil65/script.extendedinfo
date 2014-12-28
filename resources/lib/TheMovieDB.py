@@ -77,9 +77,28 @@ def CreateList(listname):
     Notify(addon_name, results["status_message"])
     return results["list_id"]
 
-def AddItemToList(list_id, movie_id):
+
+def RemoveList(list_id):
     session_id = get_session_id()
-    url = "http://api.themoviedb.org/3/list/%s/add_item?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
+    url = "http://api.themoviedb.org/3/list/%s?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
+    log("Remove List: " + url)
+    # prettyprint(results)
+    values = {'media_id': list_id}
+    request = Request(url, data=simplejson.dumps(values), headers=headers)
+    request.get_method = lambda: 'DELETE'
+    response = urlopen(request).read()
+    results = simplejson.loads(response)
+    Notify(addon_name, results["status_message"])
+    return results["list_id"]
+
+def ChangeListStatus(list_id, movie_id, status):
+    if status:
+        method = "add_item"
+    else:
+        method = "remove_item"
+    session_id = get_session_id()
+    url = "http://api.themoviedb.org/3/list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, moviedb_key, session_id)
+    log(url)
     values = {'media_id': movie_id}
     request = Request(url, data=simplejson.dumps(values), headers=headers)
     response = urlopen(request).read()
