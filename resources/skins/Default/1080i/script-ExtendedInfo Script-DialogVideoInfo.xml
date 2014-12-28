@@ -214,10 +214,10 @@
                             <control type="radiobutton" id="6003">
                                 <label>$INFO[Window.Property(FavButton_Label)]</label>
                                 <onleft>6001</onleft>
-                                <textureradioonfocus colordiffuse="grey">icons/star.png</textureradioonfocus>
+                                <textureradioonfocus colordiffuse="grey">icons/starminus.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/star.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/star.png</textureradiooffnofocus>
-                                <textureradioonnofocus colordiffuse="grey">icons/star.png</textureradioonnofocus>
+                                <textureradioonnofocus colordiffuse="grey">icons/starminus.png</textureradioonnofocus>
                                 <width>280</width>
                                 <height>160</height>
                                 <textoffsetx>0</textoffsetx>
@@ -233,6 +233,7 @@
                                 <radioposy>30</radioposy>
                                 <radiowidth>64</radiowidth>
                                 <radioheight>64</radioheight>
+                                <selected>!IsEmpty(Window.Property(movie.favorite))</selected>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
                             </control>
                             <control type="radiobutton" id="6005">

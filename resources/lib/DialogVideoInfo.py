@@ -292,11 +292,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.update = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
             self.movie["account_states"] = self.update["account_states"]
         if self.movie["account_states"]:
-            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
             if self.movie["account_states"]["favorite"]:
                 xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "UnStar Movie")
+                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "True")
             else:
                 xbmcgui.Window(self.windowid).setProperty("FavButton_Label", "Star Movie")
+                xbmcgui.Window(self.windowid).setProperty("movie.favorite", "")
             if self.movie["account_states"]["rated"]:
                 xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
             else:
