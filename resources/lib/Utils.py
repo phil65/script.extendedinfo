@@ -112,19 +112,21 @@ def WaitForVideoEnd():
 
 def calculate_age(born):
     if born and born is not None:
+        log(born)
         today = datetime.date.today()
         actor_born = born.split("-")
         base_age = today.year - int(actor_born[0])
-        base_month = today.month - int(actor_born[1])
-        base_day = today.day - int(actor_born[2])
-        if base_month < 0:
-            Notify("one year younger")
-            base_age -= 1
-        elif base_month == 0 and base_day < 0:
-            Notify("one year younger")
-            base_age -= 1
-        elif base_month == 0 and base_day == 0:
-            Notify("Birthday Today! Age %i" % base_age)
+        if len(actor_born) > 1:
+            base_month = today.month - int(actor_born[1])
+            base_day = today.day - int(actor_born[2])
+            if base_month < 0:
+                log("one year younger")
+                base_age -= 1
+            elif base_month == 0 and base_day < 0:
+                log("one year younger")
+                base_age -= 1
+            elif base_month == 0 and base_day == 0:
+                Notify("Birthday Today! Age %i" % base_age)
     return ""
 
 
