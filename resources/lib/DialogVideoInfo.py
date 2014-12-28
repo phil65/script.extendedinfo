@@ -124,36 +124,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
 
-
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
-
-    def SortLists(self, lists):
-        account_list = GetAccountLists(10)
-        id_list = []
-        for item in account_list:
-            id_list.append(item["id"])
-        own_lists = [item for item in lists if item["ID"] in id_list]
-        misc_lists = [item for item in lists if item["ID"] not in id_list]
-        return own_lists + misc_lists
-
-    def UpdateStates(self, forceupdate=True):
-        if forceupdate:
-            xbmc.sleep(2000)
-            self.update = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
-            self.movie["account_states"] = self.update["account_states"]
-        if self.movie["account_states"]:
-            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
-            if self.movie["account_states"]["rated"]:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
-            else:
-                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
-            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
-            # Notify(str(self.movie["account_states"]["rated"]["value"]))
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
@@ -287,6 +263,37 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlID):
         pass
+
+    def SortLists(self, lists):
+        account_list = GetAccountLists(10)  # use caching here, forceupdate everywhere else
+        id_list = []
+        own_lists = []
+        misc_lists = []
+        for item in account_list:
+            id_list.append(item["id"])
+        for item in lists:
+            if item["ID"] in id_list:
+                item["account"] = "True"
+                own_lists.append(item)
+            else:
+                misc_lists.append(item)
+        # own_lists = [item for item in lists if item["ID"] in id_list]
+        # misc_lists = [item for item in lists if item["ID"] not in id_list]
+        return own_lists + misc_lists
+
+    def UpdateStates(self, forceupdate=True):
+        if forceupdate:
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            self.update = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
+            self.movie["account_states"] = self.update["account_states"]
+        if self.movie["account_states"]:
+            xbmcgui.Window(self.windowid).setProperty("movie.favorite", str(self.movie["account_states"]["favorite"]))
+            if self.movie["account_states"]["rated"]:
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))
+            else:
+                xbmcgui.Window(self.windowid).setProperty("movie.rated", "")
+            xbmcgui.Window(self.windowid).setProperty("movie.watchlist", str(self.movie["account_states"]["watchlist"]))
+            # Notify(str(self.movie["account_states"]["rated"]["value"]))
 
     def RemoveListDialog(self, account_lists):
         listitems = []

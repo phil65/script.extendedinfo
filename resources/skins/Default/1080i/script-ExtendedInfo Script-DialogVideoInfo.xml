@@ -2523,7 +2523,7 @@
                                             <posy>10</posy>
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
-                                            <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                            <visible>!IsEmpty(ListItem.Property(account))</visible>
                                         </control>
                                         <control type="image">
                                             <posy>10</posy>
@@ -2592,7 +2592,7 @@
                                             <posy>10</posy>
                                             <posx>171</posx>
                                             <texture>flags/local.png</texture>
-                                            <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                                            <visible>!IsEmpty(ListItem.Property(account))</visible>
                                         </control>
                                         <control type="label">
                                             <width>228</width>
