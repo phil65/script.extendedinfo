@@ -27,7 +27,6 @@ def Filter_Image(filterimage, radius):
     filterimage = xbmc.translatePath(urllib.unquote(filterimage.encode("utf-8"))).replace("image://", "")
     if filterimage.endswith("/"):
         filterimage = filterimage[:-1]
-    filterimage = unicode(filterimage, 'utf-8', errors='ignore')
     cachedthumb = xbmc.getCacheThumbName(filterimage)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
     targetfile = os.path.join(Addon_Data_Path, filename)
@@ -48,7 +47,7 @@ def Filter_Image(filterimage, radius):
                     img = Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
-                    xbmcvfs.copy(filterimage, targetfile)
+                    xbmcvfs.copy(unicode(filterimage, 'utf-8', errors='ignore'), targetfile)
                     img = Image.open(targetfile)
                     break
             except:
