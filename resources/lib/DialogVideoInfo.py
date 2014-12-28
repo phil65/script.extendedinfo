@@ -211,7 +211,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 RateMedia("movie", self.MovieId, rating)
                 self.UpdateStates()
         elif controlID == 6002:
-            listitems = ["Favourites", "Rated Movies"]
+            listitems = ["Starred Movies", "Rated Movies"]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = GetAccountLists()
             for item in account_lists:
