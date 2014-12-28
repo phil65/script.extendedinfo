@@ -998,7 +998,7 @@
                         </control>
                     </control>
                     <control type="group">
-                        <height>100</height>
+                        <height>120</height>
                         <visible>!IsEmpty(Window.Property(movie.omdb.Awards)) | !IsEmpty(Window.Property(movie.omdb.tomatoConsensus))</visible>
                         <!--
                         <control type="radiobutton" id="241">
@@ -1022,15 +1022,15 @@
                         </control>-->
                         <control type="image">
                             <posx>30</posx>
-                            <posy>-20</posy>
+                            <posy>0</posy>
                             <width>70</width>
                             <height>70</height>
                             <texture>icons/info.png</texture>
                         </control>
                         <control type="textbox" id="800">
                             <posx>130</posx>
-                            <posy>-20</posy>
-                            <width>1800</width>
+                            <posy>0</posy>
+                            <width>1780</width>
                             <height>70</height>
                             <align>left</align>
                             <label fallback="No info available">$INFO[Window.Property(movie.omdb.Awards),,[CR]]$INFO[Window.Property(movie.omdb.tomatoConsensus),,[CR]]</label>
