@@ -58,11 +58,14 @@ class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
 
 class SlideShow(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
+    ACTION_LEFT = [1]
+    ACTION_RIGHT = [2]
 
     def __init__(self, *args, **kwargs):
         self.imagelist = kwargs.get('imagelist')
         self.index = kwargs.get('index')
         self.image = kwargs.get('image')
+        self.action = None
 
     def onInit(self):
         if self.imagelist:
@@ -72,6 +75,16 @@ class SlideShow(xbmcgui.WindowXMLDialog):
             listitem = {"label": self.image,
                         "Thumb": self.image}
             self.getControl(10000).addItems(CreateListItems([listitem]))
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+        elif action in self.ACTION_LEFT:
+            self.action = "left"
+            self.close()
+        elif action in self.ACTION_RIGHT:
+            self.action = "right"
+            self.close()
 
 
 def WaitForVideoEnd():

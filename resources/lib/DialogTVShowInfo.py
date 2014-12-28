@@ -221,8 +221,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlID):
         pass
 
-    def OpenVideoList(self, listitems):
+    def OpenVideoList(self, listitems=None, filters={}):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'])
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters)
         dialog.doModal()
