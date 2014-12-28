@@ -38,14 +38,18 @@ def checkLogin():
     return ""
 
 
-def RateMedia(mediatype, movieid, rating):
+def RateMedia(media_type, media_id, rating):
     if addon.getSetting("tmdb_username"):
         session_id_string = "session_id=" + get_session_id()
     else:
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     log(values)
-    url = "http://api.themoviedb.org/3/%s/%s/rating?api_key=%s&%s" % (mediatype, str(movieid), moviedb_key, session_id_string)
+    if media_type == "episode":
+        url = "http://api.themoviedb.org/3/tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), moviedb_key, session_id_string)
+        log(url)
+    else:
+        url = "http://api.themoviedb.org/3/%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -782,11 +786,15 @@ def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=2):
     threads = [actor_thread, crew_thread, still_thread]
     for item in threads:
         item.start()
+    if "account_states" in response:
+        account_states = response["account_states"]
+    else:
+        account_states = None
     for item in threads:
         item.join()
     answer = {"general": HandleTMDBEpisodesResult([response])[0],
               "actors": actor_thread.listitems,
-              # "studios": HandleTMDBMiscResult(response["production_companies"]),
+              "account_states": account_states,
               "crew": crew_thread.listitems,
               # "genres": HandleTMDBMiscResult(response["genres"]),
               "videos": videos,

@@ -28,11 +28,11 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.tmdb_id = kwargs.get('show_id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
-        self.episode = kwargs.get('episode')
+        self.episodenumber = kwargs.get('episode')
         self.logged_in = checkLogin()
         prettyprint(kwargs)
         if self.tmdb_id or self.showname:
-            self.episode = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episode)
+            self.episode = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber)
             prettyprint(self.episode)
             if not self.episode:
                 self.close()
@@ -106,10 +106,40 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
+        elif controlID == 6001:
+            ratings = []
+            for i in range(0, 21):
+                ratings.append(str(float(i * 0.5)))
+            rating = xbmcgui.Dialog().select("Enter Rating", ratings)
+            if rating > -1:
+                rating = float(rating) * 0.5
+                ids = [self.tmdb_id, self.season, self.episode["general"]["episode"]]
+                RateMedia("episode", ids, rating)
+                self.UpdateStates()
 
 
     def onFocus(self, controlID):
         pass
+
+    def UpdateStates(self, forceupdate=True):
+        if forceupdate:
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            self.update = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber, 0)
+            self.episode["account_states"] = self.update["account_states"]
+        if self.episode["account_states"]:
+            # if self.episode["account_states"]["favorite"]:
+            #     self.window.setProperty("FavButton_Label", "UnStar episode")
+            #     self.window.setProperty("movie.favorite", "True")
+            # else:
+            #     self.window.setProperty("FavButton_Label", "Star episode")
+            #     self.window.setProperty("movie.favorite", "")
+            if self.episode["account_states"]["rated"]:
+                self.window.setProperty("movie.rated", str(self.episode["account_states"]["rated"]["value"]))
+            else:
+                self.window.setProperty("movie.rated", "")
+            # self.window.setProperty("movie.watchlist", str(self.episode["account_states"]["watchlist"]))
+            # Notify(str(self.episode["account_states"]["rated"]["value"]))
+
 
     def OpenVideoList(self, listitems):
         AddToWindowStack(self)

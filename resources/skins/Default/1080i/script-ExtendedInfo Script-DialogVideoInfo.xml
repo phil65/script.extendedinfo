@@ -174,7 +174,7 @@
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
                                 <width>280</width>
                                 <control type="radiobutton" id="6001">
-                                    <label>Rate Movie</label>
+                                    <label>Your Rating</label>
                                     <textureradioonfocus colordiffuse="grey">-</textureradioonfocus>
                                     <textureradioofffocus colordiffuse="grey">icons/heart.png</textureradioofffocus>
                                     <textureradiooffnofocus colordiffuse="grey">icons/heart.png</textureradiooffnofocus>
