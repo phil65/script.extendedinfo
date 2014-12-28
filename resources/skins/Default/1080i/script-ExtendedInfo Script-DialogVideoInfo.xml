@@ -157,7 +157,7 @@
                                     <radioheight>64</radioheight>
                                     <onclick>Action(Close)</onclick>
                                     <onleft>8</onleft>
-                                    <onright>20</onright>
+                                    <onright>6001</onright>
                                     <onup>132</onup>
                                     <ondown>1000</ondown>
                                     <onclick>RunScript(script.toolbox,info=playmovie,dbid=$INFO[Window.Property(movie.DBID)],resume=true)</onclick>
@@ -187,7 +187,7 @@
                                     <font>Font_Reg30_2</font>
                                     <textcolor>grey</textcolor>
                                     <focusedcolor>white2</focusedcolor>
-                                    <onleft>20</onleft>
+                                    <onleft>9</onleft>
                                     <onright>6003</onright>
                                     <onup>132</onup>
                                     <ondown>1000</ondown>
