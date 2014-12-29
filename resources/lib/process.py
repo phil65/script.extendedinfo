@@ -159,18 +159,19 @@ def StartInfoActions(infos, params):
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'seasoninfo':
-            passListToSkin("SeasonVideos", None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            if params["tvshow"] and params["season"]:
+            if params.get("tvshow", False) and params.get("season", False):
                 from DialogSeasonInfo import DialogSeasonInfo
                 dialog = DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, tvshow=params["tvshow"], season=params["season"])
                 dialog.doModal()
+            else:
+                Notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
-            if params["director"]:
+            if params.get("director", False):
                 directorid = GetPersonID(params["director"])
                 if directorid:
                     data = GetDirectorMovies(directorid), "DirectorMovies"
         elif info == 'writermovies':
-            if params["writer"] and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
+            if params.get("writer", False) and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
                 writerid = GetPersonID(params["writer"])
                 if writerid:
                     data = GetDirectorMovies(writerid), "WriterMovies"
@@ -201,22 +202,22 @@ def StartInfoActions(infos, params):
             data = GetTrendingMovies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
-                passListToSkin('SimilarArtists', GetSimilarArtistsInLibrary(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetSimilarArtistsInLibrary(params.get("artist_mbid")), "SimilarArtists"
         elif info == 'artistevents':
             if params.get("artist_mbid"):
-                passListToSkin('ArtistEvents', GetEvents(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetEvents(params.get("artist_mbid")), "ArtistEvents"
         elif info == 'youtubesearch':
             homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
-                passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id", False):
-                passListToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetYoutubePlaylistVideos(params.get("id", "")), "YoutubePlaylist"
         elif info == 'youtubeusersearch':
             if params.get("id", ""):
-                passListToSkin('YoutubeUserSearch', GetYoutubeUserVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetYoutubeUserVideos(params.get("id", "")), "YoutubeUserSearch"
         elif info == 'nearevents':
-            passListToSkin('NearEvents', GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
             homewindow.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
