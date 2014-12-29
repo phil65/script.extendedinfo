@@ -155,9 +155,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.OpenVideoList(listitems)
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = GetTVShowsWithGenre(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(listitems)
+            filters = {"with_genres": genreid}
+            self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
