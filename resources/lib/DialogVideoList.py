@@ -4,6 +4,7 @@ import xbmcgui
 from Utils import *
 import DialogVideoInfo
 import DialogTVShowInfo
+import DialogActorInfo
 homewindow = xbmcgui.Window(10000)
 from TheMovieDB import *
 
@@ -73,8 +74,13 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             AddToWindowStack(self)
             self.close()
             media_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+            media_type = self.getControl(controlID).getSelectedItem().getProperty("media_type")
+            if media_type:
+                self.type = media_type
             if self.type == "tv":
                 dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=media_id)
+            elif self.type == "person":
+                dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=media_id)
             else:
                 dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=media_id)
             dialog.doModal()
