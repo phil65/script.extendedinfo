@@ -27,94 +27,84 @@ def StartInfoActions(infos, params):
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
         params["prefix"] = params["prefix"] + '.'
     for info in infos:
+        data = None
         ########### Images #####################
         if info == 'xkcd':
-            passListToSkin('XKCD', GetXKCDInfo(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetXKCDInfo(), "XKCD"
         elif info == 'flickr':
-            passListToSkin('Flickr', GetFlickrImages(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetFlickrImages(), "Flickr"
         elif info == 'cyanide':
-            passListToSkin('CyanideHappiness', GetCandHInfo(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetCandHInfo(), "CyanideHappiness"
         elif info == 'dailybabes':
-            passListToSkin('DailyBabes', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('DailyBabes', GetDailyBabes(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetDailyBabes(), "DailyBabes"
         elif info == 'dailybabe':
-            passListToSkin('DailyBabe', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('DailyBabe', GetDailyBabes(single=True), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetDailyBabes(single=True), "DailyBabe"
         ########### Audio #####################
         elif info == 'discography':
-            passListToSkin('Discography', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             Discography = GetDiscography(params["artistname"])
             if len(Discography) == 0:
                 Discography = GetArtistTopAlbums(params.get("artist_mbid"))
-            passListToSkin('Discography', Discography, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = Discography, "Discography"
         elif info == 'mostlovedtracks':
-            passListToSkin('MostLovedTracks', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('MostLovedTracks', GetMostLovedTracks(params["artistname"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMostLovedTracks(params["artistname"]), "MostLovedTracks"
         elif info == 'artistdetails':
-            passListToSkin('Discography', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('MusicVideos', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             ArtistDetails = GetArtistDetails(params["artistname"])
-            if "audiodbid" in ArtistDetails:
-                MusicVideos = GetMusicVideos(ArtistDetails["audiodbid"])
-                passListToSkin('MusicVideos', MusicVideos, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('Discography', GetDiscography(params["artistname"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             passDictToSkin(ArtistDetails, params.get("prefix", ""))
+        elif info == 'musicvideos':
+            if "audiodbid" in ArtistDetails:
+                data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'albuminfo':
             if params.get("id", ""):
                 AlbumDetails = GetAlbumDetails(params.get("id", ""))
-                Trackinfo = GetTrackDetails(params.get("id", ""))
                 passDictToSkin(AlbumDetails, params.get("prefix", ""))
-                passListToSkin('Trackinfo', Trackinfo, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+        elif info == 'trackdetails':
+            if params.get("id", ""):
+                data = GetTrackDetails(params.get("id", "")), "Trackinfo"
         elif info == 'albumshouts':
-            passListToSkin('Shout', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["artistname"] and params["albumname"]:
-                passListToSkin('Shout', GetAlbumShouts(params["artistname"], params["albumname"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetAlbumShouts(params["artistname"], params["albumname"]), "Shout"
         elif info == 'artistshouts':
-            passListToSkin('Shout', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["artistname"]:
-                passListToSkin('Shout', GetArtistShouts(params["artistname"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetArtistShouts(params["artistname"]), "Shout"
         elif info == 'topartists':
-            passListToSkin('TopArtists', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('TopArtists', GetTopArtists(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetTopArtists(), "TopArtists"
         elif info == 'hypedartists':
-            passListToSkin('HypedArtists', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-            passListToSkin('HypedArtists', GetHypedArtists(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetHypedArtists(), "HypedArtists"
         ### RottenTomatoesMovies #################################################################################
         elif info == 'intheaters':
-            passListToSkin('InTheatersMovies', GetRottenTomatoesMovies("movies/in_theaters"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
-            passListToSkin('BoxOffice', GetRottenTomatoesMovies("movies/box_office"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("movies/box_office"), "BoxOffice"
         elif info == 'opening':
-            passListToSkin('Opening', GetRottenTomatoesMovies("movies/opening"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("movies/opening"), "Opening"
         elif info == 'comingsoon':
-            passListToSkin('ComingSoonMovies', GetRottenTomatoesMovies("movies/upcoming"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("movies/upcoming"), "ComingSoonMovies"
         elif info == 'toprentals':
-            passListToSkin('TopRentals', GetRottenTomatoesMovies("dvds/top_rentals"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("dvds/top_rentals"), "TopRentals"
         elif info == 'currentdvdreleases':
-            passListToSkin('CurrentDVDs', GetRottenTomatoesMovies("dvds/current_releases"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("dvds/current_releases"), "CurrentDVDs"
         elif info == 'newdvdreleases':
-            passListToSkin('NewDVDs', GetRottenTomatoesMovies("dvds/new_releases"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
-            passListToSkin('UpcomingDVDs', GetRottenTomatoesMovies("dvds/upcoming"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
         ### The MovieDB ##########################################################################################
         elif info == 'incinemas':
-            passListToSkin('InCinemasMovies', GetMovieDBMovies("now_playing"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBMovies("now_playing"), "InCinemasMovies"
         elif info == 'upcoming':
-            passListToSkin('UpcomingMovies', GetMovieDBMovies("upcoming"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBMovies("upcoming"), "UpcomingMovies"
         elif info == 'topratedmovies':
-            passListToSkin('TopRatedMovies', GetMovieDBMovies("top_rated"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBMovies("top_rated"), "TopRatedMovies"
         elif info == 'popularmovies':
-            passListToSkin('PopularMovies', GetMovieDBMovies("popular"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBMovies("popular"), "PopularMovies"
         elif info == 'airingtodaytvshows':
-            passListToSkin('AiringTodayTVShows', GetMovieDBTVShows("airing_today"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBTVShows("airing_today"), "AiringTodayTVShows"
         elif info == 'onairtvshows':
-            passListToSkin('OnAirTVShows', GetMovieDBTVShows("on_the_air"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBTVShows("on_the_air"), "OnAirTVShows"
         elif info == 'topratedtvshows':
-            passListToSkin('TopRatedTVShows', GetMovieDBTVShows("top_rated"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBTVShows("top_rated"), "TopRatedTVShows"
         elif info == 'populartvshows':
-            passListToSkin('PopularTVShows', GetMovieDBTVShows("popular"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetMovieDBTVShows("popular"), "PopularTVShows"
         elif info == 'similarmovies':
-            passListToSkin('SimilarMovies', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", ""):
                 MovieId = params.get("id", "")
             elif params["dbid"] and (int(params["dbid"]) > -1):
@@ -123,14 +113,12 @@ def StartInfoActions(infos, params):
             else:
                 MovieId = ""
             if MovieId:
-                passListToSkin('SimilarMovies', GetSimilarMovies(MovieId), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetSimilarMovies(MovieId), "SimilarMovies"
         elif info == 'studio':
-            passListToSkin('StudioInfo', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["studio"]:
                 CompanyId = SearchforCompany(params["studio"])
-                passListToSkin('StudioInfo', GetCompanyInfo(CompanyId), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetCompanyInfo(CompanyId), "StudioInfo"
         elif info == 'set':
-            passListToSkin('MovieSetItems', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["dbid"] and not "show" in str(params["type"]):
                 name = GetMovieSetName(params["dbid"])
                 if name:
@@ -138,21 +126,19 @@ def StartInfoActions(infos, params):
             if params["setid"]:
                 SetData, info = GetSetMovies(params["setid"])
                 if SetData:
-                    passListToSkin('MovieSetItems', SetData, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                    data = SetData, "MovieSetItems"
         elif info == 'movielists':
-            passListToSkin('MovieLists', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["dbid"]:
                 movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDB Id:" + str(movieid))
                 if movieid:
-                    passListToSkin('MovieLists', GetMovieLists(movieid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                    data = GetMovieLists(movieid), "MovieLists"
         elif info == 'keywords':
-            passListToSkin('Keywords', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["dbid"]:
                 movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDB Id:" + str(movieid))
                 if movieid:
-                    passListToSkin('Keywords', GetMovieKeywords(movieid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                    data = GetMovieKeywords(movieid), "Keywords"
         elif info == 'popularpeople':
             passListToSkin('PopularPeople', GetPopularActorList(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'extendedinfo':
@@ -179,19 +165,16 @@ def StartInfoActions(infos, params):
                 dialog = DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, tvshow=params["tvshow"], season=params["season"])
                 dialog.doModal()
         elif info == 'directormovies':
-            passListToSkin('DirectorMovies', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["director"]:
                 directorid = GetPersonID(params["director"])
                 if directorid:
                     passListToSkin('DirectorMovies', GetDirectorMovies(directorid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'writermovies':
-            passListToSkin('WriterMovies', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["writer"] and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
                 writerid = GetPersonID(params["writer"])
                 if writerid:
                     passListToSkin('WriterMovies', GetDirectorMovies(writerid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'similarmoviestrakt':
-            passListToSkin('SimilarMovies', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if (params.get("id", "") or params["dbid"]):
                 if params["dbid"]:
                     movieid = GetImdbIDFromDatabase("movie", params["dbid"])
@@ -199,7 +182,6 @@ def StartInfoActions(infos, params):
                     movieid = params.get("id", "")
                 passListToSkin('SimilarMovies', GetSimilarTrakt("movie", movieid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'similartvshowstrakt':
-            passListToSkin('SimilarTVShows', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if (params.get("id", "") or params["dbid"]):
                 if params["dbid"]:
                     if params["type"] == "episode":
@@ -218,28 +200,22 @@ def StartInfoActions(infos, params):
         elif info == 'trendingmovies':
             passListToSkin('TrendingMovies', GetTrendingMovies(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'similarartistsinlibrary':
-            passListToSkin('SimilarArtists', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("artist_mbid"):
                 passListToSkin('SimilarArtists', GetSimilarArtistsInLibrary(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'artistevents':
-            passListToSkin('ArtistEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("artist_mbid"):
                 passListToSkin('ArtistEvents', GetEvents(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubesearch':
             homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
-            passListToSkin('YoutubeSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", False):
                 passListToSkin('YoutubeSearch', GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubeplaylist':
-            passListToSkin('YoutubePlaylist', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", False):
                 passListToSkin('YoutubePlaylist', GetYoutubePlaylistVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'youtubeusersearch':
-            passListToSkin('YoutubeUserSearch', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params.get("id", ""):
                 passListToSkin('YoutubeUserSearch', GetYoutubeUserVideos(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'nearevents':
-            passListToSkin('NearEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             passListToSkin('NearEvents', GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'trackinfo':
             homewindow.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
@@ -247,7 +223,6 @@ def StartInfoActions(infos, params):
                 TrackInfo = GetTrackInfo(params["artistname"], params["trackname"])
                 homewindow.setProperty('%sSummary' % params.get("prefix", ""), TrackInfo["summary"])  # set properties
         elif info == 'venueevents':
-            passListToSkin('VenueEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             if params["location"]:
                 params["id"] = GetVenueID(params["location"])
             if params.get("id", ""):
@@ -255,7 +230,6 @@ def StartInfoActions(infos, params):
             else:
                 Notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
-            passListToSkin('TopArtistsNearEvents', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             artists = GetXBMCArtists()
             events = GetArtistNearEvents(artists["result"]["artists"][0:49])
             passListToSkin('TopArtistsNearEvents', events, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
@@ -272,11 +246,9 @@ def StartInfoActions(infos, params):
                     homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
             passListToSkin('Favourites', favourites, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'json':
-            passListToSkin('RSS', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             videos = GetYoutubeVideos(params["feed"], params.get("prefix", ""))
             passListToSkin('RSS', videos, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'similarlocal' and params["dbid"]:
-            passListToSkin('SimilarLocalMovies', None, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
             passListToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(params["dbid"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'iconpanel':
             passListToSkin('IconPanel', GetIconPanel(1), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
@@ -334,4 +306,7 @@ def StartInfoActions(infos, params):
                     Notify("Error", "No Trailer available")
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
+        if data:
+            data, prefix = data
+            passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
     return params["control"]
