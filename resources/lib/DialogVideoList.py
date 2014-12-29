@@ -84,6 +84,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.get_genre()
             self.update_content()
             self.update_list()
+        elif controlID == 5003:
+            result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
