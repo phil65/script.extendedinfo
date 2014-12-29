@@ -15,13 +15,6 @@ def StartInfoActions(infos, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
         params["artist_mbid"] = GetMusicBrainzIdFromNet(params["artistname"])
-    if "window" in params:
-        if params.get("window", "") == "currentdialog":
-            xbmc.sleep(300)
-            self.window = xbmcgui.Window(xbmcgui.getCurrentWindowDialogId())
-        elif params.get("window", "") == "current":
-            xbmc.sleep(300)
-            self.window = xbmcgui.Window(xbmcgui.getCurrentWindowId())
     prettyprint(params)
     prettyprint(infos)
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
