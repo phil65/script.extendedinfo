@@ -13,8 +13,17 @@ addon_name = addon.getAddonInfo('name')
 addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
-
-
+sorts = {"movie": {"Popularity": "popularity",
+                         "Release Date": "release_date",
+                         "Revenue": "revenue",
+                         "Release Date": "primary_release_date",
+                         "Original Title": "original_title",
+                         "Vote average": "vote_average",
+                         "Vote Count": "vote_count"},
+               "tv": {"Popularity": "popularity",
+                      "First Air Date": "first_air_date",
+                      "Vote average": "vote_average",
+                      "Vote Count": "vote_count"}}
 class DialogVideoList(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
@@ -72,21 +81,21 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.get_genre()
             self.update_content()
             self.update_list()
+        elif controlID == 5004:
+            if self.order == "asc":
+                self.order = "desc"
+            else:
+                self.order = "asc"
+            self.update_content()
+            self.update_list()
 
     def onFocus(self, controlID):
         pass
 
     def get_sort_type(self):
-        sort_list = {"Popularity": "popularity",
-                     "Release Date": "release_date",
-                     "Revenue": "revenue",
-                     "Release Date": "primary_release_date",
-                     "Original Title": "original_title",
-                     "Vote average": "vote_average",
-                     "Vote Count": "vote_count"}
         listitems = []
         sort_strings = []
-        for (key, value) in sort_list.iteritems():
+        for (key, value) in sorts[self.type].iteritems():
             listitems.append(key)
             sort_strings.append(value)
         index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
@@ -120,9 +129,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.old_items = []
         self.listitems, self.totalpages = self.fetch_data()
         self.listitems_2 = []
-        if self.page < self.totalpages:
-            self.page += 1
-            self.listitems_2, self.totalpages = self.fetch_data()
+        # if self.page < self.totalpages:
+        #     self.page += 1
+        #     self.listitems_2, self.totalpages = self.fetch_data()
         self.listitems = self.old_items + CreateListItems(self.listitems) + CreateListItems(self.listitems_2)
         # for item in (self.page - 1) * 2:
         #     xbmc.executebuiltin("Down")
