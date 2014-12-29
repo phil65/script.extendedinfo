@@ -183,7 +183,7 @@
                     <onleft>500</onleft>
                     <onback>500</onback>
                     <control type="button" id="5001">
-                        <label>Sort by:</label>
+                        <label>Sort by: $INFO[Window.Property(Sort_Label)]</label>
                         <width>400</width>
                         <height>110</height>
                         <textoffsetx>82</textoffsetx>
@@ -197,7 +197,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5004">
-                        <label>Order:</label>
+                        <label>Order: $INFO[Window.Property(Order_Label)]</label>
                         <width>400</width>
                         <height>110</height>
                         <textoffsetx>82</textoffsetx>

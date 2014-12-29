@@ -15,16 +15,17 @@ addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 sorts = {"movie": {"Popularity": "popularity",
-                         "Release Date": "release_date",
-                         "Revenue": "revenue",
-                         "Release Date": "primary_release_date",
-                         "Original Title": "original_title",
-                         "Vote average": "vote_average",
-                         "Vote Count": "vote_count"},
-               "tv": {"Popularity": "popularity",
-                      "First Air Date": "first_air_date",
-                      "Vote average": "vote_average",
-                      "Vote Count": "vote_count"}}
+                   "Release Date": "release_date",
+                   "Revenue": "revenue",
+                   "Release Date": "primary_release_date",
+                   "Original Title": "original_title",
+                   "Vote average": "vote_average",
+                   "Vote Count": "vote_count"},
+            "tv": {"Popularity": "popularity",
+                   "First Air Date": "first_air_date",
+                   "Vote average": "vote_average",
+                   "Vote Count": "vote_count"},
+     "favourite": {"Created at": "created_at"}}
 
 
 class DialogVideoList(xbmcgui.WindowXMLDialog):
@@ -41,6 +42,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.page = 1
         self.mode = kwargs.get("mode", None)
         self.sort = kwargs.get('sort', "release_date")
+        self.sort_label = kwargs.get('sort', "Release Date")
         self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', {})
         if self.listitem_list:
@@ -147,6 +149,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
         if index > -1:
             self.sort = sort_strings[index]
+            self.sort_label = listitems[index]
 
     def set_filter_url(self):
         self.filter_url = ""
@@ -221,6 +224,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("CurrentPage", str(self.page))
         self.window.setProperty("Type", self.type)
         self.window.setProperty("Filter_Label", self.filter_label)
+        self.window.setProperty("Sort_Label", self.sort_label)
+        if self.order == "asc":
+            self.window.setProperty("Order_Label", "Ascending")
+        else:
+            self.window.setProperty("Order_Label", "Descending")
 
     def fetch_data(self):
         if self.mode == "search":
