@@ -24,6 +24,8 @@ sorts = {"movie": {"Popularity": "popularity",
                       "First Air Date": "first_air_date",
                       "Vote average": "vote_average",
                       "Vote Count": "vote_count"}}
+
+
 class DialogVideoList(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
@@ -111,7 +113,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
 
     def get_genre(self):
-        response = GetMovieDBData("genre/movie/list?language=%s&" % (addon.getSetting("LanguageID")), 10)
+        response = GetMovieDBData("genre/%s/list?language=%s&" % (self.type, addon.getSetting("LanguageID")), 10)
         id_list = []
         label_list = []
         for item in response["genres"]:
