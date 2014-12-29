@@ -224,7 +224,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def fetch_data(self):
         if self.mode == "search":
-            url = "search/multi?query=%s&" % urllib.quote_plus(self.search_string)
+            url = "search/multi?query=%s&include_adult=true&" % urllib.quote_plus(self.search_string)
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
             url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
@@ -240,7 +240,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.set_filter_url()
             self.set_filter_label()
             sortby = self.sort + "." + self.order
-            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
+            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=true&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
         response = GetMovieDBData(url, 10)
         prettyprint(response)
         if self.mode == "search":

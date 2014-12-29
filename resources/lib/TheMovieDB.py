@@ -1014,7 +1014,7 @@ def GetDirectorMovies(person_id):
 def search_movie(medianame, year=''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))
     medianame = urllib.quote_plus(medianame.encode('utf8', 'ignore'))
-    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&" % (medianame, year, addon.getSetting("LanguageID")), 1)
+    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&include_adult=true&" % (medianame, year, addon.getSetting("LanguageID")), 1)
     tmdb_id = ''
     try:
         if response == "Empty":
