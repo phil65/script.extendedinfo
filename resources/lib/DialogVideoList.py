@@ -139,6 +139,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if index > -1:
             # return "with_genres=" + str(id_list[index])
             self.filters["with_genres"] = str(id_list[index])
+            self.page = 1
 
     def update_content(self, add=False):
         if add:
@@ -159,6 +160,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.getControl(500).addItems(self.listitems)
         self.window.setProperty("TotalPages", str(self.totalpages))
         self.window.setProperty("CurrentPage", str(self.page))
+        self.window.setProperty("Type", self.type)
+
     def fetch_data(self):
         if self.mode == "favorites":
             url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
