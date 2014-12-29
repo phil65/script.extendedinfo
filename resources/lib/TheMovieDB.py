@@ -559,11 +559,11 @@ def millify(n):
         return ""
 
 
-def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
+def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
-    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, seasonnumber, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
     prettyprint(response)
     videos = []
     backdrops = []
@@ -573,12 +573,18 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, seasonnumber):
     else:
         poster_path = ""
         poster_path_small = ""
+    if response["name"]:
+        Title = response["name"]
+    elif season_number == "0":
+        Title = "Specials"
+    else:
+        Title = "Season %s" % season_number
     season = {'SeasonDescription': response["overview"],
               'Plot': response["overview"],
               'TVShowTitle': tvshowname,
               'Thumb': poster_path_small,
               'Poster': poster_path,
-              'Title': response["name"],
+              'Title': Title,
               'ReleaseDate': response["air_date"],
               'AirDate': response["air_date"]}
     if "videos" in response:
