@@ -51,6 +51,16 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.close()
             youtube_thread = Get_Youtube_Vids_Thread(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
             youtube_thread.start()
+            cert_list = get_certification_list("tv")
+            for item in self.tvshow["certifications"]:
+                if item["iso_3166_1"] in cert_list:
+                    language = item["iso_3166_1"]
+                    rating = item["certification"]
+                    language_certs = cert_list[item["iso_3166_1"]]
+                    prettyprint(language_certs)
+                    hit = dictfind(language_certs, "certification", rating)
+                    if hit:
+                        item["meaning"] = hit["meaning"]
             if not "DBID" in self.tvshow["general"]:  # need to add comparing for tvshows
                 # Notify("download Poster")
                 poster_thread = Get_ListItems_Thread(Get_File, self.tvshow["general"]["Poster"])
@@ -78,10 +88,12 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         self.window.setProperty("type", "tvshow")
         self.getControl(1000).addItems(CreateListItems(self.tvshow["actors"], 0))
         xbmc.sleep(200)
+        prettyprint(self.tvshow["certifications"])
         self.getControl(150).addItems(CreateListItems(self.tvshow["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.tvshow["seasons"], 0))
         self.getControl(550).addItems(CreateListItems(self.tvshow["studios"], 0))
         self.getControl(1450).addItems(CreateListItems(self.tvshow["networks"], 0))
+        self.getControl(650).addItems(CreateListItems(self.tvshow["certifications"], 0))
         self.getControl(750).addItems(CreateListItems(self.tvshow["crew"], 0))
         self.getControl(850).addItems(CreateListItems(self.tvshow["genres"], 0))
         self.getControl(950).addItems(CreateListItems(self.tvshow["keywords"], 0))
