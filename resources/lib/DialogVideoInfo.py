@@ -86,6 +86,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             lists_thread.join()
             self.movie["lists"] = lists_thread.listitems
             sets_thread.join()
+            cert_list = get_certification_list("movie")
+            for item in self.movie["releases"]:
+                if item["iso_3166_1"] in cert_list:
+                    language = item["iso_3166_1"]
+                    certification = item["certification"]
+                    language_certs = cert_list[item["iso_3166_1"]]
+                    hit = dictfind(language_certs, "certification", certification)
+                    if hit:
+                        item["meaning"] = hit["meaning"]
             self.set_listitems = sets_thread.listitems
             self.setinfo = sets_thread.setinfo
             id_list = sets_thread.id_list
@@ -112,7 +121,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
         self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
         self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
-        prettyprint(self.movie["lists"])
         self.getControl(450).addItems(CreateListItems(self.movie["lists"], 0))
         self.getControl(550).addItems(CreateListItems(self.movie["studios"], 0))
         self.getControl(650).addItems(CreateListItems(self.movie["releases"], 0))
@@ -138,8 +146,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 450:
+                list_id = self.getControl(controlID).getSelectedItem().getProperty("id")
                 context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=["Add To Account Lists"])
                 context_menu.doModal()
+
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))

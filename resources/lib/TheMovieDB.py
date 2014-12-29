@@ -124,6 +124,9 @@ def get_account_info():
     # prettyprint(response)
     return response["id"]
 
+def get_certification_list(media_type):
+    response = GetMovieDBData("certification/%s/list?" % media_type, 999999)
+    return response["certifications"]
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
@@ -564,7 +567,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    prettyprint(response)
+    # prettyprint(response)
     videos = []
     backdrops = []
     if ("poster_path" in response) and (response["poster_path"]):
@@ -783,7 +786,7 @@ def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=2):
     response = GetMovieDBData("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
                               (str(tvshow_id), str(season), str(episode), addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
     videos = []
-    prettyprint(response)
+    # prettyprint(response)
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])

@@ -1930,7 +1930,7 @@
                     </control>
                     <control type="group">
                         <visible>IntegerGreaterThan(Container(650).NumItems,0)</visible>
-                        <height>300</height>
+                        <height>480</height>
                         <control type="label">
                             <posx>25</posx>
                             <posy>6</posy>
@@ -1959,6 +1959,14 @@
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(650).HasNext + Control.HasFocus(650)</visible>
+                        </control>
+                        <control type="textbox">
+                            <posx>25</posx>
+                            <posy>250</posy>
+                            <width>1850</width>
+                            <height>160</height>
+                            <font>font14</font>
+                            <label>$INFO[Container(650).ListItem.Property(meaning)]</label>
                         </control>
                         <control type="panel" id="650">
                             <animation type="WindowOpen" reversible="false">

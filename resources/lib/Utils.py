@@ -30,6 +30,12 @@ global windowstack
 windowstack = []
 
 
+def dictfind(lst, key, value):
+    for i, dic in enumerate(lst):
+        if dic[key] == value:
+            return dic
+    return ""
+
 class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
