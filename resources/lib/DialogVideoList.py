@@ -87,6 +87,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
+            self.filters["year"] = str(result)
+            self.page = 1
+            self.update_content()
+            self.update_list()
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
@@ -135,8 +139,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.filter_label = ""
         filter_list = []
         for (key, value) in self.filters.iteritems():
-            filter_list.append("%s: %s" % (key, urllib.quote_plus(value)))
-        self.filter_label = " - ".join(filter_list)
+            filter_list.append("%s: %s" % (key.replace("with_", ""), urllib.quote_plus(value)))
+        self.filter_label = "  -  ".join(filter_list)
 
 
     def get_genre(self):

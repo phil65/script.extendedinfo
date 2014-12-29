@@ -300,7 +300,7 @@
                 <aligny>center</aligny>
                 <width>1920</width>
                 <align>left</align>
-                <label>$INFO[Window.Property(Filter_Label),Active Filters: ]</label>
+                <label>$INFO[Window.Property(Filter_Label),[COLOR grey]Active Filters:[/COLOR] ]</label>
             </control>
         </control>
     </controls>
