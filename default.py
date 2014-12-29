@@ -1,7 +1,6 @@
 import sys
 import os
 import xbmc
-import xbmcgui
 import xbmcaddon
 import xbmcplugin
 
