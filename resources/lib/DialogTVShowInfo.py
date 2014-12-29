@@ -187,7 +187,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetFavItems("tv")
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(listitems=list_items, media_type="tv" )
+                self.OpenVideoList(listitems=list_items, media_type="tv")
             elif index == 1:
                 self.ShowRatedTVShows()
         elif controlID == 6003:
@@ -241,7 +241,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         list_items = GetRatedMedia("tv")
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'])
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'], type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
