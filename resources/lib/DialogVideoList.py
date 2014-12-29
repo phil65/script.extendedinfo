@@ -85,6 +85,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.get_genre()
             self.update_content()
             self.update_list()
+        elif controlID == 5006:
+            self.get_certification()
+            self.update_content()
+            self.update_list()
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
             self.filters["year"] = str(result)
@@ -139,7 +143,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.filter_label = ""
         filter_list = []
         for (key, value) in self.filters.iteritems():
-            filter_list.append("%s: %s" % (key.replace("with_", ""), urllib.quote_plus(value)))
+            filter_list.append("%s: %s" % (key.replace("with_", ""), value))
         self.filter_label = "  -  ".join(filter_list)
 
 
@@ -155,6 +159,28 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             # return "with_genres=" + str(id_list[index])
             self.filters["with_genres"] = str(id_list[index])
             self.page = 1
+
+    def get_certification(self):
+        response = get_certification_list(self.type)
+        country_list = []
+        for (key, value) in response.iteritems():
+            country_list.append(key)
+        index = xbmcgui.Dialog().select("Choose Country", country_list)
+        if index > -1:
+            cert_list = []
+            # for (key, value) in response[country_list[index]].iteritems():
+            #     cert_list.append(key)
+            country = country_list[index]
+            for item in response[country]:
+                label = "%s  -  %s" % (item["certification"], item["meaning"])
+                cert_list.append(label)
+            index = xbmcgui.Dialog().select("Choose Certification", cert_list)
+            if index > -1:
+            # return "with_genres=" + str(id_list[index])
+                cert = cert_list[index].split("  -  ")[0]
+                self.filters["certification_country"] = country
+                self.filters["certification"] = cert
+                self.page = 1
 
     def update_content(self, add=False):
         if add:
