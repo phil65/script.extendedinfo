@@ -43,9 +43,12 @@ def StartInfoActions(infos, params):
         elif info == 'artistdetails':
             ArtistDetails = GetArtistDetails(params["artistname"])
             passDictToSkin(ArtistDetails, params.get("prefix", ""))
-        elif info == 'musicvideos':
             if "audiodbid" in ArtistDetails:
                 data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
+        elif info == 'musicvideos':
+            pass
+            # if "audiodbid" in ArtistDetails:
+            #     data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'albuminfo':
             if params.get("id", ""):
                 AlbumDetails = GetAlbumDetails(params.get("id", ""))
