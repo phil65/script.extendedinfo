@@ -26,9 +26,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id')
         if not self.id:
-            name = kwargs.get('name')
-            name = name.decode("utf-8")
-            name = name.split(xbmc.getLocalizedString(20347))
+            name = kwargs.get('name').decode("utf-8").split(xbmc.getLocalizedString(20347))
             name = name[0].strip().encode("utf-8")
             names = name.split(" / ")
             if len(names) > 1:
@@ -38,10 +36,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 name = names[ret]
             self.id = GetPersonID(name)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.person = None
-        self.movie_roles = None
-        self.tvshow_roles = None
-        self.images = None
         if self.id:
             self.person = GetExtendedActorInfo(self.id)
             youtube_thread = Get_Youtube_Vids_Thread(self.person["general"]["name"], "", "relevance", 15)
@@ -51,7 +45,6 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 if "DBID" in item:
                     db_movies += 1
             self.person["general"]["DBMovies"] = str(db_movies)
-            self.person["general"]["TotalMovies"] = str(len(self.person["movie_roles"]))
             log("Blur image %s with radius %i" % (self.person["general"]["thumb"], 25))
             image, imagecolor = Filter_Image(self.person["general"]["thumb"], 25)
             self.person["general"]['ImageFilter'] = image
