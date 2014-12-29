@@ -868,12 +868,12 @@ def GetMovieLists(list_id):
 
 
 def GetMoviesWithKeyword(keyword_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&" % (str(keyword_id), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&include_adult=true&" % (str(keyword_id), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
 def GetMoviesWithGenre(genre_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&include_adult=true&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 def GetTVShowsWithGenre(genre_id):
@@ -886,7 +886,7 @@ def GetTVShowsFromNetwork(network_id):
 
 
 def GetMoviesWithCertification(country, rating):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&" %
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&include_adult=true&" %
                               (country, str(rating), addon.getSetting("LanguageID")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
