@@ -47,6 +47,7 @@
                     <height>896</height>
                     <control type="group" id="140">
                         <height>220</height>
+                        <visible>!IsEmpty(Window.Property(movie.Plot))</visible>
                         <control type="radiobutton" id="132">
                             <posx>0</posx>
                             <posy>0</posy>
