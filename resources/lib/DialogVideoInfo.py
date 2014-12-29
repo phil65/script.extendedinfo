@@ -241,10 +241,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if index == -1:
                 pass
             elif index == 0:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                list_items = GetFavItems("movies")
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(list_items, {})
+                AddToWindowStack(self)
+                self.close()
+                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, mode="favorites", color=self.movie["general"]['ImageColor'])
+                dialog.doModal()
             elif index == 1:
                 AddToWindowStack(self)
                 self.close()

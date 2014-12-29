@@ -128,8 +128,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.getControl(500).addItems(self.listitems)
 
     def fetch_data(self):
-        if self.mode == "lists":
-            url = "account/%s/lists?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
+        if self.mode == "favorites":
+            url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
