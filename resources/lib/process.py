@@ -227,13 +227,12 @@ def StartInfoActions(infos, params):
             if params["location"]:
                 params["id"] = GetVenueID(params["location"])
             if params.get("id", ""):
-                passListToSkin('VenueEvents', GetVenueEvents(params.get("id", "")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetVenueEvents(params.get("id", "")), "VenueEvents"
             else:
                 Notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = GetXBMCArtists()
-            events = GetArtistNearEvents(artists["result"]["artists"][0:49])
-            passListToSkin('TopArtistsNearEvents', events, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetArtistNearEvents(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
         elif info == 'channels':
             channels = create_channel_list()
       #      prettyprint(channels)
@@ -245,12 +244,11 @@ def StartInfoActions(infos, params):
                 homewindow.setProperty('favourite.count', str(len(favourites)))
                 if len(favourites) > 0:
                     homewindow.setProperty('favourite.1.name', favourites[-1]["Label"])
-            passListToSkin('Favourites', favourites, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = favourites, "Favourites"
         elif info == 'json':
-            videos = GetYoutubeVideos(params["feed"], params.get("prefix", ""))
-            passListToSkin('RSS', videos, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetYoutubeVideos(params["feed"]), "RSS"
         elif info == 'similarlocal' and params["dbid"]:
-            passListToSkin('SimilarLocalMovies', GetSimilarFromOwnLibrary(params["dbid"]), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetSimilarFromOwnLibrary(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             passListToSkin('IconPanel', GetIconPanel(1), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'weather':

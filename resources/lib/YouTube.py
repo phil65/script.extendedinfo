@@ -5,7 +5,7 @@ youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwG
 youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 
 
-def GetYoutubeVideos(jsonurl, prefix=""):
+def GetYoutubeVideos(jsonurl):
     results = []
     results = Get_JSON_response(jsonurl, 0.5)
     count = 1
