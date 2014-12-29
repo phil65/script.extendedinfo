@@ -49,6 +49,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        homewindow.setProperty("WindowColor", self.color)
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
         self.window.setProperty("WindowColor", self.color)

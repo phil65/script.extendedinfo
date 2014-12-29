@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
-    <onload condition="IsEmpty(Window.Property(WindowColor))">SetProperty(WindowColor,FFFFFFFF,home)</onload>
+    <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,FFFFFFFF,home)</onload>
     <!--
-    <onload condition="IsEmpty(Window.Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload>-->
+    <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload>-->
     <onunload>ClearProperty(WindowColor,home)</onunload>
     <defaultcontrol always="true">500</defaultcontrol>
     <controls>
         <control type="image">
-            <texture colordiffuse="$INFO[Window.Property(WindowColor)]">common/white.png</texture>
+            <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">common/white.png</texture>
             <width>1920</width>
             <height>1080</height>
             <animation effect="fade" end="100" time="560">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
         </control>
         <control type="image">
-            <texture colordiffuse="$INFO[Window.Property(WindowColor)]">diffuseoverlay.png</texture>
+            <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">diffuseoverlay.png</texture>
             <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation>
             <width>1920</width>
             <height>1080</height>
@@ -37,7 +37,7 @@
                 <width>330</width>
                 <height>432</height>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
-                <texture colordiffuse="$INFO[Window.Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                 <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
                 <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
                 <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
@@ -169,7 +169,7 @@
                     <posx>-92</posx>
                     <width>512</width>
                     <height>1080</height>
-                    <texture colordiffuse="$INFO[Window.Property(WindowColor)]">dialogs/context_middle.png</texture>
+                    <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">dialogs/context_middle.png</texture>
                 </control>
                 <control type="grouplist" id="9000">
                     <posy>40</posy>
@@ -190,8 +190,8 @@
                         <textoffsety>30</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
-                        <texturefocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                        <texturenofocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
@@ -204,8 +204,8 @@
                         <textoffsety>30</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
-                        <texturefocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                        <texturenofocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
@@ -230,8 +230,8 @@
                         <textoffsety>30</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
-                        <texturefocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                        <texturenofocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
@@ -244,8 +244,8 @@
                         <textoffsety>30</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
-                        <texturefocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                        <texturenofocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
@@ -258,8 +258,8 @@
                         <textoffsety>30</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
-                        <texturefocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
-                        <texturenofocus border="40" colordiffuse="$INFO[Window.Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
