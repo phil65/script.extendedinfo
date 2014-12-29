@@ -143,6 +143,11 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(listitems)
+            # xbmc.executebuiltin("ActivateWindow(busydialog)")
+            # filters = {"with_networks": self.getControl(controlID).getSelectedItem().getProperty("id")}
+            # listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            # xbmc.executebuiltin("Dialog.Close(busydialog)")
+            # self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = GetMoviesWithKeyword(self.getControl(controlID).getSelectedItem().getProperty("id"))
@@ -159,9 +164,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 1450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = GetTVShowsFromNetwork(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            filters = {"with_networks": self.getControl(controlID).getSelectedItem().getProperty("id")}
+            listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(listitems)
+            self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID == 6001:
             ratings = []
             for i in range(0, 21):
@@ -241,8 +247,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlID):
         pass
 
-    def OpenVideoList(self, listitems=None, filters={}):
+    def OpenVideoList(self, listitems=None, filters={}, media_type="movie"):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters, type=media_type)
         dialog.doModal()
