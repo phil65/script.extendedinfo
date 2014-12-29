@@ -9,6 +9,7 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 import threading
+import ContextMenu
 homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)
@@ -128,11 +129,17 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.join_omdb.start()
 
     def onAction(self, action):
+        action_id = action.getId()
+        focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+        elif action == xbmcgui.ACTION_CONTEXT_MENU:
+            if focusid == 450:
+                context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=["Add To Account Lists"])
+                context_menu.doModal()
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
