@@ -42,7 +42,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             youtube_thread.start()
             if not "DBID" in self.episode["general"]: # need to add comparing for episodes
                 # Notify("download Poster")
-                poster_thread = Get_ListItems_Thread(Get_File, self.episode["general"]["Thumb"])
+                poster_thread = Get_ListItems_Thread(Get_File, self.episode["general"]["Poster"])
                 poster_thread.start()
             if not "DBID" in self.episode["general"]:
                 poster_thread.join()

@@ -280,7 +280,7 @@ def HandleTMDBEpisodesResult(results):
         still_path = ""
         still_path_small = ""
         if "still_path" in item and item["still_path"]:
-            still_path = base_url + fanart_size + item['still_path']
+            still_path = base_url + "original" + item['still_path']
             still_path_small = base_url + "w300" + item['still_path']
         listitem = {'Art(poster)': still_path,
                     'Poster': still_path,
