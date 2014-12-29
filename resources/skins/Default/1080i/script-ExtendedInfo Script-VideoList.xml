@@ -293,6 +293,15 @@
                 <align>right</align>
                 <label>$INFO[Window.Property(CurrentPage)]$INFO[Window.Property(TotalPages), / ]</label>
             </control>
+            <control type="label">
+                <posx>20</posx>
+                <posy>0</posy>
+                <height>40</height>
+                <aligny>center</aligny>
+                <width>1920</width>
+                <align>left</align>
+                <label>$INFO[Window.Property(Filter_Label),Active Filters: ]</label>
+            </control>
         </control>
     </controls>
 </window>

@@ -128,8 +128,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.filter_url = ""
         filter_list = []
         for (key, value) in self.filters.iteritems():
-            filter_list.append("%s=%s" % (key, value))
+            filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
         self.filter_url = "&".join(filter_list)
+
+    def set_filter_label(self):
+        self.filter_label = ""
+        filter_list = []
+        for (key, value) in self.filters.iteritems():
+            filter_list.append("%s: %s" % (key, urllib.quote_plus(value)))
+        self.filter_label = " - ".join(filter_list)
 
 
     def get_genre(self):
@@ -165,6 +172,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("TotalPages", str(self.totalpages))
         self.window.setProperty("CurrentPage", str(self.page))
         self.window.setProperty("Type", self.type)
+        self.window.setProperty("Filter_Label", self.filter_label)
 
     def fetch_data(self):
         if self.mode == "favorites":
@@ -177,6 +185,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             url = "account/%s/rated/movies?language=%s&page=%i&%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, session_id_string)
         else:
             self.set_filter_url()
+            self.set_filter_label()
             sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
         response = GetMovieDBData(url, 10)
