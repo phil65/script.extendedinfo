@@ -165,6 +165,18 @@ def auth_request_token():
         return None
 
 
+def HandleTMDBMultiSearchResult(results=[]):
+    listitems = []
+    for item in results:
+        if item["media_type"] == "movie":
+            listitem = HandleTMDBMovieResult([item])[0]
+        elif item["media_type"] == "tv":
+            listitem = HandleTMDBTVShowResult([item])[0]
+        else:
+            listitem = HandleTMDBPeopleResult([item])[0]
+        listitems.append(listitem)
+    return listitems
+
 def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
     movies = []
     ids = []
@@ -203,6 +215,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
                     'OriginalTitle': fetch(movie, 'original_title'),
                     'ID': tmdb_id,
                     'Path': path,
+                    'media_type': "movie",
                     'Trailer': trailer,
                     'Rating': fetch(movie, 'vote_average'),
                     'credit_id': fetch(movie, 'credit_id'),
@@ -257,6 +270,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
                  'year': year,
+                 'media_type': "tv",
                  'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
                  'Votes': fetch(tv, 'vote_count'),
@@ -399,6 +413,7 @@ def HandleTMDBPeopleResult(results):
                      'character': fetch(person, 'character'),
                      'department': fetch(person, 'department'),
                      'job': fetch(person, 'job'),
+                     'media_type': "person",
                      'description': description,
                      'plot': description,
                      'id': str(person['id']),
@@ -469,6 +484,14 @@ def SearchforCompany(Company):
         return response["results"][0]["id"]
     except:
         log("could not find Company ID")
+        return ""
+
+def MultiSearch(String):
+    response = GetMovieDBData("search/multi?query=%s&" % urllib.quote_plus(String), 30)
+    try:
+        return response["results"]
+    except:
+        log("Error when searching")
         return ""
 
 

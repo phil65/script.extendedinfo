@@ -36,6 +36,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.listitem_list = kwargs.get('listitems')
         self.color = kwargs.get('color', "FFAAAAAA")
         self.type = kwargs.get('type', "movie")
+        self.search_string = kwargs.get('search_string', "")
         self.page = 1
         self.mode = kwargs.get("mode", None)
         self.sort = kwargs.get('sort', "release_date")
@@ -92,6 +93,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
             self.filters["year"] = str(result)
+            self.mode = "filter"
             self.page = 1
             self.update_content()
             self.update_list()
@@ -107,7 +109,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.page = 1
             self.update_content()
             self.update_list()
-
+        elif controlID == 6000:
+            result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+            if result and result > -1:
+                self.search_string = result
+                self.filters = {}
+                self.mode = "search"
+                self.page = 1
+                self.update_content()
+                self.update_list()
 
     def onFocus(self, controlID):
         if controlID == 600:
@@ -158,6 +168,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if index > -1:
             # return "with_genres=" + str(id_list[index])
             self.filters["with_genres"] = str(id_list[index])
+            self.mode = "filter"
             self.page = 1
 
     def get_certification(self):
@@ -181,6 +192,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.filters["certification_country"] = country
                 self.filters["certification"] = cert
                 self.page = 1
+                self.mode = "filter"
 
     def update_content(self, add=False):
         if add:
@@ -205,7 +217,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("Filter_Label", self.filter_label)
 
     def fetch_data(self):
-        if self.mode == "favorites":
+        if self.mode == "search":
+            url = "search/multi?query=%s&" % urllib.quote_plus(self.search_string)
+            self.filter_label = "Search for '%s'" % self.search_string
+        elif self.mode == "favorites":
             url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
@@ -213,14 +228,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             else:
                 session_id_string = "guest_session_id=" + get_guest_session_id()
             url = "account/%s/rated/movies?language=%s&page=%i&%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, session_id_string)
+            self.filter_label = "Rated Movies"
         else:
             self.set_filter_url()
             self.set_filter_label()
             sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
         response = GetMovieDBData(url, 10)
-    #    prettyprint(response)
-        if self.type == "movie":
+        prettyprint(response)
+        if self.mode == "search":
+            return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"]
+        elif self.type == "movie":
             return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"]
         else:
             return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"]

@@ -278,6 +278,20 @@
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
                     </control>
+                    <control type="button" id="6000">
+                        <label>Multi Search</label>
+                        <width>400</width>
+                        <height>110</height>
+                        <textoffsetx>82</textoffsetx>
+                        <textoffsety>30</textoffsety>
+                        <textwidth>315</textwidth>
+                        <aligny>top</aligny>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <font>Font_Reg29</font>
+                        <textcolor>grey2</textcolor>
+                        <focusedcolor>white6</focusedcolor>
+                    </control>
                 </control>
             </control>
         </control>
