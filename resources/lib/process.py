@@ -140,7 +140,7 @@ def StartInfoActions(infos, params):
                 if movieid:
                     data = GetMovieKeywords(movieid), "Keywords"
         elif info == 'popularpeople':
-            passListToSkin('PopularPeople', GetPopularActorList(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetPopularActorList(), "PopularPeople"
         elif info == 'extendedinfo':
             from DialogVideoInfo import DialogVideoInfo
             if params.get("handle", ""):
@@ -168,19 +168,19 @@ def StartInfoActions(infos, params):
             if params["director"]:
                 directorid = GetPersonID(params["director"])
                 if directorid:
-                    passListToSkin('DirectorMovies', GetDirectorMovies(directorid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                    data = GetDirectorMovies(directorid), "DirectorMovies"
         elif info == 'writermovies':
             if params["writer"] and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
                 writerid = GetPersonID(params["writer"])
                 if writerid:
-                    passListToSkin('WriterMovies', GetDirectorMovies(writerid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                    data = GetDirectorMovies(writerid), "WriterMovies"
         elif info == 'similarmoviestrakt':
             if (params.get("id", "") or params["dbid"]):
                 if params["dbid"]:
                     movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 else:
                     movieid = params.get("id", "")
-                passListToSkin('SimilarMovies', GetSimilarTrakt("movie", movieid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetSimilarTrakt("movie", movieid), "SimilarMovies"
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
                 if params["dbid"]:
@@ -190,15 +190,15 @@ def StartInfoActions(infos, params):
                         tvshowid = GetImdbIDFromDatabase("tvshow", params["dbid"])
                 else:
                     tvshowid = params.get("id", "")
-                passListToSkin('SimilarTVShows', GetSimilarTrakt("show", tvshowid), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+                data = GetSimilarTrakt("show", tvshowid), "SimilarTVShows"
         elif info == 'airingshows':
-            passListToSkin('AiringShows', GetTraktCalendarShows("shows"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetTraktCalendarShows("shows"), "AiringShows"
         elif info == 'premiereshows':
-            passListToSkin('PremiereShows', GetTraktCalendarShows("premieres"), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetTraktCalendarShows("premieres"), "PremiereShows"
         elif info == 'trendingshows':
-            passListToSkin('TrendingShows', GetTrendingShows(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetTrendingShows(), "TrendingShows"
         elif info == 'trendingmovies':
-            passListToSkin('TrendingMovies', GetTrendingMovies(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetTrendingMovies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
                 passListToSkin('SimilarArtists', GetSimilarArtistsInLibrary(params.get("artist_mbid")), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
