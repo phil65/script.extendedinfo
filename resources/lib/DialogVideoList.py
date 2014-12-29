@@ -49,8 +49,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("WindowColor", self.color)
+        self.windowid = xbmcgui.getCurrentWindowDialogId()
+        self.window = xbmcgui.Window(self.windowid)
+        self.window.setProperty("WindowColor", self.color)
         self.update_list()
         xbmc.sleep(200)
         xbmc.executebuiltin("SetFocus(500)")
@@ -156,7 +157,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def update_list(self):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
-
+        self.window.setProperty("TotalPages", str(self.totalpages))
+        self.window.setProperty("CurrentPage", str(self.page))
     def fetch_data(self):
         if self.mode == "favorites":
             url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
