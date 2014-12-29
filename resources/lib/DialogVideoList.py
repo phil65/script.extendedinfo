@@ -34,7 +34,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.listitem_list = kwargs.get('listitems')
+        self.listitem_list = kwargs.get('listitems', None)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.type = kwargs.get('type', "movie")
         self.search_string = kwargs.get('search_string', "")
@@ -228,6 +228,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
             url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
+            self.filter_label = "Starred Movies"
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
