@@ -896,7 +896,7 @@ def GetImdbIDFromDatabase(type, dbid):
             '{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
-        if "tvshowdetails" in json_response["result"]:
+        if "result" in json_response and "tvshowdetails" in json_response["result"]:
             return json_response['result']['tvshowdetails']['imdbnumber']
         else:
             return []
