@@ -2677,7 +2677,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <label>$INFO[ListItem.Episode,[B],:[/B]] $INFO[ListItem.Label]</label>
+                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]</label>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -2716,7 +2716,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <label>$INFO[ListItem.Episode,[B],:[/B]] $INFO[ListItem.Label]</label>
+                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]</label>
                                     </control>
                                 </control>
                             </focusedlayout>
