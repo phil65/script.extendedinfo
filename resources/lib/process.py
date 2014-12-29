@@ -284,6 +284,7 @@ def StartInfoActions(infos, params):
                 PlayTrailer(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
+            xbmc.sleep(500)
             if params.get("id", ""):
                 MovieId = params.get("id", "")
             elif params["dbid"] and (int(params["dbid"]) > -1):
