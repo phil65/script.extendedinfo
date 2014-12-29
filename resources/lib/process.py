@@ -250,9 +250,9 @@ def StartInfoActions(infos, params):
         elif info == 'similarlocal' and params["dbid"]:
             data = GetSimilarFromOwnLibrary(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
-            passListToSkin('IconPanel', GetIconPanel(1), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetIconPanel(1), "IconPanel"
         elif info == 'weather':
-            passListToSkin('WeatherImages', GetWeatherImages(), params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetWeatherImages(), "WeatherImages"
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             SetMusicBrainzIDsForAllArtists(False, False)
         elif info == 'setfocus':
@@ -261,8 +261,7 @@ def StartInfoActions(infos, params):
         elif info == 'playliststats':
             GetPlaylistStats(params.get("id", ""))
         elif info == "sortletters":
-            listitems = GetSortLetters(params["path"], params.get("id", ""))
-            passListToSkin('SortLetters', listitems, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            data = GetSortLetters(params["path"], params.get("id", "")), "SortLetters"
         elif info == 'slideshow':
             windowid = xbmcgui.getCurrentWindowId()
             Window = xbmcgui.Window(windowid)
