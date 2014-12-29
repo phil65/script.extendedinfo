@@ -229,7 +229,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.OpenVideoList(list_items, {})
             elif index == 1:
-                self.ShowRatedMovies()
+                AddToWindowStack(self)
+                self.close()
+                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, mode="rating", color=self.movie["general"]['ImageColor'])
+                dialog.doModal()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"], 0)

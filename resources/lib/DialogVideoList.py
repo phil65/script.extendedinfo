@@ -25,6 +25,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.color = kwargs.get('color', "FFAAAAAA")
         self.type = kwargs.get('type', "movie")
         self.page = 1
+        self.mode = kwargs.get("mode", None)
         self.sort = kwargs.get('sort', "release_date")
         self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', {})
@@ -126,11 +127,20 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
 
-
     def fetch_data(self):
-        self.set_filter_url()
-        sortby = self.sort + "." + self.order
-        response = GetMovieDBData("discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page), 10)
+        if self.mode == "lists":
+            url = "account/%s/lists?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
+        elif self.mode == "rating":
+            if addon.getSetting("tmdb_username"):
+                session_id_string = "session_id=" + get_session_id()
+            else:
+                session_id_string = "guest_session_id=" + get_guest_session_id()
+            url = "account/%s/rated/movies?language=%s&page=%i&%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, session_id_string)
+        else:
+            self.set_filter_url()
+            sortby = self.sort + "." + self.order
+            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
+        response = GetMovieDBData(url, 10)
     #    prettyprint(response)
         if self.type == "movie":
             return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"]
