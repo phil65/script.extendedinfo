@@ -90,6 +90,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.order = "asc"
             self.update_content()
             self.update_list()
+        elif controlID == 5005:
+            self.filters = {}
+            self.update_content()
+            self.update_list()
+
 
     def onFocus(self, controlID):
         pass
