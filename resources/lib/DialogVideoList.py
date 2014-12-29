@@ -93,6 +93,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5005:
             self.filters = {}
+            self.page = 1
             self.update_content()
             self.update_list()
 
