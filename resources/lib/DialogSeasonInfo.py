@@ -83,10 +83,11 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
-            actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+            credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [2000]:
             episode = self.getControl(controlID).getSelectedItem().getProperty("episode")

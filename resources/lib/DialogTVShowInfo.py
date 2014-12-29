@@ -44,7 +44,6 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = search_movie(kwargs.get('name'))
         else:
             self.tmdb_id = ""
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.tmdb_id:
             self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
@@ -102,10 +101,11 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
-            actorid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+            credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actorid)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [150]:
             tmdb_id = self.getControl(controlID).getSelectedItem().getProperty("id")
