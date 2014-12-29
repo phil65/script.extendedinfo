@@ -231,10 +231,11 @@ def GetPlaylistStats(path):
             inprogress = 0
             numitems = json_response["result"]["limits"]["total"]
             for item in json_response["result"]["files"]:
-                if item["playcount"] > 0:
-                    played += 1
-                if item["resume"]["position"] > 0:
-                    inprogress += 1
+                if "playcount" in item:
+                    if item["playcount"] > 0:
+                        played += 1
+                    if item["resume"]["position"] > 0:
+                        inprogress += 1
             homewindow.setProperty('PlaylistWatched', str(played))
             homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
             homewindow.setProperty('PlaylistInProgress', str(inprogress))
