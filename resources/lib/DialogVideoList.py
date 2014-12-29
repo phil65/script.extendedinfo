@@ -97,7 +97,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
 
     def onFocus(self, controlID):
-        pass
+        if controlID == 600:
+            if self.page < self.totalpages:
+                self.page += 1
+                self.update_content()
+                self.update_list()
+        if controlID == 700:
+            if self.page > 1:
+                self.page -= 1
+                self.update_content()
+                self.update_list()
+
 
     def get_sort_type(self):
         listitems = []
