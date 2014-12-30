@@ -40,6 +40,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.type = kwargs.get('type', "movie")
         self.search_string = kwargs.get('search_string', "")
         self.page = 1
+        self.totalpages = 1
         self.mode = kwargs.get("mode", None)
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort', "Popularity")
@@ -255,7 +256,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=true&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
         response = GetMovieDBData(url, 10)
-        prettyprint(response)
         if self.mode == "search":
             return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"]
         elif self.type == "movie":
