@@ -42,7 +42,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.page = 1
         self.mode = kwargs.get("mode", None)
         self.sort = kwargs.get('sort', "popularity")
-        self.sort_label = kwargs.get('sort', "Popularity Date")
+        self.sort_label = kwargs.get('sort', "Popularity")
         self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', {})
         if self.listitem_list:
