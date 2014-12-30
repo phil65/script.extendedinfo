@@ -273,6 +273,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'media_type': "tv",
                  'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
+                 'User_Rating': str(fetch(tv, 'rating')),
                  'Votes': fetch(tv, 'vote_count'),
                  'Status': fetch(tv, 'status'),
                  'homepage': fetch(tv, 'homepage'),
