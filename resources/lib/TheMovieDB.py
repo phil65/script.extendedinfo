@@ -323,6 +323,11 @@ def HandleTMDBMiscResult(results):
         if ("poster_path" in item) and (item["poster_path"]):
             poster_path = base_url + poster_size + item['poster_path']
             small_poster_path = base_url + "w342" + item["poster_path"]
+        release_date = fetch(item, 'release_date')
+        if release_date:
+            year = release_date[:4]
+        else:
+            year = ""
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
@@ -330,7 +335,8 @@ def HandleTMDBMiscResult(results):
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
-                    'release_date': fetch(item, 'release_date'),
+                    'release_date': release_date,
+                    'year': year,
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),
                     'content': fetch(item, 'content'),

@@ -214,7 +214,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
             certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
             filters = {"certification_country": self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1"),
-                       "certification": self.getControl(controlID).getSelectedItem().getProperty("certification")}
+                       "certification": self.getControl(controlID).getSelectedItem().getProperty("certification"),
+                       "year": self.getControl(controlID).getSelectedItem().getProperty("year")}
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(filters=filters)
         elif controlID == 450:
