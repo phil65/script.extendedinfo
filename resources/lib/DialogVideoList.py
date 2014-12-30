@@ -231,22 +231,24 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.window.setProperty("Order_Label", "Descending")
 
     def fetch_data(self):
+        temp= "movies"
+        temp2 = "movies"
+        if self.type == "tv":
+            temp = "tv"
+            temp2 = "TV Shows"
         if self.mode == "search":
             url = "search/multi?query=%s&include_adult=true&" % urllib.quote_plus(self.search_string)
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
-            temp= "movies"
-            if self.type == "tv":
-                temp = "tv"
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
-            self.filter_label = "Starred Movies"
+            self.filter_label = "Starred " + temp2
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
             else:
                 session_id_string = "guest_session_id=" + get_guest_session_id()
             url = "account/%s/rated/movies?language=%s&page=%i&%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, session_id_string)
-            self.filter_label = "Rated Movies"
+            self.filter_label = "Rated " + temp2
         else:
             self.set_filter_url()
             self.set_filter_label()
