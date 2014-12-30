@@ -235,7 +235,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             url = "search/multi?query=%s&include_adult=true&" % urllib.quote_plus(self.search_string)
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
-            url = "account/%s/favorite/movies?language=%s&page=%i&session_id=%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, get_session_id())
+            temp= "movies"
+            if self.type == "tv":
+                temp = "tv"
+            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
             self.filter_label = "Starred Movies"
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):

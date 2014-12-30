@@ -142,7 +142,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(listitems)
+            self.OpenVideoList(listitems=listitems)
             # xbmc.executebuiltin("ActivateWindow(busydialog)")
             # filters = {"with_networks": self.getControl(controlID).getSelectedItem().getProperty("id")}
             # listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
@@ -152,7 +152,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = GetMoviesWithKeyword(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(listitems)
+            self.OpenVideoList(listitems=listitems)
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
@@ -184,10 +184,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             if index == -1:
                 pass
             elif index == 0:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                list_items = GetFavItems("tv")
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(listitems=list_items, media_type="tv")
+                self.OpenVideoList(media_type="tv", mode="favorites")
             elif index == 1:
                 self.ShowRatedTVShows()
         elif controlID == 6003:
@@ -241,15 +238,15 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         list_items = GetRatedMedia("tv")
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'], type="tv")
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.tvshow["general"]['ImageColor'], media_type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
     def onFocus(self, controlID):
         pass
 
-    def OpenVideoList(self, listitems=None, filters={}, media_type="movie"):
+    def OpenVideoList(self, listitems=None, filters={}, media_type="movie", mode="filter"):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters, type=media_type)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters, type=media_type, mode=mode)
         dialog.doModal()
