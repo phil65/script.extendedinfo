@@ -310,7 +310,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             temp = "tv"
             temp2 = "TV Shows"
         if self.mode == "search":
-            url = "search/multi?query=%s&page=%i&include_adult=true&" % (urllib.quote_plus(self.search_string), self.page)
+            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, addon.getSetting("include_adults"))
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
@@ -326,7 +326,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.set_filter_url()
             self.set_filter_label()
             sortby = self.sort + "." + self.order
-            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=true&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page)
+            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
         response = GetMovieDBData(url, 10)
         if self.mode == "search":
             return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"]

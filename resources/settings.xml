@@ -2,10 +2,11 @@
 <settings>
   <category label="General Settings">
     <setting type="sep"/>
-<!--       <setting label="30023" type="labelenum" values="IMDb|themoviedb.org" id="titlesource" default="IMDb"/>
- -->  <setting label="Language for MovieDB requests" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="LanguageID" default="en"/>
+  <setting label="Language for MovieDB requests" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="LanguageID" default="en"/>
       <setting label="TMDB Username" type="text" id="tmdb_username" />
       <setting label="TMDB Password" type="text" id="tmdb_password" option="hidden"/>
+<!--       <setting label="Include Adult Movies" type="bool" id="include_adults"/>
+ -->      <setting label="Include Adult Movies" type="labelenum" values="true|false" id="include_adults" default="false"/>
       <setting label="Open InfoDialog by default" type="bool" id="infodialog_onclick"/>
       <setting label="Debug Mode" type="bool" id="debug_mode"/>
       <setting type="sep"/>

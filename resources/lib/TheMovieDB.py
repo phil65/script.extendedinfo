@@ -511,7 +511,7 @@ def GetPersonID(person):
     #     selection = xbmcgui.Dialog().select("Select Actor", personlist)
     # else:
     person = persons[0]
-    response = GetMovieDBData("search/person?query=%s&include_adult=true&" % urllib.quote_plus(person), 30)
+    response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (urllib.quote_plus(person), addon.getSetting("include_adults")), 30)
     if response and "results" in response:
         if len(response["results"]) > 1:
             names = []
@@ -527,7 +527,7 @@ def GetPersonID(person):
         return ""
 
 def GetKeywordID(keyword):
-    response = GetMovieDBData("search/keyword?query=%s&include_adult=true&" % urllib.quote_plus(keyword), 30)
+    response = GetMovieDBData("search/keyword?query=%s&include_adult=%s&" % (urllib.quote_plus(keyword), addon.getSetting("include_adults")), 30)
     if response and "results" in response:
         if len(response["results"]) > 1:
             names = []
@@ -899,12 +899,12 @@ def GetMovieLists(list_id):
 
 
 def GetMoviesWithKeyword(keyword_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&include_adult=true&" % (str(keyword_id), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&include_adult=%s&" % (str(keyword_id), addon.getSetting("LanguageID"), addon.getSetting("include_adults")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
 def GetMoviesWithGenre(genre_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&include_adult=true&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&include_adult=%s&" % (str(genre_id), addon.getSetting("LanguageID"), addon.getSetting("include_adults")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 def GetTVShowsWithGenre(genre_id):
@@ -917,8 +917,8 @@ def GetTVShowsFromNetwork(network_id):
 
 
 def GetMoviesWithCertification(country, rating):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&include_adult=true&" %
-                              (country, str(rating), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&include_adult=%s&" %
+                              (country, str(rating), addon.getSetting("LanguageID"), addon.getSetting("include_adults")), 30)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
@@ -1045,7 +1045,7 @@ def GetDirectorMovies(person_id):
 def search_movie(medianame, year=''):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))
     medianame = urllib.quote_plus(medianame.encode('utf8', 'ignore'))
-    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&include_adult=true&" % (medianame, year, addon.getSetting("LanguageID")), 1)
+    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&include_adult=%s&" % (medianame, year, addon.getSetting("LanguageID"), addon.getSetting("include_adults")), 1)
     tmdb_id = ''
     try:
         if response == "Empty":
