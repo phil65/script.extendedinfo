@@ -512,9 +512,17 @@ def GetPersonID(person):
     # else:
     person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=true&" % urllib.quote_plus(person), 30)
-    try:
-        return response["results"][0]["id"]
-    except:
+    if response and "results" in response:
+        if len(response["results"]) > 1:
+            names = []
+            for item in response["results"]:
+                names.append(item["name"])
+            selection = xbmcgui.Dialog().select("Choose Option", names)
+            if selection > -1:
+                return response["results"][selection]["id"]
+        else:
+            return response["results"][0]["id"]
+    else:
         log("could not find Person ID")
         return ""
 
