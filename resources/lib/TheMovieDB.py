@@ -519,16 +519,18 @@ def GetPersonID(person):
         return ""
 
 def GetKeywordID(keyword):
-    # if len(keywords) > 1:
-    #     keywordlist = []
-    #     for item in keywords:
-    #         keywordlist.append(item["name"])
-    #     selection = xbmcgui.Dialog().select("Select Actor", keywordlist)
-    # else:
     response = GetMovieDBData("search/keyword?query=%s&include_adult=true&" % urllib.quote_plus(keyword), 30)
-    try:
-        return response["results"][0]["id"]
-    except:
+    if response and "results" in response:
+        if len(response["results"]) > 1:
+            names = []
+            for item in response["results"]:
+                names.append(item["name"])
+            selection = xbmcgui.Dialog().select("Choose Option", names)
+            if selection > -1:
+                return response["results"][selection]["id"]
+        else:
+            return response["results"][0]["id"]
+    else:
         log("could not find Keyword ID")
         return ""
 
