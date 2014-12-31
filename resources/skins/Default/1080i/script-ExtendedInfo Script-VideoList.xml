@@ -195,8 +195,8 @@
                         <label>Sort by: $INFO[Window.Property(Sort_Label)]</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -209,8 +209,8 @@
                         <label>Order: $INFO[Window.Property(Order_Label)]</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -223,8 +223,8 @@
                         <label>Filters</label>
                         <width>400</width>
                         <height>70</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <font>Font_Reg29</font>
@@ -235,8 +235,8 @@
                         <label>Genre</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -249,8 +249,8 @@
                         <label>Release Year</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -263,8 +263,8 @@
                         <label>Certification</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -277,8 +277,8 @@
                         <label>Clear Filters</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
@@ -291,8 +291,8 @@
                         <label>Multi Search</label>
                         <width>400</width>
                         <height>110</height>
-                        <textoffsetx>82</textoffsetx>
-                        <textoffsety>30</textoffsety>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
