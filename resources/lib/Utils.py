@@ -506,16 +506,16 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     now = time.time()
     local_items = []
     remote_items = []
-    for onlineitem in onlinelist:
+    for online_item in onlinelist:
         found = False
-        if onlineitem["Title"].lower() in title_list:
-            index = title_list.index(onlineitem["Title"].lower())
+        if online_item["Title"].lower() in title_list:
+            index = title_list.index(online_item["Title"].lower())
             found = True
-            # Notify("found title " + onlineitem["Title"])
-        elif onlineitem["OriginalTitle"].lower() in originaltitle_list:
-            index = originaltitle_list.index(onlineitem["OriginalTitle"].lower())
+            # Notify("found title " + online_item["Title"])
+        elif online_item["OriginalTitle"].lower() in originaltitle_list:
+            index = originaltitle_list.index(online_item["OriginalTitle"].lower())
             found = True
-            # Notify("found originaltitle_list " + onlineitem["Title"])
+            # Notify("found originaltitle_list " + online_item["Title"])
         if found:
             # prettyprint(id_list)
             # log(str(index))
@@ -523,43 +523,49 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
-            if "moviedetails" in json_response["result"] and "Premiered" in onlineitem:
-                response = json_response['result']['moviedetails']
-                if (response['resume']['position'] and response['resume']['total']) > 0:
+            if "moviedetails" in json_response["result"] and "Premiered" in online_item:
+                local_item = json_response['result']['moviedetails']
+                try:
+                    diff = abs(local_item["year"] - int(online_item["Year"]))
+                    if diff > 1:
+                        break
+                except:
+                    pass
+                if (local_item['resume']['position'] and local_item['resume']['total']) > 0:
                     resume = "true"
-                    played = '%s' % int((float(response['resume']['position']) / float(response['resume']['total'])) * 100)
+                    played = '%s' % int((float(local_item['resume']['position']) / float(local_item['resume']['total'])) * 100)
                 else:
                     resume = "false"
                     played = '0'
-                streaminfo = media_streamdetails(response['file'].encode('utf-8').lower(), response['streamdetails'])
-                onlineitem["Play"] = response["movieid"]
-                onlineitem["DBID"] = response["movieid"]
-                onlineitem["Path"] = response['file']
-                onlineitem["PercentPlayed"] = played
-                onlineitem["Resume"] = resume
-                onlineitem["Path"] = response['file']
-                onlineitem["FilenameAndPath"] = response['file']
-                onlineitem["Writer"] = " / ".join(response['writer'])
-                onlineitem["Logo"] = response['art'].get("clearlogo", "")
-                onlineitem["DiscArt"] = response['art'].get("discart", "")
-                onlineitem["Banner"] = response['art'].get("banner", "")
-                onlineitem["Poster"] = response['art'].get("poster", "")
-                onlineitem["Thumb"] = response['art'].get("poster", "")
-                onlineitem.update(streaminfo)
-                audio = response['streamdetails']['audio']
-                subtitles = response['streamdetails']['subtitle']
+                streaminfo = media_streamdetails(local_item['file'].encode('utf-8').lower(), local_item['streamdetails'])
+                online_item["Play"] = local_item["movieid"]
+                online_item["DBID"] = local_item["movieid"]
+                online_item["Path"] = local_item['file']
+                online_item["PercentPlayed"] = played
+                online_item["Resume"] = resume
+                online_item["Path"] = local_item['file']
+                online_item["FilenameAndPath"] = local_item['file']
+                online_item["Writer"] = " / ".join(local_item['writer'])
+                online_item["Logo"] = local_item['art'].get("clearlogo", "")
+                online_item["DiscArt"] = local_item['art'].get("discart", "")
+                online_item["Banner"] = local_item['art'].get("banner", "")
+                online_item["Poster"] = local_item['art'].get("poster", "")
+                online_item["Thumb"] = local_item['art'].get("poster", "")
+                online_item.update(streaminfo)
+                audio = local_item['streamdetails']['audio']
+                subtitles = local_item['streamdetails']['subtitle']
                 for i in range(1, 20):
-                    onlineitem['AudioLanguage.%d' % i] = ""
-                    onlineitem['SubtitleLanguage.%d' % i] = ""
+                    online_item['AudioLanguage.%d' % i] = ""
+                    online_item['SubtitleLanguage.%d' % i] = ""
                 count = 1
                 streams = []
                 for item in audio:
                     language = item['language']
                     if language not in streams and language != "und":
                         streams.append(language)
-                        onlineitem['AudioLanguage.%d' % count] = language
-                        onlineitem['AudioCodec.%d' % count] = item['codec']
-                        onlineitem['AudioChannels.%d' % count] = str(item['channels'])
+                        online_item['AudioLanguage.%d' % count] = language
+                        online_item['AudioCodec.%d' % count] = item['codec']
+                        online_item['AudioChannels.%d' % count] = str(item['channels'])
                         count += 1
                 count = 1
                 subs = []
@@ -567,16 +573,16 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                     language = item['language']
                     if language not in subs and language != "und":
                         subs.append(language)
-                        onlineitem['SubtitleLanguage.%d' % count] = language
+                        online_item['SubtitleLanguage.%d' % count] = language
                         count += 1
-                onlineitem['SubtitleLanguage'] = " / ".join(subs)
-                onlineitem['AudioLanguage'] = " / ".join(streams)
+                online_item['SubtitleLanguage'] = " / ".join(subs)
+                online_item['AudioLanguage'] = " / ".join(streams)
                 if library_first:
-                    local_items.append(onlineitem)
+                    local_items.append(online_item)
                 else:
-                    remote_items.append(onlineitem)
+                    remote_items.append(online_item)
         else:
-            remote_items.append(onlineitem)
+            remote_items.append(online_item)
     log("compare time: " + str(now - time.time()))
     if sortkey:
         return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
@@ -598,19 +604,19 @@ def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
 
 def CompareAlbumWithLibrary(onlinelist):
     locallist = GetXBMCAlbums()
-    for onlineitem in onlinelist:
+    for online_item in onlinelist:
         for localitem in locallist:
-            if onlineitem["name"] == localitem["title"]:
+            if online_item["name"] == localitem["title"]:
                 json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_query = simplejson.loads(json_query)
                 album = json_query["result"]["albumdetails"]
-                onlineitem.update({"DBID": album["albumid"]})
-                onlineitem.update(
+                online_item.update({"DBID": album["albumid"]})
+                online_item.update(
                     {"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
                 if album["thumbnail"]:
-                    onlineitem.update({"thumb": album["thumbnail"]})
-                    onlineitem.update({"Icon": album["thumbnail"]})
+                    online_item.update({"thumb": album["thumbnail"]})
+                    online_item.update({"Icon": album["thumbnail"]})
                 break
     return onlinelist
 
