@@ -97,7 +97,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
-            self.add_filter("year", str(result))
+            if self.type == "tv":
+                self.add_filter("first_air_date_year", str(result))
+            else:
+                self.add_filter("year", str(result))
             self.mode = "filter"
             self.page = 1
             self.update_content()
