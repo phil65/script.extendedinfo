@@ -155,33 +155,28 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def add_filter(self, key, value):
         if key in self.filters and self.filters[key]:
-            self.filters[key] = self.filters[key] + "," + str(value)
+            dialog = xbmcgui.Dialog()
+            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
+            if ret:
+                self.filters[key] = self.filters[key] + "," + str(value)
+            else:
+                self.filters[key] = self.filters[key] + "|" + str(value)
         else:
             self.filters[key] = str(value)
 
 
     def set_filter_url(self):
         filter_list = []
-        key_list = []
         for (key, value) in self.filters.iteritems():
-            if not key in key_list:
-                filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
-                key_list.append(key)
-            else:
-                index = key_list.index(key)
-                filter_list[index] = filter_list[index] + "," + urllib.quote_plus(value)
+            filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
         self.filter_url = "&".join(filter_list)
 
     def set_filter_label(self):
         filter_list = []
-        key_list = []
         for (key, value) in self.filters.iteritems():
-            if not key in key_list:
-                filter_list.append("%s: %s" % (key.replace("with_", ""), value))
-                key_list.append(key)
-            else:
-                index = key_list.index(key)
-                filter_list[index] = filter_list[index] + "," + urllib.quote_plus(value)
+            filter_type = key.replace("with_", "")
+            value = value.replace("|", " | ").replace(",", " , ")
+            filter_list.append("%s: %s" % (filter_type, value))
         self.filter_label = "  -  ".join(filter_list)
 
 
