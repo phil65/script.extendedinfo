@@ -580,7 +580,7 @@ def GetCreditInfo(credit_id):
 
 def millify(n):
     millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
-    if n and n > 10:
+    if n and n > 100:
         n = float(n)
         char_count = len(str(n))
         millidx = (char_count / 3) - 1
