@@ -327,6 +327,20 @@
                         <textcolor>grey2</textcolor>
                         <focusedcolor>white6</focusedcolor>
                     </control>
+                    <control type="button" id="5008">
+                        <label>Actor</label>
+                        <width>400</width>
+                        <height>110</height>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>35</textoffsety>
+                        <textwidth>315</textwidth>
+                        <aligny>top</aligny>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <font>Font_Reg29</font>
+                        <textcolor>grey2</textcolor>
+                        <focusedcolor>white6</focusedcolor>
+                    </control>
                     <control type="button" id="5005">
                         <label>Clear Filters</label>
                         <width>400</width>
