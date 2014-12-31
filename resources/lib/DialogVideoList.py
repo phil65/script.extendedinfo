@@ -101,7 +101,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
-            self.filters["year"] = str(result)
+            self.add_filter("year", str(result))
             self.mode = "filter"
             self.page = 1
             self.update_content()
@@ -116,6 +116,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif controlID == 5005:
             self.filters = {}
             self.page = 1
+            self.mode = "filter"
             self.update_content()
             self.update_list()
         elif controlID == 6000:
@@ -152,18 +153,35 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
 
+    def add_filter(self, key, value):
+        if key in self.filters and self.filters[key]:
+            self.filters[key] = self.filters[key] + "," + str(value)
+        else:
+            self.filters[key] = str(value)
+
+
     def set_filter_url(self):
-        self.filter_url = ""
         filter_list = []
+        key_list = []
         for (key, value) in self.filters.iteritems():
-            filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
+            if not key in key_list:
+                filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
+                key_list.append(key)
+            else:
+                index = key_list.index(key)
+                filter_list[index] = filter_list[index] + "," + urllib.quote_plus(value)
         self.filter_url = "&".join(filter_list)
 
     def set_filter_label(self):
-        self.filter_label = ""
         filter_list = []
+        key_list = []
         for (key, value) in self.filters.iteritems():
-            filter_list.append("%s: %s" % (key.replace("with_", ""), value))
+            if not key in key_list:
+                filter_list.append("%s: %s" % (key.replace("with_", ""), value))
+                key_list.append(key)
+            else:
+                index = key_list.index(key)
+                filter_list[index] = filter_list[index] + "," + urllib.quote_plus(value)
         self.filter_label = "  -  ".join(filter_list)
 
 
@@ -177,7 +195,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         index = xbmcgui.Dialog().select("Choose Genre", label_list)
         if index > -1:
             # return "with_genres=" + str(id_list[index])
-            self.filters["with_genres"] = str(id_list[index])
+            self.add_filter("with_genres", str(id_list[index]))
             self.mode = "filter"
             self.page = 1
 
@@ -199,8 +217,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if index > -1:
             # return "with_genres=" + str(id_list[index])
                 cert = cert_list[index].split("  -  ")[0]
-                self.filters["certification_country"] = country
-                self.filters["certification"] = cert
+                self.add_filter("certification_country", country)
+                self.add_filter("certification", cert)
                 self.page = 1
                 self.mode = "filter"
 
