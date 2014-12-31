@@ -6,6 +6,7 @@ import xbmcplugin
 
 addon = xbmcaddon.Addon()
 addon_version = addon.getAddonInfo('version')
+addon_name = addon.getAddonInfo('name')
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 sys.path.append(xbmc.translatePath(os.path.join(addon_path, 'resources', 'lib')).decode("utf-8"))
 from process import StartInfoActions
@@ -19,6 +20,10 @@ class Main:
         self._parse_argv()
         if self.infos:
             self.control = StartInfoActions(self.infos, self.params)
+        elif not self.handle:
+            import DialogVideoList
+            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path)
+            dialog.doModal()
         if self.control == "plugin":
             xbmcplugin.endOfDirectory(self.handle)
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')

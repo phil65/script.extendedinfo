@@ -8,6 +8,9 @@
 	</requires>
 	<extension point="xbmc.python.library"          library="default.py" />
 	<extension point="xbmc.python.pluginsource"     library="default.py" />
+	<extension point="xbmc.python.script"           library="default.py">
+		<provides>executable</provides>
+	</extension>
 	<extension point="xbmc.addon.metadata">
 		<language/>
 		<summary lang="en">Extended Info Script</summary>
