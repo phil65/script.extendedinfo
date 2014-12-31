@@ -41,7 +41,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.search_string = kwargs.get('search_string', "")
         self.page = 1
         self.totalpages = 1
-        self.mode = kwargs.get("mode", None)
+        self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort', "Popularity")
         self.order = kwargs.get('order', "desc")
@@ -95,10 +95,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.get_genre()
             self.update_content()
             self.update_list()
-        elif controlID == 5006:
-            self.get_certification()
-            self.update_content()
-            self.update_list()
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
             self.add_filter("year", str(result))
@@ -117,6 +113,20 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.filters = {}
             self.page = 1
             self.mode = "filter"
+            self.update_content()
+            self.update_list()
+        elif controlID == 5006:
+            self.get_certification()
+            self.update_content()
+            self.update_list()
+        elif controlID == 5007:
+            self.filters = {}
+            self.page = 1
+            self.mode = "filter"
+            if self.type == "tv":
+                self.type = "movie"
+            else:
+                self.type = "tv"
             self.update_content()
             self.update_list()
         elif controlID == 6000:
