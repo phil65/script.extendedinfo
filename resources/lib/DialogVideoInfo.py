@@ -192,7 +192,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             filters = {"with_companies": self.getControl(controlID).getSelectedItem().getProperty("id")}
-            self.OpenVideoList(None, filters)
+            self.OpenVideoList(filters=filters)
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
@@ -201,14 +201,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 950:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             filters = {"with_keywords": self.getControl(controlID).getSelectedItem().getProperty("id")}
-            self.OpenVideoList(None, filters)
+            self.OpenVideoList(filters=filters)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             filters = {"with_genres": genreid}
-            self.OpenVideoList(None, filters)
+            self.OpenVideoList(filters=filters)
         elif controlID == 650:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
