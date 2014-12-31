@@ -518,6 +518,20 @@ def GetPersonID(person):
         log("could not find Person ID")
         return ""
 
+def GetKeywordID(keyword):
+    # if len(keywords) > 1:
+    #     keywordlist = []
+    #     for item in keywords:
+    #         keywordlist.append(item["name"])
+    #     selection = xbmcgui.Dialog().select("Select Actor", keywordlist)
+    # else:
+    response = GetMovieDBData("search/keyword?query=%s&include_adult=true&" % urllib.quote_plus(keyword), 30)
+    try:
+        return response["results"][0]["id"]
+    except:
+        log("could not find Keyword ID")
+        return ""
+
 
 def SearchForSet(setname):
     setname = setname.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
