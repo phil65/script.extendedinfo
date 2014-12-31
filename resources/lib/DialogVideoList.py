@@ -149,6 +149,22 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.update_content()
                 self.update_list()
+        elif controlID == 7000:
+            listitems = ["Starred Movies", "Rated Movies"]
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            account_lists = GetAccountLists()
+            for item in account_lists:
+                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            index = xbmcgui.Dialog().select("Choose List", listitems)
+            if index == -1:
+                pass
+            elif index == 0:
+                pass
+            elif index == 1:
+                pass
+            else:
+                pass
 
     def onFocus(self, controlID):
         if controlID == 600:
