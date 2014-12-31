@@ -49,8 +49,9 @@
             <control type="panel" id="500">
                 <posx>0</posx>
                 <posy>0</posy>
+                <animation effect="zoom" end="81" center="1920,255" time="300" tween="cubic" easing="inout" condition="ControlGroup(9000).HasFocus">Conditional</animation>
                 <width>1920</width>
-                <height>1080</height>
+                <height>1274</height>
                 <viewtype label="31234">icon</viewtype>
                 <pagecontrol>72</pagecontrol>
                 <preloaditems>2</preloaditems>
