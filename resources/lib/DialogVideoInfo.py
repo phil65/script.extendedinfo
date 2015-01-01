@@ -146,7 +146,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 450:
-                list_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+                list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
                 context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=["Add To Account Lists"])
                 context_menu.doModal()
 
