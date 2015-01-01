@@ -77,6 +77,19 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 # context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select("Choose Option", listitems)
+                if selection == 0:
+                    ChangeFavStatus(list_id, self.type, "true")
+                elif selection == 1:
+                    ratings = []
+                    for i in range(0, 21):
+                        ratings.append(str(float(i * 0.5)))
+                    rating = xbmcgui.Dialog().select("Enter Rating", ratings)
+                    if rating > -1:
+                        rating = float(rating) * 0.5
+                        RateMedia(self.type, list_id, rating)
+                elif selection == 2:
+                    pass
+
         # if xbmc.getCondVisibility("Container(500).Row(1)"):
         #     self.page += 1
         #     self.update_content(add=True)
