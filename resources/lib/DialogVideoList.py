@@ -5,6 +5,7 @@ from Utils import *
 import DialogVideoInfo
 import DialogTVShowInfo
 import DialogActorInfo
+import ContextMenu
 homewindow = xbmcgui.Window(10000)
 from TheMovieDB import *
 
@@ -63,11 +64,19 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("SetFocus(500)")
 
     def onAction(self, action):
+        focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+        elif action == xbmcgui.ACTION_CONTEXT_MENU:
+            if focusid == 500:
+                list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
+                listitems = ["Add To Favourites", "Rate Movie", "Add to List"]
+                # context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
+                # context_menu.doModal()
+                selection = xbmcgui.Dialog().select("Choose Option", listitems)
         # if xbmc.getCondVisibility("Container(500).Row(1)"):
         #     self.page += 1
         #     self.update_content(add=True)
@@ -187,6 +196,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             sort_strings.append(value)
         index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
         if index > -1:
+            if sort_strings[index] == "vote_average":
+                self.add_filter("vote_count.gte", "10")
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
 
