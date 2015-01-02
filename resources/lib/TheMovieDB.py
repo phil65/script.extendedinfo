@@ -535,12 +535,12 @@ def GetKeywordID(keyword):
                 names.append(item["name"])
             selection = xbmcgui.Dialog().select("Choose Option", names)
             if selection > -1:
-                return response["results"][selection]["id"]
+                return response["results"][selection]
         else:
-            return response["results"][0]["id"]
+            return response["results"][0]
     else:
         log("could not find Keyword ID")
-        return ""
+        return False
 
 
 def SearchForSet(setname):

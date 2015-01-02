@@ -284,10 +284,12 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = GetKeywordID(result)
+            keyword_id = response["id"]
+            name = response["name"]
             prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_keywords", str(response), "Keywords", "Keyword Label (to-do)")
+                self.add_filter("with_keywords", str(keyword_id), "Keywords", name)
                 self.mode = "filter"
                 self.page = 1
 
