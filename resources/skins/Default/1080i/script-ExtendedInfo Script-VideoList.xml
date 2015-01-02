@@ -187,6 +187,8 @@
                     <font>Font_Reg29</font>
                     <textcolor>grey2</textcolor>
                     <ondown>SetFocus(7000)</ondown>
+                    <onright>500</onright>
+                    <onleft>500</onleft>
                     <focusedcolor>white6</focusedcolor>
                 </control>
                 <control type="image">
@@ -208,6 +210,8 @@
                     <aligny>center</aligny>
                     <ondown>9000</ondown>
                     <onup>6000</onup>
+                    <onright>500</onright>
+                    <onleft>500</onleft>
                     <label>    My Account</label>
                     <radiowidth>90</radiowidth>
                     <radioheight>60</radioheight>
