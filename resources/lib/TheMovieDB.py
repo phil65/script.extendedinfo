@@ -136,7 +136,7 @@ def get_guest_session_id():
 
 def get_session_id():
     request_token = auth_request_token()
-    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 0.1)
+    response = GetMovieDBData("authentication/session/new?request_token=%s&" % request_token, 99999)
     # prettyprint(response)
     if response and "success" in response:
         passDictToSkin({"tmdb_logged_in": "true"})
