@@ -122,22 +122,23 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="lower limit", yeslabel="upper limit")
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
-            if ret:
-                order = "lte"
-                value = "%s-12-31" % result
-                label = " < " + result
-            else:
-                order = "gte"
-                value = "%s-01-01" % result
-                label = " > " + result
-            if self.type == "tv":
-                self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
-            else:
-                self.add_filter("primary_release_date.%s" % order, value, "Year", label)
-            self.mode = "filter"
-            self.page = 1
-            self.update_content()
-            self.update_list()
+            if result:
+                if ret:
+                    order = "lte"
+                    value = "%s-12-31" % result
+                    label = " < " + result
+                else:
+                    order = "gte"
+                    value = "%s-01-01" % result
+                    label = " > " + result
+                    if self.type == "tv":
+                        self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
+                    else:
+                        self.add_filter("primary_release_date.%s" % order, value, "Year", label)
+                    self.mode = "filter"
+                    self.page = 1
+                    self.update_content()
+                    self.update_list()
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
@@ -247,6 +248,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def add_filter(self, key, value, typelabel, label):
         index = -1
+        if ".gte" in key or ".lte" in key:
+            force_overwrite = True
+        else:
+            force_overwrite = False
         new_filter = {"id": value,
                       "type": key,
                       "typelabel": typelabel,
@@ -254,21 +259,25 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if new_filter in self.filters:
             return False
         for i, item in enumerate(self.filters):
-            prettyprint(item)
             if item["type"] == key:
                 index = i
                 break
-        if index > -1:
-            dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
-            if ret:
-                self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
-                self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
+        if value:
+            if index > -1:
+                if not force_overwrite:
+                    dialog = xbmcgui.Dialog()
+                    ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
+                    if ret:
+                        self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
+                        self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
+                    else:
+                        self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
+                        self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
+                else:
+                    self.filters[index]["id"] = urllib.quote_plus(str(value))
+                    self.filters[index]["label"] = str(label)
             else:
-                self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
-                self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
-        else:
-            self.filters.append(new_filter)
+                self.filters.append(new_filter)
 
     def set_filter_url(self):
         filter_list = []
