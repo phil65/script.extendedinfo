@@ -50,6 +50,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = CreateListItems(self.listitem_list)
+            self.totalitems = len(self.listitem_list)
         else:
             self.update_content()
             # Notify(str(self.totalpages))
