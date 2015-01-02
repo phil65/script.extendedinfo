@@ -131,14 +131,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     order = "gte"
                     value = "%s-01-01" % result
                     label = " > " + result
-                    if self.type == "tv":
-                        self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
-                    else:
-                        self.add_filter("primary_release_date.%s" % order, value, "Year", label)
-                    self.mode = "filter"
-                    self.page = 1
-                    self.update_content()
-                    self.update_list()
+                if self.type == "tv":
+                    self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
+                else:
+                    self.add_filter("primary_release_date.%s" % order, value, "Year", label)
+                self.mode = "filter"
+                self.page = 1
+                self.update_content()
+                self.update_list()
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
