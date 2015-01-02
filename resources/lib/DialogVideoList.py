@@ -216,7 +216,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 listitems = GetMoviesFromList(account_lists[index - 2]["id"])
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                AddToWindowStack(self)
                 self.close()
                 dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.color, filters=[])
                 dialog.doModal()
