@@ -291,7 +291,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             response = SearchforCompany(result)
             prettyprint(response)
             if result > -1:
-                # return "with_genres=" + str(id_list[index])
+                if len(response) > 1:
+                    names = []
+                    for item in response:
+                        names.append(item["name"])
+                    selection = xbmcgui.Dialog().select("Choose Option", names)
+                    if selection > -1:
+                        response = response[selection]
+                else:
+                    response = response[0]
                 self.add_filter("with_companies", str(response["id"]), "People", response["name"])
                 self.mode = "filter"
                 self.page = 1

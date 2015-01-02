@@ -112,7 +112,7 @@ def StartInfoActions(infos, params):
                 data = GetSimilarMovies(MovieId), "SimilarMovies"
         elif info == 'studio':
             if params["studio"]:
-                CompanyId = SearchforCompany(params["studio"])
+                CompanyId = SearchforCompany(params["studio"])[0]["id"]
                 data = GetCompanyInfo(CompanyId), "StudioInfo"
         elif info == 'set':
             if params["dbid"] and not "show" in str(params["type"]):

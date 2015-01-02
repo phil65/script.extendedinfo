@@ -488,16 +488,17 @@ def SearchforCompany(Company):
     log(Company)
     response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company), 30)
     try:
-        return response["results"][0]["id"]
+        return response["results"]
     except:
         log("could not find Company ID")
         return ""
 
+
 def MultiSearch(String):
     response = GetMovieDBData("search/multi?query=%s&" % urllib.quote_plus(String), 30)
-    try:
+    if response and "results" in response:
         return response["results"]
-    except:
+    else:
         log("Error when searching")
         return ""
 
@@ -525,6 +526,7 @@ def GetPersonID(person):
     else:
         log("could not find Person ID")
         return ""
+
 
 def GetKeywordID(keyword):
     response = GetMovieDBData("search/keyword?query=%s&include_adult=%s&" % (urllib.quote_plus(keyword), addon.getSetting("include_adults")), 30)
