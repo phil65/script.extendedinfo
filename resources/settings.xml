@@ -9,6 +9,7 @@
  -->      <setting label="Include Adult Movies" type="labelenum" values="true|false" id="include_adults" default="false"/>
       <setting label="Open InfoDialog by default" type="bool" id="infodialog_onclick"/>
       <setting label="Debug Mode" type="bool" id="debug_mode"/>
+      <setting label="Delete Cache" type="action" action="RunScript(script.extendedinfo,info=deletecache)"/>
       <setting type="sep"/>
   </category>
 </settings>
