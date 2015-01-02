@@ -153,6 +153,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.get_keyword()
             self.update_content()
             self.update_list()
+        elif controlID == 5010:
+            self.get_company()
+            self.update_content()
+            self.update_list()
         elif controlID == 5007:
             self.filters = []
             self.page = 1
@@ -278,6 +282,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
                 self.add_filter("with_people", str(response["id"]), "People", response["name"])
+                self.mode = "filter"
+                self.page = 1
+
+    def get_company(self):
+        result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+        if result and result > -1:
+            response = SearchforCompany(result)
+            prettyprint(response)
+            if result > -1:
+                # return "with_genres=" + str(id_list[index])
+                self.add_filter("with_companies", str(response["id"]), "People", response["name"])
                 self.mode = "filter"
                 self.page = 1
 
