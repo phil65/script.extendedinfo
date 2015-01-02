@@ -34,7 +34,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 if ret == -1:
                     return False
                 name = names[ret]
-            self.id = GetPersonID(name)
+            self.id = GetPersonID(name)["id"]
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.id:
             self.person = GetExtendedActorInfo(self.id)

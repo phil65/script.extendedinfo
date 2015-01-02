@@ -215,7 +215,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.sort_label = listitems[index]
 
     def add_filter(self, key, value, typelabel, label):
-        index = False
+        index = -1
         new_filter = {"id": value,
                        "type": key,
                        "typelabel": typelabel,
@@ -223,17 +223,18 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if new_filter in self.filters:
             return False
         for i, item in enumerate(self.filters):
+            prettyprint(item)
             if item["type"] == key:
                 index = i
                 break
-        if index:
+        if index > -1:
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
             if ret:
-                self.filters[index]["id"] = self.filters[index]["id"] + "," + str(value)
+                self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
                 self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
             else:
-                self.filters[index]["id"] = self.filters[index]["id"] + "|" + str(value)
+                self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
                 self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
         else:
             self.filters.append(new_filter)
@@ -243,7 +244,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         filter_list = []
         prettyprint(self.filters)
         for item in self.filters:
-            filter_list.append("%s=%s" % (item["type"], urllib.quote_plus(item["id"])))
+            filter_list.append("%s=%s" % (item["type"], item["id"]))
         self.filter_url = "&".join(filter_list)
 
     def set_filter_label(self):
@@ -275,7 +276,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_people", str(response), "People", "Personname (to-do)")
+                self.add_filter("with_people", str(response["id"]), "People", response["name"])
                 self.mode = "filter"
                 self.page = 1
 

@@ -163,12 +163,12 @@ def StartInfoActions(infos, params):
                 Notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
             if params.get("director", False):
-                directorid = GetPersonID(params["director"])
+                directorid = GetPersonID(params["director"])["id"]
                 if directorid:
                     data = GetDirectorMovies(directorid), "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer", False) and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
-                writerid = GetPersonID(params["writer"])
+                writerid = GetPersonID(params["writer"])["id"]
                 if writerid:
                     data = GetDirectorMovies(writerid), "WriterMovies"
         elif info == 'similarmoviestrakt':
