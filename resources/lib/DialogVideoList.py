@@ -46,7 +46,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort', "Popularity")
         self.order = kwargs.get('order', "desc")
-        self.filters = kwargs.get('filters', {})
+        self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = CreateListItems(self.listitem_list)
         else:
@@ -120,9 +120,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif controlID == 5003:
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
             if self.type == "tv":
-                self.add_filter("first_air_date_year", str(result))
+                self.add_filter("first_air_date_year", str(result), "First Air Date", str(result))
             else:
-                self.add_filter("year", str(result))
+                self.add_filter("year", str(result), "Year", str(result))
             self.mode = "filter"
             self.page = 1
             self.update_content()
@@ -135,7 +135,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_content()
             self.update_list()
         elif controlID == 5005:
-            self.filters = {}
+            self.filters = []
             self.page = 1
             self.mode = "filter"
             self.update_content()
@@ -153,7 +153,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_content()
             self.update_list()
         elif controlID == 5007:
-            self.filters = {}
+            self.filters = []
             self.page = 1
             self.mode = "filter"
             if self.type == "tv":
@@ -166,7 +166,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
                 self.search_string = result
-                self.filters = {}
+                self.filters = []
                 self.mode = "search"
                 self.page = 1
                 self.update_content()
@@ -210,34 +210,47 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
         if index > -1:
             if sort_strings[index] == "vote_average":
-                self.add_filter("vote_count.gte", "10")
+                self.add_filter("vote_count.gte", "10", "Vote Count (greater)", "10")
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
 
-    def add_filter(self, key, value):
-        if key in self.filters and self.filters[key]:
+    def add_filter(self, key, value, typelabel, label):
+        index = False
+        new_filter = {"id": value,
+                       "type": key,
+                       "typelabel": typelabel,
+                       "label": label}
+        if new_filter in self.filters:
+            return False
+        for i, item in enumerate(self.filters):
+            if item["type"] == key:
+                index = i
+                break
+        if index:
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
             if ret:
-                self.filters[key] = self.filters[key] + "," + str(value)
+                self.filters[index]["id"] = self.filters[index]["id"] + "," + str(value)
+                self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
             else:
-                self.filters[key] = self.filters[key] + "|" + str(value)
+                self.filters[index]["id"] = self.filters[index]["id"] + "|" + str(value)
+                self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
         else:
-            self.filters[key] = str(value)
+            self.filters.append(new_filter)
 
 
     def set_filter_url(self):
         filter_list = []
-        for (key, value) in self.filters.iteritems():
-            filter_list.append("%s=%s" % (key, urllib.quote_plus(value)))
+        prettyprint(self.filters)
+        for item in self.filters:
+            filter_list.append("%s=%s" % (item["type"], urllib.quote_plus(item["id"])))
         self.filter_url = "&".join(filter_list)
 
     def set_filter_label(self):
         filter_list = []
-        for (key, value) in self.filters.iteritems():
-            filter_type = key.replace("with_", "")
-            value = value.replace("|", " | ").replace(",", " , ")
-            filter_list.append("%s: %s" % (filter_type, value))
+        prettyprint(self.filters)
+        for item in self.filters:
+            filter_list.append("%s: %s" % (item["typelabel"], item["label"].replace("|", " | ").replace(",", " + ")))
         self.filter_label = "  -  ".join(filter_list)
 
 
@@ -251,7 +264,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         index = xbmcgui.Dialog().select("Choose Genre", label_list)
         if index > -1:
             # return "with_genres=" + str(id_list[index])
-            self.add_filter("with_genres", str(id_list[index]))
+            self.add_filter("with_genres", str(id_list[index]), "Genres", str(label_list[index]))
             self.mode = "filter"
             self.page = 1
 
@@ -262,7 +275,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_people", str(response))
+                self.add_filter("with_people", str(response), "People", "Personname (to-do)")
                 self.mode = "filter"
                 self.page = 1
 
@@ -273,7 +286,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_keywords", str(response))
+                self.add_filter("with_keywords", str(response), "Keywords", "Keyword Label (to-do)")
                 self.mode = "filter"
                 self.page = 1
 
@@ -295,8 +308,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if index > -1:
             # return "with_genres=" + str(id_list[index])
                 cert = cert_list[index].split("  -  ")[0]
-                self.add_filter("certification_country", country)
-                self.add_filter("certification", cert)
+                self.add_filter("certification_country", country, "Certification Country", country)
+                self.add_filter("certification", cert, "Certification", cert)
                 self.page = 1
                 self.mode = "filter"
 
@@ -352,6 +365,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
         response = GetMovieDBData(url, 10)
+        if not response["results"]:
+            Notify("No results found")
         if self.mode == "search":
             return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"]
         elif self.type == "movie":

@@ -54,7 +54,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             cert_list = get_certification_list("tv")
             for item in self.tvshow["certifications"]:
                 if item["iso_3166_1"] in cert_list:
-                    language = item["iso_3166_1"]
+                    # language = item["iso_3166_1"]
                     rating = item["certification"]
                     language_certs = cert_list[item["iso_3166_1"]]
                     prettyprint(language_certs)
@@ -156,8 +156,12 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
+            genrename = self.getControl(controlID).getSelectedItem().getProperty("name")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            filters = {"with_genres": genreid}
+            filters = [{"id": genreid,
+                        "type": "with_genres",
+                        "typelabel": "Genres",
+                        "label": genrename}]
             self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")
@@ -165,8 +169,13 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID == 1450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            filters = {"with_networks": self.getControl(controlID).getSelectedItem().getProperty("id")}
-            listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+            company_name = self.getControl(controlID).getSelectedItem().getProperty("name")
+            filters = [{"id": genreid,
+                        "type": "with_networks",
+                        "typelabel": "Networks",
+                        "label": company_name}]
+            listitems = GetCompanyInfo(company_id)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID == 6001:
@@ -245,7 +254,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def onFocus(self, controlID):
         pass
 
-    def OpenVideoList(self, listitems=None, filters={}, media_type="movie", mode="filter"):
+    def OpenVideoList(self, listitems=None, filters=[], media_type="movie", mode="filter"):
         AddToWindowStack(self)
         self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters, type=media_type, mode=mode)
