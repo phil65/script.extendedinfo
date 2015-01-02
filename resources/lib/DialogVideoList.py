@@ -209,7 +209,13 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_content()
                 self.update_list()
             else:
-                pass
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
+                listitems = GetMoviesFromList(account_lists[index - 2]["id"])
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                AddToWindowStack(self)
+                self.close()
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.color, filters=[])
+                dialog.doModal()
 
     def onFocus(self, controlID):
         if controlID == 600:
@@ -395,9 +401,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
             self.filter_label = "Starred " + temp2
-        elif self.mode == "lists":
-            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
-            self.filter_label = "MovieDB Lists"
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
