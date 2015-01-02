@@ -101,6 +101,8 @@ def HandleTraktTVShowResult(results):
             banner = ""
         if "fanart-dark.jpg" in fanart:
             fanart = ""
+        air_day = fetch(tvshow, "air_day")
+        air_time = fetch(tvshow, "air_time")
         show = {'Title': tvshow["title"],
                 'Label': tvshow["title"],
                 'TVShowTitle': tvshow["title"],
@@ -115,9 +117,9 @@ def HandleTraktTVShowResult(results):
                 'imdb_id': tvshow["imdb_id"],
                 'imdbid': tvshow["imdb_id"],
                 'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&imdbid=%s' % tvshow["imdb_id"],
-                'AirDay': tvshow["air_day"],
-                'AirShortTime': tvshow["air_time"],
-                'Label2': tvshow["air_day"] + " " + tvshow["air_time"],
+                'AirDay': air_day,
+                'AirShortTime': air_time,
+                'Label2': air_day + " " + air_time,
                 'Premiered': premiered,
                 'Country': tvshow["country"],
                 'Rating': tvshow["ratings"]["percentage"] / 10.0,
