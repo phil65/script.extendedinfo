@@ -42,6 +42,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.search_string = kwargs.get('search_string', "")
         self.page = 1
         self.totalpages = 1
+        self.totalitems = 0
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort', "Popularity")
@@ -321,7 +322,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.totalpages = self.fetch_data()
+        self.listitems, self.totalpages, self.totalitems = self.fetch_data()
         self.listitems_2 = []
         # if self.page < self.totalpages:
         #     self.page += 1
@@ -334,6 +335,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
         self.window.setProperty("TotalPages", str(self.totalpages))
+        self.window.setProperty("TotalItems", str(self.totalitems))
         self.window.setProperty("CurrentPage", str(self.page))
         self.window.setProperty("Type", self.type)
         self.window.setProperty("Filter_Label", self.filter_label)
@@ -368,14 +370,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
         response = GetMovieDBData(url, 10)
+        prettyprint(response)
         if not response["results"]:
             Notify("No results found")
         if self.mode == "search":
-            return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"]
+            return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"], response["total_results"]
         elif self.type == "movie":
-            return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"]
+            return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"], response["total_results"]
         else:
-            return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"]
+            return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"], response["total_results"]
 
 
 

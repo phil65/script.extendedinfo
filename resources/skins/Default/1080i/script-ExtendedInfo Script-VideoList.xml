@@ -398,7 +398,7 @@
                 <aligny>center</aligny>
                 <width>1920</width>
                 <align>right</align>
-                <label>$INFO[Window.Property(CurrentPage)]$INFO[Window.Property(TotalPages), / ]</label>
+                <label>$INFO[Window.Property(TotalItems),[COLOR grey]Items:[/COLOR] ]$INFO[Window.Property(CurrentPage),[COLOR grey] - Page: [/COLOR]]$INFO[Window.Property(TotalPages), / ]</label>
             </control>
             <control type="label">
                 <posx>20</posx>
