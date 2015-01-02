@@ -187,7 +187,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_content()
                 self.update_list()
         elif controlID == 7000:
-            listitems = ["Starred Movies", "Rated Movies"]
+            if self.type == "tv":
+                listitems = ["Starred TV Shows", "Rated TV Shows"]
+            else:
+                listitems = ["Starred Movies", "Rated Movies"]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = GetAccountLists()
             for item in account_lists:
