@@ -119,11 +119,21 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_content()
             self.update_list()
         elif controlID == 5003:
+            dialog = xbmcgui.Dialog()
+            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="lower limit", yeslabel="upper limit")
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
-            if self.type == "tv":
-                self.add_filter("first_air_date_year", str(result), "First Air Date", str(result))
+            if ret:
+                order = "lte"
+                value = "%s-12-31" % result
+                label = " < " + result
             else:
-                self.add_filter("year", str(result), "Year", str(result))
+                order = "gte"
+                value = "%s-01-01" % result
+                label = " > " + result
+            if self.type == "tv":
+                self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
+            else:
+                self.add_filter("primary_release_date.%s" % order, value, "Year", label)
             self.mode = "filter"
             self.page = 1
             self.update_content()
@@ -171,8 +181,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
                 self.search_string = result
-                self.filters = []
                 self.mode = "search"
+                self.filters = []
                 self.page = 1
                 self.update_content()
                 self.update_list()
@@ -187,9 +197,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if index == -1:
                 pass
             elif index == 0:
-                pass
+                self.mode = "favorites"
+                self.filters = []
+                self.page = 1
+                self.update_content()
+                self.update_list()
             elif index == 1:
-                pass
+                self.mode = "rating"
+                self.filters = []
+                self.page = 1
+                self.update_content()
+                self.update_list()
             else:
                 pass
 
@@ -204,7 +222,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page -= 1
                 self.update_content()
                 self.update_list()
-
 
     def get_sort_type(self):
         listitems = []
@@ -222,9 +239,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def add_filter(self, key, value, typelabel, label):
         index = -1
         new_filter = {"id": value,
-                       "type": key,
-                       "typelabel": typelabel,
-                       "label": label}
+                      "type": key,
+                      "typelabel": typelabel,
+                      "label": label}
         if new_filter in self.filters:
             return False
         for i, item in enumerate(self.filters):
@@ -244,7 +261,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.filters.append(new_filter)
 
-
     def set_filter_url(self):
         filter_list = []
         prettyprint(self.filters)
@@ -258,7 +274,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         for item in self.filters:
             filter_list.append("%s: %s" % (item["typelabel"], item["label"].replace("|", " | ").replace(",", " + ")))
         self.filter_label = "  -  ".join(filter_list)
-
 
     def get_genre(self):
         response = GetMovieDBData("genre/%s/list?language=%s&" % (self.type, addon.getSetting("LanguageID")), 10)
@@ -369,7 +384,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.window.setProperty("Order_Label", "Descending")
 
     def fetch_data(self):
-        temp= "movies"
+        temp = "movies"
         temp2 = "movies"
         if self.type == "tv":
             temp = "tv"
@@ -380,12 +395,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
             self.filter_label = "Starred " + temp2
+        elif self.mode == "lists":
+            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
+            self.filter_label = "MovieDB Lists"
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
             else:
                 session_id_string = "guest_session_id=" + get_guest_session_id()
-            url = "account/%s/rated/movies?language=%s&page=%i&%s&" % (get_account_info(), addon.getSetting("LanguageID"), self.page, session_id_string)
+            url = "account/%s/rated/%s?language=%s&page=%i&%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, session_id_string)
             self.filter_label = "Rated " + temp2
         else:
             self.set_filter_url()
