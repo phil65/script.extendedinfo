@@ -844,7 +844,7 @@ def ConvertYoutubeURL(string):
         for id in vid_ids:
             convertedstring = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
             return convertedstring
-    if 'youtube.com/watch' in string:
+    if string and 'youtube.com/watch' in string:
         vid_ids = re.findall(
             'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
@@ -859,7 +859,7 @@ def ExtractYoutubeID(string):
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
             return id
-    if 'youtube.com/watch' in string:
+    if string and 'youtube.com/watch' in string:
         vid_ids = re.findall(
             'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
