@@ -10,6 +10,7 @@
       <setting label="Open InfoDialog by default" type="bool" id="infodialog_onclick"/>
       <setting label="Debug Mode" type="bool" id="debug_mode"/>
       <setting label="Delete Cache" type="action" action="RunScript(script.extendedinfo,info=deletecache)"/>
+      <setting label="Sync MovieDB watchlist" type="action" action="RunScript(script.extendedinfo,info=syncwatchlist)"/>
       <setting type="sep"/>
   </category>
 </settings>

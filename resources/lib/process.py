@@ -303,4 +303,15 @@ def StartInfoActions(infos, params):
         if data:
             data, prefix = data
             passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+        elif info == 'deletecache':
+            for the_file in os.listdir(Addon_Data_Path):
+                file_path = os.path.join(Addon_Data_Path, the_file)
+                try:
+                    if os.path.isfile(file_path) and not the_file == "settings.xml":
+                        os.unlink(file_path)
+                except Exception, e:
+                    log(e)
+            Notify("Cache deleted")
+        elif info == 'syncwatchlist':
+            pass
     return params["control"]
