@@ -727,7 +727,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + poster_size + response['poster_path']
+        poster_path = base_url + "w780" + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
