@@ -74,7 +74,7 @@ msgid "In Database"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Release Date"
+msgid "Release date"
 msgstr ""
 
 msgctxt "#32030"
@@ -135,4 +135,24 @@ msgstr ""
 
 msgctxt "#32106"
 msgid "Choose filter behaviour"
+msgstr ""
+
+msgctxt "#32107"
+msgid "Add to list"
+msgstr ""
+
+msgctxt "#32108"
+msgid "Revenue"
+msgstr ""
+
+msgctxt "#32109"
+msgid "Budget"
+msgstr ""
+
+msgctxt "#32110"
+msgid "Popularity"
+msgstr ""
+
+msgctxt "#32111"
+msgid "Vote count"
 msgstr ""
