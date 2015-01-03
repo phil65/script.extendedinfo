@@ -156,3 +156,11 @@ msgstr ""
 msgctxt "#32111"
 msgid "Vote count"
 msgstr ""
+
+msgctxt "#32112"
+msgid "Vote average"
+msgstr ""
+
+msgctxt "#32113"
+msgid "Rate movie"
+msgstr ""

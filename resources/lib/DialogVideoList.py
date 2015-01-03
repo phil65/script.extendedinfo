@@ -20,11 +20,11 @@ sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    addon.getLocalizedString(32108): "revenue",
                    # "Release Date": "primary_release_date",
                    xbmc.getLocalizedString(20376): "original_title",
-                   "Vote average": "vote_average",
+                   addon.getLocalizedString(32111): "vote_average",
                    addon.getLocalizedString(32111): "vote_count"},
             "tv": {addon.getLocalizedString(32110): "popularity",
-                   "First Air Date": "first_air_date",
-                   "Vote average": "vote_average",
+                   xbmc.getLocalizedString(20416): "first_air_date",
+                   addon.getLocalizedString(32111): "vote_average",
                    addon.getLocalizedString(32111): "vote_count"},
      "favourite": {"Created at": "created_at"}}
 
@@ -75,7 +75,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 500:
                 list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-                listitems = [xbmc.getLocalizedString(14076), "Rate Movie", addon.getLocalizedString(32107)]
+                listitems = [xbmc.getLocalizedString(14076), addon.getInfoLabel(32113), addon.getLocalizedString(32107)]
                 # context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select("Choose Option", listitems)
