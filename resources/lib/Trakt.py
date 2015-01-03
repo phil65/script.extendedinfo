@@ -21,9 +21,9 @@ def GetTraktCalendarShows(Type):
             for episode in day["episodes"]:
                 banner = episode["show"]["images"]["banner"]
                 fanart = episode["show"]["images"]["fanart"]
-                if "banner.jpg" in banner:
+                if not banner or "banner.jpg" in banner:
                     banner = ""
-                if "fanart-dark.jpg" in fanart:
+                if not fanart or "fanart-dark.jpg" in fanart:
                     fanart = ""
                 show = {'Title': episode["episode"]["title"],
                         'TVShowTitle': episode["show"]["title"],
@@ -97,9 +97,9 @@ def HandleTraktTVShowResult(results):
             premiered = ""
         banner = tvshow["images"]["banner"]
         fanart = tvshow["images"]["fanart"]
-        if "banner.jpg" in banner:
+        if not banner or "banner.jpg" in banner:
             banner = ""
-        if "fanart-dark.jpg" in fanart:
+        if not fanart or "fanart-dark.jpg" in fanart:
             fanart = ""
         air_day = fetch(tvshow, "air_day")
         air_time = fetch(tvshow, "air_time")
