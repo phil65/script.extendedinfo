@@ -26,7 +26,9 @@ sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(20416): "first_air_date",
                    addon.getLocalizedString(32111): "vote_average",
                    addon.getLocalizedString(32111): "vote_count"},
-     "favourite": {"Created at": "created_at"}}
+     "favorites": {"Created at": "created_at"},
+     "list": {"Created at": "created_at"},
+     "rating": {"Created at": "created_at"}}
 
 
 class DialogVideoList(xbmcgui.WindowXMLDialog):
@@ -45,7 +47,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.totalitems = 0
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "popularity")
-        self.sort_label = kwargs.get('sort', "Popularity")
+        self.sort_label = kwargs.get('sort_label', "Popularity")
         self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
@@ -203,12 +205,16 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 pass
             elif index == 0:
                 self.mode = "favorites"
+                self.sort = "created_at"
+                self.sort_label = "Created at"
                 self.filters = []
                 self.page = 1
                 self.update_content()
                 self.update_list()
             elif index == 1:
                 self.mode = "rating"
+                self.sort = "created_at"
+                self.sort_label = "Created at"
                 self.filters = []
                 self.page = 1
                 self.update_content()
@@ -236,7 +242,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
     def get_sort_type(self):
         listitems = []
         sort_strings = []
-        for (key, value) in sorts[self.type].iteritems():
+        if self.mode in ["favorites", "rating", "list"]:
+            sort_key = self.mode
+        else:
+            sort_key = self.type
+        for (key, value) in sorts[sort_key].iteritems():
             listitems.append(key)
             sort_strings.append(value)
         index = xbmcgui.Dialog().select(addon.getLocalizedString(32104), listitems)
@@ -397,13 +407,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("Filter_Label", self.filter_label)
         self.window.setProperty("Sort_Label", self.sort_label)
         if self.order == "asc":
-            self.window.setProperty("Order_Label", "Ascending")
+            self.window.setProperty("Order_Label", xbmc.getLocalizedString(584))
         else:
-            self.window.setProperty("Order_Label", "Descending")
+            self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
     def fetch_data(self):
         temp = "movies"
         temp2 = "movies"
+        sortby = self.sort + "." + self.order
         if self.type == "tv":
             temp = "tv"
             temp2 = "TV Shows"
@@ -411,19 +422,18 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, addon.getSetting("include_adults"))
             self.filter_label = "Search for '%s'" % self.search_string
         elif self.mode == "favorites":
-            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id())
+            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = "Starred " + temp2
         elif self.mode == "rating":
             if addon.getSetting("tmdb_username"):
                 session_id_string = "session_id=" + get_session_id()
             else:
                 session_id_string = "guest_session_id=" + get_guest_session_id()
-            url = "account/%s/rated/%s?language=%s&page=%i&%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, session_id_string)
+            url = "account/%s/rated/%s?language=%s&page=%i&%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, session_id_string, sortby)
             self.filter_label = "Rated " + temp2
         else:
             self.set_filter_url()
             self.set_filter_label()
-            sortby = self.sort + "." + self.order
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
         response = GetMovieDBData(url, 10)
         prettyprint(response)
