@@ -103,7 +103,7 @@ def StartInfoActions(infos, params):
         elif info == 'similarmovies':
             if params.get("id", ""):
                 MovieId = params.get("id", "")
-            elif params["dbid"] and (int(params["dbid"]) > -1):
+            elif int(params.get("dbid", -1)) > -1:
                 MovieId = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("IMDBId from local DB:" + str(MovieId))
             else:
@@ -115,7 +115,7 @@ def StartInfoActions(infos, params):
                 CompanyId = SearchforCompany(params["studio"])[0]["id"]
                 data = GetCompanyInfo(CompanyId), "StudioInfo"
         elif info == 'set':
-            if params["dbid"] and not "show" in str(params["type"]):
+            if params.get("dbid", False) and not "show" in str(params["type"]):
                 name = GetMovieSetName(params["dbid"])
                 if name:
                     params["setid"] = SearchForSet(name)
@@ -124,13 +124,13 @@ def StartInfoActions(infos, params):
                 if SetData:
                     data = SetData, "MovieSetItems"
         elif info == 'movielists':
-            if params["dbid"]:
+            if params.get("dbid", False):
                 movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDB Id:" + str(movieid))
                 if movieid:
                     data = GetMovieLists(movieid), "MovieLists"
         elif info == 'keywords':
-            if params["dbid"]:
+            if params.get("dbid", False):
                 movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDB Id:" + str(movieid))
                 if movieid:
@@ -283,7 +283,7 @@ def StartInfoActions(infos, params):
             xbmc.sleep(500)
             if params.get("id", ""):
                 MovieId = params.get("id", "")
-            elif params["dbid"] and (int(params["dbid"]) > -1):
+            elif int(params.get("dbid"),-1) > -1:
                 MovieId = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(MovieId))
             elif params.get("imdbid", ""):
