@@ -838,7 +838,7 @@ def read_from_file(path=""):
 
 
 def ConvertYoutubeURL(string):
-    if 'youtube.com/v' in string:
+    if string and 'youtube.com/v' in string:
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
@@ -854,7 +854,7 @@ def ConvertYoutubeURL(string):
 
 
 def ExtractYoutubeID(string):
-    if 'youtube.com/v' in string:
+    if string and 'youtube.com/v' in string:
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
         for id in vid_ids:
