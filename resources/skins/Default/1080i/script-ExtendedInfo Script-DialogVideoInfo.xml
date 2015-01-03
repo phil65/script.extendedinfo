@@ -731,7 +731,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Cast$INFO[Container(1000).NumItems, (,)]</label>
+                            <label>$LOCALIZE[206]$INFO[Container(1000).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -863,7 +863,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Crew$INFO[Container(750).NumItems, (,)]</label>
+                            <label>$ADDON[script.extendedinfo 32115]$INFO[Container(750).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1051,7 +1051,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Recommended By TMDB$INFO[Container(150).NumItems, (,)]</label>
+                            <label>$ADDON[script.extendedinfo 32116]$INFO[Container(150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>

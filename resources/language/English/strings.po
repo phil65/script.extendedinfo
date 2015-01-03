@@ -164,3 +164,19 @@ msgstr ""
 msgctxt "#32113"
 msgid "Rate movie"
 msgstr ""
+
+msgctxt "#32114"
+msgid "Keyword"
+msgstr ""
+
+msgctxt "#32114"
+msgid "Actor / Crew member"
+msgstr ""
+
+msgctxt "#32115"
+msgid "Crew"
+msgstr ""
+
+msgctxt "#32116"
+msgid "Recommended By TMDB"
+msgstr ""
