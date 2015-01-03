@@ -1968,7 +1968,7 @@
                             <posy>250</posy>
                             <width>1850</width>
                             <height>160</height>
-                            <font>font14</font>
+                            <font>font12</font>
                             <label>$INFO[Container(650).ListItem.Property(meaning)]</label>
                         </control>
                         <control type="panel" id="650">
