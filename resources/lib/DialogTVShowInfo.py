@@ -171,7 +171,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             company_name = self.getControl(controlID).getSelectedItem().getProperty("name")
-            filters = [{"id": genreid,
+            filters = [{"id": company_id,
                         "type": "with_networks",
                         "typelabel": "Networks",
                         "label": company_name}]
