@@ -124,3 +124,15 @@ msgstr ""
 msgctxt "#32103"
 msgid "Change info labels"
 msgstr ""
+
+msgctxt "#32104"
+msgid "Sort by"
+msgstr ""
+
+msgctxt "#32105"
+msgid "Filters"
+msgstr ""
+
+msgctxt "#32106"
+msgid "Choose filter behaviour"
+msgstr ""

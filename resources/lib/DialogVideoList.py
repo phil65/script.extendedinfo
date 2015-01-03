@@ -180,7 +180,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_content()
             self.update_list()
         elif controlID == 6000:
-            result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
                 self.search_string = result
                 self.mode = "search"
@@ -239,7 +239,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         for (key, value) in sorts[self.type].iteritems():
             listitems.append(key)
             sort_strings.append(value)
-        index = xbmcgui.Dialog().select("Choose Sort Order", listitems)
+        index = xbmcgui.Dialog().select(addon.getLocalizedString(32104), listitems)
         if index > -1:
             if sort_strings[index] == "vote_average":
                 self.add_filter("vote_count.gte", "10", "Vote Count (greater)", "10")
@@ -266,7 +266,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if index > -1:
                 if not force_overwrite:
                     dialog = xbmcgui.Dialog()
-                    ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="OR", yeslabel="AND")
+                    ret = dialog.yesno(heading=xbmc.getLocalizedString(587), line1=addon.getLocalizedString(32106), nolabel="OR", yeslabel="AND")
                     if ret:
                         self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
                         self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
@@ -308,7 +308,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.page = 1
 
     def get_actor(self):
-        result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+        result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = GetPersonID(result)
             prettyprint(response)
@@ -319,7 +319,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
 
     def get_company(self):
-        result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+        result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = SearchforCompany(result)
             prettyprint(response)
@@ -338,7 +338,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
 
     def get_keyword(self):
-        result = xbmcgui.Dialog().input("Enter Search String", "", type=xbmcgui.INPUT_ALPHANUM)
+        result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = GetKeywordID(result)
             keyword_id = response["id"]
@@ -355,7 +355,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         country_list = []
         for (key, value) in response.iteritems():
             country_list.append(key)
-        index = xbmcgui.Dialog().select("Choose Country", country_list)
+        index = xbmcgui.Dialog().select(xbmc.getLocalizedString(21879), country_list)
         if index > -1:
             cert_list = []
             # for (key, value) in response[country_list[index]].iteritems():
