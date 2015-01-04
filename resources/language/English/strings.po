@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1)\n"
 
 msgctxt "Addon Summary"
-msgid "Extended Info Script"
+msgid "ExtendedInfo Script"
 msgstr ""
 
 msgctxt "Addon Description"
@@ -187,4 +187,24 @@ msgstr ""
 
 msgctxt "#32118"
 msgid "YouTube Videos"
+msgstr ""
+
+msgctxt "#32119"
+msgid "Artwork"
+msgstr ""
+
+msgctxt "#32120"
+msgid "Movie Actor Roles"
+msgstr ""
+
+msgctxt "#32121"
+msgid "TV Show Roles"
+msgstr ""
+
+msgctxt "#32122"
+msgid "Movie crew member"
+msgstr ""
+
+msgctxt "#32123"
+msgid "TV Show crew member"
 msgstr ""

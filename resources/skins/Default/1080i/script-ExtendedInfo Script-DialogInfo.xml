@@ -140,7 +140,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Movie actor roles$INFO[Container(150).NumItems, (,)]</label>
+                            <label>$LOCALIZE[32120]$INFO[Container(150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -321,7 +321,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>TV Show actor roles$INFO[Container(250).NumItems, (,)]</label>
+                            <label>$LOCALIZE[32121]$INFO[Container(250).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -502,7 +502,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Movie crew member$INFO[Container(550).NumItems, (,)]</label>
+                            <label>$ADDON[script.extendedinfo 32122]$INFO[Container(550).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -683,7 +683,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>TVShow crew member$INFO[Container(650).NumItems, (,)]</label>
+                            <label>$ADDON[script.extendedinfo 32123]$INFO[Container(650).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -980,7 +980,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Artwork</label>
+                            <label>$ADDON[script.extendedinfo 32119]</label>
                         </control>
                         <control type="panel" id="450">
                             <posy>30</posy>
@@ -1059,7 +1059,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Fanart</label>
+                            <label>$LOCALIZE[20445]</label>
                         </control>
                         <control type="panel" id="750">
                             <posy>30</posy>
