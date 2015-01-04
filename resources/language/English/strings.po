@@ -180,3 +180,11 @@ msgstr ""
 msgctxt "#32116"
 msgid "Recommended By TMDB"
 msgstr ""
+
+msgctxt "#32117"
+msgid "Official Videos"
+msgstr ""
+
+msgctxt "#32118"
+msgid "YouTube Videos"
+msgstr ""

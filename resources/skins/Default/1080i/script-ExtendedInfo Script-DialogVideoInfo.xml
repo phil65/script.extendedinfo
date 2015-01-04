@@ -1451,7 +1451,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Official Videos</label>
+                            <label>$ADDON[script.extendedinfo 32117]</label>
                         </control>
                         <control type="image">
                             <posx>-5</posx>
@@ -1580,7 +1580,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Youtube Videos</label>
+                            <label>$ADDON[script.extendedinfo 32118]</label>
                         </control>
                         <control type="image">
                             <posx>-5</posx>
