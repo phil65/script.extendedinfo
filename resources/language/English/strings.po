@@ -208,3 +208,11 @@ msgstr ""
 msgctxt "#32123"
 msgid "TV Show crew member"
 msgstr ""
+
+msgctxt "#32124"
+msgid "Items"
+msgstr ""
+
+msgctxt "#32125"
+msgid "Page"
+msgstr ""
