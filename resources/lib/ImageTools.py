@@ -137,7 +137,12 @@ class Filter_Image_Thread(threading.Thread):
         self.radius = radius
 
     def run(self):
-        self.image, self.imagecolor = Filter_Image(self.filterimage, self.radius)
+        try:
+            self.image, self.imagecolor = Filter_Image(self.filterimage, self.radius)
+        except:
+            self.image = ""
+            self.imagecolor = ""
+            log("exception. probably android PIL issue.")
 
 
 class MyGaussianBlur(ImageFilter.Filter):
