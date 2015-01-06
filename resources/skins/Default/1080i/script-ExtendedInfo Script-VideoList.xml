@@ -323,7 +323,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5006">
-                        <label>Certification</label>
+                        <label>$ADDON[script.extendedinfo 32127]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
@@ -337,7 +337,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5008">
-                        <label>Actor / Crew Member</label>
+                        <label>$ADDON[script.extendedinfo 32126]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
@@ -351,7 +351,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5009">
-                        <label>Keyword</label>
+                        <label>$ADDON[script.extendedinfo 32114]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
