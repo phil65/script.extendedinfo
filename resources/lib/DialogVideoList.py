@@ -16,7 +16,7 @@ addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
-                   addon.getLocalizedString(32022): "release_date",
+                   xbmc.getLocalizedString(172): "release_date",
                    addon.getLocalizedString(32108): "revenue",
                    # "Release Date": "primary_release_date",
                    xbmc.getLocalizedString(20376): "original_title",

@@ -74,7 +74,15 @@ msgid "In Database"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Release date"
+msgid "Clear Filters"
+msgstr ""
+
+msgctxt "#32023"
+msgid "Filters"
+msgstr ""
+
+msgctxt "#32024"
+msgid "My account"
 msgstr ""
 
 msgctxt "#32030"
@@ -219,4 +227,8 @@ msgstr ""
 
 msgctxt "#32127"
 msgid "Certification"
+msgstr ""
+
+msgctxt "#32128"
+msgid "Order"
 msgstr ""

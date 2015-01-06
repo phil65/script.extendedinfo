@@ -212,7 +212,7 @@
                     <onup>6000</onup>
                     <onright>500</onright>
                     <onleft>500</onleft>
-                    <label>    My Account</label>
+                    <label>    $ADDON[script.extendedinfo 32024]</label>
                     <radiowidth>90</radiowidth>
                     <radioheight>60</radioheight>
                     <radioposx>20</radioposx>
@@ -253,7 +253,7 @@
                     </control>
                     <control type="button" id="5001">
                         <onup>6000</onup>
-                        <label>Sort by:</label>
+                        <label>$ADDON[script.extendedinfo 32104]</label>
                         <label2>[COLOR white]$INFO[Window.Property(Sort_Label)][/COLOR]</label2>
                         <width>400</width>
                         <height>100</height>
@@ -268,7 +268,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5004">
-                        <label>Order:</label>
+                        <label>$ADDON[script.extendedinfo 32128]</label>
                         <label2>[COLOR white]$INFO[Window.Property(Order_Label)][/COLOR]</label2>
                         <width>400</width>
                         <height>100</height>
@@ -283,7 +283,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="label" id="5333">
-                        <label>Filters</label>
+                        <label>$ADDON[script.extendedinfo 32023]</label>
                         <width>400</width>
                         <height>75</height>
                         <textoffsetx>25</textoffsetx>
@@ -295,7 +295,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5002">
-                        <label>Genre</label>
+                        <label>$LOCALIZE[515]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
@@ -309,7 +309,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5003">
-                        <label>Release Year</label>
+                        <label>$LOCALIZE[172]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
@@ -365,7 +365,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5010">
-                        <label>Company</label>
+                        <label>$LOCALIZE[572]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
@@ -379,7 +379,7 @@
                         <focusedcolor>white6</focusedcolor>
                     </control>
                     <control type="button" id="5005">
-                        <label>Clear Filters</label>
+                        <label>$ADDON[script.extendedinfo 32022]</label>
                         <width>400</width>
                         <height>90</height>
                         <textoffsetx>40</textoffsetx>
