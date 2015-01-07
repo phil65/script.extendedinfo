@@ -29,7 +29,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         if not addon.getSetting("first_start_infodialog"):
             addon.setSetting("first_start_infodialog", "True")
-            xbmcgui.Dialog().ok("ExtendedInfo Script", "For all features enter your TMDB credentials in addon settings. " "This product uses the TMDb API but is not endorsed or certified by TMDb.")
+            xbmcgui.Dialog().ok(addon_name, addon.getLocalizedString(32140), addon.getLocalizedString(32141))
         self.movieplayer = VideoPlayer(popstack=True)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         xbmcgui.WindowXMLDialog.__init__(self)
@@ -243,19 +243,19 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             ratings = []
             for i in range(0, 21):
                 ratings.append(str(float(i * 0.5)))
-            rating = xbmcgui.Dialog().select("Enter Rating", ratings)
+            rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMedia("movie", self.MovieId, rating)
                 self.UpdateStates()
         elif controlID == 6002:
-            listitems = ["Starred Movies", "Rated Movies"]
+            listitems = [addon.getLocalizedString(32134), addon.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = GetAccountLists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select("Choose List", listitems)
+            index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
             if index == -1:
                 pass
             elif index == 0:
@@ -288,15 +288,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.ShowRatedMovies()
         elif controlID == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = ["New List.."]
+            listitems = [addon.getLocalizedString(32139)]
             account_lists = GetAccountLists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-            listitems.append("Remove list...")
+            listitems.append(addon.getLocalizedString(32138))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select("Choose List", listitems)
+            index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
             if index == 0:
-                listname = xbmcgui.Dialog().input("Enter List Name", type=xbmcgui.INPUT_ALPHANUM)
+                listname = xbmcgui.Dialog().input(addon.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
                     list_id = CreateList(listname)
                     xbmc.sleep(1000)
@@ -353,7 +353,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         for item in account_lists:
             listitems.append("%s (%i)" % (item["name"], item["item_count"]))
         prettyprint(account_lists)
-        index = xbmcgui.Dialog().select("Delete movie list", listitems)
+        index = xbmcgui.Dialog().select(addon.getLocalizedString(32138), listitems)
         if index >= 0:
             # ChangeListStatus(account_lists[index]["id"], self.MovieId, False)
             RemoveList(account_lists[index]["id"])
@@ -383,11 +383,19 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                                 # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
                                 # <onclick>SetProperty(Dialog.8.Label,ExtendedInfo Settings)</onclick>
                                 # <onclick>SetProperty(Dialog.8.BuiltIn,Addon.OpenSettings(script.extendedinfo))</onclick>
+        manage_list = []
         if "DBID" in self.movie:
-            manage_list = [["413", "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"],
-                           ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
-                           ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
-                           ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+            temp_list = [["413", "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"],
+                         ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
+                         ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
+                         ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+            manage_list += temp_list
+        else:
+            temp_list = [["413", "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"],
+                         ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
+                         ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
+                         ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+            manage_list += temp_list
 
 
 class Join_Omdb_Thread(threading.Thread):

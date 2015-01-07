@@ -252,3 +252,35 @@ msgstr ""
 msgctxt "#32133"
 msgid "Manage"
 msgstr ""
+
+msgctxt "#32134"
+msgid "Starred movies"
+msgstr ""
+
+msgctxt "#32135"
+msgid "Rated movies"
+msgstr ""
+
+msgctxt "#32136"
+msgid "Choose list"
+msgstr ""
+
+msgctxt "#32137"
+msgid "Enter list name"
+msgstr ""
+
+msgctxt "#32138"
+msgid "Delete movie list"
+msgstr ""
+
+msgctxt "#32139"
+msgid "New movie list"
+msgstr ""
+
+msgctxt "#32140"
+msgid "For all features enter your TMDB credentials in addon settings. "
+msgstr ""
+
+msgctxt "#32141"
+msgid "This product uses the TMDb API but is not endorsed or certified by TMDb."
+msgstr ""
