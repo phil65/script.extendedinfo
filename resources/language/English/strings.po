@@ -232,3 +232,23 @@ msgstr ""
 msgctxt "#32128"
 msgid "Order"
 msgstr ""
+
+msgctxt "#32129"
+msgid "Your rating"
+msgstr ""
+
+msgctxt "#32130"
+msgid "Show lists"
+msgstr ""
+
+msgctxt "#32131"
+msgid "Already rated"
+msgstr ""
+
+msgctxt "#32132"
+msgid "Extras"
+msgstr ""
+
+msgctxt "#32133"
+msgid "Manage"
+msgstr ""

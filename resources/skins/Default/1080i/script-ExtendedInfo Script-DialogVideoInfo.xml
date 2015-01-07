@@ -175,7 +175,7 @@
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
                                 <width>280</width>
                                 <control type="radiobutton" id="6001">
-                                    <label>Your Rating</label>
+                                    <label>$ADDON[script.extendedinfo 32129]</label>
                                     <textureradioonfocus colordiffuse="grey">-</textureradioonfocus>
                                     <textureradioofffocus colordiffuse="grey">icons/heart.png</textureradioofffocus>
                                     <textureradiooffnofocus colordiffuse="grey">icons/heart.png</textureradiooffnofocus>
@@ -242,7 +242,7 @@
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6005">
-                                <label>Add To List</label>
+                                <label>$ADDON[script.extendedinfo 32107]</label>
                                 <textureradioonfocus colordiffuse="grey">icons/checkmark.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/checkmark.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/checkmark.png</textureradiooffnofocus>
@@ -266,7 +266,7 @@
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6002">
-                                <label>Show Lists</label>
+                                <label>$ADDON[script.extendedinfo 32130]</label>
                                 <textureradioonfocus colordiffuse="grey">icons/list2.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/list2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/list2.png</textureradiooffnofocus>
@@ -290,7 +290,7 @@
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
                             </control>
                             <control type="radiobutton" id="6006">
-                                <label>Already rated</label>
+                                <label>$ADDON[script.extendedinfo 32131]</label>
                                 <textureradioonfocus colordiffuse="grey">icons/list2.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="grey">icons/list2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/list2.png</textureradiooffnofocus>
@@ -329,7 +329,7 @@
                                 <radioposy>30</radioposy>
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
-                                <label>Extras</label>
+                                <label>$ADDON[script.extendedinfo 32132]</label>
                                 <onclick>XBMC.RunScript(script.videoextras,display,"$INFO[Window.Property(movie.FilenameAndPath)]")</onclick>
                                 <visible>System.HasAddon(script.videoextras) + IsEmpty(Window(movieinformation).Property(HideVideoExtrasButton))</visible>
                                 <visible>!IsEmpty(Window.Property(movie.FilenameAndPath))</visible>
@@ -358,7 +358,7 @@
                                 <textureradioofffocus colordiffuse="grey">icons/tool2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="grey">icons/tool2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="grey">icons/tool2.png</textureradioonnofocus>
-                                <label>Manage</label>
+                                <label>$ADDON[script.extendedinfo 32133]</label>
                                 <onclick>SetProperty(Dialog.1.Label,none)</onclick>
                                 <onclick>SetProperty(Dialog.2.Label,none)</onclick>
                                 <onclick>SetProperty(Dialog.3.Label,none)</onclick>
