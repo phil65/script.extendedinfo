@@ -1709,7 +1709,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Production Companies</label>
+                            <label>$LOCALIZE[20388]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1825,7 +1825,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Networks</label>
+                            <label>$ADDON[script.extendedinfo 32142]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
