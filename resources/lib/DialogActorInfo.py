@@ -52,7 +52,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             youtube_thread.join()
             self.youtube_vids = youtube_thread.listitems
         else:
-            Notify("No ID found")
+            Notify(addon.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 

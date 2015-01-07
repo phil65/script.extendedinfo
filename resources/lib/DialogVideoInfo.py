@@ -105,7 +105,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify("No ID found")
+            Notify(addon.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 

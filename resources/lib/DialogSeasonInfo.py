@@ -53,7 +53,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.season["general"]['ImageFilter'], self.season["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify("No ID found")
+            Notify(addon.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 

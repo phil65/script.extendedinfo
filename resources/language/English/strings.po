@@ -288,3 +288,15 @@ msgstr ""
 msgctxt "#32142"
 msgid "Studios"
 msgstr ""
+
+msgctxt "#32143"
+msgid "Could not find item at MovieDB"
+msgstr ""
+
+msgctxt "#32144"
+msgid "Starred TV Shows"
+msgstr ""
+
+msgctxt "#32145"
+msgid "Rated TV Shows"
+msgstr ""

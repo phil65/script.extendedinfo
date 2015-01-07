@@ -75,7 +75,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.tvshow["general"]['ImageFilter'], self.tvshow["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify("No ID found")
+            Notify(addon.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -182,14 +182,14 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             ratings = []
             for i in range(0, 21):
                 ratings.append(str(float(i * 0.5)))
-            rating = xbmcgui.Dialog().select("Enter Rating", ratings)
+            rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
             if rating > -1:
                 rating = float(rating) * 0.5
                 RateMedia("tv", self.tmdb_id, rating)
                 self.UpdateStates()
         elif controlID == 6002:
-            listitems = ["Favourites", "Rated Movies"]
-            index = xbmcgui.Dialog().select("Choose List", listitems)
+            listitems = [addon.getLocalizedString(32144), addon.getLocalizedString(32145)]
+            index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
             if index == -1:
                 pass
             elif index == 0:
