@@ -300,3 +300,7 @@ msgstr ""
 msgctxt "#32145"
 msgid "Rated TV Shows"
 msgstr ""
+
+msgctxt "#32146"
+msgid "Search for '%s'"
+msgstr ""

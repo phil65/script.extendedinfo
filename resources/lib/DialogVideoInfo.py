@@ -181,7 +181,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 self.movieplayer.WaitForVideoEnd()
                 PopWindowStack()
             else:
-                Notify("No trailer found")
+                Notify(addon.getLocalizedString(32052))
         elif controlID in [8]:
             AddToWindowStack(self)
             self.close()
