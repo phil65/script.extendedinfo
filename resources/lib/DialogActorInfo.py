@@ -89,7 +89,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
-            options = ["Show actor TV Show appearances", "Show TV Show Info"]
+            options = [addon.getLocalizedString(32147), addon.getLocalizedString(32148)]
             selection = xbmcgui.Dialog().select("Choose Option", options)
             if selection == 0:
                 GetCreditInfo(listitem.getProperty("credit_id"))

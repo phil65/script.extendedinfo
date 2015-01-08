@@ -123,7 +123,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5003:
             dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel="lower limit", yeslabel="upper limit")
+            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
             result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
