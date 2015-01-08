@@ -439,7 +439,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.set_filter_label()
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
         response = GetMovieDBData(url, 10)
-        prettyprint(response)
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
         if self.mode == "search":

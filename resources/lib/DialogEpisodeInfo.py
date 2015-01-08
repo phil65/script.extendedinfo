@@ -30,10 +30,8 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.showname = kwargs.get('tvshow')
         self.episodenumber = kwargs.get('episode')
         self.logged_in = checkLogin()
-        prettyprint(kwargs)
         if self.tmdb_id or self.showname:
             self.episode = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber)
-            prettyprint(self.episode)
             if not self.episode:
                 self.close()
             xbmc.executebuiltin("ActivateWindow(busydialog)")

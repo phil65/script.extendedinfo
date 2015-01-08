@@ -57,7 +57,6 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                     # language = item["iso_3166_1"]
                     rating = item["certification"]
                     language_certs = cert_list[item["iso_3166_1"]]
-                    prettyprint(language_certs)
                     hit = dictfind(language_certs, "certification", rating)
                     if hit:
                         item["meaning"] = hit["meaning"]

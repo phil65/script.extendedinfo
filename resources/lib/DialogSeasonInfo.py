@@ -30,7 +30,6 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
         self.logged_in = checkLogin()
-        prettyprint(kwargs)
         if self.tmdb_id or (self.season and self.showname):
             self.season = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.season:
