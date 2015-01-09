@@ -340,3 +340,7 @@ msgstr ""
 msgctxt "#32155"
 msgid "UnStar"
 msgstr ""
+
+msgctxt "#32156"
+msgid "Person"
+msgstr ""

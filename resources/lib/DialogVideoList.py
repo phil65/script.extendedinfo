@@ -313,7 +313,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         index = xbmcgui.Dialog().select("Choose Genre", label_list)
         if index > -1:
             # return "with_genres=" + str(id_list[index])
-            self.add_filter("with_genres", str(id_list[index]), "Genres", str(label_list[index]))
+            self.add_filter("with_genres", str(id_list[index]), xbmc.getLocalizedString(135), str(label_list[index]))
             self.mode = "filter"
             self.page = 1
 
@@ -324,7 +324,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_people", str(response["id"]), "People", response["name"])
+                self.add_filter("with_people", str(response["id"]), addon.getLocalizedString(32156), response["name"])
                 self.mode = "filter"
                 self.page = 1
 
@@ -343,7 +343,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         response = response[selection]
                 else:
                     response = response[0]
-                self.add_filter("with_companies", str(response["id"]), "People", response["name"])
+                self.add_filter("with_companies", str(response["id"]), xbmc.getLocalizedString(20388), response["name"])
                 self.mode = "filter"
                 self.page = 1
 
@@ -356,7 +356,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 name = response["name"]
                 prettyprint(response)
                 if result > -1:
-                    self.add_filter("with_keywords", str(keyword_id), "Keywords", name)
+                    self.add_filter("with_keywords", str(keyword_id), addon.getLocalizedString(32114), name)
                     self.mode = "filter"
                     self.page = 1
 
@@ -378,8 +378,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if index > -1:
             # return "with_genres=" + str(id_list[index])
                 cert = cert_list[index].split("  -  ")[0]
-                self.add_filter("certification_country", country, "Certification Country", country)
-                self.add_filter("certification", cert, "Certification", cert)
+                self.add_filter("certification_country", country, addon.getLocalizedString(32153), country)
+                self.add_filter("certification", cert, addon.getLocalizedString(32127), cert)
                 self.page = 1
                 self.mode = "filter"
 
