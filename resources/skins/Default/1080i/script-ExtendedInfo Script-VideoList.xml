@@ -99,7 +99,27 @@
                             <posy>320</posy>
                             <align>center</align>
                             <font>font12</font>
-                            <label>$INFO[ListItem.Label]$INFO[ListItem.Property(User_Rating),[CR][COLOR grey],[/COLOR]]</label>
+                            <label>$INFO[ListItem.Label]</label>
+                        </control>
+                        <control type="image">
+                            <width>48</width>
+                            <height>48</height>
+                            <posy>2</posy>
+                            <posx>-10</posx>
+                            <texture>circle.png</texture>
+                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                        </control>
+                        <control type="label">
+                            <width>46</width>
+                            <height>40</height>
+                            <posy>6</posy>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <posx>-9</posx>
+                            <font>font10</font>
+                            <textcolor>FF000000</textcolor>
+                            <label>$INFO[ListItem.Property(User_Rating)]</label>
+                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
                         </control>
                     </control>
                 </itemlayout>
@@ -144,7 +164,7 @@
                         <posy>470</posy>
                         <align>center</align>
                         <font>font12</font>
-                        <label>$INFO[ListItem.Label]$INFO[ListItem.Property(User_Rating),[CR][COLOR grey],[/COLOR]]</label>
+                        <label>$INFO[ListItem.Label]</label>
                         <animation effect="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false">Focus</animation>
                         <animation effect="slide" start="0,50" end="0" time="200" tween="cubic" reversible="false">UnFocus</animation>
                     </control>
