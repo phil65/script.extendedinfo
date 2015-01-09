@@ -268,8 +268,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                       "type": key,
                       "typelabel": typelabel,
                       "label": label}
-        if new_filter in self.filters:
-            return False
+        for item in self.filters:
+            if item == new_filter:
+                return False
         for i, item in enumerate(self.filters):
             if item["type"] == key:
                 index = i
