@@ -167,12 +167,12 @@ def StartInfoActions(infos, params):
                 if directorid:
                     data = GetDirectorMovies(directorid), "DirectorMovies"
         elif info == 'writermovies':
-            if params.get("writer", False) and not params["writer"].split(" / ")[0] == params["director"].split(" / ")[0]:
+            if params.get("writer", False) and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
                 writerid = GetPersonID(params["writer"])["id"]
                 if writerid:
                     data = GetDirectorMovies(writerid), "WriterMovies"
         elif info == 'similarmoviestrakt':
-            if (params.get("id", "") or params["dbid"]):
+            if params.get("id", False) or params.get("dbid", False):
                 if params["dbid"]:
                     movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 else:
