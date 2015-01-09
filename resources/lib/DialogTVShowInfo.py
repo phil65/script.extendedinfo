@@ -159,7 +159,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            genrename = self.getControl(controlID).getSelectedItem().getProperty("name")
+            genrename = self.getControl(controlID).getSelectedItem().getLabel()
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             filters = [{"id": genreid,
                         "type": "with_genres",
@@ -173,7 +173,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 1450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            company_name = self.getControl(controlID).getSelectedItem().getProperty("name")
+            company_name = self.getControl(controlID).getSelectedItem().getLabel()
             filters = [{"id": company_id,
                         "type": "with_networks",
                         "typelabel": addon.getLocalizedString(32152),
