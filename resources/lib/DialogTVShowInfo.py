@@ -41,7 +41,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif imdb_id:
             self.tmdb_id = Get_Show_TMDB_ID(imdb_id, "imdb_id")
         elif self.name:
-            self.tmdb_id = search_movie(kwargs.get('name'))
+            self.tmdb_id = search_media(kwargs.get('name'), "", "tv")
         else:
             self.tmdb_id = ""
         xbmc.executebuiltin("ActivateWindow(busydialog)")

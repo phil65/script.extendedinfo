@@ -1049,26 +1049,27 @@ def GetDirectorMovies(person_id):
         log("No JSON Data available")
 
 
-def search_movie(medianame, year=''):
-    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (medianame, year))
-    medianame = urllib.quote_plus(medianame.encode('utf8', 'ignore'))
-    response = GetMovieDBData("search/movie?query=%s+%s&language=%s&include_adult=%s&" % (medianame, year, addon.getSetting("LanguageID"), include_adult), 1)
-    tmdb_id = ''
-    try:
-        if response == "Empty":
-            tmdb_id = ''
+def search_media(media_name=None, year='', media_type="movie"):
+    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (media_name, year))
+    media_name = urllib.quote_plus(media_name.encode('utf8', 'ignore'))
+    if media_name:
+        response = GetMovieDBData("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name, year, addon.getSetting("LanguageID"), include_adult), 1)
+        tmdb_id = ''
+        try:
+            if response == "Empty":
+                tmdb_id = ''
+            else:
+                for item in response['results']:
+                    if item['id']:
+                        tmdb_id = item['id']
+                        log(tmdb_id)
+                        break
+        except Exception as e:
+            log(e)
+        if tmdb_id == '':
+            log('TMDB API search found no ID')
         else:
-            for item in response['results']:
-                if item['id']:
-                    tmdb_id = item['id']
-                    log(tmdb_id)
-                    break
-    except Exception as e:
-        log(e)
-    if tmdb_id == '':
-        log('TMDB API search found no ID')
-    else:
-        log('TMDB API search found ID: %s' % tmdb_id)
+            log('TMDB API search found ID: %s' % tmdb_id)
     return tmdb_id
 
 

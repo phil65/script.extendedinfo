@@ -47,7 +47,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif imdb_id:
             self.MovieId = GetMovieDBID(imdb_id)
         elif self.name:
-            self.MovieId = search_movie(kwargs.get('name'))
+            self.MovieId = search_media(kwargs.get('name'))
         else:
             self.MovieId = ""
         if self.MovieId:
