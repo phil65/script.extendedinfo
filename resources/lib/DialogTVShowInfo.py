@@ -34,14 +34,18 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > -1):
             tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
+            log("IMDBId from local DB:" + str(tvdb_id))
             self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
-            log("IMDBId from local DB:" + str(self.tmdb_id))
+            log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(self.tmdb_id)))
         elif tvdb_id:
             self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
+            log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(self.tmdb_id)))
         elif imdb_id:
             self.tmdb_id = Get_Show_TMDB_ID(imdb_id, "imdb_id")
+            log("imdb_id to tmdb_id: %s --> %s" % (str(imdb_id), str(self.tmdb_id)))
         elif self.name:
             self.tmdb_id = search_media(kwargs.get('name'), "", "tv")
+            log("search string to tmdb_id: %s --> %s" % (str(self.name), str(self.tmdb_id)))
         else:
             self.tmdb_id = ""
         xbmc.executebuiltin("ActivateWindow(busydialog)")

@@ -1062,7 +1062,6 @@ def search_media(media_name=None, year='', media_type="movie"):
                 for item in response['results']:
                     if item['id']:
                         tmdb_id = item['id']
-                        log(tmdb_id)
                         break
         except Exception as e:
             log(e)
