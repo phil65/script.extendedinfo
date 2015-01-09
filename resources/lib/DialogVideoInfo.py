@@ -193,20 +193,20 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             company_name = self.getControl(controlID).getSelectedItem().getLabel()
             filters = [{"id": company_id,
                         "type": "with_companies",
-                        "typelabel": "Companies",
+                        "typelabel": xbmc.getLocalizedString(20388),
                         "label": company_name}]
             self.OpenVideoList(filters=filters)
         elif controlID == 1050:
             author = self.getControl(controlID).getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(self.getControl(controlID).getSelectedItem().getProperty("content"))
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Review", text=text, color=self.movie["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header=xbmc.getLocalizedString(185), text=text, color=self.movie["general"]['ImageColor'])
             w.doModal()
         elif controlID == 950:
             keyword_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             keyword_name = self.getControl(controlID).getSelectedItem().getLabel()
             filters = [{"id": keyword_id,
                         "type": "with_keywords",
-                        "typelabel": "Keywords",
+                        "typelabel": addon.getLocalizedString(32114),
                         "label": keyword_name}]
             self.OpenVideoList(filters=filters)
         elif controlID == 850:
@@ -214,7 +214,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             genre_name = self.getControl(controlID).getSelectedItem().getLabel()
             filters = [{"id": genre_id,
                         "type": "with_genres",
-                        "typelabel": "Genres",
+                        "typelabel": xbmc.getLocalizedString(135),
                         "label": genre_name}]
             self.OpenVideoList(filters=filters)
         elif controlID == 650:
@@ -223,15 +223,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             year = self.getControl(controlID).getSelectedItem().getProperty("year")
             filters = [{"id": country,
                         "type": "certification_country",
-                        "typelabel": "Certification Country",
+                        "typelabel": addon.getLocalizedString(32153),
                         "label": country},
                        {"id": certification,
                         "type": "certification",
-                        "typelabel": "Certification",
+                        "typelabel": addon.getLocalizedString(32127),
                         "label": certification},
                        {"id": year,
                         "type": "year",
-                        "typelabel": "Year",
+                        "typelabel": xbmc.getLocalizedString(345),
                         "label": year}]
             self.OpenVideoList(filters=filters)
         elif controlID == 450:
@@ -336,10 +336,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.movie["account_states"] = self.update["account_states"]
         if self.movie["account_states"]:
             if self.movie["account_states"]["favorite"]:
-                self.window.setProperty("FavButton_Label", "UnStar Movie")
+                self.window.setProperty("FavButton_Label", addon.getLocalizedString(32155))
                 self.window.setProperty("movie.favorite", "True")
             else:
-                self.window.setProperty("FavButton_Label", "Star Movie")
+                self.window.setProperty("FavButton_Label", addon.getLocalizedString(32154))
                 self.window.setProperty("movie.favorite", "")
             if self.movie["account_states"]["rated"]:
                 self.window.setProperty("movie.rated", str(self.movie["account_states"]["rated"]["value"]))

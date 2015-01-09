@@ -518,7 +518,7 @@ def GetPersonID(person):
             names = []
             for item in response["results"]:
                 names.append(item["name"])
-            selection = xbmcgui.Dialog().select("Choose Option", names)
+            selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), names)
             if selection > -1:
                 return response["results"][selection]
         else:

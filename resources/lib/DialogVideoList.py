@@ -80,7 +80,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 listitems = [xbmc.getLocalizedString(14076), addon.getInfoLabel(32113), addon.getLocalizedString(32107)]
                 # context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
-                selection = xbmcgui.Dialog().select("Choose Option", listitems)
+                selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
                 if selection == 0:
                     ChangeFavStatus(list_id, self.type, "true")
                 elif selection == 1:
@@ -123,8 +123,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_list()
         elif controlID == 5003:
             dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading="Choose Mode", line1="Choose the filter behaviour", nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
-            result = xbmcgui.Dialog().input("Enter Year", "", type=xbmcgui.INPUT_NUMERIC)
+            ret = dialog.yesno(heading="Choose Mode", line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
+            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
                     order = "lte"
@@ -338,7 +338,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     names = []
                     for item in response:
                         names.append(item["name"])
-                    selection = xbmcgui.Dialog().select("Choose Option", names)
+                    selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), names)
                     if selection > -1:
                         response = response[selection]
                 else:

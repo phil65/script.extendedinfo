@@ -1,7 +1,6 @@
 import xbmcaddon
 import os
 import xbmc
-import simplejson as json
 from Utils import *
 import urllib
 
@@ -25,7 +24,7 @@ def HandleAudioDBAlbumResult(results):
             else:
                 Description = ""
             if 'strReview' in album and album['strReview']:
-                Description += "[CR][CR][B]REVIEW:[/B][CR][CR]" + album['strReview']
+                Description += "[CR][CR][B]" + xbmc.getLocalizedString(185) + ":[/B][CR][CR]" + album['strReview']
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],

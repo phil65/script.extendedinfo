@@ -89,16 +89,15 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             dialog.doModal()
         elif controlID in [250, 650]:
             listitem = self.getControl(controlID).getSelectedItem()
-            options = [addon.getLocalizedString(32147), addon.getLocalizedString(32148)]
-            selection = xbmcgui.Dialog().select("Choose Option", options)
-            if selection == 0:
-                GetCreditInfo(listitem.getProperty("credit_id"))
-                #todo
-            if selection == 1:
-                AddToWindowStack(self)
-                self.close()
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-                dialog.doModal()
+            # options = [addon.getLocalizedString(32147), addon.getLocalizedString(32148)]
+            # selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), options)
+            # if selection == 0:
+            #     GetCreditInfo(listitem.getProperty("credit_id"))
+            # if selection == 1:
+            AddToWindowStack(self)
+            self.close()
+            dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+            dialog.doModal()
         elif controlID in [450, 750]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)

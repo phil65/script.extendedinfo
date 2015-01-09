@@ -159,7 +159,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             filters = [{"id": genreid,
                         "type": "with_genres",
-                        "typelabel": "Genres",
+                        "typelabel": xbmc.getLocalizedString(135),
                         "label": genrename}]
             self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID in [1250, 1350]:
@@ -172,7 +172,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             company_name = self.getControl(controlID).getSelectedItem().getProperty("name")
             filters = [{"id": company_id,
                         "type": "with_networks",
-                        "typelabel": "Networks",
+                        "typelabel": addon.getLocalizedString(32152),
                         "label": company_name}]
             listitems = GetCompanyInfo(company_id)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -229,10 +229,10 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tvshow["account_states"] = self.update["account_states"]
         if self.tvshow["account_states"]:
             if self.tvshow["account_states"]["favorite"]:
-                self.window.setProperty("FavButton_Label", "UnStar TVShow")
+                self.window.setProperty("FavButton_Label", addon.getLocalizedString(32155))
                 self.window.setProperty("movie.favorite", "True")
             else:
-                self.window.setProperty("FavButton_Label", "Star TVShow")
+                self.window.setProperty("FavButton_Label", addon.getLocalizedString(32154))
                 self.window.setProperty("movie.favorite", "")
             if self.tvshow["account_states"]["rated"]:
                 self.window.setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))

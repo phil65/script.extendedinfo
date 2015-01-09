@@ -7,7 +7,7 @@
       <setting label="TMDB Password" type="text" id="tmdb_password" option="hidden"/>
 <!--       <setting label="Include Adult Movies" type="bool" id="include_adults"/>
  -->      <setting label="Include Adult Movies" type="labelenum" values="true|false" id="include_adults" default="false"/>
-      <setting label="Open InfoDialog by default" type="bool" id="infodialog_onclick"/>
+      <setting label="Open InfoDialog by default" type="bool" id="infodialog_onclick" default="true"/>
       <setting label="Debug Mode" type="bool" id="debug_mode"/>
       <setting label="Delete Cache" type="action" action="RunScript(script.extendedinfo,info=deletecache)"/>
       <setting label="Sync MovieDB watchlist" type="action" action="RunScript(script.extendedinfo,info=syncwatchlist)"/>
