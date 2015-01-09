@@ -1429,7 +1429,7 @@
                                 <font>font12</font>
                                 <textcolor>white2</textcolor>
                                 <scroll>true</scroll>
-                                <haspath>true</haspath>
+                                <visible>!StringCompare(Window.Property(movie.set.overview),Window.Property(movie.set.label))</visible>
                             </control>
                             <control type="image">
                                 <posy>60</posy>
