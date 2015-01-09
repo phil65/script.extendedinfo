@@ -30,7 +30,7 @@ msgid "Filmography"
 msgstr ""
 
 msgctxt "#32011"
-msgid "Known Movies"
+msgid "Known movies"
 msgstr ""
 
 msgctxt "#32012"
@@ -38,11 +38,11 @@ msgid "Birthday"
 msgstr ""
 
 msgctxt "#32013"
-msgid "Day of Death"
+msgid "Day of death"
 msgstr ""
 
 msgctxt "#32014"
-msgid "Place of Birth"
+msgid "Place of birth"
 msgstr ""
 
 msgctxt "#32015"
@@ -50,7 +50,7 @@ msgid "Adult Actor"
 msgstr ""
 
 msgctxt "#32016"
-msgid "Also Known As"
+msgid "Also known as"
 msgstr ""
 
 msgctxt "#32017"
@@ -70,11 +70,11 @@ msgid "Age"
 msgstr ""
 
 msgctxt "#32021"
-msgid "In Database"
+msgid "In database"
 msgstr ""
 
 msgctxt "#32022"
-msgid "Clear Filters"
+msgid "Clear filters"
 msgstr ""
 
 msgctxt "#32023"
@@ -86,15 +86,15 @@ msgid "My account"
 msgstr ""
 
 msgctxt "#32030"
-msgid "Movie Appearances"
+msgid "Movie appearances"
 msgstr ""
 
 msgctxt "#32031"
-msgid "TV Show Appearances"
+msgid "TV Show appearances"
 msgstr ""
 
 msgctxt "#32033"
-msgid "Enter Person Name"
+msgid "Enter person name"
 msgstr ""
 
 msgctxt "#32034"
@@ -114,7 +114,7 @@ msgid "No trailers found"
 msgstr ""
 
 msgctxt "#32099"
-msgid "Include Pornstars"
+msgid "Include porn stars"
 msgstr ""
 
 msgctxt "#32100"
@@ -186,11 +186,11 @@ msgid "Recommended By TMDB"
 msgstr ""
 
 msgctxt "#32117"
-msgid "Official Videos"
+msgid "Official videos"
 msgstr ""
 
 msgctxt "#32118"
-msgid "YouTube Videos"
+msgid "YouTube videos"
 msgstr ""
 
 msgctxt "#32119"
@@ -198,7 +198,7 @@ msgid "Artwork"
 msgstr ""
 
 msgctxt "#32120"
-msgid "Movie Actor Roles"
+msgid "Movie actor roles"
 msgstr ""
 
 msgctxt "#32121"
@@ -350,5 +350,29 @@ msgid "Created at"
 msgstr ""
 
 msgctxt "#32158"
-msgid "Birthday Today!"
+msgid "Birthday today!"
+msgstr ""
+
+msgctxt "#32159"
+msgid "Language for TheMovieDB requests"
+msgstr ""
+
+msgctxt "#32160"
+msgid "TheMovieDB username"
+msgstr ""
+
+msgctxt "#32161"
+msgid "TheMovieDB password"
+msgstr ""
+
+msgctxt "#32162"
+msgid "Include adult actors"
+msgstr ""
+
+msgctxt "#32163"
+msgid "Open InfoDialog by default"
+msgstr ""
+
+msgctxt "#32164"
+msgid "Delete cache"
 msgstr ""
