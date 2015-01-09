@@ -79,8 +79,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 500:
                 list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-                listitems = [xbmc.getLocalizedString(14076), addon.getInfoLabel(32113), addon.getLocalizedString(32107)]
-                # context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
+                listitems = [xbmc.getLocalizedString(14076), addon.getLocalizedString(32113), addon.getLocalizedString(32107)]
+                # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
                 if selection == 0:
