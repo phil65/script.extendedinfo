@@ -990,6 +990,8 @@ def CreateListItems(data=None, preload_images=0):
             itempath = ""
             counter = 1
             for (key, value) in result.iteritems():
+                if not value:
+                    continue
                 value = unicode(value)
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
