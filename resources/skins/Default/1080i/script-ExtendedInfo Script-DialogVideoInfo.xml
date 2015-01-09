@@ -755,7 +755,7 @@
                         </control>
                         <control type="panel" id="1000">
                             <posx>-50</posx>
-                            <posy>20</posy>
+                            <posy>30</posy>
                             <width>1930</width>
                             <height>500</height>
                             <onleft>1000</onleft>
@@ -887,7 +887,7 @@
                         </control>
                         <control type="panel" id="750">
                             <posx>-50</posx>
-                            <posy>20</posy>
+                            <posy>30</posy>
                             <width>1930</width>
                             <height>500</height>
                             <onleft>750</onleft>
@@ -1076,7 +1076,7 @@
                         </control>
                         <control type="panel" id="150">
                             <posx>-50</posx>
-                            <posy>20</posy>
+                            <posy>30</posy>
                             <width>1930</width>
                             <height>500</height>
                             <onleft>150</onleft>
@@ -2491,7 +2491,7 @@
                         </control>
                         <control type="panel" id="450">
                             <posx>-50</posx>
-                            <posy>20</posy>
+                            <posy>30</posy>
                             <width>1930</width>
                             <height>600</height>
                             <onleft>450</onleft>
