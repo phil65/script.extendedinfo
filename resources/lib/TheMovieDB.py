@@ -989,8 +989,8 @@ def GetMovieKeywords(movie_id):
 def GetSimilarMovies(movie_id):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                               (movie_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
-    if "similar_movies" in response:
-        return HandleTMDBMovieResult(response["similar_movies"]["results"])
+    if "similar" in response:
+        return HandleTMDBMovieResult(response["similar"]["results"])
     else:
         log("No JSON Data available")
 
