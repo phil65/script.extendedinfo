@@ -149,6 +149,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
                 context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=["Add To Account Lists"])
                 context_menu.doModal()
+                if context_menu.selection == 0:
+                    Notify(list_id)
 
 
     def onClick(self, controlID):
@@ -173,7 +175,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID in [350, 1150]:
             AddToWindowStack(self)
             self.close()
-            listitem =xbmcgui.ListItem (xbmc.getLocalizedString(20410))
+            listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
             youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
             if youtube_id:
