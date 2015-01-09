@@ -523,7 +523,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
-            if "moviedetails" in json_response["result"] and "Premiered" in online_item:
+            if "moviedetails" in json_response["result"]:
                 local_item = json_response['result']['moviedetails']
                 try:
                     diff = abs(local_item["year"] - int(online_item["Year"]))
@@ -581,6 +581,8 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                     local_items.append(online_item)
                 else:
                     remote_items.append(online_item)
+            else:
+                remote_items.append(online_item)
         else:
             remote_items.append(online_item)
     log("compare time: " + str(now - time.time()))

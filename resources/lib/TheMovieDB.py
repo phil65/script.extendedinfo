@@ -781,20 +781,24 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
         item.start()
     for item in threads:
         item.join()
-    answer = {"general": CompareWithLibrary([movie])[0],
-              "actors": actor_thread.listitems,
-              "similar": similar_thread.listitems,
-              "lists": HandleTMDBMiscResult(response["lists"]["results"]),
-              "studios": HandleTMDBMiscResult(response["production_companies"]),
-              "releases": HandleTMDBMiscResult(response["releases"]["countries"]),
-              "crew": crew_thread.listitems,
-              "genres": HandleTMDBMiscResult(response["genres"]),
-              "keywords": HandleTMDBMiscResult(response["keywords"]["keywords"]),
-              "reviews": HandleTMDBMiscResult(response["reviews"]["results"]),
-              "videos": videos,
-              "account_states": account_states,
-              "images": poster_thread.listitems,
-              "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+    synced_movie = CompareWithLibrary([movie])
+    if synced_movie:
+        answer = {"general": synced_movie[0],
+                  "actors": actor_thread.listitems,
+                  "similar": similar_thread.listitems,
+                  "lists": HandleTMDBMiscResult(response["lists"]["results"]),
+                  "studios": HandleTMDBMiscResult(response["production_companies"]),
+                  "releases": HandleTMDBMiscResult(response["releases"]["countries"]),
+                  "crew": crew_thread.listitems,
+                  "genres": HandleTMDBMiscResult(response["genres"]),
+                  "keywords": HandleTMDBMiscResult(response["keywords"]["keywords"]),
+                  "reviews": HandleTMDBMiscResult(response["reviews"]["results"]),
+                  "videos": videos,
+                  "account_states": account_states,
+                  "images": poster_thread.listitems,
+                  "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+    else:
+        answer = []
     return answer
 
 
