@@ -135,9 +135,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     value = "%s-01-01" % result
                     label = " > " + result
                 if self.type == "tv":
-                    self.add_filter("first_air_date_year.%s" % order, value, "First Air Date", label)
+                    self.add_filter("first_air_date_year.%s" % order, value, xbmc.getLocalizedString(20416), label)
                 else:
-                    self.add_filter("primary_release_date.%s" % order, value, "Year", label)
+                    self.add_filter("primary_release_date.%s" % order, value, xbmc.getLocalizedString(345), label)
                 self.mode = "filter"
                 self.page = 1
                 self.update_content()
@@ -192,9 +192,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_list()
         elif controlID == 7000:
             if self.type == "tv":
-                listitems = ["Starred TV Shows", "Rated TV Shows"]
+                listitems = [addon.getLocalizedString(32144), addon.getLocalizedString(32145)]
             else:
-                listitems = ["Starred Movies", "Rated Movies"]
+                listitems = [addon.getLocalizedString(32134), addon.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = GetAccountLists()
             for item in account_lists:
@@ -206,7 +206,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             elif index == 0:
                 self.mode = "favorites"
                 self.sort = "created_at"
-                self.sort_label = "Created at"
+                self.sort_label = addon.getLocalizedString(32157)
                 self.filters = []
                 self.page = 1
                 self.update_content()
@@ -214,7 +214,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             elif index == 1:
                 self.mode = "rating"
                 self.sort = "created_at"
-                self.sort_label = "Created at"
+                self.sort_label = addon.getLocalizedString(32157)
                 self.filters = []
                 self.page = 1
                 self.update_content()
