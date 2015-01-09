@@ -173,14 +173,14 @@ def StartInfoActions(infos, params):
                     data = GetDirectorMovies(writerid), "WriterMovies"
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid", False):
-                if params["dbid"]:
+                if params.get("dbid", False):
                     movieid = GetImdbIDFromDatabase("movie", params["dbid"])
                 else:
                     movieid = params.get("id", "")
                 data = GetSimilarTrakt("movie", movieid), "SimilarMovies"
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
-                if params["dbid"]:
+                if params.get("dbid", False):
                     if params["type"] == "episode":
                         tvshowid = GetImdbIDFromDatabasefromEpisode(params["dbid"])
                     else:
@@ -243,7 +243,7 @@ def StartInfoActions(infos, params):
             data = favourites, "Favourites"
         elif info == 'json':
             data = GetYoutubeVideos(params["feed"]), "RSS"
-        elif info == 'similarlocal' and params["dbid"]:
+        elif info == 'similarlocal' and "dbid" in params:
             data = GetSimilarFromOwnLibrary(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             data = GetIconPanel(int(self.id)), "IconPanel" + str(self.id)
