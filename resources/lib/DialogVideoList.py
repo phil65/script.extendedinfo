@@ -351,14 +351,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = GetKeywordID(result)
-            keyword_id = response["id"]
-            name = response["name"]
-            prettyprint(response)
-            if result > -1:
-                # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_keywords", str(keyword_id), "Keywords", name)
-                self.mode = "filter"
-                self.page = 1
+            if response:
+                keyword_id = response["id"]
+                name = response["name"]
+                prettyprint(response)
+                if result > -1:
+                    self.add_filter("with_keywords", str(keyword_id), "Keywords", name)
+                    self.mode = "filter"
+                    self.page = 1
 
     def get_certification(self):
         response = get_certification_list(self.type)
@@ -422,7 +422,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             rated = addon.getLocalizedString(32135)
             starred = addon.getLocalizedString(32134)
         if self.mode == "search":
-            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, addon.getSetting("include_adults"))
+            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, str(addon.getSetting("include_adults")).lower())
             self.filter_label = addon.getLocalizedString(32146) % self.search_string
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
@@ -437,7 +437,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.set_filter_url()
             self.set_filter_label()
-            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, addon.getSetting("include_adults"))
+            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, str(addon.getSetting("include_adults")).lower())
         response = GetMovieDBData(url, 10)
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
