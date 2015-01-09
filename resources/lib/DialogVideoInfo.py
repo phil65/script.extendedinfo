@@ -144,13 +144,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
-        elif action == xbmcgui.ACTION_CONTEXT_MENU:
-            if focusid == 450:
-                list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-                context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=["Add To Account Lists"])
-                context_menu.doModal()
-                if context_menu.selection == 0:
-                    Notify(list_id)
+        # elif action == xbmcgui.ACTION_CONTEXT_MENU:
+        #     if focusid == 450:
+        #         list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
+        #         listitems = ["Add To Account Lists"]
+        #         context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', addon_path, labels=listitems)
+        #         context_menu.doModal()
+        #         if context_menu.selection == 0:
+        #             Notify(list_id)
+        #         selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
 
 
     def onClick(self, controlID):

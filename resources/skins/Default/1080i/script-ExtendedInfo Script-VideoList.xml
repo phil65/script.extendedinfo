@@ -193,7 +193,7 @@
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">dialogs/context_middle.png</texture>
                 </control>
                 <control type="button" id="6000">
-                    <label>[COLOR 00FFFFFF]xxx[/COLOR]</label>
+                    <label>$LOCALIZE[19140]</label>
                     <posx>0</posx>
                     <posy>40</posy>
                     <width>400</width>
@@ -209,10 +209,10 @@
                     <ondown>SetFocus(7000)</ondown>
                     <onright>500</onright>
                     <onleft>500</onleft>
-                    <focusedcolor>white6</focusedcolor>
+                    <focusedcolor>white</focusedcolor>
                 </control>
                 <control type="image">
-                    <posx>30</posx>
+                    <posx>305</posx>
                     <posy>70</posy>
                     <width>45</width>
                     <height>45</height>
@@ -226,16 +226,19 @@
                     <posy>135</posy>
                     <width>400</width>
                     <height>110</height>
-                    <align>center</align>
+                    <align>left</align>
                     <aligny>center</aligny>
                     <ondown>9000</ondown>
                     <onup>6000</onup>
                     <onright>500</onright>
                     <onleft>500</onleft>
-                    <label>    $ADDON[script.extendedinfo 32024]</label>
+                    <textoffsetx>40</textoffsetx>
+                    <textoffsety>25</textoffsety>
+                    <textwidth>315</textwidth>
+                    <label>$ADDON[script.extendedinfo 32024]</label>
                     <radiowidth>90</radiowidth>
                     <radioheight>60</radioheight>
-                    <radioposx>20</radioposx>
+                    <radioposx>288</radioposx>
                     <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                     <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                     <aspectratio>keep</aspectratio>
@@ -269,7 +272,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5001">
                         <onup>6000</onup>
@@ -285,7 +288,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5004">
                         <label>$ADDON[script.extendedinfo 32128]</label>
@@ -300,7 +303,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="label" id="5333">
                         <label>$ADDON[script.extendedinfo 32023]</label>
@@ -312,7 +315,7 @@
                         <aligny>top</aligny>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5002">
                         <label>$LOCALIZE[515]</label>
@@ -326,7 +329,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5003">
                         <label>$LOCALIZE[172]</label>
@@ -340,7 +343,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5006">
                         <label>$ADDON[script.extendedinfo 32127]</label>
@@ -354,7 +357,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5008">
                         <label>$ADDON[script.extendedinfo 32126]</label>
@@ -368,7 +371,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5009">
                         <label>$ADDON[script.extendedinfo 32114]</label>
@@ -382,7 +385,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5010">
                         <label>$LOCALIZE[572]</label>
@@ -396,7 +399,7 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5005">
                         <label>$ADDON[script.extendedinfo 32022]</label>
@@ -410,17 +413,17 @@
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
                         <textcolor>grey2</textcolor>
-                        <focusedcolor>white6</focusedcolor>
+                        <focusedcolor>white</focusedcolor>
                     </control>
-<!--                     <control type="button" id="5005">
+                    <!--
+                    <control type="button" id="5005">
                         <label></label>
                         <enable>no</enable>
                         <width>400</width>
                         <height>50</height>
                         <texturefocus>-</texturefocus>
                         <texturenofocus>-</texturenofocus>
-                    </control> -->
-                </control>
+                    </control>--></control>
             </control>
         </control>
         <control type="group">
