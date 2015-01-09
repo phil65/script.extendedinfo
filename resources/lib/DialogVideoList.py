@@ -294,14 +294,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def set_filter_url(self):
         filter_list = []
-        prettyprint(self.filters)
+        # prettyprint(self.filters)
         for item in self.filters:
             filter_list.append("%s=%s" % (item["type"], item["id"]))
         self.filter_url = "&".join(filter_list)
 
     def set_filter_label(self):
         filter_list = []
-        prettyprint(self.filters)
+        # prettyprint(self.filters)
         for item in self.filters:
             filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], item["label"].replace("|", " | ").replace(",", " + ")))
         self.filter_label = "  -  ".join(filter_list)
@@ -324,7 +324,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = GetPersonID(result)
-            prettyprint(response)
+            # prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
                 self.add_filter("with_people", str(response["id"]), addon.getLocalizedString(32156), response["name"])
@@ -335,7 +335,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = SearchforCompany(result)
-            prettyprint(response)
+            # prettyprint(response)
             if result > -1:
                 if len(response) > 1:
                     names = []
@@ -357,7 +357,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if response:
                 keyword_id = response["id"]
                 name = response["name"]
-                prettyprint(response)
+                # prettyprint(response)
                 if result > -1:
                     self.add_filter("with_keywords", str(keyword_id), addon.getLocalizedString(32114), name)
                     self.mode = "filter"
