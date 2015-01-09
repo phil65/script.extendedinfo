@@ -126,20 +126,18 @@ def calculate_age(born):
             base_month = today.month - int(actor_born[1])
             base_day = today.day - int(actor_born[2])
             if base_month < 0:
-                log("one year younger")
                 base_age -= 1
             elif base_month == 0 and base_day < 0:
-                log("one year younger")
                 base_age -= 1
             elif base_month == 0 and base_day == 0:
-                Notify("Birthday Today! Age %i" % base_age)
+                Notify("%s (%i)" % (addon.getLocalizedString(), base_age))
     return ""
 
 
 def PlayTrailer(youtube_id="", listitem=None, popstack=False):
     if not listitem:
-        listitem = xbmcgui.ListItem('Trailer')
-        listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
+        listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
+        listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
     import YDStreamExtractor
     YDStreamExtractor.disableDASHVideo(True)
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)

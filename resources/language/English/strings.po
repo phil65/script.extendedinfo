@@ -348,3 +348,7 @@ msgstr ""
 msgctxt "#32157"
 msgid "Created at"
 msgstr ""
+
+msgctxt "#32158"
+msgid "Birthday Today!"
+msgstr ""
