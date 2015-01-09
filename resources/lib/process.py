@@ -144,9 +144,9 @@ def StartInfoActions(infos, params):
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'extendedactorinfo':
-                from DialogActorInfo import DialogActorInfo
-                dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=params.get("id", ""), name=params.get("name", ""))
-                dialog.doModal()
+            from DialogActorInfo import DialogActorInfo
+            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=params.get("id", ""), name=params.get("name", ""))
+            dialog.doModal()
 
         elif info == 'extendedtvinfo':
             from DialogTVShowInfo import DialogTVShowInfo
