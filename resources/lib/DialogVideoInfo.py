@@ -173,8 +173,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         elif controlID in [350, 1150]:
             AddToWindowStack(self)
             self.close()
-            listitem =xbmcgui.ListItem ('Trailer')
-            listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
+            listitem =xbmcgui.ListItem (xbmc.getLocalizedString(20410))
+            listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
             youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
             if youtube_id:
                 self.movieplayer.playYoutubeVideo(youtube_id, self.getControl(controlID).getSelectedItem(), True)

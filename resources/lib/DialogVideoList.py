@@ -303,7 +303,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         filter_list = []
         # prettyprint(self.filters)
         for item in self.filters:
-            filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], item["label"].replace("|", " | ").replace(",", " + ")))
+            filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], item["label"].decode("utf-8").replace("|", " | ").replace(",", " + ")))
         self.filter_label = "  -  ".join(filter_list)
 
     def get_genre(self):

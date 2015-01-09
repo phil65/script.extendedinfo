@@ -178,8 +178,8 @@ class VideoPlayer(xbmc.Player):
 
     def playYoutubeVideo(self, youtube_id="", listitem=None, popstack=True):
         if not listitem:
-            listitem = xbmcgui.ListItem('Trailer')
-            listitem.setInfo('video', {'Title': 'Trailer', 'Genre': 'Youtube Video'})
+            listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
+            listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
         import YDStreamExtractor
         YDStreamExtractor.disableDASHVideo(True)
         if youtube_id:
