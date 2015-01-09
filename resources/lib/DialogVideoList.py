@@ -15,6 +15,7 @@ addon_name = addon.getAddonInfo('name')
 addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
+include_adult = str(addon.getSetting("include_adults")).lower()
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    addon.getLocalizedString(32108): "revenue",
@@ -422,7 +423,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             rated = addon.getLocalizedString(32135)
             starred = addon.getLocalizedString(32134)
         if self.mode == "search":
-            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, str(addon.getSetting("include_adults")).lower())
+            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, include_adult)
             self.filter_label = addon.getLocalizedString(32146) % self.search_string
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
@@ -437,7 +438,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.set_filter_url()
             self.set_filter_label()
-            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, str(addon.getSetting("include_adults")).lower())
+            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, include_adult)
         response = GetMovieDBData(url, 10)
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
