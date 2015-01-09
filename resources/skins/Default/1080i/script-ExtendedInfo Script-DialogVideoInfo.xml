@@ -1030,12 +1030,13 @@
                             <height>70</height>
                             <texture>icons/info.png</texture>
                         </control>
-                        <control type="textbox" id="800">
+                        <control type="label" id="800">
                             <posx>130</posx>
                             <posy>0</posy>
                             <width>1780</width>
                             <height>70</height>
                             <align>left</align>
+                            <wrapmultiline>true</wrapmultiline>
                             <label>$INFO[Window.Property(movie.omdb.Awards),,[CR]]$INFO[Window.Property(movie.omdb.tomatoConsensus),,[CR]]</label>
                             <font>font12</font>
                             <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
