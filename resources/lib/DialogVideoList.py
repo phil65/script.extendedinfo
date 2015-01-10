@@ -78,13 +78,13 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 500:
-                list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
+                item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
                 listitems = [xbmc.getLocalizedString(14076), addon.getLocalizedString(32113), addon.getLocalizedString(32107)]
                 # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
                 if selection == 0:
-                    ChangeFavStatus(list_id, self.type, "true")
+                    ChangeFavStatus(item_id, self.type, "true")
                 elif selection == 1:
                     ratings = []
                     for i in range(0, 21):
@@ -92,13 +92,32 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
                     if rating > -1:
                         rating = float(rating) * 0.5
-                        RateMedia(self.type, list_id, rating)
+                        RateMedia(self.type, item_id, rating)
+                        xbmc.sleep(2000)
+                        self.update_content(force=True)
+                        self.update_list()
                 elif selection == 2:
-                    pass
-
-        # if xbmc.getCondVisibility("Container(500).Row(1)"):
-        #     self.page += 1
-        #     self.update_content(add=True)
+                    xbmc.executebuiltin("ActivateWindow(busydialog)")
+                    listitems = [addon.getLocalizedString(32139)]
+                    account_lists = GetAccountLists()
+                    for item in account_lists:
+                        listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+                    listitems.append(addon.getLocalizedString(32138))
+                    xbmc.executebuiltin("Dialog.Close(busydialog)")
+                    index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
+                    if index == 0:
+                        listname = xbmcgui.Dialog().input(addon.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
+                        if listname:
+                            list_id = CreateList(listname)
+                            xbmc.sleep(1000)
+                            ChangeListStatus(list_id, item_id, True)
+                    elif index == len(listitems) - 1:
+                        self.RemoveListDialog(account_lists)
+                    elif index > 0:
+                        ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
+                        xbmc.sleep(2000)
+                        self.update_content(force=True)
+                        self.update_list()
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -386,12 +405,12 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.mode = "filter"
 
-    def update_content(self, add=False):
+    def update_content(self, add=False, force=False):
         if add:
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.totalpages, self.totalitems = self.fetch_data()
+        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force)
         self.listitems_2 = []
         # if self.page < self.totalpages:
         #     self.page += 1
@@ -414,7 +433,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
-    def fetch_data(self):
+    def fetch_data(self, force=False):
         sortby = self.sort + "." + self.order
         if self.type == "tv":
             temp = "tv"
@@ -441,7 +460,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.set_filter_url()
             self.set_filter_label()
             url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, include_adult)
-        response = GetMovieDBData(url, 10)
+        if force:
+            response = GetMovieDBData(url, 0)
+        else:
+            response = GetMovieDBData(url, 10)
+        prettyprint(response)
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
