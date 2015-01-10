@@ -366,7 +366,7 @@ msgid "TheMovieDB password"
 msgstr ""
 
 msgctxt "#32162"
-msgid "Include adult actors"
+msgid "Include adult actors / movies"
 msgstr ""
 
 msgctxt "#32163"
