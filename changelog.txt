@@ -1,3 +1,16 @@
+v2.0.1
+- small fixes
+- repo release version
+
+v2.0.0
+- Standalone part: MovieDB Browser, extended Info dialogs for movies / TV /seasons / episodes /actors
+- localization
+- too much to count
+
+v1.0.0
+- new calls
+- rewritten caching engine
+
 v0.8.0
 - many Bugfixes
 - removed GoogleMaps functionality and daemon mode
