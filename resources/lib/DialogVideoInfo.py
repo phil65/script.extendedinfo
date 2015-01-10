@@ -186,12 +186,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 PopWindowStack()
             else:
                 Notify(addon.getLocalizedString(32052))
-        elif controlID in [8]:
-            AddToWindowStack(self)
-            self.close()
-            listitem = CreateListItems([self.movie["general"]])[0]
-            self.movieplayer.play(item=self.movie["general"]['FilenameAndPath'], listitem=listitem)
-            self.movieplayer.WaitForVideoEnd()
+        # elif controlID in [8]:
+        #     AddToWindowStack(self)
+        #     self.close()
+        #     listitem = CreateListItems([self.movie["general"]])[0]
+        #     self.movieplayer.play(item=self.movie["general"]['FilenameAndPath'], listitem=listitem)
+        #     self.movieplayer.WaitForVideoEnd()
         elif controlID == 550:
             company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             company_name = self.getControl(controlID).getSelectedItem().getLabel()
@@ -277,6 +277,12 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"], 0)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.OpenVideoList(list_items, {})
+        elif controlID == 8:
+            self.close()
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.movie["general"]['DBID'], "false"))
+        elif controlID == 9:
+            self.close()
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.movie["general"]['DBID'], "true"))
         elif controlID == 445:
             self.ShowManageDialog()
         elif controlID == 132:

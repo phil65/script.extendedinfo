@@ -161,7 +161,6 @@
                                     <onright>6001</onright>
                                     <onup>132</onup>
                                     <ondown>1000</ondown>
-                                    <onclick>RunScript(script.toolbox,info=playmovie,dbid=$INFO[Window.Property(movie.DBID)],resume=true)</onclick>
                                 </control>
                                 <control type="image">
                                     <posx>100</posx>
