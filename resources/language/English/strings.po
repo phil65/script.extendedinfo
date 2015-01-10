@@ -380,3 +380,7 @@ msgstr ""
 msgctxt "#32165"
 msgid "Add to CouchPotato"
 msgstr ""
+
+msgctxt "#32166"
+msgid "Add to SickBeard"
+msgstr ""

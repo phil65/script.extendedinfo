@@ -381,7 +381,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def ShowManageDialog(self):
         manage_list = []
         listitems = []
-        movie_id = xbmc.getInfoLabel("Window.Property(movie.DBID)")
+        movie_id = self.movie["general"].get("DBID", False)
+        filename = self.movie["general"].get("FilenameAndPath", False)
+        imdb_id = self.movie["general"].get("imdb_id", False)
         if movie_id:
             temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
                          [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=movie, dbid=" + movie_id + ")"],
@@ -389,10 +391,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                          [addon.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=" + movie_id + ")"]]
             manage_list += temp_list
         else:
-            temp_list = [[addon.getLocalizedString(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))"]]
+            temp_list = [[addon.getLocalizedString(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,Added Movie To CouchPota))"]]
             manage_list += temp_list
-        if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
-            manage_list.append([addon.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+        # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
+        #     manage_list.append([addon.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
             manage_list.append([addon.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
         manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])

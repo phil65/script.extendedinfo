@@ -265,6 +265,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Poster': poster_path,
                  'fanart': backdrop_path,
                  'Title': fetch(tv, 'name'),
+                 'TVShowTitle': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'Duration': duration,
                  'ID': tmdb_id,

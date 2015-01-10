@@ -359,32 +359,6 @@
                                 <textureradiooffnofocus colordiffuse="grey">icons/tool2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="grey">icons/tool2.png</textureradioonnofocus>
                                 <label>$ADDON[script.extendedinfo 32133]</label>
-                                <onclick>SetProperty(Dialog.1.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.2.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.3.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.4.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.5.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.6.Label,none)</onclick>
-                                <onclick>SetProperty(Dialog.7.Label,none)</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.1.Label,$LOCALIZE[413])</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.1.BuiltIn,RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)]))</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.2.Label,$LOCALIZE[14061])</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.2.BuiltIn,RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)]))</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.3.Label,$ADDON[script.extendedinfo 32100])</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(movie.type),movie)">SetProperty(Dialog.3.BuiltIn,RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)]))</onclick>
-                                <onclick condition="IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(movie.type),movie)">SetProperty(Dialog.3.Label,Add To Couch Potato)</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(movie.type),tv)">SetProperty(Dialog.3.BuiltIn,RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py,$INFO[Window.Property(movie.Title)]))</onclick>
-                                <onclick condition="IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(movie.type),tv)">SetProperty(Dialog.3.Label,Add To SickBeard)</onclick>
-                                <onclick condition="IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.3.BuiltIn,RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.4.Label,$ADDON[script.extendedinfo 32101])</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.4.BuiltIn,RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs))</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.5.Label,$ADDON[script.extendedinfo 32102])</onclick>
-                                <onclick condition="!IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.5.BuiltIn,RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)]))</onclick>
-                                <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.6.Label,$ADDON[script.extendedinfo 32103])</onclick>
-                                <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.6.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
-                                <onclick>SetProperty(Dialog.7.Label,ExtendedInfo Settings)</onclick>
-                                <onclick>SetProperty(Dialog.7.BuiltIn,Addon.OpenSettings(script.extendedinfo))</onclick>
-                                <onclick>RunScript(script.toolbox,info=selectdialog,header=Choose Action)</onclick>
                                 <visible>!Skin.HasSetting(kioskmode)</visible>
                             </control>
                         </control>

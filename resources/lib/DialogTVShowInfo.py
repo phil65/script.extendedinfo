@@ -182,6 +182,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             listitems = GetCompanyInfo(company_id)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(filters=filters, media_type="tv")
+        elif controlID == 445:
+            self.ShowManageDialog()
         elif controlID == 6001:
             ratings = []
             for i in range(0, 21):
@@ -245,6 +247,35 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                 self.window.setProperty("movie.rated", "")
             self.window.setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
             # Notify(str(self.tvshow["account_states"]["rated"]["value"]))
+
+    def ShowManageDialog(self):
+        manage_list = []
+        listitems = []
+        tvshow_dbid = self.tvshow["general"].get("DBID", False)
+        imdb_id = self.tvshow["general"].get("imdb_id", False)
+        title = self.tvshow["general"].get("TVShowTitle", "")
+
+        # filename = self.tvshow["general"].get("FilenameAndPath", False)
+        if tvshow_dbid:
+            temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
+                         [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + tvshow_dbid + ")"],
+                         [addon.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ",extrathumbs)"],
+                         [addon.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ")"]]
+            manage_list += temp_list
+        else:
+            manage_list += [[addon.getLocalizedString(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
+        # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and tvshow_dbid:
+        #     manage_list.append([addon.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+        if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and tvshow_dbid:
+            manage_list.append([addon.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + tvshow_dbid + ")"])
+        manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
+        for item in manage_list:
+            listitems.append(item[0])
+        selection = xbmcgui.Dialog().select(addon.getLocalizedString(32133), listitems)
+        if selection > -1:
+            builtin_list = manage_list[selection][1].split("||")
+            for item in builtin_list:
+                xbmc.executebuiltin(item)
 
     def ShowRatedTVShows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
