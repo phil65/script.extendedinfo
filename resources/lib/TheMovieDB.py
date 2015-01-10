@@ -623,7 +623,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
-    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+    response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 7)
     # prettyprint(response)
     videos = []
     backdrops = []
@@ -684,7 +684,7 @@ def GetTrailer(movieid=None):
     return ""
 
 
-def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=30):
+def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     session_string = ""
     if addon.getSetting("tmdb_username"):
         session_string = "session_id=%s&" % (get_session_id())
@@ -841,7 +841,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
 
-def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=2):
+def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
     session_string = ""
     if addon.getSetting("tmdb_username"):
         session_string = "session_id=%s&" % (get_session_id())
