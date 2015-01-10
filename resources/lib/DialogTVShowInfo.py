@@ -30,6 +30,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
         tvdb_id = kwargs.get('tvdb_id')
+        self.name = kwargs.get('name')
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > -1):
