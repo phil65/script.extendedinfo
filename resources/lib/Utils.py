@@ -255,9 +255,11 @@ def GetSortLetters(path, focusedletter):
             json_response = simplejson.loads(json_query)
             if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
-                    sortletter = movie["label"].replace("The ", "")[0]
-                    if not sortletter in letterlist:
-                        letterlist.append(sortletter)
+                    cleaned_label = movie["label"].replace("The ", "")
+                    if cleaned_label:
+                        sortletter = cleaned_label[0]
+                        if not sortletter in letterlist:
+                            letterlist.append(sortletter)
             addon.setSetting("LetterList", " ".join(letterlist))
             addon.setSetting("FolderPath", path)
     homewindow.setProperty("LetterList", "".join(letterlist))
