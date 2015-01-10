@@ -463,7 +463,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if force:
             response = GetMovieDBData(url, 0)
         else:
-            response = GetMovieDBData(url, 10)
+            response = GetMovieDBData(url, 2)
         # prettyprint(response)
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
