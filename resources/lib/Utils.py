@@ -526,6 +526,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                 try:
                     diff = abs(local_item["year"] - int(online_item["Year"]))
                     if diff > 1:
+                        remote_items.append(online_item)
                         continue
                 except:
                     pass
