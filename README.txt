@@ -382,70 +382,13 @@ Container(250).ListItem.Label --------------------> Image résolution (512x720)
 Container(250).Listitem.Icon ---------------------> Image
 Container(250).ListItem.Property(aspect_ratio) ---> Aspect Ratio (0.66)
 
+[...] (WIP)
 
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-List of Built In Controls Available In script-Actors-DialogVideoInfo.xml:
+SKINNING ADD-ON DIALOGS:
 
-150 -> container -> actor / director / writer / artist listing
-
-
-Labels Available In script-Actors-DialogVideoInfo.xml:
-
-Labels of the currently selected movie.
-Window(home).Property(Title) --------------------> Name
-Window(home).Property(Label) --------------------> Same as Title
-Window(home).Property(Icon) ---------------------> icon
-Window(home).Property(Plot) ---------------------> plot
-Window(home).Property(year) ---------------------> year
-Window(home).Property(Date) ---------------------> same as Window(home).Property(Property(releasedate)
-Window(home).Property(originaltitle) ------------> originaltitle
-Window(home).Property(director) -----------------> director
-Window(home).Property(trailer) ------------------> trailer
-Window(home).Property(genre) --------------------> genre
-Window(home).Property(mpaa) ---------------------> mpaa
-Window(home).Property(playcount) ----------------> playcount
-Window(home).Property(plotoutline) --------------> plotoutline
-Window(home).Property(rating) -------------------> rating
-Window(home).Property(duration) -----------------> duration
-Window(home).Property(studio) -------------------> studio
-Window(home).Property(tagline) ------------------> tagline
-Window(home).Property(top250) -------------------> top250
-Window(home).Property(votes) --------------------> votes
-Window(home).Property(writer) -------------------> writer
-Window(home).Property(lastplayed) ---------------> lastplayed
-Window(home).Property(FilenameAndPath) ----------> path of your movie
-Window(home).Property(Fanart_Image) ---> fanart
-Window(home).Property(set) ------------> Title of Movie Set (return empty if not exists)
-Window(home).Property(country) --------> country
-Window(home).Property(releasedate) ----> release date of movie
-Window(home).Property(lastupdated) ----> last update info
-Window(home).Property(Homepage) -------> Link of homepage
-
-
-Labels of the list actor / director / writer / artist.
-Container(150).Listitem.Title -------------------> Name
-Container(150).Listitem.Label -------------------> Same as Title
-Container(150).Listitem.Label2-------------------> Role
-Container(150).ListItem.Icon --------------------> icon
-Container(150).ListItem.Plot --------------------> Biography
-Container(150).ListItem.Property(Biography) -----> Same as Plot
-Container(150).ListItem.Property(Biooutline) ----> (currently not used)
-Container(150).ListItem.Property(TotalMovies) ---> Total of Known Movies (acting / directing / writing)
-Container(150).ListItem.Property(Birthday) ------> Date of Birthday
-Container(150).ListItem.Property(HappyBirthday) -> return true or empty
-Container(150).ListItem.Property(Age) -----------> Age (30)
-Container(150).ListItem.Property(Deathday) ------> Date of Deathday
-Container(150).ListItem.Property(Deathage) ------> Age of dead (30)
-Container(150).ListItem.Property(PlaceOfBirth) --> Place of birth
-Container(150).ListItem.Property(AlsoKnownAs) ---> Also Known Name
-Container(150).ListItem.Property(Homepage) ------> Link of homepage
-Container(150).ListItem.Property(Adult) ---------> Is Adult Actor (no / yes)
-Container(150).ListItem.Property(fanart) --> Fanart
-
-
-
-
+Please have a look at reference implementation, too much to cover. For the infodialogs it is important to include ALL lists (if you dont want to use them just hide them)
 
 
 
