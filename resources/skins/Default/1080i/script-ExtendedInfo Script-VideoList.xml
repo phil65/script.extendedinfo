@@ -156,6 +156,26 @@
                             <texture>flags/local.png</texture>
                             <visible>!IsEmpty(ListItem.Property(DBID))</visible>
                         </control>
+                                                <control type="image">
+                            <width>48</width>
+                            <height>48</height>
+                            <posy>2</posy>
+                            <posx>-10</posx>
+                            <texture>circle.png</texture>
+                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                        </control>
+                        <control type="label">
+                            <width>46</width>
+                            <height>40</height>
+                            <posy>6</posy>
+                            <align>center</align>
+                            <aligny>center</aligny>
+                            <posx>-9</posx>
+                            <font>font10</font>
+                            <textcolor>FF000000</textcolor>
+                            <label>$INFO[ListItem.Property(User_Rating)]</label>
+                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                        </control>
                     </control>
                     <control type="textbox">
                         <posx>80</posx>
