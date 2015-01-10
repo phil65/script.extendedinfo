@@ -117,6 +117,7 @@ def WaitForVideoEnd():
 
 
 def calculate_age(born):
+    base_age = ""
     if born and born is not None:
         log(born)
         today = datetime.date.today()
