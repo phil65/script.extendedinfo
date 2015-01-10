@@ -526,7 +526,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
                 try:
                     diff = abs(local_item["year"] - int(online_item["Year"]))
                     if diff > 1:
-                        break
+                        continue
                 except:
                     pass
                 if (local_item['resume']['position'] and local_item['resume']['total']) > 0:
