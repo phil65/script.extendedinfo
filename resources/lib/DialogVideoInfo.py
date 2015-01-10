@@ -379,26 +379,30 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         dialog.doModal()
 
     def ShowManageDialog(self):
-                                # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.Label,$LOCALIZE[32103])</onclick>
-                                # <onclick condition="System.HasAddon(script.libraryeditor) + !IsEmpty(Window.Property(movie.DBID))">SetProperty(Dialog.7.BuiltIn,RunScript(script.libraryeditor,DBID=$INFO[Window.Property(movie.DBID)]))</onclick>
-                                # <onclick>SetProperty(Dialog.8.Label,ExtendedInfo Settings)</onclick>
-                                # <onclick>SetProperty(Dialog.8.BuiltIn,Addon.OpenSettings(script.extendedinfo))</onclick>
         manage_list = []
-        if "DBID" in self.movie:
-            temp_list = [["413", "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"],
-                         ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
-                         ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
-                         ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+        listitems = []
+        movie_id = xbmc.getInfoLabel("Window.Property(movie.DBID)")
+        if movie_id:
+            temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
+                         [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=movie, dbid=" + movie_id + ")"],
+                         [addon.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)"],
+                         [addon.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=" + movie_id + ")"]]
             manage_list += temp_list
         else:
-            temp_list = [["Add To Couch Potato", "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))"],
-                         ["14061", "RunScript(script.artwork.downloader, mediatype=movie, dbid=$INFO[Window.Property(movie.DBID)])"],
-                         ["32101", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)],extrathumbs)"],
-                         ["32100", "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=$INFO[Window.Property(movie.DBID)])"]]
+            temp_list = [[addon.getLocalizedString(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=$INFO[Window.Property(movie.imdb_id)])||Notification(script.extendedinfo,Added Movie To CouchPota))"]]
             manage_list += temp_list
-        if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)"):
-            manage_list.append(["14061", "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
-
+        if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
+            manage_list.append([addon.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+        if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
+            manage_list.append([addon.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
+        manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
+        for item in manage_list:
+            listitems.append(item[0])
+        selection = xbmcgui.Dialog().select(addon.getLocalizedString(32133), listitems)
+        if selection > -1:
+            builtin_list = manage_list[selection][1].split("||")
+            for item in builtin_list:
+                xbmc.executebuiltin(item)
 
 class Join_Omdb_Thread(threading.Thread):
 

@@ -11,7 +11,7 @@ def GetOmdbMovieInfo(imdb_id):
                 results[key] = ""
     except:
         results = None
-        Notify("Error when fetching Omdb data from net")
+        log("Exception: Error when fetching Omdb data from net")
     count = 1
     if results is not None:
         return results

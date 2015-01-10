@@ -376,3 +376,7 @@ msgstr ""
 msgctxt "#32164"
 msgid "Delete cache"
 msgstr ""
+
+msgctxt "#32165"
+msgid "Add to CouchPotato"
+msgstr ""
