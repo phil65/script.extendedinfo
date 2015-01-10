@@ -115,9 +115,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         self.RemoveListDialog(account_lists)
                     elif index > 0:
                         ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
-                        xbmc.sleep(2000)
-                        self.update_content(force=True)
-                        self.update_list()
+                        # xbmc.sleep(2000)
+                        # self.update_content(force=True)
+                        # self.update_list()
 
     def onClick(self, controlID):
         if controlID in [500]:
