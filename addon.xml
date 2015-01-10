@@ -14,12 +14,12 @@
 	</extension>
 	<extension point="xbmc.addon.metadata">
 		<language/>
-		<summary lang="en">Extended Info Script</summary>
-		<description lang="en">This script offers various possibilities to display online content inside skins. Used services are themoviedb.org, theaudiodb.org, rottentomatoes.com, Trakt.TV and a lot more. Can also be used for importing / exporting skin settings, adding additional fanart stuff to library and cooking eggs. Needs skin support for most functions.</description>
+		<summary lang="en">ExtendedInfo Script</summary>
+		<description lang="en">This script offers various possibilities to display online content inside skins as well as a complete MovieDB browser including info dialogs for various media types. Used services are themoviedb.org, theaudiodb.org, rottentomatoes.com, Trakt.TV, omdbapi.com and a lot more. Needs skin implementation for lot of functions.</description>
 		<platform>all</platform>
 		<license>GNU GENERAL PUBLIC LICENSE Version 2, June 1991</license>
-		<forum>-</forum>
-		<source>-</source>
-		<email>-</email>
+		<forum>http://forum.kodi.tv/showthread.php?tid=160558</forum>
+		<source>https://github.com/phil65/script.extendedinfo</source>
+		<email>phil65@kodi.tv</email>
 	</extension>
 </addon>
