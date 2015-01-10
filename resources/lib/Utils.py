@@ -130,8 +130,8 @@ def calculate_age(born):
             elif base_month == 0 and base_day < 0:
                 base_age -= 1
             elif base_month == 0 and base_day == 0:
-                Notify("%s (%i)" % (addon.getLocalizedString(), base_age))
-    return ""
+                Notify("%s (%i)" % (addon.getLocalizedString(32158), base_age))
+    return base_age
 
 
 def PlayTrailer(youtube_id="", listitem=None, popstack=False):
