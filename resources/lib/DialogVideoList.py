@@ -158,7 +158,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     value = "%s-01-01" % result
                     label = " > " + result
                 if self.type == "tv":
-                    self.add_filter("first_air_date_year.%s" % order, value, xbmc.getLocalizedString(20416), label)
+                    self.add_filter("first_air_date.%s" % order, value, xbmc.getLocalizedString(20416), label)
                 else:
                     self.add_filter("primary_release_date.%s" % order, value, xbmc.getLocalizedString(345), label)
                 self.mode = "filter"
