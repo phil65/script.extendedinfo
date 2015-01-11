@@ -299,13 +299,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if controlID == 600:
             if self.page < self.totalpages:
                 self.page += 1
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 self.update_content()
                 self.update_ui()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
         if controlID == 700:
             if self.page > 1:
                 self.page -= 1
+                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 self.update_content()
                 self.update_ui()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def get_sort_type(self):
         listitems = []
