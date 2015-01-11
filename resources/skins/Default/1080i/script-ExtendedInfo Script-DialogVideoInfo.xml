@@ -689,7 +689,7 @@
                             <width>950</width>
                             <height>30</height>
                             <label>$INFO[Window.Property(movie.FileNameAndPath)]</label>
-                            <font>Font_Reg22</font>
+                            <font>font10</font>
                             <textcolor>white5</textcolor>
                             <scroll>true</scroll>
                             <haspath>true</haspath>

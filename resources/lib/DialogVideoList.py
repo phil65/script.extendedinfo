@@ -67,7 +67,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
         self.window.setProperty("WindowColor", self.color)
-        self.update_list()
+        self.update_ui()
         xbmc.sleep(200)
         xbmc.executebuiltin("SetFocus(500)")
 
@@ -97,7 +97,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         RateMedia(self.type, item_id, rating)
                         xbmc.sleep(2000)
                         self.update_content(force=True)
-                        self.update_list()
+                        self.update_ui()
                 elif selection == 2:
                     xbmc.executebuiltin("ActivateWindow(busydialog)")
                     listitems = [addon.getLocalizedString(32139)]
@@ -119,7 +119,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
                         # xbmc.sleep(2000)
                         # self.update_content(force=True)
-                        # self.update_list()
+                        # self.update_ui()
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -139,11 +139,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif controlID == 5001:
             self.get_sort_type()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5002:
             self.get_genre()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5003:
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading="Choose Mode", line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
@@ -164,36 +164,36 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.mode = "filter"
                 self.page = 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
             else:
                 self.order = "asc"
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5005:
             self.filters = []
             self.page = 1
             self.mode = "filter"
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5006:
             self.get_certification()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5008:
             self.get_actor()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5009:
             self.get_keyword()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5010:
             self.get_company()
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 5007:
             self.filters = []
             self.page = 1
@@ -203,7 +203,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             else:
                 self.type = "tv"
             self.update_content()
-            self.update_list()
+            self.update_ui()
         elif controlID == 6000:
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
@@ -212,7 +212,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.filters = []
                 self.page = 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
         elif controlID == 7000:
             if self.type == "tv":
                 listitems = [addon.getLocalizedString(32145)]
@@ -238,7 +238,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.filters = []
                 self.page = 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
             elif index == 1 or (index == 0 and not self.logged_in):
                 self.mode = "rating"
                 self.sort = "created_at"
@@ -246,7 +246,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.filters = []
                 self.page = 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                # offset = len(listitems) - len(account_lists)
@@ -262,12 +262,12 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             if self.page < self.totalpages:
                 self.page += 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
         if controlID == 700:
             if self.page > 1:
                 self.page -= 1
                 self.update_content()
-                self.update_list()
+                self.update_ui()
 
     def get_sort_type(self):
         listitems = []
@@ -428,7 +428,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         # for item in (self.page - 1) * 2:
         #     xbmc.executebuiltin("Down")
 
-    def update_list(self):
+    def update_ui(self):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
         self.window.setProperty("TotalPages", str(self.totalpages))
@@ -441,6 +441,17 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(584))
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
+        if self.type == "tv":
+            self.window.getControl(5006).setVisible(False)
+            self.window.getControl(5008).setVisible(False)
+            self.window.getControl(5009).setVisible(False)
+            self.window.getControl(5010).setVisible(False)
+        else:
+            self.window.getControl(5006).setVisible(True)
+            self.window.getControl(5008).setVisible(True)
+            self.window.getControl(5009).setVisible(True)
+            self.window.getControl(5010).setVisible(True)
+
 
     def fetch_data(self, force=False):
         sortby = self.sort + "." + self.order
