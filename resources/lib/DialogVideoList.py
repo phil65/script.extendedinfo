@@ -214,9 +214,13 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_list()
         elif controlID == 7000:
             if self.type == "tv":
-                listitems = [addon.getLocalizedString(32144), addon.getLocalizedString(32145)]
+                listitems = [addon.getLocalizedString(32145)]
+                if self.logged_in:
+                    listitems.append(addon.getLocalizedString(32144))
             else:
-                listitems = [addon.getLocalizedString(32134), addon.getLocalizedString(32135)]
+                listitems = [addon.getLocalizedString(32135)]
+                if self.logged_in:
+                    listitems.append(addon.getLocalizedString(32134))
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
                 account_lists = GetAccountLists()
