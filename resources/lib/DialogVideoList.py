@@ -230,7 +230,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             index = xbmcgui.Dialog().select("Choose List", listitems)
             if index == -1:
                 pass
-            elif index == 0:
+            elif index == 0 and self.logged_in:
                 self.mode = "favorites"
                 self.sort = "created_at"
                 self.sort_label = addon.getLocalizedString(32157)
@@ -238,7 +238,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.update_content()
                 self.update_list()
-            elif index == 1:
+            elif index == 1 or (index == 0 and not self.logged_in):
                 self.mode = "rating"
                 self.sort = "created_at"
                 self.sort_label = addon.getLocalizedString(32157)
@@ -248,6 +248,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_list()
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
+               # offset = len(listitems) - len(account_lists)
+               # Notify(str(offset))
                 listitems = GetMoviesFromList(account_lists[index - 2]["id"])
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.close()
