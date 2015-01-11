@@ -225,7 +225,7 @@
                     <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                     <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                     <font>Font_Reg29</font>
-                    <textcolor>grey2</textcolor>
+                    <textcolor>grey</textcolor>
                     <ondown>SetFocus(7000)</ondown>
                     <onright>500</onright>
                     <onleft>500</onleft>
@@ -256,6 +256,7 @@
                     <textoffsety>25</textoffsety>
                     <textwidth>315</textwidth>
                     <label>$ADDON[script.extendedinfo 32024]</label>
+                    <textcolor>grey</textcolor>
                     <radiowidth>90</radiowidth>
                     <radioheight>60</radioheight>
                     <radioposx>288</radioposx>
@@ -291,7 +292,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5001">
@@ -307,7 +308,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5004">
@@ -322,7 +323,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="label" id="5333">
@@ -334,7 +335,7 @@
                         <textwidth>315</textwidth>
                         <aligny>top</aligny>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5002">
@@ -348,7 +349,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5003">
@@ -362,7 +363,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5006">
@@ -376,7 +377,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5008">
@@ -390,7 +391,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5009">
@@ -404,7 +405,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5010">
@@ -418,7 +419,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <control type="button" id="5005">
@@ -432,7 +433,7 @@
                         <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                         <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
                         <font>Font_Reg29</font>
-                        <textcolor>grey2</textcolor>
+                        <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
                     <!--
