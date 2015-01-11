@@ -81,13 +81,13 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 500:
                 item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-                listitems = [xbmc.getLocalizedString(14076), addon.getLocalizedString(32113), addon.getLocalizedString(32107)]
+                listitems = [addon.getLocalizedString(32113)]
+                if self.logged_in:
+                    listitems += [xbmc.getLocalizedString(14076), addon.getLocalizedString(32107)]
                 # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
                 if selection == 0:
-                    ChangeFavStatus(item_id, self.type, "true")
-                elif selection == 1:
                     ratings = []
                     for i in range(0, 21):
                         ratings.append(str(float(i * 0.5)))
@@ -98,6 +98,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         xbmc.sleep(2000)
                         self.update_content(force=True)
                         self.update_ui()
+                elif selection == 1:
+                    ChangeFavStatus(item_id, self.type, "true")
                 elif selection == 2:
                     xbmc.executebuiltin("ActivateWindow(busydialog)")
                     listitems = [addon.getLocalizedString(32139)]
