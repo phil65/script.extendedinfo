@@ -271,10 +271,10 @@
                 <control type="grouplist" id="9000">
                     <posy>250</posy>
                     <width>400</width>
-                    <height>800</height>
+                    <height>830</height>
                     <orientation>vertical</orientation>
                     <scroll>true</scroll>
-                    <itemgap>-20</itemgap>
+                    <itemgap>-23</itemgap>
                     <onup>7000</onup>
                     <ondown>9000</ondown>
                     <onright>500</onright>
@@ -422,6 +422,20 @@
                         <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
+                    <control type="button" id="5012">
+                        <label>$ADDON[script.extendedinfo 32111]</label>
+                        <width>400</width>
+                        <height>90</height>
+                        <textoffsetx>40</textoffsetx>
+                        <textoffsety>25</textoffsety>
+                        <textwidth>315</textwidth>
+                        <aligny>top</aligny>
+                        <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                        <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                        <font>font13</font>
+                        <textcolor>grey</textcolor>
+                        <focusedcolor>white</focusedcolor>
+                    </control>
                     <control type="button" id="5005">
                         <label>$ADDON[script.extendedinfo 32022]</label>
                         <width>400</width>
@@ -436,6 +450,7 @@
                         <textcolor>grey</textcolor>
                         <focusedcolor>white</focusedcolor>
                     </control>
+
                     <!--
                     <control type="button" id="5005">
                         <label></label>

@@ -146,7 +146,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.update_ui()
         elif controlID == 5003:
             dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading="Choose Mode", line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
+            ret = dialog.yesno(heading=addon.getLocalizedString(32151), line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
@@ -165,6 +165,44 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.update_content()
                 self.update_ui()
+        # elif controlID == 5011:
+        #     dialog = xbmcgui.Dialog()
+        #     ret = True
+        #     if not self.type == "tv":
+        #         ret = dialog.yesno(heading=addon.getLocalizedString(32151), line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
+        #     result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
+        #     if result:
+        #         if ret:
+        #             order = "lte"
+        #             label = " < " + result
+        #         else:
+        #             order = "gte"
+        #             label = " > " + result
+        #         self.add_filter("vote_average.%s" % order, float(result) / 10.0, addon.getLocalizedString(32112), label)
+        #         self.mode = "filter"
+        #         self.page = 1
+        #         self.update_content()
+        #         self.update_ui()
+        elif controlID == 5012:
+            dialog = xbmcgui.Dialog()
+            ret = True
+            if not self.type == "tv":
+                ret = dialog.yesno(heading=addon.getLocalizedString(32151), line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
+            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
+            if result:
+                if ret:
+                    order = "lte"
+                    label = " < " + result
+                else:
+                    order = "gte"
+                    label = " > " + result
+                self.add_filter("vote_count.%s" % order, result, addon.getLocalizedString(32111), label)
+                self.mode = "filter"
+                self.page = 1
+                self.update_content()
+                self.update_ui()
+
+
         elif controlID == 5004:
             if self.order == "asc":
                 self.order = "desc"
