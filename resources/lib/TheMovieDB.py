@@ -344,7 +344,7 @@ def HandleTMDBMiscResult(results):
                     'year': year,
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),
-                    'content': fetch(item, 'content'),
+                    'content': cleanText(fetch(item, 'content')),
                     'ID': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
                     'Description': cleanText(fetch(item, 'description'))}
