@@ -170,7 +170,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         #     ret = True
         #     if not self.type == "tv":
         #         ret = dialog.yesno(heading=addon.getLocalizedString(32151), line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
-        #     result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
+        #     result = xbmcgui.Dialog().input(xbmc.getLocalizedString(32112), "", type=xbmcgui.INPUT_NUMERIC)
         #     if result:
         #         if ret:
         #             order = "lte"
@@ -188,7 +188,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             ret = True
             if not self.type == "tv":
                 ret = dialog.yesno(heading=addon.getLocalizedString(32151), line1=addon.getLocalizedString(32106), nolabel=addon.getLocalizedString(32150), yeslabel=addon.getLocalizedString(32149))
-            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
+            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(32111), "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
                     order = "lte"
