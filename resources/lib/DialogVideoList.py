@@ -299,17 +299,21 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if controlID == 600:
             if self.page < self.totalpages:
                 self.page += 1
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                self.update_content()
-                self.update_ui()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
+            else:
+                self.page = 1
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.update_content()
+            self.update_ui()
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
         if controlID == 700:
             if self.page > 1:
                 self.page -= 1
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                self.update_content()
-                self.update_ui()
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
+            # else:
+            #     self.page = self.totalpages
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.update_content()
+            self.update_ui()
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def get_sort_type(self):
         listitems = []
@@ -368,6 +372,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         for item in self.filters:
             filter_list.append("%s=%s" % (item["type"], item["id"]))
         self.filter_url = "&".join(filter_list)
+        if self.filter_url:
+            self.filter_url += "&"
 
     def set_filter_label(self):
         filter_list = []
@@ -479,6 +485,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("Type", translations[self.type])
         self.window.setProperty("Filter_Label", self.filter_label)
         self.window.setProperty("Sort_Label", self.sort_label)
+        if self.page == self.totalpages:
+            self.window.clearProperty("ArrowDown")
+        else:
+            self.window.setProperty("ArrowDown", "True")
+        if self.page > 1:
+            self.window.setProperty("ArrowUp", "True")
+        else:
+            self.window.clearProperty("ArrowUp")
         if self.order == "asc":
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(584))
         else:
@@ -521,7 +535,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.set_filter_url()
             self.set_filter_label()
-            url = "discover/%s?sort_by=%s&%s&language=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, include_adult)
+            url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, addon.getSetting("LanguageID"), self.page, include_adult)
         if force:
             response = GetMovieDBData(url, 0)
         else:
