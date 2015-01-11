@@ -40,20 +40,20 @@
                 <aspectratio align="center">scale</aspectratio>
                 <texture colordiffuse="$INFO[Window(home).Property(actor.ImageColor)]">diffuseoverlay.png</texture>
             </control>
-                <control type="group" id="33000">
-                    <posx>825</posx>
-                    <posy>22</posy>
-                    <visible>!Control.HasFocus(132)</visible>
-                    <animation effect="fade" time="250">VisibleChange</animation>
-                    <control type="image">
-                        <posx>990</posx>
-                        <posy>-20</posy>
-                        <width>830</width>
-                        <height>130</height>
-                        <aspectratio align="right">keep</aspectratio>
-                        <texture>moviedb.png</texture>
-                    </control>
+            <control type="group" id="33000">
+                <posx>825</posx>
+                <posy>22</posy>
+                <visible>!Control.HasFocus(132)</visible>
+                <animation effect="fade" time="250">VisibleChange</animation>
+                <control type="image">
+                    <posx>990</posx>
+                    <posy>-20</posy>
+                    <width>830</width>
+                    <height>130</height>
+                    <aspectratio align="right">keep</aspectratio>
+                    <texture>moviedb.png</texture>
                 </control>
+            </control>
             <control type="group">
                 <posx>825</posx>
                 <posy>68</posy>
