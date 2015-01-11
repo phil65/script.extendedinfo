@@ -384,3 +384,7 @@ msgstr ""
 msgctxt "#32166"
 msgid "Add to SickBeard"
 msgstr ""
+
+msgctxt "#32167"
+msgid "Reviews"
+msgstr ""

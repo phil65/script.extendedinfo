@@ -2111,7 +2111,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Reviews</label>
+                            <label>$ADDON[script.extendedinfo 32167]</label>
                         </control>
                         <control type="panel" id="1050">
                             <animation type="WindowOpen" reversible="false">
