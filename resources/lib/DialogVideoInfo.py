@@ -242,7 +242,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             list_items = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(list_items, {})
+            self.OpenVideoList(list_items, [])
         elif controlID == 6001:
             ratings = []
             for i in range(0, 21):
@@ -276,7 +276,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_items = GetMoviesFromList(account_lists[index - 2]["id"], 0)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(list_items, {})
+                self.OpenVideoList(list_items, [])
         elif controlID == 8:
             self.close()
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.movie["general"]['DBID'], "false"))
