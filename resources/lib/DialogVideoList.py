@@ -253,20 +253,20 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_ui()
         elif controlID == 7000:
             if self.type == "tv":
-                listitems = [addon.getLocalizedString(32145)]
+                listitems = [addon.getLocalizedString(32145)]  # rated tv
                 if self.logged_in:
-                    listitems.append(addon.getLocalizedString(32144))
+                    listitems.append(addon.getLocalizedString(32144))   # starred tv
             else:
-                listitems = [addon.getLocalizedString(32135)]
+                listitems = [addon.getLocalizedString(32135)]  # rated movies
                 if self.logged_in:
-                    listitems.append(addon.getLocalizedString(32134))
+                    listitems.append(addon.getLocalizedString(32134))   # starred movies
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
                 account_lists = GetAccountLists()
                 for item in account_lists:
                     listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select("Choose List", listitems)
+            index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
             if index == -1:
                 pass
             elif index == 0 and self.logged_in:
@@ -379,7 +379,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         for item in response["genres"]:
             id_list.append(item["id"])
             label_list.append(item["name"])
-        index = xbmcgui.Dialog().select("Choose Genre", label_list)
+        index = xbmcgui.Dialog().select(addon.getLocalizedString(32151), label_list)
         if index > -1:
             # return "with_genres=" + str(id_list[index])
             self.add_filter("with_genres", str(id_list[index]), xbmc.getLocalizedString(135), str(label_list[index]))
@@ -443,7 +443,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             for item in response[country]:
                 label = "%s  -  %s" % (item["certification"], item["meaning"])
                 cert_list.append(label)
-            index = xbmcgui.Dialog().select("Choose Certification", cert_list)
+            index = xbmcgui.Dialog().select(addon.getLocalizedString(32151), cert_list)
             if index > -1:
             # return "with_genres=" + str(id_list[index])
                 cert = cert_list[index].split("  -  ")[0]
