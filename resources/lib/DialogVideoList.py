@@ -452,11 +452,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = starred
         elif self.mode == "rating":
-            if addon.getSetting("tmdb_username"):
+            if self.logged_in:
                 session_id_string = "session_id=" + get_session_id()
+                url = "account/%s/rated/%s?language=%s&page=%i&%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, session_id_string, sortby)
             else:
-                session_id_string = "guest_session_id=" + get_guest_session_id()
-            url = "account/%s/rated/%s?language=%s&page=%i&%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, session_id_string, sortby)
+                url = "guest_session/%s/rated_movies?language=%s&" % (get_guest_session_id(), addon.getSetting("LanguageID"))
             self.filter_label = rated
         else:
             self.set_filter_url()
