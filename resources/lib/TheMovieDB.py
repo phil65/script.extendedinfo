@@ -114,9 +114,11 @@ def ChangeListStatus(list_id, movie_id, status):
 def GetAccountLists(cache_time=0):
     session_id = get_session_id()
     account_id = get_account_info()
-    response = GetMovieDBData("account/%s/lists?session_id=%s&" % (str(account_id), session_id), cache_time)
-    # prettyprint(response)
-    return response["results"]
+    if session_id and account_id:
+        response = GetMovieDBData("account/%s/lists?session_id=%s&" % (str(account_id), session_id), cache_time)
+        return response["results"]
+    else:
+        return False
 
 
 def get_account_info():

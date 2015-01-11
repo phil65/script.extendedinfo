@@ -16,6 +16,7 @@ addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 include_adult = str(addon.getSetting("include_adults")).lower()
+self.logged_in = checkLogin()
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    addon.getLocalizedString(32108): "revenue",
@@ -217,9 +218,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             else:
                 listitems = [addon.getLocalizedString(32134), addon.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            account_lists = GetAccountLists()
-            for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            if self.logged_in:
+                account_lists = GetAccountLists()
+                for item in account_lists:
+                    listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select("Choose List", listitems)
             if index == -1:
