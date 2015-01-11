@@ -16,7 +16,6 @@ addon_version = addon.getAddonInfo('version')
 addon_strings = addon.getLocalizedString
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 include_adult = str(addon.getSetting("include_adults")).lower()
-self.logged_in = checkLogin()
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    addon.getLocalizedString(32108): "revenue",
@@ -52,6 +51,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort_label', "Popularity")
         self.order = kwargs.get('order', "desc")
+        self.logged_in = checkLogin()
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = CreateListItems(self.listitem_list)
