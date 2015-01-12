@@ -636,7 +636,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     else:
         poster_path = ""
         poster_path_small = ""
-    if response["name"]:
+    if response.get("name", False):
         Title = response["name"]
     elif season_number == "0":
         Title = "Specials"
