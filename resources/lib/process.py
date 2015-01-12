@@ -103,7 +103,7 @@ def StartInfoActions(infos, params):
         elif info == 'similarmovies':
             if params.get("id", False):
                 MovieId = params["id"]
-            elif int(params.get("dbid", -1)) > -1:
+            elif int(params.get("dbid", -1)) > 0:
                 MovieId = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("IMDBId from local DB:" + str(MovieId))
             else:
@@ -283,7 +283,7 @@ def StartInfoActions(infos, params):
             xbmc.sleep(500)
             if params.get("id", ""):
                 MovieId = params.get("id", "")
-            elif int(params.get("dbid", -1)) > -1:
+            elif int(params.get("dbid", -1)) > 0:
                 MovieId = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(MovieId))
             elif params.get("imdbid", ""):

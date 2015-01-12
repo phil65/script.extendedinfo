@@ -40,7 +40,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.logged_in = checkLogin()
         if tmdb_id:
             self.MovieId = tmdb_id
-        elif self.dbid and (int(self.dbid) > -1):
+        elif self.dbid and (int(self.dbid) > 0):
             self.MovieId = GetImdbIDFromDatabase("movie", self.dbid)
             log("IMDBId from local DB:" + str(self.MovieId))
         elif imdb_id:
