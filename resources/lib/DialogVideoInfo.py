@@ -9,7 +9,6 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 import threading
-import ContextMenu
 homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)

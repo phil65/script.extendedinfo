@@ -5,7 +5,6 @@ from Utils import *
 import DialogVideoInfo
 import DialogTVShowInfo
 import DialogActorInfo
-import ContextMenu
 homewindow = xbmcgui.Window(10000)
 from TheMovieDB import *
 
