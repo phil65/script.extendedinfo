@@ -33,7 +33,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         self.name = kwargs.get('name')
         if tmdb_id:
             self.tmdb_id = tmdb_id
-        elif dbid and (int(dbid) > -1):
+        elif dbid and (int(dbid) > 0):
             tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
             log("IMDBId from local DB:" + str(tvdb_id))
             self.tmdb_id = Get_Show_TMDB_ID(tvdb_id)
