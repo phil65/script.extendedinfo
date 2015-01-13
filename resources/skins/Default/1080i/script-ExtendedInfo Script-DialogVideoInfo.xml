@@ -578,6 +578,8 @@
                                 </control>
                                 <!--Subtitle flags-->
                                 <control type="grouplist" id="12000">
+                                    <posx>0</posx>
+                                    <posy>0</posy>
                                     <animation effect="fade" start="100" end="80" time="40" condition="true">Conditional</animation>
                                     <width>600</width>
                                     <height>25</height>
@@ -1097,12 +1099,13 @@
                                             <visible>!IsEmpty(ListItem.Year)</visible>
                                         </control>
                                         <control type="label">
+                                            <posx>5</posx>
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>84</width>
                                             <height>25</height>
                                             <font>font10</font>
                                             <aligny>center</aligny>
-                                            <align>center</align>
+                                            <align>left</align>
                                             <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="image">
@@ -1182,12 +1185,13 @@
                                             <visible>!IsEmpty(ListItem.Year)</visible>
                                         </control>
                                         <control type="label">
+                                            <posx>5</posx>
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>84</width>
                                             <height>25</height>
                                             <font>font10</font>
                                             <aligny>center</aligny>
-                                            <align>center</align>
+                                            <align>left</align>
                                             <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
@@ -1288,12 +1292,13 @@
                                             <visible>!IsEmpty(ListItem.Year)</visible>
                                         </control>
                                         <control type="label">
+                                            <posx>5</posx>
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>84</width>
                                             <height>25</height>
                                             <font>font10</font>
                                             <aligny>center</aligny>
-                                            <align>center</align>
+                                            <align>left</align>
                                             <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="image">
@@ -1364,12 +1369,13 @@
                                             <visible>!IsEmpty(ListItem.Year)</visible>
                                         </control>
                                         <control type="label">
+                                            <posx>5</posx>
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>84</width>
                                             <height>25</height>
                                             <font>font10</font>
                                             <aligny>center</aligny>
-                                            <align>center</align>
+                                            <align>left</align>
                                             <label>$INFO[ListItem.Year]</label>
                                         </control>
                                         <control type="textbox">
