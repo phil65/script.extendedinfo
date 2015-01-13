@@ -250,8 +250,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
     def ShowManageDialog(self):
         manage_list = []
         listitems = []
-        tvshow_dbid = self.tvshow["general"].get("DBID", False)
-        imdb_id = self.tvshow["general"].get("imdb_id", False)
+        tvshow_dbid = str(self.tvshow["general"].get("DBID", ""))
+        imdb_id = str(self.tvshow["general"].get("imdb_id", ""))
         title = self.tvshow["general"].get("TVShowTitle", "")
 
         # filename = self.tvshow["general"].get("FilenameAndPath", False)
