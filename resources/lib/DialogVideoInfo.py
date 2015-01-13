@@ -386,9 +386,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def ShowManageDialog(self):
         manage_list = []
         listitems = []
-        movie_id = self.movie["general"].get("DBID", False)
+        movie_id = str(self.movie["general"].get("DBID", ""))
         filename = self.movie["general"].get("FilenameAndPath", False)
-        imdb_id = self.movie["general"].get("imdb_id", False)
+        imdb_id = str(self.movie["general"].get("imdb_id", ""))
         if movie_id:
             temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
                          [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=movie, dbid=" + movie_id + ")"],
