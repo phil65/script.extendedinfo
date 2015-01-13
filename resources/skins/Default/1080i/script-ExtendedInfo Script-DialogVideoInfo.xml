@@ -1916,7 +1916,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Releases</label>
+                            <label>$ADDON[script.extendedinfo 32168]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
