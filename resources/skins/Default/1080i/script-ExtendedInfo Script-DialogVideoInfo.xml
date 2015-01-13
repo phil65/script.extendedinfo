@@ -1488,6 +1488,7 @@
                                     <posx>77</posx>
                                     <posy>18</posy>
                                     <control type="image">
+                                        <posx>0</posx>
                                         <posy>10</posy>
                                         <width>320</width>
                                         <height>200</height>
@@ -1496,6 +1497,7 @@
                                         <fadetime>0</fadetime>
                                     </control>
                                     <control type="image">
+                                        <posx>0</posx>
                                         <posy>10</posy>
                                         <width>320</width>
                                         <height>200</height>
@@ -1536,6 +1538,7 @@
                                     <posx>77</posx>
                                     <posy>18</posy>
                                     <control type="image">
+                                        <posx>0</posx>
                                         <posy>10</posy>
                                         <width>320</width>
                                         <height>200</height>
@@ -2070,12 +2073,17 @@
                             <itemlayout height="100" width="270">
                                 <control type="group">
                                     <posx>50</posx>
+                                    <posy>0</posy>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="label">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <align>center</align>
@@ -2088,12 +2096,17 @@
                             <focusedlayout height="100" width="270">
                                 <control type="group">
                                     <posx>50</posx>
+                                    <posy>0</posy>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texture>
@@ -2101,6 +2114,8 @@
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
                                     <control type="label">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <align>center</align>
@@ -2144,7 +2159,10 @@
                             <itemlayout height="400" width="630">
                                 <control type="group">
                                     <posx>50</posx>
+                                    <posy>0</posy>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>630</width>
                                         <height>400</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
@@ -2163,12 +2181,15 @@
                             <focusedlayout height="400" width="630">
                                 <control type="group">
                                     <posx>50</posx>
+                                    <posy>0</posy>
                                     <control type="image">
                                         <width>630</width>
                                         <height>400</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>630</width>
                                         <height>400</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texture>
@@ -2220,12 +2241,16 @@
                             <itemlayout height="100" width="270">
                                 <control type="group">
                                     <posx>50</posx>
+                                    <posy>0</posy>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="label">
+                                        <posy>0</posy>
                                         <posx>20</posx>
                                         <width>240</width>
                                         <height>100</height>
@@ -2238,6 +2263,7 @@
                             </itemlayout>
                             <focusedlayout height="100" width="270">
                                 <control type="group">
+                                    <posy>0</posy>
                                     <posx>50</posx>
                                     <control type="image">
                                         <width>280</width>
@@ -2245,6 +2271,8 @@
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texture>
                                     </control>
                                     <control type="image">
+                                        <posx>0</posx>
+                                        <posy>0</posy>
                                         <width>280</width>
                                         <height>100</height>
                                         <texture border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texture>
@@ -2253,6 +2281,7 @@
                                     </control>
                                     <control type="label">
                                         <posx>20</posx>
+                                        <posy>0</posy>
                                         <width>240</width>
                                         <height>100</height>
                                         <align>center</align>
