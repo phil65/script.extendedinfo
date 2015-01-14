@@ -280,6 +280,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'User_Rating': str(fetch(tv, 'rating')),
                  'Votes': fetch(tv, 'vote_count'),
                  'Status': fetch(tv, 'status'),
+                 'ShowType': fetch(tv, 'type'),
                  'homepage': fetch(tv, 'homepage'),
                  'last_air_date': fetch(tv, 'last_air_date'),
                  'first_air_date': release_date,
