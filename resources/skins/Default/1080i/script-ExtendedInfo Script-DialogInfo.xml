@@ -135,6 +135,7 @@
                         <visible>IntegerGreaterThan(Container(150).NumItems,0)</visible>
                         <height>540</height>
                         <control type="label">
+                            <posy>6</posy>
                             <posx>25</posx>
                             <width>500</width>
                             <height>25</height>
@@ -318,6 +319,7 @@
                         <height>540</height>
                         <visible>IntegerGreaterThan(Container(250).NumItems,0)</visible>
                         <control type="label">
+                            <posy>6</posy>
                             <posx>25</posx>
                             <width>500</width>
                             <height>25</height>
@@ -501,6 +503,7 @@
                         <visible>IntegerGreaterThan(Container(550).NumItems,0)</visible>
                         <height>540</height>
                         <control type="label">
+                            <posy>6</posy>
                             <posx>25</posx>
                             <width>500</width>
                             <height>25</height>
