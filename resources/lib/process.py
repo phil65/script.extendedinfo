@@ -115,7 +115,7 @@ def StartInfoActions(infos, params):
                 CompanyId = SearchforCompany(params["studio"])[0]["id"]
                 data = GetCompanyInfo(CompanyId), "StudioInfo"
         elif info == 'set':
-            if params.get("dbid", False) and not "show" in str(params["type"]):
+            if params.get("dbid", False) and not "show" in str(params.get("type", "")):
                 name = GetMovieSetName(params["dbid"])
                 if name:
                     params["setid"] = SearchForSet(name)
