@@ -698,7 +698,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     directors = []
     genres = []
     year = ""
-    Country = ""
     Studio = []
     mpaa = ""
     SetName = ""
@@ -718,8 +717,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
             directors.append(item["name"])
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
-    if response['production_countries']:
-        Country = response['production_countries'][0]["name"]
     for item in response['production_companies']:
         Studio.append(item["name"])
     Set = fetch(response, "belongs_to_collection")
@@ -755,6 +752,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
              'imdb_id': fetch(response, 'imdb_id'),
              'Plot': fetch(response, 'overview'),
              'OriginalTitle': fetch(response, 'original_title'),
+             'Country': fetch(response, 'original_language'),
              'Genre': " / ".join(genres),
              'Rating': fetch(response, 'vote_average'),
              'Votes': fetch(response, 'vote_count'),
@@ -764,7 +762,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
              'Path': path,
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
-             'Country': Country,
              'Studio': " / ".join(Studio),
              'Year': year}
     if "videos" in response:
