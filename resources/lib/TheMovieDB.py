@@ -279,14 +279,8 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Rating': fetch(tv, 'vote_average'),
                  'User_Rating': str(fetch(tv, 'rating')),
                  'Votes': fetch(tv, 'vote_count'),
-                 'Status': fetch(tv, 'status'),
-                 'ShowType': fetch(tv, 'type'),
-                 'homepage': fetch(tv, 'homepage'),
-                 'last_air_date': fetch(tv, 'last_air_date'),
-                 'first_air_date': release_date,
                  'number_of_episodes': fetch(tv, 'number_of_episodes'),
                  'number_of_seasons': fetch(tv, 'number_of_seasons'),
-                 'in_production': fetch(tv, 'in_production'),
                  'Release_Date': release_date,
                  'ReleaseDate': release_date,
                  'Premiered': release_date}
@@ -824,23 +818,23 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
         account_states = None
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    tmdb_id = fetch(results, 'id')
+    tmdb_id = fetch(response, 'id')
     poster_path = ""
     duration = ""
     year = ""
     backdrop_path = ""
-    if ("backdrop_path" in results) and (results["backdrop_path"]):
-        backdrop_path = base_url + fanart_size + results['backdrop_path']
-    if ("poster_path" in results) and (results["poster_path"]):
-        poster_path = base_url + poster_size + results['poster_path']
-    if "episode_run_time" in results:
-        if len(results["episode_run_time"]) > 1:
-            duration = "%i - %i" % (min(results["episode_run_time"]), max(results["episode_run_time"]))
-        elif len(results["episode_run_time"]) == 1:
-            duration = "%i" % (results["episode_run_time"][0])
+    if ("backdrop_path" in response) and (response["backdrop_path"]):
+        backdrop_path = base_url + fanart_size + response['backdrop_path']
+    if ("poster_path" in response) and (response["poster_path"]):
+        poster_path = base_url + poster_size + response['poster_path']
+    if "episode_run_time" in response:
+        if len(response["episode_run_time"]) > 1:
+            duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
+        elif len(response["episode_run_time"]) == 1:
+            duration = "%i" % (response["episode_run_time"][0])
         else:
             duration = ""
-    release_date = fetch(results, 'first_air_date')
+    release_date = fetch(response, 'first_air_date')
     if release_date:
         year = release_date[:4]
     newtv = {'Art(fanart)': backdrop_path,
@@ -848,27 +842,27 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
              'Thumb': poster_path,
              'Poster': poster_path,
              'fanart': backdrop_path,
-             'Title': fetch(results, 'name'),
-             'TVShowTitle': fetch(results, 'name'),
-             'OriginalTitle': fetch(results, 'original_name'),
+             'Title': fetch(response, 'name'),
+             'TVShowTitle': fetch(response, 'name'),
+             'OriginalTitle': fetch(response, 'original_name'),
              'Duration': duration,
              'ID': tmdb_id,
-             'credit_id': fetch(results, 'credit_id'),
-             'Plot': fetch(results, "overview"),
+             'credit_id': fetch(response, 'credit_id'),
+             'Plot': fetch(response, "overview"),
              'year': year,
              'media_type': "tv",
              'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
-             'Rating': fetch(results, 'vote_average'),
-             'User_Rating': str(fetch(results, 'rating')),
-             'Votes': fetch(results, 'vote_count'),
-             'Status': fetch(results, 'status'),
-             'ShowType': fetch(results, 'type'),
-             'homepage': fetch(results, 'homepage'),
-             'last_air_date': fetch(results, 'last_air_date'),
+             'Rating': fetch(response, 'vote_average'),
+             'User_Rating': str(fetch(response, 'rating')),
+             'Votes': fetch(response, 'vote_count'),
+             'Status': fetch(response, 'status'),
+             'ShowType': fetch(response, 'type'),
+             'homepage': fetch(response, 'homepage'),
+             'last_air_date': fetch(response, 'last_air_date'),
              'first_air_date': release_date,
-             'number_of_episodes': fetch(results, 'number_of_episodes'),
-             'number_of_seasons': fetch(results, 'number_of_seasons'),
-             'in_production': fetch(results, 'in_production'),
+             'number_of_episodes': fetch(response, 'number_of_episodes'),
+             'number_of_seasons': fetch(response, 'number_of_seasons'),
+             'in_production': fetch(response, 'in_production'),
              'Release_Date': release_date,
              'ReleaseDate': release_date,
              'Premiered': release_date}
