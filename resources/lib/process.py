@@ -181,7 +181,7 @@ def StartInfoActions(infos, params):
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
                 if params.get("dbid", False):
-                    if params["type"] == "episode":
+                    if params.get("type") == "episode":
                         tvshowid = GetImdbIDFromDatabasefromEpisode(params["dbid"])
                     else:
                         tvshowid = GetImdbIDFromDatabase("tvshow", params["dbid"])
