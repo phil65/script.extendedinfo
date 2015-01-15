@@ -4,6 +4,9 @@ v2.0.2
 - fixed manage dialog
 - missing translations
 - use original_language tag for country property
+- fix session_id caching
+- adjusted some cache time values
+- fixed wrong onclick action in account menu
 
 v2.0.1
 - small fixes
