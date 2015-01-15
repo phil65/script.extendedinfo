@@ -485,7 +485,7 @@ def SearchforCompany(Company):
     regex = re.compile('\(.+?\)')
     Company = regex.sub('', Company)
     log(Company)
-    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company), 30)
+    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company), 10)
     try:
         return response["results"]
     except:
@@ -494,7 +494,7 @@ def SearchforCompany(Company):
 
 
 def MultiSearch(String):
-    response = GetMovieDBData("search/multi?query=%s&" % urllib.quote_plus(String), 30)
+    response = GetMovieDBData("search/multi?query=%s&" % urllib.quote_plus(String), 1)
     if response and "results" in response:
         return response["results"]
     else:
@@ -944,7 +944,7 @@ def GetExtendedActorInfo(actorid):
 
 def GetMovieLists(list_id):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (list_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+                              (list_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 5)
     return HandleTMDBMiscResult(response["lists"]["results"])
 
 
@@ -968,7 +968,7 @@ def GetTVShowsFromNetwork(network_id):
 
 def GetMoviesWithCertification(country, rating):
     response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&include_adult=%s&" %
-                              (country, str(rating), addon.getSetting("LanguageID"), include_adult), 30)
+                              (country, str(rating), addon.getSetting("LanguageID"), include_adult), 10)
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
@@ -993,7 +993,7 @@ def GetFavItems(media_type):
     return HandleTMDBMovieResult(response["results"], False, None)
 
 
-def GetMoviesFromList(list_id, cache_time=30):
+def GetMoviesFromList(list_id, cache_time=5):
     response = GetMovieDBData("list/%s?language=%s&" % (str(list_id), addon.getSetting("LanguageID")), cache_time)
   #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"], False, None)
@@ -1031,7 +1031,7 @@ def GetMovieKeywords(movie_id):
 
 def GetSimilarMovies(movie_id):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (movie_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 30)
+                              (movie_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 10)
     if "similar" in response:
         return HandleTMDBMovieResult(response["similar"]["results"])
     else:
@@ -1039,7 +1039,7 @@ def GetSimilarMovies(movie_id):
 
 
 def GetMovieDBTVShows(tvshowtype):
-    response = GetMovieDBData("tv/%s?language=%s&" % (tvshowtype, addon.getSetting("LanguageID")), 2)
+    response = GetMovieDBData("tv/%s?language=%s&" % (tvshowtype, addon.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return HandleTMDBTVShowResult(response["results"], False, None)
     else:
@@ -1048,7 +1048,7 @@ def GetMovieDBTVShows(tvshowtype):
 
 
 def GetMovieDBMovies(movietype):
-    response = GetMovieDBData("movie/%s?language=%s&" % (movietype, addon.getSetting("LanguageID")), 2)
+    response = GetMovieDBData("movie/%s?language=%s&" % (movietype, addon.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return HandleTMDBMovieResult(response["results"], False, None)
     else:
