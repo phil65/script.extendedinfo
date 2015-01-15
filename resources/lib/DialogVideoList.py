@@ -253,14 +253,15 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.update_content()
                 self.update_ui()
         elif controlID == 7000:
+            listitems = []
             if self.type == "tv":
-                listitems = [addon.getLocalizedString(32145)]  # rated tv
                 if self.logged_in:
                     listitems.append(addon.getLocalizedString(32144))   # starred tv
+                listitems.append(addon.getLocalizedString(32145))  # rated tv
             else:
-                listitems = [addon.getLocalizedString(32135)]  # rated movies
                 if self.logged_in:
                     listitems.append(addon.getLocalizedString(32134))   # starred movies
+                listitems.append(addon.getLocalizedString(32135))  # rated movies
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
                 account_lists = GetAccountLists()
