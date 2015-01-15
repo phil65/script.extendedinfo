@@ -160,7 +160,7 @@ def auth_request_token():
     request_token = get_request_token()
     username = addon.getSetting("tmdb_username")
     password = addon.getSetting("tmdb_password")
-    response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 0.1)
+    response = GetMovieDBData("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 999999)
     # prettyprint(response)
     if "success" in response and response["success"]:
         return response["request_token"]
