@@ -49,7 +49,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.filter_label = ""
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "popularity")
-        self.sort_label = kwargs.get('sort_label', "Popularity")
+        self.sort_label = kwargs.get('sort_label', addon.getLocalizedString(32110))
         self.order = kwargs.get('order', "desc")
         self.logged_in = checkLogin()
         self.filters = kwargs.get('filters', [])
