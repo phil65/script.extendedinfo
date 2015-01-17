@@ -119,7 +119,7 @@ def StartInfoActions(infos, params):
                 name = GetMovieSetName(params["dbid"])
                 if name:
                     params["setid"] = SearchForSet(name)
-            if params["setid"]:
+            if params.get("setid", False):
                 SetData, info = GetSetMovies(params["setid"])
                 if SetData:
                     data = SetData, "MovieSetItems"
