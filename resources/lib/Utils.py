@@ -641,7 +641,7 @@ def GetStringFromUrl(url):
     return None
 
 
-def Get_JSON_response(url="", cache_days=7.0):
+def Get_JSON_response(url="", cache_days=7.0, folder=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))

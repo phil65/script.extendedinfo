@@ -151,7 +151,7 @@ def get_session_id():
 
 
 def get_request_token():
-    response = GetMovieDBData("authentication/token/new?", 0.1)
+    response = GetMovieDBData("authentication/token/new?", 999999)
     # prettyprint(response)
     return response["request_token"]
 
@@ -553,7 +553,7 @@ def SearchForSet(setname):
         return ""
 
 
-def GetMovieDBData(url="", cache_days=14):
+def GetMovieDBData(url="", cache_days=14, folder=False):
     # session_id = get_session_id()
     # url = "http://api.themoviedb.org/3/%sapi_key=%s&session_id=%s" % (url, moviedb_key, session_id)
     url = "http://api.themoviedb.org/3/%sapi_key=%s" % (url, moviedb_key)
@@ -563,7 +563,7 @@ def GetMovieDBData(url="", cache_days=14):
     if not base_url:
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    results = Get_JSON_response(url, cache_days)
+    results = Get_JSON_response(url, cache_days, folder)
     return results
 
 
