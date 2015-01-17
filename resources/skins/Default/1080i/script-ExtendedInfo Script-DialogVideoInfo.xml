@@ -3040,13 +3040,6 @@
             <control type="image">
                 <width>729</width>
                 <height>1080</height>
-                <aspectratio aligny="top">scale</aspectratio>
-                <fadetime>200</fadetime>
-                <texture background="true">$INFO[Window.Property(movie.ImageFilter)]</texture>
-            </control>
-            <control type="image">
-                <width>729</width>
-                <height>1080</height>
                 <fadetime>300</fadetime>
                 <aspectratio aligny="top">scale</aspectratio>
                 <texture>$INFO[Window.Property(movie.Poster)]</texture>
