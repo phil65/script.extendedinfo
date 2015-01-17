@@ -1751,7 +1751,7 @@
                                         <posx>50</posx>
                                         <width>273</width>
                                         <height>100</height>
-                                        <texture background="true" fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
+                                        <texture fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
                                         <aspectratio aligny="center" align="center">keep</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -1787,7 +1787,7 @@
                                         <posx>50</posx>
                                         <width>273</width>
                                         <height>100</height>
-                                        <texture background="true" fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
+                                        <texture fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
                                         <aspectratio aligny="center" align="center">keep</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -1867,7 +1867,7 @@
                                         <posx>30</posx>
                                         <width>313</width>
                                         <height>100</height>
-                                        <texture background="true" fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
+                                        <texture fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
                                         <aspectratio aligny="center" align="center">keep</aspectratio>
                                     </control>
                                     <control type="textbox">
@@ -1903,7 +1903,7 @@
                                         <posx>30</posx>
                                         <width>313</width>
                                         <height>100</height>
-                                        <texture background="true" fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
+                                        <texture fallback="flags/studios/default-studio.png">$INFO[ListItem.Label,flags/studios/,.png]</texture>
                                         <aspectratio aligny="center" align="center">keep</aspectratio>
                                     </control>
                                     <control type="textbox">
