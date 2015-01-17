@@ -16,7 +16,7 @@
                 <width>729</width>
                 <height>1080</height>
                 <aspectratio aligny="top">scale</aspectratio>
-                <texture background="true">$INFO[Window.Property(actor.thumb)]</texture>
+                <texture>$INFO[Window.Property(actor.thumb)]</texture>
             </control>
         </control>
         <control type="group">
@@ -193,7 +193,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -270,7 +270,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -377,7 +377,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -454,7 +454,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -561,7 +561,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -638,7 +638,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -744,7 +744,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -821,7 +821,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -926,7 +926,7 @@
                                         <posy>10</posy>
                                         <width>320</width>
                                         <height>200</height>
-                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
                                         <fadetime>0</fadetime>
                                     </control>
@@ -965,7 +965,7 @@
                                         <posy>10</posy>
                                         <width>320</width>
                                         <height>200</height>
-                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
                                         <fadetime>0</fadetime>
                                     </control>
@@ -1021,7 +1021,7 @@
                                         <posy>28</posy>
                                         <width>224</width>
                                         <height>325</height>
-                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
                                         <fadetime>0</fadetime>
                                     </control>
@@ -1052,7 +1052,7 @@
                                             <posy>10</posy>
                                             <width>224</width>
                                             <height>325</height>
-                                            <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                             <aspectratio aligny="center">scale</aspectratio>
                                             <fadetime>0</fadetime>
                                         </control>
@@ -1100,7 +1100,7 @@
                                         <posy>28</posy>
                                         <width>505</width>
                                         <height>325</height>
-                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="label">
@@ -1139,7 +1139,7 @@
                                         <posy>28</posy>
                                         <width>505</width>
                                         <height>325</height>
-                                        <texture fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
                                     </control>
                                     <control type="label">
