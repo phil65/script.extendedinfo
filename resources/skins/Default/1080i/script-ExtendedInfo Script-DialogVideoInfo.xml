@@ -1236,6 +1236,17 @@
                             <aligny>center</aligny>
                             <font>font14</font>
                             <label>$INFO[Window.Property(movie.set.label)]$INFO[Container(250).NumItems, (,)]</label>
+                            <visible>!IsEmpty(Window.Property(movie.set.label))</visible>
+                        </control>
+                        <control type="label">
+                            <posx>25</posx>
+                            <posy>6</posy>
+                            <width>1900</width>
+                            <height>25</height>
+                            <aligny>center</aligny>
+                            <font>font14</font>
+                            <label>$LOCALIZE[33054]$INFO[Container(250).NumItems, (,)]</label>
+                            <visible>IsEmpty(Window.Property(movie.set.label))</visible>
                         </control>
                         <control type="image">
                             <posx>0</posx>
