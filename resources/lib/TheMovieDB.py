@@ -21,7 +21,7 @@ homewindow = xbmcgui.Window(10000)
 headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'User-agent': 'XBMC/13.2 ( ptemming@gmx.net )'
+    'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'
 }
 poster_sizes = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
 logo_sizes = ["w45", "w92", "w154", "w185", "w300", "w500", "original"]
@@ -948,12 +948,6 @@ def GetMovieLists(list_id):
     return HandleTMDBMiscResult(response["lists"]["results"])
 
 
-def GetMoviesWithCertification(country, rating):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&certification_country=%s&certification=%s&language=%s&include_adult=%s&" %
-                              (country, str(rating), addon.getSetting("LanguageID"), include_adult), 10)
-    return HandleTMDBMovieResult(response["results"], False, None)
-
-
 def GetRatedMedia(media_type):
     if checkLogin():
         session_id = get_session_id()
@@ -1007,7 +1001,7 @@ def GetMovieKeywords(movie_id):
             keywords.append(newkeyword)
         return keywords
     else:
-        log("No Keywords in JSON answer")
+        log("No keywords in JSON answer")
         return []
 
 
@@ -1047,7 +1041,7 @@ def GetSetMovies(set_id):
         else:
             backdrop_path = ""
         if ("poster_path" in response) and (response["poster_path"]):
-            poster_path = base_url + poster_size + response['poster_path']
+            poster_path = base_url + "original" + response['poster_path']
             small_poster_path = base_url + "w342" + response["poster_path"]
         else:
             poster_path = ""
