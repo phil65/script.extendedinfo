@@ -1466,7 +1466,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32117]</label>
+                            <label>$ADDON[script.extendedinfo 32117]$INFO[Container(1150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>-5</posx>
@@ -1600,7 +1600,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32118]</label>
+                            <label>$ADDON[script.extendedinfo 32118]$INFO[Container(350).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>-5</posx>
@@ -1731,7 +1731,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$LOCALIZE[20388]</label>
+                            <label>$LOCALIZE[20388]$INFO[Container(550).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1849,7 +1849,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32152]</label>
+                            <label>$ADDON[script.extendedinfo 32152]$INFO[Container(1450).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1967,7 +1967,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32168]</label>
+                            <label>$ADDON[script.extendedinfo 32168]$INFO[Container(650).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -2092,7 +2092,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Genres</label>
+                            <label>$LOCALIZE[135]$INFO[Container(850).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="850">
                             <animation type="WindowOpen" reversible="false">
@@ -2177,7 +2177,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32167]</label>
+                            <label>$ADDON[script.extendedinfo 32167]$INFO[Container(1050).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="1050">
                             <animation type="WindowOpen" reversible="false">
@@ -2261,7 +2261,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Keywords</label>
+                            <label>$LOCALIZE[21861]$INFO[Container(950).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="950">
                             <animation type="WindowOpen" reversible="false">
@@ -2340,11 +2340,12 @@
                         <visible>IntegerGreaterThan(Container(1250).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
+                            <posy>6</posy>
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Artwork</label>
+                            <label>$ADDON[script.extendedinfo 32119]$INFO[Container(1250).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="1250">
                             <posy>30</posy>
@@ -2408,17 +2409,14 @@
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
-                                    <control type="group">
+                                    <control type="image">
                                         <posx>77</posx>
-                                        <posy>18</posy>
-                                        <control type="image">
-                                            <posy>10</posy>
-                                            <width>224</width>
-                                            <height>325</height>
-                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-                                            <aspectratio aligny="center">scale</aspectratio>
-                                            <fadetime>0</fadetime>
-                                        </control>
+                                        <posy>28</posy>
+                                        <width>224</width>
+                                        <height>325</height>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <aspectratio aligny="center">scale</aspectratio>
+                                        <fadetime>0</fadetime>
                                     </control>
                                 </control>
                             </focusedlayout>
@@ -2429,11 +2427,12 @@
                         <visible>IntegerGreaterThan(Container(1350).NumItems,0)</visible>
                         <control type="label">
                             <posx>25</posx>
+                            <posy>6</posy>
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Fanart</label>
+                            <label>$LOCALIZE[20445]$INFO[Container(1350).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="1350">
                             <posy>30</posy>
@@ -2465,7 +2464,7 @@
                                         <height>325</height>
                                         <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
                                         <aspectratio aligny="center">scale</aspectratio>
-                                        <fadetime>0</fadetime>
+                                        <fadetime>200</fadetime>
                                     </control>
                                     <control type="image">
                                         <posx>77</posx>
@@ -2497,17 +2496,14 @@
                                         <animation effect="fade" start="0" end="100" time="160">Focus</animation>
                                         <animation effect="fade" start="0" end="100" time="0">UnFocus</animation>
                                     </control>
-                                    <control type="group">
+                                    <control type="image">
                                         <posx>77</posx>
-                                        <posy>18</posy>
-                                        <control type="image">
-                                            <posy>10</posy>
-                                            <width>505</width>
-                                            <height>325</height>
-                                            <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-                                            <aspectratio aligny="center">scale</aspectratio>
-                                            <fadetime>0</fadetime>
-                                        </control>
+                                        <posy>28</posy>
+                                        <width>505</width>
+                                        <height>325</height>
+                                        <texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                                        <aspectratio aligny="center">scale</aspectratio>
+                                        <fadetime>200</fadetime>
                                     </control>
                                 </control>
                             </focusedlayout>
