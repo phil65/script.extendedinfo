@@ -6,6 +6,8 @@ v2.0.3
 - fixed trakt rating
 - param process fixes
 - bounce effect for list end
+- fixes for actor search
+- fixed escape chars for plots in info dialogs
 
 v2.0.2
 - skin compatibility
