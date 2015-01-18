@@ -637,8 +637,8 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
         Title = "Specials"
     else:
         Title = "Season %s" % season_number
-    season = {'SeasonDescription': response["overview"],
-              'Plot': response["overview"],
+    season = {'SeasonDescription': cleanText(response["overview"]),
+              'Plot': cleanText(response["overview"]),
               'TVShowTitle': tvshowname,
               'Thumb': poster_path_small,
               'Poster': poster_path,
