@@ -1,3 +1,12 @@
+v2.0.3
+- fixed auth token caching
+- skin compatibility
+- bg loading for list images, no bg load for poster
+- fixed tvshow keyword call
+- fixed trakt rating
+- param process fixes
+- bounce effect for list end
+
 v2.0.2
 - skin compatibility
 - fixed some param/id parsing stuff
