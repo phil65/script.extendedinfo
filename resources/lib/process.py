@@ -300,9 +300,6 @@ def StartInfoActions(infos, params):
                     Notify("Error", "No Trailer available")
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
-        if data:
-            data, prefix = data
-            passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
         elif info == 'deletecache':
             for the_file in os.listdir(Addon_Data_Path):
                 file_path = os.path.join(Addon_Data_Path, the_file)
@@ -314,4 +311,7 @@ def StartInfoActions(infos, params):
             Notify("Cache deleted")
         elif info == 'syncwatchlist':
             pass
+        if data:
+            data, prefix = data
+            passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
     return params["control"]
