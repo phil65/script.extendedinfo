@@ -524,7 +524,7 @@ def GetPersonID(person):
             return response["results"][0]
     else:
         log("could not find Person ID")
-        return ""
+    return False
 
 
 def GetKeywordID(keyword):
