@@ -87,6 +87,14 @@
                     <width>2000</width>
                     <itemgap>15</itemgap>
                     <height>1000</height>
+                    <animation type="Conditional" condition="!IsEmpty(Window(Home).Property(Bounce.Down))" reversible="false">
+                        <effect type="slide" end="0,20" time="60" tween="sine" />
+                        <effect type="slide" end="0,-20" time="180" tween="sine" delay="80" />
+                    </animation>
+                    <animation type="Conditional" condition="!IsEmpty(Window(Home).Property(Bounce.Up))" reversible="false">
+                        <effect type="slide" end="0,-20" time="60" tween="sine" />
+                        <effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
+                    </animation>
                     <scrolltime tween="sine">400</scrolltime>
                     <orientation>vertical</orientation>
                     <usecontrolcoords>true</usecontrolcoords>
@@ -110,7 +118,7 @@
                             <radioposy>20</radioposy>
                             <radiowidth>46</radiowidth>
                             <radioheight>46</radioheight>
-                            <onup>750</onup>
+                            <onup>RunScript(script.extendedinfo,info=bounce,name=Bounce.Up)</onup>
                             <ondown>150</ondown>
                             <textureradioonfocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioonfocus>
                             <textureradioofffocus colordiffuse="white">icons/DefaultAddonTvInfo.png</textureradioofffocus>
@@ -1080,7 +1088,7 @@
                             <onleft>750</onleft>
                             <onright>750</onright>
                             <onup>450</onup>
-                            <ondown>132</ondown>
+                            <ondown>RunScript(script.extendedinfo,info=bounce,name=Bounce.Down)</ondown>
                             <scrolltime>200</scrolltime>
                             <orientation>horizontal</orientation>
                             <animation type="WindowOpen" reversible="false">
