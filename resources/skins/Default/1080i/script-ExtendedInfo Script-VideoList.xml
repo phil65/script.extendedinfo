@@ -364,6 +364,7 @@
                 <textwidth>315</textwidth>
                 <label>$ADDON[script.extendedinfo 32024]</label>
                 <textcolor>grey</textcolor>
+                <focusedcolor>white</focusedcolor>
                 <radiowidth>90</radiowidth>
                 <radioheight>60</radioheight>
                 <radioposx>288</radioposx>
