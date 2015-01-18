@@ -723,7 +723,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + "w780" + response['poster_path']
+        poster_path = base_url + "original" + response['poster_path']
         poster_path_small = base_url + "w342" + response['poster_path']
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': backdrop_path,
@@ -826,7 +826,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + poster_size + response['poster_path']
+        poster_path = base_url + "original" + response['poster_path']
     if "episode_run_time" in response:
         if len(response["episode_run_time"]) > 1:
             duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
@@ -946,24 +946,6 @@ def GetMovieLists(list_id):
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                               (list_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 5)
     return HandleTMDBMiscResult(response["lists"]["results"])
-
-
-def GetMoviesWithKeyword(keyword_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=10&with_keywords=%s&language=%s&include_adult=%s&" % (str(keyword_id), addon.getSetting("LanguageID"), include_adult), 30)
-    return HandleTMDBMovieResult(response["results"], False, None)
-
-
-def GetMoviesWithGenre(genre_id):
-    response = GetMovieDBData("discover/movie?sort_by=release_date.desc&vote_count.gte=5&with_genres=%s&language=%s&include_adult=%s&" % (str(genre_id), addon.getSetting("LanguageID"), include_adult), 30)
-    return HandleTMDBMovieResult(response["results"], False, None)
-
-def GetTVShowsWithGenre(genre_id):
-    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_genres=%s&language=%s&" % (str(genre_id), addon.getSetting("LanguageID")), 30)
-    return HandleTMDBTVShowResult(response["results"], False, None)
-
-def GetTVShowsFromNetwork(network_id):
-    response = GetMovieDBData("discover/tv?sort_by=popularity.desc&vote_count.gte=5&with_networks=%s&language=%s&" % (str(network_id), addon.getSetting("LanguageID")), 30)
-    return HandleTMDBTVShowResult(response["results"], False, None)
 
 
 def GetMoviesWithCertification(country, rating):
