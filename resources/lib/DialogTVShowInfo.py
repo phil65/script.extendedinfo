@@ -26,6 +26,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.movieplayer = VideoPlayer(popstack=True)
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
         dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdbid')
