@@ -8,6 +8,7 @@ v2.0.3
 - bounce effect for list end
 - fixes for actor search
 - fixed escape chars for plots in info dialogs
+- some more small fixes
 
 v2.0.2
 - skin compatibility
