@@ -482,6 +482,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     global id_list
     global originaltitle_list
     global title_list
+    global imdb_list
     if not title_list:
         now = time.time()
         id_list = xbmc.getInfoLabel("Window(home).Property(id_list.JSON)")
@@ -489,27 +490,34 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             id_list = simplejson.loads(id_list)
             originaltitle_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(originaltitle_list.JSON)"))
             title_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(title_list.JSON)"))
+            imdb_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(imdb_list.JSON)"))
         else:
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
             json_query = simplejson.loads(unicode(json_query, 'utf-8', errors='ignore'))
             id_list = []
+            imdb_list = []
             originaltitle_list = []
             title_list = []
             if "movies" in json_query["result"]:
                 for item in json_query["result"]["movies"]:
                     id_list.append(item["movieid"])
+                    imdb_list.append(item["imdbnumber"])
                     originaltitle_list.append(item["originaltitle"].lower())
                     title_list.append(item["label"].lower())
             homewindow.setProperty("id_list.JSON", simplejson.dumps(id_list))
             homewindow.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
             homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
+            homewindow.setProperty("imdb_list.JSON", simplejson.dumps(imdb_list))
         log("create_light_movielist: " + str(now - time.time()))
     now = time.time()
     local_items = []
     remote_items = []
     for online_item in onlinelist:
         found = False
-        if online_item["Title"].lower() in title_list:
+        if online_item["imdb_id"] in imdb_list:
+            index = imdb_list.index(online_item["imdb_id"])
+            found = True
+        elif online_item["Title"].lower() in title_list:
             index = title_list.index(online_item["Title"].lower())
             found = True
             # Notify("found title " + online_item["Title"])
