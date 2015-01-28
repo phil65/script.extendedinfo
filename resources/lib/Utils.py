@@ -514,7 +514,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     remote_items = []
     for online_item in onlinelist:
         found = False
-        if online_item["imdb_id"] in imdb_list:
+        if "imdb_id" in online_item and online_item["imdb_id"] in imdb_list:
             index = imdb_list.index(online_item["imdb_id"])
             found = True
         elif online_item["Title"].lower() in title_list:
