@@ -520,7 +520,7 @@ def GetPersonID(person):
             selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), names)
             if selection > -1:
                 return response["results"][selection]
-        else:
+        elif response["results"]:
             return response["results"][0]
     else:
         log("could not find Person ID")
@@ -537,7 +537,7 @@ def GetKeywordID(keyword):
             selection = xbmcgui.Dialog().select(addon.getLocalizedString(32114), names)
             if selection > -1:
                 return response["results"][selection]
-        else:
+        elif response["results"]:
             return response["results"][0]
     else:
         log("could not find Keyword ID")
