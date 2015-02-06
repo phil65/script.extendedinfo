@@ -204,7 +204,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
             year = ""
             time_comparer = ""
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
-        if addon.getSetting("infodialog_onclick"):
+        if addon.getSetting("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
         else:
             path = trailer
