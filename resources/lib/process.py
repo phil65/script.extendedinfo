@@ -246,7 +246,7 @@ def StartInfoActions(infos, params):
         elif info == 'similarlocal' and "dbid" in params:
             data = GetSimilarFromOwnLibrary(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
-            data = GetIconPanel(int(self.id)), "IconPanel" + str(self.id)
+            data = GetIconPanel(int(params["id"])), "IconPanel" + str(params["id"])
         elif info == 'weather':
             data = GetWeatherImages(), "WeatherImages"
         elif info == 'updatexbmcdatabasewithartistmbidbg':
