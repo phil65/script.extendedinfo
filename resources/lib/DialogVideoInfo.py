@@ -7,7 +7,10 @@ from YouTube import *
 from omdb import *
 import DialogActorInfo
 import DialogVideoList
-from ImageTools import *
+try:
+    from ImageTools import *
+except:
+    pass
 import threading
 homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)

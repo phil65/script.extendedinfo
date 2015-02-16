@@ -2,7 +2,10 @@ import xbmc
 import xbmcaddon
 import xbmcgui
 from Utils import *
-from ImageTools import *
+try:
+    from ImageTools import *
+except:
+    pass
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
