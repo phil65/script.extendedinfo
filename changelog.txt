@@ -1,3 +1,11 @@
+v2.0.4
+- fixed infodialog option
+- better matching for movie info dialog
+- fixed iconpanel call
+- fixed Android - Helix errors
+- de-activated Buggalo Script for now
+- some more bugfixes
+
 v2.0.3
 - fixed auth token caching
 - skin compatibility
