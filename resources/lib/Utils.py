@@ -532,7 +532,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
             json_query = unicode(json_query, 'utf-8', errors='ignore')
             json_response = simplejson.loads(json_query)
-            if "moviedetails" in json_response["result"]:
+            if "result" in json_response and "moviedetails" in json_response["result"]:
                 local_item = json_response['result']['moviedetails']
                 try:
                     diff = abs(local_item["year"] - int(online_item["Year"]))
@@ -601,6 +601,12 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     else:
         return local_items + remote_items
 
+def GetMovieFromLocalDB(dbid):
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
+    json_query = unicode(json_query, 'utf-8', errors='ignore')
+    json_response = simplejson.loads(json_query)
+    if "moviedetails" in json_response["result"]:
+        local_item = json_response['result']['moviedetails']
 
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
