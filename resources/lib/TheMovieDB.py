@@ -547,9 +547,9 @@ def GetKeywordID(keyword):
 def SearchForSet(setname):
     setname = setname.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
     response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname.encode("utf-8")), addon.getSetting("LanguageID")), 14)
-    try:
+    if "results" in response and response["results"]:
         return response["results"][0]["id"]
-    except:
+    else:
         return ""
 
 
@@ -1012,6 +1012,19 @@ def GetSimilarMovies(movie_id):
         return HandleTMDBMovieResult(response["similar"]["results"])
     else:
         log("No JSON Data available")
+
+
+def GetSimilarTVShows(tvshow_id):
+    session_string = ""
+    if checkLogin():
+        session_string = "session_id=%s&" % (get_session_id())
+    response = GetMovieDBData("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
+                              (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), 10)
+    if "similar" in response:
+        return HandleTMDBTVShowResult(response["similar"]["results"])
+    else:
+        log("No JSON Data available")
+
 
 
 def GetMovieDBTVShows(tvshowtype):
