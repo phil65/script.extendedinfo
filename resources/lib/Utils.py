@@ -846,14 +846,17 @@ def save_to_file(content, filename, path=""):
 def read_from_file(path=""):
     if path == "":
         path = get_browse_dialog(dlg_type=1)
-    if xbmcvfs.exists(path):
-        now = time.time()
+    if not xbmcvfs.exists(path):
+        return False
+    now = time.time()
+    try:
         f = open(path)
         fc = simplejson.load(f)
         log("loaded textfile %s. Time: %f" % (path, time.time() - now))
         return fc
-    else:
+    except:
         return False
+        log("failed to load JSON textfile: " + path)
 
 
 def ConvertYoutubeURL(string):
