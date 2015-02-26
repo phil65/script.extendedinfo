@@ -498,7 +498,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
             imdb_list = []
             originaltitle_list = []
             title_list = []
-            if "movies" in json_query["result"]:
+            if "result" in json_query and "movies" in json_query["result"]:
                 for item in json_query["result"]["movies"]:
                     id_list.append(item["movieid"])
                     imdb_list.append(item["imdbnumber"])
