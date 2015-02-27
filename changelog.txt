@@ -4,6 +4,8 @@ v2.0.4
 - fixed iconpanel call
 - fixed Android - Helix errors
 - de-activated Buggalo Script for now
+- fixed RottenTomatoes low-quality thumbs
+- added similartvshows call (TheMovieDB)
 - some more bugfixes
 
 v2.0.3
