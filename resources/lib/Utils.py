@@ -601,12 +601,14 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
     else:
         return local_items + remote_items
 
+
 def GetMovieFromLocalDB(dbid):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     json_response = simplejson.loads(json_query)
     if "moviedetails" in json_response["result"]:
         local_item = json_response['result']['moviedetails']
+
 
 def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
@@ -639,12 +641,16 @@ def CompareAlbumWithLibrary(onlinelist):
     return onlinelist
 
 
-def GetStringFromUrl(url):
+def GetStringFromUrl(url=None, headers=False):
     succeed = 0
+    if not headers:
+        headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
+    # prettyprint(headers)
+    request = urllib2.Request(url)
+    for (key, value) in headers.iteritems():
+        request.add_header(key, value)
     while (succeed < 5) and (not xbmc.abortRequested):
         try:
-            request = urllib2.Request(url)
-            request.add_header('User-agent', 'XBMC/14.0 ( phil65@kodi.tv )')
             response = urllib2.urlopen(request)
             data = response.read()
             return data
@@ -654,8 +660,25 @@ def GetStringFromUrl(url):
             succeed += 1
     return None
 
+# def GetStringFromUrl(url=None, headers=False):
+#     succeed = 0
+#     if not headers:
+#         headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
+#     prettyprint(headers)
+#     request = urllib2.Request(url, headers)
+#     while (succeed < 5) and (not xbmc.abortRequested):
+#         if True:
+#             response = urllib2.urlopen(request)
+#             data = response.read()
+#             return data
+#         else:
+#             log("GetStringFromURL: could not get data from %s" % url)
+#             xbmc.sleep(1000)
+#             succeed += 1
+#     return None
 
-def Get_JSON_response(url="", cache_days=7.0, folder=False):
+
+def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))
@@ -672,7 +695,7 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False):
         results = read_from_file(path)
         log("loaded file for %s. time: %f" % (url, time.time() - now))
     else:
-        response = GetStringFromUrl(url)
+        response = GetStringFromUrl(url, headers)
         try:
             results = simplejson.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))
@@ -912,14 +935,14 @@ def prettyprint(string):
 
 
 def GetImdbIDFromDatabase(type, dbid):
+    if not dbid:
+        return []
     if type == "movie":
         json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_response = simplejson.loads(json_query)
         if "moviedetails" in json_response["result"]:
             return json_response['result']['moviedetails']['imdbnumber']
-        else:
-            return []
     elif type == "tvshow":
         json_query = xbmc.executeJSONRPC(
             '{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
@@ -927,8 +950,7 @@ def GetImdbIDFromDatabase(type, dbid):
         json_response = simplejson.loads(json_query)
         if "result" in json_response and "tvshowdetails" in json_response["result"]:
             return json_response['result']['tvshowdetails']['imdbnumber']
-        else:
-            return []
+    return []
 
 
 def GetImdbIDFromDatabasefromEpisode(dbid):
