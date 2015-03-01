@@ -101,9 +101,10 @@ def StartInfoActions(infos, params):
         elif info == 'populartvshows':
             data = GetMovieDBTVShows("popular"), "PopularTVShows"
         elif info == 'similarmovies':
+            dbid = params.get("dbid", False)
             if params.get("id", False):
                 movie_id = params["id"]
-            elif int(params.get("dbid", -1)) > 0:
+            elif dbid and int(dbid) > 0:
                 movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("IMDBId from local DB:" + str(movie_id))
             else:
@@ -112,9 +113,10 @@ def StartInfoActions(infos, params):
                 data = GetSimilarMovies(movie_id), "SimilarMovies"
         elif info == 'similartvshows':
             tvshow_id = None
+            dbid = params.get("dbid", False)
             if params.get("tmdb_id", False):
                 tvshow_id = params.get("tmdb_id", False)
-            elif params.get("dbid", False) and (int(params.get("dbid", -1)) > 0):
+            elif dbid and int(dbid) > 0:
                 tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
                 log("IMDBId from local DB:" + str(tvdb_id))
                 if tvdb_id:
