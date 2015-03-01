@@ -322,6 +322,7 @@ def StartInfoActions(infos, params):
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
         elif info == 'deletecache':
+            homewindow.clearProperties()
             for the_file in os.listdir(Addon_Data_Path):
                 file_path = os.path.join(Addon_Data_Path, the_file)
                 try:
