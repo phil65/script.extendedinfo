@@ -107,6 +107,21 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in vid_id_list]
             filter_thread.join()
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.listitems = []
+            self.listitems.append((1000, CreateListItems(self.movie["actors"], 0)))
+            self.listitems.append((150, CreateListItems(self.movie["similar"], 0)))
+            self.listitems.append((250, CreateListItems(self.set_listitems, 0)))
+            self.listitems.append((450, CreateListItems(self.movie["lists"], 0)))
+            self.listitems.append((550, CreateListItems(self.movie["studios"], 0)))
+            self.listitems.append((650, CreateListItems(self.movie["releases"], 0)))
+            self.listitems.append((750, CreateListItems(self.crew_list)))
+            self.listitems.append((850, CreateListItems(self.movie["genres"], 0)))
+            self.listitems.append((950, CreateListItems(self.movie["keywords"], 0)))
+            self.listitems.append((1050, CreateListItems(self.movie["reviews"], 0)))
+            self.listitems.append((1150, CreateListItems(self.movie["videos"], 0)))
+            self.listitems.append((1250, CreateListItems(self.movie["images"], 0)))
+            self.listitems.append((1350, CreateListItems(self.movie["backdrops"], 0)))
+            self.listitems.append((350, CreateListItems(self.youtube_vids, 0)))
         else:
             Notify(addon.getLocalizedString(32143))
             self.close()
@@ -121,20 +136,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
         xbmc.sleep(200)
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
-        self.getControl(1000).addItems(CreateListItems(self.movie["actors"], 0))
-        self.getControl(150).addItems(CreateListItems(self.movie["similar"], 0))
-        self.getControl(250).addItems(CreateListItems(self.set_listitems, 0))
-        self.getControl(450).addItems(CreateListItems(self.movie["lists"], 0))
-        self.getControl(550).addItems(CreateListItems(self.movie["studios"], 0))
-        self.getControl(650).addItems(CreateListItems(self.movie["releases"], 0))
-        self.getControl(750).addItems(CreateListItems(self.crew_list, 0))
-        self.getControl(850).addItems(CreateListItems(self.movie["genres"], 0))
-        self.getControl(950).addItems(CreateListItems(self.movie["keywords"], 0))
-        self.getControl(1050).addItems(CreateListItems(self.movie["reviews"], 0))
-        self.getControl(1150).addItems(CreateListItems(self.movie["videos"], 0))
-        self.getControl(1250).addItems(CreateListItems(self.movie["images"], 0))
-        self.getControl(1350).addItems(CreateListItems(self.movie["backdrops"], 0))
-        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).addItems(listitems)
+            except:
+                log("Notice: No container with id %i available" % container_id)
         self.UpdateStates(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
