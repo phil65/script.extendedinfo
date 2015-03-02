@@ -1083,7 +1083,10 @@ def GetDirectorMovies(person_id):
 
 def search_media(media_name=None, year='', media_type="movie"):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (media_name, year))
-    media_name = urllib.quote_plus(media_name.encode('utf8', 'ignore'))
+    try:
+        media_name = urllib.quote_plus(media_name.encode('utf8', 'ignore'))
+    except:
+        media_name = urllib.quote_plus(unicode(media_name, "utf-8").encode("utf-8"))
     tmdb_id = ''
     if media_name:
         response = GetMovieDBData("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name, year, addon.getSetting("LanguageID"), include_adult), 1)
