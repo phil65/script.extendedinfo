@@ -1,3 +1,6 @@
+v2.0.5
+- added "Remove from list" context menu entry
+
 v2.0.4
 - fixed infodialog option
 - better matching for movie info dialog
