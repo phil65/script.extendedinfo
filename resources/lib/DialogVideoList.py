@@ -48,6 +48,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.totalitems = 0
         self.filter_label = ""
         self.mode = kwargs.get("mode", "filter")
+        self.list_id = kwargs.get("list_id", False)
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort_label', "Popularity")
         self.order = kwargs.get('order', "desc")
@@ -86,6 +87,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 listitems = [addon.getLocalizedString(32113)]
                 if self.logged_in:
                     listitems += [xbmc.getLocalizedString(14076), addon.getLocalizedString(32107)]
+                    if self.mode == "list":
+                        listitems += [addon.getLocalizedString(32035)]
                 # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', addon_path, labels=listitems)
                 # context_menu.doModal()
                 selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
@@ -124,6 +127,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         # xbmc.sleep(2000)
                         # self.update_content(force=True)
                         # self.update_ui()
+                elif selection > 2:
+                    ChangeListStatus(self.list_id, item_id, False)
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -293,10 +298,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                # offset = len(listitems) - len(account_lists)
                # Notify(str(offset))
-                listitems = GetMoviesFromList(account_lists[index - 2]["id"])
+                list_id = account_lists[index - 2]["id"]
+                listitems = GetMoviesFromList(list_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.color, filters=[])
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.color, filters=[], mode="list", list_id=list_id)
                 dialog.doModal()
 
     def onFocus(self, controlID):

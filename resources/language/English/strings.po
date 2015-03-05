@@ -101,6 +101,10 @@ msgctxt "#32034"
 msgid "Person results for "%s"
 msgstr ""
 
+msgctxt "#32035"
+msgid "Remove from list"
+msgstr ""
+
 msgctxt "#32050"
 msgid "Online information"
 msgstr ""
