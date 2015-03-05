@@ -6,6 +6,8 @@ v2.0.4
 - de-activated Buggalo Script for now
 - fixed RottenTomatoes low-quality thumbs
 - added similartvshows call (TheMovieDB)
+- also clear prop cache when clearing cache
+- allow missing containers for movieinfo dialog
 - some more bugfixes
 
 v2.0.3
