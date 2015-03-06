@@ -532,7 +532,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.filter_label = addon.getLocalizedString(32146) % self.search_string
         elif self.mode == "list":
             url = "list/%s?language=%s&" % (str(self.list_id), addon.getSetting("LanguageID"))
-            self.filter_label = addon.getLocalizedString(32134)
+            self.filter_label = addon.getLocalizedString(32036)
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = starred

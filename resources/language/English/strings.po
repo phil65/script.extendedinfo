@@ -105,6 +105,10 @@ msgctxt "#32035"
 msgid "Remove from list"
 msgstr ""
 
+msgctxt "#32036"
+msgid "Movie list"
+msgstr ""
+
 msgctxt "#32050"
 msgid "Online information"
 msgstr ""
