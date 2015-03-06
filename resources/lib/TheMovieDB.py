@@ -106,8 +106,11 @@ def ChangeListStatus(list_id, movie_id, status):
     log(url)
     values = {'media_id': movie_id}
     request = Request(url, data=simplejson.dumps(values), headers=headers)
-    response = urlopen(request).read()
-    results = simplejson.loads(response)
+    try:
+        response = urlopen(request).read()
+    except urllib2.HTTPError, err:
+       if err.code == 401:
+           Notify("Error", "Not authorized to modify list")
     Notify(addon_name, results["status_message"])
 
 
