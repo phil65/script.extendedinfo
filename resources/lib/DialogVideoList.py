@@ -127,8 +127,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                         # xbmc.sleep(2000)
                         # self.update_content(force=True)
                         # self.update_ui()
-                elif selection > 2:
+                elif selection == 3:
                     ChangeListStatus(self.list_id, item_id, False)
+                    self.update_content(force=True)
+                    self.update_ui()
 
     def onClick(self, controlID):
         if controlID in [500]:
@@ -528,6 +530,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if self.mode == "search":
             url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, include_adult)
             self.filter_label = addon.getLocalizedString(32146) % self.search_string
+        elif self.mode == "list":
+            url = "list/%s?language=%s&" % (str(self.list_id), addon.getSetting("LanguageID"))
+            self.filter_label = addon.getLocalizedString(32134)
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = starred
@@ -546,7 +551,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             response = GetMovieDBData(url, 0)
         else:
             response = GetMovieDBData(url, 2)
-        # prettyprint(response)
+        if self.mode == "list":
+            return HandleTMDBMovieResult(response["items"]), "1", len(response["items"])
         if not "results" in response:
             self.close()
             return [], 0, 0
