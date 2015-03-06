@@ -998,7 +998,7 @@ def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=Non
             itemlist = list()
             for item in items:
                 itemlist.append((item.getProperty("path"), item, False))
-            xbmcplugin.addDirectoryItems(handle, itemlist, False)
+            xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
     else:
         SetWindowProperties(name, data, prefix, debug)
 
