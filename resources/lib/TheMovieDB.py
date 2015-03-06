@@ -111,6 +111,7 @@ def ChangeListStatus(list_id, movie_id, status):
     except urllib2.HTTPError, err:
        if err.code == 401:
            Notify("Error", "Not authorized to modify list")
+    results = simplejson.loads(response)
     Notify(addon_name, results["status_message"])
 
 
