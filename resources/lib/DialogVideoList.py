@@ -281,16 +281,16 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             index = xbmcgui.Dialog().select(addon.getLocalizedString(32136), listitems)
             if index == -1:
                 pass
-            elif index == 0 and self.logged_in:
-                self.mode = "favorites"
+            elif index == 0:
+                self.mode = "rating"
                 self.sort = "created_at"
                 self.sort_label = addon.getLocalizedString(32157)
                 self.filters = []
                 self.page = 1
                 self.update_content()
                 self.update_ui()
-            elif index == 1 or (index == 0 and not self.logged_in):
-                self.mode = "rating"
+            elif index == 1:
+                self.mode = "favorites"
                 self.sort = "created_at"
                 self.sort_label = addon.getLocalizedString(32157)
                 self.filters = []
