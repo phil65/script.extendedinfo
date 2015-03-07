@@ -301,10 +301,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                # offset = len(listitems) - len(account_lists)
                # Notify(str(offset))
                 list_id = account_lists[index - 2]["id"]
-                listitems = GetMoviesFromList(list_id, 0)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.color, filters=[], mode="list", list_id=list_id)
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, color=self.color, filters=[], mode="list", list_id=list_id)
                 dialog.doModal()
 
     def onFocus(self, controlID):
