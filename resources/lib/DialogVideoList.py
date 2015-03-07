@@ -551,7 +551,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             response = GetMovieDBData(url, 2)
         if self.mode == "list":
-            return HandleTMDBMovieResult(response["items"]), "1", len(response["items"])
+            return HandleTMDBMovieResult(response["items"]), 1, len(response["items"])
         if not "results" in response:
             self.close()
             return [], 0, 0
