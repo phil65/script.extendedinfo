@@ -253,8 +253,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.mode = "filter"
             if self.type == "tv":
                 self.type = "movie"
+                self.filters = []
             else:
                 self.type = "tv"
+                self.filters = []
             self.update_content()
             self.update_ui()
         elif controlID == 6000:
