@@ -103,11 +103,11 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             w.doModal()
         elif controlID == 6001:
             ratings = []
-            for i in range(0, 21):
+            for i in range(1, 21):
                 ratings.append(str(float(i * 0.5)))
             rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
             if rating > -1:
-                rating = float(rating) * 0.5
+                rating = (float(rating) * 0.5) + 0.5
                 ids = [self.tmdb_id, self.season, self.episode["general"]["episode"]]
                 RateMedia("episode", ids, rating)
                 self.UpdateStates()
