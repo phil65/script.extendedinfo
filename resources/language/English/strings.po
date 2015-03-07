@@ -400,3 +400,7 @@ msgstr ""
 msgctxt "#32168"
 msgid "Releases"
 msgstr ""
+
+msgctxt "#32169"
+msgid "Rate TV Show"
+msgstr ""

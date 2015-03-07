@@ -85,7 +85,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             if focusid == 500:
                 item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-                listitems = [addon.getLocalizedString(32113)]
+                if self.type == "tv":
+                    listitems = [addon.getLocalizedString(32169)]
+                else:
+                    listitems = [addon.getLocalizedString(32113)]
                 if self.logged_in:
                     listitems += [xbmc.getLocalizedString(14076), addon.getLocalizedString(32107)]
                     if self.mode == "list":
@@ -481,7 +484,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force)
+        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force=force)
         self.listitems = self.old_items + CreateListItems(self.listitems)
 
     def update_ui(self):
