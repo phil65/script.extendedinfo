@@ -52,13 +52,14 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.sort = kwargs.get('sort', "popularity")
         self.sort_label = kwargs.get('sort_label', "Popularity")
         self.order = kwargs.get('order', "desc")
+        force = kwargs.get('force', False)
         self.logged_in = checkLogin()
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = CreateListItems(self.listitem_list)
             self.totalitems = len(self.listitem_list)
         else:
-            self.update_content()
+            self.update_content(force=force)
             # Notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 

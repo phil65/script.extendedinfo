@@ -285,7 +285,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_id = account_lists[index - 2]["id"]
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(mode="list", list_id=list_id)
+                self.OpenVideoList(mode="list", list_id=list_id, force=True)
         elif controlID == 8:
             self.close()
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.movie["general"]['DBID'], "false"))
@@ -387,10 +387,10 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
-    def OpenVideoList(self, listitems=None, filters=[], mode="filter", list_id=False):
+    def OpenVideoList(self, listitems=None, filters=[], mode="filter", list_id=False, force=False):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems, color=self.movie["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id, force=force)
         dialog.doModal()
 
     def ShowManageDialog(self):
