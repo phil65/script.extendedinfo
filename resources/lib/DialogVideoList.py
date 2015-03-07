@@ -90,7 +90,9 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 else:
                     listitems = [addon.getLocalizedString(32113)]
                 if self.logged_in:
-                    listitems += [xbmc.getLocalizedString(14076), addon.getLocalizedString(32107)]
+                    listitems += [xbmc.getLocalizedString(14076)]
+                    if not self.type == "tv":
+                        listitems += [addon.getLocalizedString(32107)]
                     if self.mode == "list":
                         listitems += [addon.getLocalizedString(32035)]
                 # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', addon_path, labels=listitems)
@@ -257,6 +259,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             else:
                 self.type = "tv"
                 self.filters = []
+            if self.mode == "list":
+                self.mode = "filter"
             self.update_content()
             self.update_ui()
         elif controlID == 6000:
