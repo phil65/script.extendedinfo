@@ -162,8 +162,6 @@ def StartInfoActions(infos, params):
             data = GetPopularActorList(), "PopularPeople"
         elif info == 'extendedinfo':
             from DialogVideoInfo import DialogVideoInfo
-            if params.get("handle", ""):
-                xbmcplugin.endOfDirectory(params.get("handle", ""))
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'extendedactorinfo':
@@ -173,8 +171,6 @@ def StartInfoActions(infos, params):
 
         elif info == 'extendedtvinfo':
             from DialogTVShowInfo import DialogTVShowInfo
-            if params.get("handle", ""):
-                xbmcplugin.endOfDirectory(params.get("handle", ""))
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'seasoninfo':
