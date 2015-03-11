@@ -962,6 +962,8 @@ def GetRatedMedia(media_type):
     else:
         session_id = get_guest_session_id()
         response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), addon.getSetting("LanguageID")), 0)
+    if media_type == "tv/episodes":
+        return HandleTMDBEpisodesResult(response["results"])
     if media_type == "tv":
         return HandleTMDBTVShowResult(response["results"], False, None)
     else:
