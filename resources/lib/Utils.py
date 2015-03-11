@@ -1071,7 +1071,6 @@ def CreateListItems(data=None, preload_images=0):
                 listitem.setProperty('%s' % (key), value)
             listitem.setPath(path=itempath)
             listitem.setProperty("index", str(counter))
-            listitem.setProperty("isplayable", "False")
             itemlist.append(listitem)
             counter += 1
         for x in threads:
