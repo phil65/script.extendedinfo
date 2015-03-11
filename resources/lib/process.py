@@ -105,7 +105,7 @@ def StartInfoActions(infos, params):
             if params.get("id", False):
                 movie_id = params["id"]
             elif dbid and int(dbid) > 0:
-                movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
+                movie_id = GetImdbIDFromDatabase("movie", dbid)
                 log("IMDBId from local DB:" + str(movie_id))
             else:
                 movie_id = ""
@@ -114,23 +114,27 @@ def StartInfoActions(infos, params):
         elif info == 'similartvshows':
             tvshow_id = None
             dbid = params.get("dbid", False)
-            if params.get("tmdb_id", False):
-                tvshow_id = params.get("tmdb_id", False)
+            name = params.get("name", False)
+            tmdb_id = params.get("tmdb_id", False)
+            tvdb_id = params.get("tvdb_id", False)
+            imdb_id = params.get("imdb_id", False)
+            if tmdb_id:
+                tvshow_id = tmdb_id
             elif dbid and int(dbid) > 0:
-                tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
                 log("IMDBId from local DB:" + str(tvdb_id))
                 if tvdb_id:
                     tvshow_id = Get_Show_TMDB_ID(tvdb_id)
                     log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(tvshow_id)))
-            elif params.get("tvdb_id", False):
-                tvshow_id = Get_Show_TMDB_ID(params["tvdb_id"])
-                log("tvdb_id to tmdb_id: %s --> %s" % (str(params["tvdb_id"]), str(tvshow_id)))
-            elif params.get("imdb_id", False):
-                tvshow_id = Get_Show_TMDB_ID(params["imdb_id"], "imdb_id")
-                log("imdb_id to tmdb_id: %s --> %s" % (str(params["imdb_id"]), str(tvshow_id)))
-            elif params.get("name", False):
-                tvshow_id = search_media(params["name"], "", "tv")
-                log("search string to tmdb_id: %s --> %s" % (str(params["name"]), str(tvshow_id)))
+            elif tvdb_id:
+                tvshow_id = Get_Show_TMDB_ID(tvdb_id)
+                log("tvdb_id to tmdb_id: %s --> %s" % (tvdb_id, str(tvshow_id)))
+            elif imdb_id:
+                tvshow_id = Get_Show_TMDB_ID(imdb_id, "imdb_id")
+                log("imdb_id to tmdb_id: %s --> %s" % (imdb_id, str(tvshow_id)))
+            elif name:
+                tvshow_id = search_media(name, "", "tv")
+                log("search string to tmdb_id: %s --> %s" % (name, str(tvshow_id)))
             if tvshow_id:
                 data = GetSimilarTVShows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
