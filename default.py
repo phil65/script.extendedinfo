@@ -23,7 +23,7 @@ class Main:
         # try:
         self._parse_argv()
         if self.infos:
-            self.control = StartInfoActions(self.infos, self.params)
+            StartInfoActions(self.infos, self.params)
         elif not self.handle:
             import DialogVideoList
             dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path)

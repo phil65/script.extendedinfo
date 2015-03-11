@@ -271,7 +271,6 @@ def StartInfoActions(infos, params):
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             SetMusicBrainzIDsForAllArtists(False, False)
         elif info == 'setfocus':
-            params["control"] = ""  # workaround to avoid breaking PlayMedia
             xbmc.executebuiltin("SetFocus(22222)")
         elif info == 'playliststats':
             GetPlaylistStats(params.get("id", ""))
@@ -294,7 +293,6 @@ def StartInfoActions(infos, params):
             homewindow.clearProperty(params.get("name", ""))
         elif info == "youtubevideo":
             if params.get("id", ""):
-                params["control"] = ""  # workaround to avoid breaking PlayMedia
                 xbmc.executebuiltin("Dialog.Close(all,true)")
                 PlayTrailer(params.get("id", ""))
         elif info == 'playtrailer':
@@ -314,7 +312,6 @@ def StartInfoActions(infos, params):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 if trailer:
                     PlayTrailer(trailer)
-                    params["control"] = ""  # workaround to avoid breaking PlayMedia
                 else:
                     Notify("Error", "No Trailer available")
         elif info == 'updatexbmcdatabasewithartistmbid':
@@ -334,4 +331,3 @@ def StartInfoActions(infos, params):
         if data:
             data, prefix = data
             passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
-    return params["control"]
