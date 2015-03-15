@@ -85,6 +85,10 @@ msgctxt "#32024"
 msgid "My account"
 msgstr ""
 
+msgctxt "#32025"
+msgid "Episode index"
+msgstr ""
+
 msgctxt "#32030"
 msgid "Movie appearances"
 msgstr ""

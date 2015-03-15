@@ -2695,7 +2695,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>Episode Index</label>
+                            <label>$LOCALIZE[32025] $INFO[Container(2000).NumItems,(,)]</label>
                         </control>
                         <control type="panel" id="2000">
                             <animation type="WindowOpen" reversible="false">
