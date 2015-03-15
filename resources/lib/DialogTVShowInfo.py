@@ -191,13 +191,9 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 445:
             self.ShowManageDialog()
         elif controlID == 6001:
-            ratings = []
-            for i in range(1, 21):
-                ratings.append(str(float(i * 0.5)))
-            rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
-            if rating > -1:
-                rating = (float(rating) * 0.5) + 0.5
-                RateMedia("tv", self.tmdb_id, rating)
+            rating = get_rating_from_user()
+            if rating:
+                send_rating_for_media_item("tv", self.tmdb_id, rating)
                 self.UpdateStates()
         elif controlID == 6002:
             listitems = [addon.getLocalizedString(32144), addon.getLocalizedString(32145)]

@@ -102,14 +102,10 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
         elif controlID == 6001:
-            ratings = []
-            for i in range(1, 21):
-                ratings.append(str(float(i * 0.5)))
-            rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
-            if rating > -1:
-                rating = (float(rating) * 0.5) + 0.5
-                ids = [self.tmdb_id, self.season, self.episode["general"]["episode"]]
-                RateMedia("episode", ids, rating)
+            rating = get_rating_from_user()
+            if rating:
+                identifier = [self.tmdb_id, self.season, self.episode["general"]["episode"]]
+                send_rating_for_media_item("episode", identifier, rating)
                 self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedEpisodes()

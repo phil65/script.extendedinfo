@@ -43,7 +43,18 @@ def checkLogin():
     return ""
 
 
-def RateMedia(media_type, media_id, rating):
+def get_rating_from_user():
+    ratings = []
+    for i in range(1, 21):
+        ratings.append(str(float(i * 0.5)))
+    rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
+    if rating > -1:
+        return (float(rating) * 0.5) + 0.5
+    else:
+        return None
+
+
+def send_rating_for_media_item(media_type, media_id, rating):
     if checkLogin():
         session_id_string = "session_id=" + get_session_id()
     else:
@@ -674,9 +685,18 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     return answer
 
 
-def GetMovieDBID(imdbid):
-    response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid.replace("tt", ""), addon.getSetting("LanguageID")), 30)
-    return response["movie_results"][0]["id"]
+def GetMovieDBID(imdb_id=None,name=None, dbid=None):
+    if dbid and (int(dbid) > 0):
+        movie_id = GetImdbIDFromDatabase("movie", dbid)
+        log("IMDBId from local DB:" + str(movie_id))
+        return movie_id
+    elif imdb_id:
+        response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdb_id.replace("tt", ""), addon.getSetting("LanguageID")), 30)
+        return response["movie_results"][0]["id"]
+    elif name:
+        return search_media(name)
+    else:
+        return None
 
 
 def Get_Show_TMDB_ID(tvdb_id=None, source="tvdb_id"):

@@ -42,18 +42,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.name = kwargs.get('name')
         self.logged_in = checkLogin()
         if tmdb_id:
-            self.MovieId = tmdb_id
-        elif self.dbid and (int(self.dbid) > 0):
-            self.MovieId = GetImdbIDFromDatabase("movie", self.dbid)
-            log("IMDBId from local DB:" + str(self.MovieId))
-        elif imdb_id:
-            self.MovieId = GetMovieDBID(imdb_id)
-        elif self.name:
-            self.MovieId = search_media(kwargs.get('name'))
+            self.tmdb_id = tmdb_id
         else:
-            self.MovieId = ""
-        if self.MovieId:
-            self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid)
+            self.tmdb_id = GetMovieDBID(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
+        if self.tmdb_id:
+            self.movie = GetExtendedMovieInfo(self.tmdb_id, self.dbid)
             if not "general" in self.movie:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
@@ -255,13 +248,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(list_items, [])
         elif controlID == 6001:
-            ratings = []
-            for i in range(1, 21):
-                ratings.append(str(float(i * 0.5)))
-            rating = xbmcgui.Dialog().select(addon.getLocalizedString(32129), ratings)
-            if rating > -1:
-                rating = (float(rating) * 0.5) + 0.5
-                RateMedia("movie", self.MovieId, rating)
+            rating = get_rating_from_user()
+            if rating:
+                send_rating_for_media_item("movie", self.tmdb_id, rating)
                 self.UpdateStates()
         elif controlID == 6002:
             listitems = [addon.getLocalizedString(32134), addon.getLocalizedString(32135)]
@@ -321,11 +310,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 if listname:
                     list_id = CreateList(listname)
                     xbmc.sleep(1000)
-                    ChangeListStatus(list_id, self.MovieId, True)
+                    ChangeListStatus(list_id, self.tmdb_id, True)
             elif index == len(listitems) - 1:
                 self.RemoveListDialog(account_lists)
             elif index > 0:
-                ChangeListStatus(account_lists[index - 1]["id"], self.MovieId, True)
+                ChangeListStatus(account_lists[index - 1]["id"], self.tmdb_id, True)
                 self.UpdateStates()
 
     def onFocus(self, controlID):
@@ -353,7 +342,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = GetExtendedMovieInfo(self.MovieId, self.dbid, 0)
+            self.update = GetExtendedMovieInfo(self.tmdb_id, self.dbid, 0)
             self.movie["account_states"] = self.update["account_states"]
         if self.movie["account_states"]:
             if self.movie["account_states"]["favorite"]:
@@ -376,7 +365,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         prettyprint(account_lists)
         index = xbmcgui.Dialog().select(addon.getLocalizedString(32138), listitems)
         if index >= 0:
-            # ChangeListStatus(account_lists[index]["id"], self.MovieId, False)
+            # ChangeListStatus(account_lists[index]["id"], self.tmdb_id, False)
             RemoveList(account_lists[index]["id"])
             self.UpdateStates()
 
