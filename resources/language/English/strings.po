@@ -89,6 +89,10 @@ msgctxt "#32025"
 msgid "Episode index"
 msgstr ""
 
+msgctxt "#32026"
+msgid "Related TheMovieDB lists"
+msgstr ""
+
 msgctxt "#32030"
 msgid "Movie appearances"
 msgstr ""
