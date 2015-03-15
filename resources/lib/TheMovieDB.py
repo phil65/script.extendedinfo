@@ -899,6 +899,8 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
 
 
 def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
+    if not season:
+        season = 0
     session_string = ""
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
