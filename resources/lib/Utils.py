@@ -36,6 +36,15 @@ def dictfind(lst, key, value):
             return dic
     return ""
 
+
+def url_quote(url):
+    try:
+        url = urllib.quote_plus(url.encode('utf8', 'ignore'))
+    except:
+        url = urllib.quote_plus(unicode(url, "utf-8").encode("utf-8"))
+    return url
+
+
 class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 

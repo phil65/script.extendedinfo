@@ -138,7 +138,7 @@ def StartInfoActions(infos, params):
             if tvshow_id:
                 data = GetSimilarTVShows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
-            if params["studio"]:
+            if "studio" in params and params["studio"]:
                 CompanyId = SearchforCompany(params["studio"])[0]["id"]
                 data = GetCompanyInfo(CompanyId), "StudioInfo"
         elif info == 'set':

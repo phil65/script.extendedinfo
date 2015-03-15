@@ -29,6 +29,10 @@ backdrop_sizes = ["w300", "w780", "w1280", "original"]
 profile_sizes = ["w45", "w185", "h632", "original"]
 still_sizes = ["w92", "w185", "w300", "original"]
 include_adult = str(addon.getSetting("include_adults")).lower()
+if addon.getSetting("use_https"):
+    url_base = "https://api.themoviedb.org/3/"
+else:
+    url_base = "http://api.themoviedb.org/3/"
 
 
 def checkLogin():
@@ -45,12 +49,11 @@ def RateMedia(media_type, media_id, rating):
     else:
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
-    log(values)
     if media_type == "episode":
-        url = "http://api.themoviedb.org/3/tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), moviedb_key, session_id_string)
+        url = url_base + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), moviedb_key, session_id_string)
         log(url)
     else:
-        url = "http://api.themoviedb.org/3/%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), moviedb_key, session_id_string)
+        url = url_base + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), moviedb_key, session_id_string)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -62,7 +65,7 @@ def ChangeFavStatus(media_id=None, media_type="movie", status="true"):
     session_id = get_session_id()
     account_id = get_account_info()
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
-    url = "http://api.themoviedb.org/3/account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
+    url = url_base + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
     log(url)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
@@ -73,7 +76,7 @@ def ChangeFavStatus(media_id=None, media_type="movie", status="true"):
 
 def CreateList(listname):
     session_id = get_session_id()
-    url = "http://api.themoviedb.org/3/list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
+    url = url_base + "list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
     values = {'name': '%s' % listname, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url, data=simplejson.dumps(values), headers=headers)
     response = urlopen(request).read()
@@ -85,7 +88,7 @@ def CreateList(listname):
 
 def RemoveList(list_id):
     session_id = get_session_id()
-    url = "http://api.themoviedb.org/3/list/%s?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
+    url = url_base + "list/%s?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
     log("Remove List: " + url)
     # prettyprint(results)
     values = {'media_id': list_id}
@@ -96,21 +99,22 @@ def RemoveList(list_id):
     Notify(addon_name, results["status_message"])
     return results["list_id"]
 
+
 def ChangeListStatus(list_id, movie_id, status):
     if status:
         method = "add_item"
     else:
         method = "remove_item"
     session_id = get_session_id()
-    url = "http://api.themoviedb.org/3/list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, moviedb_key, session_id)
+    url = url_base + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, moviedb_key, session_id)
     log(url)
     values = {'media_id': movie_id}
     request = Request(url, data=simplejson.dumps(values), headers=headers)
     try:
         response = urlopen(request).read()
     except urllib2.HTTPError, err:
-       if err.code == 401:
-           Notify("Error", "Not authorized to modify list")
+        if err.code == 401:
+            Notify("Error", "Not authorized to modify list")
     results = simplejson.loads(response)
     Notify(addon_name, results["status_message"])
 
@@ -131,9 +135,11 @@ def get_account_info():
     # prettyprint(response)
     return response["id"]
 
+
 def get_certification_list(media_type):
     response = GetMovieDBData("certification/%s/list?" % media_type, 999999)
     return response["certifications"]
+
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
@@ -183,6 +189,7 @@ def HandleTMDBMultiSearchResult(results=[]):
             listitem = HandleTMDBPeopleResult([item])[0]
         listitems.append(listitem)
     return listitems
+
 
 def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
     movies = []
@@ -352,6 +359,7 @@ def HandleTMDBMiscResult(results):
         listitems.append(listitem)
     return listitems
 
+
 def HandleTMDBSeasonResult(results):
     listitems = []
     for season in results:
@@ -379,8 +387,6 @@ def HandleTMDBSeasonResult(results):
                     'ID': fetch(season, 'id')}
         listitems.append(listitem)
     return listitems
-
-
 
 
 def HandleTMDBVideoResult(results):
@@ -561,8 +567,8 @@ def SearchForSet(setname):
 
 def GetMovieDBData(url="", cache_days=14, folder=False):
     # session_id = get_session_id()
-    # url = "http://api.themoviedb.org/3/%sapi_key=%s&session_id=%s" % (url, moviedb_key, session_id)
-    url = "http://api.themoviedb.org/3/%sapi_key=%s" % (url, moviedb_key)
+    # url = url_base + "%sapi_key=%s&session_id=%s" % (url, moviedb_key, session_id)
+    url = url_base + "%sapi_key=%s" % (url, moviedb_key)
     global base_url
     global poster_size
     global fanart_size
@@ -669,6 +675,7 @@ def GetMovieDBID(imdbid):
     response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdbid.replace("tt", ""), addon.getSetting("LanguageID")), 30)
     return response["movie_results"][0]["id"]
 
+
 def Get_Show_TMDB_ID(tvdb_id=None, source="tvdb_id"):
     response = GetMovieDBData("find/%s?external_source=%s&language=%s&" % (tvdb_id, source, addon.getSetting("LanguageID")), 30)
     try:
@@ -714,7 +721,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     for item in response['credits']['crew']:
         if item["job"] == "Author":
             authors.append(item["name"])
-        if item["job"] == "Director":
+        elif item["job"] == "Director":
             directors.append(item["name"])
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
@@ -778,10 +785,10 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
     threads = [similar_thread, actor_thread, crew_thread, poster_thread]
-    for item in threads:
-        item.start()
-    for item in threads:
-        item.join()
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
     synced_movie = CompareWithLibrary([movie])
     if synced_movie:
         answer = {"general": synced_movie[0],
@@ -816,8 +823,8 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
     threads = [similar_thread, actor_thread, crew_thread, poster_thread]
-    for item in threads:
-        item.start()
+    for thread in threads:
+        thread.start()
     if "account_states" in response:
         account_states = response["account_states"]
     else:
@@ -872,8 +879,8 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
              'Release_Date': release_date,
              'ReleaseDate': release_date,
              'Premiered': release_date}
-    for item in threads:
-        item.join()
+    for thread in threads:
+        thread.join()
     answer = {"general": newtv,
               "actors": actor_thread.listitems,
               "similar": similar_thread.listitems,
@@ -890,6 +897,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
               "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
     return answer
 
+
 def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
     session_string = ""
     if checkLogin():
@@ -904,14 +912,14 @@ def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
     crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
     still_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["stills"])
     threads = [actor_thread, crew_thread, still_thread]
-    for item in threads:
-        item.start()
+    for thread in threads:
+        thread.start()
     if "account_states" in response:
         account_states = response["account_states"]
     else:
         account_states = None
-    for item in threads:
-        item.join()
+    for thread in threads:
+        thread.join()
     answer = {"general": HandleTMDBEpisodesResult([response])[0],
               "actors": actor_thread.listitems,
               "account_states": account_states,
@@ -931,10 +939,10 @@ def GetExtendedActorInfo(actorid):
     tvshow_crew_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["crew"])
     poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["profiles"])
     threads = [movie_roles, tvshow_roles, movie_crew_roles, tvshow_crew_roles, poster_thread]
-    for item in threads:
-        item.start()
-    for item in threads:
-        item.join()
+    for thread in threads:
+        thread.start()
+    for thread in threads:
+        thread.join()
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
@@ -964,7 +972,7 @@ def GetRatedMedia(media_type):
         response = GetMovieDBData("guest_session/%s/rated_movies?language=%s&" % (str(session_id), addon.getSetting("LanguageID")), 0)
     if media_type == "tv/episodes":
         return HandleTMDBEpisodesResult(response["results"])
-    if media_type == "tv":
+    elif media_type == "tv":
         return HandleTMDBTVShowResult(response["results"], False, None)
     else:
         return HandleTMDBMovieResult(response["results"], False, None)
@@ -1004,9 +1012,9 @@ def GetMovieKeywords(movie_id):
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
-            newkeyword = {'id': fetch(keyword, 'id'),
-                          'name': keyword['name']}
-            keywords.append(newkeyword)
+            keyword_dict = {'id': fetch(keyword, 'id'),
+                            'name': keyword['name']}
+            keywords.append(keyword_dict)
         return keywords
     else:
         log("No keywords in JSON answer")
@@ -1034,7 +1042,6 @@ def GetSimilarTVShows(tvshow_id):
         log("No JSON Data available")
 
 
-
 def GetMovieDBTVShows(tvshowtype):
     response = GetMovieDBData("tv/%s?language=%s&" % (tvshowtype, addon.getSetting("LanguageID")), 0.3)
     if "results" in response:
@@ -1056,17 +1063,14 @@ def GetMovieDBMovies(movietype):
 def GetSetMovies(set_id):
     response = GetMovieDBData("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 14)
     if response:
-        # prettyprint(response)
+        backdrop_path = ""
+        poster_path = ""
+        small_poster_path = ""
         if ("backdrop_path" in response) and (response["backdrop_path"]):
             backdrop_path = base_url + fanart_size + response['backdrop_path']
-        else:
-            backdrop_path = ""
         if ("poster_path" in response) and (response["poster_path"]):
             poster_path = base_url + "original" + response['poster_path']
             small_poster_path = base_url + "w342" + response["poster_path"]
-        else:
-            poster_path = ""
-            small_poster_path = ""
         info = {"label": response["name"],
                 "Poster": poster_path,
                 "Thumb": small_poster_path,
@@ -1091,13 +1095,10 @@ def GetDirectorMovies(person_id):
 
 def search_media(media_name=None, year='', media_type="movie"):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (media_name, year))
-    try:
-        media_name = urllib.quote_plus(media_name.encode('utf8', 'ignore'))
-    except:
-        media_name = urllib.quote_plus(unicode(media_name, "utf-8").encode("utf-8"))
+    media_name_url = url_quote(media_name)
     tmdb_id = ''
-    if media_name:
-        response = GetMovieDBData("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name, year, addon.getSetting("LanguageID"), include_adult), 1)
+    if media_name_url:
+        response = GetMovieDBData("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name_url, year, addon.getSetting("LanguageID"), include_adult), 1)
         try:
             if response == "Empty":
                 tmdb_id = ''
@@ -1109,13 +1110,14 @@ def search_media(media_name=None, year='', media_type="movie"):
         except Exception as e:
             log(e)
         if tmdb_id == '':
-            log('TMDB API search found no ID')
+            log('TMDB API search found no ID for ' + media_name)
         else:
             log('TMDB API search found ID: %s' % tmdb_id)
     return tmdb_id
 
 
 class Get_ListItems_Thread(threading.Thread):
+
     def __init__(self, function=None, param=None):
         threading.Thread.__init__(self)
         self.function = function
