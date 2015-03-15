@@ -23,7 +23,7 @@
                 <posx>729</posx>
                 <width>1950</width>
                 <height>1080</height>
-                <texture fallback="common/black.png" background="true">$INFO[Window.Property(movie.ImageFilter)]</texture>
+                <texture fallback="common/black.png">$INFO[Window.Property(movie.ImageFilter)]</texture>
             </control>
             <control type="image">
                 <posx>729</posx>
