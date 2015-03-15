@@ -55,7 +55,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if self.MovieId:
             self.movie = GetExtendedMovieInfo(self.MovieId, self.dbid)
             if not "general" in self.movie:
-                self.close()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
             log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
@@ -94,7 +94,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 if item["iso_3166_1"] in cert_list:
                     language = item["iso_3166_1"]
                     certification = item["certification"]
-                    language_certs = cert_list[item["iso_3166_1"]]
+                    language_certs = cert_list[language]
                     hit = dictfind(language_certs, "certification", certification)
                     if hit:
                         item["meaning"] = hit["meaning"]
@@ -128,6 +128,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        if not self.movie:
+            self.close()
         homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
