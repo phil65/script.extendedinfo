@@ -635,6 +635,9 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
         tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 7)
     # prettyprint(response)
+    if not response:
+        Notify("Could not find season info")
+        return None
     videos = []
     backdrops = []
     if ("poster_path" in response) and (response["poster_path"]):
