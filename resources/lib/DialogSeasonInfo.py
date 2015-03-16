@@ -6,7 +6,6 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogEpisodeInfo
-import DialogVideoList
 try:
     from ImageTools import *
 except:
@@ -122,9 +121,3 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, controlID):
         pass
-
-    def OpenVideoList(self, listitems):
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems)
-        dialog.doModal()
