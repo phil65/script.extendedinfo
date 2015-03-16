@@ -59,7 +59,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.listitems = create_listitems(self.listitem_list)
             self.totalitems = len(self.listitem_list)
         else:
-            self.update_content(force=force)
+            self.update_content(force_update=force)
             # Notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -103,7 +103,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     if rating:
                         send_rating_for_media_item(self.type, item_id, rating)
                         xbmc.sleep(2000)
-                        self.update_content(force=True)
+                        self.update_content(force_update=True)
                         self.update_ui()
                 elif selection == 1:
                     ChangeFavStatus(item_id, self.type, "true")
@@ -127,11 +127,11 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                     elif index > 0:
                         ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
                         # xbmc.sleep(2000)
-                        # self.update_content(force=True)
+                        # self.update_content(force_update=True)
                         # self.update_ui()
                 elif selection == 3:
                     ChangeListStatus(self.list_id, item_id, False)
-                    self.update_content(force=True)
+                    self.update_content(force_update=True)
                     self.update_ui()
 
     def onClick(self, controlID):
@@ -484,12 +484,12 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.mode = "filter"
 
-    def update_content(self, add=False, force=False):
+    def update_content(self, add=False, force_update=False):
         if add:
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force=force)
+        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force=force_update)
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
