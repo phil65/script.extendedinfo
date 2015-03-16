@@ -46,7 +46,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.page = 1
         self.totalpages = 1
         self.totalitems = 0
-        self.filter_label = ""
+        self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.list_id = kwargs.get("list_id", False)
         self.sort = kwargs.get('sort', "popularity")
@@ -307,9 +307,10 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                # offset = len(listitems) - len(account_lists)
                # Notify(str(offset))
                 list_id = account_lists[index - 2]["id"]
+                list_title = account_lists[index - 2]["name"]
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, color=self.color, filters=[], mode="list", list_id=list_id)
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, color=self.color, filters=[], mode="list", list_id=list_id, filter_label=list_title)
                 dialog.doModal()
 
     def onFocus(self, controlID):
@@ -540,7 +541,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.filter_label = addon.getLocalizedString(32146) % self.search_string
         elif self.mode == "list":
             url = "list/%s?language=%s&" % (str(self.list_id), addon.getSetting("LanguageID"))
-            self.filter_label = addon.getLocalizedString(32036)
+            # self.filter_label = addon.getLocalizedString(32036)
         elif self.mode == "favorites":
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, addon.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = starred
