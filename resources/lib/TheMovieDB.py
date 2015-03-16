@@ -3,7 +3,6 @@ import os
 import xbmc
 from YouTube import *
 from Utils import *
-import urllib
 import threading
 from urllib2 import Request, urlopen
 
@@ -507,21 +506,21 @@ def HandleTMDBCompanyResult(results):
     return companies
 
 
-def SearchforCompany(Company):
+def SearchforCompany(company):
     import re
     regex = re.compile('\(.+?\)')
-    Company = regex.sub('', Company)
-    log(Company)
-    response = GetMovieDBData("search/company?query=%s&" % urllib.quote_plus(Company), 10)
+    company = regex.sub('', company)
+    log(company)
+    response = GetMovieDBData("search/company?query=%s&" % url_quote(company), 10)
     try:
         return response["results"]
     except:
-        log("could not find Company ID")
+        log("could not find company ID")
         return ""
 
 
 def MultiSearch(String):
-    response = GetMovieDBData("search/multi?query=%s&" % urllib.quote_plus(String), 1)
+    response = GetMovieDBData("search/multi?query=%s&" % url_quote(String), 1)
     if response and "results" in response:
         return response["results"]
     else:
@@ -538,7 +537,7 @@ def GetPersonID(person):
     #     selection = xbmcgui.Dialog().select("Select Actor", personlist)
     # else:
     person = persons[0]
-    response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (urllib.quote_plus(person), include_adult), 30)
+    response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
     if response and "results" in response:
         if len(response["results"]) > 1:
             names = []
@@ -555,7 +554,7 @@ def GetPersonID(person):
 
 
 def GetKeywordID(keyword):
-    response = GetMovieDBData("search/keyword?query=%s&include_adult=%s&" % (urllib.quote_plus(keyword), include_adult), 30)
+    response = GetMovieDBData("search/keyword?query=%s&include_adult=%s&" % (url_quote(keyword), include_adult), 30)
     if response and "results" in response and response["results"]:
         if len(response["results"]) > 1:
             names = []
@@ -573,7 +572,7 @@ def GetKeywordID(keyword):
 
 def SearchForSet(setname):
     setname = setname.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
-    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (urllib.quote_plus(setname.encode("utf-8")), addon.getSetting("LanguageID")), 14)
+    response = GetMovieDBData("search/collection?query=%s&language=%s&" % (url_quote(setname.encode("utf-8")), addon.getSetting("LanguageID")), 14)
     if "results" in response and response["results"]:
         return response["results"][0]["id"]
     else:
@@ -646,7 +645,7 @@ def millify(n):
 
 def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
-        response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshowname), addon.getSetting("LanguageID")), 30)
+        response = GetMovieDBData("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), addon.getSetting("LanguageID")), 30)
         tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, addon.getSetting("LanguageID"), addon.getSetting("LanguageID")), 7)
     # prettyprint(response)
