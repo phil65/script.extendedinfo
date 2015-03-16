@@ -64,11 +64,11 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.window = xbmcgui.Window(windowid)
         self.window.setProperty("type", "episode")
         passDictToSkin(self.episode["general"], "movie.", False, False, windowid)
-        self.getControl(1000).addItems(CreateListItems(self.episode["actors"], 0))
-        self.getControl(750).addItems(CreateListItems(self.episode["crew"], 0))
-        self.getControl(1150).addItems(CreateListItems(self.episode["videos"], 0))
-        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
-        self.getControl(1350).addItems(CreateListItems(self.episode["images"], 0))
+        self.getControl(1000).addItems(create_listitems(self.episode["actors"], 0))
+        self.getControl(750).addItems(create_listitems(self.episode["crew"], 0))
+        self.getControl(1150).addItems(create_listitems(self.episode["videos"], 0))
+        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
+        self.getControl(1350).addItems(create_listitems(self.episode["images"], 0))
 
 
     def onAction(self, action):
@@ -92,7 +92,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
-            self.movieplayer.WaitForVideoEnd()
+            self.movieplayer.wait_for_video_end()
             PopWindowStack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")

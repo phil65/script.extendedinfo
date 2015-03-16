@@ -56,7 +56,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.logged_in = checkLogin()
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
-            self.listitems = CreateListItems(self.listitem_list)
+            self.listitems = create_listitems(self.listitem_list)
             self.totalitems = len(self.listitem_list)
         else:
             self.update_content(force=force)
@@ -487,7 +487,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         else:
             self.old_items = []
         self.listitems, self.totalpages, self.totalitems = self.fetch_data(force=force)
-        self.listitems = self.old_items + CreateListItems(self.listitems)
+        self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
         self.getControl(500).reset()

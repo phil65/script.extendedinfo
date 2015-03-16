@@ -225,7 +225,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
         else:
             year = ""
             time_comparer = ""
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
+        trailer = "plugin://script.extendedinfo/?info=play_trailer&&id=" + tmdb_id
         if addon.getSetting("infodialog_onclick") != "false":
             # path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % tmdb_id
@@ -256,7 +256,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             movies.append(newmovie)
-    movies = CompareWithLibrary(movies, local_first, sortkey)
+    movies = compare_with_library(movies, local_first, sortkey)
     return movies
 
 
@@ -311,7 +311,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
         if not tmdb_id in ids:
             ids.append(tmdb_id)
             tvshows.append(newtv)
-    # tvshows = CompareWithLibrary(tvshows, local_first, sortkey)
+    # tvshows = compare_with_library(tvshows, local_first, sortkey)
     return tvshows
 
 
@@ -685,7 +685,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     return answer
 
 
-def GetMovieDBID(imdb_id=None,name=None, dbid=None):
+def get_moviedb_id(imdb_id=None,name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = GetImdbIDFromDatabase("movie", dbid)
         log("IMDBId from local DB:" + str(movie_id))
@@ -699,7 +699,7 @@ def GetMovieDBID(imdb_id=None,name=None, dbid=None):
         return None
 
 
-def Get_Show_TMDB_ID(tvdb_id=None, source="tvdb_id"):
+def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     response = GetMovieDBData("find/%s?external_source=%s&language=%s&" % (tvdb_id, source, addon.getSetting("LanguageID")), 30)
     try:
         return response["tv_results"][0]["id"]
@@ -812,7 +812,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
         thread.start()
     for thread in threads:
         thread.join()
-    synced_movie = CompareWithLibrary([movie])
+    synced_movie = compare_with_library([movie])
     if synced_movie:
         answer = {"general": synced_movie[0],
                   "actors": actor_thread.listitems,

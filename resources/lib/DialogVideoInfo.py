@@ -44,7 +44,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if tmdb_id:
             self.tmdb_id = tmdb_id
         else:
-            self.tmdb_id = GetMovieDBID(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
+            self.tmdb_id = get_moviedb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
         if self.tmdb_id:
             self.movie = GetExtendedMovieInfo(self.tmdb_id, self.dbid)
             if not "general" in self.movie:
@@ -101,20 +101,20 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.listitems = []
-            self.listitems.append((1000, CreateListItems(self.movie["actors"], 0)))
-            self.listitems.append((150, CreateListItems(self.movie["similar"], 0)))
-            self.listitems.append((250, CreateListItems(self.set_listitems, 0)))
-            self.listitems.append((450, CreateListItems(self.movie["lists"], 0)))
-            self.listitems.append((550, CreateListItems(self.movie["studios"], 0)))
-            self.listitems.append((650, CreateListItems(self.movie["releases"], 0)))
-            self.listitems.append((750, CreateListItems(self.crew_list)))
-            self.listitems.append((850, CreateListItems(self.movie["genres"], 0)))
-            self.listitems.append((950, CreateListItems(self.movie["keywords"], 0)))
-            self.listitems.append((1050, CreateListItems(self.movie["reviews"], 0)))
-            self.listitems.append((1150, CreateListItems(self.movie["videos"], 0)))
-            self.listitems.append((1250, CreateListItems(self.movie["images"], 0)))
-            self.listitems.append((1350, CreateListItems(self.movie["backdrops"], 0)))
-            self.listitems.append((350, CreateListItems(self.youtube_vids, 0)))
+            self.listitems.append((1000, create_listitems(self.movie["actors"], 0)))
+            self.listitems.append((150, create_listitems(self.movie["similar"], 0)))
+            self.listitems.append((250, create_listitems(self.set_listitems, 0)))
+            self.listitems.append((450, create_listitems(self.movie["lists"], 0)))
+            self.listitems.append((550, create_listitems(self.movie["studios"], 0)))
+            self.listitems.append((650, create_listitems(self.movie["releases"], 0)))
+            self.listitems.append((750, create_listitems(self.crew_list)))
+            self.listitems.append((850, create_listitems(self.movie["genres"], 0)))
+            self.listitems.append((950, create_listitems(self.movie["keywords"], 0)))
+            self.listitems.append((1050, create_listitems(self.movie["reviews"], 0)))
+            self.listitems.append((1150, create_listitems(self.movie["videos"], 0)))
+            self.listitems.append((1250, create_listitems(self.movie["images"], 0)))
+            self.listitems.append((1350, create_listitems(self.movie["backdrops"], 0)))
+            self.listitems.append((350, create_listitems(self.youtube_vids, 0)))
         else:
             Notify(addon.getLocalizedString(32143))
             self.close()
@@ -186,16 +186,16 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             youtube_id = self.getControl(controlID).getSelectedItem().getProperty("youtube_id")
             if youtube_id:
                 self.movieplayer.playYoutubeVideo(youtube_id, self.getControl(controlID).getSelectedItem(), True)
-                self.movieplayer.WaitForVideoEnd()
+                self.movieplayer.wait_for_video_end()
                 PopWindowStack()
             else:
                 Notify(addon.getLocalizedString(32052))
         # elif controlID in [8]:
         #     AddToWindowStack(self)
         #     self.close()
-        #     listitem = CreateListItems([self.movie["general"]])[0]
+        #     listitem = create_listitems([self.movie["general"]])[0]
         #     self.movieplayer.play(item=self.movie["general"]['FilenameAndPath'], listitem=listitem)
-        #     self.movieplayer.WaitForVideoEnd()
+        #     self.movieplayer.wait_for_video_end()
         elif controlID == 550:
             company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             company_name = self.getControl(controlID).getSelectedItem().getLabel()

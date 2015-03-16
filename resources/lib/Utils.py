@@ -84,12 +84,12 @@ class SlideShow(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         if self.imagelist:
-            self.getControl(10000).addItems(CreateListItems(self.imagelist))
+            self.getControl(10000).addItems(create_listitems(self.imagelist))
             xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
         else:
             listitem = {"label": self.image,
                         "Thumb": self.image}
-            self.getControl(10000).addItems(CreateListItems([listitem]))
+            self.getControl(10000).addItems(create_listitems([listitem]))
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -100,12 +100,6 @@ class SlideShow(xbmcgui.WindowXMLDialog):
         elif action in self.ACTION_RIGHT:
             self.action = "right"
             self.close()
-
-
-def WaitForVideoEnd():
-    xbmc.sleep(1000)
-    while xbmc.getCondVisibility("Player.HasVideo"):
-        xbmc.sleep(400)
 
 
 # def calculate_age(born):
@@ -144,7 +138,7 @@ def calculate_age(born):
     return base_age
 
 
-def PlayTrailer(youtube_id="", listitem=None, popstack=False):
+def play_trailer(youtube_id="", listitem=None, popstack=False):
     if not listitem:
         listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
         listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -199,7 +193,7 @@ class VideoPlayer(xbmc.Player):
         else:
             Notify("no youtube id found")
 
-    def WaitForVideoEnd(self):
+    def wait_for_video_end(self):
         while not self.stopped:
             xbmc.sleep(200)
         self.stopped = False
@@ -487,7 +481,7 @@ def fetch(dictionary, key):
     return ""
 
 
-def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
+def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
     global id_list
     global originaltitle_list
     global title_list
@@ -611,15 +605,7 @@ def CompareWithLibrary(onlinelist=[], library_first=True, sortkey=False):
         return local_items + remote_items
 
 
-def GetMovieFromLocalDB(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
-    if "moviedetails" in json_response["result"]:
-        local_item = json_response['result']['moviedetails']
-
-
-def GetMusicBrainzIdFromNet(artist, xbmc_artist_id=-1):
+def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = Get_JSON_response(base_url + url, 30)
@@ -1002,7 +988,7 @@ def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=Non
         homewindow.clearProperty(name)
         if data is not None:
             homewindow.setProperty(name + ".Count", str(len(data)))
-            items = CreateListItems(data)
+            items = create_listitems(data)
             xbmcplugin.setContent(handle, 'files')
             itemlist = list()
             for item in items:
@@ -1030,7 +1016,7 @@ def SetWindowProperties(name, data, prefix="", debug=False):
         log("%s%s.Count = None" % (prefix, name))
 
 
-def CreateListItems(data=None, preload_images=0):
+def create_listitems(data=None, preload_images=0):
     Int_InfoLabels = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
     Float_InfoLabels = ["rating"]
     String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",

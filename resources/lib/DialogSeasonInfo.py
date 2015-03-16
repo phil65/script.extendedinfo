@@ -69,13 +69,13 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
         passDictToSkin(self.season["general"], "movie.", False, False, windowid)
-        self.getControl(1000).addItems(CreateListItems(self.season["actors"], 0))
-        self.getControl(750).addItems(CreateListItems(self.season["crew"], 0))
-        self.getControl(1150).addItems(CreateListItems(self.season["videos"], 0))
-        self.getControl(350).addItems(CreateListItems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(CreateListItems(self.season["images"], 0))
-        self.getControl(1350).addItems(CreateListItems(self.season["backdrops"], 0))
-        self.getControl(2000).addItems(CreateListItems(self.season["episodes"], 0))
+        self.getControl(1000).addItems(create_listitems(self.season["actors"], 0))
+        self.getControl(750).addItems(create_listitems(self.season["crew"], 0))
+        self.getControl(1150).addItems(create_listitems(self.season["videos"], 0))
+        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
+        self.getControl(1250).addItems(create_listitems(self.season["images"], 0))
+        self.getControl(1350).addItems(create_listitems(self.season["backdrops"], 0))
+        self.getControl(2000).addItems(create_listitems(self.season["episodes"], 0))
 
 
     def onAction(self, action):
@@ -109,7 +109,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             AddToWindowStack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
-            self.movieplayer.WaitForVideoEnd()
+            self.movieplayer.wait_for_video_end()
             PopWindowStack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")

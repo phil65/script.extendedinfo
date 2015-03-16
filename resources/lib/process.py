@@ -14,7 +14,7 @@ Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%
 def StartInfoActions(infos, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
-        params["artist_mbid"] = GetMusicBrainzIdFromNet(params["artistname"])
+        params["artist_mbid"] = fetch_musicbrainz_id(params["artistname"])
     prettyprint(params)
     prettyprint(infos)
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
@@ -124,13 +124,13 @@ def StartInfoActions(infos, params):
                 tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
                 log("IMDBId from local DB:" + str(tvdb_id))
                 if tvdb_id:
-                    tvshow_id = Get_Show_TMDB_ID(tvdb_id)
+                    tvshow_id = get_show_tmdb_id(tvdb_id)
                     log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(tvshow_id)))
             elif tvdb_id:
-                tvshow_id = Get_Show_TMDB_ID(tvdb_id)
+                tvshow_id = get_show_tmdb_id(tvdb_id)
                 log("tvdb_id to tmdb_id: %s --> %s" % (tvdb_id, str(tvshow_id)))
             elif imdb_id:
-                tvshow_id = Get_Show_TMDB_ID(imdb_id, "imdb_id")
+                tvshow_id = get_show_tmdb_id(imdb_id, "imdb_id")
                 log("imdb_id to tmdb_id: %s --> %s" % (imdb_id, str(tvshow_id)))
             elif name:
                 tvshow_id = search_media(name, "", "tv")
@@ -172,11 +172,20 @@ def StartInfoActions(infos, params):
             from DialogActorInfo import DialogActorInfo
             dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=params.get("id", ""), name=params.get("name", ""))
             dialog.doModal()
-
         elif info == 'extendedtvinfo':
             from DialogTVShowInfo import DialogTVShowInfo
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
+        elif info == 'ratemedia':
+            if params.get("type", False):
+                if params.get("id", False):
+                    tmdb_id = params["id"]
+                else:
+                    tmdb_id = get_moviedb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                if tmdb_id:
+                    rating = get_rating_from_user()
+                    if rating:
+                        send_rating_for_media_item(params["type"], tmdb_id, rating)
         elif info == 'seasoninfo':
             if params.get("tvshow", False) and params.get("season", False):
                 from DialogSeasonInfo import DialogSeasonInfo
@@ -298,8 +307,8 @@ def StartInfoActions(infos, params):
         elif info == "youtubevideo":
             if params.get("id", ""):
                 xbmc.executebuiltin("Dialog.Close(all,true)")
-                PlayTrailer(params.get("id", ""))
-        elif info == 'playtrailer':
+                play_trailer(params.get("id", ""))
+        elif info == 'play_trailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.sleep(500)
             if params.get("id", ""):
@@ -308,14 +317,14 @@ def StartInfoActions(infos, params):
                 movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(movie_id))
             elif params.get("imdbid", ""):
-                movie_id = GetMovieDBID(params.get("imdbid", ""))
+                movie_id = get_moviedb_id(params.get("imdbid", ""))
             else:
                 movie_id = ""
             if movie_id:
                 trailer = GetTrailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 if trailer:
-                    PlayTrailer(trailer)
+                    play_trailer(trailer)
                 else:
                     Notify("Error", "No Trailer available")
         elif info == 'updatexbmcdatabasewithartistmbid':
