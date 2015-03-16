@@ -26,6 +26,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id', False)
         if not self.id:
@@ -64,6 +65,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         if not self.id:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.close()
         homewindow.setProperty("actor.ImageColor", self.person["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
