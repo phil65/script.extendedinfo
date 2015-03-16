@@ -183,8 +183,12 @@ def StartInfoActions(infos, params):
                     tmdb_id = params["id"]
                 elif media_type == "movie":
                     tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
-                elif media_type == "tv":
-                    tmdb_id = get_tvshow_moviedb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                elif media_type == "tv" and params["dbid"]:
+                    tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                    tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
+                # elif media_type == "episode" and params["dbid"]:
+                #     tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                #     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
                 if tmdb_id:
                     rating = get_rating_from_user()
                     if rating:
@@ -217,7 +221,7 @@ def StartInfoActions(infos, params):
             if (params.get("id", "") or params["dbid"]):
                 if params.get("dbid", False):
                     if params.get("type") == "episode":
-                        tvshow_id = GetImdbIDFromDatabasefromEpisode(params["dbid"])
+                        tvshow_id = get_tvshow_id_from_db_by_episode(params["dbid"])
                     else:
                         tvshow_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
                 else:

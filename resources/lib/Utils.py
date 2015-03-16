@@ -948,7 +948,7 @@ def GetImdbIDFromDatabase(type, dbid):
     return []
 
 
-def GetImdbIDFromDatabasefromEpisode(dbid):
+def get_tvshow_id_from_db_by_episode(dbid):
     json_query = xbmc.executeJSONRPC(
         '{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
