@@ -177,15 +177,18 @@ def StartInfoActions(infos, params):
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'ratemedia':
-            if params.get("type", False):
-                if params.get("id", False):
+            media_type = params.get("type", False)
+            if media_type:
+                if params.get("id", False) and params["id"]:
                     tmdb_id = params["id"]
-                else:
-                    tmdb_id = get_moviedb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                elif media_type == "movie":
+                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                elif media_type == "tv":
+                    tmdb_id = get_tvshow_moviedb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
                 if tmdb_id:
                     rating = get_rating_from_user()
                     if rating:
-                        send_rating_for_media_item(params["type"], tmdb_id, rating)
+                        send_rating_for_media_item(media_type, tmdb_id, rating)
         elif info == 'seasoninfo':
             if params.get("tvshow", False) and params.get("season", False):
                 from DialogSeasonInfo import DialogSeasonInfo
@@ -317,7 +320,7 @@ def StartInfoActions(infos, params):
                 movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(movie_id))
             elif params.get("imdbid", ""):
-                movie_id = get_moviedb_id(params.get("imdbid", ""))
+                movie_id = get_movie_tmdb_id(params.get("imdbid", ""))
             else:
                 movie_id = ""
             if movie_id:

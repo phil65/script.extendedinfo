@@ -44,7 +44,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if tmdb_id:
             self.tmdb_id = tmdb_id
         else:
-            self.tmdb_id = get_moviedb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
+            self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
         if self.tmdb_id:
             self.movie = GetExtendedMovieInfo(self.tmdb_id, self.dbid)
             if not "general" in self.movie:

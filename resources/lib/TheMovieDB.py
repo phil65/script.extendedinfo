@@ -55,6 +55,9 @@ def get_rating_from_user():
 
 
 def send_rating_for_media_item(media_type, media_id, rating):
+    # media_type: movie, tv or episode
+    # media_id: tmdb_id / episode ident array
+    # rating: ratung value (0.5-10.0, 0.5 steps)
     if checkLogin():
         session_id_string = "session_id=" + get_session_id()
     else:
@@ -65,6 +68,7 @@ def send_rating_for_media_item(media_type, media_id, rating):
         log(url)
     else:
         url = url_base + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), moviedb_key, session_id_string)
+        log(url)
     request = Request(url, data=values, headers=headers)
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -685,7 +689,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     return answer
 
 
-def get_moviedb_id(imdb_id=None,name=None, dbid=None):
+def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = GetImdbIDFromDatabase("movie", dbid)
         log("IMDBId from local DB:" + str(movie_id))
