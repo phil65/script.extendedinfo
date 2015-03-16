@@ -156,7 +156,7 @@ def GetExtendedAudioDBInfo(results):
 
 
 def GetDiscography(search_string):
-    url = 'searchalbum.php?s=%s' % (urllib.quote_plus(search_string.encode("utf-8")))
+    url = 'searchalbum.php?s=%s' % (url_quote(search_string))
     results = Get_JSON_response(base_url + url)
     return HandleAudioDBAlbumResult(results)
 
