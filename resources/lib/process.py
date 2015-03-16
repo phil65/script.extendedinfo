@@ -308,7 +308,7 @@ def StartInfoActions(infos, params):
             if params.get("id", ""):
                 xbmc.executebuiltin("Dialog.Close(all,true)")
                 play_trailer(params.get("id", ""))
-        elif info == 'play_trailer':
+        elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.sleep(500)
             if params.get("id", ""):
