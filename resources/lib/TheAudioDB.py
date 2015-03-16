@@ -162,7 +162,7 @@ def GetDiscography(search_string):
 
 
 def GetArtistDetails(search_string):
-    url = 'search.php?s=%s' % (urllib.quote_plus(search_string.encode("utf-8")))
+    url = 'search.php?s=%s' % (url_quote(search_string.encode("utf-8")))
     results = Get_JSON_response(base_url + url)
    # prettyprint(results)
     return GetExtendedAudioDBInfo(results)
@@ -172,7 +172,7 @@ def GetMostLovedTracks(search_string="", mbid=""):
     if mbid:
         pass
     else:
-        url = 'track-top10.php?s=%s' % (urllib.quote_plus(search_string.encode("utf-8")))
+        url = 'track-top10.php?s=%s' % (url_quote(search_string.encode("utf-8")))
     log("GetMostLoveTracks URL:" + url)
     results = Get_JSON_response(base_url + url)
     return HandleAudioDBTrackResult(results)
