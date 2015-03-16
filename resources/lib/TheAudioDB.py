@@ -2,7 +2,6 @@ import xbmcaddon
 import os
 import xbmc
 from Utils import *
-import urllib
 
 AudioDB_apikey = '58353d43204d68753987fl'
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))

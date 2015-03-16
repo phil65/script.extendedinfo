@@ -1,4 +1,3 @@
-import urllib
 from Utils import *
 
 youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
@@ -115,7 +114,7 @@ def GetYoutubePlaylistVideos(playlistid=""):
 
 
 def GetYoutubeUserVideos(userid=""):
-    userid = urllib.quote(userid.replace('"', ''))
+    userid = url_quote(userid.replace('"', ''))
     base_url = 'https://gdata.youtube.com/feeds/api/users/'
     url = '%s/uploads?v=2&alt=json' % (userid)
     results = Get_JSON_response(base_url + url, 0.5)
