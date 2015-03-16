@@ -11,7 +11,6 @@ from YouTube import *
 import DialogVideoInfo
 import DialogTVShowInfo
 homewindow = xbmcgui.Window(10000)
-from unidecode import unidecode
 
 addon = xbmcaddon.Addon()
 addon_id = addon.getAddonInfo('id')
@@ -38,7 +37,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 if ret == -1:
                     return None
                 name = names[ret]
-            self.id = GetPersonID(unidecode(name))
+            self.id = GetPersonID(name)
             if self.id:
                 self.id = self.id["id"]
             else:
