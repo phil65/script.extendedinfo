@@ -318,6 +318,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page += 1
             else:
                 self.page = 1
+                return
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.update_content()
             self.update_ui()
@@ -325,6 +326,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         if controlID == 700:
             if self.page > 1:
                 self.page -= 1
+            else:
+                return
             # else:
             #     self.page = self.totalpages
             xbmc.executebuiltin("ActivateWindow(busydialog)")
