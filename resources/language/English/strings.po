@@ -117,6 +117,10 @@ msgctxt "#32036"
 msgid "Movie list"
 msgstr ""
 
+msgctxt "#32037"
+msgid "Overview"
+msgstr ""
+
 msgctxt "#32050"
 msgid "Online information"
 msgstr ""

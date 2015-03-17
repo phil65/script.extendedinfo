@@ -121,7 +121,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID == 132:
             text = self.person["general"]["description"] + "[CR]" + self.person["general"]["biography"]
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header="Overview", text=text, color=self.person["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header=addon.getLocalizedString(32037), text=text, color=self.person["general"]['ImageColor'])
             w.doModal()
 
     def onFocus(self, controlID):
