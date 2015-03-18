@@ -7,7 +7,6 @@ youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 def GetYoutubeVideos(jsonurl):
     results = []
     results = Get_JSON_response(jsonurl, 0.5)
-    count = 1
     log("found youtube vids: " + jsonurl)
     videos = []
     if results:
@@ -22,7 +21,6 @@ def GetYoutubeVideos(jsonurl):
                          'Description': item["content"].get("content", ""),
                          'Date': item["pubDate"]}
                 videos.append(video)
-                count += 1
         except:
             for item in results["feed"]["entry"]:
                 for entry in item["link"]:
@@ -35,7 +33,6 @@ def GetYoutubeVideos(jsonurl):
                                  'Description': "To Come",
                                  'Date': "To Come"}
                         videos.append(video)
-                        count += 1
     return videos
 
 
@@ -118,7 +115,6 @@ def GetYoutubeUserVideos(userid=""):
     base_url = 'https://gdata.youtube.com/feeds/api/users/'
     url = '%s/uploads?v=2&alt=json' % (userid)
     results = Get_JSON_response(base_url + url, 0.5)
-    count = 1
     videos = []
     if results:
         for item in results["feed"]["entry"]:
@@ -130,6 +126,5 @@ def GetYoutubeUserVideos(userid=""):
                      'Author': item["author"][0]["name"]["$t"],
                      'Date': item["published"]["$t"].replace("T", " ").replace(".000Z", "")[:-3]}
             videos.append(video)
-            count += 1
     return videos
 
