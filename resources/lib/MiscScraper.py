@@ -110,28 +110,6 @@ def GetDailyBabes(single=False):
         return items
 
 
-def GetFlickrImages():
-    images = []
-    results = ""
-    log("GetFlickrImages")
-    try:
-        base_url = 'http://pipes.yahoo.com/pipes/pipe.run?'
-        url = '_id=241a9dca1f655c6fa0616ad98288a5b2&_render=json'
-        results = Get_JSON_response(base_url + url, 0)
-#        prettyprint(results)
-    except:
-        log("Error when fetching Flickr data from net")
-    count = 1
-    if results:
-        for item in results["value"]["items"]:
-            image = {'Fanart': item["link"],
-                     'Path': "plugin://script.extendedinfo?info=setfocus"}
-            images.append(image)
-            log(image)
-            count += 1
-    return images
-
-
 def HandleBandsInTownResult(results):
     events = []
     for event in results:

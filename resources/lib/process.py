@@ -24,8 +24,6 @@ def StartInfoActions(infos, params):
         ########### Images #####################
         if info == 'xkcd':
             data = GetXKCDInfo(), "XKCD"
-        elif info == 'flickr':
-            data = GetFlickrImages(), "Flickr"
         elif info == 'cyanide':
             data = GetCandHInfo(), "CyanideHappiness"
         elif info == 'dailybabes':
