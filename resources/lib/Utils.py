@@ -565,29 +565,20 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
                 online_item["Poster"] = local_item['art'].get("poster", "")
                 online_item["Thumb"] = local_item['art'].get("poster", "")
                 online_item.update(streaminfo)
-                audio = local_item['streamdetails']['audio']
-                subtitles = local_item['streamdetails']['subtitle']
-                for i in range(1, 20):
-                    online_item['AudioLanguage.%d' % i] = ""
-                    online_item['SubtitleLanguage.%d' % i] = ""
-                count = 1
                 streams = []
-                for item in audio:
+                for i, item in enumerate(local_item['streamdetails']['audio']):
                     language = item['language']
                     if language not in streams and language != "und":
                         streams.append(language)
-                        online_item['AudioLanguage.%d' % count] = language
-                        online_item['AudioCodec.%d' % count] = item['codec']
-                        online_item['AudioChannels.%d' % count] = str(item['channels'])
-                        count += 1
-                count = 1
+                        online_item['AudioLanguage.%d' % i + 1] = language
+                        online_item['AudioCodec.%d' % i + 1] = item['codec']
+                        online_item['AudioChannels.%d' % i + 1] = str(item['channels'])
                 subs = []
-                for item in subtitles:
+                for i, item in enumerate(local_item['streamdetails']['subtitle']):
                     language = item['language']
                     if language not in subs and language != "und":
                         subs.append(language)
-                        online_item['SubtitleLanguage.%d' % count] = language
-                        count += 1
+                        online_item['SubtitleLanguage.%d' % i + 1] = language
                 online_item['SubtitleLanguage'] = " / ".join(subs)
                 online_item['AudioLanguage'] = " / ".join(streams)
                 if library_first:
