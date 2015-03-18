@@ -5,7 +5,10 @@ v2.0.7
 - fix for case when no data available
 - fix for filter window page change logic
 - localization
-- code cleanup
+- updated C & H URL range to include latest images
+- show list title in filter window
+- instantly show busydialog when using extendedactorinfo
+- code cleanup, small bugfixes
 
 v2.0.6
 - fixes concerning plugin handling
