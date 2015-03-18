@@ -53,7 +53,7 @@ def GetCandHInfo():
         items = []
         for i in range(1, 10):
             try:
-                url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3128)
+                url = 'http://www.explosm.net/comics/%i/' % random.randrange(1, 3868)
                 response = GetStringFromUrl(url)
             except:
                 log("Error when fetching CandH data from net")
