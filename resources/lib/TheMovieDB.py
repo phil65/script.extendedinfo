@@ -889,7 +889,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
              'Plot': cleanText(fetch(response, "overview")),
              'year': year,
              'media_type': "tv",
-             'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
+             'Path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
              'Rating': fetch(response, 'vote_average'),
              'User_Rating': str(fetch(response, 'rating')),
              'Votes': fetch(response, 'vote_count'),
