@@ -122,7 +122,6 @@ class SlideShow(xbmcgui.WindowXMLDialog):
 def calculate_age(born):
     base_age = ""
     if born and born is not None:
-        log(born)
         today = datetime.date.today()
         actor_born = born.split("-")
         base_age = today.year - int(actor_born[0])
@@ -147,7 +146,6 @@ def play_trailer(youtube_id="", listitem=None, popstack=False):
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
     if vid:
         stream_url = vid.streamURL()
-        log("Youtube Trailer:" + stream_url)
         PlayMedia(stream_url, listitem, popstack)
 
 
@@ -188,7 +186,6 @@ class VideoPlayer(xbmc.Player):
             vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
             if vid:
                 stream_url = vid.streamURL()
-                log("Youtube Trailer:" + stream_url)
                 self.play(stream_url, listitem)
         else:
             Notify("no youtube id found")
@@ -330,8 +327,7 @@ def GetSimilarArtistsInLibrary(artistid):
                              "Instrument": " / ".join(item['instrument']),
                              "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'}
                 artists.append(newartist)
-    log('%i of %i artists found in last.FM is in XBMC database' %
-        (len(artists), len(simi_artists)))
+    log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
     return artists
 
 
@@ -352,7 +348,7 @@ def GetSimilarFromOwnLibrary(dbid):
         if "movies" in json_query['result']:
             quotalist = []
             for item in json_query['result']['movies']:
-                difference = int(item['year']) - year
+                difference = abs(int(item['year']) - year)
                 hit = 0.0
                 miss = 0.0
                 quota = 0.0
@@ -366,9 +362,9 @@ def GetSimilarFromOwnLibrary(dbid):
                     quota = float(hit) / float(hit + miss)
                 if genres[0] == item['genre'][0]:
                     quota += 0.3
-                if difference < 6 and difference > -6:
-                    quota += 0.15
-                if difference < 3 and difference > -3:
+                if difference < 3:
+                    quota += 0.3
+                if difference < 6:
                     quota += 0.15
                 if countries[0] == item['country'][0]:
                     quota += 0.4
@@ -383,7 +379,7 @@ def GetSimilarFromOwnLibrary(dbid):
                     movies = []
                     newmovie = GetMovieFromDB(list_movie[1])
                     movies.append(newmovie)
-                    if count == 20:
+                    if i == 20:
                         break
             return movies
 
