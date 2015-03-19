@@ -283,8 +283,7 @@ def GetXBMCArtists():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}, "id": 1}')
+        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}, "id": 1}')
         json_query = unicode(json_query, 'utf-8', errors='ignore')
         json_query = simplejson.loads(json_query)
         save_to_file(json_query, "XBMCartists", Addon_Data_Path)
@@ -305,8 +304,7 @@ def GetSimilarArtistsInLibrary(artistid):
                 if xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                     artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
-                json_query = xbmc.executeJSONRPC(
-                    '{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
+                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
                 json_query = unicode(json_query, 'utf-8', errors='ignore')
                 json_response = simplejson.loads(json_query)
                 item = json_response["result"]["artistdetails"]
@@ -679,7 +677,6 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         try:
             results = simplejson.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))
-            log("save to file: " + url)
             save_to_file(results, hashed_url, Addon_Data_Path)
         except:
             log("Exception: Could not get new JSON data. Tryin to fallback to cache")
