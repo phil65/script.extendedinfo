@@ -364,7 +364,7 @@ def GetSimilarFromOwnLibrary(dbid):
                     quota += 0.3
                 if difference < 3:
                     quota += 0.3
-                if difference < 6:
+                elif difference < 6:
                     quota += 0.15
                 if countries[0] == item['country'][0]:
                     quota += 0.4
