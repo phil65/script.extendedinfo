@@ -35,6 +35,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         imdb_id = kwargs.get('imdbid')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
+        self.tvshow = False
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):
@@ -87,6 +88,9 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        if not self.tvshow:
+            self.close()
+            return
         homewindow.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)

@@ -41,6 +41,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         imdb_id = kwargs.get('imdbid')
         self.name = kwargs.get('name')
         self.logged_in = checkLogin()
+        self.movie = False
         if tmdb_id:
             self.tmdb_id = tmdb_id
         else:
@@ -123,6 +124,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         if not self.movie:
             self.close()
+            return
         homewindow.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)

@@ -33,10 +33,12 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.showname = kwargs.get('tvshow')
         self.episodenumber = kwargs.get('episode')
         self.logged_in = checkLogin()
+        self.episode = False
         if self.tmdb_id or self.showname:
             self.episode = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber)
             if not self.episode:
-                self.close()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                return
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             search_string = "%s tv" % (self.episode["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
@@ -59,6 +61,10 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        if not self.episode:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.close()
+            return
         homewindow.setProperty("movie.ImageColor", self.episode["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(windowid)

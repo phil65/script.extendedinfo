@@ -62,6 +62,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
     def onInit(self):
         if not self.season:
             self.close()
+            return
         homewindow.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(windowid)

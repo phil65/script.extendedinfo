@@ -29,6 +29,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id', False)
+        self.person = False
         if not self.id:
             name = kwargs.get('name').decode("utf-8").split(" " + xbmc.getLocalizedString(20347) + " ")
             name = name[0].strip()
@@ -64,9 +65,10 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        if not self.id:
+        if not self.person:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.close()
+            return
         homewindow.setProperty("actor.ImageColor", self.person["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         passDictToSkin(self.person["general"], "actor.", False, False, windowid)
