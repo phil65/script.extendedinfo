@@ -605,23 +605,6 @@ def GetStringFromUrl(url=None, headers=False):
             succeed += 1
     return None
 
-# def GetStringFromUrl(url=None, headers=False):
-#     succeed = 0
-#     if not headers:
-#         headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
-#     prettyprint(headers)
-#     request = urllib2.Request(url, headers)
-#     while (succeed < 5) and (not xbmc.abortRequested):
-#         if True:
-#             response = urllib2.urlopen(request)
-#             data = response.read()
-#             return data
-#         else:
-#             log("GetStringFromURL: could not get data from %s" % url)
-#             xbmc.sleep(1000)
-#             succeed += 1
-#     return None
-
 
 def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
@@ -677,12 +660,10 @@ def Get_File(url):
     xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
     # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
     if xbmcvfs.exists(xbmc_cache_file_jpg):
-        log("1: " + xbmc_cache_file_jpg)
-        log("xbmc_cache_file_jpg Image: " + url)
+        log("xbmc_cache_file_jpg Image: " + url + "-->" + xbmc_cache_file_jpg)
         return xbmc.translatePath(xbmc_cache_file_jpg)
     elif xbmcvfs.exists(xbmc_cache_file_png):
-        log("2: " + xbmc_cache_file_png)
-        log("xbmc_cache_file_png Image: " + url)
+        log("xbmc_cache_file_png Image: " + url + "-->" + xbmc_cache_file_png)
         return xbmc_cache_file_png
     elif xbmcvfs.exists(xbmc_vid_cache_file):
         log("3: " + xbmc_vid_cache_file)
