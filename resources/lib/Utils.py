@@ -20,7 +20,6 @@ addon_strings = addon.getLocalizedString
 addon_name = addon.getAddonInfo('name')
 addon_path = addon.getAddonInfo('path').decode("utf-8")
 
-
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 id_list = []
@@ -100,23 +99,6 @@ class SlideShow(xbmcgui.WindowXMLDialog):
         elif action in self.ACTION_RIGHT:
             self.action = "right"
             self.close()
-
-
-# def calculate_age(born):
-#     age = ""
-#     log(str(born))
-#     if born and born is not None:
-#         try:
-#             born = datetime.datetime.strptime(born, '%Y-%m-%d')
-#             today = datetime.date.today()
-#             birthday = datetime.date(today.year, born.month, born.day)
-#         except ValueError:
-#             birthday = datetime.date(today.year, born.month, born.day - 1)
-#         if birthday > today:
-#             age = today.year - born.year - 1
-#         else:
-#             age = today.year - born.year
-#     return age
 
 
 def calculate_age(born):
@@ -364,22 +346,72 @@ def GetSimilarFromOwnLibrary(dbid):
                         break
             return movies
 
-def GetMovieFromDB(movieid):
-    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movieid))
-    movie = json_response["result"]["moviedetails"]
-    newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
+
+def get_db_movies(filter_string="", limit=10):
+    props = '"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded"]'
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovies", "params": {%s, %s, "limits": {"end": %d}}' % (props, filter_string, limit))
+    if "result" in json_response and "movies" in json_response["result"]:
+        movies = []
+        for item in json_response["result"]["movies"]:
+            movies.append(HandleDBMovieResult(item))
+        return movies
+
+
+def HandleDBMovieResult(movie):
+    trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
+    if addon.getSetting("infodialog_onclick") != "false":
+        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,dbid=%s)' % str(movie['movieid'])
+    else:
+        path = trailer
+    if (movie['resume']['position'] and movie['resume']['total']) > 0:
+        resume = "true"
+        played = '%s' % int((float(movie['resume']['position']) / float(movie['resume']['total'])) * 100)
+    else:
+        resume = "false"
+        played = '0'
+    streaminfo = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
+    db_movie = {'Art(fanart)': movie["art"].get('fanart', ""),
                 'Art(poster)': movie["art"].get('poster', ""),
                 'Fanart': movie["art"].get('fanart', ""),
                 'Poster': movie["art"].get('poster', ""),
+                'Banner': movie["art"].get('banner', ""),
+                'DiscArt': movie["art"].get('discart', ""),
                 'Title': movie.get('label', ""),
+                'File': movie.get('file', ""),
+                'Writer': " / ".join(movie['writer']),
+                'Logo': movie['art'].get("clearlogo", ""),
                 'OriginalTitle': movie.get('originaltitle', ""),
                 'ID': movie.get('imdbnumber', ""),
-                'Path': "",
+                'Path': path,
+                'PercentPlayed': played,
+                'Resume': resume,
+                # 'SubtitleLanguage': " / ".join(subs),
+                # 'AudioLanguage': " / ".join(streams),
                 'Play': "",
                 'DBID': str(movie['movieid']),
                 'Rating': str(round(float(movie['rating']), 1)),
                 'Premiered': movie.get('year', "")}
-    return newmovie
+    streams = []
+    for i, item in enumerate(movie['streamdetails']['audio']):
+        language = item['language']
+        if language not in streams and language != "und":
+            streams.append(language)
+            db_movie['AudioLanguage.%d' % (i + 1)] = language
+            db_movie['AudioCodec.%d' % (i + 1)] = item['codec']
+            db_movie['AudioChannels.%d' % (i + 1)] = str(item['channels'])
+    subs = []
+    for i, item in enumerate(movie['streamdetails']['subtitle']):
+        language = item['language']
+        if language not in subs and language != "und":
+            subs.append(language)
+            db_movie['SubtitleLanguage.%d' % (i + 1)] = language
+    db_movie.update(streaminfo)
+    return db_movie
+
+
+def GetMovieFromDB(movieid):
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movieid))
+    return HandleDBMovieResult(json_response["result"]["moviedetails"])
 
 
 def media_streamdetails(filename, streamdetails):
@@ -590,7 +622,6 @@ def GetStringFromUrl(url=None, headers=False):
     succeed = 0
     if not headers:
         headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
-    # prettyprint(headers)
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)
@@ -658,7 +689,6 @@ def Get_File(url):
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
     xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg").replace("\\", "/")
     xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
-    # xbmc_cache_file_jpg = os.path.join(xbmc.translatePath("special://profile/Thumbnails/Video"), cachedthumb[0], cachedthumb)
     if xbmcvfs.exists(xbmc_cache_file_jpg):
         log("xbmc_cache_file_jpg Image: " + url + "-->" + xbmc_cache_file_jpg)
         return xbmc.translatePath(xbmc_cache_file_jpg)
@@ -666,12 +696,10 @@ def Get_File(url):
         log("xbmc_cache_file_png Image: " + url + "-->" + xbmc_cache_file_png)
         return xbmc_cache_file_png
     elif xbmcvfs.exists(xbmc_vid_cache_file):
-        log("3: " + xbmc_vid_cache_file)
-        log("xbmc_vid_cache_file Image: " + url)
+        log("xbmc_vid_cache_file Image: " + url + "-->" + xbmc_vid_cache_file)
         return xbmc_vid_cache_file
     else:
         try:
-            log("Download: " + url)
             request = urllib2.Request(url)
             request.add_header('Accept-encoding', 'gzip')
             response = urllib2.urlopen(request)
@@ -889,7 +917,6 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             value = unicode(value)
             if precache:
                 if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                    # Notify("download")
                     if not value in image_requests and value:
                         thread = Get_File_Thread(value)
                         threads += [thread]

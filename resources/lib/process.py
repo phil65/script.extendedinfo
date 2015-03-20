@@ -64,7 +64,13 @@ def StartInfoActions(infos, params):
             data = GetTopArtists(), "TopArtists"
         elif info == 'hypedartists':
             data = GetHypedArtists(), "HypedArtists"
-        ### RottenTomatoesMovies #################################################################################
+        elif info == 'latestdbmovies':
+            data = get_db_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10)), "LatestMovies"
+        elif info == 'randomdbmovies':
+            data = get_db_movies('"sort": {"method": "random"}', params.get("limit", 10)), "RandomMovies"
+        elif info == 'inprogressdbmovies':
+            data = get_db_movies('"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}', params.get("limit", 10)), "RecommendedMovies"
+    ### RottenTomatoesMovies ##############################
         elif info == 'intheaters':
             data = GetRottenTomatoesMovies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
@@ -81,7 +87,7 @@ def StartInfoActions(infos, params):
             data = GetRottenTomatoesMovies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
             data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
-        ### The MovieDB ##########################################################################################
+        ### The MovieDB ##################################
         elif info == 'incinemas':
             data = GetMovieDBMovies("now_playing"), "InCinemasMovies"
         elif info == 'upcoming':
@@ -164,7 +170,8 @@ def StartInfoActions(infos, params):
             data = GetPopularActorList(), "PopularPeople"
         elif info == 'extendedinfo':
             from DialogVideoInfo import DialogVideoInfo
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""),
+                                     dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'extendedactorinfo':
             from DialogActorInfo import DialogActorInfo
@@ -172,7 +179,8 @@ def StartInfoActions(infos, params):
             dialog.doModal()
         elif info == 'extendedtvinfo':
             from DialogTVShowInfo import DialogTVShowInfo
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""), dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=params.get("id", ""),
+                                      dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
             dialog.doModal()
         elif info == 'ratemedia':
             media_type = params.get("type", False)
@@ -250,7 +258,8 @@ def StartInfoActions(infos, params):
             if params.get("id", ""):
                 data = GetYoutubeUserVideos(params.get("id", "")), "YoutubeUserSearch"
         elif info == 'nearevents':
-            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
+            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get(
+                "lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
             homewindow.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
