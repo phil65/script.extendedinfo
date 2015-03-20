@@ -222,9 +222,7 @@ def GetPlaylistStats(path):
         playlistpath = path[startindex:endindex]
     #    Notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
+        json_response = get_Kodi_JSON('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
         if "result" in json_response:
             played = 0
             inprogress = 0
@@ -250,9 +248,7 @@ def GetSortLetters(path, focusedletter):
         letterlist = letterlist.split()
     else:
         if path:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}, "id": 1}' % (path))
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_response = simplejson.loads(json_query)
+            json_response = get_Kodi_JSON('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}' % path)
             if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
                     cleaned_label = movie["label"].replace("The ", "")
@@ -283,11 +279,9 @@ def GetXBMCArtists():
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = simplejson.loads(json_query)
-        save_to_file(json_query, "XBMCartists", Addon_Data_Path)
-        return json_query
+        json_response = get_Kodi_JSON('"method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}')
+        save_to_file(json_response, "XBMCartists", Addon_Data_Path)
+        return json_response
 
 
 def GetSimilarArtistsInLibrary(artistid):
@@ -304,9 +298,7 @@ def GetSimilarArtistsInLibrary(artistid):
                 if xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                     artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}, "id": 1}' % str(xbmc_artist['artistid']))
-                json_query = unicode(json_query, 'utf-8', errors='ignore')
-                json_response = simplejson.loads(json_query)
+                json_response = get_Kodi_JSON('"method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
                 item = json_response["result"]["artistdetails"]
                 newartist = {"Title": item['label'],
                              "Genre": " / ".join(item['genre']),
@@ -330,23 +322,14 @@ def GetSimilarArtistsInLibrary(artistid):
 
 
 def GetSimilarFromOwnLibrary(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }, "id": 1}' % dbid)
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
     if "moviedetails" in json_response['result']:
-        movieid = json_response['result']['moviedetails']['movieid']
         genres = json_response['result']['moviedetails']['genre']
-        year = int(json_response['result']['moviedetails']['year'])
-        countries = json_response['result']['moviedetails']['country']
-        directors = json_response['result']['moviedetails']['director']
-        mpaa = json_response['result']['moviedetails']['mpaa']
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }, "id": 1}')
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_query = simplejson.loads(json_query)
-        if "movies" in json_query['result']:
+        json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }')
+        if "movies" in json_response['result']:
             quotalist = []
-            for item in json_query['result']['movies']:
-                difference = abs(int(item['year']) - year)
+            for item in json_response['result']['movies']:
+                difference = abs(int(item['year']) - int(json_response['result']['moviedetails']['year']))
                 hit = 0.0
                 miss = 0.0
                 quota = 0.0
@@ -364,16 +347,16 @@ def GetSimilarFromOwnLibrary(dbid):
                     quota += 0.3
                 elif difference < 6:
                     quota += 0.15
-                if countries[0] == item['country'][0]:
+                if json_response['result']['moviedetails']['country'][0] == item['country'][0]:
                     quota += 0.4
-                if mpaa == item['mpaa']:
+                if json_response['result']['moviedetails']['mpaa'] == item['mpaa']:
                     quota += 0.4
-                if directors[0] == item['director'][0]:
+                if json_response['result']['moviedetails']['director'][0] == item['director'][0]:
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
             quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
             for i, list_movie in enumerate(quotalist):
-                if movieid is not list_movie[1]:
+                if json_response['result']['moviedetails']['movieid'] is not list_movie[1]:
                     movies = []
                     newmovie = GetMovieFromDB(list_movie[1])
                     movies.append(newmovie)
@@ -382,9 +365,7 @@ def GetSimilarFromOwnLibrary(dbid):
             return movies
 
 def GetMovieFromDB(movieid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }, "id": 1}' % str(movieid))
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movieid))
     movie = json_response["result"]["moviedetails"]
     newmovie = {'Art(fanart)': movie["art"].get('fanart', ""),
                 'Art(poster)': movie["art"].get('poster', ""),
@@ -447,19 +428,15 @@ def media_streamdetails(filename, streamdetails):
 
 
 def GetXBMCAlbums():
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
-    if "result" in json_query and "albums" in json_query['result']:
-        return json_query['result']['albums']
+    json_response = get_Kodi_JSON('"method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}')
+    if "result" in json_response and "albums" in json_response['result']:
+        return json_response['result']['albums']
     else:
         return []
 
 
 def create_channel_list():
-    json_response = xbmc.executeJSONRPC('{"jsonrpc":"2.0","id":1,"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}}')
-    json_response = unicode(json_response, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_response)
+    json_response = get_Kodi_JSON('"method":"PVR.GetChannels","params":{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}')
     if ('result' in json_response) and ("movies" in json_response["result"]):
         return json_response
     else:
@@ -487,14 +464,13 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
             title_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(title_list.JSON)"))
             imdb_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(imdb_list.JSON)"))
         else:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }, "id": 1}')
-            json_query = simplejson.loads(unicode(json_query, 'utf-8', errors='ignore'))
+            json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }')
             id_list = []
             imdb_list = []
             originaltitle_list = []
             title_list = []
-            if "result" in json_query and "movies" in json_query["result"]:
-                for item in json_query["result"]["movies"]:
+            if "result" in json_response and "movies" in json_response["result"]:
+                for item in json_response["result"]["movies"]:
                     id_list.append(item["movieid"])
                     imdb_list.append(item["imdbnumber"])
                     originaltitle_list.append(item["originaltitle"].lower())
@@ -515,18 +491,11 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
         elif online_item["Title"].lower() in title_list:
             index = title_list.index(online_item["Title"].lower())
             found = True
-            # Notify("found title " + online_item["Title"])
         elif online_item["OriginalTitle"].lower() in originaltitle_list:
             index = originaltitle_list.index(online_item["OriginalTitle"].lower())
             found = True
-            # Notify("found originaltitle_list " + online_item["Title"])
         if found:
-            # prettyprint(id_list)
-            # log(str(index))
-            dbid = str(id_list[index])
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }, "id": 1}' % dbid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_response = simplejson.loads(json_query)
+            json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }' % str(id_list[index]))
             if "result" in json_response and "moviedetails" in json_response["result"]:
                 local_item = json_response['result']['moviedetails']
                 try:
@@ -605,10 +574,8 @@ def CompareAlbumWithLibrary(onlinelist):
     for online_item in onlinelist:
         for localitem in locallist:
             if online_item["name"] == localitem["title"]:
-                json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }, "id": 1}' % str(localitem["albumid"]))
-                json_query = unicode(json_query, 'utf-8', errors='ignore')
-                json_query = simplejson.loads(json_query)
-                album = json_query["result"]["albumdetails"]
+                json_response = get_Kodi_JSON('"method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(localitem["albumid"]))
+                album = json_response["result"]["albumdetails"]
                 online_item.update({"DBID": album["albumid"]})
                 online_item.update(
                     {"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
@@ -774,11 +741,9 @@ def GetFavPath(fav):
 
 def GetFavourites():
     items = []
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}, "id": 1}')
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_query = simplejson.loads(json_query)
-    if json_query["result"]["limits"]["total"] > 0:
-        for fav in json_query["result"]["favourites"]:
+    json_response = get_Kodi_JSON('"method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    if json_response["result"]["limits"]["total"] > 0:
+        for fav in json_response["result"]["favourites"]:
             path = GetFavPath(fav)
             newitem = {'Label': fav["title"],
                        'Thumb': fav["thumbnail"],
@@ -893,16 +858,18 @@ def Notify(header="", message="", icon=addon_icon, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
-def GetMovieSetName(dbid):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }, "id": 1}' % dbid)
+def get_Kodi_JSON(params):
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", %s, "id": 1}' % params)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
+    return simplejson.loads(json_query)
+
+
+def GetMovieSetName(dbid):
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }"' % dbid)
     if "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid', "")
         if dbsetid:
-            json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }, "id": 1}' % dbsetid)
-            json_query = unicode(json_query, 'utf-8', errors='ignore')
-            json_response = simplejson.loads(json_query)
+            json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }' % dbsetid)
             return json_response['result']['setdetails'].get('label', "")
     return ""
 
@@ -915,26 +882,18 @@ def GetImdbIDFromDatabase(type, dbid):
     if not dbid:
         return []
     if type == "movie":
-        json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }, "id": 1}' % dbid)
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
+        json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }' % dbid)
         if "moviedetails" in json_response["result"]:
             return json_response['result']['moviedetails']['imdbnumber']
     elif type == "tvshow":
-        json_query = xbmc.executeJSONRPC(
-            '{"jsonrpc": "2.0", "method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }, "id": 1}' % dbid)
-        json_query = unicode(json_query, 'utf-8', errors='ignore')
-        json_response = simplejson.loads(json_query)
+        json_response = get_Kodi_JSON('"method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }' % dbid)
         if "result" in json_response and "tvshowdetails" in json_response["result"]:
             return json_response['result']['tvshowdetails']['imdbnumber']
     return []
 
 
 def get_tvshow_id_from_db_by_episode(dbid):
-    json_query = xbmc.executeJSONRPC(
-        '{"jsonrpc": "2.0", "method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }, "id": 1}' % dbid)
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    json_response = simplejson.loads(json_query)
+    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }' % dbid)
     if "episodedetails" in json_response["result"]:
         tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
         return GetImdbIDFromDatabase("tvshow", tvshowid)
