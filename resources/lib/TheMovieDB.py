@@ -255,7 +255,7 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
                     'Year': year,
                     'time_comparer': time_comparer,
                     'Premiered': release_date}
-        if not tmdb_id in ids:
+        if tmdb_id not in ids:
             ids.append(tmdb_id)
             movies.append(newmovie)
     movies = compare_with_library(movies, local_first, sortkey)
@@ -310,7 +310,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'Release_Date': release_date,
                  'ReleaseDate': release_date,
                  'Premiered': release_date}
-        if not tmdb_id in ids:
+        if tmdb_id not in ids:
             ids.append(tmdb_id)
             tvshows.append(newtv)
     # tvshows = compare_with_library(tvshows, local_first, sortkey)
@@ -614,7 +614,7 @@ def GetCreditInfo(credit_id):
     response = GetMovieDBData("credit/%s?language=%s&" % (str(credit_id), addon.getSetting("LanguageID")), 30)
     prettyprint(response)
     # if response and "results" in response:
-        # return HandleTMDBMovieResult(response["results"])
+    #     return HandleTMDBMovieResult(response["results"])
     # else:
     #     return []
 
@@ -1014,7 +1014,7 @@ def GetFavItems(media_type):
 
 def GetMoviesFromList(list_id, cache_time=5):
     response = GetMovieDBData("list/%s?language=%s&" % (str(list_id), addon.getSetting("LanguageID")), cache_time)
-  #  prettyprint(response)
+    #  prettyprint(response)
     return HandleTMDBMovieResult(response["items"], False, None)
 
 
