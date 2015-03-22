@@ -917,7 +917,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             value = unicode(value)
             if precache:
                 if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                    if not value in image_requests and value:
+                    if value not in image_requests and value:
                         thread = Get_File_Thread(value)
                         threads += [thread]
                         thread.start()
@@ -950,7 +950,7 @@ def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=Non
 
 def SetWindowProperties(name, data, prefix="", debug=False):
     if data is not None:
-       # log( "%s%s.Count = %s" % (prefix, name, str(len(data)) ) )
+        # log("%s%s.Count = %s" % (prefix, name, str(len(data))))
         for (count, result) in enumerate(data):
             if debug:
                 log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
@@ -984,7 +984,7 @@ def create_listitems(data=None, preload_images=0):
                 value = unicode(value)
                 if counter <= preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                        if not value in image_requests:
+                        if value not in image_requests:
                             thread = Get_File_Thread(value)
                             threads += [thread]
                             thread.start()
@@ -999,7 +999,7 @@ def create_listitems(data=None, preload_images=0):
                     itempath = value
                 if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                     listitem.setArt({key.lower(): value})
-           #     log("key: " + unicode(key) + "  value: " + unicode(value))
+                    # log("key: " + unicode(key) + "  value: " + unicode(value))
                 if key.lower() in Int_InfoLabels:
                     try:
                         listitem.setInfo('video', {key.lower(): int(value)})

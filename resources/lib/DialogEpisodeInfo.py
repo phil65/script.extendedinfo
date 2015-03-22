@@ -43,10 +43,10 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             search_string = "%s tv" % (self.episode["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
-            if not "DBID" in self.episode["general"]:  # need to add comparing for episodes
+            if "DBID" not in self.episode["general"]:  # need to add comparing for episodes
                 poster_thread = Get_ListItems_Thread(Get_File, self.episode["general"]["Poster"])
                 poster_thread.start()
-            if not "DBID" in self.episode["general"]:
+            if "DBID" not in self.episode["general"]:
                 poster_thread.join()
                 self.episode["general"]['Poster'] = poster_thread.listitems
             filter_thread = Filter_Image_Thread(self.episode["general"]["Poster"], 25)
@@ -75,7 +75,6 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1150).addItems(create_listitems(self.episode["videos"], 0))
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
         self.getControl(1350).addItems(create_listitems(self.episode["images"], 0))
-
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -115,7 +114,6 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
                 self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedEpisodes()
-
 
     def onFocus(self, controlID):
         pass

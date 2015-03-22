@@ -48,7 +48,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
         if self.tmdb_id:
             self.movie = GetExtendedMovieInfo(self.tmdb_id, self.dbid)
-            if not "general" in self.movie:
+            if "general" not in self.movie:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
             log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
@@ -60,7 +60,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             sets_thread.start()
             youtube_thread.start()
             lists_thread.start()
-            if not "DBID" in self.movie["general"]:
+            if "DBID" not in self.movie["general"]:
                 poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
                 poster_thread.start()
             vid_id_list = []
@@ -75,7 +75,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                 else:
                     index = crew_id_list.index(item["id"])
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
-            if not "DBID" in self.movie["general"]:
+            if "DBID" not in self.movie["general"]:
                 poster_thread.join()
                 self.movie["general"]['Poster'] = poster_thread.listitems
             filter_thread = Filter_Image_Thread(self.movie["general"]["Thumb"], 25)
@@ -143,8 +143,8 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         self.join_omdb.start()
 
     def onAction(self, action):
-        action_id = action.getId()
-        focusid = self.getFocusId()
+        # action_id = action.getId()
+        # focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             PopWindowStack()
@@ -159,7 +159,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         #         if context_menu.selection == 0:
         #             Notify(list_id)
         #         selection = xbmcgui.Dialog().select(addon.getLocalizedString(32151), listitems)
-
 
     def onClick(self, controlID):
         # selectdialog.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
@@ -390,7 +389,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         manage_list = []
         listitems = []
         movie_id = str(self.movie["general"].get("DBID", ""))
-        filename = self.movie["general"].get("FilenameAndPath", False)
+        # filename = self.movie["general"].get("FilenameAndPath", False)
         imdb_id = str(self.movie["general"].get("imdb_id", ""))
         if movie_id:
             temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
@@ -413,6 +412,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             builtin_list = manage_list[selection][1].split("||")
             for item in builtin_list:
                 xbmc.executebuiltin(item)
+
 
 class Join_Omdb_Thread(threading.Thread):
 

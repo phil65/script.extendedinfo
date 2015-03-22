@@ -69,11 +69,11 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                     hit = dictfind(language_certs, "certification", rating)
                     if hit:
                         item["meaning"] = hit["meaning"]
-            if not "DBID" in self.tvshow["general"]:  # need to add comparing for tvshows
+            if "DBID" not in self.tvshow["general"]:  # need to add comparing for tvshows
                 # Notify("download Poster")
                 poster_thread = Get_ListItems_Thread(Get_File, self.tvshow["general"]["Poster"])
                 poster_thread.start()
-            if not "DBID" in self.tvshow["general"]:
+            if "DBID" not in self.tvshow["general"]:
                 poster_thread.join()
                 self.tvshow["general"]['Poster'] = poster_thread.listitems
             filter_thread = Filter_Image_Thread(self.tvshow["general"]["Poster"], 25)
@@ -258,9 +258,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         manage_list = []
         listitems = []
         tvshow_dbid = str(self.tvshow["general"].get("DBID", ""))
-        imdb_id = str(self.tvshow["general"].get("imdb_id", ""))
         title = self.tvshow["general"].get("TVShowTitle", "")
-
+        # imdb_id = str(self.tvshow["general"].get("imdb_id", ""))
         # filename = self.tvshow["general"].get("FilenameAndPath", False)
         if tvshow_dbid:
             temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
