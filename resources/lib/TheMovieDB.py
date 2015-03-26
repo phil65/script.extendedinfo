@@ -527,7 +527,7 @@ def MultiSearch(String):
         return ""
 
 
-def GetPersonID(person):
+def GetPersonID(person, skip_dialog=False):
     persons = person.split(" / ")
     # if len(persons) > 1:
     #     personlist = []
@@ -538,7 +538,7 @@ def GetPersonID(person):
     person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
     if response and "results" in response:
-        if len(response["results"]) > 1:
+        if len(response["results"]) > 1 and not skip_dialog:
             names = []
             for item in response["results"]:
                 names.append(item["name"])
