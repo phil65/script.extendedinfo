@@ -23,7 +23,7 @@ def StartInfoActions(infos, params):
         params["prefix"] = params["prefix"] + '.'
     for info in infos:
         data = None
-        ########### Images #####################
+        #  Images
         if info == 'xkcd':
             data = GetXKCDInfo(), "XKCD"
         elif info == 'cyanide':
@@ -32,7 +32,7 @@ def StartInfoActions(infos, params):
             data = GetDailyBabes(), "DailyBabes"
         elif info == 'dailybabe':
             data = GetDailyBabes(single=True), "DailyBabe"
-        ########### Audio #####################
+        # Audio
         elif info == 'discography':
             Discography = GetDiscography(params["artistname"])
             if len(Discography) == 0:
@@ -196,8 +196,7 @@ def StartInfoActions(infos, params):
                 if params.get("id", False) and params["id"]:
                     tmdb_id = params["id"]
                 elif media_type == "movie":
-                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get(
-                        "imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
                     tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
                     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
@@ -258,8 +257,7 @@ def StartInfoActions(infos, params):
             if params.get("artist_mbid"):
                 data = GetEvents(params.get("artist_mbid")), "ArtistEvents"
         elif info == 'youtubesearch':
-            homewindow.setProperty('%sSearchValue' % params.get(
-                "prefix", ""), params.get("id", ""))  # set properties
+            homewindow.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
                 data = GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
         elif info == 'youtubeplaylist':
@@ -269,8 +267,7 @@ def StartInfoActions(infos, params):
             if params.get("id", ""):
                 data = GetYoutubeUserVideos(params.get("id", "")), "YoutubeUserSearch"
         elif info == 'nearevents':
-            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get(
-                "lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
+            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
             homewindow.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
@@ -287,9 +284,8 @@ def StartInfoActions(infos, params):
             artists = GetXBMCArtists()
             data = GetArtistNearEvents(
                 artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
-        elif info == 'channels':
-            channels = create_channel_list()
-      #      prettyprint(channels)
+        # elif info == 'channels':
+        #     channels = create_channel_list()
         elif info == 'favourites':
             if params.get("id", ""):
                 favourites = GetFavouriteswithType(params.get("id", ""))
@@ -370,5 +366,4 @@ def StartInfoActions(infos, params):
             pass
         if data:
             data, prefix = data
-            passListToSkin(prefix, data, params.get("prefix", ""), params.get(
-                "window", ""), params.get("handle", ""), params.get("limit", 20))
+            passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
