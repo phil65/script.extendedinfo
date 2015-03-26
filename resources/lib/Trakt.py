@@ -1,11 +1,12 @@
 import datetime
 from Utils import *
 
-trakt_key = '' #add trakt key here
+trakt_key = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 base_url = "https://api-v2launch.trakt.tv/"
 token = ""
 headers = {
     'Content-Type': 'application/json',
+    'trakt-api-key': trakt_key,
     'trakt-api-version': 2
 }
 
