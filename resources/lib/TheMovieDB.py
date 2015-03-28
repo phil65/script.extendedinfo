@@ -215,10 +215,10 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
         else:
             backdrop_path = ""
         if ("poster_path" in movie) and (movie["poster_path"]):
-            poster_path = base_url + poster_size + movie['poster_path']
+            # poster_path = base_url + poster_size + movie['poster_path']
             small_poster_path = base_url + "w342" + movie["poster_path"]
         else:
-            poster_path = ""
+            # poster_path = ""
             small_poster_path = ""
         release_date = fetch(movie, 'release_date')
         if release_date:
@@ -617,29 +617,6 @@ def GetCreditInfo(credit_id):
     #     return HandleTMDBMovieResult(response["results"])
     # else:
     #     return []
-
-# def millify(n):
-#     import math
-#     millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
-#     millidx = max(0, min(len(millnames) - 1, int(math.floor(math.log10(abs(n)) / 3.0))))
-#     if millidx == 3:
-#             return '%.1f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-#     else:
-#             return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-
-
-def millify(n):
-    millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
-    if n and n > 100:
-        n = float(n)
-        char_count = len(str(n))
-        millidx = (char_count / 3) - 1
-        if millidx == 3 or char_count == 9:
-            return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-        else:
-            return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-    else:
-        return ""
 
 
 def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):

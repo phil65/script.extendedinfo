@@ -357,6 +357,20 @@ def get_db_movies(filter_string="", limit=10):
         return movies
 
 
+def millify(n):
+    millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
+    if n and n > 100:
+        n = float(n)
+        char_count = len(str(n))
+        millidx = (char_count / 3) - 1
+        if millidx == 3 or char_count == 9:
+            return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+        else:
+            return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+    else:
+        return ""
+
+
 def HandleDBMovieResult(movie):
     trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
     if addon.getSetting("infodialog_onclick") != "false":

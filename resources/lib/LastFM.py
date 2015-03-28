@@ -38,7 +38,10 @@ def HandleLastFMEventResult(results):
                         search_string = url_quote(event['venue']['name'])
                 except:
                     search_string = ""
-                builtin = 'RunScript(script.maps.browser,eventid=%s)' % (str(event['id']))
+                if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
+                    builtin = 'RunScript(script.maps.browser,eventid=%s)' % (str(event['id']))
+                else:
+                    builtin = "Notification(Please install script.maps.browser)"
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, googlemaps_key_old)
                 event = {'date': event['startDate'][:-3],
                          'name': event['venue']['name'],
@@ -221,13 +224,13 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon="", location="", d
         festivalsonly = "0"
     url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
-        url = url + '&tag=%s' % (url_quote(tag))
+        url += '&tag=%s' % (url_quote(tag))
     if lat:
-        url = url + '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
+        url += '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
     if location:
-        url = url + '&location=%s' % (url_quote(location))
+        url += '&location=%s' % (url_quote(location))
     if distance:
-        url = url + '&distance=%s' % (distance)
+        url += '&distance=%s' % (distance)
     results = Get_JSON_response(base_url + url, 0.5)
     return HandleLastFMEventResult(results)
 
