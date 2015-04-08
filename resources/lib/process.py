@@ -37,7 +37,7 @@ def StartInfoActions(infos, params):
         # Audio
         elif info == 'discography':
             Discography = GetDiscography(params["artistname"])
-            if len(Discography) == 0:
+            if not Discography:
                 Discography = GetArtistTopAlbums(params.get("artist_mbid"))
             data = Discography, "Discography"
         elif info == 'mostlovedtracks':
