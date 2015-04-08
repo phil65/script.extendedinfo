@@ -1,4 +1,3 @@
-import os
 import xbmc
 from YouTube import *
 from Utils import *
