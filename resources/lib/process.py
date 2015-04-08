@@ -4,11 +4,6 @@ from TheMovieDB import *
 from Utils import *
 from YouTube import *
 from Trakt import *
-homewindow = xbmcgui.Window(10000)
-Addon_Data_Path = os.path.join(xbmc.translatePath(
-    "special://profile/addon_data/%s" % addon_id).decode("utf-8"))
-Skin_Data_Path = os.path.join(xbmc.translatePath(
-    "special://profile/addon_data/%s" % xbmc.getSkinDir()).decode("utf-8"))
 
 
 def StartInfoActions(infos, params):

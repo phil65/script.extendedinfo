@@ -1,4 +1,3 @@
-import xbmcaddon
 import os
 import xbmc
 from YouTube import *
@@ -6,17 +5,10 @@ from Utils import *
 import threading
 from urllib2 import Request, urlopen
 
-
 moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_name = addon.getAddonInfo('name')
-addon_strings = addon.getLocalizedString
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
 base_url = ""
 poster_size = ""
 fanart_size = ""
-homewindow = xbmcgui.Window(10000)
 headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',

@@ -19,8 +19,8 @@ addon_icon = addon.getAddonInfo('icon')
 addon_strings = addon.getLocalizedString
 addon_name = addon.getAddonInfo('name')
 addon_path = addon.getAddonInfo('path').decode("utf-8")
-
 Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
+Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir()).decode("utf-8"))
 homewindow = xbmcgui.Window(10000)
 id_list = []
 title_list = []

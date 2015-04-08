@@ -1,19 +1,11 @@
 import xbmc
-import xbmcaddon
 import xbmcgui
 from Utils import *
 import DialogVideoInfo
 import DialogTVShowInfo
 import DialogActorInfo
-homewindow = xbmcgui.Window(10000)
 from TheMovieDB import *
 
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_name = addon.getAddonInfo('name')
-addon_version = addon.getAddonInfo('version')
-addon_strings = addon.getLocalizedString
-addon_path = addon.getAddonInfo('path').decode("utf-8")
 include_adult = str(addon.getSetting("include_adults")).lower()
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",

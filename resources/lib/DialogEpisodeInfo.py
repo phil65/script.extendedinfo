@@ -1,5 +1,4 @@
 import xbmc
-import xbmcaddon
 import xbmcgui
 from Utils import *
 from TheMovieDB import *
@@ -10,14 +9,6 @@ try:
     from ImageTools import *
 except:
     log("Exception when importing ImageTools")
-homewindow = xbmcgui.Window(10000)
-
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_name = addon.getAddonInfo('name')
-addon_version = addon.getAddonInfo('version')
-addon_strings = addon.getLocalizedString
-addon_path = addon.getAddonInfo('path').decode("utf-8")
 
 
 class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):

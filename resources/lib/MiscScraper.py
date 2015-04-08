@@ -4,14 +4,12 @@ import random
 import sys
 import urllib
 import xbmc
-import xbmcaddon
-import datetime
 from Utils import *
+import datetime
 import simplejson
 
 tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
 bandsintown_apikey = 'xbmc_open_source_media_center'
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmcaddon.Addon().getAddonInfo('id')).decode("utf-8"))
 
 
 def GetXKCDInfo():

@@ -1,5 +1,4 @@
 import xbmc
-import xbmcaddon
 import xbmcgui
 from Utils import *
 from TheMovieDB import *
@@ -12,16 +11,8 @@ try:
 except:
     log("Exception when importing ImageTools")
 import threading
-homewindow = xbmcgui.Window(10000)
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)
-
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_name = addon.getAddonInfo('name')
-addon_version = addon.getAddonInfo('version')
-addon_strings = addon.getLocalizedString
-addon_path = addon.getAddonInfo('path').decode("utf-8")
 
 
 class DialogVideoInfo(xbmcgui.WindowXMLDialog):

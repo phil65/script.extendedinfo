@@ -1,23 +1,13 @@
 import urllib
 import xbmc
-import xbmcaddon
-import xbmcgui
 import xbmcvfs
 import os
 from Utils import *
 try:
-    from PIL import Image, ImageFilter, ImageOps
+    from PIL import Image, ImageFilter
 except:
     log("Exception when importing PIL")
 
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_icon = addon.getAddonInfo('icon')
-addon_strings = addon.getLocalizedString
-addon_name = addon.getAddonInfo('name')
-addon_path = addon.getAddonInfo('path').decode("utf-8")
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
-homewindow = xbmcgui.Window(10000)
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 
 
