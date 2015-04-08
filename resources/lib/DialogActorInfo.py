@@ -32,8 +32,7 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         self.person = False
         if not self.id:
             name = kwargs.get('name').decode("utf-8").split(" " + xbmc.getLocalizedString(20347) + " ")
-            name = name[0].strip()
-            names = name.split(" / ")
+            names = name[0].strip().split(" / ")
             if len(names) > 1:
                 ret = xbmcgui.Dialog().select("Actor Info", names)
                 if ret == -1:

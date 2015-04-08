@@ -54,14 +54,14 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             log("Blur image %s with radius %i" % (self.movie["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.movie["general"]["Label"] + " " + self.movie["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.movie["general"]["SetId"])
-            self.omdb_thread = Get_ListItems_Thread(GetOmdbMovieInfo, self.movie["general"]["imdb_id"])
-            lists_thread = Get_ListItems_Thread(self.SortLists, self.movie["lists"])
+            self.omdb_thread = Threaded_Function(GetOmdbMovieInfo, self.movie["general"]["imdb_id"])
+            lists_thread = Threaded_Function(self.SortLists, self.movie["lists"])
             self.omdb_thread.start()
             sets_thread.start()
             youtube_thread.start()
             lists_thread.start()
             if "DBID" not in self.movie["general"]:
-                poster_thread = Get_ListItems_Thread(Get_File, self.movie["general"]["Poster"])
+                poster_thread = Threaded_Function(Get_File, self.movie["general"]["Poster"])
                 poster_thread.start()
             vid_id_list = []
             for item in self.movie["videos"]:

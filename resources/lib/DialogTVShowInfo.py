@@ -71,7 +71,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                         item["meaning"] = hit["meaning"]
             if "DBID" not in self.tvshow["general"]:  # need to add comparing for tvshows
                 # Notify("download Poster")
-                poster_thread = Get_ListItems_Thread(Get_File, self.tvshow["general"]["Poster"])
+                poster_thread = Threaded_Function(Get_File, self.tvshow["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.tvshow["general"]:
                 poster_thread.join()

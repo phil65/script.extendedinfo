@@ -3,7 +3,6 @@ from MiscScraper import *
 from TheAudioDB import *
 from TheMovieDB import *
 from Utils import *
-from RottenTomatoes import *
 from YouTube import *
 from Trakt import *
 homewindow = xbmcgui.Window(10000)
@@ -75,20 +74,28 @@ def StartInfoActions(infos, params):
                 "limit", 10)), "RecommendedMovies"
     #  RottenTomatoesMovies
         elif info == 'intheaters':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("movies/box_office"), "BoxOffice"
         elif info == 'opening':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("movies/opening"), "Opening"
         elif info == 'comingsoon':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("movies/upcoming"), "ComingSoonMovies"
         elif info == 'toprentals':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("dvds/top_rentals"), "TopRentals"
         elif info == 'currentdvdreleases':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("dvds/current_releases"), "CurrentDVDs"
         elif info == 'newdvdreleases':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
+            from RottenTomatoes import *
             data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
@@ -282,8 +289,7 @@ def StartInfoActions(infos, params):
                 Notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = GetXBMCArtists()
-            data = GetArtistNearEvents(
-                artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
+            data = GetArtistNearEvents(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
         # elif info == 'channels':
         #     channels = create_channel_list()
         elif info == 'favourites':
@@ -359,7 +365,7 @@ def StartInfoActions(infos, params):
                 try:
                     if os.path.isfile(file_path) and not the_file == "settings.xml":
                         os.unlink(file_path)
-                except Exception, e:
+                except Exception as e:
                     log(e)
             Notify("Cache deleted")
         elif info == 'syncwatchlist':

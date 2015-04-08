@@ -41,11 +41,11 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             search_string = "%s %s tv" % (self.season["general"]["TVShowTitle"], self.season["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
-            if not "DBID" in self.season["general"]: # need to add comparing for seasons
+            if "DBID" not in self.season["general"]:  # need to add comparing for seasons
                 # Notify("download Poster")
-                poster_thread = Get_ListItems_Thread(Get_File, self.season["general"]["Poster"])
+                poster_thread = Threaded_Function(Get_File, self.season["general"]["Poster"])
                 poster_thread.start()
-            if not "DBID" in self.season["general"]:
+            if "DBID" not in self.season["general"]:
                 poster_thread.join()
                 self.season["general"]['Poster'] = poster_thread.listitems
             filter_thread = Filter_Image_Thread(self.season["general"]["Poster"], 25)
@@ -76,7 +76,6 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         self.getControl(1250).addItems(create_listitems(self.season["images"], 0))
         self.getControl(1350).addItems(create_listitems(self.season["backdrops"], 0))
         self.getControl(2000).addItems(create_listitems(self.season["episodes"], 0))
-
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
@@ -118,7 +117,6 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header=addon.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
-
 
     def onFocus(self, controlID):
         pass

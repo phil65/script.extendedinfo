@@ -56,7 +56,6 @@ def GetTraktCalendarShows(Type):
 
 
 def HandleTraktMovieResult(results):
-    count = 1
     movies = []
     for movie in results:
         try:
@@ -87,14 +86,10 @@ def HandleTraktMovieResult(results):
                  'Art(fanart)': movie["movie"]["images"]["fanart"]["full"],
                  'Fanart': movie["movie"]["images"]["fanart"]["full"]}
         movies.append(movie)
-        count += 1
-        if count > 20:
-            break
     return movies
 
 
 def HandleTraktTVShowResult(results):
-    count = 1
     shows = []
     for tvshow in results:
         try:
@@ -138,9 +133,6 @@ def HandleTraktTVShowResult(results):
                 'Fanart': fanart,
                 'Thumb': tvshow['show']["images"]["fanart"]["thumb"]}
         shows.append(show)
-        count += 1
-        if count > 20:
-            break
     return shows
 
 
@@ -149,6 +141,8 @@ def GetTrendingShows():
     results = Get_JSON_response(base_url + url, headers=headers)
     if results is not None:
         return HandleTraktTVShowResult(results)
+    else:
+        return []
 
 
 def GetTVShowInfo(imdb_id):
@@ -156,6 +150,8 @@ def GetTVShowInfo(imdb_id):
     results = Get_JSON_response(base_url + url, headers=headers)
     if results is not None:
         return HandleTraktTVShowResult([results])
+    else:
+        return []
 
 
 def GetTrendingMovies():
@@ -163,6 +159,8 @@ def GetTrendingMovies():
     results = Get_JSON_response(base_url + url, headers=headers)
     if results is not None:
         return HandleTraktMovieResult(results)
+    else:
+        return []
 
 
 def GetSimilarTrakt(mediatype, imdb_id):

@@ -44,7 +44,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "DBID" not in self.episode["general"]:  # need to add comparing for episodes
-                poster_thread = Get_ListItems_Thread(Get_File, self.episode["general"]["Poster"])
+                poster_thread = Threaded_Function(Get_File, self.episode["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.episode["general"]:
                 poster_thread.join()

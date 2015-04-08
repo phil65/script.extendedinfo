@@ -588,8 +588,7 @@ def GetMovieDBData(url="", cache_days=14, folder=False):
     if not base_url:
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    results = Get_JSON_response(url, cache_days, folder)
-    return results
+    return Get_JSON_response(url, cache_days, folder)
 
 
 def GetMovieDBConfig():
@@ -782,10 +781,10 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
         account_states = response["account_states"]
     else:
         account_states = None
-    similar_thread = Get_ListItems_Thread(HandleTMDBMovieResult, response["similar"]["results"])
-    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
-    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
-    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
+    similar_thread = Threaded_Function(HandleTMDBMovieResult, response["similar"]["results"])
+    actor_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["crew"])
+    poster_thread = Threaded_Function(HandleTMDBPeopleImagesResult, response["images"]["posters"])
     threads = [similar_thread, actor_thread, crew_thread, poster_thread]
     for thread in threads:
         thread.start()
@@ -820,10 +819,10 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
                               (str(tvshow_id), addon.getSetting("LanguageID"), addon.getSetting("LanguageID"), session_string), cache_time)
     # prettyprint(response)
     videos = []
-    similar_thread = Get_ListItems_Thread(HandleTMDBTVShowResult, response["similar"]["results"])
-    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
-    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
-    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["posters"])
+    similar_thread = Threaded_Function(HandleTMDBTVShowResult, response["similar"]["results"])
+    actor_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["crew"])
+    poster_thread = Threaded_Function(HandleTMDBPeopleImagesResult, response["images"]["posters"])
     threads = [similar_thread, actor_thread, crew_thread, poster_thread]
     for thread in threads:
         thread.start()
@@ -912,9 +911,9 @@ def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
     # prettyprint(response)
     if "videos" in response:
         videos = HandleTMDBVideoResult(response["videos"]["results"])
-    actor_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["cast"])
-    crew_thread = Get_ListItems_Thread(HandleTMDBPeopleResult, response["credits"]["crew"])
-    still_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["stills"])
+    actor_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["cast"])
+    crew_thread = Threaded_Function(HandleTMDBPeopleResult, response["credits"]["crew"])
+    still_thread = Threaded_Function(HandleTMDBPeopleImagesResult, response["images"]["stills"])
     threads = [actor_thread, crew_thread, still_thread]
     for thread in threads:
         thread.start()
@@ -937,11 +936,11 @@ def GetExtendedEpisodeInfo(tvshow_id, season, episode, cache_time=7):
 
 def GetExtendedActorInfo(actorid):
     response = GetMovieDBData("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
-    movie_roles = Get_ListItems_Thread(HandleTMDBMovieResult, response["movie_credits"]["cast"])
-    tvshow_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["cast"])
-    movie_crew_roles = Get_ListItems_Thread(HandleTMDBMovieResult, response["movie_credits"]["crew"])
-    tvshow_crew_roles = Get_ListItems_Thread(HandleTMDBTVShowResult, response["tv_credits"]["crew"])
-    poster_thread = Get_ListItems_Thread(HandleTMDBPeopleImagesResult, response["images"]["profiles"])
+    movie_roles = Threaded_Function(HandleTMDBMovieResult, response["movie_credits"]["cast"])
+    tvshow_roles = Threaded_Function(HandleTMDBTVShowResult, response["tv_credits"]["cast"])
+    movie_crew_roles = Threaded_Function(HandleTMDBMovieResult, response["movie_credits"]["crew"])
+    tvshow_crew_roles = Threaded_Function(HandleTMDBTVShowResult, response["tv_credits"]["crew"])
+    poster_thread = Threaded_Function(HandleTMDBPeopleImagesResult, response["images"]["profiles"])
     threads = [movie_roles, tvshow_roles, movie_crew_roles, tvshow_crew_roles, poster_thread]
     for thread in threads:
         thread.start()
@@ -1109,18 +1108,12 @@ def search_media(media_name=None, year='', media_type="movie"):
             else:
                 for item in response['results']:
                     if item['id']:
-                        tmdb_id = item['id']
-                        break
+                        return item['id']
         except Exception as e:
             log(e)
-        if tmdb_id == '':
-            log('TMDB API search found no ID for ' + media_name)
-        else:
-            log('TMDB API search found ID: %s' % tmdb_id)
-    return tmdb_id
 
 
-class Get_ListItems_Thread(threading.Thread):
+class Threaded_Function(threading.Thread):
 
     def __init__(self, function=None, param=None):
         threading.Thread.__init__(self)
