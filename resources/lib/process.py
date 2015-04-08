@@ -1,5 +1,4 @@
 from LastFM import *
-from MiscScraper import *
 from TheAudioDB import *
 from TheMovieDB import *
 from Utils import *
@@ -24,12 +23,16 @@ def StartInfoActions(infos, params):
         data = None
         #  Images
         if info == 'xkcd':
+            from MiscScraper import GetXKCDInfo
             data = GetXKCDInfo(), "XKCD"
         elif info == 'cyanide':
+            from MiscScraper import GetCandHInfo
             data = GetCandHInfo(), "CyanideHappiness"
         elif info == 'dailybabes':
+            from MiscScraper import GetDailyBabes
             data = GetDailyBabes(), "DailyBabes"
         elif info == 'dailybabe':
+            from MiscScraper import GetDailyBabes
             data = GetDailyBabes(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
@@ -70,32 +73,32 @@ def StartInfoActions(infos, params):
         elif info == 'randomdbmovies':
             data = get_db_movies('"sort": {"method": "random"}', params.get("limit", 10)), "RandomMovies"
         elif info == 'inprogressdbmovies':
-            data = get_db_movies('"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}', params.get(
-                "limit", 10)), "RecommendedMovies"
+            method = '"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}'
+            data = get_db_movies(method, params.get("limit", 10)), "RecommendedMovies"
     #  RottenTomatoesMovies
         elif info == 'intheaters':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("movies/box_office"), "BoxOffice"
         elif info == 'opening':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("movies/opening"), "Opening"
         elif info == 'comingsoon':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("movies/upcoming"), "ComingSoonMovies"
         elif info == 'toprentals':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("dvds/top_rentals"), "TopRentals"
         elif info == 'currentdvdreleases':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("dvds/current_releases"), "CurrentDVDs"
         elif info == 'newdvdreleases':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
-            from RottenTomatoes import *
+            from RottenTomatoes import GetRottenTomatoesMovies
             data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
@@ -289,6 +292,7 @@ def StartInfoActions(infos, params):
                 Notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = GetXBMCArtists()
+            from MiscScraper import GetArtistNearEvents
             data = GetArtistNearEvents(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
         # elif info == 'channels':
         #     channels = create_channel_list()
