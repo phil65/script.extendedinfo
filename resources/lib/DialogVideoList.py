@@ -5,6 +5,7 @@ import DialogVideoInfo
 import DialogTVShowInfo
 import DialogActorInfo
 from TheMovieDB import *
+homewindow = xbmcgui.Window(10000)
 
 include_adult = str(addon.getSetting("include_adults")).lower()
 sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
@@ -14,15 +15,16 @@ sorts = {"movie": {addon.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(20376): "original_title",
                    addon.getLocalizedString(32111): "vote_average",
                    addon.getLocalizedString(32111): "vote_count"},
-            "tv": {addon.getLocalizedString(32110): "popularity",
-                   xbmc.getLocalizedString(20416): "first_air_date",
-                   addon.getLocalizedString(32111): "vote_average",
-                   addon.getLocalizedString(32111): "vote_count"},
-     "favorites": {addon.getLocalizedString(32157): "created_at"},
-     "list": {addon.getLocalizedString(32157): "created_at"},
-     "rating": {addon.getLocalizedString(32157): "created_at"}}
+         "tv": {addon.getLocalizedString(32110): "popularity",
+                xbmc.getLocalizedString(20416): "first_air_date",
+                addon.getLocalizedString(32111): "vote_average",
+                addon.getLocalizedString(32111): "vote_count"},
+         "favorites": {addon.getLocalizedString(32157): "created_at"},
+         "list": {addon.getLocalizedString(32157): "created_at"},
+         "rating": {addon.getLocalizedString(32157): "created_at"}}
 translations = {"movie": xbmc.getLocalizedString(20338),
                 "tv": xbmc.getLocalizedString(20364)}
+
 
 class DialogVideoList(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
@@ -206,7 +208,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 self.page = 1
                 self.update_content()
                 self.update_ui()
-
 
         elif controlID == 5004:
             if self.order == "asc":
@@ -470,7 +471,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
                 cert_list.append(label)
             index = xbmcgui.Dialog().select(addon.getLocalizedString(32151), cert_list)
             if index > -1:
-            # return "with_genres=" + str(id_list[index])
+                # return "with_genres=" + str(id_list[index])
                 cert = cert_list[index].split("  -  ")[0]
                 self.add_filter("certification_country", country, addon.getLocalizedString(32153), country)
                 self.add_filter("certification", cert, addon.getLocalizedString(32127), cert)
@@ -516,7 +517,6 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             self.window.getControl(5008).setVisible(True)
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(True)
-
 
     def fetch_data(self, force=False):
         sortby = self.sort + "." + self.order
@@ -565,6 +565,3 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"], response["total_results"]
         else:
             return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"], response["total_results"]
-
-
-

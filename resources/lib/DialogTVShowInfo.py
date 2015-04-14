@@ -114,27 +114,28 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
+        control = self.getControl(controlID)
         if controlID in [1000, 750]:
-            actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
+            actor_id = control.getSelectedItem().getProperty("id")
+            credit_id = control.getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [150]:
-            tmdb_id = self.getControl(controlID).getSelectedItem().getProperty("id")
+            tmdb_id = control.getSelectedItem().getProperty("id")
             AddToWindowStack(self)
             self.close()
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=tmdb_id)
             dialog.doModal()
         elif controlID in [250]:
-            season = self.getControl(controlID).getSelectedItem().getProperty("Season")
+            season = control.getSelectedItem().getProperty("Season")
             AddToWindowStack(self)
             self.close()
             dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, id=self.tmdb_id, season=season, tvshow=self.tvshow["general"]["Title"])
             dialog.doModal()
         elif controlID in [350, 1150]:
-            listitem = self.getControl(controlID).getSelectedItem()
+            listitem = control.getSelectedItem()
             AddToWindowStack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
@@ -142,17 +143,17 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            listitems = GetCompanyInfo(control.getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.OpenVideoList(listitems=listitems)
             # xbmc.executebuiltin("ActivateWindow(busydialog)")
-            # filters = {"with_networks": self.getControl(controlID).getSelectedItem().getProperty("id")}
-            # listitems = GetCompanyInfo(self.getControl(controlID).getSelectedItem().getProperty("id"))
+            # filters = {"with_networks": control.getSelectedItem().getProperty("id")}
+            # listitems = GetCompanyInfo(control.getSelectedItem().getProperty("id"))
             # xbmc.executebuiltin("Dialog.Close(busydialog)")
             # self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID == 950:
-            keyword_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            keyword_name = self.getControl(controlID).getSelectedItem().getLabel()
+            keyword_id = control.getSelectedItem().getProperty("id")
+            keyword_name = control.getSelectedItem().getLabel()
             filters = [{"id": keyword_id,
                         "type": "with_keywords",
                         "typelabel": addon.getLocalizedString(32114),
@@ -160,8 +161,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.OpenVideoList(filters=filters)
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            genreid = self.getControl(controlID).getSelectedItem().getProperty("id")
-            genrename = self.getControl(controlID).getSelectedItem().getLabel()
+            genreid = control.getSelectedItem().getProperty("id")
+            genrename = control.getSelectedItem().getLabel()
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             filters = [{"id": genreid,
                         "type": "with_genres",
@@ -169,13 +170,13 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
                         "label": genrename}]
             self.OpenVideoList(filters=filters, media_type="tv")
         elif controlID in [1250, 1350]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("original")
+            image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
         elif controlID == 1450:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            company_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            company_name = self.getControl(controlID).getSelectedItem().getLabel()
+            company_id = control.getSelectedItem().getProperty("id")
+            company_name = control.getSelectedItem().getLabel()
             filters = [{"id": company_id,
                         "type": "with_networks",
                         "typelabel": addon.getLocalizedString(32152),
@@ -209,7 +210,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             w.doModal()
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
-        #     country = self.getControl(controlID).getSelectedItem().getProperty("iso_3166_1")
+        #     country = control.getSelectedItem().getProperty("iso_3166_1")
         #     certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
         #     cert_items = GetMoviesWithCertification(country, certification)
         #     AddToWindowStack(self)

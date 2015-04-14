@@ -33,7 +33,6 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "DBID" not in self.season["general"]:  # need to add comparing for seasons
-                # Notify("download Poster")
                 poster_thread = Threaded_Function(Get_File, self.season["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.season["general"]:
@@ -76,17 +75,18 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
+        control = self.getControl(controlID)
         homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
-            actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
+            actor_id = control.getSelectedItem().getProperty("id")
+            credit_id = control.getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [2000]:
-            episode = self.getControl(controlID).getSelectedItem().getProperty("episode")
-            season = self.getControl(controlID).getSelectedItem().getProperty("season")
+            episode = control.getSelectedItem().getProperty("episode")
+            season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
                 response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), addon.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
@@ -95,14 +95,14 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, show_id=self.tmdb_id, season=season, episode=episode)
             dialog.doModal()
         elif controlID in [350, 1150]:
-            listitem = self.getControl(controlID).getSelectedItem()
+            listitem = control.getSelectedItem()
             AddToWindowStack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
             PopWindowStack()
         elif controlID in [1250, 1350]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("original")
+            image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
             dialog.doModal()
         elif controlID == 132:
