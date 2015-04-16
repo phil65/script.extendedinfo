@@ -103,18 +103,11 @@ def Get_Colors(img):
         minBrightness = 130
         if Avg < minBrightness:
             Diff = minBrightness - Avg
-            if rAvg <= (255 - Diff):
-                rAvg += Diff
-            else:
-                rAvg = 255
-            if gAvg <= (255 - Diff):
-                gAvg += Diff
-            else:
-                gAvg = 255
-            if bAvg <= (255 - Diff):
-                bAvg += Diff
-            else:
-                bAvg = 255
+            for color in [rAvg, gAvg, bAvg]:
+                if color <= (255 - Diff):
+                    color += Diff
+                else:
+                    color = 255
         imagecolor = "FF%s%s%s" % (format(rAvg, '02x'), format(gAvg, '02x'), format(bAvg, '02x'))
     else:
         imagecolor = "FFF0F0F0"
