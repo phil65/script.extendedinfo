@@ -44,7 +44,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.episode["general"]['ImageFilter'], self.episode["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify(addon.getLocalizedString(32143))
+            Notify(ADDON.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -53,7 +53,7 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.close()
             return
-        homewindow.setProperty("movie.ImageColor", self.episode["general"]["ImageColor"])
+        HOME.setProperty("movie.ImageColor", self.episode["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(windowid)
         self.window.setProperty("type", "episode")
@@ -72,13 +72,13 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, controlID):
-        homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
+        HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
             actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
@@ -89,10 +89,10 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header=addon.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
         elif controlID == 6001:
             rating = get_rating_from_user()
@@ -130,12 +130,12 @@ class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
         list_items = GetRatedMedia("tv/episodes")
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=list_items, color=self.episode["general"]['ImageColor'])
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.episode["general"]['ImageColor'])
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
     def OpenVideoList(self, listitems):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % addon_name, addon_path, listitems=listitems)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems)
         dialog.doModal()

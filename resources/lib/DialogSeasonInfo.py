@@ -42,7 +42,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             filter_thread.join()
             self.season["general"]['ImageFilter'], self.season["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify(addon.getLocalizedString(32143))
+            Notify(ADDON.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -50,7 +50,7 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         if not self.season:
             self.close()
             return
-        homewindow.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
+        HOME.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
         windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(windowid)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
@@ -73,23 +73,23 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         control = self.getControl(controlID)
-        homewindow.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
+        HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
             AddToWindowStack(self)
             self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % addon_name, addon_path, id=actor_id, credit_id=credit_id)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [2000]:
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
-                response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), addon.getSetting("LanguageID")), 30)
+                response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
             AddToWindowStack(self)
             self.close()
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % addon_name, addon_path, show_id=self.tmdb_id, season=season, episode=episode)
+            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=self.tmdb_id, season=season, episode=episode)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = control.getSelectedItem()
@@ -100,10 +100,10 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
             PopWindowStack()
         elif controlID in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % addon_name, addon_path, image=image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', addon_path, header=addon.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
 
     def onFocus(self, controlID):

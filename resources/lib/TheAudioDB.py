@@ -91,7 +91,7 @@ def GetExtendedAudioDBInfo(results):
     artists = []
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
-            localbio = 'strBiography' + addon.getSetting("LanguageID").upper()
+            localbio = 'strBiography' + ADDON.getSetting("LanguageID").upper()
             if localbio in artist and artist[localbio]:
                 Description = fetch(artist, localbio)
             elif 'strBiographyEN' in artist and artist['strBiographyEN']:

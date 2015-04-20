@@ -13,15 +13,13 @@ import re
 import threading
 import datetime
 
-addon = xbmcaddon.Addon()
-addon_id = addon.getAddonInfo('id')
-addon_icon = addon.getAddonInfo('icon')
-addon_strings = addon.getLocalizedString
-addon_name = addon.getAddonInfo('name')
-addon_path = addon.getAddonInfo('path').decode("utf-8")
-Addon_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % addon_id).decode("utf-8"))
-Skin_Data_Path = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % xbmc.getSkinDir()).decode("utf-8"))
-homewindow = xbmcgui.Window(10000)
+ADDON = xbmcaddon.Addon()
+ADDON_ID = ADDON.getAddonInfo('id')
+ADDON_ICON = ADDON.getAddonInfo('icon')
+ADDON_NAME = ADDON.getAddonInfo('name')
+ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
+ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
+HOME = xbmcgui.Window(10000)
 id_list = []
 title_list = []
 originaltitle_list = []
@@ -115,7 +113,7 @@ def calculate_age(born):
             elif base_month == 0 and base_day < 0:
                 base_age -= 1
             elif base_month == 0 and base_day == 0:
-                Notify("%s (%i)" % (addon.getLocalizedString(32158), base_age))
+                Notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
 
 
@@ -215,18 +213,18 @@ def GetPlaylistStats(path):
                         played += 1
                     if item["resume"]["position"] > 0:
                         inprogress += 1
-            homewindow.setProperty('PlaylistWatched', str(played))
-            homewindow.setProperty('PlaylistUnWatched', str(numitems - played))
-            homewindow.setProperty('PlaylistInProgress', str(inprogress))
-            homewindow.setProperty('PlaylistCount', str(numitems))
+            HOME.setProperty('PlaylistWatched', str(played))
+            HOME.setProperty('PlaylistUnWatched', str(numitems - played))
+            HOME.setProperty('PlaylistInProgress', str(inprogress))
+            HOME.setProperty('PlaylistCount', str(numitems))
 
 
 def GetSortLetters(path, focusedletter):
     listitems = []
     letterlist = []
-    homewindow.clearProperty("LetterList")
-    if addon.getSetting("FolderPath") == path:
-        letterlist = addon.getSetting("LetterList")
+    HOME.clearProperty("LetterList")
+    if ADDON.getSetting("FolderPath") == path:
+        letterlist = ADDON.getSetting("LetterList")
         letterlist = letterlist.split()
     else:
         if path:
@@ -238,9 +236,9 @@ def GetSortLetters(path, focusedletter):
                         sortletter = cleaned_label[0]
                         if sortletter not in letterlist:
                             letterlist.append(sortletter)
-            addon.setSetting("LetterList", " ".join(letterlist))
-            addon.setSetting("FolderPath", path)
-    homewindow.setProperty("LetterList", "".join(letterlist))
+            ADDON.setSetting("LetterList", " ".join(letterlist))
+            ADDON.setSetting("FolderPath", path)
+    HOME.setProperty("LetterList", "".join(letterlist))
     if letterlist and focusedletter:
         startord = ord("A")
         for i in range(0, 26):
@@ -257,12 +255,12 @@ def GetSortLetters(path, focusedletter):
 
 
 def GetXBMCArtists():
-    filename = Addon_Data_Path + "/XBMCartists.txt"
+    filename = ADDON_DATA_PATH + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
     else:
         json_response = get_Kodi_JSON('"method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}')
-        save_to_file(json_response, "XBMCartists", Addon_Data_Path)
+        save_to_file(json_response, "XBMCartists", ADDON_DATA_PATH)
         return json_response
 
 
@@ -373,7 +371,7 @@ def millify(n):
 
 def HandleDBMovieResult(movie):
     trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
-    if addon.getSetting("infodialog_onclick") != "false":
+    if ADDON.getSetting("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,dbid=%s)' % str(movie['movieid'])
     else:
         path = trailer
@@ -521,10 +519,10 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
                     imdb_list.append(item["imdbnumber"])
                     originaltitle_list.append(item["originaltitle"].lower())
                     title_list.append(item["label"].lower())
-            homewindow.setProperty("id_list.JSON", simplejson.dumps(id_list))
-            homewindow.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
-            homewindow.setProperty("title_list.JSON", simplejson.dumps(title_list))
-            homewindow.setProperty("imdb_list.JSON", simplejson.dumps(imdb_list))
+            HOME.setProperty("id_list.JSON", simplejson.dumps(id_list))
+            HOME.setProperty("originaltitle_list.JSON", simplejson.dumps(originaltitle_list))
+            HOME.setProperty("title_list.JSON", simplejson.dumps(title_list))
+            HOME.setProperty("imdb_list.JSON", simplejson.dumps(imdb_list))
         log("create_light_movielist: " + str(now - time.time()))
     now = time.time()
     local_items = []
@@ -654,12 +652,12 @@ def GetStringFromUrl(url=None, headers=False):
 def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
-    path = xbmc.translatePath(os.path.join(Addon_Data_Path, hashed_url + ".txt"))
+    path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, hashed_url + ".txt"))
     cache_seconds = int(cache_days * 86400.0)
-    prop_time = homewindow.getProperty(hashed_url + "_timestamp")
+    prop_time = HOME.getProperty(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
         try:
-            prop = simplejson.loads(homewindow.getProperty(hashed_url))
+            prop = simplejson.loads(HOME.getProperty(hashed_url))
             log("prop load for %s. time: %f" % (url, time.time() - now))
             return prop
         except:
@@ -672,7 +670,7 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         try:
             results = simplejson.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))
-            save_to_file(results, hashed_url, Addon_Data_Path)
+            save_to_file(results, hashed_url, ADDON_DATA_PATH)
         except:
             log("Exception: Could not get new JSON data. Tryin to fallback to cache")
             log(response)
@@ -680,8 +678,8 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
                 results = read_from_file(path)
             else:
                 results = []
-    homewindow.setProperty(hashed_url + "_timestamp", str(now))
-    homewindow.setProperty(hashed_url, simplejson.dumps(results))
+    HOME.setProperty(hashed_url + "_timestamp", str(now))
+    HOME.setProperty(hashed_url, simplejson.dumps(results))
     return results
 
 
@@ -805,7 +803,7 @@ def GetWeatherImages():
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8")
-    message = u'%s: %s' % (addon_id, txt)
+    message = u'%s: %s' % (ADDON_ID, txt)
     xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
 
 
@@ -877,7 +875,7 @@ def ExtractYoutubeID(string):
     return ""
 
 
-def Notify(header="", message="", icon=addon_icon, time=5000, sound=True):
+def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
@@ -948,9 +946,9 @@ def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=Non
         if limit < len(data):
             data = data[:limit]
     if handle:
-        homewindow.clearProperty(name)
+        HOME.clearProperty(name)
         if data is not None:
-            homewindow.setProperty(name + ".Count", str(len(data)))
+            HOME.setProperty(name + ".Count", str(len(data)))
             items = create_listitems(data)
             xbmcplugin.setContent(handle, 'files')
             itemlist = list()
@@ -970,12 +968,12 @@ def SetWindowProperties(name, data, prefix="", debug=False):
                 log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
             for (key, value) in result.iteritems():
                 value = unicode(value)
-                homewindow.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
+                HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
                 if debug:
                     log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
-        homewindow.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+        HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
     else:
-        homewindow.setProperty('%s%s.Count' % (prefix, name), '0')
+        HOME.setProperty('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
 
 

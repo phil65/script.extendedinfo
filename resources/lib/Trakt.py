@@ -62,7 +62,7 @@ def HandleTraktMovieResult(results):
             premiered = str(datetime.datetime.fromtimestamp(int(movie["movie"]["released"])))[:10]
         except:
             premiered = ""
-        if addon.getSetting("infodialog_onclick") != "false":
+        if ADDON.getSetting("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % str(fetch(movie["movie"]["ids"], 'tmdb'))
         else:
             path = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))
