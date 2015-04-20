@@ -236,7 +236,7 @@ def GetSortLetters(path, focusedletter):
                     cleaned_label = movie["label"].replace("The ", "")
                     if cleaned_label:
                         sortletter = cleaned_label[0]
-                        if not sortletter in letterlist:
+                        if sortletter not in letterlist:
                             letterlist.append(sortletter)
             addon.setSetting("LetterList", " ".join(letterlist))
             addon.setSetting("FolderPath", path)
