@@ -29,6 +29,8 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
                 if ret == -1:
                     return None
                 name = names[ret]
+            else:
+                name = names[0]
             self.id = GetPersonID(name)
             if self.id:
                 self.id = self.id["id"]
