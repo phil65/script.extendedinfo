@@ -6,10 +6,7 @@ from YouTube import *
 from omdb import *
 import DialogActorInfo
 import DialogVideoList
-try:
-    from ImageTools import *
-except:
-    log("Exception when importing ImageTools")
+from ImageTools import *
 import threading
 selectdialog = xbmcgui.Window(12000)
 busydialog = xbmcgui.Window(10138)

@@ -1,10 +1,7 @@
 import xbmc
 import xbmcgui
 from Utils import *
-try:
-    from ImageTools import *
-except:
-    log("Exception when importing ImageTools")
+from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
 import DialogVideoInfo

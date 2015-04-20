@@ -5,10 +5,7 @@ from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogVideoList
-try:
-    from ImageTools import *
-except:
-    log("Exception when importing ImageTools")
+from ImageTools import *
 
 
 class DialogEpisodeInfo(xbmcgui.WindowXMLDialog):
