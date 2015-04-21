@@ -142,7 +142,7 @@ def GetExtendedAudioDBInfo(results):
             artists.append(artist)
     else:
         log("Error when handling GetExtendedAudioDBInfo results")
-    if len(artists) > 0:
+    if artists:
         return artists[0]
     else:
         return {}
