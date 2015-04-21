@@ -7,8 +7,8 @@ from Utils import *
 import datetime
 import simplejson
 
-tvrage_key = 'VBp9BuIr5iOiBeWCFRMG'
-bandsintown_apikey = 'xbmc_open_source_media_center'
+# TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
+BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
 
 
 def GetXKCDInfo():
@@ -144,7 +144,7 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
             ArtistStr = ArtistStr + 'artists[]=' + artist
             count += 1
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
-    url = '&%sapp_id=%s' % (ArtistStr, bandsintown_apikey)
+    url = '&%sapp_id=%s' % (ArtistStr, BANDSINTOWN_KEY)
     results = Get_JSON_response(base_url + url)
     return HandleBandsInTownResult(results)
     if False:

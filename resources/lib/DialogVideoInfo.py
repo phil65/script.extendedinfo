@@ -8,8 +8,6 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 import threading
-selectdialog = xbmcgui.Window(12000)
-busydialog = xbmcgui.Window(10138)
 
 
 class DialogVideoInfo(xbmcgui.WindowXMLDialog):

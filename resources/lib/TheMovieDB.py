@@ -4,19 +4,19 @@ import threading
 from urllib2 import Request, urlopen
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
-base_url = ""
-poster_size = ""
-fanart_size = ""
-HEADERS = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json',
-    'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'
-}
 POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
 LOGO_SIZES = ["w45", "w92", "w154", "w185", "w300", "w500", "original"]
 BACKDROP_SIZES = ["w300", "w780", "w1280", "original"]
 PROFILE_SIZES = ["w45", "w185", "h632", "original"]
 STILL_SIZES = ["w92", "w185", "w300", "original"]
+HEADERS = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json',
+    'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'
+}
+base_url = ""
+poster_size = ""
+fanart_size = ""
 include_adult = str(ADDON.getSetting("include_adults")).lower()
 if ADDON.getSetting("use_https"):
     url_base = "https://api.themoviedb.org/3/"

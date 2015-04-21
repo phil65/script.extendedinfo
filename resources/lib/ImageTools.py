@@ -3,10 +3,7 @@ import xbmc
 import xbmcvfs
 import os
 from Utils import *
-try:
-    from PIL import Image, ImageFilter
-except:
-    log("Exception when importing PIL")
+from PIL import Image, ImageFilter
 
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 
