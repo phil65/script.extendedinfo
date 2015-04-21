@@ -3,20 +3,20 @@ from Utils import *
 import threading
 from urllib2 import Request, urlopen
 
-moviedb_key = '34142515d9d23817496eeb4ff1d223d0'
+TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
 base_url = ""
 poster_size = ""
 fanart_size = ""
-headers = {
+HEADERS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
     'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'
 }
-poster_sizes = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
-logo_sizes = ["w45", "w92", "w154", "w185", "w300", "w500", "original"]
-backdrop_sizes = ["w300", "w780", "w1280", "original"]
-profile_sizes = ["w45", "w185", "h632", "original"]
-still_sizes = ["w92", "w185", "w300", "original"]
+POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
+LOGO_SIZES = ["w45", "w92", "w154", "w185", "w300", "w500", "original"]
+BACKDROP_SIZES = ["w300", "w780", "w1280", "original"]
+PROFILE_SIZES = ["w45", "w185", "h632", "original"]
+STILL_SIZES = ["w92", "w185", "w300", "original"]
 include_adult = str(ADDON.getSetting("include_adults")).lower()
 if ADDON.getSetting("use_https"):
     url_base = "https://api.themoviedb.org/3/"
@@ -53,11 +53,11 @@ def send_rating_for_media_item(media_type, media_id, rating):
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
-        url = url_base + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), moviedb_key, session_id_string)
+        url = url_base + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id_string)
     else:
-        url = url_base + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), moviedb_key, session_id_string)
+        url = url_base + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id_string)
     log(url)
-    request = Request(url, data=values, headers=headers)
+    request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
@@ -68,9 +68,9 @@ def ChangeFavStatus(media_id=None, media_type="movie", status="true"):
     session_id = get_session_id()
     account_id = get_account_info()
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
-    url = url_base + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), moviedb_key)
+    url = url_base + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), TMDB_KEY)
     log(url)
-    request = Request(url, data=values, headers=headers)
+    request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
@@ -79,9 +79,9 @@ def ChangeFavStatus(media_id=None, media_type="movie", status="true"):
 
 def CreateList(listname):
     session_id = get_session_id()
-    url = url_base + "list?api_key=%s&session_id=%s" % (moviedb_key, session_id)
+    url = url_base + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % listname, 'description': 'List created by ExtendedInfo Script for Kodi.'}
-    request = Request(url, data=simplejson.dumps(values), headers=headers)
+    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
@@ -91,11 +91,11 @@ def CreateList(listname):
 
 def RemoveList(list_id):
     session_id = get_session_id()
-    url = url_base + "list/%s?api_key=%s&session_id=%s" % (list_id, moviedb_key, session_id)
+    url = url_base + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     log("Remove List: " + url)
     # prettyprint(results)
     values = {'media_id': list_id}
-    request = Request(url, data=simplejson.dumps(values), headers=headers)
+    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     request.get_method = lambda: 'DELETE'
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -109,10 +109,10 @@ def ChangeListStatus(list_id, movie_id, status):
     else:
         method = "remove_item"
     session_id = get_session_id()
-    url = url_base + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, moviedb_key, session_id)
+    url = url_base + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
     log(url)
     values = {'media_id': movie_id}
-    request = Request(url, data=simplejson.dumps(values), headers=headers)
+    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     try:
         response = urlopen(request).read()
     except urllib2.HTTPError as err:
@@ -570,8 +570,8 @@ def SearchForSet(setname):
 
 def GetMovieDBData(url="", cache_days=14, folder=False):
     # session_id = get_session_id()
-    # url = url_base + "%sapi_key=%s&session_id=%s" % (url, moviedb_key, session_id)
-    url = url_base + "%sapi_key=%s" % (url, moviedb_key)
+    # url = url_base + "%sapi_key=%s&session_id=%s" % (url, TMDB_KEY, session_id)
+    url = url_base + "%sapi_key=%s" % (url, TMDB_KEY)
     global base_url
     global poster_size
     global fanart_size
@@ -586,7 +586,7 @@ def GetMovieDBConfig():
     response = GetMovieDBData("configuration?", 60)
     # prettyprint(response)
     if response:
-        return (response["images"]["base_url"], response["images"]["poster_sizes"][-2], response["images"]["backdrop_sizes"][-2])
+        return (response["images"]["base_url"], response["images"]["POSTER_SIZES"][-2], response["images"]["BACKDROP_SIZES"][-2])
     else:
         return ("", "", "")
 

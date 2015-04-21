@@ -1,7 +1,7 @@
 from Utils import *
 
-youtube_key = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
-youtube_key2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
+YT_KEY = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
+YT_KEY_2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 
 
 def GetYoutubeVideos(jsonurl):
@@ -67,7 +67,7 @@ def GetYoutubeSearchVideosV3(search_string="", hd="", orderby="relevance", limit
         hd_string = ""
     search_string = url_quote(search_string.replace('"', ''))
     base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=video'
-    url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, youtube_key2, hd_string, int(limit))
+    url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, YT_KEY_2, hd_string, int(limit))
     results = Get_JSON_response(base_url + url, 0.5)
     if results:
         return HandleYouTubeVideoResults(results["items"])
@@ -83,7 +83,7 @@ def GetYoutubeSearchVideosV2(search_string="", hd="", orderby="relevance", time=
         hd_string = ""
     search_string = url_quote(search_string.replace('"', ''))
     base_url = 'http://gdata.youtube.com/feeds/api/videos?v=2&alt=json'
-    url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, youtube_key, hd_string)
+    url = '&q=%s&time=%s&orderby=%s&key=%s%s' % (search_string, time, orderby, YT_KEY, hd_string)
     results = Get_JSON_response(base_url + url, 0.5)
     videos = []
     if results:
@@ -101,7 +101,7 @@ def GetYoutubeSearchVideosV2(search_string="", hd="", orderby="relevance", time=
 
 def GetYoutubePlaylistVideos(playlistid=""):
     base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=50'
-    url = '&playlistId=%s&key=%s' % (playlistid, youtube_key2)
+    url = '&playlistId=%s&key=%s' % (playlistid, YT_KEY_2)
     results = Get_JSON_response(base_url + url, 0.5)
   #  prettyprint(results)
     if results:

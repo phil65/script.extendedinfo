@@ -6,9 +6,7 @@ import DialogTVShowInfo
 import DialogActorInfo
 from TheMovieDB import *
 HOME = xbmcgui.Window(10000)
-
-include_adult = str(ADDON.getSetting("include_adults")).lower()
-sorts = {"movie": {ADDON.getLocalizedString(32110): "popularity",
+SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    ADDON.getLocalizedString(32108): "revenue",
                    # "Release Date": "primary_release_date",
@@ -22,8 +20,9 @@ sorts = {"movie": {ADDON.getLocalizedString(32110): "popularity",
          "favorites": {ADDON.getLocalizedString(32157): "created_at"},
          "list": {ADDON.getLocalizedString(32157): "created_at"},
          "rating": {ADDON.getLocalizedString(32157): "created_at"}}
-translations = {"movie": xbmc.getLocalizedString(20338),
+TRANSLATIONS = {"movie": xbmc.getLocalizedString(20338),
                 "tv": xbmc.getLocalizedString(20364)}
+include_adult = str(ADDON.getSetting("include_adults")).lower()
 
 
 class DialogVideoList(xbmcgui.WindowXMLDialog):
@@ -336,7 +335,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             sort_key = self.mode
         else:
             sort_key = self.type
-        for (key, value) in sorts[sort_key].iteritems():
+        for (key, value) in SORTS[sort_key].iteritems():
             listitems.append(key)
             sort_strings.append(value)
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
@@ -492,7 +491,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("TotalPages", str(self.totalpages))
         self.window.setProperty("TotalItems", str(self.totalitems))
         self.window.setProperty("CurrentPage", str(self.page))
-        self.window.setProperty("Type", translations[self.type])
+        self.window.setProperty("Type", TRANSLATIONS[self.type])
         self.window.setProperty("Filter_Label", self.filter_label)
         self.window.setProperty("Sort_Label", self.sort_label)
         if self.page == self.totalpages:
