@@ -498,15 +498,14 @@ def GetWeatherImages():
 
 def log(txt):
     if isinstance(txt, str):
-        txt = txt.decode("utf-8")
+        txt = txt.decode("utf-8", 'ignore')
     message = u'%s: %s' % (ADDON_ID, txt)
-    xbmc.log(msg=message.encode("utf-8"), level=xbmc.LOGDEBUG)
+    xbmc.log(msg=message.encode("utf-8", 'ignore'), level=xbmc.LOGDEBUG)
 
 
 def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
     dialog = xbmcgui.Dialog()
-    value = dialog.browse(
-        dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
+    value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
     return value
 
 
