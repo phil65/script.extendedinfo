@@ -14,7 +14,7 @@ BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
 def GetXKCDInfo():
     now = datetime.datetime.now()
     filename = "xkcd" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
+    path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
@@ -34,14 +34,14 @@ def GetXKCDInfo():
                 items.append(item)
             except:
                 log("Error when setting XKCD info")
-        save_to_file(items, filename, Addon_Data_Path)
+        save_to_file(items, filename, ADDON_DATA_PATH)
         return items
 
 
 def GetCandHInfo():
     now = datetime.datetime.now()
     filename = "cyanide" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
+    path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
@@ -68,7 +68,7 @@ def GetCandHInfo():
                                        'Title': datematches[0]}
                             items.append(newitem)
                             break
-        save_to_file(items, filename, Addon_Data_Path)
+        save_to_file(items, filename, ADDON_DATA_PATH)
         return items
 
 
@@ -78,7 +78,7 @@ def GetDailyBabes(single=False):
         filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     else:
         filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = xbmc.translatePath(Addon_Data_Path + "/" + filename + ".txt")
+    path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         results = read_from_file(path)
         return results
@@ -98,7 +98,7 @@ def GetDailyBabes(single=False):
                        'Path': "plugin://script.extendedinfo?info=setfocus",
                        'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
-        save_to_file(items, filename, Addon_Data_Path)
+        save_to_file(items, filename, ADDON_DATA_PATH)
         return items
 
 

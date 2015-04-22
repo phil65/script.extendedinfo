@@ -359,8 +359,8 @@ def StartInfoActions(infos, params):
             SetMusicBrainzIDsForAllArtists(True, False)
         elif info == 'deletecache':
             HOME.clearProperties()
-            for the_file in os.listdir(Addon_Data_Path):
-                file_path = os.path.join(Addon_Data_Path, the_file)
+            for the_file in os.listdir(ADDON_DATA_PATH):
+                file_path = os.path.join(ADDON_DATA_PATH, the_file)
                 try:
                     if os.path.isfile(file_path) and not the_file == "settings.xml":
                         os.unlink(file_path)
