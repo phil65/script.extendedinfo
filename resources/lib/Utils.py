@@ -117,7 +117,7 @@ def calculate_age(born, died=False):
             base_age -= 1
         elif diff_months == 0 and diff_days < 0:
             base_age -= 1
-        elif diff_months == 0 and diff_days == 0:
+        elif diff_months == 0 and diff_days == 0 and not died:
             Notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
 
