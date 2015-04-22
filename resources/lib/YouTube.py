@@ -103,11 +103,17 @@ def GetYoutubePlaylistVideos(playlistid=""):
     base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=50'
     url = '&playlistId=%s&key=%s' % (playlistid, YT_KEY_2)
     results = Get_JSON_response(base_url + url, 0.5)
-  #  prettyprint(results)
     if results:
         return HandleYouTubeVideoResults(results["items"])
     else:
         return []
+
+
+def GetUserPlaylists(username=""):
+    base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
+    url = '&forUsername=%s&key=%s' % (username, YT_KEY_2)
+    results = Get_JSON_response(base_url + url, 0.5)
+    return results["items"][0]["contentDetails"]["relatedPlaylists"]
 
 
 def GetYoutubeUserVideos(userid=""):

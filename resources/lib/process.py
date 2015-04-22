@@ -269,8 +269,10 @@ def StartInfoActions(infos, params):
             if params.get("id", False):
                 data = GetYoutubePlaylistVideos(params.get("id", "")), "YoutubePlaylist"
         elif info == 'youtubeusersearch':
-            if params.get("id", ""):
-                data = GetYoutubeUserVideos(params.get("id", "")), "YoutubeUserSearch"
+            user_name = params.get("id", "")
+            if user_name:
+                playlists = GetUserPlaylists(user_name)
+                data = GetYoutubePlaylistVideos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
             data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
