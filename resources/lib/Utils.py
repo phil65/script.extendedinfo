@@ -104,14 +104,15 @@ def calculate_age(born, died=False):
     if died:
         ref_day = died.split("-")
     elif born:
-        ref_day = datetime.date.today()
+        date = datetime.date.today()
+        ref_day = [date.year, date.month, date.day]
     else:
         return ""
     actor_born = born.split("-")
-    base_age = ref_day.year - int(actor_born[0])
+    base_age = int(ref_day[0]) - int(actor_born[0])
     if len(actor_born) > 1:
-        diff_months = ref_day.month - int(actor_born[1])
-        diff_days = ref_day.day - int(actor_born[2])
+        diff_months = int(ref_day[1]) - int(actor_born[1])
+        diff_days = int(ref_day[2]) - int(actor_born[2])
         if diff_months < 0:
             base_age -= 1
         elif diff_months == 0 and diff_days < 0:
