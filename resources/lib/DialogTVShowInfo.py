@@ -1,6 +1,7 @@
 import xbmc
 import xbmcgui
 from Utils import *
+from local_db import GetImdbIDFromDatabase
 from ImageTools import *
 from TheMovieDB import *
 from YouTube import *

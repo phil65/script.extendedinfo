@@ -1,5 +1,6 @@
 from YouTube import *
 from Utils import *
+from local_db import compare_with_library, GetImdbIDFromDatabase
 import threading
 from urllib2 import Request, urlopen
 
@@ -1089,13 +1090,10 @@ def GetDirectorMovies(person_id):
 def search_media(media_name=None, year='', media_type="movie"):
     log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (media_name, year))
     media_name_url = url_quote(media_name)
-    tmdb_id = ''
     if media_name_url:
         response = GetMovieDBData("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name_url, year, ADDON.getSetting("LanguageID"), include_adult), 1)
         try:
-            if response == "Empty":
-                tmdb_id = ''
-            else:
+            if not response == "Empty":
                 for item in response['results']:
                     if item['id']:
                         return item['id']

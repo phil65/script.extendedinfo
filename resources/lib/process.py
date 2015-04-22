@@ -2,6 +2,7 @@ from LastFM import *
 from TheAudioDB import *
 from TheMovieDB import *
 from Utils import *
+from local_db import *
 from YouTube import *
 from Trakt import *
 
