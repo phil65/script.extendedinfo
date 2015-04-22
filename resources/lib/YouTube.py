@@ -112,7 +112,7 @@ def GetYoutubePlaylistVideos(playlistid=""):
 def GetUserPlaylists(username=""):
     base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
     url = '&forUsername=%s&key=%s' % (username, YT_KEY_2)
-    results = Get_JSON_response(base_url + url, 0.5)
+    results = Get_JSON_response(base_url + url, 30)
     return results["items"][0]["contentDetails"]["relatedPlaylists"]
 
 
