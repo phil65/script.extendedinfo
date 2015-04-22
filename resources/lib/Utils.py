@@ -99,21 +99,25 @@ class SlideShow(xbmcgui.WindowXMLDialog):
             self.close()
 
 
-def calculate_age(born):
+def calculate_age(born, died=False):
     base_age = ""
-    if born and born is not None:
-        today = datetime.date.today()
-        actor_born = born.split("-")
-        base_age = today.year - int(actor_born[0])
-        if len(actor_born) > 1:
-            base_month = today.month - int(actor_born[1])
-            base_day = today.day - int(actor_born[2])
-            if base_month < 0:
-                base_age -= 1
-            elif base_month == 0 and base_day < 0:
-                base_age -= 1
-            elif base_month == 0 and base_day == 0:
-                Notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
+    if died:
+        ref_day = died.split("-")
+    elif born:
+        ref_day = datetime.date.today()
+    else:
+        return ""
+    actor_born = born.split("-")
+    base_age = ref_day.year - int(actor_born[0])
+    if len(actor_born) > 1:
+        diff_months = ref_day.month - int(actor_born[1])
+        diff_days = ref_day.day - int(actor_born[2])
+        if diff_months < 0:
+            base_age -= 1
+        elif diff_months == 0 and diff_days < 0:
+            base_age -= 1
+        elif diff_months == 0 and diff_days == 0:
+            Notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
 
 

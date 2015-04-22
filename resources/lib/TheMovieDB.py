@@ -431,7 +431,7 @@ def HandleTMDBPeopleResult(results):
                      'alsoknownas': alsoknownas,
                      'biography': cleanText(fetch(person, 'biography')),
                      'birthday': fetch(person, 'birthday'),
-                     'age': calculate_age(fetch(person, 'birthday')),
+                     'age': calculate_age(fetch(person, 'birthday'), fetch(person, 'deathday')),
                      'character': fetch(person, 'character'),
                      'department': fetch(person, 'department'),
                      'job': fetch(person, 'job'),
