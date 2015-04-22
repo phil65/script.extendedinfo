@@ -20,8 +20,6 @@ def HandleLastFMEventResult(results):
                     my_arts = ' / '.join(artists)
                 else:
                     my_arts = artists
-                lat = ""
-                lon = ""
                 try:
                     if event['venue']['location']['geo:point']['geo:long']:
                         lon = event['venue']['location']['geo:point']['geo:long']
@@ -68,7 +66,7 @@ def HandleLastFMEventResult(results):
         Notify("Error", results["message"])
     else:
         log("Error in HandleLastFMEventResult. JSON query follows:")
-    # prettyprint(results)
+        prettyprint(results)
     return events
 
 
@@ -103,7 +101,7 @@ def HandleLastFMShoutResult(results):
 
 def HandleLastFMTrackResult(results):
     if not results:
-        return []
+        return {}
     if "wiki" in results['track']:
         summary = cleanText(results['track']['wiki']['summary'])
     else:
@@ -115,9 +113,9 @@ def HandleLastFMTrackResult(results):
 
 
 def HandleLastFMArtistResult(results):
+    artists = []
     if not results:
         return []
-    artists = []
     for artist in results['artist']:
         try:
             if 'name' in artist:
@@ -222,7 +220,7 @@ def GetNearEvents(tag=False, festivalsonly=False, lat="", lon="", location="", d
     url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
         url += '&tag=%s' % (url_quote(tag))
-    if lat:
+    if lat and lon:
         url += '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
     if location:
         url += '&location=%s' % (url_quote(location))

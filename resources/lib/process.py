@@ -264,7 +264,7 @@ def StartInfoActions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
-                data = GetYoutubeSearchVideosV3(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
+                data = GetYoutubeSearchVideos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id", False):
                 data = GetYoutubePlaylistVideos(params.get("id", "")), "YoutubePlaylist"
