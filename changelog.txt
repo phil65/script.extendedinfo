@@ -5,6 +5,7 @@ v2.0.8
 - adjust Trakt to API v2
 - localization
 - skip dialog for writermovies / directormovies when called from skin
+- show age of death instead of actual age for dead persons
 - code cosmetics, small bugfixes
 
 v2.0.7
