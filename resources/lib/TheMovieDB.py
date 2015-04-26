@@ -520,14 +520,9 @@ def MultiSearch(String):
 
 def GetPersonID(person, skip_dialog=False):
     persons = person.split(" / ")
-    # if len(persons) > 1:
-    #     personlist = []
-    #     for item in persons:
-    #         personlist.append(item["name"])
-    #     selection = xbmcgui.Dialog().select("Select Actor", personlist)
-    # else:
     person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
+    xbmc.executebuiltin("Dialog.Close(busydialog)")
     if response and "results" in response:
         if len(response["results"]) > 1 and not skip_dialog:
             names = []
