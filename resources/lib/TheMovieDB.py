@@ -522,12 +522,12 @@ def GetPersonID(person, skip_dialog=False):
     persons = person.split(" / ")
     person = persons[0]
     response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
-    xbmc.executebuiltin("Dialog.Close(busydialog)")
     if response and "results" in response:
         if len(response["results"]) > 1 and not skip_dialog:
             names = []
             for item in response["results"]:
                 names.append(item["name"])
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
             selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), names)
             if selection > -1:
                 return response["results"][selection]
