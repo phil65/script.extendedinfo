@@ -14,7 +14,6 @@ def GetYoutubeVideos(jsonurl):
             for item in results["value"]["items"]:
                 thumb = item["media:group"]["media:thumbnail"][0]["url"]
                 video = {'Thumb': thumb,
-                         'Media': ConvertYoutubeURL(item["link"]),
                          'Play': "PlayMedia(" + ConvertYoutubeURL(item["link"]) + ")",
                          'Path': ConvertYoutubeURL(item["link"]),
                          'Title': item["title"],
@@ -26,7 +25,6 @@ def GetYoutubeVideos(jsonurl):
                 for entry in item["link"]:
                     if entry.get('href', '').startswith('http://www.youtube.com/watch'):
                         video = {'Thumb': "http://i.ytimg.com/vi/" + ExtractYoutubeID(entry.get('href', '')) + "/0.jpg",
-                                 'Media': ConvertYoutubeURL(entry.get('href', '')),
                                  'Path': ConvertYoutubeURL(entry.get('href', '')),
                                  'Play': "PlayMedia(" + ConvertYoutubeURL(entry.get('href', '')) + ")",
                                  'Title': item["title"]["$t"],
