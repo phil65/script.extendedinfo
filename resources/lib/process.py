@@ -303,8 +303,6 @@ def StartInfoActions(infos, params):
                 if len(favourites) > 0:
                     HOME.setProperty('favourite.1.name', favourites[-1]["Label"])
             data = favourites, "Favourites"
-        elif info == 'json':
-            data = GetYoutubeVideos(params["feed"]), "RSS"
         elif info == 'similarlocal' and "dbid" in params:
             data = GetSimilarFromOwnLibrary(
                 params["dbid"]), "SimilarLocalMovies"
