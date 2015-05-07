@@ -2,6 +2,7 @@ from YouTube import *
 from Utils import *
 from local_db import compare_with_library, GetImdbIDFromDatabase
 import threading
+import re
 from urllib2 import Request, urlopen
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
@@ -607,7 +608,13 @@ def GetCreditInfo(credit_id):
 def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
         response = GetMovieDBData("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
-        tmdb_tvshow_id = str(response['results'][0]['id'])
+        if response["results"]:
+            tmdb_tvshow_id = str(response['results'][0]['id'])
+        else:
+            tvshowname = re.sub('\(.*?\)', '', tvshowname)
+            response = GetMovieDBData("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
+            if response["results"]:
+                tmdb_tvshow_id = str(response['results'][0]['id'])
     response = GetMovieDBData("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 7)
     # prettyprint(response)
     if not response:
