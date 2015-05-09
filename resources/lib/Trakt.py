@@ -57,10 +57,6 @@ def GetTraktCalendarShows(Type):
 def HandleTraktMovieResult(results):
     movies = []
     for movie in results:
-        try:
-            premiered = str(datetime.datetime.fromtimestamp(int(movie["movie"]["released"])))[:10]
-        except:
-            premiered = ""
         if ADDON.getSetting("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % str(fetch(movie["movie"]["ids"], 'tmdb'))
         else:
@@ -75,7 +71,7 @@ def HandleTraktMovieResult(results):
                  'Path': path,
                  'mpaa': movie["movie"]["certification"],
                  'Plot': movie["movie"]["overview"],
-                 'Premiered': premiered,
+                 'Premiered': movie["movie"]["released"],
                  'Rating': round(movie["movie"]["rating"], 1),
                  'Votes': movie["movie"]["votes"],
                  'Watchers': movie["watchers"],
@@ -134,6 +130,7 @@ def HandleTraktTVShowResult(results):
 def GetTrendingShows():
     url = 'shows/trending?extended=full,images'
     results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
+    prettyprint(results)
     if results is not None:
         return HandleTraktTVShowResult(results)
     else:
