@@ -248,6 +248,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -316,6 +317,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -432,6 +434,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -500,6 +503,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Character)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -616,6 +620,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -684,6 +689,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -800,6 +806,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -868,6 +875,7 @@
                                             <posy>340</posy>
                                             <align>center</align>
                                             <font>font12</font>
+                                            <textcolor>FFF0F0F0</textcolor>
                                             <label>$INFO[ListItem.Label][CR][COLOR FF999999]$INFO[ListItem.Property(Job)][/COLOR]</label>
                                         </control>
                                     </control>
@@ -947,6 +955,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
+                                        <textcolor>FFF0F0F0</textcolor>
                                         <info>ListItem.Label</info>
                                     </control>
                                 </control>
@@ -986,6 +995,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
+                                        <textcolor>FFF0F0F0</textcolor>
                                         <info>ListItem.Label</info>
                                     </control>
                                 </control>
