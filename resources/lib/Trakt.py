@@ -87,10 +87,6 @@ def HandleTraktMovieResult(results):
 def HandleTraktTVShowResult(results):
     shows = []
     for tvshow in results:
-        try:
-            premiered = str(datetime.datetime.fromtimestamp(int(tvshow['show']["first_aired"])))[:10]
-        except:
-            premiered = ""
         airs = fetch(tvshow['show'], "airs")
         path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,imdbid=%s)' % tvshow['show']['ids']["imdb"]
         show = {'Title': tvshow['show']["title"],
@@ -110,7 +106,7 @@ def HandleTraktTVShowResult(results):
                 'AirDay': fetch(airs, "day"),
                 'AirShortTime': fetch(airs, "time"),
                 'Label2': fetch(airs, "day") + " " + fetch(airs, "time"),
-                'Premiered': premiered,
+                'Premiered': tvshow['show']["first_aired"][:10],
                 'Country': tvshow['show']["country"],
                 'Rating': round(tvshow['show']["rating"], 1),
                 'Votes': tvshow['show']["votes"],
@@ -130,7 +126,6 @@ def HandleTraktTVShowResult(results):
 def GetTrendingShows():
     url = 'shows/trending?extended=full,images'
     results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
-    prettyprint(results)
     if results is not None:
         return HandleTraktTVShowResult(results)
     else:
