@@ -926,7 +926,6 @@
                             <ondown>450</ondown>
                             <pagecontrol>60</pagecontrol>
                             <scrolltime>300</scrolltime>
-                            <focusposition>0</focusposition>
                             <orientation>horizontal</orientation>
                             <preloaditems>2</preloaditems>
                             <itemlayout height="410" width="380">
