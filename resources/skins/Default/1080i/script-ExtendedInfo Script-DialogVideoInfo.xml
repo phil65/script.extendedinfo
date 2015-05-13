@@ -83,7 +83,7 @@
                             <align>left</align>
                             <label fallback="No info available">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
                             <font>font12</font>
-                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">true</autoscroll>
+                            <autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
                         </control>
                     </control>
                     <control type="group" id="50000">
@@ -832,7 +832,7 @@
                                             <textcolor>FFFAFAFA</textcolor>
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]$INFO[ListItem.Property(character),[COLOR FF999999][CR] $LOCALIZE[20347] ,[/COLOR]]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                         </control>
                                     </control>
                                 </control>
@@ -983,7 +983,7 @@
                                             <align>center</align>
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]$INFO[ListItem.Property(job),[COLOR FF999999][CR],[/COLOR]]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                         </control>
                                     </control>
                                 </control>
@@ -1213,7 +1213,7 @@
                                             <align>center</align>
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                         </control>
                                     </control>
                                 </control>
@@ -1259,7 +1259,7 @@
                             <label fallback="N / A">$INFO[Window.Property(movie.set.overview)]</label>
                             <font>font12</font>
                             <textcolor>FFFAFAFA</textcolor>
-                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">true</autoscroll>
+                            <autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
                             <visible>!StringCompare(Window.Property(movie.set.overview),Window.Property(movie.set.label))</visible>
                         </control>
                         <control type="image">
@@ -1452,7 +1452,7 @@
                                             <align>center</align>
                                             <font>font12</font>
                                             <label>$INFO[ListItem.Label]</label>
-                                            <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                            <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                         </control>
                                     </control>
                                 </control>
@@ -1833,7 +1833,7 @@
                                         <align>center</align>
                                         <font>font12</font>
                                         <label>$INFO[ListItem.Label]</label>
-                                        <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                        <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                     </control>
                                 </control>
                             </focusedlayout>
@@ -1950,7 +1950,7 @@
                                         <align>center</align>
                                         <font>font12</font>
                                         <label>$INFO[ListItem.Label]</label>
-                                        <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                        <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                     </control>
                                 </control>
                             </focusedlayout>
@@ -2074,7 +2074,7 @@
                                         <align>center</align>
                                         <font>font12</font>
                                         <label>$INFO[ListItem.Property(release_date)][CR]$INFO[ListItem.Property(certification)]</label>
-                                        <autoscroll delay="5000" time="AutoScrollTime" repeat="8001">true</autoscroll>
+                                        <autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
                                     </control>
                                 </control>
                             </focusedlayout>
