@@ -83,7 +83,7 @@
                             <align>left</align>
                             <label fallback="No info available">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
                             <font>font12</font>
-                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
+                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">true</autoscroll>
                         </control>
                     </control>
                     <control type="group" id="50000">
@@ -1259,7 +1259,7 @@
                             <label fallback="N / A">$INFO[Window.Property(movie.set.overview)]</label>
                             <font>font12</font>
                             <textcolor>FFFAFAFA</textcolor>
-                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">Skin.HasSetting(AutoScroll)</autoscroll>
+                            <autoscroll delay="10000" time="AutoScrollTime" repeat="10000">true</autoscroll>
                             <visible>!StringCompare(Window.Property(movie.set.overview),Window.Property(movie.set.label))</visible>
                         </control>
                         <control type="image">
