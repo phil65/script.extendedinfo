@@ -525,12 +525,12 @@ def GetPersonID(person, skip_dialog=False):
     response = GetMovieDBData("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
     if response and "results" in response:
         if len(response["results"]) > 1 and not skip_dialog:
-            names = []
-            for item in response["results"]:
-                names.append(item["name"])
+            listitems = create_listitems(HandleTMDBPeopleResult(response["results"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), names)
-            if selection > -1:
+            w = Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=listitems)
+            w.doModal()
+            selection = w.index
+            if selection >= 0:
                 return response["results"][selection]
         elif response["results"]:
             return response["results"][0]
