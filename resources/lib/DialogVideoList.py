@@ -427,9 +427,7 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
             # prettyprint(response)
             if result > -1:
                 if len(response) > 1:
-                    names = []
-                    for item in response:
-                        names.append(item["name"])
+                    names = [item["name"] for item in response]
                     selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), names)
                     if selection > -1:
                         response = response[selection]

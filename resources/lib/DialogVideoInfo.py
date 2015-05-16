@@ -49,9 +49,7 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             if "DBID" not in self.movie["general"]:
                 poster_thread = Threaded_Function(Get_File, self.movie["general"]["Poster"])
                 poster_thread.start()
-            vid_id_list = []
-            for item in self.movie["videos"]:
-                vid_id_list.append(item["key"])
+            vid_id_list = [item["key"] for item in self.movie["videos"]]
             self.crew_list = []
             crew_id_list = []
             for item in self.movie["crew"]:
@@ -308,11 +306,9 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         if not self.logged_in:
             return lists
         account_list = GetAccountLists(10)  # use caching here, forceupdate everywhere else
-        id_list = []
         own_lists = []
         misc_lists = []
-        for item in account_list:
-            id_list.append(item["id"])
+        id_list = [item["id"] for item in account_list]
         for item in lists:
             if item["ID"] in id_list:
                 item["account"] = "True"
@@ -414,12 +410,11 @@ class Get_Set_Items_Thread(threading.Thread):
         self.set_id = set_id
 
     def run(self):
-        self.id_list = []
         if self.set_id:
             self.listitems, self.setinfo = GetSetMovies(self.set_id)
-            for item in self.listitems:
-                self.id_list.append(item["ID"])
+            self.id_list = [item["ID"] for item in self.listitems]
         else:
+            self.id_list = []
             self.listitems = []
             self.setinfo = {}
 
