@@ -397,11 +397,8 @@ class DialogVideoList(xbmcgui.WindowXMLDialog):
 
     def get_genre(self):
         response = GetMovieDBData("genre/%s/list?language=%s&" % (self.type, ADDON.getSetting("LanguageID")), 10)
-        id_list = []
-        label_list = []
-        for item in response["genres"]:
-            id_list.append(item["id"])
-            label_list.append(item["name"])
+        id_list = [item["id"] for item in response["genres"]]
+        label_list = [item["name"] for item in response["genres"]]
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
         if index > -1:
             # return "with_genres=" + str(id_list[index])
