@@ -543,9 +543,7 @@ def GetKeywordID(keyword):
     response = GetMovieDBData("search/keyword?query=%s&include_adult=%s&" % (url_quote(keyword), include_adult), 30)
     if response and "results" in response and response["results"]:
         if len(response["results"]) > 1:
-            names = []
-            for item in response["results"]:
-                names.append(item["name"])
+            names = [item["name"] for item in response["results"]]
             selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32114), names)
             if selection > -1:
                 return response["results"][selection]
@@ -698,9 +696,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     # prettyprint(response)
     authors = []
     directors = []
-    genres = []
     year = ""
-    Studio = []
     mpaa = ""
     SetName = ""
     SetID = ""
@@ -711,6 +707,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
         Notify("Could not get movie information")
         return {}
     genres = [item["name"] for item in response["genres"]]
+    Studio = [item["name"] for item in response["production_companies"]]
     for item in response['credits']['crew']:
         if item["job"] == "Author":
             authors.append(item["name"])
@@ -718,8 +715,6 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
             directors.append(item["name"])
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
-    for item in response['production_companies']:
-        Studio.append(item["name"])
     Set = fetch(response, "belongs_to_collection")
     if Set:
         SetName = fetch(Set, "name")
