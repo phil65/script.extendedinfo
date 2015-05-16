@@ -54,14 +54,15 @@ def GetSimilarArtistsInLibrary(artistid):
 
 
 def GetSimilarFromOwnLibrary(dbid):
-    json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
-    if "moviedetails" in json_response['result']:
-        genres = json_response['result']['moviedetails']['genre']
+    movie_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
+    if "moviedetails" in movie_response['result']:
+        comp_movie = movie_response['result']['moviedetails']
+        genres = comp_movie['genre']
         json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovies", "params": {"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }')
         if "movies" in json_response['result']:
             quotalist = []
             for item in json_response['result']['movies']:
-                difference = abs(int(item['year']) - int(json_response['result']['moviedetails']['year']))
+                difference = abs(int(item['year']) - int(comp_movie['year']))
                 hit = 0.0
                 miss = 0.0
                 quota = 0.0
@@ -73,22 +74,22 @@ def GetSimilarFromOwnLibrary(dbid):
                 miss += 0.00001
                 if hit > 0.0:
                     quota = float(hit) / float(hit + miss)
-                if genres[0] == item['genre'][0]:
+                if genres and item['genre'] and genres[0] == item['genre'][0]:
                     quota += 0.3
                 if difference < 3:
                     quota += 0.3
                 elif difference < 6:
                     quota += 0.15
-                if json_response['result']['moviedetails']['country'][0] == item['country'][0]:
+                if comp_movie['country'] and item['country'] and comp_movie['country'][0] == item['country'][0]:
                     quota += 0.4
-                if json_response['result']['moviedetails']['mpaa'] == item['mpaa']:
+                if comp_movie['mpaa'] and item['mpaa'] and comp_movie['mpaa'] == item['mpaa']:
                     quota += 0.4
-                if json_response['result']['moviedetails']['director'][0] == item['director'][0]:
+                if comp_movie['director'] and item['director'] and comp_movie['director'][0] == item['director'][0]:
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
             quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
             for i, list_movie in enumerate(quotalist):
-                if json_response['result']['moviedetails']['movieid'] is not list_movie[1]:
+                if comp_movie['movieid'] is not list_movie[1]:
                     movies = []
                     newmovie = GetMovieFromDB(list_movie[1])
                     movies.append(newmovie)
