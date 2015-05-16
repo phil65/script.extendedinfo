@@ -710,8 +710,7 @@ def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
     if not response:
         Notify("Could not get movie information")
         return {}
-    for item in response['genres']:
-        genres.append(item["name"])
+    genres = [item["name"] for item in response["genres"]]
     for item in response['credits']['crew']:
         if item["job"] == "Author":
             authors.append(item["name"])
@@ -844,6 +843,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
     release_date = fetch(response, 'first_air_date')
     if release_date:
         year = release_date[:4]
+    genres = [item["name"] for item in response["genres"]]
     newtv = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
              'Thumb': poster_path,
@@ -854,6 +854,7 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
              'OriginalTitle': fetch(response, 'original_name'),
              'Duration': duration,
              'ID': tmdb_id,
+             'Genre': " / ".join(genres),
              'credit_id': fetch(response, 'credit_id'),
              'Plot': cleanText(fetch(response, "overview")),
              'year': year,
