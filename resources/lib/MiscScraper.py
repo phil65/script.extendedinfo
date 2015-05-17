@@ -137,8 +137,9 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
     url = '&%sapp_id=%s' % (ArtistStr, BANDSINTOWN_KEY)
     results = Get_JSON_response(base_url + url)
-    return HandleBandsInTownResult(results)
-    if False:
-        log("GetArtistNearEvents: error when getting artist data from " + url)
+    if results:
+        return HandleBandsInTownResult(results)
+    else:
+        log("GetArtistNearEvents: Could not get data from " + url)
         log(results)
         return []

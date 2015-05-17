@@ -564,8 +564,8 @@ def read_from_file(path=""):
         log("loaded textfile %s. Time: %f" % (path, time.time() - now))
         return fc
     except:
-        return False
         log("failed to load JSON textfile: " + path)
+        return False
 
 
 def ConvertYoutubeURL(string):
