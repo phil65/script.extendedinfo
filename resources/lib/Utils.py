@@ -407,6 +407,20 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     return results
 
 
+class Threaded_Function(threading.Thread):
+
+    def __init__(self, function=None, param=None):
+        threading.Thread.__init__(self)
+        self.function = function
+        self.param = param
+        self.setName(self.function.__name__)
+        log("init " + self.function.__name__)
+
+    def run(self):
+        self.listitems = self.function(self.param)
+        return True
+
+
 class Get_File_Thread(threading.Thread):
 
     def __init__(self, url):
