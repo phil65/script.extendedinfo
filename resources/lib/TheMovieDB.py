@@ -1032,7 +1032,6 @@ def GetSetMovies(set_id):
                 "Thumb": small_poster_path,
                 "Fanart": backdrop_path,
                 "overview": response["overview"],
-                "overview": response["overview"],
                 "ID": response["id"]}
         return HandleTMDBMovieResult(response.get("parts", [])), info
     else:
