@@ -688,9 +688,10 @@ def GetTrailer(movieid=None):
 
 
 def GetExtendedMovieInfo(movieid=None, dbid=None, cache_time=14):
-    session_string = ""
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
+    else:
+        session_string = ""
     response = GetMovieDBData("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
                               (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     # prettyprint(response)
@@ -821,23 +822,22 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
         videos = HandleTMDBVideoResult(response["videos"]["results"])
     tmdb_id = fetch(response, 'id')
     poster_path = ""
-    duration = ""
-    year = ""
     backdrop_path = ""
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     if ("poster_path" in response) and (response["poster_path"]):
         poster_path = base_url + "original" + response['poster_path']
-    if "episode_run_time" in response:
-        if len(response["episode_run_time"]) > 1:
-            duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
-        elif len(response["episode_run_time"]) == 1:
-            duration = "%i" % (response["episode_run_time"][0])
-        else:
-            duration = ""
+    if len(response.get("episode_run_time", -1)) > 1:
+        duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
+    elif len(response.get("episode_run_time", -1)) == 1:
+        duration = "%i" % (response["episode_run_time"][0])
+    else:
+        duration = ""
     release_date = fetch(response, 'first_air_date')
     if release_date:
         year = release_date[:4]
+    else:
+        year = ""
     genres = [item["name"] for item in response["genres"]]
     newtv = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
