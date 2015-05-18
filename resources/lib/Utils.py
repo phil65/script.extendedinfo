@@ -31,14 +31,18 @@ def dictfind(lst, key, value):
     return ""
 
 
-def format_time(time):
+def format_time(time, format=None):
     try:
         intTime = int(time)
     except:
         return time
     hour = str(intTime / 60)
     minute = str(intTime % 60).zfill(2)
-    if intTime >= 60:
+    if format == "h":
+        return hour
+    elif format == "m":
+        return minute
+    elif intTime >= 60:
         return hour + " h " + minute + " min"
     else:
         return minute + " min"

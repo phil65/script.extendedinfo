@@ -3,7 +3,7 @@ v2.1.0
 - add genre label for tvshows
 - check Trakt and RT movie lists for local movies
 - Code cleanup
-- added "duration_formatted" property
+- added "duration(h)" and "duration(m)" property
 - API CHANGE: "imdbid" param for script call is now "imdb_id"
 
 v2.0.10
