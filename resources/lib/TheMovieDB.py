@@ -287,7 +287,7 @@ def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
                  'TVShowTitle': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
-                 'duration_formatted': format_time(duration),
+                 # 'duration_formatted': format_time(duration),
                  'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
