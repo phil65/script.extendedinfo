@@ -31,6 +31,19 @@ def dictfind(lst, key, value):
     return ""
 
 
+def format_time(time):
+    try:
+        intTime = int(time)
+    except:
+        return time
+    hour = str(intTime / 60)
+    minute = str(intTime % 60).zfill(2)
+    if intTime >= 60:
+        return hour + " h " + minute + " min"
+    else:
+        return minute + " min"
+
+
 def url_quote(url):
     try:
         url = urllib.quote_plus(url.encode('utf8', 'ignore'))

@@ -2928,7 +2928,7 @@
                             <control type="group">
                                 <posx>0</posx>
                                 <width>155</width>
-                                <visible>!Stringcompare(Window.Property(movie.Duration),0) + !IsEmpty(Window.Property(movie.Duration))</visible>
+                                <visible>!Stringcompare(Window.Property(movie.duration),0) + !IsEmpty(Window.Property(movie.duration))</visible>
                                 <control type="image">
                                     <posx>0</posx>
                                     <height>79</height>
@@ -2941,7 +2941,7 @@
                                     <width>155</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label>$INFO[Window.Property(movie.Duration)]</label>
+                                    <label>$INFO[Window.Property(movie.duration)]</label>
                                     <font>font14</font>
                                 </control>
                                 <control type="label">

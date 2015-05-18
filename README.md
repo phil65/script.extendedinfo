@@ -23,7 +23,7 @@ Available Properties:
 'Title':        Movie Title
 'Art(poster)':  Movie Poster
 'imdb_id':       IMDB ID
-'Duration':     Movie Duration
+'duration':     Movie duration
 'Year':         Release Year
 'Premiered':    Release Date
 'mpaa':         MPAA Rating
@@ -113,7 +113,7 @@ RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%
 -- required additional parameters: dbid= (database id) or id= (tvdb id)
 
 'TVShowTitle':      TVShow Title
-'Duration':         Duration (?)
+'duration':         Duration (?)
 'Plot':             Plot
 'ID':               ID
 'Genre':            Genre
