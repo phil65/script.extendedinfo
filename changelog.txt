@@ -1,10 +1,11 @@
 v2.1.0
+- API CHANGE: "imdbid" param for script call is now "imdb_id"
 - fix similarlocal call
 - add genre label for tvshows
 - check Trakt and RT movie lists for local movies
 - Code cleanup
 - added "duration(h)" and "duration(m)" property
-- API CHANGE: "imdbid" param for script call is now "imdb_id"
+- fix limit param for some script calls
 
 v2.0.10
 - fixed tv show lookup with year in brackets attached to lookup string
