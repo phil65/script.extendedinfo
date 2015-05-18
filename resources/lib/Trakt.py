@@ -91,7 +91,7 @@ def HandleTraktTVShowResult(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
-        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,imdbid=%s)' % tvshow['show']['ids']["imdb"]
+        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,imdb_id=%s)' % tvshow['show']['ids']["imdb"]
         show = {'Title': tvshow['show']["title"],
                 'Label': tvshow['show']["title"],
                 'TVShowTitle': tvshow['show']["title"],
@@ -104,7 +104,6 @@ def HandleTraktTVShowResult(results):
                 'Plot': tvshow['show']["overview"],
                 'tvdb_id': tvshow['show']['ids']["tvdb"],
                 'imdb_id': tvshow['show']['ids']["imdb"],
-                'imdbid': tvshow['show']['ids']["imdb"],
                 'Path': path,
                 'AirDay': fetch(airs, "day"),
                 'AirShortTime': fetch(airs, "time"),

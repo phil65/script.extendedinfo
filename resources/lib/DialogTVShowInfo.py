@@ -21,7 +21,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
         dbid = kwargs.get('dbid')
-        imdb_id = kwargs.get('imdbid')
+        imdb_id = kwargs.get('imdb_id')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
         self.tvshow = False
@@ -29,7 +29,7 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):
             tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
-            log("IMDBId from local DB:" + str(tvdb_id))
+            log("IMDB Id from local DB:" + str(tvdb_id))
             if tvdb_id:
                 self.tmdb_id = get_show_tmdb_id(tvdb_id)
                 log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(self.tmdb_id)))

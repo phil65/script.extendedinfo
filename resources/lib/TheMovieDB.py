@@ -657,7 +657,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = GetImdbIDFromDatabase("movie", dbid)
-        log("IMDBId from local DB:" + str(movie_id))
+        log("IMDB Id from local DB:" + str(movie_id))
         return movie_id
     elif imdb_id:
         response = GetMovieDBData("find/tt%s?external_source=imdb_id&language=%s&" % (imdb_id.replace("tt", ""), ADDON.getSetting("LanguageID")), 30)

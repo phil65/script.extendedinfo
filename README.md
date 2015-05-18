@@ -22,7 +22,7 @@ Available Properties:
 
 'Title':        Movie Title
 'Art(poster)':  Movie Poster
-'imdbid':       IMDB ID
+'imdb_id':       IMDB ID
 'Duration':     Movie Duration
 'Year':         Release Year
 'Premiered':    Release Date

@@ -119,7 +119,7 @@ def StartInfoActions(infos, params):
                 movie_id = params["id"]
             elif dbid and int(dbid) > 0:
                 movie_id = GetImdbIDFromDatabase("movie", dbid)
-                log("IMDBId from local DB:" + str(movie_id))
+                log("IMDB Id from local DB:" + str(movie_id))
             else:
                 movie_id = ""
             if movie_id:
@@ -135,7 +135,7 @@ def StartInfoActions(infos, params):
                 tvshow_id = tmdb_id
             elif dbid and int(dbid) > 0:
                 tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
-                log("IMDBId from local DB:" + str(tvdb_id))
+                log("IMDB Id from local DB:" + str(tvdb_id))
                 if tvdb_id:
                     tvshow_id = get_show_tmdb_id(tvdb_id)
                     log("tvdb_id to tmdb_id: %s --> %s" %
@@ -185,7 +185,7 @@ def StartInfoActions(infos, params):
             HOME.setProperty('infodialogs.active', "true")
             from DialogVideoInfo import DialogVideoInfo
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""),
-                                     dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+                                     dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
             dialog.doModal()
             HOME.clearProperty('infodialogs.active')
         elif info == 'extendedactorinfo':
@@ -199,7 +199,7 @@ def StartInfoActions(infos, params):
             HOME.setProperty('infodialogs.active', "true")
             from DialogTVShowInfo import DialogTVShowInfo
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""),
-                                      dbid=params.get("dbid", None), imdbid=params.get("imdbid", ""), name=params.get("name", ""))
+                                      dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
             dialog.doModal()
             HOME.clearProperty('infodialogs.active')
         elif info == 'ratemedia':
@@ -352,8 +352,8 @@ def StartInfoActions(infos, params):
             elif int(params.get("dbid", -1)) > 0:
                 movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(movie_id))
-            elif params.get("imdbid", ""):
-                movie_id = get_movie_tmdb_id(params.get("imdbid", ""))
+            elif params.get("imdb_id", ""):
+                movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))
             else:
                 movie_id = ""
             if movie_id:
