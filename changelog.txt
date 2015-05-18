@@ -1,3 +1,9 @@
+v2.1.0
+- fix similarlocal call
+- add genre label for tvshows
+- check Trakt and RT movie lists for local movies
+- Code cleanup
+
 v2.0.10
 - fixed tv show lookup with year in brackets attached to lookup string
 - fixed "Premiered" property for trakt calls
