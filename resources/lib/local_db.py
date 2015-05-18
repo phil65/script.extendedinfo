@@ -223,7 +223,7 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
         elif online_item["Title"].lower() in title_list:
             index = title_list.index(online_item["Title"].lower())
             found = True
-        elif online_item["OriginalTitle"].lower() in originaltitle_list:
+        elif "OriginalTitle" in online_item and online_item["OriginalTitle"].lower() in originaltitle_list:
             index = originaltitle_list.index(online_item["OriginalTitle"].lower())
             found = True
         if found:

@@ -1,5 +1,6 @@
 import datetime
 from Utils import *
+from local_db import compare_with_library
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -68,6 +69,7 @@ def HandleTraktMovieResult(results):
                  'Trailer': ConvertYoutubeURL(movie["movie"]["trailer"]),
                  'Year': movie["movie"]["year"],
                  'ID': movie["movie"]["ids"]["tmdb"],
+                 'imdb_id': movie["movie"]["ids"]["imdb"],
                  'Path': path,
                  'mpaa': movie["movie"]["certification"],
                  'Plot': movie["movie"]["overview"],
@@ -81,6 +83,7 @@ def HandleTraktMovieResult(results):
                  'Art(fanart)': movie["movie"]["images"]["fanart"]["full"],
                  'Fanart': movie["movie"]["images"]["fanart"]["full"]}
         movies.append(movie)
+    movies = compare_with_library(movies, False)
     return movies
 
 
