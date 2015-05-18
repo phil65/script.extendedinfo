@@ -16,7 +16,7 @@ def StartInfoActions(infos, params):
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
         params["prefix"] = params["prefix"] + '.'
     for info in infos:
-        data = None
+        data = []
         #  Images
         if info == 'xkcd':
             from MiscScraper import GetXKCDInfo

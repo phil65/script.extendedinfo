@@ -664,13 +664,12 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             x.join()
 
 
-def passListToSkin(name="", data=None, prefix="", controlwindow=None, handle=None, limit=False, debug=False):
-    if limit and data:
-        if limit < len(data):
-            data = data[:limit]
+def passListToSkin(name="", data=[], prefix="", controlwindow=None, handle=None, limit=False, debug=False):
+    if limit and int(limit) < len(data):
+        data = data[:int(limit)]
     if handle:
         HOME.clearProperty(name)
-        if data is not None:
+        if data:
             HOME.setProperty(name + ".Count", str(len(data)))
             items = create_listitems(data)
             xbmcplugin.setContent(handle, 'files')
