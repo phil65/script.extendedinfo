@@ -1,4 +1,5 @@
 from Utils import *
+from local_db import compare_with_library
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
