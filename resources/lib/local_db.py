@@ -88,9 +88,9 @@ def GetSimilarFromOwnLibrary(dbid):
                     quota += 0.6
                 quotalist.append((quota, item["movieid"]))
             quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
+            movies = []
             for i, list_movie in enumerate(quotalist):
                 if comp_movie['movieid'] is not list_movie[1]:
-                    movies = []
                     newmovie = GetMovieFromDB(list_movie[1])
                     movies.append(newmovie)
                     if i == 20:
