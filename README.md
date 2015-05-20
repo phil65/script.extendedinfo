@@ -311,9 +311,24 @@ XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
 
 ###List of Built In Controls Available In script-ExtendedInfo Script-DialogInfo.xml:
 
-150 -> container -> movies list
-250 -> container -> youtube videos
-
+| IDS     | MOVIES    | TVSHOWS   | SEASONS   | EPISODES | ACTORS      |
+|---------|-----------|-----------|-----------|----------|-------------|
+| 150     | Similar   | Similar   | ---       | ---      | Movie Roles |
+| 250     | Sets      | Seasons   | ---       | ---      | TV Roles    |
+| 350     | Youtube   | Youtube   | Youtube   | Youtube  | Youtube     |
+| 450     | Lists     | ---       | ---       | ---      | Images      |
+| 550     | Studios   | Studios   | ---       | ---      | Movie Crew  |
+| 650     | Releases  | Certific  | ---       | ---      | TV Crew     |
+| 750     | Crew      | Crew      | Crew      | Crew     | Tagged Img  |
+| 850     | Genres    | Genres    | ---       | ---      | ---         |
+| 950     | Keywords  | Keywords  | ---       | ---      | ---         |
+| 1000    | Actors    | Actors    | Actors    | Actors   | ---         |
+| 1050    | Reviews   | ---       | ---       | ---      | ---         |
+| 1150    | Videos    | Videos    | Videos    | Videos   | ---         |
+| 1250    | Images    | Images    | Images    | ---      | ---         |
+| 1350    | Backdrops | Backdrops | Backdrops | Images   | ---         |
+| 1450    | ---       | Networks  | ---       | ---      | ---         |
+| 2000    | ---       | ---       | Episodes  | ---      | ---         |
 
 ###Labels Available In script-Actors-DialogInfo.xml:
 
