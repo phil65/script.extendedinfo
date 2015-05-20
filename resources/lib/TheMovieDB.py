@@ -433,8 +433,6 @@ def HandleTMDBPeopleResult(results):
                      'department': fetch(person, 'department'),
                      'job': fetch(person, 'job'),
                      'media_type': "person",
-                     'description': description,
-                     'plot': description,
                      'id': str(person['id']),
                      'cast_id': str(fetch(person, 'cast_id')),
                      'credit_id': str(fetch(person, 'credit_id')),
