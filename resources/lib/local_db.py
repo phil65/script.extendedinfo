@@ -309,7 +309,7 @@ def CompareAlbumWithLibrary(onlinelist):
 
 def GetMovieSetName(dbid):
     json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }"' % dbid)
-    if "moviedetails" in json_response["result"]:
+    if "result" in json_response and "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid', "")
         if dbsetid:
             json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }' % dbsetid)
@@ -317,14 +317,14 @@ def GetMovieSetName(dbid):
     return ""
 
 
-def GetImdbIDFromDatabase(type, dbid):
+def GetImdbIDFromDatabase(media_type, dbid):
     if not dbid:
         return []
-    if type == "movie":
+    if media_type == "movie":
         json_response = get_Kodi_JSON('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["imdbnumber","title", "year"], "movieid":%s }' % dbid)
-        if "moviedetails" in json_response["result"]:
+        if "result" in json_response and "moviedetails" in json_response["result"]:
             return json_response['result']['moviedetails']['imdbnumber']
-    elif type == "tvshow":
+    elif media_type == "tvshow":
         json_response = get_Kodi_JSON('"method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["imdbnumber","title", "year"], "tvshowid":%s }' % dbid)
         if "result" in json_response and "tvshowdetails" in json_response["result"]:
             return json_response['result']['tvshowdetails']['imdbnumber']
