@@ -416,9 +416,6 @@ def HandleTMDBPeopleResult(results):
     for person in results:
         image = ""
         image_small = ""
-        description = "[B]Known for[/B]:[CR][CR]"
-        for movie in results.get("known_for", []):
-            description = description + movie["title"] + " (%s)" % (movie["release_date"]) + "[CR]"
         builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s)' % str(person['id'])
         if "profile_path" in person and person["profile_path"]:
             image = base_url + poster_size + person["profile_path"]
