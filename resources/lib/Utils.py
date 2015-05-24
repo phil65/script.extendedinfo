@@ -56,6 +56,68 @@ def url_quote(url):
     return url
 
 
+def merge_dicts(*dict_args):
+    '''
+    Given any number of dicts, shallow copy and merge into a new dict,
+    precedence goes to key value pairs in latter dicts.
+    '''
+    result = {}
+    for dictionary in dict_args:
+        result.update(dictionary)
+    return result
+
+
+def widget_selectdialog():
+    # rottentomatoes
+    movie = {"intheaters": "RottenTomatoes: In theaters",
+             "boxoffice": "RottenTomatoes: Box office",
+             "opening": "RottenTomatoes: Opening movies",
+             "comingsoon": "RottenTomatoes: Upcoming movies",
+             "toprentals": "RottenTomatoes: Top Rentals",
+             "currentdvdreleases": "RottenTomatoes: Current DVD releases",
+             "newdvdreleases": "RottenTomatoes: New DVD releases",
+             "upcomingdvds": "RottenTomatoes: Upcoming DVDs",
+             # tmdb
+             "incinemas": "TheMovieDB: In cinemas",
+             "upcoming": "TheMovieDB: In cinemas",
+             "topratedmovies": "TheMovieDB: Top Rated Movies",
+             "popularmovies": "TheMovieDB: Popular movies",
+             # trakt
+             "trendingmovies": "",
+             # tmdb
+             "starredmovies": "%s" % ADDON.getLocalizedString(32134),
+             "ratedmovies": "%s" % ADDON.getLocalizedString(32135),
+             # local
+             "latestdbmovies": "",
+             "randomdbmovies": "",
+             "inprogressdbmovies": "",
+             }
+    tvshow = {"airingshows": "",
+              "premiereshows": "",
+              "trendingshows": "",
+              "starredshows": "%s" % ADDON.getLocalizedString(32144),
+              "ratedshows": "%s" % ADDON.getLocalizedString(32145),
+              }
+
+    images = {"xkcd": "XKCD",
+              "cyanide": "Cyanide",
+              "dailybabe": "Daily babe",
+              "dailybabes": "Daily babes",
+              }
+# popularpeople
+    artists = {"topartists": "",
+               "hypedartists": ""}
+    events = {}
+    if True:
+        listitems = merge_dicts(movie, tvshow, images, artists, events)
+    keywords = [key for key in listitems.keys()]
+    labels = [label for label in listitems.keys()]
+    ret = xbmcgui.Dialog().select("Choose type", labels)
+    if ret > -1:
+        Notify(keywords[ret])
+
+
+
 class Select_Dialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
