@@ -105,6 +105,10 @@ def StartInfoActions(infos, params):
             data = GetMovieDBMovies("top_rated"), "TopRatedMovies"
         elif info == 'popularmovies':
             data = GetMovieDBMovies("popular"), "PopularMovies"
+        elif info == 'ratedmovies':
+            data = GetRatedMedia("movies"), "RatedMovies"
+        elif info == 'starredmovies':
+            data = GetFavItems("movies"), "StarredMovies"
         elif info == 'airingtodaytvshows':
             data = GetMovieDBTVShows("airing_today"), "AiringTodayTVShows"
         elif info == 'onairtvshows':
@@ -113,6 +117,10 @@ def StartInfoActions(infos, params):
             data = GetMovieDBTVShows("top_rated"), "TopRatedTVShows"
         elif info == 'populartvshows':
             data = GetMovieDBTVShows("popular"), "PopularTVShows"
+        elif info == 'ratedtvshows':
+            data = GetRatedMedia("tv"), "RatedTVShows"
+        elif info == 'starredtvshows':
+            data = GetFavItems("tv"), "StarredTVShows"
         elif info == 'similarmovies':
             dbid = params.get("dbid", False)
             if params.get("id", False):

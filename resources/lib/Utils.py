@@ -67,7 +67,7 @@ def merge_dicts(*dict_args):
     return result
 
 
-def widget_selectdialog():
+def widget_selectdialog(filter=None, string_prefix="widget"):
     # rottentomatoes
     movie = {"intheaters": "RottenTomatoes: In theaters",
              "boxoffice": "RottenTomatoes: Box office",
@@ -88,9 +88,9 @@ def widget_selectdialog():
              "starredmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32134),
              "ratedmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32135),
              # local
-             "latestdbmovies": "Local DB: Latest movies",
-             "randomdbmovies": "Local DB: Random movies",
-             "inprogressdbmovies": "Local DB: In progress movies",
+             # "latestdbmovies": "Local DB: Latest movies",
+             # "randomdbmovies": "Local DB: Random movies",
+             # "inprogressdbmovies": "Local DB: In progress movies",
              }
     tvshow = {"airingshows": "Trakt.tv: Airing TV shows",
               "premiereshows": "Trakt.tv: Premiere TV shows",
@@ -99,26 +99,29 @@ def widget_selectdialog():
               "onairtvshows": "TheMovieDB: TV shows on air",
               "topratedtvshows": "TheMovieDB: Top rated TV shows",
               "populartvshows": "TheMovieDB: Popular TV shows",
-              "starredshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32144),
-              "ratedshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32145),
+              "starredtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32144),
+              "ratedtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32145),
               }
 
-    images = {"xkcd": "XKCD webcomics",
-              "cyanide": "Cyanide & Happiness webcomics",
-              "dailybabe": "Daily babe",
-              "dailybabes": "Daily babes",
-              }
+    image = {"xkcd": "XKCD webcomics",
+             "cyanide": "Cyanide & Happiness webcomics",
+             "dailybabe": "Daily babe",
+             "dailybabes": "Daily babes",
+             }
 # popularpeople
-    artists = {"topartists": "LastFM: Top artists",
-               "hypedartists": "LastFM: Hyped artists"}
-    events = {}
+    artist = {"topartists": "LastFM: Top artists",
+              "hypedartists": "LastFM: Hyped artists"
+              }
+    event = {}
     if True:
-        listitems = merge_dicts(movie, tvshow, images, artists, events)
+        listitems = merge_dicts(movie, tvshow, image, artist, event)
     keywords = [key for key in listitems.keys()]
     labels = [label for label in listitems.values()]
     ret = xbmcgui.Dialog().select("Choose content", labels)
     if ret > -1:
         Notify(keywords[ret])
+        xbmc.executebuiltin("Skin.SetString(%s.path,plugin://script.extendedinfo?info=%s)" % (string_prefix, keywords[ret]))
+        xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (string_prefix, labels[ret]))
 
 
 class Select_Dialog(xbmcgui.WindowXMLDialog):

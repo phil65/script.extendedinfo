@@ -917,6 +917,7 @@ def GetMovieLists(list_id):
 
 
 def GetRatedMedia(media_type):
+    '''takes "tv/episodes", "tv" or "movies"'''
     if checkLogin():
         session_id = get_session_id()
         account_id = get_account_info()
@@ -933,6 +934,7 @@ def GetRatedMedia(media_type):
 
 
 def GetFavItems(media_type):
+    '''takes "tv/episodes", "tv" or "movies"'''
     session_id = get_session_id()
     account_id = get_account_info()
     response = GetMovieDBData("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), ADDON.getSetting("LanguageID")), 0)
