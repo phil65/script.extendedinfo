@@ -21,6 +21,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
         self.window.setProperty("WindowColor", self.color)
+        self.window.setProperty("layout", self.layout)
         self.update_ui()
         xbmc.sleep(200)
         if self.totalitems > 0:
@@ -72,3 +73,63 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(584))
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
+
+    def onFocus(self, controlID):
+        if controlID == 600:
+            if self.page < self.totalpages:
+                self.page += 1
+            else:
+                self.page = 1
+                return
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.update_content()
+            self.update_ui()
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+        if controlID == 700:
+            if self.page > 1:
+                self.page -= 1
+            else:
+                return
+            # else:
+            #     self.page = self.totalpages
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.update_content()
+            self.update_ui()
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+
+    def onClick(self, controlID):
+        if controlID == 5001:
+            self.get_sort_type()
+            self.update_content()
+            self.update_ui()
+
+    def add_filter(self, key, value, typelabel, label):
+        index = -1
+        new_filter = {"id": value,
+                      "type": key,
+                      "typelabel": typelabel,
+                      "label": label}
+        if new_filter in self.filters:
+            return False
+        for i, item in enumerate(self.filters):
+            if item["type"] == key:
+                index = i
+                break
+        if not value:
+            return False
+        if index > -1:
+            if not self.force_overwrite:
+                dialog = xbmcgui.Dialog()
+                ret = dialog.yesno(heading=xbmc.getLocalizedString(587), line1=ADDON.getLocalizedString(32106), nolabel="OR", yeslabel="AND")
+                if ret:
+                    self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
+                    self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
+                else:
+                    self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
+                    self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
+            else:
+                self.filters[index]["id"] = urllib.quote_plus(str(value))
+                self.filters[index]["label"] = str(label)
+        else:
+            self.filters.append(new_filter)
+

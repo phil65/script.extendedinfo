@@ -36,7 +36,7 @@
                 <posy>107</posy>
                 <width>330</width>
                 <height>432</height>
-                <visible>IsEmpty(Window.Property(landscapelayout))</visible>
+                <visible>!Stringcompare(Window.Property(layout),landscape)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                 <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
@@ -52,7 +52,7 @@
                 <posy>135</posy>
                 <width>440</width>
                 <height>410</height>
-                <visible>!IsEmpty(Window.Property(landscapelayout))</visible>
+                <visible>Stringcompare(Window.Property(layout),landscape)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                 <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
@@ -75,7 +75,7 @@
                 <onup>700</onup>
                 <ondown>600</ondown>
                 <orientation>vertical</orientation>
-                <itemlayout width="384" height="425" condition="IsEmpty(Window.Property(landscapelayout))">
+                <itemlayout width="384" height="425" condition="!Stringcompare(Window.Property(layout),landscape)">
                     <control type="group">
                         <posy>150</posy>
                         <posx>80</posx>
@@ -138,7 +138,7 @@
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout width="384" height="425" condition="IsEmpty(Window.Property(landscapelayout))">
+                <focusedlayout width="384" height="425" condition="!Stringcompare(Window.Property(layout),landscape)">
                     <control type="group">
                         <posy>150</posy>
                         <posx>80</posx>
@@ -206,7 +206,7 @@
                         <animation effect="slide" start="0,50" end="0" time="200" tween="cubic" reversible="false">UnFocus</animation>
                     </control>
                 </focusedlayout>
-                <itemlayout height="410" width="440" condition="!IsEmpty(Window.Property(landscapelayout))">
+                <itemlayout height="425" width="440" condition="Stringcompare(Window.Property(layout),landscape)">
                     <control type="group">
                         <posx>75</posx>
                         <posy>160</posy>
@@ -267,7 +267,7 @@
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout height="410" width="440" condition="!IsEmpty(Window.Property(landscapelayout))">
+                <focusedlayout height="425" width="440" condition="Stringcompare(Window.Property(layout),landscape)">
                     <control type="group">
                         <posx>75</posx>
                         <posy>160</posy>
