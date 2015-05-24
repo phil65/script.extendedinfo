@@ -73,49 +73,52 @@ def widget_selectdialog():
              "boxoffice": "RottenTomatoes: Box office",
              "opening": "RottenTomatoes: Opening movies",
              "comingsoon": "RottenTomatoes: Upcoming movies",
-             "toprentals": "RottenTomatoes: Top Rentals",
+             "toprentals": "RottenTomatoes: Top rentals",
              "currentdvdreleases": "RottenTomatoes: Current DVD releases",
              "newdvdreleases": "RottenTomatoes: New DVD releases",
              "upcomingdvds": "RottenTomatoes: Upcoming DVDs",
              # tmdb
-             "incinemas": "TheMovieDB: In cinemas",
-             "upcoming": "TheMovieDB: In cinemas",
-             "topratedmovies": "TheMovieDB: Top Rated Movies",
+             "incinemas": "TheMovieDB: In-cinema Movies",
+             "upcoming": "TheMovieDB: Upcoming movies",
+             "topratedmovies": "TheMovieDB: Top rated movies",
              "popularmovies": "TheMovieDB: Popular movies",
              # trakt
-             "trendingmovies": "",
+             "trendingmovies": "Trakt.tv: Trending movies",
              # tmdb
-             "starredmovies": "%s" % ADDON.getLocalizedString(32134),
-             "ratedmovies": "%s" % ADDON.getLocalizedString(32135),
+             "starredmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32134),
+             "ratedmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32135),
              # local
-             "latestdbmovies": "",
-             "randomdbmovies": "",
-             "inprogressdbmovies": "",
+             "latestdbmovies": "Local DB: Latest movies",
+             "randomdbmovies": "Local DB: Random movies",
+             "inprogressdbmovies": "Local DB: In progress movies",
              }
-    tvshow = {"airingshows": "",
-              "premiereshows": "",
-              "trendingshows": "",
-              "starredshows": "%s" % ADDON.getLocalizedString(32144),
-              "ratedshows": "%s" % ADDON.getLocalizedString(32145),
+    tvshow = {"airingshows": "Trakt.tv: Airing TV shows",
+              "premiereshows": "Trakt.tv: Premiere TV shows",
+              "trendingshows": "Trakt.tv: Trending TV shows",
+              "airingtodaytvshows": "TheMovieDB: TV shows airing today",
+              "onairtvshows": "TheMovieDB: TV shows on air",
+              "topratedtvshows": "TheMovieDB: Top rated TV shows",
+              "populartvshows": "TheMovieDB: Popular TV shows",
+              "starredshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32144),
+              "ratedshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32145),
               }
 
-    images = {"xkcd": "XKCD",
-              "cyanide": "Cyanide",
+    images = {"xkcd": "XKCD webcomics",
+              "cyanide": "Cyanide & Happiness webcomics",
               "dailybabe": "Daily babe",
               "dailybabes": "Daily babes",
               }
 # popularpeople
-    artists = {"topartists": "",
-               "hypedartists": ""}
+    artists = {"topartists": "LastFM: Top artists",
+               "hypedartists": "LastFM: Hyped artists"}
     events = {}
     if True:
         listitems = merge_dicts(movie, tvshow, images, artists, events)
     keywords = [key for key in listitems.keys()]
-    labels = [label for label in listitems.keys()]
-    ret = xbmcgui.Dialog().select("Choose type", labels)
+    labels = [label for label in listitems.values()]
+    ret = xbmcgui.Dialog().select("Choose content", labels)
     if ret > -1:
         Notify(keywords[ret])
-
 
 
 class Select_Dialog(xbmcgui.WindowXMLDialog):
