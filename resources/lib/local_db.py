@@ -24,8 +24,8 @@ def GetSimilarArtistsInLibrary(artistid):
         return None
     xbmc_artists = GetXBMCArtists()
     artists = []
-    for (count, simi_artist) in enumerate(simi_artists):
-        for (count, xbmc_artist) in enumerate(xbmc_artists["result"]["artists"]):
+    for simi_artist in simi_artists:
+        for xbmc_artist in xbmc_artists["result"]["artists"]:
             if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                 artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
