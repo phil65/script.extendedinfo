@@ -740,7 +740,7 @@ def passListToSkin(name="", data=[], prefix="", controlwindow=None, handle=None,
         if data:
             HOME.setProperty(name + ".Count", str(len(data)))
             items = create_listitems(data)
-            xbmcplugin.setContent(handle, 'files')
+            xbmcplugin.setContent(handle, 'movies')
             itemlist = list()
             for item in items:
                 itemlist.append((item.getProperty("path"), item, False))
