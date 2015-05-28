@@ -36,6 +36,7 @@ def GetTraktCalendarShows(Type):
                         'tvdb_id': episode["show"]["ids"]["tvdb"],
                         'id': episode["show"]["ids"]["tvdb"],
                         'imdb_id': episode["show"]["ids"]["imdb"],
+                        'Path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % episode["show"]["ids"]["tvdb"],
                         'Runtime': episode["show"]["runtime"],
                         'duration': episode["show"]["runtime"],
                         'duration(h)': format_time(episode["show"]["runtime"], "h"),
@@ -97,7 +98,7 @@ def HandleTraktTVShowResult(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
-        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,imdb_id=%s)' % tvshow['show']['ids']["imdb"]
+        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tvshow['show']['ids']["tvdb"]
         show = {'Title': tvshow['show']["title"],
                 'Label': tvshow['show']["title"],
                 'TVShowTitle': tvshow['show']["title"],
