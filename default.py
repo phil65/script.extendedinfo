@@ -35,18 +35,11 @@ class Main:
         #     xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _parse_argv(self):
-        if sys.argv[0] == 'plugin://script.extendedinfo/':
-            args = sys.argv[2][1:].split("&&")
-            self.handle = int(sys.argv[1])
-            self.control = "plugin"
-        else:
-            self.control = None
-            self.handle = None
-            args = sys.argv
+        self.handle = None
         self.infos = []
-        self.params = {"handle": self.handle,
-                       "control": self.control}
-        for arg in args:
+        self.params = {"handle": None,
+                       "control": None}
+        for arg in sys.argv:
             if arg == 'script.extendedinfo':
                 continue
             param = arg.replace('"', '').replace("'", " ")

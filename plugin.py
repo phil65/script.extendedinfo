@@ -46,17 +46,25 @@ class Main:
                      # tmdb
                      "starredmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32134),
                      "ratedmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32135),
-                     # local
-                     # "latestdbmovies": "Local DB: Latest movies",
-                     # "randomdbmovies": "Local DB: Random movies",
-                     # "inprogressdbmovies": "Local DB: In progress movies",
                      }
-            # xbmcplugin.setContent(self.handle, 'files')
+            tvshow = {"airingshows": "Trakt.tv: Airing TV shows",
+                      "premiereshows": "Trakt.tv: Premiere TV shows",
+                      "trendingshows": "Trakt.tv: Trending TV shows",
+                      "airingtodaytvshows": "TheMovieDB: TV shows airing today",
+                      "onairtvshows": "TheMovieDB: TV shows on air",
+                      "topratedtvshows": "TheMovieDB: Top rated TV shows",
+                      "populartvshows": "TheMovieDB: Popular TV shows",
+                      "starredtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32144),
+                      "ratedtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32145),
+                      }
+
+            xbmcplugin.setContent(self.handle, 'files')
 
             # url = 'plugin://script.extendedinfo?info=extendedinfo&&id=233'
             # li = xbmcgui.ListItem('TheMovieDB database browser', iconImage='DefaultMovies.png')
             # xbmcplugin.addDirectoryItem(handle=self.handle, url=url, listitem=li)
-            for key, value in movie.iteritems():
+            items = merge_dicts(movie, tvshow)
+            for key, value in items.iteritems():
                 li = xbmcgui.ListItem(value, iconImage='DefaultFolder.png')
                 url = 'plugin://script.extendedinfo?info=%s' % key
                 xbmcplugin.addDirectoryItem(handle=self.handle, url=url,

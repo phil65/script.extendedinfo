@@ -392,4 +392,10 @@ def StartInfoActions(infos, params):
             widget_selectdialog()
         if data:
             data, prefix = data
-            passListToSkin(prefix, data, params.get("prefix", ""), params.get("window", ""), params.get("handle", ""), params.get("limit", 20))
+            if params.get("handle"):
+                if info.endswith("shows"):
+                    xbmcplugin.setContent(params.get("handle"), 'tvshows')
+                else:
+                    xbmcplugin.setContent(params.get("handle"), 'movies')
+            passListToSkin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
+

@@ -732,7 +732,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             x.join()
 
 
-def passListToSkin(name="", data=[], prefix="", controlwindow=None, handle=None, limit=False, debug=False):
+def passListToSkin(name="", data=[], prefix="", handle=None, limit=False):
     if limit and int(limit) < len(data):
         data = data[:int(limit)]
     if handle:
@@ -740,14 +740,13 @@ def passListToSkin(name="", data=[], prefix="", controlwindow=None, handle=None,
         if data:
             HOME.setProperty(name + ".Count", str(len(data)))
             items = create_listitems(data)
-            xbmcplugin.setContent(handle, 'movies')
             itemlist = list()
             for item in items:
                 itemlist.append((item.getProperty("path"), item, False))
             xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
             xbmcplugin.endOfDirectory(handle)
     else:
-        SetWindowProperties(name, data, prefix, debug)
+        SetWindowProperties(name, data, prefix)
 
 
 def SetWindowProperties(name, data, prefix="", debug=False):
