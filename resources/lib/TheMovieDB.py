@@ -938,7 +938,10 @@ def GetFavItems(media_type):
     session_id = get_session_id()
     account_id = get_account_info()
     response = GetMovieDBData("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), ADDON.getSetting("LanguageID")), 0)
-    return HandleTMDBMovieResult(response["results"], False, None)
+    if media_type == "tv":
+        return HandleTMDBTVShowResult(response["results"], False, None)
+    else:
+        return HandleTMDBMovieResult(response["results"], False, None)
 
 
 def GetMoviesFromList(list_id, cache_time=5):
