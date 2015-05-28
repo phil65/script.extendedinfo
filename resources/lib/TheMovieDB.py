@@ -941,7 +941,7 @@ def GetFavItems(media_type):
     if media_type == "tv":
         return HandleTMDBTVShowResult(response["results"], False, None)
     elif media_type == "tv/episodes":
-        return HandleTMDBEpisodesResult(response["results"], False, None)
+        return HandleTMDBEpisodesResult(response["results"])
     else:
         return HandleTMDBMovieResult(response["results"], False, None)
 
