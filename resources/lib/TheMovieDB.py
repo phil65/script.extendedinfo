@@ -940,6 +940,8 @@ def GetFavItems(media_type):
     response = GetMovieDBData("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), ADDON.getSetting("LanguageID")), 0)
     if media_type == "tv":
         return HandleTMDBTVShowResult(response["results"], False, None)
+    elif media_type == "tv/episodes":
+        return HandleTMDBEpisodesResult(response["results"], False, None)
     else:
         return HandleTMDBMovieResult(response["results"], False, None)
 
