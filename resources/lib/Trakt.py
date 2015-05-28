@@ -34,6 +34,8 @@ def GetTraktCalendarShows(Type):
                 show = {'Title': episode["episode"]["title"],
                         'TVShowTitle': episode["show"]["title"],
                         'tvdb_id': episode["show"]["ids"]["tvdb"],
+                        'id': episode["show"]["ids"]["tvdb"],
+                        'imdb_id': episode["show"]["ids"]["imdb"],
                         'Runtime': episode["show"]["runtime"],
                         'duration': episode["show"]["runtime"],
                         'duration(h)': format_time(episode["show"]["runtime"], "h"),
