@@ -222,7 +222,7 @@ def StartInfoActions(infos, params):
         elif info == 'extendedtvinfo':
             HOME.setProperty('infodialogs.active', "true")
             from DialogTVShowInfo import DialogTVShowInfo
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""),
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""), tvdb_id=params.get("tvdb_id", ""),
                                       dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
             dialog.doModal()
             HOME.clearProperty('infodialogs.active')
