@@ -85,21 +85,21 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in vid_id_list]
             filter_thread.join()
             self.movie["general"]['ImageFilter'], self.movie["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            self.listitems = []
-            self.listitems.append((1000, create_listitems(self.movie["actors"], 0)))
-            self.listitems.append((150, create_listitems(self.movie["similar"], 0)))
-            self.listitems.append((250, create_listitems(self.set_listitems, 0)))
-            self.listitems.append((450, create_listitems(self.movie["lists"], 0)))
-            self.listitems.append((550, create_listitems(self.movie["studios"], 0)))
-            self.listitems.append((650, create_listitems(self.movie["releases"], 0)))
-            self.listitems.append((750, create_listitems(self.crew_list)))
-            self.listitems.append((850, create_listitems(self.movie["genres"], 0)))
-            self.listitems.append((950, create_listitems(self.movie["keywords"], 0)))
-            self.listitems.append((1050, create_listitems(self.movie["reviews"], 0)))
-            self.listitems.append((1150, create_listitems(self.movie["videos"], 0)))
-            self.listitems.append((1250, create_listitems(self.movie["images"], 0)))
-            self.listitems.append((1350, create_listitems(self.movie["backdrops"], 0)))
-            self.listitems.append((350, create_listitems(self.youtube_vids, 0)))
+            self.listitems = [(1000, create_listitems(self.movie["actors"], 0)),
+                              (150, create_listitems(self.movie["similar"], 0)),
+                              (250, create_listitems(self.set_listitems, 0)),
+                              (450, create_listitems(self.movie["lists"], 0)),
+                              (550, create_listitems(self.movie["studios"], 0)),
+                              (650, create_listitems(self.movie["releases"], 0)),
+                              (750, create_listitems(self.crew_list, 0)),
+                              (850, create_listitems(self.movie["genres"], 0)),
+                              (950, create_listitems(self.movie["keywords"], 0)),
+                              (1050, create_listitems(self.movie["reviews"], 0)),
+                              (1150, create_listitems(self.movie["videos"], 0)),
+                              (1250, create_listitems(self.movie["images"], 0)),
+                              (1350, create_listitems(self.movie["backdrops"], 0)),
+                              (350, create_listitems(self.youtube_vids, 0))]
+
         else:
             Notify(ADDON.getLocalizedString(32143))
             self.close()
