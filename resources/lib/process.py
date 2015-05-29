@@ -370,7 +370,7 @@ def StartInfoActions(infos, params):
                 play_trailer(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            xbmc.sleep(500)
+            xbmc.sleep(100)
             if params.get("id", ""):
                 movie_id = params.get("id", "")
             elif int(params.get("dbid", -1)) > 0:
@@ -387,6 +387,7 @@ def StartInfoActions(infos, params):
                     play_trailer(trailer)
                 else:
                     Notify("Error", "No Trailer available")
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
         elif info == 'deletecache':
