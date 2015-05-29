@@ -798,7 +798,8 @@ def GetExtendedTVShowInfo(tvshow_id=None, cache_time=7):
         session_string = "session_id=%s&" % (get_session_id())
     response = GetMovieDBData("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
                               (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
-    # prettyprint(response)
+    if not response:
+        return False
     videos = []
     if "account_states" in response:
         account_states = response["account_states"]

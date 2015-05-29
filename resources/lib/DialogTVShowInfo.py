@@ -46,7 +46,8 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         if self.tmdb_id:
             self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
             if not self.tvshow:
-                self.close()
+                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                return None
             youtube_thread = Get_Youtube_Vids_Thread(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")
