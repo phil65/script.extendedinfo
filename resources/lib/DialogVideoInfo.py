@@ -99,7 +99,6 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
                               (1250, create_listitems(self.movie["images"], 0)),
                               (1350, create_listitems(self.movie["backdrops"], 0)),
                               (350, create_listitems(self.youtube_vids, 0))]
-
         else:
             Notify(ADDON.getLocalizedString(32143))
             self.close()
@@ -160,12 +159,15 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
-        elif controlID in [350, 1150]:
+        elif controlID in [350, 1150, 10]:
             AddToWindowStack(self)
             self.close()
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
-            youtube_id = control.getSelectedItem().getProperty("youtube_id")
+            if controlID == 10:
+                youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
+            else:
+                youtube_id = control.getSelectedItem().getProperty("youtube_id")
             if youtube_id:
                 self.movieplayer.playYoutubeVideo(youtube_id, control.getSelectedItem(), True)
                 self.movieplayer.wait_for_video_end()
