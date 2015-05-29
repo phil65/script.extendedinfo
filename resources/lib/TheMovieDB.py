@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 from YouTube import *
 from Utils import *
 from local_db import compare_with_library, GetImdbIDFromDatabase
@@ -354,6 +359,7 @@ def HandleTMDBMiscResult(results):
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
                     'release_date': release_date,
+                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % fetch(item, 'id'),
                     'year': year,
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),

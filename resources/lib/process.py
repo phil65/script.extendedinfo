@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 from LastFM import *
 from TheAudioDB import *
 from TheMovieDB import *
@@ -112,6 +117,14 @@ def StartInfoActions(infos, params):
             data = GetRatedMedia("movies"), "RatedMovies"
         elif info == 'starredmovies':
             data = GetFavItems("movies"), "StarredMovies"
+        elif info == 'accountlists':
+            account_lists = HandleTMDBMiscResult(GetAccountLists())
+            for item in account_lists:
+                item["directory"] = True
+            data = account_lists, "AccountLists"
+        elif info == 'listmovies':
+            movies = GetMoviesFromList(params["id"])
+            data = movies, "AccountLists"
         elif info == 'airingtodaytvshows':
             data = GetMovieDBTVShows("airing_today"), "AiringTodayTVShows"
         elif info == 'onairtvshows':

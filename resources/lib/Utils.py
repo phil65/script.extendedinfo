@@ -740,9 +740,8 @@ def passListToSkin(name="", data=[], prefix="", handle=None, limit=False):
         if data:
             HOME.setProperty(name + ".Count", str(len(data)))
             items = create_listitems(data)
-            itemlist = list()
             for item in items:
-                itemlist.append((item.getProperty("path"), item, False))
+            itemlist = [(item.getProperty("path"), item, bool(item.getProperty("directory"))) for item in items]
             xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
             xbmcplugin.endOfDirectory(handle)
     else:

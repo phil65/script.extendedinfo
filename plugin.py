@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 import sys
 import os
 import xbmc
@@ -41,6 +46,7 @@ class Main:
                      "upcoming": "TheMovieDB: Upcoming movies",
                      "topratedmovies": "TheMovieDB: Top rated movies",
                      "popularmovies": "TheMovieDB: Popular movies",
+                     "accountlists": "TheMovieDB: User-created lists",
                      # trakt
                      "trendingmovies": "Trakt.tv: Trending movies",
                      # tmdb
@@ -77,13 +83,18 @@ class Main:
         #     xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _parse_argv(self):
-        args = sys.argv[2][1:].split("&&")
+        args = sys.argv[2][1:]
         self.handle = int(sys.argv[1])
         self.control = "plugin"
         self.infos = []
         self.params = {"handle": self.handle,
                        "control": self.control}
-        for arg in args:
+        if args.startswith("---"):
+            delimiter = "&"
+            args = args[3:]
+        else:
+            delimiter = "&&"
+        for arg in args.split(delimiter):
             param = arg.replace('"', '').replace("'", " ")
             if param.startswith('info='):
                 self.infos.append(param[5:])
