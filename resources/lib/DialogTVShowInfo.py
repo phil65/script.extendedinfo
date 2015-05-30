@@ -193,20 +193,15 @@ class DialogTVShowInfo(DialogBaseInfo):
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
         #     country = control.getSelectedItem().getProperty("iso_3166_1")
         #     certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
-        #     cert_items = GetMoviesWithCertification(country, certification)
-        #     AddToWindowStack(self)
-        #     self.close()
-        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=cert_items)
+        #     listitems = GetMoviesWithCertification(country, certification)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     dialog.doModal()
+        #     self.OpenVideoList(listitems=listitems)
         # elif controlID == 450:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
-        #     list_items = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
-        #     self.close()
-        #     AddToWindowStack(self)
-        #     dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items)
+        #     listitems = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     dialog.doModal()
+        #     self.OpenVideoList(listitems=listitems)
+
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
@@ -255,9 +250,9 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def ShowRatedTVShows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        list_items = GetRatedMedia("tv")
+        listitems = GetRatedMedia("tv")
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'], media_type="tv")
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], media_type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()

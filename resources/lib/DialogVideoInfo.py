@@ -264,9 +264,6 @@ class DialogVideoInfo(DialogBaseInfo):
                 ChangeListStatus(account_lists[index - 1]["id"], self.tmdb_id, True)
                 self.UpdateStates()
 
-    def onFocus(self, controlID):
-        pass
-
     def SortLists(self, lists):
         if not self.logged_in:
             return lists
@@ -316,12 +313,9 @@ class DialogVideoInfo(DialogBaseInfo):
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        list_items = GetRatedMedia("movies")
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'])
+        listitems = GetRatedMedia("movies")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        dialog.doModal()
+        self.OpenVideoList(listitems=listitems)
 
     def ShowManageDialog(self):
         manage_list = []

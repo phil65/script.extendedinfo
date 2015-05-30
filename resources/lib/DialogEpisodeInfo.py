@@ -86,9 +86,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         elif controlID == 6006:
             self.ShowRatedEpisodes()
 
-    def onFocus(self, controlID):
-        pass
-
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
@@ -110,9 +107,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
 
     def ShowRatedEpisodes(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        list_items = GetRatedMedia("tv/episodes")
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'])
+        listitems = GetRatedMedia("tv/episodes")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        dialog.doModal()
+        self.OpenVideoList(listitems=listitems)
