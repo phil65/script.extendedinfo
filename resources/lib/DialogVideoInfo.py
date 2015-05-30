@@ -79,8 +79,7 @@ class DialogVideoInfo(DialogBaseInfo):
             id_list = sets_thread.id_list
             self.data["similar"] = [item for item in self.data["similar"] if item["ID"] not in id_list]
             youtube_thread.join()
-            self.youtube_vids = youtube_thread.listitems
-            self.youtube_vids = [item for item in self.youtube_vids if item["youtube_id"] not in vid_id_list]
+            youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
@@ -96,7 +95,7 @@ class DialogVideoInfo(DialogBaseInfo):
                               (1150, create_listitems(self.data["videos"], 0)),
                               (1250, create_listitems(self.data["images"], 0)),
                               (1350, create_listitems(self.data["backdrops"], 0)),
-                              (350, create_listitems(self.youtube_vids, 0))]
+                              (350, create_listitems(youtube_vids, 0))]
         else:
             Notify(ADDON.getLocalizedString(32143))
             self.close()

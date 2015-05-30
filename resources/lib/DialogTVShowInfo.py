@@ -67,7 +67,6 @@ class DialogTVShowInfo(DialogBaseInfo):
             filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
-            self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.listitems = [(150, create_listitems(self.data["similar"], 0)),
@@ -82,7 +81,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                               (1150, create_listitems(self.data["videos"], 0)),
                               (1250, create_listitems(self.data["images"], 0)),
                               (1350, create_listitems(self.data["backdrops"], 0)),
-                              (350, create_listitems(self.youtube_vids, 0))]
+                              (350, create_listitems(youtube_thread.listitems, 0))]
         else:
             Notify(ADDON.getLocalizedString(32143))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
