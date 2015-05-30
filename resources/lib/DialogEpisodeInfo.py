@@ -61,13 +61,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
         self.getControl(1350).addItems(create_listitems(self.episode["images"], 0))
 
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            PopWindowStack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if controlID in [1000, 750]:

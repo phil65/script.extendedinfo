@@ -61,13 +61,6 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.getControl(1350).addItems(create_listitems(self.season["backdrops"], 0))
         self.getControl(2000).addItems(create_listitems(self.season["episodes"], 0))
 
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            PopWindowStack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-
     def onClick(self, controlID):
         control = self.getControl(controlID)
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))

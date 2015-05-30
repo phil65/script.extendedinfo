@@ -102,13 +102,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         self.getControl(1350).addItems(create_listitems(self.tvshow["backdrops"], 0))
         self.UpdateStates(False)
 
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            PopWindowStack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         control = self.getControl(controlID)

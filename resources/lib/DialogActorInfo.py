@@ -73,13 +73,6 @@ class DialogActorInfo(DialogBaseInfo):
     def setControls(self):
         pass
 
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            PopWindowStack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 550]:

@@ -123,22 +123,6 @@ class DialogVideoInfo(DialogBaseInfo):
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
 
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            PopWindowStack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-        # elif action == xbmcgui.ACTION_CONTEXT_MENU:
-        #     if focusid == 450:
-        #         list_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-        #         listitems = ["Add To Account Lists"]
-        #         context_menu = ContextMenu.ContextMenu(u'script-globalsearch-contextmenu.xml', ADDON_PATH, labels=listitems)
-        #         context_menu.doModal()
-        #         if context_menu.selection == 0:
-        #             Notify(list_id)
-        #         selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), listitems)
-
     def onClick(self, controlID):
         control = self.getControl(controlID)
         if controlID in [1000, 750]:

@@ -144,3 +144,10 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
     def onInit(self, *args, **kwargs):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
+
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+            PopWindowStack()
+        elif action in self.ACTION_EXIT_SCRIPT:
+            self.close()
