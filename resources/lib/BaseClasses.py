@@ -1,6 +1,7 @@
 import xbmc
 import xbmcgui
 from Utils import *
+import DialogVideoList
 HOME = xbmcgui.Window(10000)
 
 
