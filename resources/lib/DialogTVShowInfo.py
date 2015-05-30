@@ -70,9 +70,21 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.listitems = [(150, create_listitems(self.data["similar"], 0)),
+                              (250, create_listitems(self.data["seasons"], 0)),
+                              (1450, create_listitems(self.data["networks"], 0)),
+                              (550, create_listitems(self.data["studios"], 0)),
+                              (650, create_listitems(self.data["certifications"], 0)),
+                              (750, create_listitems(self.data["crew"], 0)),
+                              (850, create_listitems(self.data["genres"], 0)),
+                              (950, create_listitems(self.data["keywords"], 0)),
+                              (1000, create_listitems(self.data["actors"], 0)),
+                              (1150, create_listitems(self.data["videos"], 0)),
+                              (1250, create_listitems(self.data["images"], 0)),
+                              (1350, create_listitems(self.data["backdrops"], 0)),
+                              (350, create_listitems(self.youtube_vids, 0))]
         else:
             Notify(ADDON.getLocalizedString(32143))
-            self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
@@ -81,21 +93,12 @@ class DialogTVShowInfo(DialogBaseInfo):
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("tmdb_logged_in", checkLogin())
         self.window.setProperty("type", "tvshow")
-        self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
-        xbmc.sleep(200)
-        prettyprint(self.data["certifications"])
-        self.getControl(150).addItems(create_listitems(self.data["similar"], 0))
-        self.getControl(250).addItems(create_listitems(self.data["seasons"], 0))
-        self.getControl(550).addItems(create_listitems(self.data["studios"], 0))
-        self.getControl(1450).addItems(create_listitems(self.data["networks"], 0))
-        self.getControl(650).addItems(create_listitems(self.data["certifications"], 0))
-        self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
-        self.getControl(850).addItems(create_listitems(self.data["genres"], 0))
-        self.getControl(950).addItems(create_listitems(self.data["keywords"], 0))
-        self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
-        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(create_listitems(self.data["images"], 0))
-        self.getControl(1350).addItems(create_listitems(self.data["backdrops"], 0))
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).reset()
+                self.getControl(container_id).addItems(listitems)
+            except:
+                log("Notice: No container with id %i available" % container_id)
         self.UpdateStates(False)
 
     def onClick(self, controlID):
