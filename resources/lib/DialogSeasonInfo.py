@@ -41,7 +41,6 @@ class DialogSeasonInfo(DialogBaseInfo):
             self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
                               (750, create_listitems(self.data["crew"], 0)),
                               (2000, create_listitems(self.data["episodes"], 0)),
-                              (1050, create_listitems(self.data["reviews"], 0)),
                               (1150, create_listitems(self.data["videos"], 0)),
                               (1250, create_listitems(self.data["images"], 0)),
                               (1350, create_listitems(self.data["backdrops"], 0)),
