@@ -65,9 +65,6 @@ class DialogActorInfo(DialogBaseInfo):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
     #    self.getControl(150).addItems(tvshow_listitems)
 
-    def setControls(self):
-        pass
-
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 550]:
@@ -102,6 +99,3 @@ class DialogActorInfo(DialogBaseInfo):
             text = self.data["general"]["biography"]
             w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])
             w.doModal()
-
-    def onFocus(self, controlID):
-        pass

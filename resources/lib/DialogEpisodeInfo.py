@@ -118,9 +118,3 @@ class DialogEpisodeInfo(DialogBaseInfo):
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'])
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
-
-    def OpenVideoList(self, listitems):
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems)
-        dialog.doModal()

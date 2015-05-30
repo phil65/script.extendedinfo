@@ -90,6 +90,3 @@ class DialogSeasonInfo(DialogBaseInfo):
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
-
-    def onFocus(self, controlID):
-        pass

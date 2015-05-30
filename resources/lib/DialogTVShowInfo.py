@@ -266,12 +266,3 @@ class DialogTVShowInfo(DialogBaseInfo):
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'], media_type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
-
-    def onFocus(self, controlID):
-        pass
-
-    def OpenVideoList(self, listitems=None, filters=[], media_type="movie", mode="filter"):
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, type=media_type, mode=mode)
-        dialog.doModal()

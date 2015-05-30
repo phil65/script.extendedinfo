@@ -338,12 +338,6 @@ class DialogVideoInfo(DialogBaseInfo):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
-    def OpenVideoList(self, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False):
-        AddToWindowStack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label)
-        dialog.doModal()
-
     def ShowManageDialog(self):
         manage_list = []
         listitems = []
