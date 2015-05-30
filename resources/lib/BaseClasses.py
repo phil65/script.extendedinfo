@@ -145,7 +145,10 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
     def onInit(self, *args, **kwargs):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
-
+        if not self.data:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.close()
+            return
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()

@@ -22,7 +22,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         imdb_id = kwargs.get('imdb_id')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
-        self.tvshow = False
+        self.data = False
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):
@@ -42,14 +42,14 @@ class DialogTVShowInfo(DialogBaseInfo):
             log("search string to tmdb_id: %s --> %s" % (str(self.name), str(self.tmdb_id)))
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.tmdb_id:
-            self.tvshow = GetExtendedTVShowInfo(self.tmdb_id)
-            if not self.tvshow:
+            self.data = GetExtendedTVShowInfo(self.tmdb_id)
+            if not self.data:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
-            youtube_thread = Get_Youtube_Vids_Thread(self.tvshow["general"]["Title"] + " tv", "", "relevance", 15)
+            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Title"] + " tv", "", "relevance", 15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")
-            for item in self.tvshow["certifications"]:
+            for item in self.data["certifications"]:
                 if item["iso_3166_1"] in cert_list:
                     # language = item["iso_3166_1"]
                     rating = item["certification"]
@@ -57,19 +57,19 @@ class DialogTVShowInfo(DialogBaseInfo):
                     hit = dictfind(language_certs, "certification", rating)
                     if hit:
                         item["meaning"] = hit["meaning"]
-            if "DBID" not in self.tvshow["general"]:  # need to add comparing for tvshows
+            if "DBID" not in self.data["general"]:  # need to add comparing for tvshows
                 # Notify("download Poster")
-                poster_thread = Threaded_Function(Get_File, self.tvshow["general"]["Poster"])
+                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
                 poster_thread.start()
-            if "DBID" not in self.tvshow["general"]:
+            if "DBID" not in self.data["general"]:
                 poster_thread.join()
-                self.tvshow["general"]['Poster'] = poster_thread.listitems
-            filter_thread = Filter_Image_Thread(self.tvshow["general"]["Poster"], 25)
+                self.data["general"]['Poster'] = poster_thread.listitems
+            filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
             self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
-            self.tvshow["general"]['ImageFilter'], self.tvshow["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
             Notify(ADDON.getLocalizedString(32143))
             self.close()
@@ -77,28 +77,25 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
-        if not self.tvshow:
-            self.close()
-            return
-        HOME.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
-        passDictToSkin(self.tvshow["general"], "movie.", False, False, self.windowid)
+        HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
+        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("tmdb_logged_in", checkLogin())
         self.window.setProperty("type", "tvshow")
-        self.getControl(1000).addItems(create_listitems(self.tvshow["actors"], 0))
+        self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
         xbmc.sleep(200)
-        prettyprint(self.tvshow["certifications"])
-        self.getControl(150).addItems(create_listitems(self.tvshow["similar"], 0))
-        self.getControl(250).addItems(create_listitems(self.tvshow["seasons"], 0))
-        self.getControl(550).addItems(create_listitems(self.tvshow["studios"], 0))
-        self.getControl(1450).addItems(create_listitems(self.tvshow["networks"], 0))
-        self.getControl(650).addItems(create_listitems(self.tvshow["certifications"], 0))
-        self.getControl(750).addItems(create_listitems(self.tvshow["crew"], 0))
-        self.getControl(850).addItems(create_listitems(self.tvshow["genres"], 0))
-        self.getControl(950).addItems(create_listitems(self.tvshow["keywords"], 0))
-        self.getControl(1150).addItems(create_listitems(self.tvshow["videos"], 0))
+        prettyprint(self.data["certifications"])
+        self.getControl(150).addItems(create_listitems(self.data["similar"], 0))
+        self.getControl(250).addItems(create_listitems(self.data["seasons"], 0))
+        self.getControl(550).addItems(create_listitems(self.data["studios"], 0))
+        self.getControl(1450).addItems(create_listitems(self.data["networks"], 0))
+        self.getControl(650).addItems(create_listitems(self.data["certifications"], 0))
+        self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
+        self.getControl(850).addItems(create_listitems(self.data["genres"], 0))
+        self.getControl(950).addItems(create_listitems(self.data["keywords"], 0))
+        self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(create_listitems(self.tvshow["images"], 0))
-        self.getControl(1350).addItems(create_listitems(self.tvshow["backdrops"], 0))
+        self.getControl(1250).addItems(create_listitems(self.data["images"], 0))
+        self.getControl(1350).addItems(create_listitems(self.data["backdrops"], 0))
         self.UpdateStates(False)
 
     def onClick(self, controlID):
@@ -121,7 +118,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             season = control.getSelectedItem().getProperty("Season")
             AddToWindowStack(self)
             self.close()
-            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.tvshow["general"]["Title"])
+            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]["Title"])
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = control.getSelectedItem()
@@ -190,12 +187,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             elif index == 1:
                 self.ShowRatedTVShows()
         elif controlID == 6003:
-            ChangeFavStatus(self.tvshow["general"]["ID"], "tv", "true")
+            ChangeFavStatus(self.data["general"]["ID"], "tv", "true")
             self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedTVShows()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.tvshow["general"]["Plot"], color=self.tvshow["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -220,27 +217,27 @@ class DialogTVShowInfo(DialogBaseInfo):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             self.update = GetExtendedTVShowInfo(self.tmdb_id, 0)
-            self.tvshow["account_states"] = self.update["account_states"]
-        if self.tvshow["account_states"]:
-            if self.tvshow["account_states"]["favorite"]:
+            self.data["account_states"] = self.update["account_states"]
+        if self.data["account_states"]:
+            if self.data["account_states"]["favorite"]:
                 self.window.setProperty("FavButton_Label", ADDON.getLocalizedString(32155))
                 self.window.setProperty("movie.favorite", "True")
             else:
                 self.window.setProperty("FavButton_Label", ADDON.getLocalizedString(32154))
                 self.window.setProperty("movie.favorite", "")
-            if self.tvshow["account_states"]["rated"]:
-                self.window.setProperty("movie.rated", str(self.tvshow["account_states"]["rated"]["value"]))
+            if self.data["account_states"]["rated"]:
+                self.window.setProperty("movie.rated", str(self.data["account_states"]["rated"]["value"]))
             else:
                 self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.tvshow["account_states"]["watchlist"]))
-            # Notify(str(self.tvshow["account_states"]["rated"]["value"]))
+            self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
+            # Notify(str(self.data["account_states"]["rated"]["value"]))
 
     def ShowManageDialog(self):
         manage_list = []
-        tvshow_dbid = str(self.tvshow["general"].get("DBID", ""))
-        title = self.tvshow["general"].get("TVShowTitle", "")
-        # imdb_id = str(self.tvshow["general"].get("imdb_id", ""))
-        # filename = self.tvshow["general"].get("FilenameAndPath", False)
+        tvshow_dbid = str(self.data["general"].get("DBID", ""))
+        title = self.data["general"].get("TVShowTitle", "")
+        # imdb_id = str(self.data["general"].get("imdb_id", ""))
+        # filename = self.data["general"].get("FilenameAndPath", False)
         if tvshow_dbid:
             temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
                          [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + tvshow_dbid + ")"],
@@ -266,7 +263,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         list_items = GetRatedMedia("tv")
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.tvshow["general"]['ImageColor'], media_type="tv")
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=list_items, color=self.data["general"]['ImageColor'], media_type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         dialog.doModal()
 
@@ -276,5 +273,5 @@ class DialogTVShowInfo(DialogBaseInfo):
     def OpenVideoList(self, listitems=None, filters=[], media_type="movie", mode="filter"):
         AddToWindowStack(self)
         self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.tvshow["general"]['ImageColor'], filters=filters, type=media_type, mode=mode)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, type=media_type, mode=mode)
         dialog.doModal()

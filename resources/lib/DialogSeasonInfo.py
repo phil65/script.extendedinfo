@@ -18,47 +18,43 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.showname = kwargs.get('tvshow')
         self.logged_in = checkLogin()
         if self.tmdb_id or (self.season and self.showname):
-            self.season = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
-            if not self.season:
+            self.data = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
+            if not self.data:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            search_string = "%s %s tv" % (self.season["general"]["TVShowTitle"], self.season["general"]["Title"])
+            search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
-            if "DBID" not in self.season["general"]:  # need to add comparing for seasons
-                poster_thread = Threaded_Function(Get_File, self.season["general"]["Poster"])
+            if "DBID" not in self.data["general"]:  # need to add comparing for seasons
+                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
                 poster_thread.start()
-            if "DBID" not in self.season["general"]:
+            if "DBID" not in self.data["general"]:
                 poster_thread.join()
-                self.season["general"]['Poster'] = poster_thread.listitems
-            filter_thread = Filter_Image_Thread(self.season["general"]["Poster"], 25)
+                self.data["general"]['Poster'] = poster_thread.listitems
+            filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
             self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
-            self.season["general"]['ImageFilter'], self.season["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
             Notify(ADDON.getLocalizedString(32143))
-            self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
-        if not self.season:
-            self.close()
-            return
-        HOME.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
+        HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
-        passDictToSkin(self.season["general"], "movie.", False, False, self.windowid)
-        self.getControl(1000).addItems(create_listitems(self.season["actors"], 0))
-        self.getControl(750).addItems(create_listitems(self.season["crew"], 0))
-        self.getControl(1150).addItems(create_listitems(self.season["videos"], 0))
+        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
+        self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
+        self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
+        self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(create_listitems(self.season["images"], 0))
-        self.getControl(1350).addItems(create_listitems(self.season["backdrops"], 0))
-        self.getControl(2000).addItems(create_listitems(self.season["episodes"], 0))
+        self.getControl(1250).addItems(create_listitems(self.data["images"], 0))
+        self.getControl(1350).addItems(create_listitems(self.data["backdrops"], 0))
+        self.getControl(2000).addItems(create_listitems(self.data["episodes"], 0))
 
     def onClick(self, controlID):
         control = self.getControl(controlID)
@@ -92,7 +88,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
 
     def onFocus(self, controlID):
