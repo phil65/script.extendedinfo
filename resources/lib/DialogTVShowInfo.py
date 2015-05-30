@@ -8,16 +8,15 @@ from YouTube import *
 import DialogActorInfo
 import DialogVideoList
 import DialogSeasonInfo
+from BaseClasses import DialogBaseInfo
 
 
-class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [92, 9]
-    ACTION_EXIT_SCRIPT = [13, 10]
+class DialogTVShowInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
+        super(DialogTVShowInfo, self).__init__(*args, **kwargs)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.movieplayer = VideoPlayer(popstack=True)
-        xbmcgui.WindowXMLDialog.__init__(self)
         self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
         dbid = kwargs.get('dbid')
@@ -78,12 +77,11 @@ class DialogTVShowInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        super(DialogTVShowInfo, self).onInit()
         if not self.tvshow:
             self.close()
             return
         HOME.setProperty("movie.ImageColor", self.tvshow["general"]["ImageColor"])
-        self.windowid = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.windowid)
         passDictToSkin(self.tvshow["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("tmdb_logged_in", checkLogin())
         self.window.setProperty("type", "tvshow")

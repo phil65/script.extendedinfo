@@ -133,3 +133,14 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         else:
             self.filters.append(new_filter)
 
+
+class DialogBaseInfo(xbmcgui.WindowXMLDialog):
+    ACTION_PREVIOUS_MENU = [92, 9]
+    ACTION_EXIT_SCRIPT = [13, 10]
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+
+    def onInit(self, *args, **kwargs):
+        self.windowid = xbmcgui.getCurrentWindowDialogId()
+        self.window = xbmcgui.Window(self.windowid)

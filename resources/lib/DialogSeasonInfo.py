@@ -1,20 +1,18 @@
 import xbmc
-import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
 import DialogEpisodeInfo
 from ImageTools import *
+from BaseClasses import DialogBaseInfo
 
 
-class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [92, 9]
-    ACTION_EXIT_SCRIPT = [13, 10]
+class DialogSeasonInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
+        super(DialogSeasonInfo, self).__init__(*args, **kwargs)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        xbmcgui.WindowXMLDialog.__init__(self)
         self.movieplayer = VideoPlayer(popstack=True)
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
@@ -47,15 +45,14 @@ class DialogSeasonInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        super(DialogSeasonInfo, self).onInit()
         if not self.season:
             self.close()
             return
         HOME.setProperty("movie.ImageColor", self.season["general"]["ImageColor"])
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(windowid)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
-        passDictToSkin(self.season["general"], "movie.", False, False, windowid)
+        passDictToSkin(self.season["general"], "movie.", False, False, self.windowid)
         self.getControl(1000).addItems(create_listitems(self.season["actors"], 0))
         self.getControl(750).addItems(create_listitems(self.season["crew"], 0))
         self.getControl(1150).addItems(create_listitems(self.season["videos"], 0))

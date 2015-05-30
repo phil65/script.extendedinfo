@@ -6,14 +6,13 @@ from TheMovieDB import *
 from YouTube import *
 import DialogVideoInfo
 import DialogTVShowInfo
+from BaseClasses import DialogBaseInfo
 
 
-class DialogActorInfo(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [92, 9]
-    ACTION_EXIT_SCRIPT = [13, 10]
+class DialogActorInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        super(DialogActorInfo, self).__init__(*args, **kwargs)
         self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id', False)
         self.person = False
@@ -54,13 +53,13 @@ class DialogActorInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        super(DialogActorInfo, self).onInit()
         if not self.person:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.close()
             return
         HOME.setProperty("actor.ImageColor", self.person["general"]["ImageColor"])
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        passDictToSkin(self.person["general"], "actor.", False, False, windowid)
+        passDictToSkin(self.person["general"], "actor.", False, False, self.windowid)
         self.getControl(150).addItems(create_listitems(self.person["movie_roles"], 0))
         self.getControl(250).addItems(create_listitems(self.person["tvshow_roles"], 0))
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))

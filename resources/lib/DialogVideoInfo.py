@@ -8,19 +8,18 @@ import DialogActorInfo
 import DialogVideoList
 from ImageTools import *
 import threading
+from BaseClasses import DialogBaseInfo
 
 
-class DialogVideoInfo(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [92, 9]
-    ACTION_EXIT_SCRIPT = [13, 10]
+class DialogVideoInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
+        super(DialogVideoInfo, self).__init__(*args, **kwargs)
         if not ADDON.getSetting("first_start_infodialog"):
             ADDON.setSetting("first_start_infodialog", "True")
             xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
         self.movieplayer = VideoPlayer(popstack=True)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        xbmcgui.WindowXMLDialog.__init__(self)
         self.monitor = SettingsMonitor()
         tmdb_id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
@@ -105,12 +104,11 @@ class DialogVideoInfo(xbmcgui.WindowXMLDialog):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
+        super(DialogVideoInfo, self).onInit()
         if not self.movie:
             self.close()
             return
         HOME.setProperty("movie.ImageColor", self.movie["general"]["ImageColor"])
-        self.windowid = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.windowid)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "movie")
         passDictToSkin(self.movie["general"], "movie.", False, False, self.windowid)
