@@ -104,9 +104,8 @@ class DialogVideoInfo(DialogBaseInfo):
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "movie")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        xbmc.sleep(200)
-        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         super(DialogVideoInfo, self).fill_lists()
+        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.UpdateStates(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
@@ -216,15 +215,9 @@ class DialogVideoInfo(DialogBaseInfo):
             if index == -1:
                 pass
             elif index == 0:
-                AddToWindowStack(self)
-                self.close()
-                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, mode="favorites", color=self.data["general"]['ImageColor'])
-                dialog.doModal()
+                OpenVideoList(mode="favorites", color=self.data["general"]['ImageColor'])
             elif index == 1:
-                AddToWindowStack(self)
-                self.close()
-                dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, mode="rating", color=self.data["general"]['ImageColor'])
-                dialog.doModal()
+                OpenVideoList(mode="rating", color=self.data["general"]['ImageColor'])
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_id = account_lists[index - 2]["id"]
