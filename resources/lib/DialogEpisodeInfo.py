@@ -46,7 +46,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
-        super(DialogBaseInfo, self).onInit()
+        super(DialogEpisodeInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "episode")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
