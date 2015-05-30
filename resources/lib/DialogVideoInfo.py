@@ -104,7 +104,7 @@ class DialogVideoInfo(DialogBaseInfo):
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "movie")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        super(DialogVideoInfo, self).fill_lists()
+        self.fill_lists()
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.UpdateStates(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)

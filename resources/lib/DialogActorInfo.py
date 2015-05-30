@@ -61,7 +61,7 @@ class DialogActorInfo(DialogBaseInfo):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "actor.", False, False, self.windowid)
-        super(DialogActorInfo, self).fill_lists()
+        self.fill_lists()
 
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))

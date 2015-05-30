@@ -90,7 +90,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("type", "tvshow")
-        super(DialogTVShowInfo, self).fill_lists()
+        self.fill_lists()
         self.UpdateStates(False)
 
     def onClick(self, controlID):
@@ -201,7 +201,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         #     listitems = GetMoviesFromList(self.getControl(controlID).getSelectedItem().getProperty("id"))
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     self.OpenVideoList(listitems=listitems)
-
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
