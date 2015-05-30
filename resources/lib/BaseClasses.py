@@ -152,6 +152,14 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
             self.close()
             return
 
+    def fill_lists(self):
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).reset()
+                self.getControl(container_id).addItems(listitems)
+            except:
+                log("Notice: No container with id %i available" % container_id)
+
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()

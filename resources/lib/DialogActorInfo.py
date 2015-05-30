@@ -61,12 +61,7 @@ class DialogActorInfo(DialogBaseInfo):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "actor.", False, False, self.windowid)
-        for container_id, listitems in self.listitems:
-            try:
-                self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(listitems)
-            except:
-                log("Notice: No container with id %i available" % container_id)
+        super(DialogActorInfo, self).fill_lists()
 
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))

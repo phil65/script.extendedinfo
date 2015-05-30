@@ -91,12 +91,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("tmdb_logged_in", checkLogin())
         self.window.setProperty("type", "tvshow")
-        for container_id, listitems in self.listitems:
-            try:
-                self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(listitems)
-            except:
-                log("Notice: No container with id %i available" % container_id)
+        super(DialogTVShowInfo, self).fill_lists()
         self.UpdateStates(False)
 
     def onClick(self, controlID):

@@ -55,12 +55,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        for container_id, listitems in self.listitems:
-            try:
-                self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(listitems)
-            except:
-                log("Notice: No container with id %i available" % container_id)
+        super(DialogSeasonInfo, self).fill_lists()
 
     def onClick(self, controlID):
         control = self.getControl(controlID)

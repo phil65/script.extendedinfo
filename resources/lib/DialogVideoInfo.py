@@ -108,12 +108,7 @@ class DialogVideoInfo(DialogBaseInfo):
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         xbmc.sleep(200)
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
-        for container_id, listitems in self.listitems:
-            try:
-                self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(listitems)
-            except:
-                log("Notice: No container with id %i available" % container_id)
+        super(DialogVideoInfo, self).fill_lists()
         self.UpdateStates(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
