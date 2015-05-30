@@ -17,6 +17,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
         self.logged_in = checkLogin()
+        self.data = None
         if self.tmdb_id or (self.season and self.showname):
             self.data = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.data:
@@ -35,9 +36,16 @@ class DialogSeasonInfo(DialogBaseInfo):
             filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
-            self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
+                              (750, create_listitems(self.data["crew"], 0)),
+                              (2000, create_listitems(self.data["episodes"], 0)),
+                              (1050, create_listitems(self.data["reviews"], 0)),
+                              (1150, create_listitems(self.data["videos"], 0)),
+                              (1250, create_listitems(self.data["images"], 0)),
+                              (1350, create_listitems(self.data["backdrops"], 0)),
+                              (350, create_listitems(youtube_thread.listitems, 0))]
         else:
             Notify(ADDON.getLocalizedString(32143))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -48,13 +56,12 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
-        self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
-        self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
-        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(1250).addItems(create_listitems(self.data["images"], 0))
-        self.getControl(1350).addItems(create_listitems(self.data["backdrops"], 0))
-        self.getControl(2000).addItems(create_listitems(self.data["episodes"], 0))
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).reset()
+                self.getControl(container_id).addItems(listitems)
+            except:
+                log("Notice: No container with id %i available" % container_id)
 
     def onClick(self, controlID):
         control = self.getControl(controlID)
