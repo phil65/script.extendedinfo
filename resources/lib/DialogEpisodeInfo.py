@@ -18,7 +18,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.showname = kwargs.get('tvshow')
         self.episodenumber = kwargs.get('episode')
         self.logged_in = checkLogin()
-        self.data = False
         if self.tmdb_id or self.showname:
             self.data = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber)
             if not self.data:

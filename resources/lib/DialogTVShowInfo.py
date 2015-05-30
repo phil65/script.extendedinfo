@@ -22,7 +22,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         imdb_id = kwargs.get('imdb_id')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
-        self.data = False
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):

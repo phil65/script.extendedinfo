@@ -25,7 +25,6 @@ class DialogVideoInfo(DialogBaseInfo):
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
         self.logged_in = checkLogin()
-        self.data = False
         if tmdb_id:
             self.tmdb_id = tmdb_id
         else:
