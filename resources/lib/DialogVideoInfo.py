@@ -215,9 +215,9 @@ class DialogVideoInfo(DialogBaseInfo):
             if index == -1:
                 pass
             elif index == 0:
-                self.OpenVideoList(mode="favorites", color=self.data["general"]['ImageColor'])
+                self.OpenVideoList(mode="favorites")
             elif index == 1:
-                self.OpenVideoList(mode="rating", color=self.data["general"]['ImageColor'])
+                self.OpenVideoList(mode="rating")
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_id = account_lists[index - 2]["id"]
