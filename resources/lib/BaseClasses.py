@@ -141,12 +141,14 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.logged_in = checkLogin()
         self.movieplayer = VideoPlayer(popstack=True)
         self.data = None
 
     def onInit(self, *args, **kwargs):
         self.windowid = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.windowid)
+        self.window.setProperty("tmdb_logged_in", self.logged_in)
         if not self.data:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.close()

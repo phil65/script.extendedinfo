@@ -24,7 +24,6 @@ class DialogVideoInfo(DialogBaseInfo):
         self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
-        self.logged_in = checkLogin()
         if tmdb_id:
             self.tmdb_id = tmdb_id
         else:
@@ -103,7 +102,6 @@ class DialogVideoInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "movie")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         xbmc.sleep(200)

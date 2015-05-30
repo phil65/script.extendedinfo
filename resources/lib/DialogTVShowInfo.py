@@ -89,7 +89,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         super(DialogTVShowInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        self.window.setProperty("tmdb_logged_in", checkLogin())
         self.window.setProperty("type", "tvshow")
         super(DialogTVShowInfo, self).fill_lists()
         self.UpdateStates(False)

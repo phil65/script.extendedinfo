@@ -16,8 +16,6 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
-        self.logged_in = checkLogin()
-        self.data = None
         if self.tmdb_id or (self.season and self.showname):
             self.data = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.data:
@@ -52,7 +50,6 @@ class DialogSeasonInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        self.window.setProperty("tmdb_logged_in", self.logged_in)
         self.window.setProperty("type", "season")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         super(DialogSeasonInfo, self).fill_lists()
