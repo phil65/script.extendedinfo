@@ -140,6 +140,7 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
+        self.movieplayer = VideoPlayer(popstack=True)
 
     def onInit(self, *args, **kwargs):
         self.windowid = xbmcgui.getCurrentWindowDialogId()

@@ -13,7 +13,6 @@ class DialogActorInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
         super(DialogActorInfo, self).__init__(*args, **kwargs)
-        self.movieplayer = VideoPlayer(popstack=True)
         self.id = kwargs.get('id', False)
         self.person = False
         if not self.id:

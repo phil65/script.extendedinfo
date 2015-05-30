@@ -18,7 +18,6 @@ class DialogVideoInfo(DialogBaseInfo):
         if not ADDON.getSetting("first_start_infodialog"):
             ADDON.setSetting("first_start_infodialog", "True")
             xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
-        self.movieplayer = VideoPlayer(popstack=True)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.monitor = SettingsMonitor()
         tmdb_id = kwargs.get('id')

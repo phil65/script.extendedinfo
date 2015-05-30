@@ -16,7 +16,6 @@ class DialogTVShowInfo(DialogBaseInfo):
     def __init__(self, *args, **kwargs):
         super(DialogTVShowInfo, self).__init__(*args, **kwargs)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.movieplayer = VideoPlayer(popstack=True)
         self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
         dbid = kwargs.get('dbid')
