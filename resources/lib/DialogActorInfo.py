@@ -31,39 +31,43 @@ class DialogActorInfo(DialogBaseInfo):
                 self.id = self.id["id"]
             else:
                 return None
-        if self.id:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            self.data = GetExtendedActorInfo(self.id)
-            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["name"], "", "relevance", 15)
-            youtube_thread.start()
-            filter_thread = Filter_Image_Thread(self.data["general"]["thumb"], 25)
-            filter_thread.start()
-            db_movies = 0
-            for item in self.data["movie_roles"]:
-                if "DBID" in item:
-                    db_movies += 1
-            self.data["general"]["DBMovies"] = str(db_movies)
-            filter_thread.join()
-            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            youtube_thread.join()
-            self.youtube_vids = youtube_thread.listitems
-        else:
+        if not self.id:
             Notify(ADDON.getLocalizedString(32143))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            return None
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.data = GetExtendedActorInfo(self.id)
+        youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["name"], "", "relevance", 15)
+        youtube_thread.start()
+        filter_thread = Filter_Image_Thread(self.data["general"]["thumb"], 25)
+        filter_thread.start()
+        db_movies = 0
+        for item in self.data["movie_roles"]:
+            if "DBID" in item:
+                db_movies += 1
+        self.data["general"]["DBMovies"] = str(db_movies)
+        filter_thread.join()
+        self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+        youtube_thread.join()
+        self.listitems = [(150, create_listitems(self.data["movie_roles"], 0)),
+                          (250, create_listitems(self.data["tvshow_roles"], 0)),
+                          (450, create_listitems(self.data["images"], 0)),
+                          (550, create_listitems(self.data["movie_crew_roles"], 0)),
+                          (650, create_listitems(self.data["tvshow_crew_roles"], 0)),
+                          (750, create_listitems(self.data["tagged_images"], 0)),
+                          (350, create_listitems(youtube_thread.listitems, 0))]
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "actor.", False, False, self.windowid)
-        self.getControl(150).addItems(create_listitems(self.data["movie_roles"], 0))
-        self.getControl(250).addItems(create_listitems(self.data["tvshow_roles"], 0))
-        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(450).addItems(create_listitems(self.data["images"], 0))
-        self.getControl(550).addItems(create_listitems(self.data["movie_crew_roles"], 0))
-        self.getControl(650).addItems(create_listitems(self.data["tvshow_crew_roles"], 0))
-        self.getControl(750).addItems(create_listitems(self.data["tagged_images"], 0))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-    #    self.getControl(150).addItems(tvshow_listitems)
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).reset()
+                self.getControl(container_id).addItems(listitems)
+            except:
+                log("Notice: No container with id %i available" % container_id)
 
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
