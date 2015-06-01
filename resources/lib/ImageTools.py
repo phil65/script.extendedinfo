@@ -6,17 +6,17 @@ from Utils import *
 from PIL import Image, ImageFilter
 
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
-
+ADDON_DATA_PATH_IMAGES = os.path.join(ADDON_DATA_PATH, "images")
 
 def Filter_Image(filterimage, radius):
-    if not xbmcvfs.exists(ADDON_DATA_PATH):
-        xbmcvfs.mkdir(ADDON_DATA_PATH)
+    if not xbmcvfs.exists(ADDON_DATA_PATH_IMAGES):
+        xbmcvfs.mkdir(ADDON_DATA_PATH_IMAGES)
     filterimage = xbmc.translatePath(urllib.unquote(filterimage.encode("utf-8"))).replace("image://", "")
     if filterimage.endswith("/"):
         filterimage = filterimage[:-1]
     cachedthumb = xbmc.getCacheThumbName(filterimage)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
-    targetfile = os.path.join(ADDON_DATA_PATH, filename)
+    targetfile = os.path.join(ADDON_DATA_PATH_IMAGES, filename)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
     xbmc_cache_file = os.path.join("special://profile/Thumbnails", cachedthumb[0], cachedthumb[:-4] + ".jpg")
     if filterimage == "":
