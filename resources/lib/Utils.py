@@ -644,6 +644,8 @@ def save_to_file(content, filename, path=""):
     if path == "":
         text_file_path = get_browse_dialog() + filename + ".txt"
     else:
+        if not xbmcvfs.exists(ADDON_DATA_PATH):
+            xbmcvfs.mkdir(ADDON_DATA_PATH)
         if not xbmcvfs.exists(path):
             xbmcvfs.mkdir(path)
         text_file_path = os.path.join(path, filename + ".txt")
