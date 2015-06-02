@@ -6,7 +6,7 @@ Example:
 - keep Attention to the parameter separators ("&amp;&amp;")
 
 
-##Rotten Tomatoes
+## Rotten Tomatoes
 
 Run:
 RunScript(script.extendedinfo,info=intheaters)          --> InTheatersMovies.%d.xxx
@@ -31,7 +31,7 @@ Available Properties:
 'Plot':         Movie Plot
 
 
-##The MovieDB
+## TheMovieDB
 
 Run:
 
@@ -85,7 +85,7 @@ Available Properties:
 'Art(fanart)':      TVShow Fanart
 
 
-##Trakt.tv
+## Trakt.tv
 
 Run:
 RunScript(script.extendedinfo,info=trendingmovies)  --> TrendingMovies.%d
@@ -189,7 +189,7 @@ RunScript(script.extendedinfo,info=artistdetails) ???
 
 
 
-#LastFM
+## LastFM
 
 RunScript(script.extendedinfo,info=albumshouts)
 - fetches twitter shouts for given album
@@ -238,7 +238,7 @@ RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
 
 
 
-##YouTube
+## YouTube
 
 RunScript(script.extendedinfo,info=youtubesearch)           --> YoutubeSearch.%d
 -- required additional parameters: id=
@@ -253,7 +253,7 @@ RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearc
 'Date':         Video Upload Date
 
 
-##Misc Images
+## Misc Images
 
 RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
 - fetches a daily random list of XKCD webcomics
@@ -295,21 +295,29 @@ info=albuminfo ## todo
 
 
 
+## ActorInfo / MovieInfo Dialogs (script.metadata.actors replacement)
 
-
-
-
-
-
-##ActorInfo / MovieInfo Dialogs (script.metadata.actors replacement)
-
-
+possible script call for Actor Info Dialog:
 XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,name=ACTORNAME)
 XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
 
-------------------------------------------------------------------------------------------------------------------------------------
+possible script calls for Movie Info Dialog:
+XBMC.RunScript(script.extendedinfo,info=extendedinfo,name=MOVIENAME)
+XBMC.RunScript(script.extendedinfo,info=extendedinfo,id=MOVIE_TMDB_ID)
+XBMC.RunScript(script.extendedinfo,info=extendedinfo,dbid=MOVIE_DBID)
+XBMC.RunScript(script.extendedinfo,info=extendedinfo,imdb_id=IMDB_ID)
 
-###List of Built In Controls Available In script-ExtendedInfo Script-DialogInfo.xml:
+
+----
+
+## SKINNING ADD-ON DIALOGS:
+
+Please have a look at reference implementation, too much to cover. Consider the following docs as outdated, needs some updating.
+
+
+### List of Built In Controls for add-on dialogs :
+ - MOVIES, TVSHOWS, SEASONS, EPISODES: script-ExtendedInfo Script-DialogVideoInfo.xml
+ - ACTORS: script-ExtendedInfo Script-DialogInfo.xml
 
 | IDS     | MOVIES    | TVSHOWS   | SEASONS   | EPISODES | ACTORS      |
 |---------|-----------|-----------|-----------|----------|-------------|
@@ -330,28 +338,25 @@ XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
 | 1450    | ---       | Networks  | ---       | ---      | ---         |
 | 2000    | ---       | ---       | Episodes  | ---      | ---         |
 
-###Labels Available In script-Actors-DialogInfo.xml:
+### Labels Available In script-Actors-DialogInfo.xml:
 
 Labels of the currently selected actor / director / writer / artist.
-Window(home).Property(Title) --------------------> Name
-Window(home).Property(Label) --------------------> Same as Title
-Window(home).Property(Poster)---------------------> Poster
-Window(home).Property(Plot)---------------------> Biography
+Window(home).Property(Title) ----------> Name
+Window(home).Property(Label) ----------> Same as Title
+Window(home).Property(Poster)----------> Poster
+Window(home).Property(Plot)------------> Biography
 Window(home).Property(Biography) ------> Same as Plot
-Window(home).Property(Biooutline) -----> (currently not used)
 Window(home).Property(TotalMovies) ----> Total of Known Movies (acting / directing / writing)
 Window(home).Property(Birthday) -------> Date of Birthday
 Window(home).Property(HappyBirthday) --> return true or empty
 Window(home).Property(Age) ------------> Age (30)
 Window(home).Property(AgeLong) --------> Age long format (age 30)
 Window(home).Property(Deathday) -------> Date of Deathday
-Window(home).Property(Deathage) -------> Age of dead (30)
-Window(home).Property(DeathageLong) ---> Age of dead long format (age 30)
 Window(home).Property(PlaceOfBirth) ---> Place of birth
 Window(home).Property(AlsoKnownAs) ----> Also Known Name
-Window(home).Property(Homepage) -------> Link of homepage, you can use onclick for open web browser directly on homepage: RunScript(script.metadata.actors,homepage=$INFO[Window(home).Property(Homepage)])
+Window(home).Property(Homepage) -------> Link of homepage
 Window(home).Property(Adult) ----------> Is Adult Actor (no / yes)
-Window(home).Property(fanart) ---> Fanart
+Window(home).Property(fanart) ---------> Fanart
 
 
 Labels of Known Movies list
@@ -375,13 +380,6 @@ Container(250).ListItem.Property(aspect_ratio) ---> Aspect Ratio (0.66)
 
 [...] (WIP)
 
-------------------------------------------------------------------------------------------------------------------------------------
+###Labels Available In script-Actors-DialogVideoInfo.xml:
 
-##SKINNING ADD-ON DIALOGS:
-
-Please have a look at reference implementation, too much to cover. For the infodialogs it is important to include ALL lists (if you dont want to use them just hide them)
-
-
-
-
-
+[...] (WIP)
