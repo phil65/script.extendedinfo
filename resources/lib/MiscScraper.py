@@ -21,7 +21,7 @@ def GetXKCDInfo():
             try:
                 base_url = 'http://xkcd.com/'
                 url = '%i/info.0.json' % random.randrange(1, 1190)
-                results = Get_JSON_response(base_url + url, 9999)
+                results = Get_JSON_response(base_url + url, 9999, folder="XKCD")
                 item = {'Image': results["img"],
                         'Thumb': results["img"],
                         'Path': "plugin://script.extendedinfo?info=setfocus",
@@ -65,7 +65,7 @@ def GetDailyBabes(single=False):
         filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     else:
         filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
-    path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
+    path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, "Babes", filename + ".txt"))
     if xbmcvfs.exists(path):
         return read_from_file(path)
     else:
@@ -84,7 +84,7 @@ def GetDailyBabes(single=False):
                        'Path': "plugin://script.extendedinfo?info=setfocus",
                        'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
-        save_to_file(items, filename, ADDON_DATA_PATH)
+        save_to_file(items, filename, os.path.join(ADDON_DATA_PATH, "Babes"))
         return items
 
 
@@ -131,7 +131,7 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
             count += 1
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
     url = '&%sapp_id=%s' % (ArtistStr, BANDSINTOWN_KEY)
-    results = Get_JSON_response(base_url + url)
+    results = Get_JSON_response(base_url + url, folder="BandsInTown")
     if results:
         return HandleBandsInTownResult(results)
     else:

@@ -19,7 +19,7 @@ def GetTraktCalendarShows(Type):
     elif Type == "premieres":
         url = 'calendars/shows/premieres/%s/14?extended=full,images' % datetime.date.today()
     try:
-        results = Get_JSON_response(BASE_URL + url, 0.5, headers=HEADERS)
+        results = Get_JSON_response(BASE_URL + url, 0.5, folder="Trakt", headers=HEADERS)
     except:
         log("Error when fetching Trakt data from net")
         log("Json Query: " + url)
@@ -137,7 +137,7 @@ def HandleTraktTVShowResult(results):
 
 def GetTrendingShows():
     url = 'shows/trending?extended=full,images'
-    results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
+    results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
         return HandleTraktTVShowResult(results)
     else:
@@ -146,7 +146,7 @@ def GetTrendingShows():
 
 def GetTVShowInfo(imdb_id):
     url = 'show/%s?extended=full,images' % imdb_id
-    results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
+    results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
         return HandleTraktTVShowResult([results])
     else:
@@ -155,7 +155,7 @@ def GetTVShowInfo(imdb_id):
 
 def GetTrendingMovies():
     url = 'movies/trending?extended=full,images'
-    results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
+    results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
         return HandleTraktMovieResult(results)
     else:
@@ -165,7 +165,7 @@ def GetTrendingMovies():
 def GetSimilarTrakt(mediatype, imdb_id):
     if imdb_id is not None:
         url = '%s/%s/related?extended=full,images' % (mediatype, imdb_id)
-        results = Get_JSON_response(BASE_URL + url, headers=HEADERS)
+        results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
         if results is not None:
             if mediatype == "show":
                 return HandleTraktTVShowResult(results)

@@ -461,7 +461,11 @@ def GetStringFromUrl(url=None, headers=False):
 def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
-    path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, hashed_url + ".txt"))
+    if folder:
+        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, folder))
+    else:
+        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH))
+    path = os.path.join(cache_path, hashed_url + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     prop_time = HOME.getProperty(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
@@ -479,7 +483,7 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         try:
             results = simplejson.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))
-            save_to_file(results, hashed_url, ADDON_DATA_PATH)
+            save_to_file(results, hashed_url, cache_path)
         except:
             log("Exception: Could not get new JSON data. Tryin to fallback to cache")
             log(response)

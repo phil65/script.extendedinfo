@@ -573,7 +573,7 @@ def GetMovieDBData(url="", cache_days=14, folder=False):
     if not base_url:
         base_url = True
         base_url, poster_size, fanart_size = GetMovieDBConfig()
-    return Get_JSON_response(url, cache_days, folder)
+    return Get_JSON_response(url, cache_days, "TheMovieDB")
 
 
 def GetMovieDBConfig():
