@@ -143,19 +143,26 @@ def get_account_info():
     session_id = get_session_id()
     response = GetMovieDBData("account?session_id=%s&" % session_id, 999999)
     # prettyprint(response)
-    return response["id"]
+    if "id" in response:
+        return response["id"]
+    else:
+        return None
 
 
 def get_certification_list(media_type):
     response = GetMovieDBData("certification/%s/list?" % media_type, 999999)
-    return response["certifications"]
-
+    if "certifications" in response:
+        return response["certifications"]
+    else:
+        return None
 
 def get_guest_session_id():
     response = GetMovieDBData("authentication/guest_session/new?", 999999)
     # prettyprint(response)
-    return response["guest_session_id"]
-
+    if "guest_session_id" in response:
+        return response["guest_session_id"]
+    else:
+        return None
 
 def get_session_id():
     request_token = auth_request_token()
