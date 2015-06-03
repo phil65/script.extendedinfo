@@ -409,7 +409,14 @@ def StartInfoActions(infos, params):
             if params.get("handle"):
                 if info.endswith("shows"):
                     xbmcplugin.setContent(params.get("handle"), 'tvshows')
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
+
                 else:
                     xbmcplugin.setContent(params.get("handle"), 'movies')
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
             passListToSkin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
 
