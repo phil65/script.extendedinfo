@@ -169,7 +169,7 @@ def GetArtistDetails(search_string):
 
 def GetMostLovedTracks(search_string="", mbid=""):
     if mbid:
-        pass
+        url = 'track-top10-mb.php?s=%s' % (mbid)
     else:
         url = 'track-top10.php?s=%s' % (url_quote(search_string))
     log("GetMostLoveTracks URL:" + url)
