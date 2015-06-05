@@ -50,8 +50,6 @@ def HandleLastFMEventResult(results):
                          'postalcode': event['venue']['location']['postalcode'],
                          'city': event['venue']['location']['city'],
                          'country': event['venue']['location']['country'],
-                         'geolat': event['venue']['location']['geo:point']['geo:lat'],
-                         'geolong': event['venue']['location']['geo:point']['geo:long'],
                          'lat': event['venue']['location']['geo:point']['geo:lat'],
                          'lon': event['venue']['location']['geo:point']['geo:long'],
                          'artists': my_arts,
