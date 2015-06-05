@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 from Utils import *
 
 BASE_URL = "http://www.omdbapi.com/?tomatoes=true&plot=full&r=json&"

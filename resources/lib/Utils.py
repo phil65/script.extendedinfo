@@ -1,3 +1,8 @@
+# -*- coding: utf8 -*-
+
+# Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
+# This program is Free Software see LICENSE file for details
+
 import urllib
 import xbmc
 import xbmcaddon
@@ -432,9 +437,8 @@ def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = Get_JSON_response(base_url + url, 30)
     if results and len(results["artists"]) > 0:
-        mbid = results["artists"][0]["id"]
-        log("found artist id for " + artist.decode("utf-8") + ": " + mbid)
-        return mbid
+        log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
+        return results["artists"][0]["id"]
     else:
         return None
 
@@ -777,6 +781,7 @@ def create_listitems(data=None, preload_images=0):
     String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
                          "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
     itemlist = []
+    prettyprint(data)
     if data is not None:
         threads = []
         image_requests = []
