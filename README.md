@@ -1,3 +1,5 @@
+# ExtendedInfo add-on [![License](https://img.shields.io/badge/License-GPL%20v2%2B-blue.svg)](https://github.com/phil65/script.extendedinfo/blob/master/LICENSE.txt)
+
 List of possible ExtendedInfo script calls.
 All calls can also be done by using a plugin path.
 
@@ -35,15 +37,15 @@ RunScript(script.extendedinfo,info=upcomingdvds)        --> UpcomingDVDs.%d.xxx
 
 Available Properties:
 
-'Title':        Movie Title
-'Art(poster)':  Movie Poster
-'imdb_id':       IMDB ID
-'duration':     Movie duration
-'Year':         Release Year
-'Premiered':    Release Date
-'mpaa':         MPAA Rating
-'Rating':       Audience Rating (0-10)
-'Plot':         Movie Plot
+- 'Title':        Movie Title
+- 'Art(poster)':  Movie Poster
+- 'imdb_id':       IMDB ID
+- 'duration':     Movie duration
+- 'Year':         Release Year
+- 'Premiered':    Release Date
+- 'mpaa':         MPAA Rating
+- 'Rating':       Audience Rating (0-10)
+- 'Plot':         Movie Plot
 
 
 ### TheMovieDB
@@ -86,15 +88,15 @@ RunScript(script.extendedinfo,info=studio)              --> StudioInfo.%d
 
 Available Properties:
 
-'Art(fanart)':      Movie Fanart
-'Art(poster)':      Movie Poster
-'Title':            Movie Title
-'OriginalTitle':    Movie OriginalTitle
-'ID':               TheMovieDB ID
-'Rating':           Movie Rating (0-10)
-'Votes':            Vote Count for Rating
-'Year':             Release Year
-'Premiered':        Release Date
+- 'Art(fanart)':      Movie Fanart
+- 'Art(poster)':      Movie Poster
+- 'Title':            Movie Title
+- 'OriginalTitle':    Movie OriginalTitle
+- 'ID':               TheMovieDB ID
+- 'Rating':           Movie Rating (0-10)
+- 'Votes':            Vote Count for Rating
+- 'Year':             Release Year
+- 'Premiered':        Release Date
 
 
 ```
@@ -112,14 +114,14 @@ RunScript(script.extendedinfo,info=airingtodaytvshows)  --> AiringTodayTVShows.%
 
 Available Properties:
 
-'Title':            TVShow Title
-'ID':               TVShow MovieDB ID
-'OriginalTitle':    TVShow OriginalTitle
-'Rating':           TVShow Rating
-'Votes':            Number of Votes for Rating
-'Premiered':        TV Show First Air Date
-'Art(poster)':      TVShow Poster
-'Art(fanart)':      TVShow Fanart
+- 'Title':            TVShow Title
+- 'ID':               TVShow MovieDB ID
+- 'OriginalTitle':    TVShow OriginalTitle
+- 'Rating':           TVShow Rating
+- 'Votes':            Number of Votes for Rating
+- 'Premiered':        TV Show First Air Date
+- 'Art(poster)':      TVShow Poster
+- 'Art(fanart)':      TVShow Fanart
 
 
 ### Trakt.tv
@@ -132,18 +134,18 @@ RunScript(script.extendedinfo,info=similarmoviestrakt)     --> SimilarMovies.%d
 ```
   - required additional parameters: dbid= (database id) or id= (imdb id)
 
-'Title'
-'Plot'
-'Tagline'
-'Genre'
-'Rating'
-'mpaa'
-'Year'
-'Premiered'
-'Runtime'
-'Trailer'
-'Art(poster)'
-'Art(fanart)'
+- 'Title'
+- 'Plot'
+- 'Tagline'
+- 'Genre'
+- 'Rating'
+- 'mpaa'
+- 'Year'
+- 'Premiered'
+- 'Runtime'
+- 'Trailer'
+- 'Art(poster)'
+- 'Art(fanart)'
 
 
 ```
@@ -155,25 +157,25 @@ RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%
   - required additional parameters: dbid= (database id) or id= (tvdb id)
 
 
-'TVShowTitle':      TVShow Title
-'duration':         Duration (?)
-'Plot':             Plot
-'ID':               ID
-'Genre':            Genre
-'Rating':           Rating
-'mpaa':             mpaa
-'Year':             Release Year
-'Premiered':        First Air Date
-'Status':           TVShow Status
-'Studio':           TVShow Studio
-'Country':          Production Country
-'Votes':            Amount of Votes
-'Watchers':         Amount of Watchers
-'AirDay':           Day episode is aired
-'AirShortTime':     Time episode is aired
-'Art(poster)':      TVShow Poster
-'Art(banner)':      TVShow Banner
-'Art(fanart)':      TVShow Fanart
+- 'TVShowTitle':      TVShow Title
+- 'duration':         Duration (?)
+- 'Plot':             Plot
+- 'ID':               ID
+- 'Genre':            Genre
+- 'Rating':           Rating
+- 'mpaa':             mpaa
+- 'Year':             Release Year
+- 'Premiered':        First Air Date
+- 'Status':           TVShow Status
+- 'Studio':           TVShow Studio
+- 'Country':          Production Country
+- 'Votes':            Amount of Votes
+- 'Watchers':         Amount of Watchers
+- 'AirDay':           Day episode is aired
+- 'AirShortTime':     Time episode is aired
+- 'Art(poster)':      TVShow Poster
+- 'Art(banner)':      TVShow Banner
+- 'Art(fanart)':      TVShow Fanart
 
 ```
 RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
@@ -182,18 +184,18 @@ RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
 RunScript(script.extendedinfo,info=premiereshows)       --> PremiereShows.%d
 ```
 
-'Title':         Episode Title
-'TVShowTitle':   TVShow Title
-'Plot':          Episode Plot
-'Genre':         TVShow Genre
-'Runtime':       Episode Duration
-'Year':          Episode Release Year
-'Certification': TVShow Mpaa Rating
-'Studio':        TVShow Studio
-'Thumb':         Episode Thumb
-'Art(poster)':   TVShow Poster
-'Art(banner)':   TVShow Banner
-'Art(fanart)':   TVShow Fanart
+- 'Title':         Episode Title
+- 'TVShowTitle':   TVShow Title
+- 'Plot':          Episode Plot
+- 'Genre':         TVShow Genre
+- 'Runtime':       Episode Duration
+- 'Year':          Episode Release Year
+- 'Certification': TVShow Mpaa Rating
+- 'Studio':        TVShow Studio
+- 'Thumb':         Episode Thumb
+- 'Art(poster)':   TVShow Poster
+- 'Art(banner)':   TVShow Banner
+- 'Art(fanart)':   TVShow Fanart
 
 
 ### TheAudioDB
@@ -204,19 +206,19 @@ RunScript(script.extendedinfo,info=discography)         --> Discography.%d
 - fetches the artist discography (Last.FM)
   - required additional parameters: artistname=
 
-'Label':           Album Title
-'artist':          Album Artist
-'mbid':            Album MBID
-'id':              Album AudioDB ID
-'Description':     Album Description
-'Genre':           Album Genre
-'Mood':            Album Mood
-'Speed':           Album Speed
-'Theme':           Album Theme
-'Type':            Album Type
-'thumb':           Album Thumb
-'year':            Album Release Year
-'Sales':           Album Sales
+- 'Label':           Album Title
+- 'artist':          Album Artist
+- 'mbid':            Album MBID
+- 'id':              Album AudioDB ID
+- 'Description':     Album Description
+- 'Genre':           Album Genre
+- 'Mood':            Album Mood
+- 'Speed':           Album Speed
+- 'Theme':           Album Theme
+- 'Type':            Album Type
+- 'thumb':           Album Thumb
+- 'year':            Album Release Year
+- 'Sales':           Album Sales
 
 ```
 RunScript(script.extendedinfo,info=mostlovedtracks)         --> MostLovedTracks.%d
@@ -229,12 +231,12 @@ RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
   - required additional parameters: id= ???
 
 
-'Label':       Track Name
-'Artist':      Artist Name
-'mbid':        Track MBID
-'Album':       Album Title
-'Thumb':       Album Thumb
-'Path':        Link to Youtube Video
+- 'Label':       Track Name
+- 'Artist':      Artist Name
+- 'mbid':        Track MBID
+- 'Album':       Album Title
+- 'Thumb':       Album Thumb
+- 'Path':        Link to Youtube Video
 
 ```
 RunScript(script.extendedinfo,info=artistdetails) ???
@@ -253,9 +255,9 @@ RunScript(script.extendedinfo,info=artistshouts)
 - fetches twitter shouts for given artist
   - required additional parameters: artistname=
 
-'comment':  Tweet Content
-'author':   Tweet Author
-'date':     Tweet Date
+- 'comment':  Tweet Content
+- 'author':   Tweet Author
+- 'date':     Tweet Date
 
 ```
 RunScript(script.extendedinfo,info=topartists)
@@ -265,34 +267,34 @@ RunScript(script.extendedinfo,info=topartists)
 RunScript(script.extendedinfo,info=hypedartists)
 ```
 
-'Title':        Artist Name
-'mbid':         Artist MBID
-'Thumb':        Artist Thumb
-'Listeners':    actual Listeners
+- 'Title':        Artist Name
+- 'mbid':         Artist MBID
+- 'Thumb':        Artist Thumb
+- 'Listeners':    actual Listeners
 
 ```
 RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
 ```
   - optional parameters: lat=, lon=, location=, distance=, festivalsonly=, tag=
 
-'date':         Event Date
-'name':         Venue Name
-'venue_id':     Venue ID
-'event_id':     Event ID
-'street':       Venue Street
-'eventname':    Event Title
-'website':      Event Website
-'description':  Event description
-'postalcode':   Venue PostalCode
-'city':         Venue city
-'country':      Venue country
-'lat':          Venue latitude
-'lon':          Venue longitude
-'artists':      Event artists
-'headliner':    Event Headliner
-'googlemap':    GoogleMap of venue location
-'artist_image': Artist image
-'venue_image':  Venue image
+- 'date':         Event Date
+- 'name':         Venue Name
+- 'venue_id':     Venue ID
+- 'event_id':     Event ID
+- 'street':       Venue Street
+- 'eventname':    Event Title
+- 'website':      Event Website
+- 'description':  Event description
+- 'postalcode':   Venue PostalCode
+- 'city':         Venue city
+- 'country':      Venue country
+- 'lat':          Venue latitude
+- 'lon':          Venue longitude
+- 'artists':      Event artists
+- 'headliner':    Event Headliner
+- 'googlemap':    GoogleMap of venue location
+- 'artist_image': Artist image
+- 'venue_image':  Venue image
 
 
 
@@ -310,10 +312,10 @@ RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearc
 ```
   - required additional parameters: id=
 
-'Thumb':        Video Thumbnail
-'Description':  Video Description
-'Title':        Video Title
-'Date':         Video Upload Date
+- 'Thumb':        Video Thumbnail
+- 'Description':  Video Description
+- 'Title':        Video Title
+- 'Date':         Video Upload Date
 
 
 ### Misc Images
@@ -332,9 +334,9 @@ RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
 RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
 ```
 
-'Thumb':        Image
-'Title':        Image Title
-'Description':  Image Description (only XKCD)
+- 'Thumb':        Image
+- 'Title':        Image Title
+- 'Description':  Image Description (only XKCD)
 
 
 
