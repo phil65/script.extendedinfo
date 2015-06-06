@@ -8,15 +8,30 @@ Example:
 
 ### Rotten Tomatoes
 
-Run:
+```
 RunScript(script.extendedinfo,info=intheaters)          --> InTheatersMovies.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=comingsoon)          --> ComingSoonMovies.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=opening)             --> Opening.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=boxoffice)           --> BoxOffice.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=toprentals)          --> TopRentals.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=currentdvdreleases)  --> CurrentDVDs.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=newdvdreleases)      --> NewDVDs.%d.xxx
+```
+```
 RunScript(script.extendedinfo,info=upcomingdvds)        --> UpcomingDVDs.%d.xxx
+```
 
 Available Properties:
 
@@ -33,24 +48,40 @@ Available Properties:
 
 ### TheMovieDB
 
-Run:
-
+```
 RunScript(script.extendedinfo,info=incinemas)           --> InCinemasMovies.%d
+```
+```
 RunScript(script.extendedinfo,info=upcoming)            --> UpcomingMovies.%d
+```
+```
 RunScript(script.extendedinfo,info=popularmovies)       --> PopularMovies.%d
+```
+```
 RunScript(script.extendedinfo,info=topratedmovies)      --> TopRatedMovies.%d
+```
+```
 RunScript(script.extendedinfo,info=similarmovies)       --> SimilarMovies.%d
--- required additional parameters: dbid=
+```
+  - required additional parameters: dbid=
+```
 RunScript(script.extendedinfo,info=set)                 --> MovieSetItems.%d
+```
 - fetches a list of movies from the same Set
--- required additional parameters: dbid=
+  - required additional parameters: dbid=
+```
 RunScript(script.extendedinfo,info=directormovies)      --> DirectorMovies.%d
--- required additional parameters: director=
+```
+  - required additional parameters: director=
+```
 RunScript(script.extendedinfo,info=writermovies)        --> WriterMovies.%d
--- required additional parameters: writer=
+```
+  - required additional parameters: writer=
+```
 RunScript(script.extendedinfo,info=studio)              --> StudioInfo.%d
+```
 - fetches a list of movies from the same studio
--- required additional parameters: studio=
+  - required additional parameters: studio=
 
 
 Available Properties:
@@ -66,12 +97,18 @@ Available Properties:
 'Premiered':        Release Date
 
 
-Run:
-
+```
 RunScript(script.extendedinfo,info=populartvshows)      --> PopularTVShows.%d
+```
+```
 RunScript(script.extendedinfo,info=topratedtvshows)     --> TopRatedTVShows.%d
+```
+```
 RunScript(script.extendedinfo,info=onairtvshows)        --> OnAirTVShows.%d
+```
+```
 RunScript(script.extendedinfo,info=airingtodaytvshows)  --> AiringTodayTVShows.%d
+```
 
 Available Properties:
 
@@ -87,10 +124,13 @@ Available Properties:
 
 ### Trakt.tv
 
-Run:
+```
 RunScript(script.extendedinfo,info=trendingmovies)  --> TrendingMovies.%d
+```
+```
 RunScript(script.extendedinfo,info=similarmoviestrakt)     --> SimilarMovies.%d
--- required additional parameters: dbid= (database id) or id= (imdb id)
+```
+  - required additional parameters: dbid= (database id) or id= (imdb id)
 
 'Title'
 'Plot'
@@ -106,11 +146,14 @@ RunScript(script.extendedinfo,info=similarmoviestrakt)     --> SimilarMovies.%d
 'Art(fanart)'
 
 
-Run:
-
+```
 RunScript(script.extendedinfo,info=trendingshows)           --> TrendingShows.%d
+```
+```
 RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%d
--- required additional parameters: dbid= (database id) or id= (tvdb id)
+```
+  - required additional parameters: dbid= (database id) or id= (tvdb id)
+
 
 'TVShowTitle':      TVShow Title
 'duration':         Duration (?)
@@ -132,9 +175,12 @@ RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%
 'Art(banner)':      TVShow Banner
 'Art(fanart)':      TVShow Fanart
 
-
+```
 RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
+```
+```
 RunScript(script.extendedinfo,info=premiereshows)       --> PremiereShows.%d
+```
 
 'Title':         Episode Title
 'TVShowTitle':   TVShow Title
@@ -152,9 +198,11 @@ RunScript(script.extendedinfo,info=premiereshows)       --> PremiereShows.%d
 
 ### TheAudioDB
 
+```
 RunScript(script.extendedinfo,info=discography)         --> Discography.%d
+```
 - fetches the artist discography (Last.FM)
--- required additional parameters: artistname=
+  - required additional parameters: artistname=
 
 'Label':           Album Title
 'artist':          Album Artist
@@ -170,12 +218,16 @@ RunScript(script.extendedinfo,info=discography)         --> Discography.%d
 'year':            Album Release Year
 'Sales':           Album Sales
 
-
+```
 RunScript(script.extendedinfo,info=mostlovedtracks)         --> MostLovedTracks.%d
+```
 - fetches most loved tracks for the given artist (TheAudioDB)
--- required additional parameters: artistname=
+  - required additional parameters: artistname=
+```
 RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
--- required additional parameters: id= ???
+```
+  - required additional parameters: id= ???
+
 
 'Label':       Track Name
 'Artist':      Artist Name
@@ -184,38 +236,44 @@ RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
 'Thumb':       Album Thumb
 'Path':        Link to Youtube Video
 
-
+```
 RunScript(script.extendedinfo,info=artistdetails) ???
-
+```
 
 
 ### LastFM
-
+```
 RunScript(script.extendedinfo,info=albumshouts)
+```
 - fetches twitter shouts for given album
--- required additional parameters: artistname=, albumname=
+  - required additional parameters: artistname=, albumname=
+```
 RunScript(script.extendedinfo,info=artistshouts)
+```
 - fetches twitter shouts for given artist
--- required additional parameters: artistname=
+  - required additional parameters: artistname=
 
 'comment':  Tweet Content
 'author':   Tweet Author
 'date':     Tweet Date
 
-
+```
 RunScript(script.extendedinfo,info=topartists)
+```
 - fetches a lists of the most popular artists
+```
 RunScript(script.extendedinfo,info=hypedartists)
-
+```
 
 'Title':        Artist Name
 'mbid':         Artist MBID
 'Thumb':        Artist Thumb
 'Listeners':    actual Listeners
 
-
+```
 RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
--- optional parameters: lat=, lon=, location=, distance=, festivalsonly=, tag=
+```
+  - optional parameters: lat=, lon=, location=, distance=, festivalsonly=, tag=
 
 'date':         Event Date
 'name':         Venue Name
@@ -239,13 +297,18 @@ RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
 
 
 ### YouTube
-
+```
 RunScript(script.extendedinfo,info=youtubesearch)           --> YoutubeSearch.%d
--- required additional parameters: id=
+```
+  - required additional parameters: id=
+```
 RunScript(script.extendedinfo,info=youtubeplaylist)         --> YoutubePlaylist.%d
--- required additional parameters: id=
+```
+  - required additional parameters: id=
+```
 RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearch.%d
--- required additional parameters: id=
+```
+  - required additional parameters: id=
 
 'Thumb':        Video Thumbnail
 'Description':  Video Description
@@ -254,13 +317,20 @@ RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearc
 
 
 ### Misc Images
-
+```
 RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
+```
 - fetches a daily random list of XKCD webcomics
+```
 RunScript(script.extendedinfo,info=cyanide)       --> CyanideHappiness.%d
+```
 - fetches a daily random list of Cyanide & Happiness webcomics
+```
 RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
+```
+```
 RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
+```
 
 'Thumb':        Image
 'Title':        Image Title
@@ -298,15 +368,25 @@ info=albuminfo ## todo
 ### ActorInfo / MovieInfo Dialogs (script.metadata.actors replacement)
 
 possible script call for Actor Info Dialog:
-XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,name=ACTORNAME)
-XBMC.RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
-
+```
+RunScript(script.extendedinfo,info=extendedactorinfo,name=ACTORNAME)
+```
+```
+RunScript(script.extendedinfo,info=extendedactorinfo,id=ACTOR_TMDB_ID)
+```
 possible script calls for Movie Info Dialog:
-XBMC.RunScript(script.extendedinfo,info=extendedinfo,name=MOVIENAME)
-XBMC.RunScript(script.extendedinfo,info=extendedinfo,id=MOVIE_TMDB_ID)
-XBMC.RunScript(script.extendedinfo,info=extendedinfo,dbid=MOVIE_DBID)
-XBMC.RunScript(script.extendedinfo,info=extendedinfo,imdb_id=IMDB_ID)
-
+```
+RunScript(script.extendedinfo,info=extendedinfo,name=MOVIENAME)
+```
+```
+RunScript(script.extendedinfo,info=extendedinfo,id=MOVIE_TMDB_ID)
+```
+```
+RunScript(script.extendedinfo,info=extendedinfo,dbid=MOVIE_DBID)
+```
+```
+RunScript(script.extendedinfo,info=extendedinfo,imdb_id=IMDB_ID)
+```
 
 ----
 
