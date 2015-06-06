@@ -24,6 +24,7 @@ ADDON_ICON = ADDON.getAddonInfo('icon')
 ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
+ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 global windowstack
 windowstack = []
@@ -661,19 +662,20 @@ def save_to_file(content, filename, path=""):
     return True
 
 
-def read_from_file(path=""):
+def read_from_file(path="", raw=False):
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     if not xbmcvfs.exists(path):
         return False
-    now = time.time()
     try:
         f = open(path)
-        fc = simplejson.load(f)
-        log("loaded textfile %s. Time: %f" % (path, time.time() - now))
-        return fc
+        log("opened textfile %s." % (path))
+        if not raw:
+            return simplejson.load(f)
+        else:
+            return f.read()
     except:
-        log("failed to load JSON textfile: " + path)
+        log("failed to load textfile: " + path)
         return False
 
 

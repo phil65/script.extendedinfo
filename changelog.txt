@@ -107,7 +107,7 @@ v2.0.1
 - repo release version
 
 v2.0.0
-- Standalone part: MovieDB Browser, extended Info dialogs for movies / TV /seasons / episodes /actors
+- Standalone part: MovieDB Browser, extended Info dialogs for movies / TV /seasons / episodes / actors
 - localization
 - too much to count
 
