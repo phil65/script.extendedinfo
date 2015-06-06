@@ -33,9 +33,9 @@ include_adult = str(ADDON.getSetting("include_adults")).lower()
 class DialogVideoList(DialogBaseList):
 
     def __init__(self, *args, **kwargs):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         super(DialogVideoList, self).__init__()
         self.layout = "poster"
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.type = kwargs.get('type', "movie")
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")

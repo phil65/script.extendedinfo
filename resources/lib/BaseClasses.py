@@ -174,11 +174,27 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
                 log("Notice: No container with id %i available" % container_id)
 
     def onAction(self, action):
+        focus_id = self.getFocusId()
+        control = self.getControl(focus_id)
+        media_type = self.window.getProperty("type")
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             pop_window_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+        if action == xbmcgui.ACTION_CONTEXT_MENU:
+            if focus_id == 1250 and self.data["general"].get("DBID"):
+                selection = xbmcgui.Dialog().select("Choose", ["Use as thumbnail"])
+                if selection == 0:
+                    path = control.getSelectedItem().getProperty("original")
+                    params = '"art": {"poster": "%s"}' % path
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
+            elif focus_id == 1350 and self.data["general"].get("DBID"):
+                selection = xbmcgui.Dialog().select("Choose", ["Use as fanart"])
+                if selection == 0:
+                    path = control.getSelectedItem().getProperty("original")
+                    params = '"art": {"fanart": "%s"}' % path
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
 
     def open_video_list(self, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
         add_to_window_stack(self)
