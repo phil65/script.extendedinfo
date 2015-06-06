@@ -87,11 +87,11 @@ class DialogEpisodeInfo(DialogBaseInfo):
             if rating:
                 identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
                 send_rating_for_media_item("episode", identifier, rating)
-                self.UpdateStates()
+                self.update_states()
         elif controlID == 6006:
             self.ShowRatedEpisodes()
 
-    def UpdateStates(self, forceupdate=True):
+    def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             self.update = extended_episode_info(self.tmdb_id, self.season, self.episodenumber, 0)

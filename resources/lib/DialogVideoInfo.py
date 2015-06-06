@@ -111,7 +111,7 @@ class DialogVideoInfo(DialogBaseInfo):
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.fill_lists()
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
-        self.UpdateStates(False)
+        self.update_states(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
 
@@ -221,7 +221,7 @@ class DialogVideoInfo(DialogBaseInfo):
             rating = get_rating_from_user()
             if rating:
                 send_rating_for_media_item("movie", self.tmdb_id, rating)
-                self.UpdateStates()
+                self.update_states()
         elif control_id == 6002:
             listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -249,7 +249,7 @@ class DialogVideoInfo(DialogBaseInfo):
             self.close()
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.data["general"]['DBID'], "true"))
         elif control_id == 445:
-            self.ShowManageDialog()
+            self.show_manage_dialog()
         elif control_id == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
@@ -258,9 +258,9 @@ class DialogVideoInfo(DialogBaseInfo):
                 change_fav_status(self.data["general"]["ID"], "movie", "false")
             else:
                 change_fav_status(self.data["general"]["ID"], "movie", "true")
-            self.UpdateStates()
+            self.update_states()
         elif control_id == 6006:
-            self.ShowRatedMovies()
+            self.show_rated_movies()
         elif control_id == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [ADDON.getLocalizedString(32139)]
@@ -280,7 +280,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 self.remove_listDialog(account_lists)
             elif index > 0:
                 change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
-                self.UpdateStates()
+                self.update_states()
 
     def SortLists(self, lists):
         if not self.logged_in:
@@ -299,7 +299,7 @@ class DialogVideoInfo(DialogBaseInfo):
         # misc_lists = [item for item in lists if item["ID"] not in id_list]
         return own_lists + misc_lists
 
-    def UpdateStates(self, forceupdate=True):
+    def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             self.update = extended_movie_info(self.tmdb_id, self.dbid, 0)
@@ -327,15 +327,15 @@ class DialogVideoInfo(DialogBaseInfo):
         if index >= 0:
             # change_list_status(account_lists[index]["id"], self.tmdb_id, False)
             remove_list(account_lists[index]["id"])
-            self.UpdateStates()
+            self.update_states()
 
-    def ShowRatedMovies(self):
+    def show_rated_movies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("movies")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_video_list(listitems=listitems)
 
-    def ShowManageDialog(self):
+    def show_manage_dialog(self):
         manage_list = []
         listitems = []
         movie_id = str(self.data["general"].get("DBID", ""))

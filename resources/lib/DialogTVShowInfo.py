@@ -96,7 +96,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("type", "tvshow")
         self.fill_lists()
-        self.UpdateStates(False)
+        self.update_states(False)
 
     def onClick(self, controlID):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
@@ -171,12 +171,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             self.open_video_list(filters=filters, media_type="tv")
         elif controlID == 445:
-            self.ShowManageDialog()
+            self.show_manage_dialog()
         elif controlID == 6001:
             rating = get_rating_from_user()
             if rating:
                 send_rating_for_media_item("tv", self.tmdb_id, rating)
-                self.UpdateStates()
+                self.update_states()
         elif controlID == 6002:
             listitems = [ADDON.getLocalizedString(32144), ADDON.getLocalizedString(32145)]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
@@ -185,12 +185,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             elif index == 0:
                 self.open_video_list(media_type="tv", mode="favorites")
             elif index == 1:
-                self.ShowRatedTVShows()
+                self.show_rated_tvshows()
         elif controlID == 6003:
             change_fav_status(self.data["general"]["ID"], "tv", "true")
-            self.UpdateStates()
+            self.update_states()
         elif controlID == 6006:
-            self.ShowRatedTVShows()
+            self.show_rated_tvshows()
         elif controlID == 132:
             w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
@@ -207,7 +207,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
         #     self.open_video_list(listitems=listitems)
 
-    def UpdateStates(self, forceupdate=True):
+    def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             self.update = extended_tvshow_info(self.tmdb_id, 0)
@@ -226,7 +226,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
             # Notify(str(self.data["account_states"]["rated"]["value"]))
 
-    def ShowManageDialog(self):
+    def show_manage_dialog(self):
         manage_list = []
         tvshow_dbid = str(self.data["general"].get("DBID", ""))
         title = self.data["general"].get("TVShowTitle", "")
@@ -252,7 +252,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             for item in builtin_list:
                 xbmc.executebuiltin(item)
 
-    def ShowRatedTVShows(self):
+    def show_rated_tvshows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("tv")
         AddToWindowStack(self)
