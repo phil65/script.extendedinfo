@@ -156,6 +156,7 @@ def get_certification_list(media_type):
     else:
         return None
 
+
 def get_guest_session_id():
     response = get_tmdb_data("authentication/guest_session/new?", 999999)
     # prettyprint(response)
@@ -163,6 +164,7 @@ def get_guest_session_id():
         return response["guest_session_id"]
     else:
         return None
+
 
 def get_session_id():
     request_token = auth_request_token()
@@ -525,19 +527,17 @@ def multi_search(String):
         return ""
 
 
-def get_person_id(person, skip_dialog=False):
-    persons = person.split(" / ")
-    person = persons[0]
-    response = get_tmdb_data("search/person?query=%s&include_adult=%s&" % (url_quote(person), include_adult), 30)
+def get_person_id(person_label, skip_dialog=False):
+    persons = person_label.split(" / ")
+    response = get_tmdb_data("search/person?query=%s&include_adult=%s&" % (url_quote(persons[0]), include_adult), 30)
     if response and "results" in response:
         if len(response["results"]) > 1 and not skip_dialog:
             listitems = create_listitems(handle_tmdb_people(response["results"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             w = Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=listitems)
             w.doModal()
-            selection = w.index
-            if selection >= 0:
-                return response["results"][selection]
+            if w.index >= 0:
+                return response["results"][w.index]
         elif response["results"]:
             return response["results"][0]
     else:
@@ -685,7 +685,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
 
 def GetTrailer(movieid=None):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
+                             (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
         youtube_id = response['videos']['results'][0]['key']
         return youtube_id
@@ -699,7 +699,7 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
     else:
         session_string = ""
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
-                              (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
+                             (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     # prettyprint(response)
     authors = []
     directors = []
@@ -803,7 +803,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                              (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
+                             (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     if not response:
         return False
     videos = []
@@ -888,7 +888,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
-                              (str(tvshow_id), str(season), str(episode), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
+                             (str(tvshow_id), str(season), str(episode), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     videos = []
     # prettyprint(response)
     if "videos" in response:
@@ -925,7 +925,7 @@ def GetExtendedActorInfo(actorid):
 
 def get_movie_lists(list_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (list_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 5)
+                             (list_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 5)
     return handle_tmdb_misc(response["lists"]["results"])
 
 
@@ -985,7 +985,7 @@ def GetActorTVShowCredits(actor_id):
 
 def GetMovieKeywords(movie_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
+                             (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -1000,7 +1000,7 @@ def GetMovieKeywords(movie_id):
 
 def get_similar_movies(movie_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 10)
+                             (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 10)
     if "similar" in response:
         return handle_tmdb_movies(response["similar"]["results"])
     else:
@@ -1012,7 +1012,7 @@ def get_similar_tvshows(tvshow_id):
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                              (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), 10)
+                             (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), 10)
     if "similar" in response:
         return handle_tmdb_tvshows(response["similar"]["results"])
     else:
