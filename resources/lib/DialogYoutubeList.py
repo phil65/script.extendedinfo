@@ -8,7 +8,6 @@ import xbmcgui
 from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList
-HOME = xbmcgui.Window(10000)
 
 
 class DialogYoutubeList(DialogBaseList):

@@ -8,7 +8,6 @@ import xbmcgui
 from Utils import *
 import DialogVideoList
 from TheMovieDB import *
-HOME = xbmcgui.Window(10000)
 
 
 class DialogBaseList(xbmcgui.WindowXMLDialog):

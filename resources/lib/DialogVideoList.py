@@ -11,7 +11,6 @@ import DialogTVShowInfo
 import DialogActorInfo
 from TheMovieDB import *
 from BaseClasses import DialogBaseList
-HOME = xbmcgui.Window(10000)
 SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    ADDON.getLocalizedString(32108): "revenue",
