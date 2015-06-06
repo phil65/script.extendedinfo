@@ -4,14 +4,18 @@ v2.1.0
 - added 24 movie / TV show listings from different content providers to plugin
 - added script calls for TMDB starred/rated movies and TV shows
 - added genre label for tvshows
-- added "duration(h)" and "duration(m)" property
-- check Trakt and RT movie lists for local movies
+- added context menu entry for posters / backdrops (allows using them as local artwork)
+- added local-check for Trakt and RT movie lists
+- added button id 10 to play trailer for movie info dialog
+- fixed onclick for Trakt calendar items
 - fixed limit param for some script calls
 - fixed biography dialog for actors
 - fixed RT json parsing in case premiered is not available
 - fixed MovieDB TV show favourites processing
 - fixed similarlocal call
+- fixed maps.browser call
 - fixed onclick for Trakt calendar items
+- put cache files into subdirectories
 - Code cleanup
 
 v2.0.10
