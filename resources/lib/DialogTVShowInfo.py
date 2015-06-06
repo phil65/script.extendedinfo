@@ -94,7 +94,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         super(DialogTVShowInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
-        self.window.setProperty("type", "tvshow")
+        self.window.setProperty("type", "TVShow")
         self.fill_lists()
         self.update_states(False)
 
@@ -233,11 +233,10 @@ class DialogTVShowInfo(DialogBaseInfo):
         # imdb_id = str(self.data["general"].get("imdb_id", ""))
         # filename = self.data["general"].get("FilenameAndPath", False)
         if tvshow_dbid:
-            temp_list = [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
-                         [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + tvshow_dbid + ")"],
-                         [ADDON.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ",extrathumbs)"],
-                         [ADDON.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ")"]]
-            manage_list += temp_list
+            manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
+                            [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + tvshow_dbid + ")"],
+                            [ADDON.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ",extrathumbs)"],
+                            [ADDON.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ")"]]
         else:
             manage_list += [[ADDON.getLocalizedString(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
         # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and tvshow_dbid:

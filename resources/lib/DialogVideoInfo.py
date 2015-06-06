@@ -42,7 +42,7 @@ class DialogVideoInfo(DialogBaseInfo):
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.data["general"]["SetId"])
             self.omdb_thread = Threaded_Function(GetOmdbMovieInfo, self.data["general"]["imdb_id"])
-            lists_thread = Threaded_Function(self.SortLists, self.data["lists"])
+            lists_thread = Threaded_Function(self.sort_lists, self.data["lists"])
             self.omdb_thread.start()
             sets_thread.start()
             youtube_thread.start()
@@ -107,7 +107,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        self.window.setProperty("type", "movie")
+        self.window.setProperty("type", "Movie")
         passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
         self.fill_lists()
         passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
@@ -282,7 +282,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
                 self.update_states()
 
-    def SortLists(self, lists):
+    def sort_lists(self, lists):
         if not self.logged_in:
             return lists
         account_list = GetAccountLists(10)  # use caching here, forceupdate everywhere else
