@@ -124,7 +124,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 selection = xbmcgui.Dialog().select("Choose", ["Use as thumbnail"])
                 if selection == 0:
                     media_type = "Movie"
-                    path = control.getSelectedItem().getProperty("thumb")
+                    path = control.getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
 
