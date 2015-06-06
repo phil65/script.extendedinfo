@@ -781,7 +781,7 @@ def create_listitems(data=None, preload_images=0):
     String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
                          "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
     itemlist = []
-    prettyprint(data)
+    # prettyprint(data)
     if data is not None:
         threads = []
         image_requests = []
