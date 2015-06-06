@@ -55,10 +55,9 @@ def format_time(time, format=None):
 
 def url_quote(url):
     try:
-        url = urllib.quote_plus(url.encode('utf8', 'ignore'))
+        return urllib.quote_plus(url.encode('utf8', 'ignore'))
     except:
-        url = urllib.quote_plus(unicode(url, "utf-8").encode("utf-8"))
-    return url
+        return urllib.quote_plus(unicode(url, "utf-8").encode("utf-8"))
 
 
 def merge_dicts(*dict_args):
@@ -314,7 +313,7 @@ def get_playlist_stats(path):
         playlistpath = path[startindex:endindex]
     #    notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_response = get_Kodi_JSON('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
+        json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
         if "result" in json_response:
             played = 0
             inprogress = 0
@@ -331,33 +330,33 @@ def get_playlist_stats(path):
             HOME.setProperty('PlaylistCount', str(numitems))
 
 
-def get_sort_letters(path, focusedletter):
+def get_sort_letters(path, focused_letter):
     listitems = []
-    letterlist = []
+    letter_list = []
     HOME.clearProperty("LetterList")
     if ADDON.getSetting("FolderPath") == path:
-        letterlist = ADDON.getSetting("LetterList")
-        letterlist = letterlist.split()
+        letter_list = ADDON.getSetting("LetterList")
+        letter_list = letter_list.split()
     else:
         if path:
-            json_response = get_Kodi_JSON('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}' % path)
+            json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}' % path)
             if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
                     cleaned_label = movie["label"].replace("The ", "")
                     if cleaned_label:
                         sortletter = cleaned_label[0]
-                        if sortletter not in letterlist:
-                            letterlist.append(sortletter)
-            ADDON.setSetting("LetterList", " ".join(letterlist))
+                        if sortletter not in letter_list:
+                            letter_list.append(sortletter)
+            ADDON.setSetting("LetterList", " ".join(letter_list))
             ADDON.setSetting("FolderPath", path)
-    HOME.setProperty("LetterList", "".join(letterlist))
-    if letterlist and focusedletter:
+    HOME.setProperty("LetterList", "".join(letter_list))
+    if letter_list and focused_letter:
         startord = ord("A")
         for i in range(0, 26):
             letter = chr(startord + i)
-            if letter == focusedletter:
+            if letter == focused_letter:
                 label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-            elif letter in letterlist:
+            elif letter in letter_list:
                 label = letter
             else:
                 label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
@@ -528,9 +527,9 @@ def get_file(url):
     clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
     if clean_url.endswith("/"):
         clean_url = clean_url[:-1]
-    cachedthumb = xbmc.getCacheThumbName(clean_url)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cachedthumb[0], cachedthumb[:-4] + ".jpg").replace("\\", "/")
+    cached_thumb = xbmc.getCacheThumbName(clean_url)
+    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
+    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
     xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
     if xbmcvfs.exists(xbmc_cache_file_jpg):
         log("xbmc_cache_file_jpg Image: " + url + "-->" + xbmc_cache_file_jpg)
@@ -558,9 +557,9 @@ def get_file(url):
                     image = xbmc_cache_file_png
                 else:
                     image = xbmc_cache_file_jpg
-                tmpfile = open(xbmc.translatePath(image), 'wb')
-                tmpfile.write(data)
-                tmpfile.close()
+                tmp_file = open(xbmc.translatePath(image), 'wb')
+                tmp_file.write(data)
+                tmp_file.close()
                 return xbmc.translatePath(image)
             except:
                 log('failed to save image ' + url)
@@ -571,11 +570,11 @@ def get_file(url):
 
 def get_favs_by_type(fav_type):
     favs = get_favs()
-    favlist = []
+    fav_list = []
     for fav in favs:
         if fav["Type"] == fav_type:
-            favlist.append(fav)
-    return favlist
+            fav_list.append(fav)
+    return fav_list
 
 
 def get_fav_path(fav):
@@ -593,7 +592,7 @@ def get_fav_path(fav):
 
 def get_favs():
     items = []
-    json_response = get_Kodi_JSON('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    json_response = get_kodi_json('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
     if "result" not in json_response:
         return []
     if json_response["result"]["limits"]["total"] > 0:
@@ -679,31 +678,25 @@ def read_from_file(path=""):
         return False
 
 
-def ConvertYoutubeURL(string):
-    if string and 'youtube.com/v' in string:
-        vid_ids = re.findall(
-            'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
+def ConvertYoutubeURL(raw_string):
+    if raw_string and 'youtube.com/v' in raw_string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
         for id in vid_ids:
-            convertedstring = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
-            return convertedstring
-    if string and 'youtube.com/watch' in string:
-        vid_ids = re.findall(
-            'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
+            return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
+    if raw_string and 'youtube.com/watch' in raw_string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
         for id in vid_ids:
-            convertedstring = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
-            return convertedstring
+            return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
     return ""
 
 
-def extract_youtube_id(string):
-    if string and 'youtube.com/v' in string:
-        vid_ids = re.findall(
-            'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
+def extract_youtube_id(raw_string):
+    if raw_string and 'youtube.com/v' in raw_string:
+        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
         for id in vid_ids:
             return id
-    if string and 'youtube.com/watch' in string:
-        vid_ids = re.findall(
-            'youtube.com/watch\?v=(.{11})\??', string, re.DOTALL)
+    if raw_string and 'youtube.com/watch' in raw_string:
+        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
         for id in vid_ids:
             return id
     return ""
@@ -713,7 +706,7 @@ def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
-def get_Kodi_JSON(params):
+def get_kodi_json(params):
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", %s, "id": 1}' % params)
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     return simplejson.loads(json_query)
