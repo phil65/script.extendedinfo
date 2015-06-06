@@ -4,7 +4,9 @@ List of possible ExtendedInfo script calls.
 All calls can also be done by using a plugin path.
 
 Example:
+```
 <content>plugin://script.extendedinfo?info=discography&amp;&amp;artistname=INSERT_ARTIST_NAME_HERE</content>
+```
 - keep Attention to the parameter separators ("&amp;&amp;")
 
 
@@ -134,6 +136,8 @@ RunScript(script.extendedinfo,info=similarmoviestrakt)     --> SimilarMovies.%d
 ```
   - required additional parameters: dbid= (database id) or id= (imdb id)
 
+Available Properties:
+
 - 'Title'
 - 'Plot'
 - 'Tagline'
@@ -156,6 +160,7 @@ RunScript(script.extendedinfo,info=similartvshowstrakt)     --> SimilarTVShows.%
 ```
   - required additional parameters: dbid= (database id) or id= (tvdb id)
 
+Available Properties:
 
 - 'TVShowTitle':      TVShow Title
 - 'duration':         Duration (?)
@@ -183,6 +188,7 @@ RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
 ```
 RunScript(script.extendedinfo,info=premiereshows)       --> PremiereShows.%d
 ```
+Available Properties:
 
 - 'Title':         Episode Title
 - 'TVShowTitle':   TVShow Title
@@ -205,6 +211,8 @@ RunScript(script.extendedinfo,info=discography)         --> Discography.%d
 ```
 - fetches the artist discography (Last.FM)
   - required additional parameters: artistname=
+
+Available Properties:
 
 - 'Label':           Album Title
 - 'artist':          Album Artist
@@ -230,6 +238,7 @@ RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
 ```
   - required additional parameters: id= ???
 
+Available Properties:
 
 - 'Label':       Track Name
 - 'Artist':      Artist Name
@@ -267,6 +276,8 @@ RunScript(script.extendedinfo,info=topartists)
 RunScript(script.extendedinfo,info=hypedartists)
 ```
 
+Available Properties:
+
 - 'Title':        Artist Name
 - 'mbid':         Artist MBID
 - 'Thumb':        Artist Thumb
@@ -276,6 +287,8 @@ RunScript(script.extendedinfo,info=hypedartists)
 RunScript(script.extendedinfo,info=nearevents)       --> NearEvents.%d
 ```
   - optional parameters: lat=, lon=, location=, distance=, festivalsonly=, tag=
+
+Available Properties:
 
 - 'date':         Event Date
 - 'name':         Venue Name
@@ -312,6 +325,8 @@ RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearc
 ```
   - required additional parameters: id=
 
+Available Properties:
+
 - 'Thumb':        Video Thumbnail
 - 'Description':  Video Description
 - 'Title':        Video Title
@@ -333,6 +348,8 @@ RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
 ```
 RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
 ```
+
+Available Properties:
 
 - 'Thumb':        Image
 - 'Title':        Image Title
