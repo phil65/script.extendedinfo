@@ -52,7 +52,7 @@ class DialogVideoList(DialogBaseList):
             self.totalitems = len(self.listitem_list)
         else:
             self.update_content(force_update=force)
-            # Notify(str(self.totalpages))
+            # notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def update_ui(self):
@@ -296,7 +296,7 @@ class DialogVideoList(DialogBaseList):
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 # offset = len(listitems) - len(account_lists)
-                # Notify(str(offset))
+                # notify(str(offset))
                 list_id = account_lists[index - 2]["id"]
                 list_title = account_lists[index - 2]["name"]
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -362,7 +362,7 @@ class DialogVideoList(DialogBaseList):
             elif response:
                 response = response[0]
             else:
-                Notify("no company found")
+                notify("no company found")
             self.add_filter("with_companies", str(response["id"]), xbmc.getLocalizedString(20388), response["name"])
             self.mode = "filter"
             self.page = 1
@@ -442,7 +442,7 @@ class DialogVideoList(DialogBaseList):
             self.close()
             return [], 0, 0
         if not response["results"]:
-            Notify(xbmc.getLocalizedString(284))
+            notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
             return handle_tmdb_multi_search(response["results"]), response["total_pages"], response["total_results"]
         elif self.type == "movie":

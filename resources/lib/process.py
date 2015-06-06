@@ -48,7 +48,7 @@ def StartInfoActions(infos, params):
             data = GetMostLovedTracks(params["artistname"]), "MostLovedTracks"
         elif info == 'artistdetails':
             ArtistDetails = GetArtistDetails(params["artistname"])
-            passDictToSkin(ArtistDetails, params.get("prefix", ""))
+            pass_dict_to_skin(ArtistDetails, params.get("prefix", ""))
             if "audiodbid" in ArtistDetails:
                 data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'musicvideos':
@@ -58,7 +58,7 @@ def StartInfoActions(infos, params):
         elif info == 'albuminfo':
             if params.get("id", ""):
                 AlbumDetails = GetAlbumDetails(params.get("id", ""))
-                passDictToSkin(AlbumDetails, params.get("prefix", ""))
+                pass_dict_to_skin(AlbumDetails, params.get("prefix", ""))
         elif info == 'trackdetails':
             if params.get("id", ""):
                 data = GetTrackDetails(params.get("id", "")), "Trackinfo"
@@ -251,7 +251,7 @@ def StartInfoActions(infos, params):
                 dialog.doModal()
                 HOME.clearProperty('infodialogs.active')
             else:
-                Notify("Error", "Required data missing in script call")
+                notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
             if params.get("director", False):
                 director_id = get_person_id(params["director"], skip_dialog=True)["id"]
@@ -318,7 +318,7 @@ def StartInfoActions(infos, params):
             if params.get("id", ""):
                 data = GetVenueEvents(params.get("id", "")), "VenueEvents"
             else:
-                Notify("Error", "Could not find venue")
+                notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = GetXBMCArtists()
             from MiscScraper import GetArtistNearEvents
@@ -327,9 +327,9 @@ def StartInfoActions(infos, params):
         #     channels = create_channel_list()
         elif info == 'favourites':
             if params.get("id", ""):
-                favourites = GetFavouriteswithType(params.get("id", ""))
+                favourites = get_favs_by_type(params.get("id", ""))
             else:
-                favourites = GetFavourites()
+                favourites = get_favs()
                 HOME.setProperty('favourite.count', str(len(favourites)))
                 if len(favourites) > 0:
                     HOME.setProperty('favourite.1.name', favourites[-1]["Label"])
@@ -338,9 +338,9 @@ def StartInfoActions(infos, params):
             data = GetSimilarFromOwnLibrary(
                 params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
-            data = GetIconPanel(int(params["id"])), "IconPanel" + str(params["id"])
+            data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
         elif info == 'weather':
-            data = GetWeatherImages(), "WeatherImages"
+            data = get_weather_images(), "WeatherImages"
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             SetMusicBrainzIDsForAllArtists(False, False)
         elif info == 'setfocus':
@@ -357,7 +357,7 @@ def StartInfoActions(infos, params):
             numitems = itemlist.getSelectedPosition()
             log("items:" + str(numitems))
             for i in range(0, numitems):
-                Notify(item.getProperty("Image"))
+                notify(item.getProperty("Image"))
         elif info == 'action':
             xbmc.executebuiltin(params.get("id", ""))
         elif info == 'bounce':
@@ -386,7 +386,7 @@ def StartInfoActions(infos, params):
                 if trailer:
                     play_trailer(trailer)
                 else:
-                    Notify("Error", "No Trailer available")
+                    notify("Error", "No Trailer available")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
             SetMusicBrainzIDsForAllArtists(True, False)
@@ -399,7 +399,7 @@ def StartInfoActions(infos, params):
                         os.unlink(file_path)
                 except Exception as e:
                     log(e)
-            Notify("Cache deleted")
+            notify("Cache deleted")
         elif info == 'syncwatchlist':
             pass
         elif info == "widgetdialog":
@@ -418,5 +418,5 @@ def StartInfoActions(infos, params):
                     xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
                     xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
                     xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
-            passListToSkin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
+            pass_list_to_skin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
 

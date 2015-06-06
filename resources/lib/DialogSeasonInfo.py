@@ -31,7 +31,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "DBID" not in self.data["general"]:  # need to add comparing for seasons
-                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
+                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.data["general"]:
                 poster_thread.join()
@@ -49,14 +49,14 @@ class DialogSeasonInfo(DialogBaseInfo):
                               (1350, create_listitems(self.data["backdrops"], 0)),
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
-            Notify(ADDON.getLocalizedString(32143))
+            notify(ADDON.getLocalizedString(32143))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Season")
-        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
         self.fill_lists()
 
     def onClick(self, controlID):
@@ -91,5 +91,5 @@ class DialogSeasonInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()

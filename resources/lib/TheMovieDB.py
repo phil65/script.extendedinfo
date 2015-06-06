@@ -68,7 +68,7 @@ def send_rating_for_media_item(media_type, media_id, rating):
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
-    Notify(ADDON_NAME, results["status_message"])
+    notify(ADDON_NAME, results["status_message"])
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
@@ -81,7 +81,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
-    Notify(ADDON_NAME, results["status_message"])
+    notify(ADDON_NAME, results["status_message"])
 
 
 def CreateList(listname):
@@ -92,7 +92,7 @@ def CreateList(listname):
     response = urlopen(request).read()
     results = simplejson.loads(response)
     # prettyprint(results)
-    Notify(ADDON_NAME, results["status_message"])
+    notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -106,7 +106,7 @@ def remove_list(list_id):
     request.get_method = lambda: 'DELETE'
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    Notify(ADDON_NAME, results["status_message"])
+    notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -124,9 +124,9 @@ def change_list_status(list_id, movie_id, status):
         response = urlopen(request).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
-            Notify("Error", "Not authorized to modify list")
+            notify("Error", "Not authorized to modify list")
     results = simplejson.loads(response)
-    Notify(ADDON_NAME, results["status_message"])
+    notify(ADDON_NAME, results["status_message"])
 
 
 def GetAccountLists(cache_time=0):
@@ -171,11 +171,11 @@ def get_session_id():
     response = get_tmdb_data("authentication/session/new?request_token=%s&" % request_token, 99999)
     # prettyprint(response)
     if response and "success" in response:
-        passDictToSkin({"tmdb_logged_in": "true"})
+        pass_dict_to_skin({"tmdb_logged_in": "true"})
         return response["session_id"]
     else:
-        passDictToSkin({"tmdb_logged_in": ""})
-        Notify("login failed")
+        pass_dict_to_skin({"tmdb_logged_in": ""})
+        notify("login failed")
         return None
 
 
@@ -334,7 +334,7 @@ def handle_tmdb_episodes(results):
         listitem = {'Art(poster)': still_path,
                     'Poster': still_path,
                     'Thumb': still_path_small,
-                    'Title': cleanText(fetch(item, 'name')),
+                    'Title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
                     'production_code': fetch(item, 'production_code'),
@@ -342,7 +342,7 @@ def handle_tmdb_episodes(results):
                     'Rating': fetch(item, 'vote_average'),
                     'Votes': fetch(item, 'vote_count'),
                     'ID': fetch(item, 'id'),
-                    'Description': cleanText(fetch(item, 'overview'))}
+                    'Description': clean_text(fetch(item, 'overview'))}
         listitems.append(listitem)
     return listitems
 
@@ -363,7 +363,7 @@ def handle_tmdb_misc(results):
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
-                    'Title': cleanText(fetch(item, 'name')),
+                    'Title': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
@@ -372,10 +372,10 @@ def handle_tmdb_misc(results):
                     'year': year,
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),
-                    'content': cleanText(fetch(item, 'content')),
+                    'content': clean_text(fetch(item, 'content')),
                     'ID': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
-                    'Description': cleanText(fetch(item, 'description'))}
+                    'Description': clean_text(fetch(item, 'description'))}
         listitems.append(listitem)
     return listitems
 
@@ -441,7 +441,7 @@ def handle_tmdb_people(results):
                      'title': person['name'],
                      'also_known_as': alsoknownas,
                      'alsoknownas': alsoknownas,
-                     'biography': cleanText(fetch(person, 'biography')),
+                     'biography': clean_text(fetch(person, 'biography')),
                      'birthday': fetch(person, 'birthday'),
                      'age': calculate_age(fetch(person, 'birthday'), fetch(person, 'deathday')),
                      'character': fetch(person, 'character'),
@@ -534,7 +534,7 @@ def get_person_id(person_label, skip_dialog=False):
         if len(response["results"]) > 1 and not skip_dialog:
             listitems = create_listitems(handle_tmdb_people(response["results"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            w = Select_Dialog('DialogSelect.xml', ADDON_PATH, listing=listitems)
+            w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=listitems)
             w.doModal()
             if w.index >= 0:
                 return response["results"][w.index]
@@ -622,7 +622,7 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
     response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 7)
     # prettyprint(response)
     if not response:
-        Notify("Could not find season info")
+        notify("Could not find season info")
         return None
     videos = []
     backdrops = []
@@ -638,8 +638,8 @@ def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
         Title = "Specials"
     else:
         Title = "Season %s" % season_number
-    season = {'SeasonDescription': cleanText(response["overview"]),
-              'Plot': cleanText(response["overview"]),
+    season = {'SeasonDescription': clean_text(response["overview"]),
+              'Plot': clean_text(response["overview"]),
               'TVShowTitle': tvshowname,
               'Thumb': poster_path_small,
               'Poster': poster_path,
@@ -679,7 +679,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     try:
         return response["tv_results"][0]["id"]
     except:
-        Notify("TVShow Info not available.")
+        notify("TVShow Info not available.")
         return None
 
 
@@ -689,7 +689,7 @@ def GetTrailer(movieid=None):
     if response and "videos" in response and response['videos']['results']:
         youtube_id = response['videos']['results'][0]['key']
         return youtube_id
-    Notify("Could not get trailer")
+    notify("Could not get trailer")
     return ""
 
 
@@ -711,7 +711,7 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
     poster_path_small = ""
     backdrop_path = ""
     if not response:
-        Notify("Could not get movie information")
+        notify("Could not get movie information")
         return {}
     genres = [item["name"] for item in response["genres"]]
     Studio = [item["name"] for item in response["production_companies"]]
@@ -755,7 +755,7 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
              'SetId': SetID,
              'ID': fetch(response, 'id'),
              'imdb_id': fetch(response, 'imdb_id'),
-             'Plot': cleanText(fetch(response, 'overview')),
+             'Plot': clean_text(fetch(response, 'overview')),
              'OriginalTitle': fetch(response, 'original_title'),
              'Country': fetch(response, 'original_language'),
              'Genre': " / ".join(genres),
@@ -846,7 +846,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'ID': tmdb_id,
              'Genre': " / ".join(genres),
              'credit_id': fetch(response, 'credit_id'),
-             'Plot': cleanText(fetch(response, "overview")),
+             'Plot': clean_text(fetch(response, "overview")),
              'year': year,
              'media_type': "tv",
              'Path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,

@@ -41,14 +41,14 @@ class DialogVideoInfo(DialogBaseInfo):
             log("Blur image %s with radius %i" % (self.data["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.data["general"]["SetId"])
-            self.omdb_thread = Threaded_Function(get_omdb_movie_info, self.data["general"]["imdb_id"])
-            lists_thread = Threaded_Function(self.sort_lists, self.data["lists"])
+            self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
+            lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
             self.omdb_thread.start()
             sets_thread.start()
             youtube_thread.start()
             lists_thread.start()
             if "DBID" not in self.data["general"]:
-                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
+                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             vid_id_list = [item["key"] for item in self.data["videos"]]
             self.crew_list = []
@@ -100,7 +100,7 @@ class DialogVideoInfo(DialogBaseInfo):
                               (1350, create_listitems(self.data["backdrops"], 0)),
                               (350, create_listitems(youtube_vids, 0))]
         else:
-            Notify(ADDON.getLocalizedString(32143))
+            notify(ADDON.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -108,9 +108,9 @@ class DialogVideoInfo(DialogBaseInfo):
         super(DialogVideoInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Movie")
-        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
         self.fill_lists()
-        passDictToSkin(self.setinfo, "movie.set.", False, False, self.windowid)
+        pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.update_states(False)
         self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
@@ -167,7 +167,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 self.movieplayer.wait_for_video_end()
                 pop_window_stack()
             else:
-                Notify(ADDON.getLocalizedString(32052))
+                notify(ADDON.getLocalizedString(32052))
         # elif control_id in [8]:
         #     add_to_window_stack(self)
         #     self.close()
@@ -184,8 +184,8 @@ class DialogVideoInfo(DialogBaseInfo):
             self.open_video_list(filters=filters)
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
-            text = "[B]" + author + "[/B][CR]" + cleanText(control.getSelectedItem().getProperty("content"))
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(185), text=text, color=self.data["general"]['ImageColor'])
+            text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(185), text=text, color=self.data["general"]['ImageColor'])
             w.doModal()
         elif control_id == 950:
             keyword_id = control.getSelectedItem().getProperty("id")
@@ -258,7 +258,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
         elif control_id == 6003:
             if self.data["account_states"]["favorite"]:
@@ -323,7 +323,7 @@ class DialogVideoInfo(DialogBaseInfo):
             else:
                 self.window.setProperty("movie.rated", "")
             self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
-            # Notify(str(self.data["account_states"]["rated"]["value"]))
+            # notify(str(self.data["account_states"]["rated"]["value"]))
 
     def remove_listDialog(self, account_lists):
         listitems = []
@@ -378,7 +378,7 @@ class Join_Omdb_Thread(threading.Thread):
     def run(self):
         self.omdb_thread.join()
         if xbmcgui.getCurrentWindowDialogId() == self.windowid:
-            passDictToSkin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.windowid)
+            pass_dict_to_skin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.windowid)
 
 
 class Get_Set_Items_Thread(threading.Thread):

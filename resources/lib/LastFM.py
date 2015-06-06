@@ -51,7 +51,7 @@ def HandleLastFMEventResult(results):
                          'street': event['venue']['location']['street'],
                          'eventname': event['title'],
                          'website': event['website'],
-                         'description': cleanText(event['description']),
+                         'description': clean_text(event['description']),
                          'postalcode': event['venue']['location']['postalcode'],
                          'city': event['venue']['location']['city'],
                          'country': event['venue']['location']['country'],
@@ -66,7 +66,7 @@ def HandleLastFMEventResult(results):
                          'headliner': event['artists']['headliner']}
                 events.append(event)
     elif "error" in results:
-        Notify("Error", results["message"])
+        notify("Error", results["message"])
     else:
         log("Error in HandleLastFMEventResult. JSON query follows:")
         prettyprint(results)
@@ -106,7 +106,7 @@ def HandleLastFMTrackResult(results):
     if not results:
         return {}
     if "wiki" in results['track']:
-        summary = cleanText(results['track']['wiki']['summary'])
+        summary = clean_text(results['track']['wiki']['summary'])
     else:
         summary = ""
     TrackInfo = {'playcount': str(results['track']['playcount']),

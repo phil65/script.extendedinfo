@@ -31,7 +31,7 @@ class DialogYoutubeList(DialogBaseList):
             self.totalitems = len(self.listitem_list)
         else:
             self.update_content(force_update=force)
-            # Notify(str(self.totalpages))
+            # notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def update_ui(self):

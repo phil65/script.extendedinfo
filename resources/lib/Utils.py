@@ -124,12 +124,12 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
     labels = [label for label in listitems.values()]
     ret = xbmcgui.Dialog().select("Choose content", labels)
     if ret > -1:
-        Notify(keywords[ret])
+        notify(keywords[ret])
         xbmc.executebuiltin("Skin.SetString(%s.path,plugin://script.extendedinfo?info=%s)" % (string_prefix, keywords[ret]))
         xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (string_prefix, labels[ret]))
 
 
-class Select_Dialog(xbmcgui.WindowXMLDialog):
+class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
@@ -158,7 +158,7 @@ class Select_Dialog(xbmcgui.WindowXMLDialog):
         pass
 
 
-class TextViewer_Dialog(xbmcgui.WindowXMLDialog):
+class TextViewerDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
     def __init__(self, *args, **kwargs):
@@ -231,7 +231,7 @@ def calculate_age(born, died=False):
         if diff_months < 0 or (diff_months == 0 and diff_days < 0):
             base_age -= 1
         elif diff_months == 0 and diff_days == 0 and not died:
-            Notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
+            notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
 
 
@@ -280,7 +280,7 @@ class VideoPlayer(xbmc.Player):
                 stream_url = vid.streamURL()
                 self.play(stream_url, listitem)
         else:
-            Notify("no youtube id found")
+            notify("no youtube id found")
 
     def wait_for_video_end(self):
         while not self.stopped:
@@ -312,7 +312,7 @@ def get_playlist_stats(path):
         endindex = path.rfind("/") + 1
     if (startindex > 0) and (endindex > 0):
         playlistpath = path[startindex:endindex]
-    #    Notify(playlistpath)
+    #    notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
         json_response = get_Kodi_JSON('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
         if "result" in json_response:
@@ -500,7 +500,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     return results
 
 
-class Threaded_Function(threading.Thread):
+class FunctionThread(threading.Thread):
 
     def __init__(self, function=None, param=None):
         threading.Thread.__init__(self)
@@ -514,17 +514,17 @@ class Threaded_Function(threading.Thread):
         return True
 
 
-class Get_File_Thread(threading.Thread):
+class GetFileThread(threading.Thread):
 
     def __init__(self, url):
         threading.Thread.__init__(self)
         self.url = url
 
     def run(self):
-        self.file = Get_File(self.url)
+        self.file = get_file(self.url)
 
 
-def Get_File(url):
+def get_file(url):
     clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
     if clean_url.endswith("/"):
         clean_url = clean_url[:-1]
@@ -569,8 +569,8 @@ def Get_File(url):
             return ""
 
 
-def GetFavouriteswithType(fav_type):
-    favs = GetFavourites()
+def get_favs_by_type(fav_type):
+    favs = get_favs()
     favlist = []
     for fav in favs:
         if fav["Type"] == fav_type:
@@ -578,7 +578,7 @@ def GetFavouriteswithType(fav_type):
     return favlist
 
 
-def GetFavPath(fav):
+def get_fav_path(fav):
     path = ""
     if fav["type"] == "media":
         path = "PlayMedia(%s)" % (fav["path"])
@@ -591,12 +591,12 @@ def GetFavPath(fav):
     return path
 
 
-def GetFavourites():
+def get_favs():
     items = []
-    json_response = get_Kodi_JSON('"method": "Favourites.GetFavourites", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    json_response = get_Kodi_JSON('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
     if json_response["result"]["limits"]["total"] > 0:
         for fav in json_response["result"]["favourites"]:
-            path = GetFavPath(fav)
+            path = get_fav_path(fav)
             newitem = {'Label': fav["title"],
                        'Thumb': fav["thumbnail"],
                        'Type': fav["type"],
@@ -606,7 +606,7 @@ def GetFavourites():
     return items
 
 
-def GetIconPanel(number):
+def get_icon_panel(number):
     items = []
     offset = number * 5 - 5
     for i in range(1, 6):
@@ -619,7 +619,7 @@ def GetIconPanel(number):
     return items
 
 
-def GetWeatherImages():
+def get_weather_images():
     items = []
     for i in range(1, 6):
         newitem = {'Label': "bla",
@@ -693,7 +693,7 @@ def ConvertYoutubeURL(string):
     return ""
 
 
-def ExtractYoutubeID(string):
+def extract_youtube_id(string):
     if string and 'youtube.com/v' in string:
         vid_ids = re.findall(
             'http://www.youtube.com/v/(.{11})\??', string, re.DOTALL)
@@ -707,7 +707,7 @@ def ExtractYoutubeID(string):
     return ""
 
 
-def Notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
+def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
 
 
@@ -721,7 +721,7 @@ def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
-def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=10000):
+def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
     skinwindow = xbmcgui.Window(window)
     if data is not None:
         threads = []
@@ -731,7 +731,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             if precache:
                 if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
                     if value not in image_requests and value:
-                        thread = Get_File_Thread(value)
+                        thread = GetFileThread(value)
                         threads += [thread]
                         thread.start()
                         image_requests.append(value)
@@ -742,7 +742,7 @@ def passDictToSkin(data=None, prefix="", debug=False, precache=False, window=100
             x.join()
 
 
-def passListToSkin(name="", data=[], prefix="", handle=None, limit=False):
+def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
     if limit and int(limit) < len(data):
         data = data[:int(limit)]
     if handle:
@@ -755,10 +755,10 @@ def passListToSkin(name="", data=[], prefix="", handle=None, limit=False):
             xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
             xbmcplugin.endOfDirectory(handle)
     else:
-        SetWindowProperties(name, data, prefix)
+        set_window_props(name, data, prefix)
 
 
-def SetWindowProperties(name, data, prefix="", debug=False):
+def set_window_props(name, data, prefix="", debug=False):
     if data is not None:
         # log("%s%s.Count = %s" % (prefix, name, str(len(data))))
         for (count, result) in enumerate(data):
@@ -795,7 +795,7 @@ def create_listitems(data=None, preload_images=0):
                 if count < preload_images:
                     if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
                         if value not in image_requests:
-                            thread = Get_File_Thread(value)
+                            thread = GetFileThread(value)
                             threads += [thread]
                             thread.start()
                             image_requests.append(value)
@@ -831,7 +831,7 @@ def create_listitems(data=None, preload_images=0):
     return itemlist
 
 
-def cleanText(text):
+def clean_text(text):
     if text:
         text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
         text = text.replace('<br \/>', '[CR]')

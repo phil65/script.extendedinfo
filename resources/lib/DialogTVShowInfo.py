@@ -62,8 +62,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                     if hit:
                         item["meaning"] = hit["meaning"]
             if "DBID" not in self.data["general"]:  # need to add comparing for tvshows
-                # Notify("download Poster")
-                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
+                # notify("download Poster")
+                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.data["general"]:
                 poster_thread.join()
@@ -87,13 +87,13 @@ class DialogTVShowInfo(DialogBaseInfo):
                               (1350, create_listitems(self.data["backdrops"], 0)),
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
-            Notify(ADDON.getLocalizedString(32143))
+            notify(ADDON.getLocalizedString(32143))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
         self.window.setProperty("type", "TVShow")
         self.fill_lists()
         self.update_states(False)
@@ -192,7 +192,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif controlID == 6006:
             self.show_rated_tvshows()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
         # elif controlID == 650:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -224,7 +224,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             else:
                 self.window.setProperty("movie.rated", "")
             self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
-            # Notify(str(self.data["account_states"]["rated"]["value"]))
+            # notify(str(self.data["account_states"]["rated"]["value"]))
 
     def show_manage_dialog(self):
         manage_list = []

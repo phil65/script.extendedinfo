@@ -36,7 +36,7 @@ class DialogActorInfo(DialogBaseInfo):
             else:
                 return None
         if not self.id:
-            Notify(ADDON.getLocalizedString(32143))
+            notify(ADDON.getLocalizedString(32143))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -65,7 +65,7 @@ class DialogActorInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
-        passDictToSkin(self.data["general"], "actor.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "actor.", False, False, self.windowid)
         self.fill_lists()
 
     def onClick(self, controlID):
@@ -100,5 +100,5 @@ class DialogActorInfo(DialogBaseInfo):
             pop_window_stack()
         elif controlID == 132:
             text = self.data["general"]["biography"]
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])
             w.doModal()

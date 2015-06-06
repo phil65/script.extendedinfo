@@ -31,7 +31,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "DBID" not in self.data["general"]:  # need to add comparing for episodes
-                poster_thread = Threaded_Function(Get_File, self.data["general"]["Poster"])
+                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             if "DBID" not in self.data["general"]:
                 poster_thread.join()
@@ -43,7 +43,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         else:
-            Notify(ADDON.getLocalizedString(32143))
+            notify(ADDON.getLocalizedString(32143))
             self.close()
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
@@ -51,7 +51,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         super(DialogEpisodeInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Episode")
-        passDictToSkin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
         self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
         self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
         self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
@@ -79,7 +79,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif controlID == 132:
-            w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
         elif controlID == 6001:
             rating = get_rating_from_user()
@@ -107,7 +107,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             else:
                 self.window.setProperty("movie.rated", "")
             # self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
-            # Notify(str(self.data["account_states"]["rated"]["value"]))
+            # notify(str(self.data["account_states"]["rated"]["value"]))
 
     def show_rated_episodes(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")

@@ -178,5 +178,5 @@ def get_trakt_similar(media_type, imdb_id):
             elif media_type == "movie":
                 return handle_trakt_movies(results)
     else:
-        Notify("Error when fetching info from Trakt.TV")
+        notify("Error when fetching info from Trakt.TV")
         return[]
