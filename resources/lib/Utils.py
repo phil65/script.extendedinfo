@@ -351,17 +351,16 @@ def get_sort_letters(path, focused_letter):
             ADDON.setSetting("FolderPath", path)
     HOME.setProperty("LetterList", "".join(letter_list))
     if letter_list and focused_letter:
-        startord = ord("A")
+        start_ord = ord("A")
         for i in range(0, 26):
-            letter = chr(startord + i)
+            letter = chr(start_ord + i)
             if letter == focused_letter:
                 label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
             elif letter in letter_list:
                 label = letter
             else:
                 label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
-            listitem = {"label": label}
-            listitems.append(listitem)
+            listitems.append({"label": label})
     return listitems
 
 

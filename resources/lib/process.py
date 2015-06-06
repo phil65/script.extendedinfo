@@ -142,7 +142,7 @@ def StartInfoActions(infos, params):
             if params.get("id", False):
                 movie_id = params["id"]
             elif dbid and int(dbid) > 0:
-                movie_id = GetImdbIDFromDatabase("movie", dbid)
+                movie_id = get_imdb_id_from_db("movie", dbid)
                 log("IMDB Id from local DB:" + str(movie_id))
             else:
                 movie_id = ""
@@ -158,7 +158,7 @@ def StartInfoActions(infos, params):
             if tmdb_id:
                 tvshow_id = tmdb_id
             elif dbid and int(dbid) > 0:
-                tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
+                tvdb_id = get_imdb_id_from_db("tvshow", dbid)
                 log("IMDB Id from local DB:" + str(tvdb_id))
                 if tvdb_id:
                     tvshow_id = get_show_tmdb_id(tvdb_id)
@@ -193,13 +193,13 @@ def StartInfoActions(infos, params):
                     data = SetData, "MovieSetItems"
         elif info == 'movielists':
             if params.get("dbid", False):
-                movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
+                movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
                     data = get_movie_lists(movie_id), "MovieLists"
         elif info == 'keywords':
             if params.get("dbid", False):
-                movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
+                movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
                     data = GetMovieKeywords(movie_id), "Keywords"
@@ -234,10 +234,10 @@ def StartInfoActions(infos, params):
                 elif media_type == "movie":
                     tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
-                    tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                    tvdb_id = get_imdb_id_from_db("tvshow", params["dbid"])
                     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
                 # elif media_type == "episode" and params["dbid"]:
-                #     tvdb_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                #     tvdb_id = get_imdb_id_from_db("tvshow", params["dbid"])
                 #     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
                 if tmdb_id:
                     rating = get_rating_from_user()
@@ -265,7 +265,7 @@ def StartInfoActions(infos, params):
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid", False):
                 if params.get("dbid", False):
-                    movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
+                    movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 else:
                     movie_id = params.get("id", "")
                 data = get_trakt_similar("movie", movie_id), "SimilarMovies"
@@ -275,7 +275,7 @@ def StartInfoActions(infos, params):
                     if params.get("type") == "episode":
                         tvshow_id = get_tvshow_id_from_db_by_episode(params["dbid"])
                     else:
-                        tvshow_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
+                        tvshow_id = get_imdb_id_from_db("tvshow", params["dbid"])
                 else:
                     tvshow_id = params.get("id", "")
                 data = get_trakt_similar("show", tvshow_id), "SimilarTVShows"
@@ -289,7 +289,7 @@ def StartInfoActions(infos, params):
             data = get_trending_movies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
-                data = GetSimilarArtistsInLibrary(params.get("artist_mbid")), "SimilarArtists"
+                data = get_similar_artists_from_db(params.get("artist_mbid")), "SimilarArtists"
         elif info == 'artistevents':
             if params.get("artist_mbid"):
                 data = GetEvents(params.get("artist_mbid")), "ArtistEvents"
@@ -320,7 +320,7 @@ def StartInfoActions(infos, params):
             else:
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
-            artists = GetXBMCArtists()
+            artists = get_kodi_artists()
             from MiscScraper import GetArtistNearEvents
             data = GetArtistNearEvents(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
         # elif info == 'channels':
@@ -335,7 +335,7 @@ def StartInfoActions(infos, params):
                     HOME.setProperty('favourite.1.name', favourites[-1]["Label"])
             data = favourites, "Favourites"
         elif info == 'similarlocal' and "dbid" in params:
-            data = GetSimilarFromOwnLibrary(
+            data = get_similar_movies_from_db(
                 params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
@@ -374,7 +374,7 @@ def StartInfoActions(infos, params):
             if params.get("id", ""):
                 movie_id = params.get("id", "")
             elif int(params.get("dbid", -1)) > 0:
-                movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
+                movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDBID from local DB:" + str(movie_id))
             elif params.get("imdb_id", ""):
                 movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))

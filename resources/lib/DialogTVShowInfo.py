@@ -6,7 +6,7 @@
 import xbmc
 import xbmcgui
 from Utils import *
-from local_db import GetImdbIDFromDatabase
+from local_db import get_imdb_id_from_db
 from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
@@ -30,7 +30,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):
-            tvdb_id = GetImdbIDFromDatabase("tvshow", dbid)
+            tvdb_id = get_imdb_id_from_db("tvshow", dbid)
             log("IMDB Id from local DB:" + str(tvdb_id))
             if tvdb_id:
                 self.tmdb_id = get_show_tmdb_id(tvdb_id)
