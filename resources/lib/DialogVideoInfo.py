@@ -127,6 +127,13 @@ class DialogVideoInfo(DialogBaseInfo):
                     path = control.getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
+            elif focus_id == 1350:
+                selection = xbmcgui.Dialog().select("Choose", ["Use as fanart"])
+                if selection == 0:
+                    media_type = "Movie"
+                    path = control.getSelectedItem().getProperty("original")
+                    params = '"art": {"fanart": "%s"}' % path
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
 
     def onClick(self, control_id):
         control = self.getControl(control_id)

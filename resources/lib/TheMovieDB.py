@@ -195,23 +195,23 @@ def auth_request_token():
         return None
 
 
-def HandleTMDBmulti_searchResult(results=[]):
+def handle_tmdb_multi_search(results=[]):
     listitems = []
     for item in results:
         if item["media_type"] == "movie":
-            listitem = HandleTMDBMovieResult([item])[0]
+            listitem = handle_tmdb_movies([item])[0]
         elif item["media_type"] == "tv":
-            listitem = HandleTMDBTVShowResult([item])[0]
+            listitem = handle_tmdb_tvshows([item])[0]
         else:
             listitem = handle_tmdb_people([item])[0]
         listitems.append(listitem)
     return listitems
 
 
-def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
+def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
     movies = []
     ids = []
-    log("starting HandleTMDBMovieResult")
+    log("starting handle_tmdb_movies")
     for movie in results:
         tmdb_id = str(fetch(movie, 'id'))
         if ("backdrop_path" in movie) and (movie["backdrop_path"]):
@@ -266,10 +266,10 @@ def HandleTMDBMovieResult(results=[], local_first=True, sortkey="Year"):
     return movies
 
 
-def HandleTMDBTVShowResult(results, local_first=True, sortkey="year"):
+def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
     ids = []
-    log("starting HandleTMDBTVShowResult")
+    log("starting handle_tmdb_tvshows")
     for tv in results:
         tmdb_id = fetch(tv, 'id')
         poster_path = ""
@@ -504,11 +504,11 @@ def handle_tmdb_companies(results):
     return companies
 
 
-def get_company_data(company):
+def search_company(company_name):
     import re
     regex = re.compile('\(.+?\)')
-    company = regex.sub('', company)
-    response = get_tmdb_data("search/company?query=%s&" % url_quote(company), 10)
+    company_name = regex.sub('', company_name)
+    response = get_tmdb_data("search/company?query=%s&" % url_quote(company_name), 10)
     try:
         return response["results"]
     except:
@@ -595,7 +595,7 @@ def get_tmdb_config():
 def get_company_data(company_id):
     response = get_tmdb_data("company/%s/movies?append_to_response=movies&" % (company_id), 30)
     if response and "results" in response:
-        return HandleTMDBMovieResult(response["results"])
+        return handle_tmdb_movies(response["results"])
     else:
         return []
 
@@ -604,7 +604,7 @@ def GetCreditInfo(credit_id):
     response = get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), ADDON.getSetting("LanguageID")), 30)
     prettyprint(response)
     # if response and "results" in response:
-    #     return HandleTMDBMovieResult(response["results"])
+    #     return handle_tmdb_movies(response["results"])
     # else:
     #     return []
 
@@ -781,7 +781,7 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
     if synced_movie:
         answer = {"general": synced_movie[0],
                   "actors": handle_tmdb_people(response["credits"]["cast"]),
-                  "similar": HandleTMDBMovieResult(response["similar"]["results"]),
+                  "similar": handle_tmdb_movies(response["similar"]["results"]),
                   "lists": handle_tmdb_misc(response["lists"]["results"]),
                   "studios": handle_tmdb_misc(response["production_companies"]),
                   "releases": handle_tmdb_misc(response["releases"]["countries"]),
@@ -866,7 +866,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'Premiered': release_date}
     answer = {"general": newtv,
               "actors": handle_tmdb_people(response["credits"]["cast"]),
-              "similar": HandleTMDBTVShowResult(response["similar"]["results"]),
+              "similar": handle_tmdb_tvshows(response["similar"]["results"]),
               "studios": handle_tmdb_misc(response["production_companies"]),
               "networks": handle_tmdb_misc(response["networks"]),
               "certifications": handle_tmdb_misc(response["content_ratings"]["results"]),
@@ -914,10 +914,10 @@ def GetExtendedActorInfo(actorid):
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
     answer = {"general": handle_tmdb_people([response])[0],
-              "movie_roles": HandleTMDBMovieResult(response["movie_credits"]["cast"]),
-              "tvshow_roles": HandleTMDBTVShowResult(response["tv_credits"]["cast"]),
-              "movie_crew_roles": HandleTMDBMovieResult(response["movie_credits"]["crew"]),
-              "tvshow_crew_roles": HandleTMDBTVShowResult(response["tv_credits"]["crew"]),
+              "movie_roles": handle_tmdb_movies(response["movie_credits"]["cast"]),
+              "tvshow_roles": handle_tmdb_tvshows(response["tv_credits"]["cast"]),
+              "movie_crew_roles": handle_tmdb_movies(response["movie_credits"]["crew"]),
+              "tvshow_crew_roles": handle_tmdb_tvshows(response["tv_credits"]["crew"]),
               "tagged_images": tagged_images,
               "images": HandleTMDBPeopleImagesResult(response["images"]["profiles"])}
     return answer
@@ -941,9 +941,9 @@ def get_rated_media_items(media_type):
     if media_type == "tv/episodes":
         return handle_tmdb_episodes(response["results"])
     elif media_type == "tv":
-        return HandleTMDBTVShowResult(response["results"], False, None)
+        return handle_tmdb_tvshows(response["results"], False, None)
     else:
-        return HandleTMDBMovieResult(response["results"], False, None)
+        return handle_tmdb_movies(response["results"], False, None)
 
 
 def get_fav_items(media_type):
@@ -953,11 +953,11 @@ def get_fav_items(media_type):
     response = get_tmdb_data("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, str(session_id), ADDON.getSetting("LanguageID")), 0)
     if "results" in response:
         if media_type == "tv":
-            return HandleTMDBTVShowResult(response["results"], False, None)
+            return handle_tmdb_tvshows(response["results"], False, None)
         elif media_type == "tv/episodes":
             return handle_tmdb_episodes(response["results"])
         else:
-            return HandleTMDBMovieResult(response["results"], False, None)
+            return handle_tmdb_movies(response["results"], False, None)
     else:
         return []
 
@@ -965,7 +965,7 @@ def get_fav_items(media_type):
 def get_movies_from_list(list_id, cache_time=5):
     response = get_tmdb_data("list/%s?language=%s&" % (str(list_id), ADDON.getSetting("LanguageID")), cache_time)
     #  prettyprint(response)
-    return HandleTMDBMovieResult(response["items"], False, None)
+    return handle_tmdb_movies(response["items"], False, None)
 
 
 def GetPopularActorList():
@@ -975,12 +975,12 @@ def GetPopularActorList():
 
 def GetActorMovieCredits(actor_id):
     response = get_tmdb_data("person/%s/movie_credits?" % (actor_id), 1)
-    return HandleTMDBMovieResult(response["cast"])
+    return handle_tmdb_movies(response["cast"])
 
 
 def GetActorTVShowCredits(actor_id):
     response = get_tmdb_data("person/%s/tv_credits?" % (actor_id), 1)
-    return HandleTMDBMovieResult(response["cast"])
+    return handle_tmdb_movies(response["cast"])
 
 
 def GetMovieKeywords(movie_id):
@@ -1002,7 +1002,7 @@ def get_similar_movies(movie_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                               (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 10)
     if "similar" in response:
-        return HandleTMDBMovieResult(response["similar"]["results"])
+        return handle_tmdb_movies(response["similar"]["results"])
     else:
         log("No JSON Data available")
 
@@ -1014,7 +1014,7 @@ def get_similar_tvshows(tvshow_id):
     response = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
                               (str(tvshow_id), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), 10)
     if "similar" in response:
-        return HandleTMDBTVShowResult(response["similar"]["results"])
+        return handle_tmdb_tvshows(response["similar"]["results"])
     else:
         log("No JSON Data available")
 
@@ -1022,7 +1022,7 @@ def get_similar_tvshows(tvshow_id):
 def GetMovieDBTVShows(tvshow_type):
     response = get_tmdb_data("tv/%s?language=%s&" % (tvshow_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
-        return HandleTMDBTVShowResult(response["results"], False, None)
+        return handle_tmdb_tvshows(response["results"], False, None)
     else:
         log("No JSON Data available for GetMovieDBTVShows(%s)" % tvshow_type)
         log(response)
@@ -1031,7 +1031,7 @@ def GetMovieDBTVShows(tvshow_type):
 def GetMovieDBMovies(movie_type):
     response = get_tmdb_data("movie/%s?language=%s&" % (movie_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
-        return HandleTMDBMovieResult(response["results"], False, None)
+        return handle_tmdb_movies(response["results"], False, None)
     else:
         log("No JSON Data available for GetMovieDBMovies(%s)" % movie_type)
         log(response)
@@ -1054,7 +1054,7 @@ def GetSetMovies(set_id):
                 "Fanart": backdrop_path,
                 "overview": response["overview"],
                 "ID": response["id"]}
-        return HandleTMDBMovieResult(response.get("parts", [])), info
+        return handle_tmdb_movies(response.get("parts", [])), info
     else:
         log("No JSON Data available")
         return [], {}
@@ -1062,9 +1062,9 @@ def GetSetMovies(set_id):
 
 def GetDirectorMovies(person_id):
     response = get_tmdb_data("person/%s/credits?language=%s&" % (person_id, ADDON.getSetting("LanguageID")), 14)
-    # return HandleTMDBMovieResult(response["crew"]) + HandleTMDBMovieResult(response["cast"])
+    # return handle_tmdb_movies(response["crew"]) + handle_tmdb_movies(response["cast"])
     if "crew" in response:
-        return HandleTMDBMovieResult(response["crew"])
+        return handle_tmdb_movies(response["crew"])
     else:
         log("No JSON Data available")
 

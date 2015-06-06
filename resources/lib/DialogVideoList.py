@@ -334,7 +334,6 @@ class DialogVideoList(DialogBaseList):
         label_list = [item["name"] for item in response["genres"]]
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
         if index > -1:
-            # return "with_genres=" + str(id_list[index])
             self.add_filter("with_genres", str(id_list[index]), xbmc.getLocalizedString(135), str(label_list[index]))
             self.mode = "filter"
             self.page = 1
@@ -343,44 +342,43 @@ class DialogVideoList(DialogBaseList):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = get_person_id(result)
-            # prettyprint(response)
-            if result > -1:
-                # return "with_genres=" + str(id_list[index])
-                self.add_filter("with_people", str(response["id"]), ADDON.getLocalizedString(32156), response["name"])
-                self.mode = "filter"
-                self.page = 1
+            if result == -1:
+                return None
+            self.add_filter("with_people", str(response["id"]), ADDON.getLocalizedString(32156), response["name"])
+            self.mode = "filter"
+            self.page = 1
 
     def get_company(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
-            response = get_company_data(result)
-            # prettyprint(response)
-            if result > -1:
-                if len(response) > 1:
-                    names = [item["name"] for item in response]
-                    selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), names)
-                    if selection > -1:
-                        response = response[selection]
-                elif response:
-                    response = response[0]
-                else:
-                    Notify("no company found")
-                self.add_filter("with_companies", str(response["id"]), xbmc.getLocalizedString(20388), response["name"])
-                self.mode = "filter"
-                self.page = 1
+            response = search_company(result)
+            if result == -1:
+                return None
+            if len(response) > 1:
+                names = [item["name"] for item in response]
+                selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), names)
+                if selection > -1:
+                    response = response[selection]
+            elif response:
+                response = response[0]
+            else:
+                Notify("no company found")
+            self.add_filter("with_companies", str(response["id"]), xbmc.getLocalizedString(20388), response["name"])
+            self.mode = "filter"
+            self.page = 1
 
     def get_keyword(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             response = get_keyword_id(result)
-            if response:
-                keyword_id = response["id"]
-                name = response["name"]
-                # prettyprint(response)
-                if result > -1:
-                    self.add_filter("with_keywords", str(keyword_id), ADDON.getLocalizedString(32114), name)
-                    self.mode = "filter"
-                    self.page = 1
+            if not response:
+                return None
+            keyword_id = response["id"]
+            name = response["name"]
+            if result > -1:
+                self.add_filter("with_keywords", str(keyword_id), ADDON.getLocalizedString(32114), name)
+                self.mode = "filter"
+                self.page = 1
 
     def get_certification(self):
         response = get_certification_list(self.type)
@@ -388,22 +386,21 @@ class DialogVideoList(DialogBaseList):
         for (key, value) in response.iteritems():
             country_list.append(key)
         index = xbmcgui.Dialog().select(xbmc.getLocalizedString(21879), country_list)
-        if index > -1:
-            cert_list = []
-            # for (key, value) in response[country_list[index]].iteritems():
-            #     cert_list.append(key)
-            country = country_list[index]
-            for item in response[country]:
-                label = "%s  -  %s" % (item["certification"], item["meaning"])
-                cert_list.append(label)
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), cert_list)
-            if index > -1:
-                # return "with_genres=" + str(id_list[index])
-                cert = cert_list[index].split("  -  ")[0]
-                self.add_filter("certification_country", country, ADDON.getLocalizedString(32153), country)
-                self.add_filter("certification", cert, ADDON.getLocalizedString(32127), cert)
-                self.page = 1
-                self.mode = "filter"
+        if index == -1:
+            return None
+        cert_list = []
+        country = country_list[index]
+        for item in response[country]:
+            label = "%s  -  %s" % (item["certification"], item["meaning"])
+            cert_list.append(label)
+        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), cert_list)
+        if index == -1:
+            return None
+        cert = cert_list[index].split("  -  ")[0]
+        self.add_filter("certification_country", country, ADDON.getLocalizedString(32153), country)
+        self.add_filter("certification", cert, ADDON.getLocalizedString(32127), cert)
+        self.page = 1
+        self.mode = "filter"
 
     def fetch_data(self, force=False):
         sortby = self.sort + "." + self.order
@@ -440,15 +437,15 @@ class DialogVideoList(DialogBaseList):
         else:
             response = get_tmdb_data(url, 2)
         if self.mode == "list":
-            return HandleTMDBMovieResult(response["items"]), 1, len(response["items"])
+            return handle_tmdb_movies(response["items"]), 1, len(response["items"])
         if "results" not in response:
             self.close()
             return [], 0, 0
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
-            return HandleTMDBmulti_searchResult(response["results"]), response["total_pages"], response["total_results"]
+            return handle_tmdb_multi_search(response["results"]), response["total_pages"], response["total_results"]
         elif self.type == "movie":
-            return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"], response["total_results"]
+            return handle_tmdb_movies(response["results"], False, None), response["total_pages"], response["total_results"]
         else:
-            return HandleTMDBTVShowResult(response["results"], False, None), response["total_pages"], response["total_results"]
+            return handle_tmdb_tvshows(response["results"], False, None), response["total_pages"], response["total_results"]
