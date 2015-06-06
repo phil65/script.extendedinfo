@@ -268,7 +268,7 @@ def StartInfoActions(infos, params):
                     movie_id = GetImdbIDFromDatabase("movie", params["dbid"])
                 else:
                     movie_id = params.get("id", "")
-                data = GetSimilarTrakt("movie", movie_id), "SimilarMovies"
+                data = get_trakt_similar("movie", movie_id), "SimilarMovies"
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
                 if params.get("dbid", False):
@@ -278,15 +278,15 @@ def StartInfoActions(infos, params):
                         tvshow_id = GetImdbIDFromDatabase("tvshow", params["dbid"])
                 else:
                     tvshow_id = params.get("id", "")
-                data = GetSimilarTrakt("show", tvshow_id), "SimilarTVShows"
+                data = get_trakt_similar("show", tvshow_id), "SimilarTVShows"
         elif info == 'airingshows':
-            data = GetTraktCalendarShows("shows"), "AiringShows"
+            data = get_trakt_calendar_shows("shows"), "AiringShows"
         elif info == 'premiereshows':
-            data = GetTraktCalendarShows("premieres"), "PremiereShows"
+            data = get_trakt_calendar_shows("premieres"), "PremiereShows"
         elif info == 'trendingshows':
-            data = GetTrendingShows(), "TrendingShows"
+            data = get_trending_shows(), "TrendingShows"
         elif info == 'trendingmovies':
-            data = GetTrendingMovies(), "TrendingMovies"
+            data = get_trending_movies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
                 data = GetSimilarArtistsInLibrary(params.get("artist_mbid")), "SimilarArtists"

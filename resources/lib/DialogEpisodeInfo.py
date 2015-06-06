@@ -8,7 +8,6 @@ from Utils import *
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
-import DialogVideoList
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 
@@ -89,7 +88,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
                 send_rating_for_media_item("episode", identifier, rating)
                 self.update_states()
         elif controlID == 6006:
-            self.ShowRatedEpisodes()
+            self.show_rated_episodes()
 
     def update_states(self, forceupdate=True):
         if forceupdate:
@@ -110,7 +109,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             # self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
             # Notify(str(self.data["account_states"]["rated"]["value"]))
 
-    def ShowRatedEpisodes(self):
+    def show_rated_episodes(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("tv/episodes")
         xbmc.executebuiltin("Dialog.Close(busydialog)")

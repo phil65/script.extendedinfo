@@ -16,7 +16,7 @@ HEADERS = {
 }
 
 
-def GetTraktCalendarShows(Type):
+def get_trakt_calendar_shows(Type):
     shows = []
     url = ""
     if Type == "shows":
@@ -65,7 +65,7 @@ def GetTraktCalendarShows(Type):
     return shows
 
 
-def HandleTraktMovieResult(results):
+def handle_trakt_movies(results):
     movies = []
     for movie in results:
         if ADDON.getSetting("infodialog_onclick") != "false":
@@ -99,7 +99,7 @@ def HandleTraktMovieResult(results):
     return movies
 
 
-def HandleTraktTVShowResult(results):
+def handle_trakt_tvshows(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
@@ -140,42 +140,42 @@ def HandleTraktTVShowResult(results):
     return shows
 
 
-def GetTrendingShows():
+def get_trending_shows():
     url = 'shows/trending?extended=full,images'
     results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
-        return HandleTraktTVShowResult(results)
+        return handle_trakt_tvshows(results)
     else:
         return []
 
 
-def GetTVShowInfo(imdb_id):
+def get_tshow_info(imdb_id):
     url = 'show/%s?extended=full,images' % imdb_id
     results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
-        return HandleTraktTVShowResult([results])
+        return handle_trakt_tvshows([results])
     else:
         return []
 
 
-def GetTrendingMovies():
+def get_trending_movies():
     url = 'movies/trending?extended=full,images'
     results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
     if results is not None:
-        return HandleTraktMovieResult(results)
+        return handle_trakt_movies(results)
     else:
         return []
 
 
-def GetSimilarTrakt(mediatype, imdb_id):
+def get_trakt_similar(mediatype, imdb_id):
     if imdb_id is not None:
         url = '%s/%s/related?extended=full,images' % (mediatype, imdb_id)
         results = Get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
         if results is not None:
             if mediatype == "show":
-                return HandleTraktTVShowResult(results)
+                return handle_trakt_tvshows(results)
             elif mediatype == "movie":
-                return HandleTraktMovieResult(results)
+                return handle_trakt_movies(results)
     else:
         Notify("Error when fetching info from Trakt.TV")
         return[]
