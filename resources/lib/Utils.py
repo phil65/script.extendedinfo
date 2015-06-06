@@ -594,6 +594,8 @@ def get_fav_path(fav):
 def get_favs():
     items = []
     json_response = get_Kodi_JSON('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    if "result" not in json_response:
+        return []
     if json_response["result"]["limits"]["total"] > 0:
         for fav in json_response["result"]["favourites"]:
             path = get_fav_path(fav)
@@ -721,8 +723,8 @@ def prettyprint(string):
     log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
 
 
-def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=10000):
-    skinwindow = xbmcgui.Window(window)
+def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_id=10000):
+    window = xbmcgui.Window(window_id)
     if data is not None:
         threads = []
         image_requests = []
@@ -735,7 +737,7 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window=
                         threads += [thread]
                         thread.start()
                         image_requests.append(value)
-            skinwindow.setProperty('%s%s' % (prefix, str(key)), value)
+            window.setProperty('%s%s' % (prefix, str(key)), value)
             if debug:
                 log('%s%s' % (prefix, str(key)) + value)
         for x in threads:
@@ -776,9 +778,9 @@ def set_window_props(name, data, prefix="", debug=False):
 
 
 def create_listitems(data=None, preload_images=0):
-    Int_InfoLabels = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
-    Float_InfoLabels = ["rating"]
-    String_InfoLabels = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
+    INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
+    FLOAT_INFOLABELS = ["rating"]
+    STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
                          "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
     itemlist = []
     # prettyprint(data)
@@ -810,14 +812,14 @@ def create_listitems(data=None, preload_images=0):
                 if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                     listitem.setArt({key.lower(): value})
                     # log("key: " + unicode(key) + "  value: " + unicode(value))
-                if key.lower() in Int_InfoLabels:
+                if key.lower() in INT_INFOLABELS:
                     try:
                         listitem.setInfo('video', {key.lower(): int(value)})
                     except:
                         pass
-                if key.lower() in String_InfoLabels:
+                if key.lower() in STRING_INFOLABELS:
                     listitem.setInfo('video', {key.lower(): value})
-                if key.lower() in Float_InfoLabels:
+                if key.lower() in FLOAT_INFOLABELS:
                     try:
                         listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
                     except:
