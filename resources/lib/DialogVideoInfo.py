@@ -174,7 +174,7 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_companies",
                         "typelabel": xbmc.getLocalizedString(20388),
                         "label": company_name}]
-            self.OpenVideoList(filters=filters)
+            self.open_video_list(filters=filters)
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + cleanText(control.getSelectedItem().getProperty("content"))
@@ -187,7 +187,7 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_keywords",
                         "typelabel": ADDON.getLocalizedString(32114),
                         "label": keyword_name}]
-            self.OpenVideoList(filters=filters)
+            self.open_video_list(filters=filters)
         elif control_id == 850:
             genre_id = control.getSelectedItem().getProperty("id")
             genre_name = control.getSelectedItem().getLabel()
@@ -195,7 +195,7 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_genres",
                         "typelabel": xbmc.getLocalizedString(135),
                         "label": genre_name}]
-            self.OpenVideoList(filters=filters)
+            self.open_video_list(filters=filters)
         elif control_id == 650:
             country = control.getSelectedItem().getProperty("iso_3166_1")
             certification = control.getSelectedItem().getProperty("certification")
@@ -212,11 +212,11 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "year",
                         "typelabel": xbmc.getLocalizedString(345),
                         "label": year}]
-            self.OpenVideoList(filters=filters)
+            self.open_video_list(filters=filters)
         elif control_id == 450:
             list_id = control.getSelectedItem().getProperty("id")
             list_title = control.getSelectedItem().getLabel()
-            self.OpenVideoList(mode="list", list_id=list_id, filter_label=list_title)
+            self.open_video_list(mode="list", list_id=list_id, filter_label=list_title)
         elif control_id == 6001:
             rating = get_rating_from_user()
             if rating:
@@ -233,15 +233,15 @@ class DialogVideoInfo(DialogBaseInfo):
             if index == -1:
                 pass
             elif index == 0:
-                self.OpenVideoList(mode="favorites")
+                self.open_video_list(mode="favorites")
             elif index == 1:
-                self.OpenVideoList(mode="rating")
+                self.open_video_list(mode="rating")
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_id = account_lists[index - 2]["id"]
                 list_title = account_lists[index - 2]["name"]
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                self.OpenVideoList(mode="list", list_id=list_id, filter_label=list_title, force=True)
+                self.open_video_list(mode="list", list_id=list_id, filter_label=list_title, force=True)
         elif control_id == 8:
             self.close()
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.data["general"]['DBID'], "false"))
@@ -333,7 +333,7 @@ class DialogVideoInfo(DialogBaseInfo):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("movies")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        self.OpenVideoList(listitems=listitems)
+        self.open_video_list(listitems=listitems)
 
     def ShowManageDialog(self):
         manage_list = []

@@ -131,12 +131,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_company_data(control.getSelectedItem().getProperty("id"))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(listitems=listitems)
+            self.open_video_list(listitems=listitems)
             # xbmc.executebuiltin("ActivateWindow(busydialog)")
             # filters = {"with_networks": control.getSelectedItem().getProperty("id")}
             # listitems = get_company_data(control.getSelectedItem().getProperty("id"))
             # xbmc.executebuiltin("Dialog.Close(busydialog)")
-            # self.OpenVideoList(filters=filters, media_type="tv")
+            # self.open_video_list(filters=filters, media_type="tv")
         elif controlID == 950:
             keyword_id = control.getSelectedItem().getProperty("id")
             keyword_name = control.getSelectedItem().getLabel()
@@ -144,7 +144,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                         "type": "with_keywords",
                         "typelabel": ADDON.getLocalizedString(32114),
                         "label": keyword_name}]
-            self.OpenVideoList(filters=filters)
+            self.open_video_list(filters=filters)
         elif controlID == 850:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             genreid = control.getSelectedItem().getProperty("id")
@@ -154,7 +154,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                         "type": "with_genres",
                         "typelabel": xbmc.getLocalizedString(135),
                         "label": genrename}]
-            self.OpenVideoList(filters=filters, media_type="tv")
+            self.open_video_list(filters=filters, media_type="tv")
         elif controlID in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
@@ -169,7 +169,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                         "label": company_name}]
             listitems = get_company_data(company_id)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.OpenVideoList(filters=filters, media_type="tv")
+            self.open_video_list(filters=filters, media_type="tv")
         elif controlID == 445:
             self.ShowManageDialog()
         elif controlID == 6001:
@@ -183,7 +183,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             if index == -1:
                 pass
             elif index == 0:
-                self.OpenVideoList(media_type="tv", mode="favorites")
+                self.open_video_list(media_type="tv", mode="favorites")
             elif index == 1:
                 self.ShowRatedTVShows()
         elif controlID == 6003:
@@ -200,12 +200,12 @@ class DialogTVShowInfo(DialogBaseInfo):
         #     certification = self.getControl(controlID).getSelectedItem().getProperty("certification")
         #     listitems = GetMoviesWithCertification(country, certification)
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     self.OpenVideoList(listitems=listitems)
+        #     self.open_video_list(listitems=listitems)
         # elif controlID == 450:
         #     xbmc.executebuiltin("ActivateWindow(busydialog)")
         #     listitems = get_movies_from_list(self.getControl(controlID).getSelectedItem().getProperty("id"))
         #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     self.OpenVideoList(listitems=listitems)
+        #     self.open_video_list(listitems=listitems)
 
     def UpdateStates(self, forceupdate=True):
         if forceupdate:

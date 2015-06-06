@@ -114,4 +114,4 @@ class DialogEpisodeInfo(DialogBaseInfo):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("tv/episodes")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        self.OpenVideoList(listitems=listitems)
+        self.open_video_list(listitems=listitems)
