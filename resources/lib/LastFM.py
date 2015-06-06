@@ -39,7 +39,7 @@ def HandleLastFMEventResult(results):
                 except:
                     search_string = ""
                 if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
-                    builtin = 'RunScript(script.maps.browser,eventid=%s)' % (str(event['id']))
+                    builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
                 else:
                     builtin = "Notification(Please install script.maps.browser)"
                 googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
