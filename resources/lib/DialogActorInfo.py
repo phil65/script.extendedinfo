@@ -30,7 +30,7 @@ class DialogActorInfo(DialogBaseInfo):
             else:
                 name = names[0]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            self.id = GetPersonID(name)
+            self.id = get_person_id(name)
             if self.id:
                 self.id = self.id["id"]
             else:

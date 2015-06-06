@@ -101,7 +101,7 @@ class DialogVideoList(DialogBaseList):
                     self.update_content(force_update=True)
                     self.update_ui()
             elif selection == 1:
-                ChangeFavStatus(item_id, self.type, "true")
+                change_fav_status(item_id, self.type, "true")
             elif selection == 2:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 listitems = [ADDON.getLocalizedString(32139)]
@@ -116,16 +116,16 @@ class DialogVideoList(DialogBaseList):
                     if listname:
                         list_id = CreateList(listname)
                         xbmc.sleep(1000)
-                        ChangeListStatus(list_id, item_id, True)
+                        change_list_status(list_id, item_id, True)
                 elif index == len(listitems) - 1:
-                    self.RemoveListDialog(account_lists)
+                    self.remove_listDialog(account_lists)
                 elif index > 0:
-                    ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
+                    change_list_status(account_lists[index - 1]["id"], item_id, True)
                     # xbmc.sleep(2000)
                     # self.update_content(force_update=True)
                     # self.update_ui()
             elif selection == 3:
-                ChangeListStatus(self.list_id, item_id, False)
+                change_list_status(self.list_id, item_id, False)
                 self.update_content(force_update=True)
                 self.update_ui()
 
@@ -329,7 +329,7 @@ class DialogVideoList(DialogBaseList):
         super(DialogVideoList, self).add_filter(key, value, typelabel, label)
 
     def get_genre(self):
-        response = GetMovieDBData("genre/%s/list?language=%s&" % (self.type, ADDON.getSetting("LanguageID")), 10)
+        response = get_tmdb_data("genre/%s/list?language=%s&" % (self.type, ADDON.getSetting("LanguageID")), 10)
         id_list = [item["id"] for item in response["genres"]]
         label_list = [item["name"] for item in response["genres"]]
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
@@ -342,7 +342,7 @@ class DialogVideoList(DialogBaseList):
     def get_actor(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
-            response = GetPersonID(result)
+            response = get_person_id(result)
             # prettyprint(response)
             if result > -1:
                 # return "with_genres=" + str(id_list[index])
@@ -353,7 +353,7 @@ class DialogVideoList(DialogBaseList):
     def get_company(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
-            response = SearchforCompany(result)
+            response = get_company_data(result)
             # prettyprint(response)
             if result > -1:
                 if len(response) > 1:
@@ -372,7 +372,7 @@ class DialogVideoList(DialogBaseList):
     def get_keyword(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
-            response = GetKeywordID(result)
+            response = get_keyword_id(result)
             if response:
                 keyword_id = response["id"]
                 name = response["name"]
@@ -436,9 +436,9 @@ class DialogVideoList(DialogBaseList):
             self.set_filter_label()
             url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, ADDON.getSetting("LanguageID"), self.page, include_adult)
         if force:
-            response = GetMovieDBData(url, 0)
+            response = get_tmdb_data(url, 0)
         else:
-            response = GetMovieDBData(url, 2)
+            response = get_tmdb_data(url, 2)
         if self.mode == "list":
             return HandleTMDBMovieResult(response["items"]), 1, len(response["items"])
         if "results" not in response:
@@ -447,7 +447,7 @@ class DialogVideoList(DialogBaseList):
         if not response["results"]:
             Notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
-            return HandleTMDBMultiSearchResult(response["results"]), response["total_pages"], response["total_results"]
+            return HandleTMDBmulti_searchResult(response["results"]), response["total_pages"], response["total_results"]
         elif self.type == "movie":
             return HandleTMDBMovieResult(response["results"], False, None), response["total_pages"], response["total_results"]
         else:

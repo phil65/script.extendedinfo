@@ -73,7 +73,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
-                response = GetMovieDBData("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), ADDON.getSetting("LanguageID")), 30)
+                response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
             AddToWindowStack(self)
             self.close()

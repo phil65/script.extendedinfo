@@ -34,7 +34,7 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
         if self.tmdb_id:
-            self.data = GetExtendedMovieInfo(self.tmdb_id, self.dbid)
+            self.data = extended_movie_info(self.tmdb_id, self.dbid)
             if "general" not in self.data:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
@@ -242,9 +242,9 @@ class DialogVideoInfo(DialogBaseInfo):
             w.doModal()
         elif controlID == 6003:
             if self.data["account_states"]["favorite"]:
-                ChangeFavStatus(self.data["general"]["ID"], "movie", "false")
+                change_fav_status(self.data["general"]["ID"], "movie", "false")
             else:
-                ChangeFavStatus(self.data["general"]["ID"], "movie", "true")
+                change_fav_status(self.data["general"]["ID"], "movie", "true")
             self.UpdateStates()
         elif controlID == 6006:
             self.ShowRatedMovies()
@@ -262,11 +262,11 @@ class DialogVideoInfo(DialogBaseInfo):
                 if listname:
                     list_id = CreateList(listname)
                     xbmc.sleep(1000)
-                    ChangeListStatus(list_id, self.tmdb_id, True)
+                    change_list_status(list_id, self.tmdb_id, True)
             elif index == len(listitems) - 1:
-                self.RemoveListDialog(account_lists)
+                self.remove_listDialog(account_lists)
             elif index > 0:
-                ChangeListStatus(account_lists[index - 1]["id"], self.tmdb_id, True)
+                change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
                 self.UpdateStates()
 
     def SortLists(self, lists):
@@ -289,7 +289,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = GetExtendedMovieInfo(self.tmdb_id, self.dbid, 0)
+            self.update = extended_movie_info(self.tmdb_id, self.dbid, 0)
             self.data["account_states"] = self.update["account_states"]
         if self.data["account_states"]:
             if self.data["account_states"]["favorite"]:
@@ -305,20 +305,20 @@ class DialogVideoInfo(DialogBaseInfo):
             self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
             # Notify(str(self.data["account_states"]["rated"]["value"]))
 
-    def RemoveListDialog(self, account_lists):
+    def remove_listDialog(self, account_lists):
         listitems = []
         for item in account_lists:
             listitems.append("%s (%i)" % (item["name"], item["item_count"]))
         prettyprint(account_lists)
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32138), listitems)
         if index >= 0:
-            # ChangeListStatus(account_lists[index]["id"], self.tmdb_id, False)
-            RemoveList(account_lists[index]["id"])
+            # change_list_status(account_lists[index]["id"], self.tmdb_id, False)
+            remove_list(account_lists[index]["id"])
             self.UpdateStates()
 
     def ShowRatedMovies(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = GetRatedMedia("movies")
+        listitems = get_rated_media_items("movies")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.OpenVideoList(listitems=listitems)
 

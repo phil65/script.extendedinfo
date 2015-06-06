@@ -80,7 +80,7 @@ class DialogYoutubeList(DialogBaseList):
                     self.update_content(force_update=True)
                     self.update_ui()
             elif selection == 1:
-                ChangeFavStatus(item_id, self.type, "true")
+                change_fav_status(item_id, self.type, "true")
             elif selection == 2:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 listitems = [ADDON.getLocalizedString(32139)]
@@ -95,16 +95,16 @@ class DialogYoutubeList(DialogBaseList):
                     if listname:
                         list_id = CreateList(listname)
                         xbmc.sleep(1000)
-                        ChangeListStatus(list_id, item_id, True)
+                        change_list_status(list_id, item_id, True)
                 elif index == len(listitems) - 1:
-                    self.RemoveListDialog(account_lists)
+                    self.remove_listDialog(account_lists)
                 elif index > 0:
-                    ChangeListStatus(account_lists[index - 1]["id"], item_id, True)
+                    change_list_status(account_lists[index - 1]["id"], item_id, True)
                     # xbmc.sleep(2000)
                     # self.update_content(force_update=True)
                     # self.update_ui()
             elif selection == 3:
-                ChangeListStatus(self.list_id, item_id, False)
+                change_list_status(self.list_id, item_id, False)
                 self.update_content(force_update=True)
                 self.update_ui()
 

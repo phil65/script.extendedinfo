@@ -23,7 +23,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.showname = kwargs.get('tvshow')
         self.episodenumber = kwargs.get('episode')
         if self.tmdb_id or self.showname:
-            self.data = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber)
+            self.data = extended_episode_info(self.tmdb_id, self.season, self.episodenumber)
             if not self.data:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
@@ -94,7 +94,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
     def UpdateStates(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = GetExtendedEpisodeInfo(self.tmdb_id, self.season, self.episodenumber, 0)
+            self.update = extended_episode_info(self.tmdb_id, self.season, self.episodenumber, 0)
             self.data["account_states"] = self.update["account_states"]
         if self.data["account_states"]:
             # if self.data["account_states"]["favorite"]:
@@ -112,6 +112,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
 
     def ShowRatedEpisodes(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = GetRatedMedia("tv/episodes")
+        listitems = get_rated_media_items("tv/episodes")
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.OpenVideoList(listitems=listitems)
