@@ -104,25 +104,25 @@ class DialogTVShowInfo(DialogBaseInfo):
         if controlID in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [150]:
             tmdb_id = control.getSelectedItem().getProperty("id")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tmdb_id)
             dialog.doModal()
         elif controlID in [250]:
             season = control.getSelectedItem().getProperty("Season")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]["Title"])
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = control.getSelectedItem()
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
@@ -254,7 +254,7 @@ class DialogTVShowInfo(DialogBaseInfo):
     def show_rated_tvshows(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         listitems = get_rated_media_items("tv")
-        AddToWindowStack(self)
+        add_to_window_stack(self)
         self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], media_type="tv")
         xbmc.executebuiltin("Dialog.Close(busydialog)")

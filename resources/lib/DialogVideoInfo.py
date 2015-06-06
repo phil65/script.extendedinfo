@@ -132,13 +132,13 @@ class DialogVideoInfo(DialogBaseInfo):
         control = self.getControl(control_id)
         if control_id in [1000, 750]:
             actorid = control.getSelectedItem().getProperty("id")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actorid)
             dialog.doModal()
         elif control_id in [150, 250]:
             movieid = control.getSelectedItem().getProperty("id")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movieid)
             dialog.doModal()
@@ -147,7 +147,7 @@ class DialogVideoInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif control_id in [350, 1150, 10]:
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -162,7 +162,7 @@ class DialogVideoInfo(DialogBaseInfo):
             else:
                 Notify(ADDON.getLocalizedString(32052))
         # elif control_id in [8]:
-        #     AddToWindowStack(self)
+        #     add_to_window_stack(self)
         #     self.close()
         #     listitem = create_listitems([self.data["general"]])[0]
         #     self.movieplayer.play(item=self.data["general"]['FilenameAndPath'], listitem=listitem)

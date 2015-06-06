@@ -110,7 +110,7 @@ class DialogYoutubeList(DialogBaseList):
 
     def onClick(self, controlID):
         if controlID in [500]:
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
 
     def add_filter(self, key, value, typelabel, label):

@@ -63,13 +63,13 @@ class DialogEpisodeInfo(DialogBaseInfo):
         if controlID in [1000, 750]:
             actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif controlID in [350, 1150]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()

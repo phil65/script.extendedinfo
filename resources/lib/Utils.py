@@ -288,7 +288,7 @@ class VideoPlayer(xbmc.Player):
         self.stopped = False
 
 
-def AddToWindowStack(window):
+def add_to_window_stack(window):
     windowstack.append(window)
 
 
@@ -569,11 +569,11 @@ def Get_File(url):
             return ""
 
 
-def GetFavouriteswithType(favtype):
+def GetFavouriteswithType(fav_type):
     favs = GetFavourites()
     favlist = []
     for fav in favs:
-        if fav["Type"] == favtype:
+        if fav["Type"] == fav_type:
             favlist.append(fav)
     return favlist
 

@@ -72,7 +72,7 @@ class DialogActorInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if controlID in [150, 550]:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
@@ -83,7 +83,7 @@ class DialogActorInfo(DialogBaseInfo):
             # if selection == 0:
             #     GetCreditInfo(listitem.getProperty("credit_id"))
             # if selection == 1:
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
@@ -93,7 +93,7 @@ class DialogActorInfo(DialogBaseInfo):
             dialog.doModal()
         elif controlID == 350:
             listitem = self.getControl(controlID).getSelectedItem()
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()

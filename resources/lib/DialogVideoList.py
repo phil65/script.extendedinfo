@@ -132,7 +132,7 @@ class DialogVideoList(DialogBaseList):
     def onClick(self, controlID):
         super(DialogVideoList, self).onClick(controlID)
         if controlID in [500]:
-            AddToWindowStack(self)
+            add_to_window_stack(self)
             self.close()
             media_id = self.getControl(controlID).getSelectedItem().getProperty("id")
             media_type = self.getControl(controlID).getSelectedItem().getProperty("media_type")
