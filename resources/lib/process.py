@@ -296,15 +296,15 @@ def StartInfoActions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
-                data = GetYoutubeSearchVideos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
+                data = get_youtube_search_videos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id", False):
-                data = GetYoutubePlaylistVideos(params.get("id", "")), "YoutubePlaylist"
+                data = get_youtube_playlist_videos(params.get("id", "")), "YoutubePlaylist"
         elif info == 'youtubeusersearch':
             user_name = params.get("id", "")
             if user_name:
-                playlists = GetUserPlaylists(user_name)
-                data = GetYoutubePlaylistVideos(playlists["uploads"]), "YoutubeUserSearch"
+                playlists = get_youtube_user_playlists(user_name)
+                data = get_youtube_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
             data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
@@ -346,9 +346,9 @@ def StartInfoActions(infos, params):
         elif info == 'setfocus':
             xbmc.executebuiltin("SetFocus(22222)")
         elif info == 'playliststats':
-            GetPlaylistStats(params.get("id", ""))
+            get_playlist_stats(params.get("id", ""))
         elif info == "sortletters":
-            data = GetSortLetters(params["path"], params.get("id", "")), "SortLetters"
+            data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
         elif info == 'slideshow':
             windowid = xbmcgui.getCurrentWindowId()
             Window = xbmcgui.Window(windowid)

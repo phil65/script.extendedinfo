@@ -11,7 +11,7 @@ BASE_URL = "http://www.omdbapi.com/?tomatoes=true&plot=full&r=json&"
 def get_omdb_movie_info(imdb_id):
     try:
         url = 'i=%s' % (imdb_id)
-        results = Get_JSON_response(BASE_URL + url, 20, "OMDB")
+        results = get_JSON_response(BASE_URL + url, 20, "OMDB")
         for (key, value) in results.iteritems():
             if value == "N/A":
                 results[key] = ""

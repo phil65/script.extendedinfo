@@ -13,7 +13,7 @@ BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
 def GetRottenTomatoesMovies(movietype):
     movies = []
     url = movietype + '.json?apikey=%s' % (RT_KEY)
-    results = Get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
+    results = get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if results is not None and "movies" in results:
         for item in results["movies"]:
             if "alternate_ids" in item:

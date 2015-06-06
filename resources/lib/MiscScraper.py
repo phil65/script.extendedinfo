@@ -26,7 +26,7 @@ def GetXKCDInfo():
             try:
                 base_url = 'http://xkcd.com/'
                 url = '%i/info.0.json' % random.randrange(1, 1190)
-                results = Get_JSON_response(base_url + url, 9999, folder="XKCD")
+                results = get_JSON_response(base_url + url, 9999, folder="XKCD")
                 item = {'Image': results["img"],
                         'Thumb': results["img"],
                         'Path': "plugin://script.extendedinfo?info=setfocus",
@@ -50,7 +50,7 @@ def GetCandHInfo():
         items = []
         for i in range(1, 10):
             url = r'http://www.explosm.net/comics/%i/' % random.randrange(1, 3868)
-            response = GetStringFromUrl(url)
+            response = get_http(url)
             if response:
                 keyword = re.search("<meta property=\"og:image\".*?content=\"([^\"]*)\"", response).group(1)
                 url = re.search("<meta property=\"og:url\".*?content=\"([^\"]*)\"", response).group(1)
@@ -136,7 +136,7 @@ def GetArtistNearEvents(Artists):  # not possible with api 2.0
             count += 1
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
     url = '&%sapp_id=%s' % (ArtistStr, BANDSINTOWN_KEY)
-    results = Get_JSON_response(base_url + url, folder="BandsInTown")
+    results = get_JSON_response(base_url + url, folder="BandsInTown")
     if results:
         return HandleBandsInTownResult(results)
     else:

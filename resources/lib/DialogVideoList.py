@@ -73,7 +73,7 @@ class DialogVideoList(DialogBaseList):
         focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            PopWindowStack()
+            pop_window_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:

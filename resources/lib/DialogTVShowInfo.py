@@ -126,7 +126,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
-            PopWindowStack()
+            pop_window_stack()
         elif controlID == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_company_data(control.getSelectedItem().getProperty("id"))

@@ -158,7 +158,7 @@ class DialogVideoInfo(DialogBaseInfo):
             if youtube_id:
                 self.movieplayer.playYoutubeVideo(youtube_id, control.getSelectedItem(), True)
                 self.movieplayer.wait_for_video_end()
-                PopWindowStack()
+                pop_window_stack()
             else:
                 Notify(ADDON.getLocalizedString(32052))
         # elif control_id in [8]:

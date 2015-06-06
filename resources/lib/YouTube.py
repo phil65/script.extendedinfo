@@ -9,9 +9,9 @@ YT_KEY = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj
 YT_KEY_2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 
 
-def HandleYouTubeVideoResults(results):
+def handle_youtube_videos(results):
     videos = []
-    log("starting HandleYouTubeVideoResults")
+    log("starting handle_youtube_videos")
     for item in results:
             thumb = ""
             if "thumbnails" in item["snippet"]:
@@ -32,7 +32,7 @@ def HandleYouTubeVideoResults(results):
     return videos
 
 
-def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", limit=50):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=50):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
@@ -41,25 +41,25 @@ def GetYoutubeSearchVideos(search_string="", hd="", orderby="relevance", limit=5
     search_string = url_quote(search_string.replace('"', ''))
     base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=video'
     url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, YT_KEY_2, hd_string, int(limit))
-    results = Get_JSON_response(base_url + url, 0.5, "YouTube")
+    results = get_JSON_response(base_url + url, 0.5, "YouTube")
     if results:
-        return HandleYouTubeVideoResults(results["items"])
+        return handle_youtube_videos(results["items"])
     else:
         return []
 
 
-def GetYoutubePlaylistVideos(playlistid=""):
+def get_youtube_playlist_videos(playlistid=""):
     base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=50'
     url = '&playlistId=%s&key=%s' % (playlistid, YT_KEY_2)
-    results = Get_JSON_response(base_url + url, 0.5, "YouTube")
+    results = get_JSON_response(base_url + url, 0.5, "YouTube")
     if results:
-        return HandleYouTubeVideoResults(results["items"])
+        return handle_youtube_videos(results["items"])
     else:
         return []
 
 
-def GetUserPlaylists(username=""):
+def get_youtube_user_playlists(username=""):
     base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
     url = '&forUsername=%s&key=%s' % (username, YT_KEY_2)
-    results = Get_JSON_response(base_url + url, 30, "YouTube")
+    results = get_JSON_response(base_url + url, 30, "YouTube")
     return results["items"][0]["contentDetails"]["relatedPlaylists"]

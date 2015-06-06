@@ -52,7 +52,7 @@ class DialogYoutubeList(DialogBaseList):
         focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            PopWindowStack()
+            pop_window_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
@@ -118,4 +118,4 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
-        return GetYoutubeSearchVideos("test"), "20", "20"
+        return get_youtube_search_videos("test"), "20", "20"

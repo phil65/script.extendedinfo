@@ -292,13 +292,13 @@ def add_to_window_stack(window):
     windowstack.append(window)
 
 
-def PopWindowStack():
+def pop_window_stack():
     if windowstack:
         dialog = windowstack.pop()
         dialog.doModal()
 
 
-def GetPlaylistStats(path):
+def get_playlist_stats(path):
     startindex = -1
     endindex = -1
     if (".xsp" in path) and ("special://" in path):
@@ -331,7 +331,7 @@ def GetPlaylistStats(path):
             HOME.setProperty('PlaylistCount', str(numitems))
 
 
-def GetSortLetters(path, focusedletter):
+def get_sort_letters(path, focusedletter):
     listitems = []
     letterlist = []
     HOME.clearProperty("LetterList")
@@ -435,7 +435,7 @@ def fetch(dictionary, key):
 def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = Get_JSON_response(base_url + url, 30)
+    results = get_JSON_response(base_url + url, 30)
     if results and len(results["artists"]) > 0:
         log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
         return results["artists"][0]["id"]
@@ -443,7 +443,7 @@ def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
         return None
 
 
-def GetStringFromUrl(url=None, headers=False):
+def get_http(url=None, headers=False):
     succeed = 0
     if not headers:
         headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
@@ -456,13 +456,13 @@ def GetStringFromUrl(url=None, headers=False):
             data = response.read()
             return data
         except:
-            log("GetStringFromURL: could not get data from %s" % url)
+            log("get_http: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return None
 
 
-def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
+def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
@@ -483,7 +483,7 @@ def Get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         results = read_from_file(path)
         log("loaded file for %s. time: %f" % (url, time.time() - now))
     else:
-        response = GetStringFromUrl(url, headers)
+        response = get_http(url, headers)
         try:
             results = simplejson.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))

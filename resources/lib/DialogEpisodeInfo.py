@@ -73,7 +73,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
-            PopWindowStack()
+            pop_window_stack()
         elif controlID in [1250, 1350]:
             image = self.getControl(controlID).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

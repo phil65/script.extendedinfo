@@ -97,7 +97,7 @@ class DialogActorInfo(DialogBaseInfo):
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
-            PopWindowStack()
+            pop_window_stack()
         elif controlID == 132:
             text = self.data["general"]["biography"]
             w = TextViewer_Dialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])

@@ -579,7 +579,7 @@ def get_tmdb_data(url="", cache_days=14, folder=False):
     if not base_url:
         base_url = True
         base_url, poster_size, fanart_size = get_tmdb_config()
-    return Get_JSON_response(url, cache_days, "TheMovieDB")
+    return get_JSON_response(url, cache_days, "TheMovieDB")
 
 
 def get_tmdb_config():
@@ -1093,4 +1093,4 @@ class Get_Youtube_Vids_Thread(threading.Thread):
         self.limit = limit
 
     def run(self):
-        self.listitems = GetYoutubeSearchVideos(self.search_string, self.hd, self.order, self.limit)
+        self.listitems = get_youtube_search_videos(self.search_string, self.hd, self.order, self.limit)

@@ -477,8 +477,8 @@ Labels of thumbs list
 - Container(250).Listitem.Icon ---------------------> Image
 - Container(250).ListItem.Property(aspect_ratio) ---> Aspect Ratio (0.66)
 
-[...] (WIP)
+[...](WIP)
 
 #### Labels Available In script-Actors-DialogVideoInfo.xml:
 
-[...] (WIP)
+[...](WIP)

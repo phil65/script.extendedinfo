@@ -170,7 +170,7 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            PopWindowStack()
+            pop_window_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
 
