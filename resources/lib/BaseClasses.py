@@ -23,9 +23,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         self.totalitems = 0
         if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
             path = os.path.join(ADDON_PATH, "changelog.txt")
-            log(path)
             changelog = read_from_file(path, True)
-            log(changelog)
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header="Changelog", text=changelog)
             w.doModal()
             ADDON.setSetting("changelog_version", ADDON_VERSION)
