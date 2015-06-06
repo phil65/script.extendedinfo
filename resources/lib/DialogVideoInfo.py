@@ -41,7 +41,7 @@ class DialogVideoInfo(DialogBaseInfo):
             log("Blur image %s with radius %i" % (self.data["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["Year"] + ", movie", "", "relevance", 15)
             sets_thread = Get_Set_Items_Thread(self.data["general"]["SetId"])
-            self.omdb_thread = Threaded_Function(GetOmdbMovieInfo, self.data["general"]["imdb_id"])
+            self.omdb_thread = Threaded_Function(get_omdb_movie_info, self.data["general"]["imdb_id"])
             lists_thread = Threaded_Function(self.sort_lists, self.data["lists"])
             self.omdb_thread.start()
             sets_thread.start()
