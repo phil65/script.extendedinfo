@@ -86,6 +86,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
+    @busy_dialog
     def onFocus(self, controlID):
         if controlID == 600:
             if self.page < self.totalpages:
@@ -93,10 +94,8 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
             else:
                 self.page = 1
                 return
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.update_content()
             self.update_ui()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
         if controlID == 700:
             if self.page > 1:
                 self.page -= 1
@@ -104,10 +103,8 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
                 return
             # else:
             #     self.page = self.totalpages
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.update_content()
             self.update_ui()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onClick(self, controlID):
         if controlID == 5001:

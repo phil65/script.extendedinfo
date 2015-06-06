@@ -18,12 +18,12 @@ from BaseClasses import DialogBaseInfo
 
 class DialogVideoInfo(DialogBaseInfo):
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogVideoInfo, self).__init__(*args, **kwargs)
         if not ADDON.getSetting("first_start_infodialog"):
             ADDON.setSetting("first_start_infodialog", "True")
             xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.monitor = SettingsMonitor()
         tmdb_id = kwargs.get('id')
         self.dbid = kwargs.get('dbid')
@@ -36,7 +36,6 @@ class DialogVideoInfo(DialogBaseInfo):
         if self.tmdb_id:
             self.data = extended_movie_info(self.tmdb_id, self.dbid)
             if "general" not in self.data:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
             log("Blur image %s with radius %i" % (self.data["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["Year"] + ", movie", "", "relevance", 15)
@@ -102,7 +101,6 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             notify(ADDON.getLocalizedString(32143))
             self.close()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()

@@ -29,6 +29,20 @@ HOME = xbmcgui.Window(10000)
 global windowstack
 windowstack = []
 
+def busy_dialog(func):
+    """
+    Decorator to show busy dialog while function is running
+    Only one of the decorated functions may run simultaniously
+    """
+
+    def decorator(self, *args, **kwargs):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        result = func(self, *args, **kwargs)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        return result
+
+    return decorator
+
 
 def dictfind(lst, key, value):
     for i, dic in enumerate(lst):

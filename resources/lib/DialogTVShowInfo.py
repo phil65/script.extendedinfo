@@ -18,9 +18,9 @@ from BaseClasses import DialogBaseInfo
 
 class DialogTVShowInfo(DialogBaseInfo):
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
         dbid = kwargs.get('dbid')
@@ -44,11 +44,9 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif self.name:
             self.tmdb_id = search_media(kwargs.get('name'), "", "tv")
             log("search string to tmdb_id: %s --> %s" % (str(self.name), str(self.tmdb_id)))
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         if self.tmdb_id:
             self.data = extended_tvshow_info(self.tmdb_id)
             if not self.data:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return None
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Title"] + " tv", "", "relevance", 15)
             youtube_thread.start()
@@ -88,7 +86,6 @@ class DialogTVShowInfo(DialogBaseInfo):
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
             notify(ADDON.getLocalizedString(32143))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()

@@ -14,9 +14,9 @@ from BaseClasses import DialogBaseInfo
 
 class DialogEpisodeInfo(DialogBaseInfo):
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.tmdb_id = kwargs.get('show_id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
@@ -24,9 +24,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         if self.tmdb_id or self.showname:
             self.data = extended_episode_info(self.tmdb_id, self.season, self.episodenumber)
             if not self.data:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             search_string = "%s tv" % (self.data["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
@@ -45,7 +43,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         else:
             notify(ADDON.getLocalizedString(32143))
             self.close()
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()

@@ -15,18 +15,16 @@ from BaseClasses import DialogBaseInfo
 
 class DialogSeasonInfo(DialogBaseInfo):
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogSeasonInfo, self).__init__(*args, **kwargs)
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
         if self.tmdb_id or (self.season and self.showname):
             self.data = GetSeasonInfo(self.tmdb_id, self.showname, self.season)
             if not self.data:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 return
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
@@ -50,7 +48,6 @@ class DialogSeasonInfo(DialogBaseInfo):
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
             notify(ADDON.getLocalizedString(32143))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
