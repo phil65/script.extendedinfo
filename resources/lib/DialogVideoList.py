@@ -123,7 +123,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.getControl(9091).reset()
         listitems = []
         headers = {'User-agent': 'Mozilla/5.0'}
-        result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % self.search_string, headers=headers, folder="Google")
+        result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % urllib.quote_plus(self.search_string), headers=headers, folder="Google")
         for item in result[1]:
             li = xbmcgui.ListItem(item)
             listitems.append(li)
@@ -356,7 +356,8 @@ class DialogVideoList(DialogBaseList):
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
-            self.setFocusId(500)
+            if self.totalitems > 0:
+                self.setFocusId(500)
 
         elif controlID == 7000:
             if self.type == "tv":
