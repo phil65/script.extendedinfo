@@ -1,4 +1,4 @@
-v2.1.0
+v3.0.0
 - API CHANGE: "imdbid" param for script call is now "imdb_id"
 - new add-on extension point: Video plugin
 - added 24 movie / TV show listings from different content providers to plugin
