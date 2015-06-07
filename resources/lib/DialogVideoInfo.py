@@ -10,7 +10,6 @@ from TheMovieDB import *
 from YouTube import *
 from omdb import *
 import DialogActorInfo
-import DialogVideoList
 from ImageTools import *
 import threading
 from BaseClasses import DialogBaseInfo
