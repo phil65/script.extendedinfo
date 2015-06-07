@@ -250,6 +250,8 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'ID': tmdb_id,
                     'Path': path,
                     'media_type': "movie",
+                    'country': fetch(movie, 'original_language'),
+                    'plot': fetch(movie, 'overview'),
                     'Trailer': trailer,
                     'Rating': fetch(movie, 'vote_average'),
                     'credit_id': fetch(movie, 'credit_id'),
