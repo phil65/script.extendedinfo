@@ -43,6 +43,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.previous = False
         self.prev_time = 0
         self.timer = None
+        self.color_timer = None
 
     def onInit(self):
         if self.search_string:
@@ -83,7 +84,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
 
     def onClick(self, controlID):
         if controlID == 9090:
-            letters = self.getControl(9090).getSelectedItem().getLabel2()
+            letters = self.getControl(9090).getSelectedItem().getProperty("value")
             number = self.getControl(9090).getSelectedItem().getProperty("key")
             letter_list = [c for c in letters]
             now = time.time()
@@ -101,10 +102,14 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.prev_time = now
                 self.previous = letters
                 self.search_string += letter_list[0]
+                self.color_labels(letter_list[0], letters)
             elif time_diff < 1:
+                if self.color_timer:
+                    self.color_timer.cancel()
                 self.prev_time = now
                 idx = (letter_list.index(self.search_string[-1]) + 1) % len(letter_list)
                 self.search_string = self.search_string[:-1] + letter_list[idx]
+                self.color_labels(letter_list[idx], letters)
             if self.timer:
                 self.timer.cancel()
             self.timer = Timer(1.0, self.callback, (self.search_string,))
@@ -119,6 +124,18 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.timer.cancel()
             self.timer = Timer(0.0, self.callback, (self.search_string,))
             self.timer.start()
+
+    def color_labels(self, letter, letters):
+        label = "[COLOR=FFFF3333]%s[/COLOR]" % letter
+        self.getControl(9090).getSelectedItem().setLabel2(letters.replace(letter, label))
+        self.color_timer = Timer(1.0, self.reset_color, (self.getControl(9090).getSelectedItem(),))
+        self.color_timer.start()
+
+    def reset_color(self, item):
+        label = item.getLabel2()
+        log("resetus. label: " + label)
+        label = label.replace("[COLOR=FFFF3333]", "").replace("[/COLOR]", "")
+        item.setLabel2(label)
 
     @run_async
     def get_autocomplete_labels(self):
