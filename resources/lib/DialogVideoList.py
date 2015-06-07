@@ -105,7 +105,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.search_string = self.search_string[:-1] + letter_list[idx]
             if self.timer:
                 self.timer.cancel()
-            self.timer = Timer(1.5, self.callback, (self.search_string,))
+            self.timer = Timer(1.0, self.callback, (self.search_string,))
             self.timer.start()
             self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
 
