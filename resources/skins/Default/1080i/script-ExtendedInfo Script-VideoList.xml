@@ -236,14 +236,14 @@
                             <width>440</width>
                             <label>$INFO[ListItem.Label2]</label>
                             <font>font12</font>
-                            <textcolor>grey</textcolor>
+                            <textcolor>AAFFFFFF</textcolor>
                         </control>
                         <control type="image">
                             <posx>280</posx>
                             <posy>218</posy>
                             <width>130</width>
                             <height>30</height>
-                            <texture colordiffuse="grey">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
                             <animation effect="fade" delay="800" time="400">WindowOpen</animation>
                             <animation effect="fade" time="160">WindowClose</animation>
                             <animation effect="fade" time="240">VisibleChange</animation>
@@ -256,7 +256,7 @@
                             <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
                             <font>font12</font>
-                            <textcolor>grey2</textcolor>
+                            <textcolor>FF888888</textcolor>
                         </control>
                         <control type="label">
                             <posx>30</posx>
@@ -309,14 +309,14 @@
                             <width>440</width>
                             <label>$INFO[ListItem.Label2]</label>
                             <font>font12</font>
-                            <textcolor>grey</textcolor>
+                            <textcolor>AAFFFFFF</textcolor>
                         </control>
                         <control type="image">
                             <posx>280</posx>
                             <posy>218</posy>
                             <width>130</width>
                             <height>30</height>
-                            <texture colordiffuse="grey">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
                             <animation effect="fade" delay="800" time="400">WindowOpen</animation>
                             <animation effect="fade" time="160">WindowClose</animation>
                             <animation effect="fade" time="240">VisibleChange</animation>
