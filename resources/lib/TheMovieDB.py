@@ -271,7 +271,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
 
 def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
-    ids = []
     log("starting handle_tmdb_tvshows")
     for tv in results:
         tmdb_id = fetch(tv, 'id')
@@ -313,9 +312,8 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Release_Date': fetch(tv, 'first_air_date'),
                  'ReleaseDate': fetch(tv, 'first_air_date'),
                  'Premiered': fetch(tv, 'first_air_date')}
-        if tmdb_id not in ids:
-            ids.append(tmdb_id)
-            tvshows.append(newtv)
+        tvshows.append(newtv)
+    tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
     # tvshows = compare_with_library(tvshows, local_first, sortkey)
     return tvshows
 
