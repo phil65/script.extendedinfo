@@ -108,7 +108,7 @@ def get_autocomplete_items(search_string):
     result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % urllib.quote_plus(search_string), headers=headers, folder="Google")
     for item in result[1]:
         li = {"label": item,
-              "path": "plugin://script.extendedinfo/?info=action&&id=Control.SetLabel(312,%s)$$SetFocus(300)" % item}
+              "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}
         listitems.append(li)
     return listitems
 

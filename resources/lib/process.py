@@ -351,8 +351,8 @@ def StartInfoActions(infos, params):
         elif info == "sortletters":
             data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
         elif info == 'slideshow':
-            windowid = xbmcgui.getCurrentWindowId()
-            Window = xbmcgui.Window(windowid)
+            window_id = xbmcgui.getCurrentwindow_id()
+            Window = xbmcgui.Window(window_id)
             # focusid = Window.getFocusId()
             itemlist = Window.getFocus()
             numitems = itemlist.getSelectedPosition()
@@ -362,6 +362,11 @@ def StartInfoActions(infos, params):
         elif info == 'action':
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
+        elif info == 'selectautocomplete':
+            window_id = xbmcgui.getCurrentWindowDialogId()
+            window = xbmcgui.Window(window_id)
+            window.getControl(312).setText(params.get("id"))
+            window.setFocusId(300)
         elif info == 'bounce':
             HOME.setProperty(params.get("name", ""), "True")
             xbmc.sleep(200)
