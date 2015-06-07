@@ -32,8 +32,8 @@ include_adult = str(ADDON.getSetting("include_adults")).lower()
 
 class DialogVideoList(DialogBaseList):
 
+    @busy_dialog
     def __init__(self, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         super(DialogVideoList, self).__init__()
         self.layout = "poster"
         self.type = kwargs.get('type', "movie")
@@ -53,7 +53,6 @@ class DialogVideoList(DialogBaseList):
         else:
             self.update_content(force_update=force)
             # notify(str(self.totalpages))
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def update_ui(self):
         super(DialogVideoList, self).update_ui()
@@ -294,12 +293,10 @@ class DialogVideoList(DialogBaseList):
                 self.update_content()
                 self.update_ui()
             else:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
                 # offset = len(listitems) - len(account_lists)
                 # notify(str(offset))
                 list_id = account_lists[index - 2]["id"]
                 list_title = account_lists[index - 2]["name"]
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
                 self.close()
                 dialog = DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, color=self.color, filters=[], mode="list", list_id=list_id, filter_label=list_title)
                 dialog.doModal()
