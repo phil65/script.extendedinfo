@@ -12,6 +12,7 @@ import DialogTVShowInfo
 import DialogActorInfo
 from TheMovieDB import *
 import time
+from threading import Timer
 from BaseClasses import DialogBaseList
 
 SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
@@ -41,6 +42,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.search_string = kwargs.get("start_value", "")
         self.previous = False
         self.prev_time = 0
+        self.timer = None
 
     def onInit(self):
         keys = (("1", "ABC"),
@@ -83,7 +85,10 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.prev_time = now
                 idx = (letter_list.index(self.search_string[-1]) + 1) % len(letter_list)
                 self.search_string = self.search_string[:-1] + letter_list[idx]
-            self.callback(self.search_string)
+            if self.timer:
+                self.timer.cancel()
+            self.timer = Timer(1.5, self.callback, (self.search_string,))
+            self.timer.start()
             self.getControl(600).setLabel(self.search_string)
 
     def start_edit_timeout(self):
@@ -312,11 +317,11 @@ class DialogVideoList(DialogBaseList):
             self.update_content()
             self.update_ui()
         elif controlID == 6000:
-            result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
-            if result and result > -1:
-                self.search(result)
-            # dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
-            # dialog.doModal()
+            # result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
+            # if result and result > -1:
+            #   self.search(result)
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
+            dialog.doModal()
 
         elif controlID == 7000:
             if self.type == "tv":
