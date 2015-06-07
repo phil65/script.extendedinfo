@@ -5,12 +5,15 @@
 
 import xbmc
 import xbmcgui
+import collections
 from Utils import *
 import DialogVideoInfo
 import DialogTVShowInfo
 import DialogActorInfo
 from TheMovieDB import *
+import time
 from BaseClasses import DialogBaseList
+
 SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
                    ADDON.getLocalizedString(32108): "revenue",
@@ -27,7 +30,66 @@ SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
          "rating": {ADDON.getLocalizedString(32157): "created_at"}}
 TRANSLATIONS = {"movie": xbmc.getLocalizedString(20338),
                 "tv": xbmc.getLocalizedString(20364)}
+
 include_adult = str(ADDON.getSetting("include_adults")).lower()
+
+
+class T9Search(xbmcgui.WindowXMLDialog):
+
+    def __init__(self, *args, **kwargs):
+        self.callback = kwargs.get("call")
+        self.search_string = kwargs.get("start_value", "")
+        self.previous = False
+        self.prev_time = 0
+
+    def onInit(self):
+        keys = (("1", "ABC"),
+                ("2", "DEF"),
+                ("3", "GHI"),
+                ("4", "JKL"),
+                ("5", "MNO"),
+                ("6", "PQR"),
+                ("7", "STU"),
+                ("8", "VWX"),
+                ("9", "YZ"),
+                ("DEL", "DEF"),
+                ("0", "___"))
+        key_dict = collections.OrderedDict(keys)
+        listitems = []
+        for key, value in key_dict.iteritems():
+            li = xbmcgui.ListItem(key, value)
+            listitems.append(li)
+        self.getControl(9090).addItems(listitems)
+        self.setFocusId(9090)
+
+    def onClick(self, controlID):
+        if controlID == 9090:
+            letters = self.getControl(9090).getSelectedItem().getLabel2()
+            number = self.getControl(9090).getSelectedItem().getLabel()
+            letter_list = [c for c in letters]
+            now = time.time()
+            time_diff = now - self.prev_time
+            if number == "DEL":
+                if self.search_string:
+                    self.search_string = self.search_string[:-1]
+            elif number == "0":
+                if self.search_string:
+                    self.search_string += " "
+            elif self.previous != letters or time_diff >= 1:
+                self.prev_time = now
+                self.previous = letters
+                self.search_string += letter_list[0]
+            elif time_diff < 1:
+                self.prev_time = now
+                idx = (letter_list.index(self.search_string[-1]) + 1) % len(letter_list)
+                self.search_string = self.search_string[:-1] + letter_list[idx]
+            self.callback(self.search_string)
+            self.getControl(600).setLabel(self.search_string)
+
+    def start_edit_timeout(self):
+        while self.timeout >= 0:
+            self.timeout -= 1
+            time.sleep(0.1)
 
 
 class DialogVideoList(DialogBaseList):
@@ -252,12 +314,10 @@ class DialogVideoList(DialogBaseList):
         elif controlID == 6000:
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
-                self.search_string = result
-                self.mode = "search"
-                self.filters = []
-                self.page = 1
-                self.update_content()
-                self.update_ui()
+                self.search(result)
+            # dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
+            # dialog.doModal()
+
         elif controlID == 7000:
             if self.type == "tv":
                 listitems = [ADDON.getLocalizedString(32145)]  # rated tv
@@ -436,7 +496,7 @@ class DialogVideoList(DialogBaseList):
         if self.mode == "list":
             return handle_tmdb_movies(response["items"]), 1, len(response["items"])
         if "results" not in response:
-            self.close()
+            # self.close()
             return [], 0, 0
         if not response["results"]:
             notify(xbmc.getLocalizedString(284))

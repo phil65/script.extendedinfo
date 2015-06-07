@@ -31,34 +31,38 @@
                 <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
                 <effect type="fade" start="100" end="0" time="240" />
             </animation>
-            <control type="image">
-                <posx>25</posx>
-                <posy>107</posy>
-                <width>330</width>
-                <height>432</height>
-                <visible>!Stringcompare(Window.Property(layout),landscape)</visible>
+            <control type="group">
+                <visible>IntegerGreaterThan(Container(500).NumItems,0)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
-                <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
-                <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
-                <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
-            </control>
-            <control type="image">
-                <posx>75</posx>
-                <posy>135</posy>
-                <width>440</width>
-                <height>410</height>
-                <visible>Stringcompare(Window.Property(layout),landscape)</visible>
-                <animation effect="fade" time="320" delay="300">Visible</animation>
-                <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
-                <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
-                <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>
-                <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
-                <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                <control type="image">
+                    <posx>25</posx>
+                    <posy>107</posy>
+                    <width>330</width>
+                    <height>432</height>
+                    <visible>!Stringcompare(Window.Property(layout),landscape)</visible>
+                    <animation effect="fade" time="320" delay="300">Visible</animation>
+                    <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                    <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
+                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                </control>
+                <control type="image">
+                    <posx>75</posx>
+                    <posy>135</posy>
+                    <width>440</width>
+                    <height>410</height>
+                    <visible>Stringcompare(Window.Property(layout),landscape)</visible>
+                    <animation effect="fade" time="320" delay="300">Visible</animation>
+                    <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                    <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                </control>
             </control>
             <control type="panel" id="500">
                 <posx>0</posx>
@@ -722,15 +726,7 @@
                     <textcolor>FF999999</textcolor>
                     <focusedcolor>FFFAFAFA</focusedcolor>
                 </control>
-                <!--
-                <control type="button" id="5005">
-                    <label></label>
-                    <enable>no</enable>
-                    <width>400</width>
-                    <height>50</height>
-                    <texturefocus>-</texturefocus>
-                    <texturenofocus>-</texturenofocus>
-                </control>--></control>
+            </control>
         </control>
     </controls>
 </window>

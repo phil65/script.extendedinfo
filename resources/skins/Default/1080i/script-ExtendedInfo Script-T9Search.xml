@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<window>
+    <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,FFFFFFFF,home)</onload>
+    <!--
+    <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload>-->
+    <onunload>ClearProperty(WindowColor,home)</onunload>
+    <defaultcontrol always="true">9090</defaultcontrol>
+    <controls>
+        <control type="group">
+            <animation type="WindowOpen" reversible="false">
+                <effect type="zoom" start="80" end="100" center="960,540" delay="500" tween="back" time="240" />
+                <effect type="fade" delay="500" end="100" time="240" />
+            </animation>
+            <animation type="WindowClose" reversible="false">
+                <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
+                <effect type="fade" start="100" end="0" time="240" />
+            </animation>
+            <posx>1200</posx>
+            <posy>280</posy>
+            <control type="image">
+                <width>500</width>
+                <height>790</height>
+                <texture border="40,100,40,100">keyboard/numeric_back.png</texture>
+            </control>
+            <control type="panel" id="9090">
+                <left>30</left>
+                <top>0</top>
+                <width>447</width>
+                <height>708</height>
+                <onleft>9080</onleft>
+                <onright>9080</onright>
+                <onback>noop</onback>
+                <orientation>vertical</orientation>
+                <scrolltime tween="quadratic" easing="out">200</scrolltime>
+                <itemlayout height="177" width="149">
+                    <control type="label">
+                        <left>0</left>
+                        <top>7</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <align>center</align>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>0</left>
+                        <top>37</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <align>center</align>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout height="177" width="149">
+                    <control type="image">
+                        <left>0</left>
+                        <top>27</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                    </control>
+                    <control type="label">
+                        <left>0</left>
+                        <top>7</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <align>center</align>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <left>0</left>
+                        <top>37</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <align>center</align>
+                        <label>$INFO[ListItem.Label2]</label>
+                    </control>
+                </focusedlayout>
+            </control>
+            <control type="label" id="600">
+                <left>20</left>
+                <top>710</top>
+                <width>450</width>
+                <height>50</height>
+                <align>center</align>
+                <textoffsetx>15</textoffsetx>
+                <textcolor>grey</textcolor>
+                <scroll>true</scroll>
+                <scrollspeed>20</scrollspeed>
+            </control>
+        </control>
+    </controls>
+</window>

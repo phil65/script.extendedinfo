@@ -41,6 +41,14 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         else:
             xbmc.executebuiltin("SetFocus(6000)")
 
+    def search(self, label):
+        self.search_string = label
+        self.mode = "search"
+        self.filters = []
+        self.page = 1
+        self.update_content()
+        self.update_ui()
+
     def set_filter_url(self):
         filter_list = []
         # prettyprint(self.filters)
