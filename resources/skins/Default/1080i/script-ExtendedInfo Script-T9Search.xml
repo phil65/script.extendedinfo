@@ -29,9 +29,9 @@
                 <width>447</width>
                 <height>708</height>
                 <onleft>9090</onleft>
-                <onright>9090</onright>
-                <onup>9091</onup>
-                <ondown>9091</ondown>
+                <onright>Action(Close)</onright>
+                <onup condition="IntegerGreaterThan(Container(9091).NumItems,0)">Control.SetFocus(9091,999)</onup>
+                <ondown condition="IntegerGreaterThan(Container(9091).NumItems,0)">Control.SetFocus(9091,0)</ondown>
                 <onback>noop</onback>
                 <orientation>vertical</orientation>
                 <scrolltime tween="quadratic" easing="out">200</scrolltime>
@@ -100,7 +100,7 @@
                 <width>390</width>
                 <height>708</height>
                 <onleft>9091</onleft>
-                <onright>9091</onright>
+                <onright>Action(Close)</onright>
                 <onup>9090</onup>
                 <ondown>9090</ondown>
                 <onback>noop</onback>

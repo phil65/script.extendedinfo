@@ -356,6 +356,7 @@ class DialogVideoList(DialogBaseList):
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
+            self.setFocusId(500)
 
         elif controlID == 7000:
             if self.type == "tv":
