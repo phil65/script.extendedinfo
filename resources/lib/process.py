@@ -335,10 +335,11 @@ def StartInfoActions(infos, params):
                     HOME.setProperty('favourite.1.name', favourites[-1]["Label"])
             data = favourites, "Favourites"
         elif info == 'similarlocal' and "dbid" in params:
-            data = get_similar_movies_from_db(
-                params["dbid"]), "SimilarLocalMovies"
+            data = get_similar_movies_from_db(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
+        elif info == 'autocomplete':
+            data = get_autocomplete_items(params["id"]), "AutoComplete"
         elif info == 'weather':
             data = get_weather_images(), "WeatherImages"
         elif info == 'updatexbmcdatabasewithartistmbidbg':
@@ -359,7 +360,8 @@ def StartInfoActions(infos, params):
             for i in range(0, numitems):
                 notify(item.getProperty("Image"))
         elif info == 'action':
-            xbmc.executebuiltin(params.get("id", ""))
+            for builtin in params.get("id", "").split("$$"):
+                xbmc.executebuiltin(builtin)
         elif info == 'bounce':
             HOME.setProperty(params.get("name", ""), "True")
             xbmc.sleep(200)

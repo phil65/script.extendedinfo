@@ -100,6 +100,19 @@ def merge_dicts(*dict_args):
     return result
 
 
+def get_autocomplete_items(search_string):
+    if not search_string:
+        return []
+    listitems = []
+    headers = {'User-agent': 'Mozilla/5.0'}
+    result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % urllib.quote_plus(search_string), headers=headers, folder="Google")
+    for item in result[1]:
+        li = {"label": item,
+              "path": "plugin://script.extendedinfo/?info=action&&id=Control.SetLabel(312,%s)$$SetFocus(300)" % item}
+        listitems.append(li)
+    return listitems
+
+
 def widget_selectdialog(filter=None, string_prefix="widget"):
     # rottentomatoes
     movie = {"intheaters": "RottenTomatoes: In theaters",

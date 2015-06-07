@@ -133,20 +133,14 @@ class T9Search(xbmcgui.WindowXMLDialog):
 
     def reset_color(self, item):
         label = item.getLabel2()
-        log("resetus. label: " + label)
         label = label.replace("[COLOR=FFFF3333]", "").replace("[/COLOR]", "")
         item.setLabel2(label)
 
     @run_async
     def get_autocomplete_labels(self):
         self.getControl(9091).reset()
-        listitems = []
-        headers = {'User-agent': 'Mozilla/5.0'}
-        result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % urllib.quote_plus(self.search_string), headers=headers, folder="Google")
-        for item in result[1]:
-            li = xbmcgui.ListItem(item)
-            listitems.append(li)
-        self.getControl(9091).addItems(listitems)
+        listitems = get_autocomplete_items(self.search_string)
+        self.getControl(9091).addItems(create_listitems(listitems))
 
 
 class DialogVideoList(DialogBaseList):
