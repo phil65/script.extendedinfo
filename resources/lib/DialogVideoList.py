@@ -56,32 +56,33 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 ("7", "STU"),
                 ("8", "VWX"),
                 ("9", "YZ"),
-                ("DEL", "DEF"),
+                ("DEL", "<--"),
                 ("0", "___"),
                 ("KEYB", "CLASSIC"))
         key_dict = collections.OrderedDict(keys)
         listitems = []
         for key, value in key_dict.iteritems():
-            li = xbmcgui.ListItem(key, value)
+            li = xbmcgui.ListItem("[B]%s[/B]" % key, value)
+            li.setProperty("key", key)
+            li.setProperty("value", value)
             listitems.append(li)
         self.getControl(9090).addItems(listitems)
         self.setFocusId(9090)
-        self.getControl(600).setLabel(self.search_string + "_")
+        self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
 
     @run_async
     def update_search_label(self):
         while True:
             time.sleep(1)
             if int(time.time()) % 2 == 0:
-                self.getControl(600).setLabel(self.search_string + "_")
+                self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
             else:
-                self.getControl(600).setLabel(self.search_string + "[COLOR 00FFFFFF]_[/COLOR]")
-
+                self.getControl(600).setLabel("[B]%s[/B][COLOR 00FFFFFF]_[/COLOR]" % self.search_string)
 
     def onClick(self, controlID):
         if controlID == 9090:
             letters = self.getControl(9090).getSelectedItem().getLabel2()
-            number = self.getControl(9090).getSelectedItem().getLabel()
+            number = self.getControl(9090).getSelectedItem().getProperty("key")
             letter_list = [c for c in letters]
             now = time.time()
             time_diff = now - self.prev_time
@@ -106,7 +107,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.timer.cancel()
             self.timer = Timer(1.5, self.callback, (self.search_string,))
             self.timer.start()
-            self.getControl(600).setLabel(self.search_string + "_")
+            self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
 
 
 class DialogVideoList(DialogBaseList):

@@ -23,8 +23,8 @@
                 <texture border="40,100,40,100">keyboard/numeric_back.png</texture>
             </control>
             <control type="panel" id="9090">
-                <left>30</left>
-                <top>0</top>
+                <left>28</left>
+                <top>-2</top>
                 <width>447</width>
                 <height>708</height>
                 <onleft>9080</onleft>
@@ -33,12 +33,20 @@
                 <orientation>vertical</orientation>
                 <scrolltime tween="quadratic" easing="out">200</scrolltime>
                 <itemlayout height="177" width="149">
+                    <control type="image">
+                        <left>0</left>
+                        <top>27</top>
+                        <width>149</width>
+                        <height>163</height>
+                        <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-nofocus.png</texture>
+                    </control>
                     <control type="label">
                         <left>0</left>
                         <top>7</top>
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <font>font12</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
@@ -47,6 +55,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <font>font10</font>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
                 </itemlayout>
@@ -64,6 +73,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <font>font12</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                     <control type="label">
@@ -72,6 +82,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <font>font10</font>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
                 </focusedlayout>
