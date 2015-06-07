@@ -211,10 +211,14 @@ def handle_tmdb_multi_search(results=[]):
 
 
 def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
+    response = get_tmdb_data("genre/movie/list?language=%s&" % (ADDON.getSetting("LanguageID")), 9999)
+    id_list = [item["id"] for item in response["genres"]]
+    label_list = [item["name"] for item in response["genres"]]
     movies = []
     ids = []
     log("starting handle_tmdb_movies")
     for movie in results:
+        genres = " / ".join([label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"]])
         tmdb_id = str(fetch(movie, 'id'))
         if ("backdrop_path" in movie) and (movie["backdrop_path"]):
             backdrop_path = base_url + fanart_size + movie['backdrop_path']
@@ -261,6 +265,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'Year': year,
+                    'Genre': genres,
                     'time_comparer': time_comparer,
                     'Premiered': release_date}
         if tmdb_id not in ids:
