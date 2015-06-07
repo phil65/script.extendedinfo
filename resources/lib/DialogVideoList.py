@@ -45,6 +45,8 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.timer = None
 
     def onInit(self):
+        self.classic_mode = False
+        self.update_search_label()
         keys = (("1", "ABC"),
                 ("2", "DEF"),
                 ("3", "GHI"),
@@ -55,7 +57,8 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 ("8", "VWX"),
                 ("9", "YZ"),
                 ("DEL", "DEF"),
-                ("0", "___"))
+                ("0", "___"),
+                ("KEYB", "CLASSIC"))
         key_dict = collections.OrderedDict(keys)
         listitems = []
         for key, value in key_dict.iteritems():
@@ -63,6 +66,17 @@ class T9Search(xbmcgui.WindowXMLDialog):
             listitems.append(li)
         self.getControl(9090).addItems(listitems)
         self.setFocusId(9090)
+        self.getControl(600).setLabel(self.search_string + "_")
+
+    @run_async
+    def update_search_label(self):
+        while True:
+            time.sleep(1)
+            if int(time.time()) % 2 == 0:
+                self.getControl(600).setLabel(self.search_string + "_")
+            else:
+                self.getControl(600).setLabel(self.search_string + "[COLOR 00FFFFFF]_[/COLOR]")
+
 
     def onClick(self, controlID):
         if controlID == 9090:
@@ -77,6 +91,9 @@ class T9Search(xbmcgui.WindowXMLDialog):
             elif number == "0":
                 if self.search_string:
                     self.search_string += " "
+            elif number == "KEYB":
+                self.classic_mode = True
+                self.close()
             elif self.previous != letters or time_diff >= 1:
                 self.prev_time = now
                 self.previous = letters
@@ -89,7 +106,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 self.timer.cancel()
             self.timer = Timer(1.5, self.callback, (self.search_string,))
             self.timer.start()
-            self.getControl(600).setLabel(self.search_string)
+            self.getControl(600).setLabel(self.search_string + "_")
 
 
 class DialogVideoList(DialogBaseList):
@@ -312,11 +329,12 @@ class DialogVideoList(DialogBaseList):
             self.update_content()
             self.update_ui()
         elif controlID == 6000:
-            # result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
-            # if result and result > -1:
-            #   self.search(result)
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
             dialog.doModal()
+            if dialog.classic_mode:
+                result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
+                if result and result > -1:
+                    self.search(result)
 
         elif controlID == 7000:
             if self.type == "tv":

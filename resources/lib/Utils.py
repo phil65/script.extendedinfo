@@ -17,6 +17,8 @@ import simplejson
 import re
 import threading
 import datetime
+from functools import wraps
+
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -28,6 +30,18 @@ ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 global windowstack
 windowstack = []
+
+def run_async(func):
+    """
+    Decorator to put a function into a separate thread
+    """
+    @wraps(func)
+    def async_func(*args, **kwargs):
+        func_hl = threading.Thread(target=func, args=args, kwargs=kwargs)
+        func_hl.start()
+        return func_hl
+
+    return async_func
 
 def busy_dialog(func):
     """

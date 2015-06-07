@@ -235,7 +235,7 @@
                             <posy>215</posy>
                             <width>440</width>
                             <label>$INFO[ListItem.Label2]</label>
-                            <font>Font_Reg25_2</font>
+                            <font>font12</font>
                             <textcolor>grey</textcolor>
                         </control>
                         <control type="image">
@@ -255,7 +255,7 @@
                             <width>400</width>
                             <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
-                            <font>Font_Reg25_2</font>
+                            <font>font12</font>
                             <textcolor>grey2</textcolor>
                         </control>
                         <control type="label">
@@ -265,7 +265,7 @@
                             <height>5</height>
                             <align>center</align>
                             <label>$INFO[ListItem.Date]</label>
-                            <font>Font_Reg22_2</font>
+                            <font>font10</font>
                             <shadowcolor>floorshadow</shadowcolor>
                             <textcolor>floor</textcolor>
                         </control>
@@ -308,7 +308,7 @@
                             <posy>215</posy>
                             <width>440</width>
                             <label>$INFO[ListItem.Label2]</label>
-                            <font>Font_Reg25_2</font>
+                            <font>font12</font>
                             <textcolor>grey</textcolor>
                         </control>
                         <control type="image">
@@ -330,7 +330,7 @@
                             <label>$INFO[ListItem.Label]</label>
                             <animation effect="fade" time="300" start="70" end="100" delay="100" reversible="false">Focus</animation>
                             <animation effect="fade" time="300" start="100" end="50" reversible="false">UnFocus</animation>
-                            <font>Font_Reg25_2</font>
+                            <font>font12</font>
                         </control>
                         <control type="label">
                             <posx>30</posx>
@@ -339,7 +339,7 @@
                             <height>5</height>
                             <align>center</align>
                             <label>$INFO[ListItem.Date]</label>
-                            <font>Font_Reg22_2</font>
+                            <font>font10</font>
                             <shadowcolor>floorshadow</shadowcolor>
                             <textcolor>floor</textcolor>
                         </control>

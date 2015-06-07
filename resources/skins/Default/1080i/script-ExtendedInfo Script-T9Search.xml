@@ -83,7 +83,7 @@
                 <height>50</height>
                 <align>center</align>
                 <textoffsetx>15</textoffsetx>
-                <textcolor>grey</textcolor>
+                <textcolor>white</textcolor>
                 <scroll>true</scroll>
                 <scrollspeed>20</scrollspeed>
             </control>
