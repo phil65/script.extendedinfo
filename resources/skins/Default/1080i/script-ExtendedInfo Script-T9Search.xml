@@ -95,7 +95,7 @@
                 </focusedlayout>
             </control>
             <control type="list" id="9091">
-                <left>28</left>
+                <left>15</left>
                 <top>450</top>
                 <width>390</width>
                 <height>708</height>
@@ -106,18 +106,18 @@
                 <onback>noop</onback>
                 <orientation>vertical</orientation>
                 <scrolltime tween="quadratic" easing="out">200</scrolltime>
-                <itemlayout height="55" width="390">
+                <itemlayout height="55" width="380">
                     <control type="image">
                         <left>0</left>
                         <top>27</top>
-                        <width>390</width>
+                        <width>380</width>
                         <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-nofocus.png</texture>
                     </control>
                     <control type="label">
                         <left>0</left>
                         <top>20</top>
-                        <width>390</width>
+                        <width>380</width>
                         <height>85</height>
                         <align>center</align>
                         <aligny>center</aligny>
@@ -125,18 +125,18 @@
                         <label>$INFO[ListItem.Label]</label>
                     </control>
                 </itemlayout>
-                <focusedlayout height="55" width="390">
+                <focusedlayout height="55" width="380">
                     <control type="image">
                         <left>0</left>
                         <top>27</top>
-                        <width>390</width>
+                        <width>380</width>
                         <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                     </control>
                     <control type="label">
                         <left>0</left>
                         <top>20</top>
-                        <width>390</width>
+                        <width>380</width>
                         <height>85</height>
                         <align>center</align>
                         <aligny>center</aligny>
@@ -146,9 +146,9 @@
                 </focusedlayout>
             </control>
             <control type="label" id="600">
-                <left>28</left>
+                <left>15</left>
                 <top>440</top>
-                <width>390</width>
+                <width>380</width>
                 <height>50</height>
                 <align>center</align>
                 <textoffsetx>15</textoffsetx>
