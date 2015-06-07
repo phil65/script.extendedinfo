@@ -366,6 +366,7 @@ def StartInfoActions(infos, params):
             window_id = xbmcgui.getCurrentWindowDialogId()
             window = xbmcgui.Window(window_id)
             window.getControl(312).setText(params.get("id"))
+            xbmc.executebuiltin("SendClick(32)")
             window.setFocusId(300)
         elif info == 'bounce':
             HOME.setProperty(params.get("name", ""), "True")

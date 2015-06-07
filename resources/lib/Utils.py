@@ -31,6 +31,7 @@ HOME = xbmcgui.Window(10000)
 global windowstack
 windowstack = []
 
+
 def run_async(func):
     """
     Decorator to put a function into a separate thread
@@ -42,6 +43,7 @@ def run_async(func):
         return func_hl
 
     return async_func
+
 
 def busy_dialog(func):
     """
