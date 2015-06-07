@@ -131,7 +131,16 @@
                         <top>27</top>
                         <width>380</width>
                         <height>85</height>
+                        <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-nofocus.png</texture>
+                        <visible>!Control.HasFocus(9091)</visible>
+                    </control>
+                    <control type="image">
+                        <left>0</left>
+                        <top>27</top>
+                        <width>380</width>
+                        <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                        <visible>Control.HasFocus(9091)</visible>
                     </control>
                     <control type="label">
                         <left>0</left>
