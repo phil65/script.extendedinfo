@@ -45,6 +45,8 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.timer = None
 
     def onInit(self):
+        if self.search_string:
+            self.get_autocomplete_labels()
         self.classic_mode = False
         self.update_search_label()
         keys = (("1", "ABC"),
