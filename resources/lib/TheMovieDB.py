@@ -215,7 +215,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
     id_list = [item["id"] for item in response["genres"]]
     label_list = [item["name"] for item in response["genres"]]
     movies = []
-    ids = []
     log("starting handle_tmdb_movies")
     for movie in results:
         if "genre_ids" in movie:
@@ -271,9 +270,8 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'Genre': genres,
                     'time_comparer': time_comparer,
                     'Premiered': release_date}
-        if tmdb_id not in ids:
-            ids.append(tmdb_id)
-            movies.append(newmovie)
+        movies.append(newmovie)
+    movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
     movies = compare_with_library(movies, local_first, sortkey)
     return movies
 
