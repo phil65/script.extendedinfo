@@ -91,11 +91,6 @@ class T9Search(xbmcgui.WindowXMLDialog):
             self.timer.start()
             self.getControl(600).setLabel(self.search_string)
 
-    def start_edit_timeout(self):
-        while self.timeout >= 0:
-            self.timeout -= 1
-            time.sleep(0.1)
-
 
 class DialogVideoList(DialogBaseList):
 
