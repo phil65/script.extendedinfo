@@ -218,7 +218,10 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
     ids = []
     log("starting handle_tmdb_movies")
     for movie in results:
-        genres = " / ".join([label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"]])
+        if "genre_ids" in movie:
+            genres = " / ".join([label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"]])
+        else:
+            genres = ""
         tmdb_id = str(fetch(movie, 'id'))
         if ("backdrop_path" in movie) and (movie["backdrop_path"]):
             backdrop_path = base_url + fanart_size + movie['backdrop_path']
