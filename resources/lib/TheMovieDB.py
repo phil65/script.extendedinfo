@@ -232,13 +232,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
         else:
             # poster_path = ""
             small_poster_path = ""
-        release_date = fetch(movie, 'release_date')
-        if release_date:
-            year = release_date[:4]
-            time_comparer = release_date.replace("-", "")
-        else:
-            year = ""
-            time_comparer = ""
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if ADDON.getSetting("infodialog_onclick") != "false":
             # path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
@@ -266,10 +259,10 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'department': fetch(movie, 'department'),
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
-                    'Year': year,
+                    'Year': get_year(fetch(response, 'release_date')),
                     'Genre': genres,
-                    'time_comparer': time_comparer,
-                    'Premiered': release_date}
+                    'time_comparer': fetch(movie, 'release_date').replace("-", ""),
+                    'Premiered': fetch(movie, 'release_date')}
         movies.append(newmovie)
     movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
     movies = compare_with_library(movies, local_first, sortkey)
@@ -284,7 +277,6 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
         tmdb_id = fetch(tv, 'id')
         poster_path = ""
         duration = ""
-        year = ""
         backdrop_path = ""
         if ("backdrop_path" in tv) and (tv["backdrop_path"]):
             backdrop_path = base_url + fanart_size + tv['backdrop_path']
@@ -297,9 +289,6 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i" % (tv["episode_run_time"][0])
             else:
                 duration = ""
-        release_date = fetch(tv, 'first_air_date')
-        if release_date:
-            year = release_date[:4]
         newtv = {'Art(fanart)': backdrop_path,
                  'Art(poster)': poster_path,
                  'Thumb': poster_path,
@@ -312,7 +301,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'ID': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
-                 'year': year,
+                 'year': get_year(fetch(tv, 'first_air_date')),
                  'media_type': "tv",
                  'Path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
                  # 'Path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
@@ -321,9 +310,9 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Votes': fetch(tv, 'vote_count'),
                  'number_of_episodes': fetch(tv, 'number_of_episodes'),
                  'number_of_seasons': fetch(tv, 'number_of_seasons'),
-                 'Release_Date': release_date,
-                 'ReleaseDate': release_date,
-                 'Premiered': release_date}
+                 'Release_Date': fetch(tv, 'first_air_date'),
+                 'ReleaseDate': fetch(tv, 'first_air_date'),
+                 'Premiered': fetch(tv, 'first_air_date')}
         if tmdb_id not in ids:
             ids.append(tmdb_id)
             tvshows.append(newtv)
@@ -363,11 +352,6 @@ def handle_tmdb_misc(results):
         if ("poster_path" in item) and (item["poster_path"]):
             poster_path = base_url + poster_size + item['poster_path']
             small_poster_path = base_url + "w342" + item["poster_path"]
-        release_date = fetch(item, 'release_date')
-        if release_date:
-            year = release_date[:4]
-        else:
-            year = ""
         listitem = {'Art(poster)': poster_path,
                     'Poster': poster_path,
                     'Thumb': small_poster_path,
@@ -375,9 +359,9 @@ def handle_tmdb_misc(results):
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
-                    'release_date': release_date,
+                    'release_date': fetch(item, 'release_date'),
                     'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % fetch(item, 'id'),
-                    'year': year,
+                    'year': get_year(fetch(item, 'release_date')),
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),
                     'content': clean_text(fetch(item, 'content')),
@@ -391,13 +375,9 @@ def handle_tmdb_misc(results):
 def handle_tmdb_seasons(results):
     listitems = []
     for season in results:
-        year = ""
         poster_path = ""
         season_number = str(fetch(season, 'season_number'))
         small_poster_path = ""
-        air_date = fetch(season, 'air_date')
-        if air_date:
-            year = air_date[:4]
         if ("poster_path" in season) and season["poster_path"]:
             poster_path = base_url + poster_size + season['poster_path']
             small_poster_path = base_url + "w342" + season["poster_path"]
@@ -410,8 +390,8 @@ def handle_tmdb_seasons(results):
                     'Thumb': small_poster_path,
                     'Title': Title,
                     'Season': season_number,
-                    'air_date': air_date,
-                    'Year': year,
+                    'air_date': fetch(season, 'air_date'),
+                    'Year': get_year(fetch(season, 'air_date')),
                     'ID': fetch(season, 'id')}
         listitems.append(listitem)
     return listitems
@@ -711,7 +691,6 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
     # prettyprint(response)
     authors = []
     directors = []
-    year = ""
     mpaa = ""
     SetName = ""
     SetID = ""
@@ -734,8 +713,6 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
     if Set:
         SetName = fetch(Set, "name")
         SetID = fetch(Set, "id")
-    if 'release_date' in response and fetch(response, 'release_date'):
-        year = fetch(response, 'release_date')[:4]
     if ("backdrop_path" in response) and (response["backdrop_path"]):
         backdrop_path = base_url + fanart_size + response['backdrop_path']
     if ("poster_path" in response) and (response["poster_path"]):
@@ -776,7 +753,7 @@ def extended_movie_info(movieid=None, dbid=None, cache_time=14):
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
              'Studio': " / ".join(Studio),
-             'Year': year}
+             'Year': get_year(fetch(response, 'release_date'))}
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     else:
@@ -834,11 +811,6 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
         duration = "%i" % (response["episode_run_time"][0])
     else:
         duration = ""
-    release_date = fetch(response, 'first_air_date')
-    if release_date:
-        year = release_date[:4]
-    else:
-        year = ""
     genres = [item["name"] for item in response["genres"]]
     newtv = {'Art(fanart)': backdrop_path,
              'Art(poster)': poster_path,
@@ -855,7 +827,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'Genre': " / ".join(genres),
              'credit_id': fetch(response, 'credit_id'),
              'Plot': clean_text(fetch(response, "overview")),
-             'year': year,
+             'year': get_year(fetch(response, 'first_air_date')),
              'media_type': "tv",
              'Path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
              'Rating': fetch(response, 'vote_average'),
@@ -865,13 +837,13 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'ShowType': fetch(response, 'type'),
              'homepage': fetch(response, 'homepage'),
              'last_air_date': fetch(response, 'last_air_date'),
-             'first_air_date': release_date,
+             'first_air_date': fetch(response, 'first_air_date'),
              'number_of_episodes': fetch(response, 'number_of_episodes'),
              'number_of_seasons': fetch(response, 'number_of_seasons'),
              'in_production': fetch(response, 'in_production'),
-             'Release_Date': release_date,
-             'ReleaseDate': release_date,
-             'Premiered': release_date}
+             'Release_Date': fetch(response, 'first_air_date'),
+             'ReleaseDate': fetch(response, 'first_air_date'),
+             'Premiered': fetch(response, 'first_air_date')}
     answer = {"general": newtv,
               "actors": handle_tmdb_people(response["credits"]["cast"]),
               "similar": handle_tmdb_tvshows(response["similar"]["results"]),

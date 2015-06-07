@@ -482,6 +482,12 @@ def fetch(dictionary, key):
     return ""
 
 
+def get_year(year_string):
+    if year_string and len(year_string) > 3:
+        return year_string[:4]
+    else:
+        return ""
+
 def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
