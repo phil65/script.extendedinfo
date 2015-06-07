@@ -108,6 +108,26 @@ class T9Search(xbmcgui.WindowXMLDialog):
             self.timer = Timer(1.0, self.callback, (self.search_string,))
             self.timer.start()
             self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
+            self.get_autocomplete_labels()
+        elif controlID == 9091:
+            self.search_string = self.getControl(9091).getSelectedItem().getLabel()
+            self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
+            self.get_autocomplete_labels()
+            if self.timer:
+                self.timer.cancel()
+            self.timer = Timer(0.0, self.callback, (self.search_string,))
+            self.timer.start()
+
+    @run_async
+    def get_autocomplete_labels(self):
+        self.getControl(9091).reset()
+        listitems = []
+        headers = {'User-agent': 'Mozilla/5.0'}
+        result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % self.search_string, headers=headers, folder="Google")
+        for item in result[1]:
+            li = xbmcgui.ListItem(item)
+            listitems.append(li)
+        self.getControl(9091).addItems(listitems)
 
 
 class DialogVideoList(DialogBaseList):

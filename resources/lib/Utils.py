@@ -515,7 +515,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log("prop load for %s. time: %f" % (url, time.time() - now))
             return prop
         except:
-            log("could not load prop data")
+            log("could not load prop data for %s" % url)
     if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
         log("loaded file for %s. time: %f" % (url, time.time() - now))
@@ -526,7 +526,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log("download %s. time: %f" % (url, time.time() - now))
             save_to_file(results, hashed_url, cache_path)
         except:
-            log("Exception: Could not get new JSON data. Tryin to fallback to cache")
+            log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
             log(response)
             if xbmcvfs.exists(path):
                 results = read_from_file(path)
