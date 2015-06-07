@@ -96,7 +96,7 @@
             </control>
             <control type="list" id="9091">
                 <left>15</left>
-                <top>450</top>
+                <top>482</top>
                 <width>390</width>
                 <height>708</height>
                 <onleft>9091</onleft>
@@ -109,14 +109,14 @@
                 <itemlayout height="55" width="380">
                     <control type="image">
                         <left>0</left>
-                        <top>27</top>
+                        <top>-5</top>
                         <width>380</width>
                         <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-nofocus.png</texture>
                     </control>
                     <control type="label">
                         <left>25</left>
-                        <top>23</top>
+                        <top>-9</top>
                         <width>330</width>
                         <height>85</height>
                         <align>center</align>
@@ -128,7 +128,7 @@
                 <focusedlayout height="55" width="380">
                     <control type="image">
                         <left>0</left>
-                        <top>27</top>
+                        <top>-5</top>
                         <width>380</width>
                         <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-nofocus.png</texture>
@@ -136,7 +136,7 @@
                     </control>
                     <control type="image">
                         <left>0</left>
-                        <top>27</top>
+                        <top>-5</top>
                         <width>380</width>
                         <height>85</height>
                         <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
@@ -144,7 +144,7 @@
                     </control>
                     <control type="label">
                         <left>25</left>
-                        <top>23</top>
+                        <top>-9</top>
                         <width>330</width>
                         <height>85</height>
                         <align>center</align>
