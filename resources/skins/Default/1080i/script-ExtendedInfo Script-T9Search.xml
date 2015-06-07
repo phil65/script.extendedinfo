@@ -116,7 +116,7 @@
                     </control>
                     <control type="label">
                         <left>0</left>
-                        <top>20</top>
+                        <top>23</top>
                         <width>380</width>
                         <height>85</height>
                         <align>center</align>
@@ -144,7 +144,7 @@
                     </control>
                     <control type="label">
                         <left>0</left>
-                        <top>20</top>
+                        <top>23</top>
                         <width>380</width>
                         <height>85</height>
                         <align>center</align>
