@@ -143,6 +143,16 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
         xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (string_prefix, labels[ret]))
 
 
+
+class SettingsMonitor(xbmc.Monitor):
+
+    def __init__(self):
+        xbmc.Monitor.__init__(self)
+
+    def onSettingsChanged(self):
+        xbmc.sleep(300)
+
+
 class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 

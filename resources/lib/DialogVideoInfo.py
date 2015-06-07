@@ -39,7 +39,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 return None
             log("Blur image %s with radius %i" % (self.data["general"]["Thumb"], 25))
             youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["Year"] + ", movie", "", "relevance", 15)
-            sets_thread = Get_Set_Items_Thread(self.data["general"]["SetId"])
+            sets_thread = SetItemsThread(self.data["general"]["SetId"])
             self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
             lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
             self.omdb_thread.start()
@@ -110,7 +110,7 @@ class DialogVideoInfo(DialogBaseInfo):
         self.fill_lists()
         pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.windowid)
         self.update_states(False)
-        self.join_omdb = Join_Omdb_Thread(self.omdb_thread, self.windowid)
+        self.join_omdb = JoinOmdbThread(self.omdb_thread, self.windowid)
         self.join_omdb.start()
 
     def onAction(self, action):
@@ -135,8 +135,6 @@ class DialogVideoInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif control_id in [350, 1150, 10]:
-            add_to_window_stack(self)
-            self.close()
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
             if control_id == 10:
@@ -144,6 +142,8 @@ class DialogVideoInfo(DialogBaseInfo):
             else:
                 youtube_id = control.getSelectedItem().getProperty("youtube_id")
             if youtube_id:
+                add_to_window_stack(self)
+                self.close()
                 self.movieplayer.playYoutubeVideo(youtube_id, control.getSelectedItem(), True)
                 self.movieplayer.wait_for_video_end()
                 pop_window_stack()
@@ -349,7 +349,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 xbmc.executebuiltin(item)
 
 
-class Join_Omdb_Thread(threading.Thread):
+class JoinOmdbThread(threading.Thread):
 
     def __init__(self, omdb_thread, windowid):
         threading.Thread.__init__(self)
@@ -362,7 +362,7 @@ class Join_Omdb_Thread(threading.Thread):
             pass_dict_to_skin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.windowid)
 
 
-class Get_Set_Items_Thread(threading.Thread):
+class SetItemsThread(threading.Thread):
 
     def __init__(self, set_id=""):
         threading.Thread.__init__(self)
@@ -376,12 +376,3 @@ class Get_Set_Items_Thread(threading.Thread):
             self.id_list = []
             self.listitems = []
             self.setinfo = {}
-
-
-class SettingsMonitor(xbmc.Monitor):
-
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
-
-    def onSettingsChanged(self):
-        xbmc.sleep(300)
