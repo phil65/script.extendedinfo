@@ -20,7 +20,7 @@
             <control type="image">
                 <width>500</width>
                 <height>790</height>
-                <texture border="40,100,40,100">keyboard/numeric_back.png</texture>
+                <texture border="40,100,40,100">dialogs/numeric_back.png</texture>
             </control>
             <control type="panel" id="9090">
                 <left>28</left>
@@ -46,6 +46,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <aligny>center</aligny>
                         <font>font12</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
@@ -55,6 +56,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <aligny>center</aligny>
                         <font>font10</font>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
@@ -73,6 +75,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <aligny>center</aligny>
                         <font>font12</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
@@ -82,6 +85,7 @@
                         <width>149</width>
                         <height>163</height>
                         <align>center</align>
+                        <aligny>center</aligny>
                         <font>font10</font>
                         <label>$INFO[ListItem.Label2]</label>
                     </control>
