@@ -19,8 +19,8 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         self.listitem_list = kwargs.get('listitems', None)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
-        self.totalpages = 1
-        self.totalitems = 0
+        self.total_pages = 1
+        self.total_items = 0
         if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
             path = os.path.join(ADDON_PATH, "changelog.txt")
             changelog = read_from_file(path, True)
@@ -36,7 +36,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
         self.window.setProperty("layout", self.layout)
         self.update_ui()
         xbmc.sleep(200)
-        if self.totalitems > 0:
+        if self.total_items > 0:
             xbmc.executebuiltin("SetFocus(500)")
         else:
             xbmc.executebuiltin("SetFocus(6000)")
@@ -70,18 +70,18 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.totalpages, self.totalitems = self.fetch_data(force=force_update)
+        self.listitems, self.total_pages, self.total_items = self.fetch_data(force=force_update)
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
-        self.window.setProperty("TotalPages", str(self.totalpages))
-        self.window.setProperty("TotalItems", str(self.totalitems))
+        self.window.setProperty("TotalPages", str(self.total_pages))
+        self.window.setProperty("TotalItems", str(self.total_items))
         self.window.setProperty("CurrentPage", str(self.page))
         self.window.setProperty("Filter_Label", self.filter_label)
         self.window.setProperty("Sort_Label", self.sort_label)
-        if self.page == self.totalpages:
+        if self.page == self.total_pages:
             self.window.clearProperty("ArrowDown")
         else:
             self.window.setProperty("ArrowDown", "True")
@@ -97,7 +97,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
     @busy_dialog
     def onFocus(self, controlID):
         if controlID == 600:
-            if self.page < self.totalpages:
+            if self.page < self.total_pages:
                 self.page += 1
             else:
                 self.page = 1
@@ -110,7 +110,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
             else:
                 return
             # else:
-            #     self.page = self.totalpages
+            #     self.page = self.total_pages
             self.update_content()
             self.update_ui()
 

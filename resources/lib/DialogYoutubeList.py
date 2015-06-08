@@ -28,7 +28,7 @@ class DialogYoutubeList(DialogBaseList):
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = create_listitems(self.listitem_list)
-            self.totalitems = len(self.listitem_list)
+            self.total_items = len(self.listitem_list)
         else:
             self.update_content(force_update=force)
             # notify(str(self.totalpages))

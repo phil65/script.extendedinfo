@@ -162,7 +162,7 @@ class DialogVideoList(DialogBaseList):
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = create_listitems(self.listitem_list)
-            self.totalitems = len(self.listitem_list)
+            self.total_items = len(self.listitem_list)
         else:
             self.update_content(force_update=force)
             # notify(str(self.totalpages))
@@ -369,7 +369,7 @@ class DialogVideoList(DialogBaseList):
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
-            if self.totalitems > 0:
+            if self.total_items > 0:
                 self.setFocusId(500)
 
         elif controlID == 7000:
