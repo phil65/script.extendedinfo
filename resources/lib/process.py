@@ -106,19 +106,19 @@ def StartInfoActions(infos, params):
             data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
-            data = GetMovieDBMovies("now_playing"), "InCinemasMovies"
+            data = get_tmdb_movies("now_playing"), "InCinemasMovies"
         elif info == 'upcoming':
-            data = GetMovieDBMovies("upcoming"), "UpcomingMovies"
+            data = get_tmdb_movies("upcoming"), "UpcomingMovies"
         elif info == 'topratedmovies':
-            data = GetMovieDBMovies("top_rated"), "TopRatedMovies"
+            data = get_tmdb_movies("top_rated"), "TopRatedMovies"
         elif info == 'popularmovies':
-            data = GetMovieDBMovies("popular"), "PopularMovies"
+            data = get_tmdb_movies("popular"), "PopularMovies"
         elif info == 'ratedmovies':
             data = get_rated_media_items("movies"), "RatedMovies"
         elif info == 'starredmovies':
             data = get_fav_items("movies"), "StarredMovies"
         elif info == 'accountlists':
-            account_lists = handle_tmdb_misc(GetAccountLists())
+            account_lists = handle_tmdb_misc(get_lists())
             for item in account_lists:
                 item["directory"] = True
             data = account_lists, "AccountLists"
@@ -126,13 +126,13 @@ def StartInfoActions(infos, params):
             movies = get_movies_from_list(params["id"])
             data = movies, "AccountLists"
         elif info == 'airingtodaytvshows':
-            data = GetMovieDBTVShows("airing_today"), "AiringTodayTVShows"
+            data = get_tmdb_shows("airing_today"), "AiringTodayTVShows"
         elif info == 'onairtvshows':
-            data = GetMovieDBTVShows("on_the_air"), "OnAirTVShows"
+            data = get_tmdb_shows("on_the_air"), "OnAirTVShows"
         elif info == 'topratedtvshows':
-            data = GetMovieDBTVShows("top_rated"), "TopRatedTVShows"
+            data = get_tmdb_shows("top_rated"), "TopRatedTVShows"
         elif info == 'populartvshows':
-            data = GetMovieDBTVShows("popular"), "PopularTVShows"
+            data = get_tmdb_shows("popular"), "PopularTVShows"
         elif info == 'ratedtvshows':
             data = get_rated_media_items("tv"), "RatedTVShows"
         elif info == 'starredtvshows':
@@ -188,7 +188,7 @@ def StartInfoActions(infos, params):
                 if name:
                     params["setid"] = get_set_id(name)
             if params.get("setid", False):
-                SetData, info = GetSetMovies(params["setid"])
+                SetData, info = get_set_movies(params["setid"])
                 if SetData:
                     data = SetData, "MovieSetItems"
         elif info == 'movielists':
@@ -196,13 +196,13 @@ def StartInfoActions(infos, params):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
-                    data = get_movie_lists(movie_id), "MovieLists"
+                    data = get_lists(movie_id), "MovieLists"
         elif info == 'keywords':
             if params.get("dbid", False):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
-                    data = GetMovieKeywords(movie_id), "Keywords"
+                    data = get_keywords(movie_id), "Keywords"
         elif info == 'popularpeople':
             data = get_popular_actors(), "PopularPeople"
         elif info == 'extendedinfo':
@@ -256,12 +256,12 @@ def StartInfoActions(infos, params):
             if params.get("director", False):
                 director_id = get_person_id(params["director"], skip_dialog=True)["id"]
                 if director_id:
-                    data = GetDirectorMovies(director_id), "DirectorMovies"
+                    data = get_person_movies(director_id), "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer", False) and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
                 writer_id = get_person_id(params["writer"], skip_dialog=True)["id"]
                 if writer_id:
-                    data = GetDirectorMovies(writer_id), "WriterMovies"
+                    data = get_person_movies(writer_id), "WriterMovies"
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid", False):
                 if params.get("dbid", False):

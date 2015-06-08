@@ -217,7 +217,7 @@ class DialogVideoList(DialogBaseList):
             elif selection == 2:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 listitems = [ADDON.getLocalizedString(32139)]
-                account_lists = GetAccountLists()
+                account_lists = get_lists()
                 for item in account_lists:
                     listitems.append("%s (%i)" % (item["name"], item["item_count"]))
                 listitems.append(ADDON.getLocalizedString(32138))
@@ -226,7 +226,7 @@ class DialogVideoList(DialogBaseList):
                 if index == 0:
                     listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
                     if listname:
-                        list_id = CreateList(listname)
+                        list_id = create_list(listname)
                         xbmc.sleep(1000)
                         change_list_status(list_id, item_id, True)
                 elif index == len(listitems) - 1:
@@ -383,7 +383,7 @@ class DialogVideoList(DialogBaseList):
                     listitems.append(ADDON.getLocalizedString(32134))   # starred movies
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
-                account_lists = GetAccountLists()
+                account_lists = get_lists()
                 for item in account_lists:
                     listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")

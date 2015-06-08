@@ -212,7 +212,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 6002:
             listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            account_lists = GetAccountLists()
+            account_lists = get_lists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -251,7 +251,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [ADDON.getLocalizedString(32139)]
-            account_lists = GetAccountLists()
+            account_lists = get_lists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             listitems.append(ADDON.getLocalizedString(32138))
@@ -260,7 +260,7 @@ class DialogVideoInfo(DialogBaseInfo):
             if index == 0:
                 listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
-                    list_id = CreateList(listname)
+                    list_id = create_list(listname)
                     xbmc.sleep(1000)
                     change_list_status(list_id, self.tmdb_id, True)
             elif index == len(listitems) - 1:
@@ -272,7 +272,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def sort_lists(self, lists):
         if not self.logged_in:
             return lists
-        account_list = GetAccountLists(10)  # use caching here, forceupdate everywhere else
+        account_list = get_lists(10)  # use caching here, forceupdate everywhere else
         own_lists = []
         misc_lists = []
         id_list = [item["id"] for item in account_list]
@@ -369,7 +369,7 @@ class SetItemsThread(threading.Thread):
 
     def run(self):
         if self.set_id:
-            self.listitems, self.setinfo = GetSetMovies(self.set_id)
+            self.listitems, self.setinfo = get_set_movies(self.set_id)
             self.id_list = [item["ID"] for item in self.listitems]
         else:
             self.id_list = []

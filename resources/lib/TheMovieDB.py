@@ -84,7 +84,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     notify(ADDON_NAME, results["status_message"])
 
 
-def CreateList(listname):
+def create_list(listname):
     session_id = get_session_id()
     url = url_base + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % listname, 'description': 'List created by ExtendedInfo Script for Kodi.'}
@@ -129,7 +129,7 @@ def change_list_status(list_id, movie_id, status):
     notify(ADDON_NAME, results["status_message"])
 
 
-def GetAccountLists(cache_time=0):
+def get_lists(cache_time=0):
     session_id = get_session_id()
     account_id = get_account_info()
     if session_id and account_id:
@@ -595,7 +595,7 @@ def GetCreditInfo(credit_id):
     #     return []
 
 
-def GetSeasonInfo(tmdb_tvshow_id, tvshowname, season_number):
+def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
         response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
         if response["results"]:
@@ -901,7 +901,7 @@ def extended_actor_info(actor_id):
     return answer
 
 
-def get_movie_lists(list_id):
+def get_lists(list_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (list_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 5)
     return handle_tmdb_misc(response["lists"]["results"])
@@ -951,17 +951,15 @@ def get_popular_actors():
     return handle_tmdb_people(response["results"])
 
 
-def GetActorMovieCredits(actor_id):
-    response = get_tmdb_data("person/%s/movie_credits?" % (actor_id), 1)
+def get_actor_credits(actor_id, media_type):
+    '''
+    media_type: movie or tv
+    '''
+    response = get_tmdb_data("person/%s/%s_credits?" % (actor_id, media_type), 1)
     return handle_tmdb_movies(response["cast"])
 
 
-def GetActorTVShowCredits(actor_id):
-    response = get_tmdb_data("person/%s/tv_credits?" % (actor_id), 1)
-    return handle_tmdb_movies(response["cast"])
-
-
-def GetMovieKeywords(movie_id):
+def get_keywords(movie_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     keywords = []
@@ -997,25 +995,25 @@ def get_similar_tvshows(tvshow_id):
         log("No JSON Data available")
 
 
-def GetMovieDBTVShows(tvshow_type):
+def get_tmdb_shows(tvshow_type):
     response = get_tmdb_data("tv/%s?language=%s&" % (tvshow_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return handle_tmdb_tvshows(response["results"], False, None)
     else:
-        log("No JSON Data available for GetMovieDBTVShows(%s)" % tvshow_type)
+        log("No JSON Data available for get_tmdb_shows(%s)" % tvshow_type)
         log(response)
 
 
-def GetMovieDBMovies(movie_type):
+def get_tmdb_movies(movie_type):
     response = get_tmdb_data("movie/%s?language=%s&" % (movie_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return handle_tmdb_movies(response["results"], False, None)
     else:
-        log("No JSON Data available for GetMovieDBMovies(%s)" % movie_type)
+        log("No JSON Data available for get_tmdb_movies(%s)" % movie_type)
         log(response)
 
 
-def GetSetMovies(set_id):
+def get_set_movies(set_id):
     response = get_tmdb_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 14)
     if response:
         backdrop_path = ""
@@ -1038,7 +1036,7 @@ def GetSetMovies(set_id):
         return [], {}
 
 
-def GetDirectorMovies(person_id):
+def get_person_movies(person_id):
     response = get_tmdb_data("person/%s/credits?language=%s&" % (person_id, ADDON.getSetting("LanguageID")), 14)
     # return handle_tmdb_movies(response["crew"]) + handle_tmdb_movies(response["cast"])
     if "crew" in response:
