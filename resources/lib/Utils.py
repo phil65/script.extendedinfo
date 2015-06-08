@@ -34,7 +34,7 @@ window_stack = []
 
 def run_async(func):
     """
-    Decorator to put a function into a separate thread
+    Decorator to run a function in a separate thread
     """
     @wraps(func)
     def async_func(*args, **kwargs):
@@ -390,35 +390,35 @@ def pop_window_stack():
 
 
 def get_playlist_stats(path):
-    startindex = -1
-    endindex = -1
+    start_index = -1
+    end_index = -1
     if (".xsp" in path) and ("special://" in path):
-        startindex = path.find("special://")
-        endindex = path.find(".xsp") + 4
+        start_index = path.find("special://")
+        end_index = path.find(".xsp") + 4
     elif ("library://" in path):
-        startindex = path.find("library://")
-        endindex = path.rfind("/") + 1
+        start_index = path.find("library://")
+        end_index = path.rfind("/") + 1
     elif ("videodb://" in path):
-        startindex = path.find("videodb://")
-        endindex = path.rfind("/") + 1
-    if (startindex > 0) and (endindex > 0):
-        playlistpath = path[startindex:endindex]
+        start_index = path.find("videodb://")
+        end_index = path.rfind("/") + 1
+    if (start_index > 0) and (end_index > 0):
+        playlistpath = path[start_index:end_index]
     #    notify(playlistpath)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
         json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
         if "result" in json_response:
             played = 0
-            inprogress = 0
+            in_progress = 0
             numitems = json_response["result"]["limits"]["total"]
             for item in json_response["result"]["files"]:
                 if "playcount" in item:
                     if item["playcount"] > 0:
                         played += 1
                     if item["resume"]["position"] > 0:
-                        inprogress += 1
+                        in_progress += 1
             HOME.setProperty('PlaylistWatched', str(played))
             HOME.setProperty('PlaylistUnWatched', str(numitems - played))
-            HOME.setProperty('PlaylistInProgress', str(inprogress))
+            HOME.setProperty('PlaylistInProgress', str(in_progress))
             HOME.setProperty('PlaylistCount', str(numitems))
 
 
@@ -535,7 +535,7 @@ def get_year(year_string):
         return ""
 
 
-def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
+def fetch_musicbrainz_id(artist, artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = get_JSON_response(base_url + url, 30)
@@ -632,18 +632,18 @@ def get_file(url):
     if clean_url.endswith("/"):
         clean_url = clean_url[:-1]
     cached_thumb = xbmc.getCacheThumbName(clean_url)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
-    xbmc_cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
-    xbmc_cache_file_png = xbmc_cache_file_jpg[:-4] + ".png"
-    if xbmcvfs.exists(xbmc_cache_file_jpg):
-        log("xbmc_cache_file_jpg Image: " + url + "-->" + xbmc_cache_file_jpg)
-        return xbmc.translatePath(xbmc_cache_file_jpg)
-    elif xbmcvfs.exists(xbmc_cache_file_png):
-        log("xbmc_cache_file_png Image: " + url + "-->" + xbmc_cache_file_png)
-        return xbmc_cache_file_png
-    elif xbmcvfs.exists(xbmc_vid_cache_file):
-        log("xbmc_vid_cache_file Image: " + url + "-->" + xbmc_vid_cache_file)
-        return xbmc_vid_cache_file
+    vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
+    cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
+    cache_file_png = cache_file_jpg[:-4] + ".png"
+    if xbmcvfs.exists(cache_file_jpg):
+        log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
+        return xbmc.translatePath(cache_file_jpg)
+    elif xbmcvfs.exists(cache_file_png):
+        log("cache_file_png Image: " + url + "-->" + cache_file_png)
+        return cache_file_png
+    elif xbmcvfs.exists(vid_cache_file):
+        log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
+        return vid_cache_file
     else:
         try:
             request = urllib2.Request(url)
@@ -658,9 +658,9 @@ def get_file(url):
         if data != '':
             try:
                 if url.endswith(".png"):
-                    image = xbmc_cache_file_png
+                    image = cache_file_png
                 else:
-                    image = xbmc_cache_file_jpg
+                    image = cache_file_jpg
                 tmp_file = open(xbmc.translatePath(image), 'wb')
                 tmp_file.write(data)
                 tmp_file.close()
