@@ -155,7 +155,7 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.logged_in = check_login()
-        self.movieplayer = VideoPlayer(popstack=True)
+        self.movieplayer = VideoPlayer(pop_stack=True)
         self.data = None
         check_version()
 

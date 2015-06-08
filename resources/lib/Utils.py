@@ -28,8 +28,8 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
-global windowstack
-windowstack = []
+global window_stack
+window_stack = []
 
 
 def run_async(func):
@@ -296,7 +296,7 @@ def calculate_age(born, died=False):
     return base_age
 
 
-def play_trailer(youtube_id="", listitem=None, popstack=False):
+def play_trailer(youtube_id="", listitem=None, pop_stack=False):
     if not listitem:
         listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
         listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -305,11 +305,11 @@ def play_trailer(youtube_id="", listitem=None, popstack=False):
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
     if vid:
         stream_url = vid.streamURL()
-        PlayMedia(stream_url, listitem, popstack)
+        PlayMedia(stream_url, listitem, pop_stack)
 
 
-def PlayMedia(path="", listitem=None, popstack=False):
-    player = VideoPlayer(popstack=popstack)
+def PlayMedia(path="", listitem=None, pop_stack=False):
+    player = VideoPlayer(pop_stack=pop_stack)
     player.play(item=path, listitem=listitem)
 
 
@@ -318,7 +318,7 @@ class VideoPlayer(xbmc.Player):
     def __init__(self, *args, **kwargs):
         xbmc.Player.__init__(self)
         self.stopped = False
-        self.popstack = kwargs.get("popstack", True)
+        self.pop_stack = kwargs.get("pop_stack", True)
 
     def onPlayBackEnded(self):
         self.stopped = True
@@ -329,7 +329,7 @@ class VideoPlayer(xbmc.Player):
     def onPlayBackStarted(self):
         self.stopped = False
 
-    def playYoutubeVideo(self, youtube_id="", listitem=None, popstack=True):
+    def playYoutubeVideo(self, youtube_id="", listitem=None, pop_stack=True):
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -350,12 +350,12 @@ class VideoPlayer(xbmc.Player):
 
 
 def add_to_window_stack(window):
-    windowstack.append(window)
+    window_stack.append(window)
 
 
 def pop_window_stack():
-    if windowstack:
-        dialog = windowstack.pop()
+    if window_stack:
+        dialog = window_stack.pop()
         dialog.doModal()
 
 
@@ -497,6 +497,7 @@ def get_year(year_string):
         return year_string[:4]
     else:
         return ""
+
 
 def fetch_musicbrainz_id(artist, xbmc_artist_id=-1):
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"

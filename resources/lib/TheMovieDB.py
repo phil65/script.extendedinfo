@@ -84,10 +84,10 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     notify(ADDON_NAME, results["status_message"])
 
 
-def create_list(listname):
+def create_list(list_name):
     session_id = get_session_id()
     url = url_base + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
-    values = {'name': '%s' % listname, 'description': 'List created by ExtendedInfo Script for Kodi.'}
+    values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -238,7 +238,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % tmdb_id
         else:
             path = trailer
-        newmovie = {'Art(fanart)': backdrop_path,
+        listitem = {'Art(fanart)': backdrop_path,
                     'Art(poster)': small_poster_path,  # needs to be adjusted to poster_path (-->skin)
                     'Thumb': small_poster_path,
                     'Poster': small_poster_path,
@@ -263,7 +263,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'Genre': genres,
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
-        movies.append(newmovie)
+        movies.append(listitem)
     movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
     movies = compare_with_library(movies, local_first, sortkey)
     return movies
@@ -421,12 +421,12 @@ def handle_tmdb_people(results):
         if "profile_path" in person and person["profile_path"]:
             image = base_url + poster_size + person["profile_path"]
             image_small = base_url + "w342" + person["profile_path"]
-        alsoknownas = " / ".join(fetch(person, 'also_known_as'))
+        also_known_as = " / ".join(fetch(person, 'also_known_as'))
         newperson = {'adult': str(fetch(person, 'adult')),
                      'name': person['name'],
                      'title': person['name'],
-                     'also_known_as': alsoknownas,
-                     'alsoknownas': alsoknownas,
+                     'also_known_as': also_known_as,
+                     'alsoknownas': also_known_as,
                      'biography': clean_text(fetch(person, 'biography')),
                      'birthday': fetch(person, 'birthday'),
                      'age': calculate_age(fetch(person, 'birthday'), fetch(person, 'deathday')),

@@ -21,9 +21,9 @@ def get_kodi_artists():
         return json_response
 
 
-def get_similar_artists_from_db(artistid):
+def get_similar_artists_from_db(artist_id):
     from LastFM import GetSimilarById
-    simi_artists = GetSimilarById(artistid)
+    simi_artists = GetSimilarById(artist_id)
     if simi_artists is None:
         log('Last.fm didn\'t return proper response')
         return None
@@ -126,7 +126,7 @@ def handle_db_movies(movie):
     else:
         resume = "false"
         played = '0'
-    streaminfo = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
+    stream_info = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
     db_movie = {'Art(fanart)': movie["art"].get('fanart', ""),
                 'Art(poster)': movie["art"].get('poster', ""),
                 'Fanart': movie["art"].get('fanart', ""),
@@ -162,7 +162,7 @@ def handle_db_movies(movie):
         if language not in subs and language != "und":
             subs.append(language)
             db_movie['SubtitleLanguage.%d' % (i + 1)] = language
-    db_movie.update(streaminfo)
+    db_movie.update(stream_info)
     return db_movie
 
 
@@ -187,7 +187,7 @@ def create_channel_list():
         return False
 
 
-def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
+def compare_with_library(online_list=[], library_first=True, sortkey=False):
     global id_list
     global originaltitle_list
     global title_list
@@ -220,7 +220,7 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
     now = time.time()
     local_items = []
     remote_items = []
-    for online_item in onlinelist:
+    for online_item in online_list:
         found = False
         if "imdb_id" in online_item and online_item["imdb_id"] in imdb_list:
             index = imdb_list.index(online_item["imdb_id"])
@@ -248,7 +248,7 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
                 else:
                     resume = "false"
                     played = '0'
-                streaminfo = media_streamdetails(local_item['file'].encode('utf-8').lower(), local_item['streamdetails'])
+                stream_info = media_streamdetails(local_item['file'].encode('utf-8').lower(), local_item['streamdetails'])
                 online_item["Play"] = local_item["movieid"]
                 online_item["DBID"] = local_item["movieid"]
                 online_item["Path"] = local_item['file']
@@ -262,7 +262,7 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
                 online_item["Banner"] = local_item['art'].get("banner", "")
                 online_item["Poster"] = local_item['art'].get("poster", "")
                 online_item["Thumb"] = local_item['art'].get("poster", "")
-                online_item.update(streaminfo)
+                online_item.update(stream_info)
                 streams = []
                 for i, item in enumerate(local_item['streamdetails']['audio']):
                     language = item['language']
@@ -294,9 +294,9 @@ def compare_with_library(onlinelist=[], library_first=True, sortkey=False):
         return local_items + remote_items
 
 
-def compare_album_with_library(onlinelist):
+def compare_album_with_library(online_list):
     locallist = get_kodi_albums()
-    for online_item in onlinelist:
+    for online_item in online_list:
         for localitem in locallist:
             if not online_item["name"] == localitem["title"]:
                 continue
@@ -309,7 +309,7 @@ def compare_album_with_library(onlinelist):
                 online_item.update({"thumb": album["thumbnail"]})
                 online_item.update({"Icon": album["thumbnail"]})
             break
-    return onlinelist
+    return online_list
 
 
 def GetMovieSetName(dbid):
@@ -339,5 +339,5 @@ def get_imdb_id_from_db(media_type, dbid):
 def get_tvshow_id_from_db_by_episode(dbid):
     json_response = get_kodi_json('"method": "VideoLibrary.GetEpisodeDetails", "params": {"properties": ["tvshowid"], "episodeid":%s }' % dbid)
     if "episodedetails" in json_response["result"]:
-        tvshowid = str(json_response['result']['episodedetails']['tvshowid'])
-        return get_imdb_id_from_db("tvshow", tvshowid)
+        tvshow_dbid = str(json_response['result']['episodedetails']['tvshowid'])
+        return get_imdb_id_from_db("tvshow", tvshow_dbid)
