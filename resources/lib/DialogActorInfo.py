@@ -78,15 +78,20 @@ class DialogActorInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id in [250, 650]:
             listitem = self.getControl(control_id).getSelectedItem()
-            # options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
-            # selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
-            # if selection == 0:
-            #     GetCreditInfo(listitem.getProperty("credit_id"))
-            # if selection == 1:
-            add_to_window_stack(self)
-            self.close()
-            dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-            dialog.doModal()
+            options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
+            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
+            if selection == 0:
+                listitems = []
+                info = get_credit_info(listitem.getProperty("credit_id"))
+                listitems = handle_tmdb_seasons(info["media"]["seasons"])
+                listitems += handle_tmdb_episodes(info["media"]["episodes"])
+                w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
+                w.doModal()
+            if selection == 1:
+                add_to_window_stack(self)
+                self.close()
+                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+                dialog.doModal()
         elif control_id in [450, 750]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

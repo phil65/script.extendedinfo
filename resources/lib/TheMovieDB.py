@@ -586,9 +586,10 @@ def get_company_data(company_id):
         return []
 
 
-def GetCreditInfo(credit_id):
+def get_credit_info(credit_id):
     response = get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), ADDON.getSetting("LanguageID")), 30)
     prettyprint(response)
+    return response
     # if response and "results" in response:
     #     return handle_tmdb_movies(response["results"])
     # else:
