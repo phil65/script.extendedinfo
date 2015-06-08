@@ -118,16 +118,16 @@ class DialogVideoInfo(DialogBaseInfo):
     def onClick(self, control_id):
         control = self.getControl(control_id)
         if control_id in [1000, 750]:
-            actorid = control.getSelectedItem().getProperty("id")
+            actor_id = control.getSelectedItem().getProperty("id")
             add_to_window_stack(self)
             self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actorid)
+            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id)
             dialog.doModal()
         elif control_id in [150, 250]:
-            movieid = control.getSelectedItem().getProperty("id")
+            movie_id = control.getSelectedItem().getProperty("id")
             add_to_window_stack(self)
             self.close()
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movieid)
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id)
             dialog.doModal()
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")

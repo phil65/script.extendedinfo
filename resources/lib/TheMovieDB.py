@@ -669,9 +669,9 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
         return None
 
 
-def GetTrailer(movieid=None):
+def GetTrailer(movie_id=None):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                             (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
+                             (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
         youtube_id = response['videos']['results'][0]['key']
         return youtube_id
@@ -679,13 +679,13 @@ def GetTrailer(movieid=None):
     return ""
 
 
-def extended_movie_info(movieid=None, dbid=None, cache_time=14):
+def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if checkLogin():
         session_string = "session_id=%s&" % (get_session_id())
     else:
         session_string = ""
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
-                             (movieid, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
+                             (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     # prettyprint(response)
     authors = []
     directors = []
@@ -886,8 +886,8 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     return answer
 
 
-def GetExtendedActorInfo(actorid):
-    response = get_tmdb_data("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actorid), 1)
+def GetExtendedActorInfo(actor_id):
+    response = get_tmdb_data("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actor_id), 1)
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
