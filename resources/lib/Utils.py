@@ -460,7 +460,7 @@ def millify(n):
     """
     make large numbers human-readable, return string
     """
-    millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
+    millnames = [' ', '.000', ' ' + ADDON.getLocalizedString(32000), ' ' + ADDON.getLocalizedString(32001), ' ' + ADDON.getLocalizedString(32002)]
     if n and n > 100:
         n = float(n)
         char_count = len(str(n))

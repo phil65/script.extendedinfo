@@ -190,13 +190,13 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
             if focus_id == 1250 and self.data["general"].get("DBID"):
-                selection = xbmcgui.Dialog().select("Choose", ["Use as thumbnail"])
+                selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), ["Use as thumbnail"])
                 if selection == 0:
                     path = control.getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
             elif focus_id == 1350 and self.data["general"].get("DBID"):
-                selection = xbmcgui.Dialog().select("Choose", ["Use as fanart"])
+                selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), ["Use as fanart"])
                 if selection == 0:
                     path = control.getSelectedItem().getProperty("original")
                     params = '"art": {"fanart": "%s"}' % path
