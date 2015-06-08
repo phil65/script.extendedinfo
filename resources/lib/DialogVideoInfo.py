@@ -212,7 +212,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 6002:
             listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            account_lists = get_lists()
+            account_lists = get_account_lists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -251,7 +251,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [ADDON.getLocalizedString(32139)]
-            account_lists = get_lists()
+            account_lists = get_account_lists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             listitems.append(ADDON.getLocalizedString(32138))
@@ -272,7 +272,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def sort_lists(self, lists):
         if not self.logged_in:
             return lists
-        account_list = get_lists(10)  # use caching here, forceupdate everywhere else
+        account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
         own_lists = []
         misc_lists = []
         id_list = [item["id"] for item in account_list]

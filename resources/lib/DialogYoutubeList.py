@@ -84,7 +84,7 @@ class DialogYoutubeList(DialogBaseList):
             elif selection == 2:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 listitems = [ADDON.getLocalizedString(32139)]
-                account_lists = get_lists()
+                account_lists = get_account_lists()
                 for item in account_lists:
                     listitems.append("%s (%i)" % (item["name"], item["item_count"]))
                 listitems.append(ADDON.getLocalizedString(32138))

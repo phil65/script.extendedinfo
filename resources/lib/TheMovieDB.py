@@ -129,7 +129,7 @@ def change_list_status(list_id, movie_id, status):
     notify(ADDON_NAME, results["status_message"])
 
 
-def get_lists(cache_time=0):
+def get_account_lists(cache_time=0):
     session_id = get_session_id()
     account_id = get_account_info()
     if session_id and account_id:
@@ -901,7 +901,7 @@ def extended_actor_info(actor_id):
     return answer
 
 
-def get_lists(list_id):
+def get_movie_lists(list_id):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (list_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 5)
     return handle_tmdb_misc(response["lists"]["results"])

@@ -118,7 +118,7 @@ def StartInfoActions(infos, params):
         elif info == 'starredmovies':
             data = get_fav_items("movies"), "StarredMovies"
         elif info == 'accountlists':
-            account_lists = handle_tmdb_misc(get_lists())
+            account_lists = handle_tmdb_misc(get_account_lists())
             for item in account_lists:
                 item["directory"] = True
             data = account_lists, "AccountLists"
@@ -196,7 +196,7 @@ def StartInfoActions(infos, params):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
-                    data = get_lists(movie_id), "MovieLists"
+                    data = get_movie_lists(movie_id), "MovieLists"
         elif info == 'keywords':
             if params.get("dbid", False):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
