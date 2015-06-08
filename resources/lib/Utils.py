@@ -102,6 +102,15 @@ def merge_dicts(*dict_args):
     return result
 
 
+def check_version():
+    if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
+        path = os.path.join(ADDON_PATH, "changelog.txt")
+        changelog = read_from_file(path, True)
+        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header="Changelog", text=changelog)
+        w.doModal()
+        ADDON.setSetting("changelog_version", ADDON_VERSION)
+
+
 def get_autocomplete_items(search_string):
     if not search_string:
         return []

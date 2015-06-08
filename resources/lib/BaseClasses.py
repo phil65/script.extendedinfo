@@ -20,12 +20,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if True else xbmcgui.WindowXML):
         self.page = 1
         self.total_pages = 1
         self.total_items = 0
-        if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
-            path = os.path.join(ADDON_PATH, "changelog.txt")
-            changelog = read_from_file(path, True)
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header="Changelog", text=changelog)
-            w.doModal()
-            ADDON.setSetting("changelog_version", ADDON_VERSION)
+        check_version()
 
     def onInit(self):
         HOME.setProperty("WindowColor", self.color)
@@ -162,6 +157,7 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog if True else xbmcgui.WindowXML):
         self.logged_in = checkLogin()
         self.movieplayer = VideoPlayer(popstack=True)
         self.data = None
+        check_version()
 
     def onInit(self, *args, **kwargs):
         if True:
