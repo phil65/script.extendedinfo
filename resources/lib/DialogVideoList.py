@@ -158,7 +158,7 @@ class DialogVideoList(DialogBaseList):
         self.sort_label = kwargs.get('sort_label', "Popularity")
         self.order = kwargs.get('order', "desc")
         force = kwargs.get('force', False)
-        self.logged_in = checkLogin()
+        self.logged_in = check_login()
         self.filters = kwargs.get('filters', [])
         if self.listitem_list:
             self.listitems = create_listitems(self.listitem_list)

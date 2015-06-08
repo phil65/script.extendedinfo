@@ -204,7 +204,7 @@ def StartInfoActions(infos, params):
                 if movie_id:
                     data = GetMovieKeywords(movie_id), "Keywords"
         elif info == 'popularpeople':
-            data = GetPopularActorList(), "PopularPeople"
+            data = get_popular_actors(), "PopularPeople"
         elif info == 'extendedinfo':
             HOME.setProperty('infodialogs.active', "true")
             from DialogVideoInfo import DialogVideoInfo
