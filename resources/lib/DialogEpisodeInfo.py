@@ -25,6 +25,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             self.data = extended_episode_info(self.tmdb_id, self.season, self.episodenumber)
             if not self.data:
                 return
+            # prettyprint(self.data)
             search_string = "%s tv" % (self.data["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
@@ -37,23 +38,23 @@ class DialogEpisodeInfo(DialogBaseInfo):
             filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
-            self.youtube_vids = youtube_thread.listitems
             filter_thread.join()
             self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.listitems = [(1000, create_listitems(self.data["actors"] + self.data["guest_stars"], 0)),
+                              (750, create_listitems(self.data["crew"], 0)),
+                              (1150, create_listitems(self.data["videos"], 0)),
+                              # (1250, create_listitems(self.data["guest_stars"], 0)),
+                              (1350, create_listitems(self.data["images"], 0)),
+                              (350, create_listitems(youtube_thread.listitems, 0))]
         else:
             notify(ADDON.getLocalizedString(32143))
-            self.close()
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Episode")
         pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
-        self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
-        self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
-        self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))
-        self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
-        self.getControl(1350).addItems(create_listitems(self.data["images"], 0))
+        self.fill_lists()
 
     def onClick(self, control_id):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))

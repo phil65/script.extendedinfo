@@ -880,6 +880,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
               "actors": handle_tmdb_people(response["credits"]["cast"]),
               "account_states": account_states,
               "crew": handle_tmdb_people(response["credits"]["crew"]),
+              "guest_stars": handle_tmdb_people(response["credits"]["guest_stars"]),
               # "genres": handle_tmdb_misc(response["genres"]),
               "videos": videos,
               # "seasons": handle_tmdb_seasons(response["seasons"]),
