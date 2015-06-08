@@ -247,7 +247,7 @@
                                 <radioheight>44</radioheight>
                                 <selected>!IsEmpty(Window.Property(movie.favorite))</selected>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
-                                <visible>!StringCompare(Window.Property(type),season)</visible>
+                                <visible>!StringCompare(Window.Property(type),season) + !StringCompare(Window.Property(type),episode)</visible>
                             </control>
                             <control type="radiobutton" id="6005">
                                 <label>$ADDON[script.extendedinfo 32107]</label>
@@ -271,7 +271,7 @@
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
                                 <visible>!IsEmpty(Window.Property(tmdb_logged_in))</visible>
-                                <visible>!StringCompare(Window.Property(type),season)</visible>
+                                <visible>!StringCompare(Window.Property(type),season) + !StringCompare(Window.Property(type),episode)</visible>
                             </control>
                             <control type="radiobutton" id="6002">
                                 <label>$ADDON[script.extendedinfo 32130]</label>
