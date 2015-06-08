@@ -34,7 +34,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             if "DBID" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = Filter_Image_Thread(self.data["general"]["Poster"], 25)
+            filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
             filter_thread.join()

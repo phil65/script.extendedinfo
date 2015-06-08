@@ -43,7 +43,7 @@ class DialogActorInfo(DialogBaseInfo):
         self.data = extended_actor_info(self.id)
         youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["name"], "", "relevance", 15)
         youtube_thread.start()
-        filter_thread = Filter_Image_Thread(self.data["general"]["thumb"], 25)
+        filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
         filter_thread.start()
         db_movies = 0
         for item in self.data["movie_roles"]:

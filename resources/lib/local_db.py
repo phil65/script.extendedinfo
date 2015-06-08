@@ -22,8 +22,8 @@ def get_kodi_artists():
 
 
 def get_similar_artists_from_db(artist_id):
-    from LastFM import GetSimilarById
-    simi_artists = GetSimilarById(artist_id)
+    from LastFM import get_similar_artists
+    simi_artists = get_similar_artists(artist_id)
     if simi_artists is None:
         log('Last.fm didn\'t return proper response')
         return None

@@ -449,7 +449,7 @@ def handle_tmdb_people(results):
     return people
 
 
-def HandleTMDBPeopleImagesResult(results):
+def handle_tmdb_images(results):
     images = []
     for item in results:
         image = {'aspectratio': item['aspect_ratio'],
@@ -462,7 +462,7 @@ def HandleTMDBPeopleImagesResult(results):
     return images
 
 
-def HandleTMDBPeopleTaggedImagesResult(results):
+def handle_tmdb_tagged_images(results):
     images = []
     for item in results:
         image = {'aspectratio': item['aspect_ratio'],
@@ -636,13 +636,13 @@ def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     if "backdrops" in response["images"]:
-        backdrops = HandleTMDBPeopleImagesResult(response["images"]["backdrops"])
+        backdrops = handle_tmdb_images(response["images"]["backdrops"])
     answer = {"general": season,
               "actors": handle_tmdb_people(response["credits"]["cast"]),
               "crew": handle_tmdb_people(response["credits"]["crew"]),
               "videos": videos,
               "episodes": handle_tmdb_episodes(response["episodes"]),
-              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
+              "images": handle_tmdb_images(response["images"]["posters"]),
               "backdrops": backdrops}
     return answer
 
@@ -775,8 +775,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                   "reviews": handle_tmdb_misc(response["reviews"]["results"]),
                   "videos": videos,
                   "account_states": account_states,
-                  "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
-                  "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+                  "images": handle_tmdb_images(response["images"]["posters"]),
+                  "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
     else:
         answer = []
     return answer
@@ -855,8 +855,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
               "videos": videos,
               "account_states": account_states,
               "seasons": handle_tmdb_seasons(response["seasons"]),
-              "images": HandleTMDBPeopleImagesResult(response["images"]["posters"]),
-              "backdrops": HandleTMDBPeopleImagesResult(response["images"]["backdrops"])}
+              "images": handle_tmdb_images(response["images"]["posters"]),
+              "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
     return answer
 
 
@@ -884,7 +884,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
               # "genres": handle_tmdb_misc(response["genres"]),
               "videos": videos,
               # "seasons": handle_tmdb_seasons(response["seasons"]),
-              "images": HandleTMDBPeopleImagesResult(response["images"]["stills"])}
+              "images": handle_tmdb_images(response["images"]["stills"])}
     return answer
 
 
@@ -892,14 +892,14 @@ def extended_actor_info(actor_id):
     response = get_tmdb_data("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actor_id), 1)
     tagged_images = []
     if "tagged_images" in response:
-        tagged_images = HandleTMDBPeopleTaggedImagesResult(response["tagged_images"]["results"])
+        tagged_images = handle_tmdb_tagged_images(response["tagged_images"]["results"])
     answer = {"general": handle_tmdb_people([response])[0],
               "movie_roles": handle_tmdb_movies(response["movie_credits"]["cast"]),
               "tvshow_roles": handle_tmdb_tvshows(response["tv_credits"]["cast"]),
               "movie_crew_roles": handle_tmdb_movies(response["movie_credits"]["crew"]),
               "tvshow_crew_roles": handle_tmdb_tvshows(response["tv_credits"]["crew"]),
               "tagged_images": tagged_images,
-              "images": HandleTMDBPeopleImagesResult(response["images"]["profiles"])}
+              "images": handle_tmdb_images(response["images"]["profiles"])}
     return answer
 
 

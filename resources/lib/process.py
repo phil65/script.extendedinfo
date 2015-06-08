@@ -42,7 +42,7 @@ def StartInfoActions(infos, params):
         elif info == 'discography':
             Discography = GetDiscography(params["artistname"])
             if not Discography:
-                Discography = GetArtistTopAlbums(params.get("artist_mbid"))
+                Discography = get_artist_albums(params.get("artist_mbid"))
             data = Discography, "Discography"
         elif info == 'mostlovedtracks':
             data = GetMostLovedTracks(params["artistname"]), "MostLovedTracks"
@@ -64,14 +64,14 @@ def StartInfoActions(infos, params):
                 data = GetTrackDetails(params.get("id", "")), "Trackinfo"
         elif info == 'albumshouts':
             if params["artistname"] and params["albumname"]:
-                data = GetAlbumShouts(params["artistname"], params["albumname"]), "Shout"
+                data = get_album_shouts(params["artistname"], params["albumname"]), "Shout"
         elif info == 'artistshouts':
             if params["artistname"]:
-                data = GetArtistShouts(params["artistname"]), "Shout"
+                data = get_artist_shouts(params["artistname"]), "Shout"
         elif info == 'topartists':
-            data = GetTopArtists(), "TopArtists"
+            data = get_top_artists(), "TopArtists"
         elif info == 'hypedartists':
-            data = GetHypedArtists(), "HypedArtists"
+            data = get_hyped_artists(), "HypedArtists"
         elif info == 'latestdbmovies':
             data = get_db_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10)), "LatestMovies"
         elif info == 'randomdbmovies':
@@ -292,7 +292,7 @@ def StartInfoActions(infos, params):
                 data = get_similar_artists_from_db(params.get("artist_mbid")), "SimilarArtists"
         elif info == 'artistevents':
             if params.get("artist_mbid"):
-                data = GetEvents(params.get("artist_mbid")), "ArtistEvents"
+                data = get_events(params.get("artist_mbid")), "ArtistEvents"
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
@@ -306,17 +306,17 @@ def StartInfoActions(infos, params):
                 playlists = get_youtube_user_playlists(user_name)
                 data = get_youtube_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
-            data = GetNearEvents(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
+            data = get_near_events(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
         elif info == 'trackinfo':
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
-                TrackInfo = GetTrackInfo(params["artistname"], params["trackname"])
+                TrackInfo = get_track_info(params["artistname"], params["trackname"])
                 HOME.setProperty('%sSummary' % params.get("prefix", ""), TrackInfo["summary"])  # set properties
         elif info == 'venueevents':
             if params["location"]:
-                params["id"] = GetVenueID(params["location"])
+                params["id"] = get_venue_id(params["location"])
             if params.get("id", ""):
-                data = GetVenueEvents(params.get("id", "")), "VenueEvents"
+                data = get_venue_events(params.get("id", "")), "VenueEvents"
             else:
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':

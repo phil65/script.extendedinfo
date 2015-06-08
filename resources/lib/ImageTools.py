@@ -13,7 +13,8 @@ from PIL import Image, ImageFilter
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 ADDON_DATA_PATH_IMAGES = os.path.join(ADDON_DATA_PATH, "images")
 
-def Filter_Image(filterimage, radius):
+
+def filter_image(filterimage, radius):
     if not xbmcvfs.exists(ADDON_DATA_PATH_IMAGES):
         xbmcvfs.mkdir(ADDON_DATA_PATH_IMAGES)
     filterimage = xbmc.translatePath(urllib.unquote(filterimage.encode("utf-8"))).replace("image://", "")
@@ -55,7 +56,7 @@ def Filter_Image(filterimage, radius):
     else:
         log("blurred img already created: " + targetfile)
         img = Image.open(targetfile)
-    imagecolor = Get_Colors(img)
+    imagecolor = get_colors(img)
     return targetfile, imagecolor
 
 
@@ -75,7 +76,7 @@ def get_cached_thumb(filename):
     return thumbpath
 
 
-def Get_Colors(img):
+def get_colors(img):
     width, height = img.size
     try:
         pixels = img.load()
@@ -117,7 +118,7 @@ def Get_Colors(img):
     return imagecolor
 
 
-class Filter_Image_Thread(threading.Thread):
+class FilterImageThread(threading.Thread):
 
     def __init__(self, image="", radius=25):
         threading.Thread.__init__(self)
@@ -126,7 +127,7 @@ class Filter_Image_Thread(threading.Thread):
 
     def run(self):
         try:
-            self.image, self.imagecolor = Filter_Image(self.filterimage, self.radius)
+            self.image, self.imagecolor = filter_image(self.filterimage, self.radius)
         except:
             self.image = ""
             self.imagecolor = ""

@@ -97,7 +97,7 @@ class DialogYoutubeList(DialogBaseList):
                         xbmc.sleep(1000)
                         change_list_status(list_id, item_id, True)
                 elif index == len(listitems) - 1:
-                    self.remove_listDialog(account_lists)
+                    self.remove_list_dialog(account_lists)
                 elif index > 0:
                     change_list_status(account_lists[index - 1]["id"], item_id, True)
                     # xbmc.sleep(2000)

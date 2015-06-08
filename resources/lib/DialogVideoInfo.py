@@ -61,7 +61,7 @@ class DialogVideoInfo(DialogBaseInfo):
             if "DBID" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = Filter_Image_Thread(self.data["general"]["Thumb"], 25)
+            filter_thread = FilterImageThread(self.data["general"]["Thumb"], 25)
             filter_thread.start()
             lists_thread.join()
             self.data["lists"] = lists_thread.listitems
@@ -264,7 +264,7 @@ class DialogVideoInfo(DialogBaseInfo):
                     xbmc.sleep(1000)
                     change_list_status(list_id, self.tmdb_id, True)
             elif index == len(listitems) - 1:
-                self.remove_listDialog(account_lists)
+                self.remove_list_dialog(account_lists)
             elif index > 0:
                 change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
                 self.update_states()
@@ -305,7 +305,7 @@ class DialogVideoInfo(DialogBaseInfo):
             self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
             # notify(str(self.data["account_states"]["rated"]["value"]))
 
-    def remove_listDialog(self, account_lists):
+    def remove_list_dialog(self, account_lists):
         listitems = []
         for item in account_lists:
             listitems.append("%s (%i)" % (item["name"], item["item_count"]))
