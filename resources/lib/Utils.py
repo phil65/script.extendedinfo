@@ -68,6 +68,10 @@ def dictfind(lst, key, value):
 
 
 def format_time(time, format=None):
+    """
+    get formatted time
+    format = h, m or None
+    """
     try:
         intTime = int(time)
     except:
@@ -84,11 +88,14 @@ def format_time(time, format=None):
         return minute + " min"
 
 
-def url_quote(url):
+def url_quote(input_string):
+    """
+    get url-quoted string
+    """
     try:
-        return urllib.quote_plus(url.encode('utf8', 'ignore'))
+        return urllib.quote_plus(input_string.encode('utf8', 'ignore'))
     except:
-        return urllib.quote_plus(unicode(url, "utf-8").encode("utf-8"))
+        return urllib.quote_plus(unicode(input_string, "utf-8").encode("utf-8"))
 
 
 def merge_dicts(*dict_args):
@@ -103,6 +110,9 @@ def merge_dicts(*dict_args):
 
 
 def check_version():
+    """
+    check version, open TextViewer if update detected
+    """
     if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
         path = os.path.join(ADDON_PATH, "changelog.txt")
         changelog = read_from_file(path, True)
@@ -112,6 +122,9 @@ def check_version():
 
 
 def get_autocomplete_items(search_string):
+    """
+    get dict list with autocomplete labels from google
+    """
     if not search_string:
         return []
     listitems = []
@@ -277,6 +290,11 @@ class SlideShow(xbmcgui.WindowXMLDialog):
 
 
 def calculate_age(born, died=False):
+    """
+    calculate age based on born / died
+    display notification for birthday
+    return death age when already dead
+    """
     if died:
         ref_day = died.split("-")
     elif born:
@@ -297,6 +315,9 @@ def calculate_age(born, died=False):
 
 
 def play_trailer(youtube_id="", listitem=None, pop_stack=False):
+    """
+    play youtube vid with info from *listitem
+    """
     if not listitem:
         listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
         listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -309,6 +330,9 @@ def play_trailer(youtube_id="", listitem=None, pop_stack=False):
 
 
 def PlayMedia(path="", listitem=None, pop_stack=False):
+    """
+    play media based on path, info from *listitem
+    """
     player = VideoPlayer(pop_stack=pop_stack)
     player.play(item=path, listitem=listitem)
 
@@ -350,10 +374,16 @@ class VideoPlayer(xbmc.Player):
 
 
 def add_to_window_stack(window):
+    """
+    add window / dialog to global window stack
+    """
     window_stack.append(window)
 
 
 def pop_window_stack():
+    """
+    get newest item from global window stack
+    """
     if window_stack:
         dialog = window_stack.pop()
         dialog.doModal()
@@ -427,6 +457,9 @@ def get_sort_letters(path, focused_letter):
 
 
 def millify(n):
+    """
+    make large numbers human-readable, return string
+    """
     millnames = [' ', '.000', ' Million', ' Billion', ' Trillion']
     if n and n > 100:
         n = float(n)
@@ -493,6 +526,9 @@ def fetch(dictionary, key):
 
 
 def get_year(year_string):
+    """
+    return last 4 chars of string
+    """
     if year_string and len(year_string) > 3:
         return year_string[:4]
     else:
@@ -676,6 +712,9 @@ def get_favs():
 
 
 def get_icon_panel(number):
+    """
+    get icon panel with index *number, returns dict list based on skin strings
+    """
     items = []
     offset = number * 5 - 5
     for i in range(1, 6):
@@ -747,7 +786,7 @@ def read_from_file(path="", raw=False):
         return False
 
 
-def ConvertYoutubeURL(raw_string):
+def convert_youtube_url(raw_string):
     if raw_string and 'youtube.com/v' in raw_string:
         vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
         for id in vid_ids:

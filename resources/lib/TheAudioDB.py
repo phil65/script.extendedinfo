@@ -65,7 +65,7 @@ def HandleAudioDBTrackResult(results):
         for track in results['track']:
             if 'strMusicVid' in track and track['strMusicVid']:
                 Thumb = "http://i.ytimg.com/vi/" + extract_youtube_id(track.get('strMusicVid', '')) + "/0.jpg"
-                Path = ConvertYoutubeURL(track['strMusicVid'])
+                Path = convert_youtube_url(track['strMusicVid'])
             else:
                 Thumb = ""
                 Path = ""
@@ -91,7 +91,7 @@ def HandleAudioDBMusicVideoResult(results):
                     'Description': mvid['strDescriptionEN'],
                     'id': mvid['idTrack'],
                     'Thumb': "http://i.ytimg.com/vi/" + extract_youtube_id(mvid.get('strMusicVid', '')) + "/0.jpg",
-                    'Path': ConvertYoutubeURL(mvid['strMusicVid']),
+                    'Path': convert_youtube_url(mvid['strMusicVid']),
                     'Label': mvid['strTrack']}
             mvids.append(mvid)
     else:

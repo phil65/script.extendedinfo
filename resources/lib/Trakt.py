@@ -79,7 +79,7 @@ def handle_trakt_movies(results):
                  'duration(h)': format_time(movie["movie"]["runtime"], "h"),
                  'duration(m)': format_time(movie["movie"]["runtime"], "m"),
                  'Tagline': movie["movie"]["tagline"],
-                 'Trailer': ConvertYoutubeURL(movie["movie"]["trailer"]),
+                 'Trailer': convert_youtube_url(movie["movie"]["trailer"]),
                  'Year': movie["movie"]["year"],
                  'ID': movie["movie"]["ids"]["tmdb"],
                  'imdb_id': movie["movie"]["ids"]["imdb"],
