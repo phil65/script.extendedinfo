@@ -65,7 +65,7 @@ class DialogActorInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
-        pass_dict_to_skin(self.data["general"], "actor.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "actor.", False, False, self.window_id)
         self.fill_lists()
 
     def onClick(self, controlID):

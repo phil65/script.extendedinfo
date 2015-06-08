@@ -48,7 +48,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         super(DialogEpisodeInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Episode")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.getControl(1000).addItems(create_listitems(self.data["actors"], 0))
         self.getControl(750).addItems(create_listitems(self.data["crew"], 0))
         self.getControl(1150).addItems(create_listitems(self.data["videos"], 0))

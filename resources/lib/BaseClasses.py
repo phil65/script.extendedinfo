@@ -9,7 +9,7 @@ from Utils import *
 from TheMovieDB import *
 
 
-class DialogBaseList(xbmcgui.WindowXMLDialog):
+class DialogBaseList(xbmcgui.WindowXMLDialog if True else xbmcgui.WindowXML):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
@@ -29,8 +29,11 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         HOME.setProperty("WindowColor", self.color)
-        self.windowid = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.windowid)
+        if True:
+            self.window_id = xbmcgui.getCurrentWindowDialogId()
+        else:
+            self.window_id = xbmcgui.getCurrentWindowId()
+        self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("WindowColor", self.color)
         self.window.setProperty("layout", self.layout)
         self.update_ui()
@@ -150,7 +153,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog):
             self.filters.append(new_filter)
 
 
-class DialogBaseInfo(xbmcgui.WindowXMLDialog):
+class DialogBaseInfo(xbmcgui.WindowXMLDialog if True else xbmcgui.WindowXML):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
@@ -161,8 +164,11 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog):
         self.data = None
 
     def onInit(self, *args, **kwargs):
-        self.windowid = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.windowid)
+        if True:
+            self.window_id = xbmcgui.getCurrentWindowDialogId()
+        else:
+            self.window_id = xbmcgui.getCurrentWindowId()
+        self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         if not self.data:
             xbmc.executebuiltin("Dialog.Close(busydialog)")

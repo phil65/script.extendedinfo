@@ -105,11 +105,11 @@ class DialogVideoInfo(DialogBaseInfo):
         super(DialogVideoInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Movie")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.fill_lists()
-        pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.windowid)
+        pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.window_id)
         self.update_states(False)
-        self.join_omdb = JoinOmdbThread(self.omdb_thread, self.windowid)
+        self.join_omdb = JoinOmdbThread(self.omdb_thread, self.window_id)
         self.join_omdb.start()
 
     def onAction(self, action):
@@ -353,12 +353,12 @@ class JoinOmdbThread(threading.Thread):
     def __init__(self, omdb_thread, windowid):
         threading.Thread.__init__(self)
         self.omdb_thread = omdb_thread
-        self.windowid = windowid
+        self.window_id = windowid
 
     def run(self):
         self.omdb_thread.join()
-        if xbmcgui.getCurrentWindowDialogId() == self.windowid:
-            pass_dict_to_skin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.windowid)
+        if xbmcgui.getCurrentWindowDialogId() == self.window_id:
+            pass_dict_to_skin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.window_id)
 
 
 class SetItemsThread(threading.Thread):

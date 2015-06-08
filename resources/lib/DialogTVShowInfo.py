@@ -90,7 +90,7 @@ class DialogTVShowInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.window.setProperty("type", "TVShow")
         self.fill_lists()
         self.update_states(False)

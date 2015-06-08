@@ -53,7 +53,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         super(DialogSeasonInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Season")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.windowid)
+        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.fill_lists()
 
     def onClick(self, controlID):
