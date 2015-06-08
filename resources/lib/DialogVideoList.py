@@ -82,8 +82,8 @@ class T9Search(xbmcgui.WindowXMLDialog):
             else:
                 self.getControl(600).setLabel("[B]%s[/B][COLOR 00FFFFFF]_[/COLOR]" % self.search_string)
 
-    def onClick(self, controlID):
-        if controlID == 9090:
+    def onClick(self, control_id):
+        if control_id == 9090:
             letters = self.getControl(9090).getSelectedItem().getProperty("value")
             number = self.getControl(9090).getSelectedItem().getProperty("key")
             letter_list = [c for c in letters]
@@ -116,7 +116,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
             self.timer.start()
             self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
             self.get_autocomplete_labels()
-        elif controlID == 9091:
+        elif control_id == 9091:
             self.search_string = self.getControl(9091).getSelectedItem().getLabel()
             self.getControl(600).setLabel("[B]%s[/B]_" % self.search_string)
             self.get_autocomplete_labels()
@@ -241,13 +241,13 @@ class DialogVideoList(DialogBaseList):
                 self.update_content(force_update=True)
                 self.update_ui()
 
-    def onClick(self, controlID):
-        super(DialogVideoList, self).onClick(controlID)
-        if controlID in [500]:
+    def onClick(self, control_id):
+        super(DialogVideoList, self).onClick(control_id)
+        if control_id in [500]:
             add_to_window_stack(self)
             self.close()
-            media_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            media_type = self.getControl(controlID).getSelectedItem().getProperty("media_type")
+            media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
+            media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")
             if media_type:
                 self.type = media_type
             if self.type == "tv":
@@ -257,11 +257,11 @@ class DialogVideoList(DialogBaseList):
             else:
                 dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id)
             dialog.doModal()
-        elif controlID == 5002:
+        elif control_id == 5002:
             self.get_genre()
             self.update_content()
             self.update_ui()
-        elif controlID == 5003:
+        elif control_id == 5003:
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading=ADDON.getLocalizedString(32151), line1=ADDON.getLocalizedString(32106), nolabel=ADDON.getLocalizedString(32150), yeslabel=ADDON.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
@@ -282,7 +282,7 @@ class DialogVideoList(DialogBaseList):
                 self.page = 1
                 self.update_content()
                 self.update_ui()
-        # elif controlID == 5011:
+        # elif control_id == 5011:
         #     dialog = xbmcgui.Dialog()
         #     ret = True
         #     if not self.type == "tv":
@@ -300,7 +300,7 @@ class DialogVideoList(DialogBaseList):
         #         self.page = 1
         #         self.update_content()
         #         self.update_ui()
-        elif controlID == 5012:
+        elif control_id == 5012:
             dialog = xbmcgui.Dialog()
             ret = True
             if not self.type == "tv":
@@ -319,36 +319,36 @@ class DialogVideoList(DialogBaseList):
                 self.update_content()
                 self.update_ui()
 
-        elif controlID == 5004:
+        elif control_id == 5004:
             if self.order == "asc":
                 self.order = "desc"
             else:
                 self.order = "asc"
             self.update_content()
             self.update_ui()
-        elif controlID == 5005:
+        elif control_id == 5005:
             self.filters = []
             self.page = 1
             self.mode = "filter"
             self.update_content()
             self.update_ui()
-        elif controlID == 5006:
+        elif control_id == 5006:
             self.get_certification()
             self.update_content()
             self.update_ui()
-        elif controlID == 5008:
+        elif control_id == 5008:
             self.get_actor()
             self.update_content()
             self.update_ui()
-        elif controlID == 5009:
+        elif control_id == 5009:
             self.get_keyword()
             self.update_content()
             self.update_ui()
-        elif controlID == 5010:
+        elif control_id == 5010:
             self.get_company()
             self.update_content()
             self.update_ui()
-        elif controlID == 5007:
+        elif control_id == 5007:
             self.filters = []
             self.page = 1
             self.mode = "filter"
@@ -362,7 +362,7 @@ class DialogVideoList(DialogBaseList):
                 self.mode = "filter"
             self.update_content()
             self.update_ui()
-        elif controlID == 6000:
+        elif control_id == 6000:
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
             dialog.doModal()
             if dialog.classic_mode:
@@ -372,7 +372,7 @@ class DialogVideoList(DialogBaseList):
             if self.total_items > 0:
                 self.setFocusId(500)
 
-        elif controlID == 7000:
+        elif control_id == 7000:
             if self.type == "tv":
                 listitems = [ADDON.getLocalizedString(32145)]  # rated tv
                 if self.logged_in:

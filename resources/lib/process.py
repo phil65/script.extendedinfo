@@ -184,7 +184,7 @@ def StartInfoActions(infos, params):
                 data = get_company_data(CompanyId), "StudioInfo"
         elif info == 'set':
             if params.get("dbid", False) and "show" not in str(params.get("type", "")):
-                name = GetMovieSetName(params["dbid"])
+                name = get_set_name_from_db(params["dbid"])
                 if name:
                     params["setid"] = get_set_id(name)
             if params.get("setid", False):

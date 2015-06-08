@@ -92,8 +92,8 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
     @busy_dialog
-    def onFocus(self, controlID):
-        if controlID == 600:
+    def onFocus(self, control_id):
+        if control_id == 600:
             if self.page < self.total_pages:
                 self.page += 1
             else:
@@ -101,7 +101,7 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
                 return
             self.update_content()
             self.update_ui()
-        if controlID == 700:
+        if control_id == 700:
             if self.page > 1:
                 self.page -= 1
             else:
@@ -111,8 +111,8 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
             self.update_content()
             self.update_ui()
 
-    def onClick(self, controlID):
-        if controlID == 5001:
+    def onClick(self, control_id):
+        if control_id == 5001:
             self.get_sort_type()
             self.update_content()
             self.update_ui()

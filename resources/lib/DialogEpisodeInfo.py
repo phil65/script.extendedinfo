@@ -55,36 +55,36 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.getControl(350).addItems(create_listitems(self.youtube_vids, 0))
         self.getControl(1350).addItems(create_listitems(self.data["images"], 0))
 
-    def onClick(self, controlID):
+    def onClick(self, control_id):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
-        if controlID in [1000, 750]:
-            actor_id = self.getControl(controlID).getSelectedItem().getProperty("id")
-            credit_id = self.getControl(controlID).getSelectedItem().getProperty("credit_id")
+        if control_id in [1000, 750]:
+            actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
+            credit_id = self.getControl(control_id).getSelectedItem().getProperty("credit_id")
             add_to_window_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
-        elif controlID in [350, 1150]:
-            listitem = self.getControl(controlID).getSelectedItem()
+        elif control_id in [350, 1150]:
+            listitem = self.getControl(control_id).getSelectedItem()
             add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
             pop_window_stack()
-        elif controlID in [1250, 1350]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("original")
+        elif control_id in [1250, 1350]:
+            image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
-        elif controlID == 132:
+        elif control_id == 132:
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
             w.doModal()
-        elif controlID == 6001:
+        elif control_id == 6001:
             rating = get_rating_from_user()
             if rating:
                 identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
                 send_rating_for_media_item("episode", identifier, rating)
                 self.update_states()
-        elif controlID == 6006:
+        elif control_id == 6006:
             self.show_rated_episodes()
 
     def update_states(self, forceupdate=True):

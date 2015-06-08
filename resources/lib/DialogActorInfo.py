@@ -68,16 +68,16 @@ class DialogActorInfo(DialogBaseInfo):
         pass_dict_to_skin(self.data["general"], "actor.", False, False, self.window_id)
         self.fill_lists()
 
-    def onClick(self, controlID):
+    def onClick(self, control_id):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
-        if controlID in [150, 550]:
-            listitem = self.getControl(controlID).getSelectedItem()
+        if control_id in [150, 550]:
+            listitem = self.getControl(control_id).getSelectedItem()
             add_to_window_stack(self)
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
-        elif controlID in [250, 650]:
-            listitem = self.getControl(controlID).getSelectedItem()
+        elif control_id in [250, 650]:
+            listitem = self.getControl(control_id).getSelectedItem()
             # options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
             # selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
             # if selection == 0:
@@ -87,18 +87,18 @@ class DialogActorInfo(DialogBaseInfo):
             self.close()
             dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
-        elif controlID in [450, 750]:
-            image = self.getControl(controlID).getSelectedItem().getProperty("original")
+        elif control_id in [450, 750]:
+            image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
-        elif controlID == 350:
-            listitem = self.getControl(controlID).getSelectedItem()
+        elif control_id == 350:
+            listitem = self.getControl(control_id).getSelectedItem()
             add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
             pop_window_stack()
-        elif controlID == 132:
+        elif control_id == 132:
             text = self.data["general"]["biography"]
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])
             w.doModal()

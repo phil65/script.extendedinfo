@@ -312,7 +312,7 @@ def compare_album_with_library(online_list):
     return online_list
 
 
-def GetMovieSetName(dbid):
+def get_set_name_from_db(dbid):
     json_response = get_kodi_json('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }"' % dbid)
     if "result" in json_response and "moviedetails" in json_response["result"]:
         dbsetid = json_response['result']['moviedetails'].get('setid', "")

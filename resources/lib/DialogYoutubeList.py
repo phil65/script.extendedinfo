@@ -108,8 +108,8 @@ class DialogYoutubeList(DialogBaseList):
                 self.update_content(force_update=True)
                 self.update_ui()
 
-    def onClick(self, controlID):
-        if controlID in [500]:
+    def onClick(self, control_id):
+        if control_id in [500]:
             add_to_window_stack(self)
             self.close()
 

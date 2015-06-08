@@ -56,17 +56,17 @@ class DialogSeasonInfo(DialogBaseInfo):
         pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.fill_lists()
 
-    def onClick(self, controlID):
-        control = self.getControl(controlID)
+    def onClick(self, control_id):
+        control = self.getControl(control_id)
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
-        if controlID in [1000, 750]:
+        if control_id in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
             add_to_window_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
-        elif controlID in [2000]:
+        elif control_id in [2000]:
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
@@ -76,17 +76,17 @@ class DialogSeasonInfo(DialogBaseInfo):
             self.close()
             dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=self.tmdb_id, season=season, episode=episode)
             dialog.doModal()
-        elif controlID in [350, 1150]:
+        elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
             add_to_window_stack(self)
             self.close()
             self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
             self.movieplayer.wait_for_video_end()
             pop_window_stack()
-        elif controlID in [1250, 1350]:
+        elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
-        elif controlID == 132:
+        elif control_id == 132:
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()

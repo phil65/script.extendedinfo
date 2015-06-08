@@ -210,12 +210,12 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
 
-    def onClick(self, controlID):
-        if controlID == 6 or controlID == 3:
+    def onClick(self, control_id):
+        if control_id == 6 or control_id == 3:
             self.index = int(self.list.getSelectedItem().getProperty("index"))
             self.close()
 
-    def onFocus(self, controlID):
+    def onFocus(self, control_id):
         pass
 
 
@@ -238,10 +238,10 @@ class TextViewerDialog(xbmcgui.WindowXMLDialog):
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
 
-    def onClick(self, controlID):
+    def onClick(self, control_id):
         pass
 
-    def onFocus(self, controlID):
+    def onFocus(self, control_id):
         pass
 
 
