@@ -389,12 +389,8 @@ def handle_tmdb_videos(results):
 def handle_tmdb_people(results):
     people = []
     for person in results:
-        image = ""
-        image_small = ""
         builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s)' % str(person['id'])
-        if "profile_path" in person and person["profile_path"]:
-            image = base_url + poster_size + person["profile_path"]
-            image_small = base_url + "w342" + person["profile_path"]
+        artwork = get_image_urls(profile=person.get("profile_path"))
         also_known_as = " / ".join(fetch(person, 'also_known_as'))
         newperson = {'adult': str(fetch(person, 'adult')),
                      'name': person['name'],
@@ -416,9 +412,9 @@ def handle_tmdb_people(results):
                      'place_of_birth': fetch(person, 'place_of_birth'),
                      'placeofbirth': fetch(person, 'place_of_birth'),
                      'homepage': fetch(person, 'homepage'),
-                     'thumb': image_small,
-                     'icon': image_small,
-                     'poster': image}
+                     'thumb': artwork.get("profile_small", ""),
+                     'icon': artwork.get("profile_small", ""),
+                     'poster': artwork.get("profile", "")}
         people.append(newperson)
     return people
 
@@ -569,7 +565,8 @@ def get_credit_info(credit_id):
     # else:
     #     return []
 
-def get_image_urls(poster=None, still=None, fanart=None):
+
+def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     images = {}
     if poster:
         images["poster"] = base_url + "w500" + poster
@@ -583,6 +580,10 @@ def get_image_urls(poster=None, still=None, fanart=None):
         images["fanart"] = base_url + "w1280" + fanart
         images["fanart_original"] = base_url + "original" + fanart
         images["fanart_small"] = base_url + "w780" + fanart
+    if profile:
+        images["profile"] = base_url + "w500" + profile
+        images["profile_original"] = base_url + "original" + profile
+        images["profile_small"] = base_url + "w342" + profile
     return images
 
 def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
