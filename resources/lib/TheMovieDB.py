@@ -250,7 +250,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'department': fetch(movie, 'department'),
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
-                    'Year': get_year(fetch(response, 'release_date')),
+                    'Year': get_year(fetch(movie, 'release_date')),
                     'Genre': genres,
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
