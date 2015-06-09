@@ -247,7 +247,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 change_fav_status(self.data["general"]["ID"], "movie", "true")
             self.update_states()
         elif control_id == 6006:
-            self.show_rated_movies()
+            self.open_video_list(mode="rating")
         elif control_id == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [ADDON.getLocalizedString(32139)]
@@ -315,12 +315,6 @@ class DialogVideoInfo(DialogBaseInfo):
             # change_list_status(account_lists[index]["id"], self.tmdb_id, False)
             remove_list(account_lists[index]["id"])
             self.update_states()
-
-    def show_rated_movies(self):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = get_rated_media_items("movies")
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        self.open_video_list(listitems=listitems)
 
     def show_manage_dialog(self):
         manage_list = []

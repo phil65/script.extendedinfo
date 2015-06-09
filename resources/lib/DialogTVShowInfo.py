@@ -182,12 +182,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             elif index == 0:
                 self.open_video_list(media_type="tv", mode="favorites")
             elif index == 1:
-                self.show_rated_tvshows()
+                self.open_video_list(mode="rating", type="tv")
         elif control_id == 6003:
             change_fav_status(self.data["general"]["ID"], "tv", "true")
             self.update_states()
         elif control_id == 6006:
-            self.show_rated_tvshows()
+            self.open_video_list(mode="rating", type="tv")
         elif control_id == 132:
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
@@ -247,12 +247,3 @@ class DialogTVShowInfo(DialogBaseInfo):
             builtin_list = manage_list[selection][1].split("||")
             for item in builtin_list:
                 xbmc.executebuiltin(item)
-
-    def show_rated_tvshows(self):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = get_rated_media_items("tv")
-        add_to_window_stack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], media_type="tv")
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        dialog.doModal()
