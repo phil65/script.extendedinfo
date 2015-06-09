@@ -220,7 +220,7 @@ def get_near_events(tag=False, festivalsonly=False, lat="", lon="", location="",
         festivalsonly = "1"
     else:
         festivalsonly = "0"
-    url = 'method=geo.get_events&festivalsonly=%s&limit=40' % (festivalsonly)
+    url = 'method=geo.getevents&festivalsonly=%s&limit=40' % (festivalsonly)
     if tag:
         url += '&tag=%s' % (url_quote(tag))
     if lat and lon:
@@ -234,7 +234,7 @@ def get_near_events(tag=False, festivalsonly=False, lat="", lon="", location="",
 
 
 def get_venue_events(venueid=""):
-    url = 'method=venue.get_events&venue=%s' % (venueid)
+    url = 'method=venue.getevents&venue=%s' % (venueid)
     results = get_JSON_response(BASE_URL + url, 0.5, folder="LastFM")
     return handle_lastfm_events(results)
 
