@@ -365,8 +365,8 @@ def StartInfoActions(infos, params):
         elif info == 'selectautocomplete':
             window_id = xbmcgui.getCurrentWindowDialogId()
             window = xbmcgui.Window(window_id)
-            window.getControl(312).setText(params.get("id"))
-            xbmc.executebuiltin("SendClick(103,32)")
+            xbmc.executeJSONRPC('{"id": 1, "jsonrpc": "2.0", "method": "Input.SendText", "params":{"text":"%s", "done":false}}' % params.get("id"))
+            # xbmc.executebuiltin("SendClick(103,32)")
             window.setFocusId(300)
         elif info == 'bounce':
             HOME.setProperty(params.get("name", ""), "True")
