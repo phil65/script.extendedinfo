@@ -54,6 +54,14 @@ msgctxt "#32005"
 msgid "Windowed mode (for low-power platforms)"
 msgstr ""
 
+msgctxt "#32006"
+msgid "Use as thumbnail"
+msgstr ""
+
+msgctxt "#32007"
+msgid "Use as fanart"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Filmography"
 msgstr ""
