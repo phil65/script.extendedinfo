@@ -129,7 +129,7 @@ def get_autocomplete_items(search_string):
         return []
     listitems = []
     headers = {'User-agent': 'Mozilla/5.0'}
-    result = get_JSON_response("http://clients1.google.com/complete/search?hl=us&q=%s&json=t&client=serp" % urllib.quote_plus(search_string), headers=headers, folder="Google")
+    result = get_JSON_response("http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (ADDON.getSetting("autocomplete_lang"), urllib.quote_plus(search_string)), headers=headers, folder="Google")
     for item in result[1]:
         li = {"label": item,
               "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}

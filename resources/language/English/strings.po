@@ -42,6 +42,10 @@ msgctxt "#32002"
 msgid "Trillion"
 msgstr ""
 
+msgctxt "#32003"
+msgid "Autocompletion language"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Filmography"
 msgstr ""
