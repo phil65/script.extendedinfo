@@ -533,11 +533,17 @@ class DialogVideoList(DialogBaseList):
             url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, get_session_id(), sortby)
             self.filter_label = starred
         elif self.mode == "rating":
+            force = True  # workaround, should be updated after setting rating
             if self.logged_in:
-                session_id_string = "session_id=" + get_session_id()
-                url = "account/%s/rated/%s?language=%s&page=%i&%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id_string, sortby)
+                session_id = get_session_id()
+                if not session_id:
+                    notify("Could not get session id")
+                url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sortby)
             else:
-                url = "guest_session/%s/rated_movies?language=%s&" % (get_guest_session_id(), ADDON.getSetting("LanguageID"))
+                session_id = get_guest_session_id()
+                if not session_id:
+                    notify("Could not get session id")
+                url = "guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID"))
             self.filter_label = rated
         else:
             self.set_filter_url()
