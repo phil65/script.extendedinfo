@@ -586,6 +586,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
         images["profile_small"] = base_url + "w342" + profile
     return images
 
+
 def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
         response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
@@ -605,17 +606,17 @@ def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     backdrops = []
     artwork = get_image_urls(poster=response.get("poster_path"))
     if response.get("name", False):
-        Title = response["name"]
+        title = response["name"]
     elif season_number == "0":
-        Title = "Specials"
+        title = "Specials"
     else:
-        Title = "Season %s" % season_number
+        title = "Season %s" % season_number
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
               'TVShowTitle': tvshowname,
               'Thumb': artwork.get("poster_small", ""),
               'Poster': artwork.get("poster", ""),
-              'Title': Title,
+              'Title': title,
               'ReleaseDate': response["air_date"],
               'AirDate': response["air_date"]}
     if "videos" in response:
@@ -690,10 +691,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
             directors.append(item["name"])
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
-    Set = fetch(response, "belongs_to_collection")
-    if Set:
-        set_name = fetch(Set, "name")
-        set_id = fetch(Set, "id")
+    movie_set = fetch(response, "belongs_to_collection")
+    if movie_set:
+        set_name = fetch(movie_set, "name")
+        set_id = fetch(movie_set, "id")
     artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': artwork.get("fanart", ""),
@@ -943,10 +944,7 @@ def get_keywords(movie_id):
             keyword_dict = {'id': fetch(keyword, 'id'),
                             'name': keyword['name']}
             keywords.append(keyword_dict)
-        return keywords
-    else:
-        log("No keywords in JSON answer")
-        return []
+    return keywords
 
 
 def get_similar_movies(movie_id):
