@@ -50,6 +50,10 @@ msgctxt "#32004"
 msgid "Use autocompletion suggestions from Youtube"
 msgstr ""
 
+msgctxt "#32005"
+msgid "Windowed mode (for low-power platforms)"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Filmography"
 msgstr ""

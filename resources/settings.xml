@@ -11,7 +11,7 @@
         <!--
         <setting label="Include Adult Movies" type="labelenum" values="true|false" id="include_adults" default="false"/>-->
         <setting label="32163" type="bool" id="infodialog_onclick" default="true"/>-->
-        <setting label="Windowed mode (for low-power platforms)" type="bool" id="window_mode" default="false"/>
+        <setting label="32005" type="bool" id="window_mode" default="false"/>
         <!--
         <setting label="Debug Mode" type="bool" id="debug_mode"/>-->
         <setting label="32164" type="action" action="RunScript(script.extendedinfo,info=deletecache)"/>
