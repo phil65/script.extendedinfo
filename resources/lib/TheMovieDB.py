@@ -222,27 +222,18 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
         else:
             genres = ""
         tmdb_id = str(fetch(movie, 'id'))
-        if ("backdrop_path" in movie) and (movie["backdrop_path"]):
-            backdrop_path = base_url + fanart_size + movie['backdrop_path']
-        else:
-            backdrop_path = ""
-        if ("poster_path" in movie) and (movie["poster_path"]):
-            # poster_path = base_url + poster_size + movie['poster_path']
-            small_poster_path = base_url + "w342" + movie["poster_path"]
-        else:
-            # poster_path = ""
-            small_poster_path = ""
+        artwork = get_image_urls(poster=movie.get("poster_path"), fanart=movie.get("backdrop_path"))
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if ADDON.getSetting("infodialog_onclick") != "false":
             # path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % tmdb_id
         else:
             path = trailer
-        listitem = {'Art(fanart)': backdrop_path,
-                    'Art(poster)': small_poster_path,  # needs to be adjusted to poster_path (-->skin)
-                    'Thumb': small_poster_path,
-                    'Poster': small_poster_path,
-                    'fanart': backdrop_path,
+        listitem = {'Art(fanart)': artwork.get("fanart", ""),
+                    'Art(poster)': artwork.get("poster_small", ""),
+                    'Thumb': artwork.get("poster_small", ""),
+                    'Poster': artwork.get("poster_small", ""),
+                    'fanart': artwork.get("fanart", "")
                     'Title': fetch(movie, 'title'),
                     'Label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
@@ -274,13 +265,8 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     log("starting handle_tmdb_tvshows")
     for tv in results:
         tmdb_id = fetch(tv, 'id')
-        poster_path = ""
         duration = ""
-        backdrop_path = ""
-        if ("backdrop_path" in tv) and (tv["backdrop_path"]):
-            backdrop_path = base_url + fanart_size + tv['backdrop_path']
-        if ("poster_path" in tv) and (tv["poster_path"]):
-            poster_path = base_url + poster_size + tv['poster_path']
+        artwork = get_image_urls(poster=tv.get("poster_path"), fanart=tv.get("backdrop_path"))
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
@@ -288,11 +274,11 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i" % (tv["episode_run_time"][0])
             else:
                 duration = ""
-        newtv = {'Art(fanart)': backdrop_path,
-                 'Art(poster)': poster_path,
-                 'Thumb': poster_path,
-                 'Poster': poster_path,
-                 'fanart': backdrop_path,
+        newtv = {'Art(fanart)': artwork.get("fanart", "")
+                 'Art(poster)': artwork.get("poster", ""),
+                 'Thumb': artwork.get("poster", ""),
+                 'Poster': artwork.get("poster", ""),
+                 'fanart': artwork.get("fanart", "")
                  'Title': fetch(tv, 'name'),
                  'TVShowTitle': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
@@ -345,14 +331,10 @@ def handle_tmdb_episodes(results):
 def handle_tmdb_misc(results):
     listitems = []
     for item in results:
-        poster_path = ""
-        small_poster_path = ""
-        if ("poster_path" in item) and (item["poster_path"]):
-            poster_path = base_url + poster_size + item['poster_path']
-            small_poster_path = base_url + "w342" + item["poster_path"]
-        listitem = {'Art(poster)': poster_path,
-                    'Poster': poster_path,
-                    'Thumb': small_poster_path,
+        artwork = get_image_urls(poster=item.get("poster_path"))
+        listitem = {'Art(poster)': artwork.get("poster", ""),
+                    'Poster': artwork.get("poster", ""),
+                    'Thumb': artwork.get("poster_small", ""),
                     'Title': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
@@ -373,19 +355,15 @@ def handle_tmdb_misc(results):
 def handle_tmdb_seasons(results):
     listitems = []
     for season in results:
-        poster_path = ""
         season_number = str(fetch(season, 'season_number'))
-        small_poster_path = ""
-        if ("poster_path" in season) and season["poster_path"]:
-            poster_path = base_url + poster_size + season['poster_path']
-            small_poster_path = base_url + "w342" + season["poster_path"]
+        artwork = get_image_urls(poster=season.get("poster_path"))
         if season_number == "0":
             Title = "Specials"
         else:
             Title = "Season %s" % season_number
-        listitem = {'Art(poster)': poster_path,
-                    'Poster': poster_path,
-                    'Thumb': small_poster_path,
+        listitem = {'Art(poster)': artwork.get("poster", ""),
+                    'Poster': artwork.get("poster", ""),
+                    'Thumb': artwork.get("poster_small", ""),
                     'Title': Title,
                     'Season': season_number,
                     'air_date': fetch(season, 'air_date'),
@@ -546,9 +524,9 @@ def get_keyword_id(keyword):
         return False
 
 
-def get_set_id(setname):
-    setname = setname.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
-    response = get_tmdb_data("search/collection?query=%s&language=%s&" % (url_quote(setname.encode("utf-8")), ADDON.getSetting("LanguageID")), 14)
+def get_set_id(set_name):
+    set_name = set_name.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
+    response = get_tmdb_data("search/collection?query=%s&language=%s&" % (url_quote(set_name.encode("utf-8")), ADDON.getSetting("LanguageID")), 14)
     if "results" in response and response["results"]:
         return response["results"][0]["id"]
     else:
@@ -595,6 +573,21 @@ def get_credit_info(credit_id):
     # else:
     #     return []
 
+def get_image_urls(poster=None, still=None, fanart=None):
+    images = {}
+    if poster:
+        images["poster"] = base_url + "w500" + poster
+        images["poster_original"] = base_url + "original" + poster
+        images["poster_small"] = base_url + "w342" + poster
+    if still:
+        images["still"] = base_url + "w300" + still
+        images["still_original"] = base_url + "original" + still
+        images["still_small"] = base_url + "w185" + still
+    if fanart:
+        images["fanart"] = base_url + "w1280" + fanart
+        images["fanart_original"] = base_url + "original" + fanart
+        images["fanart_small"] = base_url + "w780" + fanart
+    return images
 
 def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     if not tmdb_tvshow_id:
@@ -613,12 +606,7 @@ def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
         return None
     videos = []
     backdrops = []
-    if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + poster_size + response['poster_path']
-        poster_path_small = base_url + "w342" + response['poster_path']
-    else:
-        poster_path = ""
-        poster_path_small = ""
+    artwork = get_image_urls(poster=response.get("poster_path"))
     if response.get("name", False):
         Title = response["name"]
     elif season_number == "0":
@@ -628,8 +616,8 @@ def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
               'TVShowTitle': tvshowname,
-              'Thumb': poster_path_small,
-              'Poster': poster_path,
+              'Thumb': artwork.get("poster_small", ""),
+              'Poster': artwork.get("poster", ""),
               'Title': Title,
               'ReleaseDate': response["air_date"],
               'AirDate': response["air_date"]}
@@ -691,11 +679,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     authors = []
     directors = []
     mpaa = ""
-    SetName = ""
-    SetID = ""
-    poster_path = ""
-    poster_path_small = ""
-    backdrop_path = ""
+    set_name = ""
+    set_id = ""
     if not response:
         notify("Could not get movie information")
         return {}
@@ -710,19 +695,15 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         mpaa = response['releases']['countries'][0]['certification']
     Set = fetch(response, "belongs_to_collection")
     if Set:
-        SetName = fetch(Set, "name")
-        SetID = fetch(Set, "id")
-    if ("backdrop_path" in response) and (response["backdrop_path"]):
-        backdrop_path = base_url + fanart_size + response['backdrop_path']
-    if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + "original" + response['poster_path']
-        poster_path_small = base_url + "w342" + response['poster_path']
+        set_name = fetch(Set, "name")
+        set_id = fetch(Set, "id")
+    artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
-    movie = {'Art(fanart)': backdrop_path,
-             'Art(poster)': poster_path,
-             'Thumb': poster_path_small,
-             'Poster': poster_path,
-             'fanart': backdrop_path,
+    movie = {'Art(fanart)': artwork.get("fanart", ""),
+             'Art(poster)': artwork.get("poster", ""),
+             'Thumb': artwork.get("poster_small", ""),
+             'Poster': artwork.get("poster", ""),
+             'fanart': artwork.get("fanart", ""),
              'Title': fetch(response, 'title'),
              'Label': fetch(response, 'title'),
              'Tagline': fetch(response, 'tagline'),
@@ -735,8 +716,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Budget': millify(fetch(response, 'budget')),
              'Revenue': millify(fetch(response, 'revenue')),
              'Homepage': fetch(response, 'homepage'),
-             'Set': SetName,
-             'SetId': SetID,
+             'Set': set_name,
+             'SetId': set_id,
              'ID': fetch(response, 'id'),
              'imdb_id': fetch(response, 'imdb_id'),
              'Plot': clean_text(fetch(response, 'overview')),
@@ -798,12 +779,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     tmdb_id = fetch(response, 'id')
-    poster_path = ""
-    backdrop_path = ""
-    if ("backdrop_path" in response) and (response["backdrop_path"]):
-        backdrop_path = base_url + fanart_size + response['backdrop_path']
-    if ("poster_path" in response) and (response["poster_path"]):
-        poster_path = base_url + "original" + response['poster_path']
+    artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
     if len(response.get("episode_run_time", -1)) > 1:
         duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
     elif len(response.get("episode_run_time", -1)) == 1:
@@ -811,11 +787,11 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     else:
         duration = ""
     genres = [item["name"] for item in response["genres"]]
-    newtv = {'Art(fanart)': backdrop_path,
-             'Art(poster)': poster_path,
-             'Thumb': poster_path,
-             'Poster': poster_path,
-             'fanart': backdrop_path,
+    newtv = {'Art(fanart)': artwork.get("fanart", "")
+             'Art(poster)': artwork.get("poster", ""),
+             'Thumb': artwork.get("poster", ""),
+             'Poster': artwork.get("poster", ""),
+             'fanart': artwork.get("fanart", "")
              'Title': fetch(response, 'name'),
              'TVShowTitle': fetch(response, 'name'),
              'OriginalTitle': fetch(response, 'original_name'),
@@ -1018,18 +994,11 @@ def get_tmdb_movies(movie_type):
 def get_set_movies(set_id):
     response = get_tmdb_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 14)
     if response:
-        backdrop_path = ""
-        poster_path = ""
-        small_poster_path = ""
-        if ("backdrop_path" in response) and (response["backdrop_path"]):
-            backdrop_path = base_url + fanart_size + response['backdrop_path']
-        if ("poster_path" in response) and (response["poster_path"]):
-            poster_path = base_url + "original" + response['poster_path']
-            small_poster_path = base_url + "w342" + response["poster_path"]
+        artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
         info = {"label": response["name"],
-                "Poster": poster_path,
-                "Thumb": small_poster_path,
-                "Fanart": backdrop_path,
+                "Poster": artwork.get("poster", ""),
+                "Thumb": artwork.get("poster_small", ""),
+                "Fanart": artwork.get("fanart", "")
                 "overview": response["overview"],
                 "ID": response["id"]}
         return handle_tmdb_movies(response.get("parts", [])), info
