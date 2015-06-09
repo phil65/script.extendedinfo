@@ -181,7 +181,6 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
 
     def onAction(self, action):
         focus_id = self.getFocusId()
-        control = self.getControl(focus_id)
         media_type = self.window.getProperty("type")
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
@@ -192,13 +191,13 @@ class DialogBaseInfo(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
             if focus_id == 1250 and self.data["general"].get("DBID"):
                 selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), ["Use as thumbnail"])
                 if selection == 0:
-                    path = control.getSelectedItem().getProperty("original")
+                    path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
             elif focus_id == 1350 and self.data["general"].get("DBID"):
                 selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), ["Use as fanart"])
                 if selection == 0:
-                    path = control.getSelectedItem().getProperty("original")
+                    path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"fanart": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
 
