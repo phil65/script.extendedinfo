@@ -553,7 +553,7 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
     """
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = get_JSON_response(base_url + url, 30)
+    results = get_JSON_response(base_url + url, 30, folder="MusicBrainz")
     if results and len(results["artists"]) > 0:
         log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
         return results["artists"][0]["id"]
