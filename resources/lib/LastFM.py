@@ -138,7 +138,7 @@ def get_events(id, pastevents=False):
     if pastevents:
         url = 'method=artist.getpastevents&mbid=%s' % (id)
     else:
-        url = 'method=artist.get_events&mbid=%s' % (id)
+        url = 'method=artist.getevents&mbid=%s' % (id)
     results = get_JSON_response(BASE_URL + url, 1, folder="LastFM")
     return handle_lastfm_events(results)
 
