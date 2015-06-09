@@ -233,7 +233,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'Art(poster)': artwork.get("poster_small", ""),
                     'Thumb': artwork.get("poster_small", ""),
                     'Poster': artwork.get("poster_small", ""),
-                    'fanart': artwork.get("fanart", "")
+                    'fanart': artwork.get("fanart", ""),
                     'Title': fetch(movie, 'title'),
                     'Label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
@@ -274,11 +274,11 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i" % (tv["episode_run_time"][0])
             else:
                 duration = ""
-        newtv = {'Art(fanart)': artwork.get("fanart", "")
+        newtv = {'Art(fanart)': artwork.get("fanart", ""),
                  'Art(poster)': artwork.get("poster", ""),
                  'Thumb': artwork.get("poster", ""),
                  'Poster': artwork.get("poster", ""),
-                 'fanart': artwork.get("fanart", "")
+                 'fanart': artwork.get("fanart", ""),
                  'Title': fetch(tv, 'name'),
                  'TVShowTitle': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
@@ -783,11 +783,11 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     else:
         duration = ""
     genres = [item["name"] for item in response["genres"]]
-    newtv = {'Art(fanart)': artwork.get("fanart", "")
+    newtv = {'Art(fanart)': artwork.get("fanart", ""),
              'Art(poster)': artwork.get("poster", ""),
              'Thumb': artwork.get("poster", ""),
              'Poster': artwork.get("poster", ""),
-             'fanart': artwork.get("fanart", "")
+             'fanart': artwork.get("fanart", ""),
              'Title': fetch(response, 'name'),
              'TVShowTitle': fetch(response, 'name'),
              'OriginalTitle': fetch(response, 'original_name'),
@@ -994,7 +994,7 @@ def get_set_movies(set_id):
         info = {"label": response["name"],
                 "Poster": artwork.get("poster", ""),
                 "Thumb": artwork.get("poster_small", ""),
-                "Fanart": artwork.get("fanart", "")
+                "Fanart": artwork.get("fanart", ""),
                 "overview": response["overview"],
                 "ID": response["id"]}
         return handle_tmdb_movies(response.get("parts", [])), info
