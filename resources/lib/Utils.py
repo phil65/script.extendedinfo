@@ -676,20 +676,19 @@ def get_file(url):
         except:
             log('image download failed: ' + url)
             return ""
-        if data != '':
-            try:
-                if url.endswith(".png"):
-                    image = cache_file_png
-                else:
-                    image = cache_file_jpg
-                tmp_file = open(xbmc.translatePath(image), 'wb')
-                tmp_file.write(data)
-                tmp_file.close()
-                return xbmc.translatePath(image)
-            except:
-                log('failed to save image ' + url)
-                return ""
-        else:
+        if not data:
+            return ""
+        try:
+            if url.endswith(".png"):
+                image = cache_file_png
+            else:
+                image = cache_file_jpg
+            tmp_file = open(xbmc.translatePath(image), 'wb')
+            tmp_file.write(data)
+            tmp_file.close()
+            return xbmc.translatePath(image)
+        except:
+            log('failed to save image ' + url)
             return ""
 
 
@@ -703,32 +702,29 @@ def get_favs_by_type(fav_type):
 
 
 def get_fav_path(fav):
-    path = ""
     if fav["type"] == "media":
-        path = "PlayMedia(%s)" % (fav["path"])
+        return "PlayMedia(%s)" % (fav["path"])
     elif fav["type"] == "script":
-        path = "RunScript(%s)" % (fav["path"])
+        return "RunScript(%s)" % (fav["path"])
     elif "window" in fav and "windowparameter" in fav:
-        path = "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
+        return "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
     else:
         log("error parsing favs")
-    return path
 
 
 def get_favs():
     items = []
     json_response = get_kodi_json('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
-    if "result" not in json_response:
+    if "result" not in json_response or json_response["result"]["limits"]["total"] == 0:
         return []
-    if json_response["result"]["limits"]["total"] > 0:
-        for fav in json_response["result"]["favourites"]:
-            path = get_fav_path(fav)
-            newitem = {'Label': fav["title"],
-                       'Thumb': fav["thumbnail"],
-                       'Type': fav["type"],
-                       'Builtin': path,
-                       'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
-            items.append(newitem)
+    for fav in json_response["result"]["favourites"]:
+        path = get_fav_path(fav)
+        newitem = {'Label': fav["title"],
+                   'Thumb': fav["thumbnail"],
+                   'Type': fav["type"],
+                   'Builtin': path,
+                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
+        items.append(newitem)
     return items
 
 
