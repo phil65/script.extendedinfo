@@ -26,9 +26,9 @@ poster_size = ""
 fanart_size = ""
 include_adult = str(ADDON.getSetting("include_adults")).lower()
 if ADDON.getSetting("use_https"):
-    url_base = "https://api.themoviedb.org/3/"
+    URL_BASE = "https://api.themoviedb.org/3/"
 else:
-    url_base = "http://api.themoviedb.org/3/"
+    URL_BASE = "http://api.themoviedb.org/3/"
 
 
 def check_login():
@@ -60,9 +60,9 @@ def send_rating_for_media_item(media_type, media_id, rating):
         session_id_string = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
-        url = url_base + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id_string)
+        url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id_string)
     else:
-        url = url_base + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id_string)
+        url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id_string)
     log(url)
     request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
@@ -75,7 +75,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     session_id = get_session_id()
     account_id = get_account_info()
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
-    url = url_base + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), TMDB_KEY)
+    url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), TMDB_KEY)
     log(url)
     request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
@@ -86,7 +86,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
 
 def create_list(list_name):
     session_id = get_session_id()
-    url = url_base + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
+    url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     response = urlopen(request).read()
@@ -98,7 +98,7 @@ def create_list(list_name):
 
 def remove_list(list_id):
     session_id = get_session_id()
-    url = url_base + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
+    url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     log("Remove List: " + url)
     # prettyprint(results)
     values = {'media_id': list_id}
@@ -116,7 +116,7 @@ def change_list_status(list_id, movie_id, status):
     else:
         method = "remove_item"
     session_id = get_session_id()
-    url = url_base + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
+    url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
     log(url)
     values = {'media_id': movie_id}
     request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
@@ -527,8 +527,8 @@ def get_set_id(set_name):
 
 def get_tmdb_data(url="", cache_days=14, folder=False):
     # session_id = get_session_id()
-    # url = url_base + "%sapi_key=%s&session_id=%s" % (url, TMDB_KEY, session_id)
-    url = url_base + "%sapi_key=%s" % (url, TMDB_KEY)
+    # url = URL_BASE + "%sapi_key=%s&session_id=%s" % (url, TMDB_KEY, session_id)
+    url = URL_BASE + "%sapi_key=%s" % (url, TMDB_KEY)
     global base_url
     global poster_size
     global fanart_size

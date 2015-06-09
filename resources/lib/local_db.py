@@ -70,14 +70,13 @@ def get_similar_movies_from_db(dbid):
     for item in json_response['result']['movies']:
         difference = abs(int(item['year']) - int(comp_movie['year']))
         hit = 0.0
-        miss = 0.0
+        miss = 0.00001
         quota = 0.0
         for genre in genres:
             if genre in item['genre']:
                 hit += 1.0
             else:
                 miss += 1.0
-        miss += 0.00001
         if hit > 0.0:
             quota = float(hit) / float(hit + miss)
         if genres and item['genre'] and genres[0] == item['genre'][0]:
