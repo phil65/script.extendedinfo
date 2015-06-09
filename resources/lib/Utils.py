@@ -954,33 +954,29 @@ def create_listitems(data=None, preload_images=0):
 
 
 def clean_text(text):
-    if text:
-        text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
-        text = text.replace('<br \/>', '[CR]')
-        text = re.sub('<(.|\n|\r)*?>', '', text)
-        text = text.replace('&quot;', '"')
-        text = text.replace('<em>', '[I]')
-        text = text.replace('</em>', '[/I]')
-        text = text.replace('&amp;', '&')
-        text = text.replace('&gt;', '>')
-        text = text.replace('&lt;', '<')
-        text = text.replace('&#39;', "'")
-        text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-        while text:
-            s = text[0]
-            e = text[-1]
-            if s == u'\u200b':
-                text = text[1:]
-            if text and e == u'\u200b':
-                text = text[:-1]
-            if s == " " or e == " ":
-                text = text.strip()
-            elif s == "." or e == ".":
-                text = text.strip(".")
-            elif s == "\n" or e == "\n":
-                text = text.strip("\n")
-            else:
-                break
-        return text.strip()
-    else:
+    if not text:
         return ""
+    text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
+    text = re.sub('<(.|\n|\r)*?>', '', text)
+    text = text.replace('<br \/>', '[CR]')
+    text = text.replace('<em>', '[I]').replace('</em>', '[/I]')
+    text = text.replace('&amp;', '&')
+    text = text.replace('&gt;', '>').replace('&lt;', '<')
+    text = text.replace('&#39;', "'").replace('&quot;', '"')
+    text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+    while text:
+        s = text[0]
+        e = text[-1]
+        if s == u'\u200b':
+            text = text[1:]
+        if text and e == u'\u200b':
+            text = text[:-1]
+        if s == " " or e == " ":
+            text = text.strip()
+        elif s == "." or e == ".":
+            text = text.strip(".")
+        elif s == "\n" or e == "\n":
+            text = text.strip("\n")
+        else:
+            break
+    return text.strip()
