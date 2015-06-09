@@ -46,6 +46,10 @@ msgctxt "#32003"
 msgid "Autocompletion language"
 msgstr ""
 
+msgctxt "#32004"
+msgid "Use autocompletion suggestions from Youtube"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Filmography"
 msgstr ""
