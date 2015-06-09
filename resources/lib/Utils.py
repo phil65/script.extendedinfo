@@ -409,10 +409,10 @@ def get_playlist_stats(path):
         start_index = path.find("videodb://")
         end_index = path.rfind("/") + 1
     if (start_index > 0) and (end_index > 0):
-        playlistpath = path[start_index:end_index]
-    #    notify(playlistpath)
-    #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlistpath))
-        json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlistpath)
+        playlist_path = path[start_index:end_index]
+    #    notify(playlist_path)
+    #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlist_path))
+        json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
         if "result" in json_response:
             played = 0
             in_progress = 0
@@ -845,23 +845,24 @@ def prettyprint(string):
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_id=10000):
     window = xbmcgui.Window(window_id)
-    if data is not None:
-        threads = []
-        image_requests = []
-        for (key, value) in data.iteritems():
-            value = unicode(value)
-            if precache:
-                if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                    if value not in image_requests and value:
-                        thread = GetFileThread(value)
-                        threads += [thread]
-                        thread.start()
-                        image_requests.append(value)
-            window.setProperty('%s%s' % (prefix, str(key)), value)
-            if debug:
-                log('%s%s' % (prefix, str(key)) + value)
-        for x in threads:
-            x.join()
+    if not data:
+        return None
+    threads = []
+    image_requests = []
+    for (key, value) in data.iteritems():
+        value = unicode(value)
+        if precache:
+            if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                if value not in image_requests and value:
+                    thread = GetFileThread(value)
+                    threads += [thread]
+                    thread.start()
+                    image_requests.append(value)
+        window.setProperty('%s%s' % (prefix, str(key)), value)
+        if debug:
+            log('%s%s' % (prefix, str(key)) + value)
+    for x in threads:
+        x.join()
 
 
 def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
@@ -902,54 +903,54 @@ def create_listitems(data=None, preload_images=0):
     FLOAT_INFOLABELS = ["rating"]
     STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
                          "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
+    if not data:
+        return []
     itemlist = []
-    # prettyprint(data)
-    if data is not None:
-        threads = []
-        image_requests = []
-        for (count, result) in enumerate(data):
-            listitem = xbmcgui.ListItem('%s' % (str(count)))
-            itempath = ""
-            for (key, value) in result.iteritems():
-                if not value:
-                    continue
-                value = unicode(value)
-                if count < preload_images:
-                    if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
-                        if value not in image_requests:
-                            thread = GetFileThread(value)
-                            threads += [thread]
-                            thread.start()
-                            image_requests.append(value)
-                if key.lower() in ["name", "label", "title"]:
-                    listitem.setLabel(value)
-                elif key.lower() in ["thumb"]:
-                    listitem.setThumbnailImage(value)
-                elif key.lower() in ["icon"]:
-                    listitem.setIconImage(value)
-                elif key.lower() in ["path"]:
-                    itempath = value
-                if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                    listitem.setArt({key.lower(): value})
-                    # log("key: " + unicode(key) + "  value: " + unicode(value))
-                if key.lower() in INT_INFOLABELS:
-                    try:
-                        listitem.setInfo('video', {key.lower(): int(value)})
-                    except:
-                        pass
-                if key.lower() in STRING_INFOLABELS:
-                    listitem.setInfo('video', {key.lower(): value})
-                if key.lower() in FLOAT_INFOLABELS:
-                    try:
-                        listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
-                    except:
-                        pass
-                listitem.setProperty('%s' % (key), value)
-            listitem.setPath(path=itempath)
-            listitem.setProperty("index", str(count))
-            itemlist.append(listitem)
-        for x in threads:
-            x.join()
+    threads = []
+    image_requests = []
+    for (count, result) in enumerate(data):
+        listitem = xbmcgui.ListItem('%s' % (str(count)))
+        itempath = ""
+        for (key, value) in result.iteritems():
+            if not value:
+                continue
+            value = unicode(value)
+            if count < preload_images:
+                if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                    if value not in image_requests:
+                        thread = GetFileThread(value)
+                        threads += [thread]
+                        thread.start()
+                        image_requests.append(value)
+            if key.lower() in ["name", "label", "title"]:
+                listitem.setLabel(value)
+            elif key.lower() in ["thumb"]:
+                listitem.setThumbnailImage(value)
+            elif key.lower() in ["icon"]:
+                listitem.setIconImage(value)
+            elif key.lower() in ["path"]:
+                itempath = value
+            if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                listitem.setArt({key.lower(): value})
+                # log("key: " + unicode(key) + "  value: " + unicode(value))
+            if key.lower() in INT_INFOLABELS:
+                try:
+                    listitem.setInfo('video', {key.lower(): int(value)})
+                except:
+                    pass
+            if key.lower() in STRING_INFOLABELS:
+                listitem.setInfo('video', {key.lower(): value})
+            if key.lower() in FLOAT_INFOLABELS:
+                try:
+                    listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
+                except:
+                    pass
+            listitem.setProperty('%s' % (key), value)
+        listitem.setPath(path=itempath)
+        listitem.setProperty("index", str(count))
+        itemlist.append(listitem)
+    for x in threads:
+        x.join()
     return itemlist
 
 
