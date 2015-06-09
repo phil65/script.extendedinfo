@@ -63,11 +63,9 @@ def send_rating_for_media_item(media_type, media_id, rating):
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id_string)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id_string)
-    log(url)
     request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    # prettyprint(results)
     notify(ADDON_NAME, results["status_message"])
 
 
@@ -76,11 +74,9 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     account_id = get_account_info()
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
     url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), str(session_id), TMDB_KEY)
-    log(url)
     request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    # prettyprint(results)
     notify(ADDON_NAME, results["status_message"])
 
 
@@ -91,7 +87,6 @@ def create_list(list_name):
     request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
-    # prettyprint(results)
     notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
@@ -100,7 +95,6 @@ def remove_list(list_id):
     session_id = get_session_id()
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     log("Remove List: " + url)
-    # prettyprint(results)
     values = {'media_id': list_id}
     request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
     request.get_method = lambda: 'DELETE'
@@ -142,7 +136,6 @@ def get_account_lists(cache_time=0):
 def get_account_info():
     session_id = get_session_id()
     response = get_tmdb_data("account?session_id=%s&" % session_id, 999999)
-    # prettyprint(response)
     if "id" in response:
         return response["id"]
     else:
@@ -159,7 +152,6 @@ def get_certification_list(media_type):
 
 def get_guest_session_id():
     response = get_tmdb_data("authentication/guest_session/new?", 999999)
-    # prettyprint(response)
     if "guest_session_id" in response:
         return response["guest_session_id"]
     else:
@@ -169,7 +161,6 @@ def get_guest_session_id():
 def get_session_id():
     request_token = auth_request_token()
     response = get_tmdb_data("authentication/session/new?request_token=%s&" % request_token, 99999)
-    # prettyprint(response)
     if response and "success" in response:
         pass_dict_to_skin({"tmdb_logged_in": "true"})
         return response["session_id"]
@@ -181,7 +172,6 @@ def get_session_id():
 
 def get_request_token():
     response = get_tmdb_data("authentication/token/new?", 999999)
-    # prettyprint(response)
     return response["request_token"]
 
 
@@ -190,7 +180,6 @@ def auth_request_token():
     username = ADDON.getSetting("tmdb_username")
     password = ADDON.getSetting("tmdb_password")
     response = get_tmdb_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 999999)
-    # prettyprint(response)
     if "success" in response and response["success"]:
         return response["request_token"]
     else:
@@ -470,16 +459,16 @@ def search_company(company_name):
     try:
         return response["results"]
     except:
-        log("could not find company ID")
+        log("Could not find company ID for %s" % company_name)
         return ""
 
 
-def multi_search(String):
-    response = get_tmdb_data("search/multi?query=%s&" % url_quote(String), 1)
+def multi_search(search_string):
+    response = get_tmdb_data("search/multi?query=%s&" % url_quote(search_string), 1)
     if response and "results" in response:
         return response["results"]
     else:
-        log("Error when searching")
+        log("Error when searching for %s" % search_string)
         return ""
 
 
@@ -541,7 +530,6 @@ def get_tmdb_data(url="", cache_days=14, folder=False):
 def get_tmdb_config():
     return ("http://image.tmdb.org/t/p/", "w500", "w1280")
     response = get_tmdb_data("configuration?", 60)
-    # prettyprint(response)
     if response:
         return (response["images"]["base_url"], response["images"]["POSTER_SIZES"][-2], response["images"]["BACKDROP_SIZES"][-2])
     else:
@@ -660,8 +648,7 @@ def GetTrailer(movie_id=None):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
-        youtube_id = response['videos']['results'][0]['key']
-        return youtube_id
+        return response['videos']['results'][0]['key']
     notify("Could not get trailer")
     return ""
 
@@ -673,15 +660,14 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         session_string = ""
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
-    # prettyprint(response)
+    if not response:
+        notify("Could not get movie information")
+        return {}
     authors = []
     directors = []
     mpaa = ""
     set_name = ""
     set_id = ""
-    if not response:
-        notify("Could not get movie information")
-        return {}
     genres = [item["name"] for item in response["genres"]]
     Studio = [item["name"] for item in response["production_companies"]]
     for item in response['credits']['crew']:
@@ -917,12 +903,18 @@ def get_fav_items(media_type):
 
 
 def get_movies_from_list(list_id, cache_time=5):
+    '''
+    get movie dict list from tmdb list.
+    '''
+
     response = get_tmdb_data("list/%s?language=%s&" % (str(list_id), ADDON.getSetting("LanguageID")), cache_time)
-    #  prettyprint(response)
     return handle_tmdb_movies(response["items"], False, None)
 
 
 def get_popular_actors():
+    '''
+    get dict list containing popular actors / directors / writers
+    '''
     response = get_tmdb_data("person/popular?", 1)
     return handle_tmdb_people(response["results"])
 
@@ -936,6 +928,9 @@ def get_actor_credits(actor_id, media_type):
 
 
 def get_keywords(movie_id):
+    '''
+    get dict list containing movie keywords
+    '''
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     keywords = []
@@ -948,12 +943,17 @@ def get_keywords(movie_id):
 
 
 def get_similar_movies(movie_id):
+    '''
+    get dict list containing movies similar to *movie_id
+    '''
+
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 10)
     if "similar" in response:
         return handle_tmdb_movies(response["similar"]["results"])
     else:
         log("No JSON Data available")
+        return []
 
 
 def get_similar_tvshows(tvshow_id):
@@ -966,6 +966,7 @@ def get_similar_tvshows(tvshow_id):
         return handle_tmdb_tvshows(response["similar"]["results"])
     else:
         log("No JSON Data available")
+        return []
 
 
 def get_tmdb_shows(tvshow_type):
@@ -975,6 +976,7 @@ def get_tmdb_shows(tvshow_type):
     else:
         log("No JSON Data available for get_tmdb_shows(%s)" % tvshow_type)
         log(response)
+        return []
 
 
 def get_tmdb_movies(movie_type):
@@ -984,6 +986,7 @@ def get_tmdb_movies(movie_type):
     else:
         log("No JSON Data available for get_tmdb_movies(%s)" % movie_type)
         log(response)
+        return []
 
 
 def get_set_movies(set_id):
@@ -1009,6 +1012,7 @@ def get_person_movies(person_id):
         return handle_tmdb_movies(response["crew"])
     else:
         log("No JSON Data available")
+        return []
 
 
 def search_media(media_name=None, year='', media_type="movie"):
@@ -1023,6 +1027,7 @@ def search_media(media_name=None, year='', media_type="movie"):
                         return item['id']
         except Exception as e:
             log(e)
+    return None
 
 
 class Get_Youtube_Vids_Thread(threading.Thread):
