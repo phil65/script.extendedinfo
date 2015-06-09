@@ -354,13 +354,13 @@ def handle_tmdb_seasons(results):
         season_number = str(fetch(season, 'season_number'))
         artwork = get_image_urls(poster=season.get("poster_path"))
         if season_number == "0":
-            Title = "Specials"
+            title = "Specials"
         else:
-            Title = "Season %s" % season_number
+            title = "Season %s" % season_number
         listitem = {'Art(poster)': artwork.get("poster", ""),
                     'Poster': artwork.get("poster", ""),
                     'Thumb': artwork.get("poster_small", ""),
-                    'Title': Title,
+                    'Title': title,
                     'Season': season_number,
                     'air_date': fetch(season, 'air_date'),
                     'Year': get_year(fetch(season, 'air_date')),
@@ -587,14 +587,14 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     return images
 
 
-def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
+def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
     if not tmdb_tvshow_id:
-        response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
+        response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow_name), ADDON.getSetting("LanguageID")), 30)
         if response["results"]:
             tmdb_tvshow_id = str(response['results'][0]['id'])
         else:
-            tvshowname = re.sub('\(.*?\)', '', tvshowname)
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshowname), ADDON.getSetting("LanguageID")), 30)
+            tvshow_name = re.sub('\(.*?\)', '', tvshow_name)
+            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow_name), ADDON.getSetting("LanguageID")), 30)
             if response["results"]:
                 tmdb_tvshow_id = str(response['results'][0]['id'])
     response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 7)
@@ -613,7 +613,7 @@ def extended_season_info(tmdb_tvshow_id, tvshowname, season_number):
         title = "Season %s" % season_number
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
-              'TVShowTitle': tvshowname,
+              'TVShowTitle': tvshow_name,
               'Thumb': artwork.get("poster_small", ""),
               'Poster': artwork.get("poster", ""),
               'Title': title,
