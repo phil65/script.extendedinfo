@@ -86,7 +86,10 @@ class DialogEpisodeInfo(DialogBaseInfo):
                 send_rating_for_media_item("episode", identifier, rating)
                 self.update_states()
         elif control_id == 6006:
-            self.show_rated_episodes()
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            listitems = get_rated_media_items("tv/episodes")
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.open_video_list(listitems=listitems)
 
     def update_states(self, forceupdate=True):
         if forceupdate:
@@ -106,9 +109,3 @@ class DialogEpisodeInfo(DialogBaseInfo):
                 self.window.setProperty("movie.rated", "")
             # self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
             # notify(str(self.data["account_states"]["rated"]["value"]))
-
-    def show_rated_episodes(self):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = get_rated_media_items("tv/episodes")
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        self.open_video_list(listitems=listitems)

@@ -148,12 +148,6 @@ class DialogVideoInfo(DialogBaseInfo):
                 pop_window_stack()
             else:
                 notify(ADDON.getLocalizedString(32052))
-        # elif control_id in [8]:
-        #     add_to_window_stack(self)
-        #     self.close()
-        #     listitem = create_listitems([self.data["general"]])[0]
-        #     self.movieplayer.play(item=self.data["general"]['FilenameAndPath'], listitem=listitem)
-        #     self.movieplayer.wait_for_video_end()
         elif control_id == 550:
             company_id = control.getSelectedItem().getProperty("id")
             company_name = control.getSelectedItem().getLabel()
