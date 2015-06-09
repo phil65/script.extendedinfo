@@ -141,6 +141,10 @@ def get_autocomplete_items(search_string):
 
 
 def widget_selectdialog(filter=None, string_prefix="widget"):
+    """
+    show dialog including all video media lists (for widget selection)
+    and set strings PREFIX.path and PREFIX.label with chosen values
+    """
     # rottentomatoes
     movie = {"intheaters": "RottenTomatoes: In theaters",
              "boxoffice": "RottenTomatoes: Box office",
@@ -245,8 +249,8 @@ class TextViewerDialog(xbmcgui.WindowXMLDialog):
         self.color = kwargs.get('color')
 
     def onInit(self):
-        windowid = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(windowid).setProperty("WindowColor", self.color)
+        window_id = xbmcgui.getCurrentWindowDialogId()
+        xbmcgui.Window(window_id).setProperty("WindowColor", self.color)
         self.getControl(1).setLabel(self.header)
         self.getControl(5).setText(self.text)
 
@@ -426,6 +430,10 @@ def get_playlist_stats(path):
 
 
 def get_sort_letters(path, focused_letter):
+    """
+    create string including all sortletters
+    and put it into home window property "LetterList"
+    """
     listitems = []
     letter_list = []
     HOME.clearProperty("LetterList")
@@ -539,6 +547,10 @@ def get_year(year_string):
 
 
 def fetch_musicbrainz_id(artist, artist_id=-1):
+    """
+    fetches MusicBrainz ID for given *artist and returns it
+    uses musicbrainz.org
+    """
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
     results = get_JSON_response(base_url + url, 30)
@@ -550,6 +562,9 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
 
 
 def get_http(url=None, headers=False):
+    """
+    fetches data from *url, returns it as a string
+    """
     succeed = 0
     if not headers:
         headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
@@ -569,6 +584,9 @@ def get_http(url=None, headers=False):
 
 
 def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
+    """
+    get JSON response for *url, makes use of prop and file cache.
+    """
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
@@ -756,6 +774,9 @@ def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", 
 
 
 def save_to_file(content, filename, path=""):
+    """
+    dump json and save to *filename in *path
+    """
     if path == "":
         text_file_path = get_browse_dialog() + filename + ".txt"
     else:
@@ -790,14 +811,9 @@ def read_from_file(path="", raw=False):
 
 
 def convert_youtube_url(raw_string):
-    if raw_string and 'youtube.com/v' in raw_string:
-        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
-        for id in vid_ids:
-            return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
-    if raw_string and 'youtube.com/watch' in raw_string:
-        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
-        for id in vid_ids:
-            return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % id
+    youtube_id = extract_youtube_id(raw_string)
+    if youtube_id:
+        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % youtube_id
     return ""
 
 

@@ -338,10 +338,10 @@ class DialogVideoInfo(DialogBaseInfo):
 
 class JoinOmdbThread(threading.Thread):
 
-    def __init__(self, omdb_thread, windowid):
+    def __init__(self, omdb_thread, window_id):
         threading.Thread.__init__(self)
         self.omdb_thread = omdb_thread
-        self.window_id = windowid
+        self.window_id = window_id
 
     def run(self):
         self.omdb_thread.join()
