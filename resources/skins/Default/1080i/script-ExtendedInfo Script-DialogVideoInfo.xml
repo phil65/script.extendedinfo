@@ -319,7 +319,7 @@
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
                                 <visible>IsEmpty(Window.Property(tmdb_logged_in))</visible>
-                                <visible>!StringCompare(Window.Property(type),season)</visible>
+                                <visible>!StringCompare(Window.Property(type),season) + !StringCompare(Window.Property(type),TVShow)</visible>
                             </control>
                             <control type="radiobutton" id="100">
                                 <width>280</width>
