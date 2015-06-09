@@ -159,7 +159,7 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(185), text=text, color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=text, color=self.data["general"]['ImageColor'])
             w.doModal()
         elif control_id == 950:
             keyword_id = control.getSelectedItem().getProperty("id")
