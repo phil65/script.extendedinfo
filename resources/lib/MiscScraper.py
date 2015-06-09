@@ -14,7 +14,7 @@ import datetime
 BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
 
 
-def GetXKCDInfo():
+def get_xkcd_images():
     now = datetime.datetime.now()
     filename = "xkcd" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
@@ -40,7 +40,7 @@ def GetXKCDInfo():
         return items
 
 
-def GetCandHInfo():
+def get_cyanide_images():
     now = datetime.datetime.now()
     filename = "cyanide" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
@@ -64,7 +64,7 @@ def GetCandHInfo():
         return items
 
 
-def GetDailyBabes(single=False):
+def get_babe_images(single=False):
     now = datetime.datetime.now()
     if single is True:
         filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
@@ -93,7 +93,7 @@ def GetDailyBabes(single=False):
         return items
 
 
-def HandleBandsInTownResult(results):
+def handle_bandsintown_events(results):
     events = []
     for event in results:
         try:
@@ -114,32 +114,32 @@ def HandleBandsInTownResult(results):
                      'artists': artists}
             events.append(event)
         except Exception as e:
-            log("Exception in HandleBandsInTownResult")
+            log("Exception in handle_bandsintown_events")
             log(e)
             prettyprint(event)
     return events
 
 
-def GetArtistNearEvents(Artists):  # not possible with api 2.0
-    ArtistStr = ''
+def get_artist_near_events(artists):  # not possible with api 2.0
+    artist_str = ''
     count = 0
-    for art in Artists:
+    for art in artists:
         artist = art['artist']
         try:
             artist = urllib.quote(artist)
         except:
             artist = urllib.quote(artist.encode("utf-8"))
         if count < 49:
-            if len(ArtistStr) > 0:
-                ArtistStr = ArtistStr + '&'
-            ArtistStr = ArtistStr + 'artists[]=' + artist
+            if len(artist_str) > 0:
+                artist_str = artist_str + '&'
+            artist_str = artist_str + 'artists[]=' + artist
             count += 1
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
-    url = '&%sapp_id=%s' % (ArtistStr, BANDSINTOWN_KEY)
+    url = '&%sapp_id=%s' % (artist_str, BANDSINTOWN_KEY)
     results = get_JSON_response(base_url + url, folder="BandsInTown")
     if results:
-        return HandleBandsInTownResult(results)
+        return handle_bandsintown_events(results)
     else:
-        log("GetArtistNearEvents: Could not get data from " + url)
+        log("get_artist_near_events: Could not get data from " + url)
         log(results)
         return []

@@ -27,17 +27,17 @@ def StartInfoActions(infos, params):
         data = []
         #  Images
         if info == 'xkcd':
-            from MiscScraper import GetXKCDInfo
-            data = GetXKCDInfo(), "XKCD"
+            from MiscScraper import get_xkcd_images
+            data = get_xkcd_images(), "XKCD"
         elif info == 'cyanide':
-            from MiscScraper import GetCandHInfo
-            data = GetCandHInfo(), "CyanideHappiness"
+            from MiscScraper import get_cyanide_images
+            data = get_cyanide_images(), "CyanideHappiness"
         elif info == 'dailybabes':
-            from MiscScraper import GetDailyBabes
-            data = GetDailyBabes(), "DailyBabes"
+            from MiscScraper import get_babe_images
+            data = get_babe_images(), "DailyBabes"
         elif info == 'dailybabe':
-            from MiscScraper import GetDailyBabes
-            data = GetDailyBabes(single=True), "DailyBabe"
+            from MiscScraper import get_babe_images
+            data = get_babe_images(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
             Discography = GetDiscography(params["artistname"])
@@ -321,8 +321,8 @@ def StartInfoActions(infos, params):
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = get_kodi_artists()
-            from MiscScraper import GetArtistNearEvents
-            data = GetArtistNearEvents(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
+            from MiscScraper import get_artist_near_events
+            data = get_artist_near_events(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
         # elif info == 'channels':
         #     channels = create_channel_list()
         elif info == 'favourites':
