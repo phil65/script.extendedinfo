@@ -182,12 +182,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             elif index == 0:
                 self.open_video_list(media_type="tv", mode="favorites")
             elif index == 1:
-                self.open_video_list(mode="rating", type="tv")
+                self.open_video_list(mode="rating", media_type="tv")
         elif control_id == 6003:
             change_fav_status(self.data["general"]["ID"], "tv", "true")
             self.update_states()
         elif control_id == 6006:
-            self.open_video_list(mode="rating", type="tv")
+            self.open_video_list(mode="rating", media_type="tv")
         elif control_id == 132:
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
             w.doModal()
