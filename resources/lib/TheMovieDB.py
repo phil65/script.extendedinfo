@@ -307,14 +307,10 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
 def handle_tmdb_episodes(results):
     listitems = []
     for item in results:
-        still_path = ""
-        still_path_small = ""
-        if "still_path" in item and item["still_path"]:
-            still_path = base_url + "original" + item['still_path']
-            still_path_small = base_url + "w300" + item['still_path']
-        listitem = {'Art(poster)': still_path,
-                    'Poster': still_path,
-                    'Thumb': still_path_small,
+        artwork = get_image_urls(still=item.get("still_path"))
+        listitem = {'Art(poster)': artwork.get("still", ""),
+                    'Poster': artwork.get("still", ""),
+                    'Thumb': artwork.get("still_small", ""),
                     'Title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
