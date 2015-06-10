@@ -9,12 +9,15 @@ from Utils import *
 from TheMovieDB import *
 
 
-class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXML):
+class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        if ADDON.getSetting("window_mode") == "true":
+            xbmcgui.WindowXML.__init__(self)
+        else:
+            xbmcgui.WindowXMLDialog.__init__(self)
         self.listitem_list = kwargs.get('listitems', None)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
@@ -24,10 +27,10 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
 
     def onInit(self):
         HOME.setProperty("WindowColor", self.color)
-        if not ADDON.getSetting("window_mode") == "true":
-            self.window_id = xbmcgui.getCurrentWindowDialogId()
-        else:
+        if ADDON.getSetting("window_mode") == "true":
             self.window_id = xbmcgui.getCurrentWindowId()
+        else:
+            self.window_id = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("WindowColor", self.color)
         self.window.setProperty("layout", self.layout)
@@ -148,22 +151,25 @@ class DialogBaseList(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mod
             self.filters.append(new_filter)
 
 
-class DialogBaseInfo(xbmcgui.WindowXMLDialog if not ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXML):
+class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
+        if ADDON.getSetting("window_mode") == "true":
+            xbmcgui.WindowXML.__init__(self)
+        else:
+            xbmcgui.WindowXMLDialog.__init__(self)
         self.logged_in = check_login()
         self.movieplayer = VideoPlayer(pop_stack=True)
         self.data = None
         check_version()
 
     def onInit(self, *args, **kwargs):
-        if not ADDON.getSetting("window_mode") == "true":
-            self.window_id = xbmcgui.getCurrentWindowDialogId()
-        else:
+        if ADDON.getSetting("window_mode") == "true":
             self.window_id = xbmcgui.getCurrentWindowId()
+        else:
+            self.window_id = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         if not self.data:
