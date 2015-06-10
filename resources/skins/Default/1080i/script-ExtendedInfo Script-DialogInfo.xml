@@ -16,6 +16,7 @@
                 <width>729</width>
                 <height>1080</height>
                 <aspectratio aligny="top">scale</aspectratio>
+                <fadetime>300</fadetime>
                 <texture>$INFO[Window.Property(actor.thumb)]</texture>
             </control>
         </control>
@@ -30,7 +31,7 @@
                 <width>1950</width>
                 <height>1080</height>
                 <aspectratio align="center">scale</aspectratio>
-                <texture fallback="common/black.png" background="true">$INFO[Window.Property(actor.ImageFilter)]</texture>
+                <texture fallback="common/black.png">$INFO[Window.Property(actor.ImageFilter)]</texture>
             </control>
             <control type="image">
                 <posx>729</posx>
