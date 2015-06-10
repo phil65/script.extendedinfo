@@ -13,7 +13,7 @@ from BaseClasses import DialogBaseList
 class DialogYoutubeList(DialogBaseList):
 
     def __init__(self, *args, **kwargs):
-        super(DialogYoutubeList, self).__init__()
+        super(DialogYoutubeList, self).__init__(*args, **kwargs)
         self.layout = "landscape"
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.type = kwargs.get('type', "movie")

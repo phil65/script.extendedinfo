@@ -147,7 +147,7 @@ class DialogVideoList(DialogBaseList):
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
-        super(DialogVideoList, self).__init__()
+        super(DialogVideoList, self).__init__(*args, **kwargs)
         self.layout = "poster"
         self.type = kwargs.get('type', "movie")
         self.search_string = kwargs.get('search_string', "")
