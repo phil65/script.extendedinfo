@@ -412,7 +412,7 @@ def StartInfoActions(infos, params):
             pass
         elif info == "widgetdialog":
             widget_selectdialog()
-        data, prefix = data
+        listitems, prefix = data
         if params.get("handle"):
             if info.endswith("shows"):
                 xbmcplugin.setContent(params.get("handle"), 'tvshows')
@@ -425,5 +425,5 @@ def StartInfoActions(infos, params):
                 xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
                 xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
-        pass_list_to_skin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
+        pass_list_to_skin(prefix, listitems, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
 
