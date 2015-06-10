@@ -3016,7 +3016,7 @@
                                     <font>font10</font>
                                 </control>
                             </control>
-                            <control type="group" id="3300">
+                            <control type="group">
                                 <posx>0</posx>
                                 <width>220</width>
                                 <visible>!IsEmpty(Window.Property(movie.Revenue))</visible>
@@ -3043,7 +3043,38 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label>Revenue</label>
+                                    <label>$ADDON[script.extendedinfo 32108]</label>
+                                    <font>font10</font>
+                                </control>
+                            </control>
+                            <control type="group">
+                                <posx>0</posx>
+                                <width>180</width>
+                                <visible>Stringcompare(Window.Property(type),Season)</visible>
+                                <control type="image">
+                                    <posx>0</posx>
+                                    <posy>1</posy>
+                                    <height>79</height>
+                                    <width>2</width>
+                                    <texture>info/upright.png</texture>
+                                </control>
+                                <control type="label">
+                                    <posx>0</posx>
+                                    <posy>12</posy>
+                                    <width>220</width>
+                                    <height>38</height>
+                                    <align>center</align>
+                                    <label fallback="?">$INFO[Container(2000).NumItems]</label>
+                                    <font>font14</font>
+                                </control>
+                                <control type="label">
+                                    <posx>0</posx>
+                                    <posy>37</posy>
+                                    <width>220</width>
+                                    <height>38</height>
+                                    <align>center</align>
+                                    <aligny>center</aligny>
+                                    <label>$LOCALIZE[20453]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
