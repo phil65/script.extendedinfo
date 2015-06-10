@@ -62,6 +62,10 @@ msgctxt "#32007"
 msgid "Use as fanart"
 msgstr ""
 
+msgctxt "#32008"
+msgid "Autocompletion"
+msgstr ""
+
 msgctxt "#32010"
 msgid "Filmography"
 msgstr ""
