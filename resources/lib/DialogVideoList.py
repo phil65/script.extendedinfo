@@ -50,17 +50,17 @@ class T9Search(xbmcgui.WindowXMLDialog):
             self.get_autocomplete_labels()
         self.classic_mode = False
         self.update_search_label()
-        keys = (("1", "ABC"),
-                ("2", "DEF"),
-                ("3", "GHI"),
-                ("4", "JKL"),
-                ("5", "MNO"),
-                ("6", "PQR"),
-                ("7", "STU"),
-                ("8", "VWX"),
-                ("9", "YZ"),
+        keys = (("1", "ABC1"),
+                ("2", "DEF2"),
+                ("3", "GHI3"),
+                ("4", "JKL4"),
+                ("5", "MNO5"),
+                ("6", "PQR6"),
+                ("7", "STU7"),
+                ("8", "VWX8"),
+                ("9", "YZ90"),
                 ("DEL", "<--"),
-                ("0", "___"),
+                ("", "___"),
                 ("KEYB", "CLASSIC"))
         key_dict = collections.OrderedDict(keys)
         listitems = []
@@ -92,7 +92,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
             if number == "DEL":
                 if self.search_string:
                     self.search_string = self.search_string[:-1]
-            elif number == "0":
+            elif number == "":
                 if self.search_string:
                     self.search_string += " "
             elif number == "KEYB":
