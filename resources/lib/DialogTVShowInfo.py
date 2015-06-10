@@ -11,7 +11,6 @@ from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
 import DialogActorInfo
-import DialogVideoList
 import DialogSeasonInfo
 from BaseClasses import DialogBaseInfo
 
