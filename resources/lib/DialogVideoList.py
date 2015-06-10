@@ -538,11 +538,13 @@ class DialogVideoList(DialogBaseList):
                 session_id = get_session_id()
                 if not session_id:
                     notify("Could not get session id")
+                    return []
                 url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sort_by)
             else:
                 session_id = get_guest_session_id()
                 if not session_id:
                     notify("Could not get session id")
+                    return []
                 url = "guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID"))
             self.filter_label = rated
         else:

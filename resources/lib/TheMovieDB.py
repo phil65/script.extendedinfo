@@ -75,6 +75,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
     if not session_id:
         notify("Could not get session id")
+        return None
     url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), session_id, TMDB_KEY)
     request = Request(url, data=values, headers=HEADERS)
     response = urlopen(request).read()
@@ -878,11 +879,13 @@ def get_rated_media_items(media_type):
         account_id = get_account_info()
         if not session_id:
             notify("Could not get session id")
+            return []
         response = get_tmdb_data("account/%s/rated/%s?session_id=%s&language=%s&" % (str(account_id), media_type, session_id, ADDON.getSetting("LanguageID")), 0)
     else:
         session_id = get_guest_session_id()
         if not session_id:
             notify("Could not get session id")
+            return []
         response = get_tmdb_data("guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID")), 0)
     if media_type == "tv/episodes":
         return handle_tmdb_episodes(response["results"])
@@ -898,6 +901,7 @@ def get_fav_items(media_type):
     account_id = get_account_info()
     if not session_id:
         notify("Could not get session id")
+        return []
     response = get_tmdb_data("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, session_id, ADDON.getSetting("LanguageID")), 0)
     if "results" in response:
         if media_type == "tv":
