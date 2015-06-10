@@ -24,7 +24,7 @@ def StartInfoActions(infos, params):
     if "imdbid" in params and "imdb_id" not in params:
         params["imdb_id"] = params["imdbid"]
     for info in infos:
-        data = []
+        data = [], ""
         #  Images
         if info == 'xkcd':
             from MiscScraper import get_xkcd_images
@@ -412,19 +412,18 @@ def StartInfoActions(infos, params):
             pass
         elif info == "widgetdialog":
             widget_selectdialog()
-        if data:
-            data, prefix = data
-            if params.get("handle"):
-                if info.endswith("shows"):
-                    xbmcplugin.setContent(params.get("handle"), 'tvshows')
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
+        data, prefix = data
+        if params.get("handle"):
+            if info.endswith("shows"):
+                xbmcplugin.setContent(params.get("handle"), 'tvshows')
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
 
-                else:
-                    xbmcplugin.setContent(params.get("handle"), 'movies')
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                    xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
-            pass_list_to_skin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
+            else:
+                xbmcplugin.setContent(params.get("handle"), 'movies')
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
+        pass_list_to_skin(prefix, data, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
 

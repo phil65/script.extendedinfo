@@ -169,6 +169,7 @@ def get_common_words_autocomplete_items(search_string):
                     break
     return listitems
 
+
 def widget_selectdialog(filter=None, string_prefix="widget"):
     """
     show dialog including all video media lists (for widget selection)
@@ -897,10 +898,10 @@ def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
         HOME.clearProperty(name)
         if data:
             HOME.setProperty(name + ".Count", str(len(data)))
-            items = create_listitems(data)
-            for item in items:
+            if data:
+                items = create_listitems(data)
                 itemlist = [(item.getProperty("path"), item, bool(item.getProperty("directory"))) for item in items]
-            xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
+                xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
             xbmcplugin.endOfDirectory(handle)
     else:
         set_window_props(name, data, prefix)
