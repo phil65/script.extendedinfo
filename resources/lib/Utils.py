@@ -17,6 +17,7 @@ import simplejson
 import re
 import threading
 import datetime
+import codecs
 from functools import wraps
 
 
@@ -125,12 +126,24 @@ def get_autocomplete_items(search_string):
     """
     get dict list with autocomplete labels from google
     """
+    if ADDON.getSetting("autocomplete_provider") == "youtube":
+        return get_google_autocomplete_items(search_string, True)
+    elif ADDON.getSetting("autocomplete_provider") == "google":
+        return get_google_autocomplete_items(search_string)
+    else:
+        return get_common_words_autocomplete_items(search_string)
+
+
+def get_google_autocomplete_items(search_string, youtube=False):
+    """
+    get dict list with autocomplete labels from google
+    """
     if not search_string:
         return []
     listitems = []
     headers = {'User-agent': 'Mozilla/5.0'}
     url = "http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (ADDON.getSetting("autocomplete_lang"), urllib.quote_plus(search_string))
-    if ADDON.getSetting("autocomplete_youtube") == "true":
+    if youtube:
         url += "&ds=yt"
     result = get_JSON_response(url, headers=headers, folder="Google")
     for item in result[1]:
@@ -139,6 +152,22 @@ def get_autocomplete_items(search_string):
         listitems.append(li)
     return listitems
 
+
+def get_common_words_autocomplete_items(search_string):
+    listitems = []
+    k = search_string.rfind(" ")
+    if k >= 0:
+        search_string = search_string[k + 1:]
+    path = os.path.join(ADDON_PATH, "resources", "data", "common_%s.txt" % ADDON.getSetting("autocomplete_lang_local"))
+    with codecs.open(path, encoding="utf8") as f:
+        for i, line in enumerate(f.readlines()):
+            if line.startswith(search_string) and len(line) > 3:
+                li = {"label": line,
+                      "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % line}
+                listitems.append(li)
+                if len(listitems) > 10:
+                    break
+    return listitems
 
 def widget_selectdialog(filter=None, string_prefix="widget"):
     """

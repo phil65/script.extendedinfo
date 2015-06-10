@@ -47,7 +47,7 @@ msgid "Autocompletion language"
 msgstr ""
 
 msgctxt "#32004"
-msgid "Use autocompletion suggestions from Youtube"
+msgid "Autocompletion provider"
 msgstr ""
 
 msgctxt "#32005"
