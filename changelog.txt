@@ -20,6 +20,8 @@ v3.0.0
 - fixed maps.browser call
 - fixed onclick for Trakt calendar items
 - put cache files into subdirectories
+- reworked settings
+- localization
 - Code cleanup
 
 v2.0.10
