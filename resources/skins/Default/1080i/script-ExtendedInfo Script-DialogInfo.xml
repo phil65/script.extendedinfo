@@ -897,7 +897,7 @@
                         </control>
                         <control type="image">
                             <posx>0</posx>
-                            <posy>200</posy>
+                            <posy>150</posy>
                             <width>28</width>
                             <height>28</height>
                             <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
@@ -907,7 +907,7 @@
                         </control>
                         <control type="image">
                             <posx>1883</posx>
-                            <posy>200</posy>
+                            <posy>150</posy>
                             <width>28</width>
                             <height>28</height>
                             <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
@@ -1013,6 +1013,26 @@
                             <font>font14</font>
                             <label>$ADDON[script.extendedinfo 32119]</label>
                         </control>
+                        <control type="image">
+                            <posx>0</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(450).HasPrevious + Control.HasFocus(450)</visible>
+                        </control>
+                        <control type="image">
+                            <posx>1883</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(450).HasNext + Control.HasFocus(450)</visible>
+                        </control>
                         <control type="panel" id="450">
                             <posy>30</posy>
                             <posx>-45</posx>
@@ -1092,6 +1112,26 @@
                             <aligny>center</aligny>
                             <font>font14</font>
                             <label>$LOCALIZE[20445]</label>
+                        </control>
+                        <control type="image">
+                            <posx>0</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(750).HasPrevious + Control.HasFocus(750)</visible>
+                        </control>
+                        <control type="image">
+                            <posx>1883</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(750).HasNext + Control.HasFocus(750)</visible>
                         </control>
                         <control type="panel" id="750">
                             <posy>30</posy>
