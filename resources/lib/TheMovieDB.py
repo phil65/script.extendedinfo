@@ -132,7 +132,7 @@ def get_account_lists(cache_time=0):
         response = get_tmdb_data("account/%s/lists?session_id=%s&" % (str(account_id), session_id), cache_time)
         return response["results"]
     else:
-        return False
+        return []
 
 
 def get_account_info():
@@ -149,7 +149,7 @@ def get_certification_list(media_type):
     if "certifications" in response:
         return response["certifications"]
     else:
-        return None
+        return []
 
 
 def get_guest_session_id():
