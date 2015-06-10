@@ -514,7 +514,7 @@ class DialogVideoList(DialogBaseList):
         self.mode = "filter"
 
     def fetch_data(self, force=False):
-        sortby = self.sort + "." + self.order
+        sort_by = self.sort + "." + self.order
         if self.type == "tv":
             temp = "tv"
             rated = ADDON.getLocalizedString(32145)
@@ -530,7 +530,7 @@ class DialogVideoList(DialogBaseList):
             url = "list/%s?language=%s&" % (str(self.list_id), ADDON.getSetting("LanguageID"))
             # self.filter_label = ADDON.getLocalizedString(32036)
         elif self.mode == "favorites":
-            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, get_session_id(), sortby)
+            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, get_session_id(), sort_by)
             self.filter_label = starred
         elif self.mode == "rating":
             force = True  # workaround, should be updated after setting rating
@@ -538,7 +538,7 @@ class DialogVideoList(DialogBaseList):
                 session_id = get_session_id()
                 if not session_id:
                     notify("Could not get session id")
-                url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sortby)
+                url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sort_by)
             else:
                 session_id = get_guest_session_id()
                 if not session_id:
@@ -548,7 +548,7 @@ class DialogVideoList(DialogBaseList):
         else:
             self.set_filter_url()
             self.set_filter_label()
-            url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sortby, self.filter_url, ADDON.getSetting("LanguageID"), self.page, include_adult)
+            url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, ADDON.getSetting("LanguageID"), self.page, include_adult)
         if force:
             response = get_tmdb_data(url, 0)
         else:
