@@ -225,10 +225,10 @@ class DialogVideoInfo(DialogBaseInfo):
                 self.open_video_list(mode="list", list_id=list_id, filter_label=list_title, force=True)
         elif control_id == 8:
             self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.data["general"]['DBID'], "false"))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['DBID']), "false"))
         elif control_id == 9:
             self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %i }, "options":{ "resume": %s } }, "id": 1 }' % (self.data["general"]['DBID'], "true"))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['DBID']), "true"))
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 132:
