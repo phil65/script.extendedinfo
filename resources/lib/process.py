@@ -40,21 +40,21 @@ def start_info_actions(infos, params):
             data = get_babe_images(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
-            Discography = GetDiscography(params["artistname"])
+            Discography = get_artist_discography(params["artistname"])
             if not Discography:
                 Discography = get_artist_albums(params.get("artist_mbid"))
             data = Discography, "Discography"
         elif info == 'mostlovedtracks':
             data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
         elif info == 'artistdetails':
-            ArtistDetails = GetArtistDetails(params["artistname"])
+            ArtistDetails = get_artist_details(params["artistname"])
             pass_dict_to_skin(ArtistDetails, params.get("prefix", ""))
             if "audiodbid" in ArtistDetails:
-                data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
+                data = get_musicvideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'musicvideos':
             pass
             # if "audiodbid" in ArtistDetails:
-            #     data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
+            #     data = get_musicvideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'albuminfo':
             if params.get("id", ""):
                 AlbumDetails = get_album_details(params.get("id", ""))
