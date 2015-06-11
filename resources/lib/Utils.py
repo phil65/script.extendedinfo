@@ -960,6 +960,7 @@ def create_listitems(data=None, preload_images=0):
                 listitem.setArt({key.lower(): value})
             elif key.lower() in ["path"]:
                 listitem.setPath(path=value)
+                listitem.setProperty('%s' % (key), value)
             elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key.lower(): value})
                 # log("key: " + unicode(key) + "  value: " + unicode(value))
@@ -975,7 +976,8 @@ def create_listitems(data=None, preload_images=0):
                     listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
                 except:
                     pass
-            listitem.setProperty('%s' % (key), value)
+            else:
+                listitem.setProperty('%s' % (key), value)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     for x in threads:
