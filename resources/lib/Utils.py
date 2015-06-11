@@ -247,6 +247,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.items = kwargs.get('listing')
         self.index = -1
+        self.type = None
 
     def onInit(self):
         self.list = self.getControl(6)
@@ -263,6 +264,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
     def onClick(self, control_id):
         if control_id == 6 or control_id == 3:
             self.index = int(self.list.getSelectedItem().getProperty("index"))
+            self.type = self.list.getSelectedItem().getProperty("media_type")
             self.close()
 
     def onFocus(self, control_id):

@@ -254,12 +254,12 @@ def StartInfoActions(infos, params):
                 notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
             if params.get("director", False):
-                director_id = get_person_id(params["director"], skip_dialog=True)["id"]
+                director_id = get_person_info(params["director"], skip_dialog=True)["id"]
                 if director_id:
                     data = get_person_movies(director_id), "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer", False) and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
-                writer_id = get_person_id(params["writer"], skip_dialog=True)["id"]
+                writer_id = get_person_info(params["writer"], skip_dialog=True)["id"]
                 if writer_id:
                     data = get_person_movies(writer_id), "WriterMovies"
         elif info == 'similarmoviestrakt':

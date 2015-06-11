@@ -452,7 +452,7 @@ class DialogVideoList(DialogBaseList):
     def get_actor(self):
         result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
-            response = get_person_id(result)
+            response = get_person_info(result)
             if result == -1:
                 return None
             self.add_filter("with_people", str(response["id"]), ADDON.getLocalizedString(32156), response["name"])

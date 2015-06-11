@@ -30,7 +30,7 @@ class DialogActorInfo(DialogBaseInfo):
             else:
                 name = names[0]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            self.id = get_person_id(name)
+            self.id = get_person_info(name)
             if self.id:
                 self.id = self.id["id"]
             else:
@@ -95,11 +95,19 @@ class DialogActorInfo(DialogBaseInfo):
                 listitems += handle_tmdb_episodes(info["media"]["episodes"])
                 w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
                 w.doModal()
-                import DialogEpisodeInfo
-                add_to_window_stack(self)
-                self.close()
-                dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=listitem.getProperty("id"))
-                dialog.doModal()
+                if w.type == "episode":
+                    import DialogEpisodeInfo
+                    add_to_window_stack(self)
+                    self.close()
+                    dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=listitem.getProperty("id"))
+                    dialog.doModal()
+                elif w.type == "season":
+                    import DialogSeasonInfo
+                    add_to_window_stack(self)
+                    self.close()
+                    prettyprint(listitems[w.index])
+                    dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], tvshow=listitem.getLabel())
+                    dialog.doModal()
             if selection == 1:
                 add_to_window_stack(self)
                 self.close()

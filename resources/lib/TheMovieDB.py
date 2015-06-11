@@ -302,6 +302,7 @@ def handle_tmdb_episodes(results):
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'Art(poster)': artwork.get("still", ""),
                     'Poster': artwork.get("still", ""),
+                    'media_type': "episode",
                     'thumb': artwork.get("still_small", ""),
                     'Title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
@@ -351,9 +352,10 @@ def handle_tmdb_seasons(results):
             title = "Season %s" % season_number
         listitem = {'Art(poster)': artwork.get("poster", ""),
                     'Poster': artwork.get("poster", ""),
+                    'media_type': "season",
                     'thumb': artwork.get("poster_small", ""),
                     'Title': title,
-                    'Season': season_number,
+                    'season': season_number,
                     'air_date': fetch(season, 'air_date'),
                     'year': get_year(fetch(season, 'air_date')),
                     'id': fetch(season, 'id')}
@@ -475,7 +477,7 @@ def multi_search(search_string):
         return ""
 
 
-def get_person_id(person_label, skip_dialog=False):
+def get_person_info(person_label, skip_dialog=False):
     persons = person_label.split(" / ")
     response = get_tmdb_data("search/person?query=%s&include_adult=%s&" % (url_quote(persons[0]), include_adult), 30)
     if response and "results" in response:

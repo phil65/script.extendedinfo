@@ -111,7 +111,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tmdb_id)
             dialog.doModal()
         elif control_id in [250]:
-            season = control.getSelectedItem().getProperty("Season")
+            season = control.getSelectedItem().getProperty("season")
             add_to_window_stack(self)
             self.close()
             dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]["Title"])

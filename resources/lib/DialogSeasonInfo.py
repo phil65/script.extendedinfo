@@ -20,9 +20,9 @@ class DialogSeasonInfo(DialogBaseInfo):
         super(DialogSeasonInfo, self).__init__(*args, **kwargs)
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
-        self.showname = kwargs.get('tvshow')
-        if self.tmdb_id or (self.season and self.showname):
-            self.data = extended_season_info(self.tmdb_id, self.showname, self.season)
+        self.tvshow = kwargs.get('tvshow')
+        if self.tmdb_id or (self.season and self.tvshow):
+            self.data = extended_season_info(self.tmdb_id, self.tvshow, self.season)
             if not self.data:
                 return
             search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]["Title"])
@@ -52,7 +52,7 @@ class DialogSeasonInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        self.window.setProperty("type", "Season")
+        self.window.setProperty("type", "season")
         pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
         self.fill_lists()
 
@@ -70,7 +70,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
-                response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.showname), ADDON.getSetting("LanguageID")), 30)
+                response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
             add_to_window_stack(self)
             self.close()
