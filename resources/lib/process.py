@@ -360,7 +360,6 @@ def StartInfoActions(infos, params):
             for i in range(0, numitems):
                 notify(item.getProperty("Image"))
         elif info == 'action':
-            log("hallo")
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
         elif info == 'selectautocomplete':
