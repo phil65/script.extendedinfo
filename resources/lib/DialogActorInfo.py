@@ -50,6 +50,14 @@ class DialogActorInfo(DialogBaseInfo):
             if "DBID" in item:
                 db_movies += 1
         self.data["general"]["DBMovies"] = str(db_movies)
+        # crew_id_list = []
+        # for item in self.data["movie_crew_roles"]:
+        #     if item["id"] not in crew_id_list:
+        #         crew_id_list.append(item["id"])
+        #         self.crew_list.append(item)
+        #     else:
+        #         index = crew_id_list.index(item["id"])
+        #         self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
         filter_thread.join()
         self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         youtube_thread.join()

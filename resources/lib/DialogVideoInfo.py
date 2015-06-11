@@ -78,7 +78,7 @@ class DialogVideoInfo(DialogBaseInfo):
             self.set_listitems = sets_thread.listitems
             self.setinfo = sets_thread.setinfo
             id_list = sets_thread.id_list
-            self.data["similar"] = [item for item in self.data["similar"] if item["ID"] not in id_list]
+            self.data["similar"] = [item for item in self.data["similar"] if item["id"] not in id_list]
             youtube_thread.join()
             youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
             filter_thread.join()
@@ -236,9 +236,9 @@ class DialogVideoInfo(DialogBaseInfo):
             w.doModal()
         elif control_id == 6003:
             if self.data["account_states"]["favorite"]:
-                change_fav_status(self.data["general"]["ID"], "movie", "false")
+                change_fav_status(self.data["general"]["id"], "movie", "false")
             else:
-                change_fav_status(self.data["general"]["ID"], "movie", "true")
+                change_fav_status(self.data["general"]["id"], "movie", "true")
             self.update_states()
         elif control_id == 6006:
             self.open_video_list(mode="rating")
@@ -271,13 +271,13 @@ class DialogVideoInfo(DialogBaseInfo):
         misc_lists = []
         id_list = [item["id"] for item in account_list]
         for item in lists:
-            if item["ID"] in id_list:
+            if item["id"] in id_list:
                 item["account"] = "True"
                 own_lists.append(item)
             else:
                 misc_lists.append(item)
-        # own_lists = [item for item in lists if item["ID"] in id_list]
-        # misc_lists = [item for item in lists if item["ID"] not in id_list]
+        # own_lists = [item for item in lists if item["id"] in id_list]
+        # misc_lists = [item for item in lists if item["id"] not in id_list]
         return own_lists + misc_lists
 
     def update_states(self, forceupdate=True):
@@ -358,7 +358,7 @@ class SetItemsThread(threading.Thread):
     def run(self):
         if self.set_id:
             self.listitems, self.setinfo = get_set_movies(self.set_id)
-            self.id_list = [item["ID"] for item in self.listitems]
+            self.id_list = [item["id"] for item in self.listitems]
         else:
             self.id_list = []
             self.listitems = []

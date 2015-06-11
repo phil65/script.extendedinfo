@@ -183,7 +183,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             elif index == 1:
                 self.open_video_list(mode="rating", media_type="tv")
         elif control_id == 6003:
-            change_fav_status(self.data["general"]["ID"], "tv", "true")
+            change_fav_status(self.data["general"]["id"], "tv", "true")
             self.update_states()
         elif control_id == 6006:
             self.open_video_list(mode="rating", media_type="tv")

@@ -768,7 +768,7 @@ def get_icon_panel(number):
         newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Label)").decode("utf-8"),
                    'path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
                    'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
-                   'ID': "IconPanelitem" + str(i + offset).decode("utf-8"),
+                   'id': "IconPanelitem" + str(i + offset).decode("utf-8"),
                    'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Type)").decode("utf-8")}
         items.append(newitem)
     return items

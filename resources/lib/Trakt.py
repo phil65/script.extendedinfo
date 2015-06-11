@@ -81,7 +81,7 @@ def handle_trakt_movies(results):
                  'Tagline': movie["movie"]["tagline"],
                  'Trailer': convert_youtube_url(movie["movie"]["trailer"]),
                  'year': movie["movie"]["year"],
-                 'ID': movie["movie"]["ids"]["tmdb"],
+                 'id': movie["movie"]["ids"]["tmdb"],
                  'imdb_id': movie["movie"]["ids"]["imdb"],
                  'path': path,
                  'mpaa': movie["movie"]["certification"],

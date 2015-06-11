@@ -229,7 +229,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'Title': fetch(movie, 'title'),
                     'Label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
-                    'ID': tmdb_id,
+                    'id': tmdb_id,
                     'path': path,
                     'media_type': "movie",
                     'country': fetch(movie, 'original_language'),
@@ -275,7 +275,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'TVShowTitle': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
-                 'ID': tmdb_id,
+                 'id': tmdb_id,
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
                  'year': get_year(fetch(tv, 'first_air_date')),
@@ -310,7 +310,7 @@ def handle_tmdb_episodes(results):
                     'season': fetch(item, 'season_number'),
                     'Rating': fetch(item, 'vote_average'),
                     'Votes': fetch(item, 'vote_count'),
-                    'ID': fetch(item, 'id'),
+                    'id': fetch(item, 'id'),
                     'Description': clean_text(fetch(item, 'overview'))}
         listitems.append(listitem)
     return listitems
@@ -333,7 +333,7 @@ def handle_tmdb_misc(results):
                     'iso_3166_1': fetch(item, 'iso_3166_1'),
                     'author': fetch(item, 'author'),
                     'content': clean_text(fetch(item, 'content')),
-                    'ID': fetch(item, 'id'),
+                    'id': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
                     'Description': clean_text(fetch(item, 'description'))}
         listitems.append(listitem)
@@ -356,7 +356,7 @@ def handle_tmdb_seasons(results):
                     'Season': season_number,
                     'air_date': fetch(season, 'air_date'),
                     'year': get_year(fetch(season, 'air_date')),
-                    'ID': fetch(season, 'id')}
+                    'id': fetch(season, 'id')}
         listitems.append(listitem)
     return listitems
 
@@ -372,7 +372,7 @@ def handle_tmdb_videos(results):
                     'key': fetch(item, 'key'),
                     'youtube_id': fetch(item, 'key'),
                     'site': fetch(item, 'site'),
-                    'ID': fetch(item, 'id'),
+                    'id': fetch(item, 'id'),
                     'size': fetch(item, 'size')}
         listitems.append(listitem)
     return listitems
@@ -705,7 +705,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Homepage': fetch(response, 'homepage'),
              'Set': set_name,
              'SetId': set_id,
-             'ID': fetch(response, 'id'),
+             'id': fetch(response, 'id'),
              'imdb_id': fetch(response, 'imdb_id'),
              'Plot': clean_text(fetch(response, 'overview')),
              'OriginalTitle': fetch(response, 'original_title'),
@@ -785,7 +785,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'duration': duration,
              'duration(h)': format_time(duration, "h"),
              'duration(m)': format_time(duration, "m"),
-             'ID': tmdb_id,
+             'id': tmdb_id,
              'Genre': " / ".join(genres),
              'credit_id': fetch(response, 'credit_id'),
              'Plot': clean_text(fetch(response, "overview")),
@@ -1010,7 +1010,7 @@ def get_set_movies(set_id):
                 "thumb": artwork.get("poster_small", ""),
                 "Fanart": artwork.get("fanart", ""),
                 "overview": response["overview"],
-                "ID": response["id"]}
+                "id": response["id"]}
         return handle_tmdb_movies(response.get("parts", [])), info
     else:
         log("No JSON Data available")
