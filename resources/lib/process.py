@@ -12,7 +12,7 @@ from YouTube import *
 from Trakt import *
 
 
-def StartInfoActions(infos, params):
+def start_info_actions(infos, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
         params["artist_mbid"] = fetch_musicbrainz_id(params["artistname"])
@@ -45,7 +45,7 @@ def StartInfoActions(infos, params):
                 Discography = get_artist_albums(params.get("artist_mbid"))
             data = Discography, "Discography"
         elif info == 'mostlovedtracks':
-            data = GetMostLovedTracks(params["artistname"]), "MostLovedTracks"
+            data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
         elif info == 'artistdetails':
             ArtistDetails = GetArtistDetails(params["artistname"])
             pass_dict_to_skin(ArtistDetails, params.get("prefix", ""))
@@ -57,11 +57,11 @@ def StartInfoActions(infos, params):
             #     data = GetMusicVideos(ArtistDetails["audiodbid"]), "MusicVideos"
         elif info == 'albuminfo':
             if params.get("id", ""):
-                AlbumDetails = GetAlbumDetails(params.get("id", ""))
+                AlbumDetails = get_album_details(params.get("id", ""))
                 pass_dict_to_skin(AlbumDetails, params.get("prefix", ""))
         elif info == 'trackdetails':
             if params.get("id", ""):
-                data = GetTrackDetails(params.get("id", "")), "Trackinfo"
+                data = get_track_details(params.get("id", "")), "Trackinfo"
         elif info == 'albumshouts':
             if params["artistname"] and params["albumname"]:
                 data = get_album_shouts(params["artistname"], params["albumname"]), "Shout"

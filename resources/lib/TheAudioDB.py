@@ -14,26 +14,26 @@ BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
 def HandleAudioDBAlbumResult(results):
     albums = []
     if 'album' in results and results['album']:
-        localdescription = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
+        local_description = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
         for album in results['album']:
-            if localdescription in album and album[localdescription]:
-                Description = album.get(localdescription, "")
+            if local_description in album and album[local_description]:
+                description = album.get(local_description, "")
             elif 'strDescriptionEN' in album and album['strDescriptionEN']:
-                Description = album['strDescriptionEN']
+                description = album['strDescriptionEN']
             elif 'strDescription' in album and album['strDescription']:
-                Description = album['strDescription']
+                description = album['strDescription']
             else:
-                Description = ""
+                description = ""
             if 'strReview' in album and album['strReview']:
-                Description += "[CR][CR][B]" + xbmc.getLocalizedString(185) + ":[/B][CR][CR]" + album['strReview']
+                description += "[CR][CR][B]" + xbmc.getLocalizedString(185) + ":[/B][CR][CR]" + album['strReview']
             album = {'artist': album['strArtist'],
                      'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
                      'id': album['idAlbum'],
                      'audiodbid': album['idAlbum'],
-                     'Description': Description,
+                     'Description': description,
                      'path': "",
-                     'Plot': Description,
+                     'Plot': description,
                      'Genre': album['strGenre'],
                      'Mood': album['strMood'],
                      'Style': album['strStyle'],
@@ -105,19 +105,19 @@ def GetExtendedAudioDBInfo(results):
         for artist in results['artists']:
             localbio = 'strBiography' + ADDON.getSetting("LanguageID").upper()
             if localbio in artist and artist[localbio]:
-                Description = fetch(artist, localbio)
+                description = fetch(artist, localbio)
             elif 'strBiographyEN' in artist and artist['strBiographyEN']:
-                Description = fetch(artist, 'strBiographyEN')
+                description = fetch(artist, 'strBiographyEN')
             elif 'strBiography' in artist and artist['strBiography']:
-                Description = fetch(artist, 'strBiography')
+                description = fetch(artist, 'strBiography')
             else:
-                Description = ""
+                description = ""
             if 'strArtistBanner' in artist and artist['strArtistBanner']:
                 banner = artist['strArtistBanner']
             else:
                 banner = ""
             if 'strReview' in artist and artist['strReview']:
-                Description += "[CR]" + fetch(artist, 'strReview')
+                description += "[CR]" + fetch(artist, 'strReview')
             artist = {'artist': fetch(artist, 'strArtist'),
                       'mbid': fetch(artist, 'strMusicBrainzID'),
                       'Banner': banner,
@@ -143,8 +143,8 @@ def GetExtendedAudioDBInfo(results):
                       'LastFMChart': fetch(artist, 'strLastFMChart'),
                       'Gender': fetch(artist, 'strGender'),
                       'audiodbid': fetch(artist, 'idArtist'),
-                      'Description': Description,
-                      'Plot': Description,
+                      'Description': description,
+                      'Plot': description,
                       'path': "",
                       'Genre': fetch(artist, 'strGenre'),
                       'Style': fetch(artist, 'strStyle'),
@@ -172,7 +172,7 @@ def GetArtistDetails(search_string):
     return GetExtendedAudioDBInfo(results)
 
 
-def GetMostLovedTracks(search_string="", mbid=""):
+def get_most_loved_tracks(search_string="", mbid=""):
     if mbid:
         url = 'track-top10-mb.php?s=%s' % (mbid)
     else:
@@ -182,7 +182,7 @@ def GetMostLovedTracks(search_string="", mbid=""):
     return HandleAudioDBTrackResult(results)
 
 
-def GetAlbumDetails(audiodbid="", mbid=""):
+def get_album_details(audiodbid="", mbid=""):
     if audiodbid:
         url = 'album.php?m=%s' % (audiodbid)
     elif mbid:
@@ -200,7 +200,7 @@ def GetMusicVideos(audiodbid):
         return []
 
 
-def GetTrackDetails(audiodbid):
+def get_track_details(audiodbid):
     if audiodbid:
         url = 'track.php?m=%s' % (audiodbid)
         results = get_JSON_response(BASE_URL + url, folder="TheAudioDB")

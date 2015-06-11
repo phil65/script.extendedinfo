@@ -19,7 +19,7 @@ ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
-from process import StartInfoActions
+from process import start_info_actions
 from Utils import *
 
 
@@ -31,7 +31,7 @@ class Main:
         # try:
         self._parse_argv()
         if self.infos:
-            StartInfoActions(self.infos, self.params)
+            start_info_actions(self.infos, self.params)
         else:
             movie = {"intheaters": "In theaters [I](RottenTomatoes)[/I]",
                      "boxoffice": "Box office [I](RottenTomatoes)[/I]",

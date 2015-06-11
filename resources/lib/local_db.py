@@ -265,7 +265,7 @@ def compare_album_with_library(online_list):
         for localitem in locallist:
             if not online_item["name"] == localitem["title"]:
                 continue
-            json_response = get_kodi_json('"method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(localitem["albumid"]))
+            json_response = get_kodi_json('"method": "AudioLibrary.get_album_details", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(localitem["albumid"]))
             album = json_response["result"]["albumdetails"]
             online_item.update({"dbid": album["albumid"]})
             online_item.update(
