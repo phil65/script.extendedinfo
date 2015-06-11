@@ -38,7 +38,7 @@ def get_similar_artists_from_db(artist_id):
                 item = json_response["result"]["artistdetails"]
                 newartist = {"Title": item['label'],
                              "Genre": " / ".join(item['genre']),
-                             "Thumb": item['thumbnail'],  # remove
+                             "thumb": item['thumbnail'],  # remove
                              "Fanart": item['fanart'],  # remove
                              "Art(thumb)": item['thumbnail'],
                              "Art(fanart)": item['fanart'],

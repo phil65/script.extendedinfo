@@ -223,7 +223,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
             path = trailer
         listitem = {'Art(fanart)': artwork.get("fanart", ""),
                     'Art(poster)': artwork.get("poster_small", ""),
-                    'Thumb': artwork.get("poster_small", ""),
+                    'thumb': artwork.get("poster_small", ""),
                     'Poster': artwork.get("poster_small", ""),
                     'fanart': artwork.get("fanart", ""),
                     'Title': fetch(movie, 'title'),
@@ -268,7 +268,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                 duration = ""
         newtv = {'Art(fanart)': artwork.get("fanart", ""),
                  'Art(poster)': artwork.get("poster", ""),
-                 'Thumb': artwork.get("poster", ""),
+                 'thumb': artwork.get("poster", ""),
                  'Poster': artwork.get("poster", ""),
                  'fanart': artwork.get("fanart", ""),
                  'Title': fetch(tv, 'name'),
@@ -302,7 +302,7 @@ def handle_tmdb_episodes(results):
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'Art(poster)': artwork.get("still", ""),
                     'Poster': artwork.get("still", ""),
-                    'Thumb': artwork.get("still_small", ""),
+                    'thumb': artwork.get("still_small", ""),
                     'Title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
@@ -322,7 +322,7 @@ def handle_tmdb_misc(results):
         artwork = get_image_urls(poster=item.get("poster_path"))
         listitem = {'Art(poster)': artwork.get("poster", ""),
                     'Poster': artwork.get("poster", ""),
-                    'Thumb': artwork.get("poster_small", ""),
+                    'thumb': artwork.get("poster_small", ""),
                     'Title': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
@@ -351,7 +351,7 @@ def handle_tmdb_seasons(results):
             title = "Season %s" % season_number
         listitem = {'Art(poster)': artwork.get("poster", ""),
                     'Poster': artwork.get("poster", ""),
-                    'Thumb': artwork.get("poster_small", ""),
+                    'thumb': artwork.get("poster_small", ""),
                     'Title': title,
                     'Season': season_number,
                     'air_date': fetch(season, 'air_date'),
@@ -365,7 +365,7 @@ def handle_tmdb_videos(results):
     listitems = []
     for item in results:
         image = "http://i.ytimg.com/vi/" + fetch(item, 'key') + "/0.jpg"
-        listitem = {'Thumb': image,
+        listitem = {'thumb': image,
                     'Title': fetch(item, 'name'),
                     'iso_639_1': fetch(item, 'iso_639_1'),
                     'type': fetch(item, 'type'),
@@ -605,7 +605,7 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
               'TVShowTitle': tvshow_name,
-              'Thumb': artwork.get("poster_small", ""),
+              'thumb': artwork.get("poster_small", ""),
               'Poster': artwork.get("poster", ""),
               'Title': title,
               'ReleaseDate': response["air_date"],
@@ -688,7 +688,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'Art(fanart)': artwork.get("fanart", ""),
              'Art(poster)': artwork.get("poster", ""),
-             'Thumb': artwork.get("poster_small", ""),
+             'thumb': artwork.get("poster_small", ""),
              'Poster': artwork.get("poster", ""),
              'fanart': artwork.get("fanart", ""),
              'Title': fetch(response, 'title'),
@@ -776,7 +776,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     genres = [item["name"] for item in response["genres"]]
     newtv = {'Art(fanart)': artwork.get("fanart", ""),
              'Art(poster)': artwork.get("poster", ""),
-             'Thumb': artwork.get("poster", ""),
+             'thumb': artwork.get("poster", ""),
              'Poster': artwork.get("poster", ""),
              'fanart': artwork.get("fanart", ""),
              'Title': fetch(response, 'name'),
@@ -1007,7 +1007,7 @@ def get_set_movies(set_id):
         artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
         info = {"label": response["name"],
                 "Poster": artwork.get("poster", ""),
-                "Thumb": artwork.get("poster_small", ""),
+                "thumb": artwork.get("poster_small", ""),
                 "Fanart": artwork.get("fanart", ""),
                 "overview": response["overview"],
                 "ID": response["id"]}

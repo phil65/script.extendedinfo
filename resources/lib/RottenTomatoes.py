@@ -29,7 +29,7 @@ def GetRottenTomatoesMovies(movietype):
             movie = {'Title': item["title"],
                      'Art(poster)': item["posters"]["original"],
                      'imdb_id': imdb_id,
-                     'Thumb': poster,
+                     'thumb': poster,
                      'Poster': poster,
                      'Runtime': item["runtime"],
                      'duration': item["runtime"],

@@ -110,7 +110,7 @@ def handle_lastfm_tracks(results):
     else:
         summary = ""
     TrackInfo = {'playcount': str(results['track']['playcount']),
-                 'Thumb': str(results['track']['playcount']),
+                 'thumb': str(results['track']['playcount']),
                  'summary': summary}
     return TrackInfo
 
@@ -126,7 +126,7 @@ def handle_lastfm_artists(results):
                 artist = {'Title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
-                          'Thumb': artist['image'][-1]['#text'],
+                          'thumb': artist['image'][-1]['#text'],
                           'Listeners': format(listeners, ",d")}
                 artists.append(artist)
         except:

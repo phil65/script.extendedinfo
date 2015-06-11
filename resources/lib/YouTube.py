@@ -20,7 +20,7 @@ def handle_youtube_videos(results):
                 videoid = item["id"]["videoId"]
             except:
                 videoid = item["snippet"]["resourceId"]["videoId"]
-            video = {'Thumb': thumb,
+            video = {'thumb': thumb,
                      'youtube_id': videoid,
                      'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
                      'Path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,

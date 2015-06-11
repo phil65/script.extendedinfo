@@ -312,7 +312,7 @@ class SlideShow(xbmcgui.WindowXMLDialog):
             xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
         else:
             listitem = {"label": self.image,
-                        "Thumb": self.image}
+                        "thumb": self.image}
             self.getControl(10000).addItems(create_listitems([listitem]))
 
     def onAction(self, action):
@@ -750,7 +750,7 @@ def get_favs():
     for fav in json_response["result"]["favourites"]:
         path = get_fav_path(fav)
         newitem = {'Label': fav["title"],
-                   'Thumb': fav["thumbnail"],
+                   'thumb': fav["thumbnail"],
                    'Type': fav["type"],
                    'Builtin': path,
                    'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
@@ -767,7 +767,7 @@ def get_icon_panel(number):
     for i in range(1, 6):
         newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Label)").decode("utf-8"),
                    'Path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
-                   'Thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
+                   'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
                    'ID': "IconPanelitem" + str(i + offset).decode("utf-8"),
                    'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Type)").decode("utf-8")}
         items.append(newitem)
@@ -779,7 +779,7 @@ def get_weather_images():
     for i in range(1, 6):
         newitem = {'Label': "bla",
                    'Path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
-                   'Thumb': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Area)"),
+                   'thumb': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Area)"),
                    'Layer': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Layer)"),
                    'Legend': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Legend)")}
         items.append(newitem)

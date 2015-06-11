@@ -52,7 +52,7 @@ def get_trakt_calendar_shows(content):
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
                     'Genre': " / ".join(episode["show"]["genres"]),
-                    'Thumb': episode["episode"]["images"]["screenshot"]["thumb"],
+                    'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                     'Art(poster)': poster,
                     'Poster': poster,
                     'Art(banner)': banner,
@@ -136,7 +136,7 @@ def handle_trakt_tvshows(results):
                 'Banner': tvshow['show']["images"]["banner"]["full"],
                 'Art(fanart)': tvshow['show']["images"]["fanart"]["full"],
                 'Fanart': tvshow['show']["images"]["fanart"]["full"],
-                'Thumb': tvshow['show']["images"]["fanart"]["thumb"]}
+                'thumb': tvshow['show']["images"]["fanart"]["thumb"]}
         shows.append(show)
     return shows
 

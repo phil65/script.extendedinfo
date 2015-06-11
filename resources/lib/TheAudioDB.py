@@ -73,7 +73,7 @@ def HandleAudioDBTrackResult(results):
                      'Artist': track['strArtist'],
                      'mbid': track['strMusicBrainzID'],
                      'Album': track['strAlbum'],
-                     'Thumb': Thumb,
+                     'thumb': Thumb,
                      'Path': Path,
                      'Label': track['strTrack']}
             tracks.append(track)
@@ -90,7 +90,7 @@ def HandleAudioDBMusicVideoResult(results):
             mvid = {'Track': mvid['strTrack'],
                     'Description': mvid['strDescriptionEN'],
                     'id': mvid['idTrack'],
-                    'Thumb': "http://i.ytimg.com/vi/" + extract_youtube_id(mvid.get('strMusicVid', '')) + "/0.jpg",
+                    'thumb': "http://i.ytimg.com/vi/" + extract_youtube_id(mvid.get('strMusicVid', '')) + "/0.jpg",
                     'Path': convert_youtube_url(mvid['strMusicVid']),
                     'Label': mvid['strTrack']}
             mvids.append(mvid)
@@ -148,7 +148,7 @@ def GetExtendedAudioDBInfo(results):
                       'Path': "",
                       'Genre': fetch(artist, 'strGenre'),
                       'Style': fetch(artist, 'strStyle'),
-                      'Thumb': fetch(artist, 'strArtistThumb'),
+                      'thumb': fetch(artist, 'strArtistThumb'),
                       'Art(Thumb)': fetch(artist, 'strArtistThumb'),
                       'Members': fetch(artist, 'intMembers')}
             artists.append(artist)
