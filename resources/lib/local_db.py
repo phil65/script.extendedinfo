@@ -68,7 +68,7 @@ def get_similar_movies_from_db(dbid):
         return []
     quotalist = []
     for item in json_response['result']['movies']:
-        difference = abs(int(item['year']) - int(comp_movie['year']))
+        diff = abs(int(item['year']) - int(comp_movie['year']))
         hit = 0.0
         miss = 0.00001
         quota = 0.0
@@ -81,9 +81,9 @@ def get_similar_movies_from_db(dbid):
             quota = float(hit) / float(hit + miss)
         if genres and item['genre'] and genres[0] == item['genre'][0]:
             quota += 0.3
-        if difference < 3:
+        if diff < 3:
             quota += 0.3
-        elif difference < 6:
+        elif diff < 6:
             quota += 0.15
         if comp_movie['country'] and item['country'] and comp_movie['country'][0] == item['country'][0]:
             quota += 0.4
@@ -260,12 +260,12 @@ def compare_with_library(online_list=[], library_first=True, sortkey=False):
 
 
 def compare_album_with_library(online_list):
-    locallist = get_kodi_albums()
+    local_list = get_kodi_albums()
     for online_item in online_list:
-        for localitem in locallist:
-            if not online_item["name"] == localitem["title"]:
+        for local_item in local_list:
+            if not online_item["name"] == local_item["title"]:
                 continue
-            json_response = get_kodi_json('"method": "AudioLibrary.get_album_details", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(localitem["albumid"]))
+            json_response = get_kodi_json('"method": "AudioLibrary.get_album_details", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(local_item["albumid"]))
             album = json_response["result"]["albumdetails"]
             online_item.update({"dbid": album["albumid"]})
             online_item.update(
@@ -280,9 +280,9 @@ def compare_album_with_library(online_list):
 def get_set_name_from_db(dbid):
     json_response = get_kodi_json('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["setid"], "movieid":%s }"' % dbid)
     if "result" in json_response and "moviedetails" in json_response["result"]:
-        dbsetid = json_response['result']['moviedetails'].get('setid', "")
-        if dbsetid:
-            json_response = get_kodi_json('"method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }' % dbsetid)
+        set_dbid = json_response['result']['moviedetails'].get('setid', "")
+        if set_dbid:
+            json_response = get_kodi_json('"method": "VideoLibrary.GetMovieSetDetails", "params": {"setid":%s }' % set_dbid)
             return json_response['result']['setdetails'].get('label', "")
     return ""
 

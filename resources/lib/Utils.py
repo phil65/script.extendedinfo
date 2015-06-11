@@ -365,10 +365,10 @@ def play_trailer(youtube_id="", listitem=None, pop_stack=False):
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
     if vid:
         stream_url = vid.streamURL()
-        PlayMedia(stream_url, listitem, pop_stack)
+        play_media(stream_url, listitem, pop_stack)
 
 
-def PlayMedia(path="", listitem=None, pop_stack=False):
+def play_media(path="", listitem=None, pop_stack=False):
     """
     play media based on path, info from *listitem
     """

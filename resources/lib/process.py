@@ -40,25 +40,25 @@ def start_info_actions(infos, params):
             data = get_babe_images(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
-            Discography = get_artist_discography(params["artistname"])
-            if not Discography:
-                Discography = get_artist_albums(params.get("artist_mbid"))
-            data = Discography, "Discography"
+            discography = get_artist_discography(params["artistname"])
+            if not discography:
+                discography = get_artist_albums(params.get("artist_mbid"))
+            data = discography, "discography"
         elif info == 'mostlovedtracks':
             data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
         elif info == 'artistdetails':
-            ArtistDetails = get_artist_details(params["artistname"])
-            pass_dict_to_skin(ArtistDetails, params.get("prefix", ""))
-            if "audiodbid" in ArtistDetails:
-                data = get_musicvideos(ArtistDetails["audiodbid"]), "MusicVideos"
+            artist_details = get_artist_details(params["artistname"])
+            pass_dict_to_skin(artist_details, params.get("prefix", ""))
+            if "audiodbid" in artist_details:
+                data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
         elif info == 'musicvideos':
             pass
-            # if "audiodbid" in ArtistDetails:
-            #     data = get_musicvideos(ArtistDetails["audiodbid"]), "MusicVideos"
+            # if "audiodbid" in artist_details:
+            #     data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
         elif info == 'albuminfo':
             if params.get("id", ""):
-                AlbumDetails = get_album_details(params.get("id", ""))
-                pass_dict_to_skin(AlbumDetails, params.get("prefix", ""))
+                album_details = get_album_details(params.get("id", ""))
+                pass_dict_to_skin(album_details, params.get("prefix", ""))
         elif info == 'trackdetails':
             if params.get("id", ""):
                 data = get_track_details(params.get("id", "")), "Trackinfo"
@@ -81,29 +81,29 @@ def start_info_actions(infos, params):
             data = get_db_movies(method, params.get("limit", 10)), "RecommendedMovies"
     #  RottenTomatoesMovies
         elif info == 'intheaters':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("movies/in_theaters"), "InTheatersMovies"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("movies/box_office"), "BoxOffice"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("movies/box_office"), "BoxOffice"
         elif info == 'opening':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("movies/opening"), "Opening"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("movies/opening"), "Opening"
         elif info == 'comingsoon':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("movies/upcoming"), "ComingSoonMovies"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("movies/upcoming"), "ComingSoonMovies"
         elif info == 'toprentals':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("dvds/top_rentals"), "TopRentals"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("dvds/top_rentals"), "TopRentals"
         elif info == 'currentdvdreleases':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("dvds/current_releases"), "CurrentDVDs"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("dvds/current_releases"), "CurrentDVDs"
         elif info == 'newdvdreleases':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("dvds/new_releases"), "NewDVDs"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
-            from RottenTomatoes import GetRottenTomatoesMovies
-            data = GetRottenTomatoesMovies("dvds/upcoming"), "UpcomingDVDs"
+            from RottenTomatoes import get_rottentomatoes_movies
+            data = get_rottentomatoes_movies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
             data = get_tmdb_movies("now_playing"), "InCinemasMovies"
@@ -180,17 +180,17 @@ def start_info_actions(infos, params):
                 data = get_similar_tvshows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
             if "studio" in params and params["studio"]:
-                CompanyId = get_company_data(params["studio"])[0]["id"]
-                data = get_company_data(CompanyId), "StudioInfo"
+                company_id = get_company_data(params["studio"])[0]["id"]
+                data = get_company_data(company_id), "StudioInfo"
         elif info == 'set':
             if params.get("dbid", False) and "show" not in str(params.get("type", "")):
                 name = get_set_name_from_db(params["dbid"])
                 if name:
                     params["setid"] = get_set_id(name)
             if params.get("setid", False):
-                SetData, info = get_set_movies(params["setid"])
-                if SetData:
-                    data = SetData, "MovieSetItems"
+                set_data, info = get_set_movies(params["setid"])
+                if set_data:
+                    data = set_data, "MovieSetItems"
         elif info == 'movielists':
             if params.get("dbid", False):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
@@ -310,8 +310,8 @@ def start_info_actions(infos, params):
         elif info == 'trackinfo':
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
-                TrackInfo = get_track_info(params["artistname"], params["trackname"])
-                HOME.setProperty('%sSummary' % params.get("prefix", ""), TrackInfo["summary"])  # set properties
+                track_info = get_track_info(params["artistname"], params["trackname"])
+                HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
         elif info == 'venueevents':
             if params["location"]:
                 params["id"] = get_venue_id(params["location"])
@@ -327,13 +327,13 @@ def start_info_actions(infos, params):
         #     channels = create_channel_list()
         elif info == 'favourites':
             if params.get("id", ""):
-                favourites = get_favs_by_type(params.get("id", ""))
+                favs = get_favs_by_type(params.get("id", ""))
             else:
-                favourites = get_favs()
-                HOME.setProperty('favourite.count', str(len(favourites)))
-                if len(favourites) > 0:
-                    HOME.setProperty('favourite.1.name', favourites[-1]["Label"])
-            data = favourites, "Favourites"
+                favs = get_favs()
+                HOME.setProperty('favourite.count', str(len(favs)))
+                if len(favs) > 0:
+                    HOME.setProperty('favourite.1.name', favs[-1]["Label"])
+            data = favs, "Favourites"
         elif info == 'similarlocal' and "dbid" in params:
             data = get_similar_movies_from_db(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
@@ -343,7 +343,7 @@ def start_info_actions(infos, params):
         elif info == 'weather':
             data = get_weather_images(), "WeatherImages"
         elif info == 'updatexbmcdatabasewithartistmbidbg':
-            SetMusicBrainzIDsForAllArtists(False, False)
+            set_mbids_for_artists(False, False)
         elif info == 'setfocus':
             xbmc.executebuiltin("SetFocus(22222)")
         elif info == 'playliststats':
@@ -352,12 +352,12 @@ def start_info_actions(infos, params):
             data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
         elif info == 'slideshow':
             window_id = xbmcgui.getCurrentwindow_id()
-            Window = xbmcgui.Window(window_id)
+            window = xbmcgui.Window(window_id)
             # focusid = Window.getFocusId()
-            itemlist = Window.getFocus()
-            numitems = itemlist.getSelectedPosition()
-            log("items:" + str(numitems))
-            for i in range(0, numitems):
+            itemlist = window.getFocus()
+            num_items = itemlist.getSelectedPosition()
+            log("items:" + str(num_items))
+            for i in range(0, num_items):
                 notify(item.getProperty("Image"))
         elif info == 'action':
             for builtin in params.get("id", "").split("$$"):
@@ -397,7 +397,7 @@ def start_info_actions(infos, params):
                     notify("Error", "No Trailer available")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
-            SetMusicBrainzIDsForAllArtists(True, False)
+            set_mbids_for_artists(True, False)
         elif info == 'deletecache':
             HOME.clearProperties()
             for the_file in os.listdir(ADDON_DATA_PATH):
@@ -414,16 +414,12 @@ def start_info_actions(infos, params):
             widget_selectdialog()
         listitems, prefix = data
         if params.get("handle"):
+            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
             if info.endswith("shows"):
                 xbmcplugin.setContent(params.get("handle"), 'tvshows')
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
-
             else:
                 xbmcplugin.setContent(params.get("handle"), 'movies')
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
         pass_list_to_skin(prefix, listitems, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
 
