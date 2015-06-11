@@ -138,7 +138,7 @@ def handle_db_movies(movie):
                 'Writer': " / ".join(movie['writer']),
                 'Logo': movie['art'].get("clearlogo", ""),
                 'OriginalTitle': movie.get('originaltitle', ""),
-                'ID': movie.get('imdbnumber', ""),
+                'imdb_id': movie.get('imdbnumber', ""),
                 'Path': path,
                 'PercentPlayed': played,
                 'Resume': resume,
