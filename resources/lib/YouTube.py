@@ -23,7 +23,7 @@ def handle_youtube_videos(results):
             video = {'thumb': thumb,
                      'youtube_id': videoid,
                      'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
-                     'Path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
+                     'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
                      'Description': item["snippet"]["description"],
                      'Title': item["snippet"]["title"],
                      # 'Author': item["author"][0]["name"]["$t"],

@@ -753,7 +753,7 @@ def get_favs():
                    'thumb': fav["thumbnail"],
                    'Type': fav["type"],
                    'Builtin': path,
-                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + path}
+                   'path': "plugin://script.extendedinfo/?info=action&&id=" + path}
         items.append(newitem)
     return items
 
@@ -766,7 +766,7 @@ def get_icon_panel(number):
     offset = number * 5 - 5
     for i in range(1, 6):
         newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Label)").decode("utf-8"),
-                   'Path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
+                   'path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
                    'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
                    'ID': "IconPanelitem" + str(i + offset).decode("utf-8"),
                    'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Type)").decode("utf-8")}
@@ -778,7 +778,7 @@ def get_weather_images():
     items = []
     for i in range(1, 6):
         newitem = {'Label': "bla",
-                   'Path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
+                   'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
                    'thumb': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Area)"),
                    'Layer': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Layer)"),
                    'Legend': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Legend)")}

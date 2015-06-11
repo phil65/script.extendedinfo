@@ -29,7 +29,7 @@ def get_xkcd_images():
                 results = get_JSON_response(base_url + url, 9999, folder="XKCD")
                 item = {'Image': results["img"],
                         'thumb': results["img"],
-                        'Path': "plugin://script.extendedinfo?info=setfocus",
+                        'path': "plugin://script.extendedinfo?info=setfocus",
                         'Poster': results["img"],
                         'Title': results["title"],
                         'Description': results["alt"]}
@@ -56,7 +56,7 @@ def get_cyanide_images():
                 url = re.search("<meta property=\"og:url\".*?content=\"([^\"]*)\"", response).group(1)
                 newitem = {'Image': keyword,
                            'thumb': keyword,
-                           'Path': "plugin://script.extendedinfo?info=setfocus",
+                           'path': "plugin://script.extendedinfo?info=setfocus",
                            'Poster': keyword,
                            'Title': url}
                 items.append(newitem)
@@ -86,7 +86,7 @@ def get_babe_images(single=False):
                 image = random.randrange(1, 8)
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             newitem = {'thumb': url,
-                       'Path': "plugin://script.extendedinfo?info=setfocus",
+                       'path': "plugin://script.extendedinfo?info=setfocus",
                        'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
         save_to_file(items, filename, os.path.join(ADDON_DATA_PATH, "Babes"))

@@ -32,7 +32,7 @@ def HandleAudioDBAlbumResult(results):
                      'id': album['idAlbum'],
                      'audiodbid': album['idAlbum'],
                      'Description': Description,
-                     'Path': "",
+                     'path': "",
                      'Plot': Description,
                      'Genre': album['strGenre'],
                      'Mood': album['strMood'],
@@ -74,7 +74,7 @@ def HandleAudioDBTrackResult(results):
                      'mbid': track['strMusicBrainzID'],
                      'Album': track['strAlbum'],
                      'thumb': Thumb,
-                     'Path': Path,
+                     'path': Path,
                      'Label': track['strTrack']}
             tracks.append(track)
     else:
@@ -91,7 +91,7 @@ def HandleAudioDBMusicVideoResult(results):
                     'Description': mvid['strDescriptionEN'],
                     'id': mvid['idTrack'],
                     'thumb': "http://i.ytimg.com/vi/" + extract_youtube_id(mvid.get('strMusicVid', '')) + "/0.jpg",
-                    'Path': convert_youtube_url(mvid['strMusicVid']),
+                    'path': convert_youtube_url(mvid['strMusicVid']),
                     'Label': mvid['strTrack']}
             mvids.append(mvid)
     else:
@@ -145,7 +145,7 @@ def GetExtendedAudioDBInfo(results):
                       'audiodbid': fetch(artist, 'idArtist'),
                       'Description': Description,
                       'Plot': Description,
-                      'Path': "",
+                      'path': "",
                       'Genre': fetch(artist, 'strGenre'),
                       'Style': fetch(artist, 'strStyle'),
                       'thumb': fetch(artist, 'strArtistThumb'),

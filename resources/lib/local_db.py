@@ -139,7 +139,7 @@ def handle_db_movies(movie):
                 'Logo': movie['art'].get("clearlogo", ""),
                 'OriginalTitle': movie.get('originaltitle', ""),
                 'imdb_id': movie.get('imdbnumber', ""),
-                'Path': path,
+                'path': path,
                 'PercentPlayed': played,
                 'Resume': resume,
                 # 'SubtitleLanguage': " / ".join(subs),
@@ -269,7 +269,7 @@ def compare_album_with_library(online_list):
             album = json_response["result"]["albumdetails"]
             online_item.update({"DBID": album["albumid"]})
             online_item.update(
-                {"Path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
+                {"path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
             if album["thumbnail"]:
                 online_item.update({"thumb": album["thumbnail"]})
                 online_item.update({"Icon": album["thumbnail"]})
