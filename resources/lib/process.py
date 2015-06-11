@@ -389,7 +389,7 @@ def StartInfoActions(infos, params):
             else:
                 movie_id = ""
             if movie_id:
-                trailer = GetTrailer(movie_id)
+                trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 if trailer:
                     play_trailer(trailer)

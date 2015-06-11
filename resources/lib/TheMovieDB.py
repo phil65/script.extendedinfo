@@ -649,7 +649,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
         return None
 
 
-def GetTrailer(movie_id=None):
+def get_trailer(movie_id=None):
     response = get_tmdb_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
                              (movie_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
