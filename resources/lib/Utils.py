@@ -936,7 +936,6 @@ def create_listitems(data=None, preload_images=0):
     image_requests = []
     for (count, result) in enumerate(data):
         listitem = xbmcgui.ListItem('%s' % (str(count)))
-        itempath = ""
         for (key, value) in result.iteritems():
             if not value:
                 continue
@@ -976,8 +975,7 @@ def create_listitems(data=None, preload_images=0):
                     listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
                 except:
                     pass
-            else:
-                listitem.setProperty('%s' % (key), value)
+            listitem.setProperty('%s' % (key), value)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     for x in threads:
