@@ -202,7 +202,7 @@ def handle_tmdb_multi_search(results=[]):
     return listitems
 
 
-def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
+def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
     response = get_tmdb_data("genre/movie/list?language=%s&" % (ADDON.getSetting("LanguageID")), 9999)
     id_list = [item["id"] for item in response["genres"]]
     label_list = [item["name"] for item in response["genres"]]
@@ -242,7 +242,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="Year"):
                     'department': fetch(movie, 'department'),
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
-                    'Year': get_year(fetch(movie, 'release_date')),
+                    'year': get_year(fetch(movie, 'release_date')),
                     'Genre': genres,
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
@@ -355,7 +355,7 @@ def handle_tmdb_seasons(results):
                     'Title': title,
                     'Season': season_number,
                     'air_date': fetch(season, 'air_date'),
-                    'Year': get_year(fetch(season, 'air_date')),
+                    'year': get_year(fetch(season, 'air_date')),
                     'ID': fetch(season, 'id')}
         listitems.append(listitem)
     return listitems
@@ -720,7 +720,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'ReleaseDate': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
              'Studio': " / ".join(Studio),
-             'Year': get_year(fetch(response, 'release_date'))}
+             'year': get_year(fetch(response, 'release_date'))}
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     else:

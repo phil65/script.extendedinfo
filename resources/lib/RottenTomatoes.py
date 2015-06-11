@@ -35,7 +35,7 @@ def GetRottenTomatoesMovies(movietype):
                      'duration': item["runtime"],
                      'duration(h)': format_time(item["runtime"], "h"),
                      'duration(m)': format_time(item["runtime"], "m"),
-                     'Year': item["year"],
+                     'year': item["year"],
                      'path': path,
                      'Premiered': item["release_dates"].get("theater", ""),
                      'mpaa': item["mpaa_rating"],

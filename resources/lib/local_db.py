@@ -134,6 +134,7 @@ def handle_db_movies(movie):
                 'DiscArt': movie["art"].get('discart', ""),
                 'Title': movie.get('label', ""),
                 'File': movie.get('file', ""),
+                'year': str(movie.get('year', "")),
                 'Writer': " / ".join(movie['writer']),
                 'Logo': movie['art'].get("clearlogo", ""),
                 'OriginalTitle': movie.get('originaltitle', ""),
@@ -233,53 +234,16 @@ def compare_with_library(online_list=[], library_first=True, sortkey=False):
             index = originaltitle_list.index(online_item["OriginalTitle"].lower())
             found = True
         if found:
-            json_response = get_kodi_json('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["streamdetails", "resume", "year", "art", "writer", "file"], "movieid":%s }' % str(id_list[index]))
-            if "result" in json_response and "moviedetails" in json_response["result"]:
-                local_item = json_response['result']['moviedetails']
+            local_item = get_movie_from_db(id_list[index])
+            if local_item:
                 try:
-                    diff = abs(local_item["year"] - int(online_item["Year"]))
+                    diff = abs(int(local_item["year"]) - int(online_item["year"]))
                     if diff > 1:
                         remote_items.append(online_item)
                         continue
                 except:
                     pass
-                if (local_item['resume']['position'] and local_item['resume']['total']) > 0:
-                    resume = "true"
-                    played = '%s' % int((float(local_item['resume']['position']) / float(local_item['resume']['total'])) * 100)
-                else:
-                    resume = "false"
-                    played = '0'
-                stream_info = media_streamdetails(local_item['file'].encode('utf-8').lower(), local_item['streamdetails'])
-                online_item["Play"] = local_item["movieid"]
-                online_item["DBID"] = local_item["movieid"]
-                online_item["Path"] = local_item['file']
-                online_item["PercentPlayed"] = played
-                online_item["Resume"] = resume
-                online_item["Path"] = local_item['file']
-                online_item["FilenameAndPath"] = local_item['file']
-                online_item["Writer"] = " / ".join(local_item['writer'])
-                online_item["Logo"] = local_item['art'].get("clearlogo", "")
-                online_item["DiscArt"] = local_item['art'].get("discart", "")
-                online_item["Banner"] = local_item['art'].get("banner", "")
-                online_item["Poster"] = local_item['art'].get("poster", "")
-                online_item["Thumb"] = local_item['art'].get("poster", "")
-                online_item.update(stream_info)
-                streams = []
-                for i, item in enumerate(local_item['streamdetails']['audio']):
-                    language = item['language']
-                    if language not in streams and language != "und":
-                        streams.append(language)
-                        online_item['AudioLanguage.%d' % (i + 1)] = language
-                        online_item['AudioCodec.%d' % (i + 1)] = item['codec']
-                        online_item['AudioChannels.%d' % (i + 1)] = str(item['channels'])
-                subs = []
-                for i, item in enumerate(local_item['streamdetails']['subtitle']):
-                    language = item['language']
-                    if language not in subs and language != "und":
-                        subs.append(language)
-                        online_item['SubtitleLanguage.%d' % (i + 1)] = language
-                online_item['SubtitleLanguage'] = " / ".join(subs)
-                online_item['AudioLanguage'] = " / ".join(streams)
+                online_item.update(local_item)
                 if library_first:
                     local_items.append(online_item)
                 else:
