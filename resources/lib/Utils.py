@@ -948,8 +948,11 @@ def create_listitems(data=None, preload_images=0):
                         threads += [thread]
                         thread.start()
                         image_requests.append(value)
-            if key.lower() in ["name", "label", "title"]:
+            if key.lower() in ["name", "label"]:
                 listitem.setLabel(value)
+            elif key.lower() in ["title"]:
+                listitem.setLabel(value)
+                listitem.setInfo('video', {key.lower(): value})
             elif key.lower() in ["thumb"]:
                 listitem.setThumbnailImage(value)
                 listitem.setArt({key.lower(): value})
