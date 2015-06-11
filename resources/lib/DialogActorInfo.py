@@ -89,10 +89,11 @@ class DialogActorInfo(DialogBaseInfo):
             options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
             selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
             if selection == 0:
-                listitems = []
                 info = get_credit_info(listitem.getProperty("credit_id"))
                 listitems = handle_tmdb_seasons(info["media"]["seasons"])
                 listitems += handle_tmdb_episodes(info["media"]["episodes"])
+                if not listitems:
+                    listitems += [{"label": xbmc.getLocalizedString(19055)}]
                 w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
                 w.doModal()
                 if w.type == "episode":
