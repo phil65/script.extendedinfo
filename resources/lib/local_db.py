@@ -166,8 +166,10 @@ def handle_db_movies(movie):
 
 
 def get_movie_from_db(movie_id):
-    json_response = get_kodi_json('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movie_id))
-    return handle_db_movies(json_response["result"]["moviedetails"])
+    response = get_kodi_json('"method": "VideoLibrary.GetMovieDetails", "params": {"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movie_id))
+    if "result" in response and "moviedetails" in response["result"]:
+        return handle_db_movies(response["result"]["moviedetails"])
+    return {}
 
 
 def get_kodi_albums():
