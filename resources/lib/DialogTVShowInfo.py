@@ -58,11 +58,11 @@ class DialogTVShowInfo(DialogBaseInfo):
                     hit = dictfind(language_certs, "certification", rating)
                     if hit:
                         item["meaning"] = hit["meaning"]
-            if "DBID" not in self.data["general"]:  # need to add comparing for tvshows
+            if "dbid" not in self.data["general"]:  # need to add comparing for tvshows
                 # notify("download Poster")
                 poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
-            if "DBID" not in self.data["general"]:
+            if "dbid" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
             filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)
@@ -224,7 +224,7 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def show_manage_dialog(self):
         manage_list = []
-        tvshow_dbid = str(self.data["general"].get("DBID", ""))
+        tvshow_dbid = str(self.data["general"].get("dbid", ""))
         title = self.data["general"].get("TVShowTitle", "")
         # imdb_id = str(self.data["general"].get("imdb_id", ""))
         # filename = self.data["general"].get("FilenameAndPath", False)

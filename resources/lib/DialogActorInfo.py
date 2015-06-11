@@ -47,7 +47,7 @@ class DialogActorInfo(DialogBaseInfo):
         filter_thread.start()
         db_movies = 0
         for item in self.data["movie_roles"]:
-            if "DBID" in item:
+            if "dbid" in item:
                 db_movies += 1
         self.data["general"]["DBMovies"] = str(db_movies)
         # crew_id_list = []

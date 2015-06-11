@@ -45,7 +45,7 @@ class DialogVideoInfo(DialogBaseInfo):
             sets_thread.start()
             youtube_thread.start()
             lists_thread.start()
-            if "DBID" not in self.data["general"]:
+            if "dbid" not in self.data["general"]:
                 poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             vid_id_list = [item["key"] for item in self.data["videos"]]
@@ -58,7 +58,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 else:
                     index = crew_id_list.index(item["id"])
                     self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
-            if "DBID" not in self.data["general"]:
+            if "dbid" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
             filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
@@ -225,10 +225,10 @@ class DialogVideoInfo(DialogBaseInfo):
                 self.open_video_list(mode="list", list_id=list_id, filter_label=list_title, force=True)
         elif control_id == 8:
             self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['DBID']), "false"))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['dbid']), "false"))
         elif control_id == 9:
             self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['DBID']), "true"))
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['dbid']), "true"))
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 132:
@@ -313,7 +313,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def show_manage_dialog(self):
         manage_list = []
         listitems = []
-        movie_id = str(self.data["general"].get("DBID", ""))
+        movie_id = str(self.data["general"].get("dbid", ""))
         # filename = self.data["general"].get("FilenameAndPath", False)
         imdb_id = str(self.data["general"].get("imdb_id", ""))
         if movie_id:

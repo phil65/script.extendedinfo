@@ -28,10 +28,10 @@ class DialogSeasonInfo(DialogBaseInfo):
             search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]["Title"])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
-            if "DBID" not in self.data["general"]:  # need to add comparing for seasons
+            if "dbid" not in self.data["general"]:  # need to add comparing for seasons
                 poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
-            if "DBID" not in self.data["general"]:
+            if "dbid" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
             filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)

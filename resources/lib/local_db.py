@@ -145,7 +145,7 @@ def handle_db_movies(movie):
                 # 'SubtitleLanguage': " / ".join(subs),
                 # 'AudioLanguage': " / ".join(streams),
                 'Play': "",
-                'DBID': str(movie['movieid']),
+                'dbid': str(movie['movieid']),
                 'Rating': str(round(float(movie['rating']), 1)),
                 'Premiered': movie.get('year', "")}
     streams = []
@@ -267,7 +267,7 @@ def compare_album_with_library(online_list):
                 continue
             json_response = get_kodi_json('"method": "AudioLibrary.GetAlbumDetails", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(localitem["albumid"]))
             album = json_response["result"]["albumdetails"]
-            online_item.update({"DBID": album["albumid"]})
+            online_item.update({"dbid": album["albumid"]})
             online_item.update(
                 {"path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
             if album["thumbnail"]:

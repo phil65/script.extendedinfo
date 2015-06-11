@@ -194,18 +194,18 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
-            if focus_id == 1250 and self.data["general"].get("DBID"):
+            if focus_id == 1250 and self.data["general"].get("dbid"):
                 selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), [ADDON.getLocalizedString(32006)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
-            elif focus_id == 1350 and self.data["general"].get("DBID"):
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
+            elif focus_id == 1350 and self.data["general"].get("dbid"):
                 selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), [ADDON.getLocalizedString(32007)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"fanart": "%s"}' % path
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['DBID']))
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
 
     def open_video_list(self, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
         import DialogVideoList
