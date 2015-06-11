@@ -952,26 +952,29 @@ def create_listitems(data=None, preload_images=0):
                 listitem.setLabel(value)
             elif key.lower() in ["thumb"]:
                 listitem.setThumbnailImage(value)
+                listitem.setArt({key.lower(): value})
             elif key.lower() in ["icon"]:
                 listitem.setIconImage(value)
+                listitem.setArt({key.lower(): value})
             elif key.lower() in ["path"]:
                 itempath = value
-            if key.lower() in ["thumb", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+            elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key.lower(): value})
                 # log("key: " + unicode(key) + "  value: " + unicode(value))
-            if key.lower() in INT_INFOLABELS:
+            elif key.lower() in INT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key.lower(): int(value)})
                 except:
                     pass
-            if key.lower() in STRING_INFOLABELS:
+            elif key.lower() in STRING_INFOLABELS:
                 listitem.setInfo('video', {key.lower(): value})
-            if key.lower() in FLOAT_INFOLABELS:
+            elif key.lower() in FLOAT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
                 except:
                     pass
-            listitem.setProperty('%s' % (key), value)
+            else:
+                listitem.setProperty('%s' % (key), value)
         listitem.setPath(path=itempath)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
