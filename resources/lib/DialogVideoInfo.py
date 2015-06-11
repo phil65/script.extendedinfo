@@ -135,7 +135,7 @@ class DialogVideoInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id in [350, 1150, 10]:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
+            listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
             if control_id == 10:
                 youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
             else:

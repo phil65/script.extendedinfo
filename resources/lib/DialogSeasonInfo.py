@@ -25,7 +25,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             self.data = extended_season_info(self.tmdb_id, self.tvshow, self.season)
             if not self.data:
                 return
-            search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]["Title"])
+            search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]['title'])
             youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "dbid" not in self.data["general"]:  # need to add comparing for seasons

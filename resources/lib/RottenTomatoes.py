@@ -26,7 +26,7 @@ def GetRottenTomatoesMovies(movietype):
                 path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,imdb_id=%s)' % imdb_id
             else:
                 path = "plugin://script.extendedinfo/?info=playtrailer&&imdb_id=" + imdb_id
-            movie = {'Title': item["title"],
+            movie = {'title': item["title"],
                      'Art(poster)': item["posters"]["original"],
                      'imdb_id': imdb_id,
                      'thumb': poster,

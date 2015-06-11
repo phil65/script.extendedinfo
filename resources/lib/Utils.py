@@ -359,7 +359,7 @@ def play_trailer(youtube_id="", listitem=None, pop_stack=False):
     """
     if not listitem:
         listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-        listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
+        listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
     import YDStreamExtractor
     YDStreamExtractor.disableDASHVideo(True)
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
@@ -395,7 +395,7 @@ class VideoPlayer(xbmc.Player):
     def playYoutubeVideo(self, youtube_id="", listitem=None, pop_stack=True):
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo('video', {'Title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
+            listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
         import YDStreamExtractor
         YDStreamExtractor.disableDASHVideo(True)
         if youtube_id:

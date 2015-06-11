@@ -37,7 +37,7 @@ def get_trakt_calendar_shows(content):
             banner = episode["show"]["images"]["banner"]["full"]
             fanart = episode["show"]["images"]["fanart"]["full"]
             poster = episode["show"]["images"]["poster"]["full"]
-            show = {'Title': episode["episode"]["title"],
+            show = {'title': episode["episode"]["title"],
                     'TVShowTitle': episode["show"]["title"],
                     'tvdb_id': episode["show"]["ids"]["tvdb"],
                     'id': episode["show"]["ids"]["tvdb"],
@@ -73,7 +73,7 @@ def handle_trakt_movies(results):
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % str(fetch(movie["movie"]["ids"], 'tmdb'))
         else:
             path = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))
-        movie = {'Title': movie["movie"]["title"],
+        movie = {'title': movie["movie"]["title"],
                  'Runtime': movie["movie"]["runtime"],
                  'duration': movie["movie"]["runtime"],
                  'duration(h)': format_time(movie["movie"]["runtime"], "h"),
@@ -105,7 +105,7 @@ def handle_trakt_tvshows(results):
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
         path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,tvdb_id=%s)' % tvshow['show']['ids']["tvdb"]
-        show = {'Title': tvshow['show']["title"],
+        show = {'title': tvshow['show']["title"],
                 'Label': tvshow['show']["title"],
                 'TVShowTitle': tvshow['show']["title"],
                 'Runtime': tvshow['show']["runtime"],

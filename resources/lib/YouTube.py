@@ -25,7 +25,7 @@ def handle_youtube_videos(results):
                      'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
                      'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % videoid,
                      'Description': item["snippet"]["description"],
-                     'Title': item["snippet"]["title"],
+                     'title': item["snippet"]["title"],
                      # 'Author': item["author"][0]["name"]["$t"],
                      'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             videos.append(video)

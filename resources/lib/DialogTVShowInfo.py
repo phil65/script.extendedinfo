@@ -47,7 +47,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.data = extended_tvshow_info(self.tmdb_id)
             if not self.data:
                 return None
-            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Title"] + " tv", "", "relevance", 15)
+            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]['title'] + " tv", "", "relevance", 15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")
             for item in self.data["certifications"]:
@@ -114,7 +114,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             season = control.getSelectedItem().getProperty("season")
             add_to_window_stack(self)
             self.close()
-            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]["Title"])
+            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]['title'])
             dialog.doModal()
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()

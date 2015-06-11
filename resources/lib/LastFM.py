@@ -123,7 +123,7 @@ def handle_lastfm_artists(results):
         try:
             if 'name' in artist:
                 listeners = int(artist.get('listeners', 0))
-                artist = {'Title': artist['name'],
+                artist = {'title': artist['name'],
                           'name': artist['name'],
                           'mbid': artist['mbid'],
                           'thumb': artist['image'][-1]['#text'],

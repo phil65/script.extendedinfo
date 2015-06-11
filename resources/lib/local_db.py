@@ -36,7 +36,7 @@ def get_similar_artists_from_db(artist_id):
             elif xbmc_artist['artist'] == simi_artist['name']:
                 json_response = get_kodi_json('"method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
                 item = json_response["result"]["artistdetails"]
-                newartist = {"Title": item['label'],
+                newartist = {'title': item['label'],
                              "Genre": " / ".join(item['genre']),
                              "thumb": item['thumbnail'],  # remove
                              "Fanart": item['fanart'],  # remove
@@ -132,7 +132,7 @@ def handle_db_movies(movie):
                 'Poster': movie["art"].get('poster', ""),
                 'Banner': movie["art"].get('banner', ""),
                 'DiscArt': movie["art"].get('discart', ""),
-                'Title': movie.get('label', ""),
+                'title': movie.get('label', ""),
                 'File': movie.get('file', ""),
                 'year': str(movie.get('year', "")),
                 'Writer': " / ".join(movie['writer']),
@@ -227,8 +227,8 @@ def compare_with_library(online_list=[], library_first=True, sortkey=False):
         if "imdb_id" in online_item and online_item["imdb_id"] in imdb_list:
             index = imdb_list.index(online_item["imdb_id"])
             found = True
-        elif online_item["Title"].lower() in title_list:
-            index = title_list.index(online_item["Title"].lower())
+        elif online_item['title'].lower() in title_list:
+            index = title_list.index(online_item['title'].lower())
             found = True
         elif "OriginalTitle" in online_item and online_item["OriginalTitle"].lower() in originaltitle_list:
             index = originaltitle_list.index(online_item["OriginalTitle"].lower())

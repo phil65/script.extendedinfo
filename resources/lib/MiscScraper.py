@@ -31,7 +31,7 @@ def get_xkcd_images():
                         'thumb': results["img"],
                         'path': "plugin://script.extendedinfo?info=setfocus",
                         'Poster': results["img"],
-                        'Title': results["title"],
+                        'title': results["title"],
                         'Description': results["alt"]}
                 items.append(item)
             except:
@@ -58,7 +58,7 @@ def get_cyanide_images():
                            'thumb': keyword,
                            'path': "plugin://script.extendedinfo?info=setfocus",
                            'Poster': keyword,
-                           'Title': url}
+                           'title': url}
                 items.append(newitem)
         save_to_file(items, filename, ADDON_DATA_PATH)
         return items
@@ -87,7 +87,7 @@ def get_babe_images(single=False):
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             newitem = {'thumb': url,
                        'path': "plugin://script.extendedinfo?info=setfocus",
-                       'Title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
+                       'title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
             items.append(newitem)
         save_to_file(items, filename, os.path.join(ADDON_DATA_PATH, "Babes"))
         return items
