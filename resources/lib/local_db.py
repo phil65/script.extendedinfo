@@ -34,7 +34,7 @@ def get_similar_artists_from_db(artist_id):
             if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                 artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
-                json_response = get_kodi_json('"method": "AudioLibrary.get_artist_details", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
+                json_response = get_kodi_json('"method": "AudioLibrary.GetArtistDetails", "params": {"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
                 item = json_response["result"]["artistdetails"]
                 newartist = {'title': item['label'],
                              "Genre": " / ".join(item['genre']),
