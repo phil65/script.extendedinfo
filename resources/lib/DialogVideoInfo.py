@@ -143,7 +143,7 @@ class DialogVideoInfo(DialogBaseInfo):
             if youtube_id:
                 add_to_window_stack(self)
                 self.close()
-                PLAYER.playYoutubeVideo(youtube_id, control.getSelectedItem(), True)
+                PLAYER.playYoutubeVideo(youtube_id, control.getSelectedItem())
                 PLAYER.wait_for_video_end()
                 pop_window_stack()
             else:

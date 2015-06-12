@@ -115,7 +115,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             listitem = control.getSelectedItem()
             add_to_window_stack(self)
             self.close()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem)
             PLAYER.wait_for_video_end()
             pop_window_stack()
         elif control_id == 550:
