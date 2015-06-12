@@ -45,10 +45,7 @@ class DialogActorInfo(DialogBaseInfo):
         youtube_thread.start()
         filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
         filter_thread.start()
-        db_movies = 0
-        for item in self.data["movie_roles"]:
-            if "dbid" in item:
-                db_movies += 1
+        db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
         self.data["general"]["DBMovies"] = str(db_movies)
         # crew_id_list = []
         # for item in self.data["movie_crew_roles"]:
