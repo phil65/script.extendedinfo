@@ -161,7 +161,6 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         else:
             xbmcgui.WindowXMLDialog.__init__(self)
         self.logged_in = check_login()
-        self.movieplayer = VideoPlayer(pop_stack=True)
         self.data = None
         check_version()
 

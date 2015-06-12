@@ -103,7 +103,6 @@ class DialogActorInfo(DialogBaseInfo):
                     import DialogSeasonInfo
                     add_to_window_stack(self)
                     self.close()
-                    prettyprint(listitems[w.index])
                     dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], tvshow=listitem.getLabel())
                     dialog.doModal()
             if selection == 1:
@@ -119,8 +118,8 @@ class DialogActorInfo(DialogBaseInfo):
             listitem = self.getControl(control_id).getSelectedItem()
             add_to_window_stack(self)
             self.close()
-            self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
-            self.movieplayer.wait_for_video_end()
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            PLAYER.wait_for_video_end()
             pop_window_stack()
         elif control_id == 132:
             text = self.data["general"]["biography"]

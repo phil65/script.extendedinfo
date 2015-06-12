@@ -69,8 +69,8 @@ class DialogEpisodeInfo(DialogBaseInfo):
             listitem = self.getControl(control_id).getSelectedItem()
             add_to_window_stack(self)
             self.close()
-            self.movieplayer.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
-            self.movieplayer.wait_for_video_end()
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, True)
+            PLAYER.wait_for_video_end()
             pop_window_stack()
         elif control_id in [1250, 1350]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")

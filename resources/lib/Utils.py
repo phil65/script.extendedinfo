@@ -19,7 +19,7 @@ import threading
 import datetime
 import codecs
 from functools import wraps
-
+import VideoPlayer
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -30,7 +30,7 @@ ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 window_stack = []
-
+PLAYER = VideoPlayer.VideoPlayer(pop_stack=True)
 
 def run_async(func):
     """
@@ -355,7 +355,7 @@ def calculate_age(born, died=False):
     return base_age
 
 
-def play_trailer(youtube_id="", listitem=None, pop_stack=False):
+def play_trailer(youtube_id="", listitem=None):
     """
     play youtube vid with info from *listitem
     """
@@ -367,51 +367,7 @@ def play_trailer(youtube_id="", listitem=None, pop_stack=False):
     vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
     if vid:
         stream_url = vid.streamURL()
-        play_media(stream_url, listitem, pop_stack)
-
-
-def play_media(path="", listitem=None, pop_stack=False):
-    """
-    play media based on path, info from *listitem
-    """
-    player = VideoPlayer(pop_stack=pop_stack)
-    player.play(item=path, listitem=listitem)
-
-
-class VideoPlayer(xbmc.Player):
-
-    def __init__(self, *args, **kwargs):
-        xbmc.Player.__init__(self)
-        self.stopped = False
-        self.pop_stack = kwargs.get("pop_stack", True)
-
-    def onPlayBackEnded(self):
-        self.stopped = True
-
-    def onPlayBackStopped(self):
-        self.stopped = True
-
-    def onPlayBackStarted(self):
-        self.stopped = False
-
-    def playYoutubeVideo(self, youtube_id="", listitem=None, pop_stack=True):
-        if not listitem:
-            listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
-        import YDStreamExtractor
-        YDStreamExtractor.disableDASHVideo(True)
-        if youtube_id:
-            vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
-            if vid:
-                stream_url = vid.streamURL()
-                self.play(stream_url, listitem)
-        else:
-            notify("no youtube id found")
-
-    def wait_for_video_end(self):
-        while not self.stopped:
-            xbmc.sleep(200)
-        self.stopped = False
+        PLAYER.play(item=path, listitem=listitem)
 
 
 def add_to_window_stack(window):
