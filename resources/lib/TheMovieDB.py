@@ -971,6 +971,9 @@ def get_similar_movies(movie_id):
 
 
 def get_similar_tvshows(tvshow_id):
+    '''
+    return list with similar tvshows for show with *tvshow_id (TMDB ID)
+    '''
     session_string = ""
     if check_login():
         session_string = "session_id=%s&" % (get_session_id())
@@ -984,6 +987,10 @@ def get_similar_tvshows(tvshow_id):
 
 
 def get_tmdb_shows(tvshow_type):
+    '''
+    return list with tv shows
+    available types: airing, on_the_air, top_rated, popular
+    '''
     response = get_tmdb_data("tv/%s?language=%s&" % (tvshow_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return handle_tmdb_tvshows(response["results"], False, None)
@@ -994,6 +1001,10 @@ def get_tmdb_shows(tvshow_type):
 
 
 def get_tmdb_movies(movie_type):
+    '''
+    return list with movies
+    available types: now_playing, upcoming, top_rated, popular
+    '''
     response = get_tmdb_data("movie/%s?language=%s&" % (movie_type, ADDON.getSetting("LanguageID")), 0.3)
     if "results" in response:
         return handle_tmdb_movies(response["results"], False, None)
@@ -1004,6 +1015,9 @@ def get_tmdb_movies(movie_type):
 
 
 def get_set_movies(set_id):
+    '''
+    return list with movies which are part of set with *set_id
+    '''
     response = get_tmdb_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 14)
     if response:
         artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
@@ -1030,10 +1044,12 @@ def get_person_movies(person_id):
 
 
 def search_media(media_name=None, year='', media_type="movie"):
-    log('TMDB API search criteria: Title[''%s''] | Year[''%s'']' % (media_name, year))
-    media_name_url = url_quote(media_name)
-    if media_name_url:
-        response = get_tmdb_data("search/%s?query=%s+%s&language=%s&include_adult=%s&" % (media_type, media_name_url, year, ADDON.getSetting("LanguageID"), include_adult), 1)
+    '''
+    return list of items with type *media_type for search with *media_name
+    '''
+    search_query = url_quote(media_name + " " + str(year))
+    if search_query:
+        response = get_tmdb_data("search/%s?query=%s&language=%s&include_adult=%s&" % (media_type, search_query, ADDON.getSetting("LanguageID"), include_adult), 1)
         try:
             if not response == "Empty":
                 for item in response['results']:

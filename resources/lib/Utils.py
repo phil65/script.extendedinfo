@@ -726,6 +726,9 @@ def get_file(url):
 
 
 def get_favs_by_type(fav_type):
+    """
+    returns dict list containing favourites with type *fav_type
+    """
     favs = get_favs()
     fav_list = []
     for fav in favs:
@@ -746,6 +749,9 @@ def get_fav_path(fav):
 
 
 def get_favs():
+    """
+    returns dict list containing favourites
+    """
     items = []
     json_response = get_kodi_json('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
     if "result" not in json_response or json_response["result"]["limits"]["total"] == 0:
@@ -821,6 +827,9 @@ def save_to_file(content, filename, path=""):
 
 
 def read_from_file(path="", raw=False):
+    """
+    return data from file with *path
+    """
     if path == "":
         path = get_browse_dialog(dlg_type=1)
     if not xbmcvfs.exists(path):
