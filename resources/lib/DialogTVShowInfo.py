@@ -30,19 +30,14 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.tmdb_id = tmdb_id
         elif dbid and (int(dbid) > 0):
             tvdb_id = get_imdb_id_from_db("tvshow", dbid)
-            log("IMDB Id from local DB:" + str(tvdb_id))
             if tvdb_id:
                 self.tmdb_id = get_show_tmdb_id(tvdb_id)
-                log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(self.tmdb_id)))
         elif tvdb_id:
             self.tmdb_id = get_show_tmdb_id(tvdb_id)
-            log("tvdb_id to tmdb_id: %s --> %s" % (str(tvdb_id), str(self.tmdb_id)))
         elif imdb_id:
             self.tmdb_id = get_show_tmdb_id(imdb_id, "imdb_id")
-            log("imdb_id to tmdb_id: %s --> %s" % (str(imdb_id), str(self.tmdb_id)))
         elif self.name:
             self.tmdb_id = search_media(kwargs.get('name'), "", "tv")
-            log("search string to tmdb_id: %s --> %s" % (str(self.name), str(self.tmdb_id)))
         if self.tmdb_id:
             self.data = extended_tvshow_info(self.tmdb_id)
             if not self.data:
