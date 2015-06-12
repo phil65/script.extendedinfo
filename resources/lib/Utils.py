@@ -30,7 +30,7 @@ ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 window_stack = []
-PLAYER = VideoPlayer.VideoPlayer(pop_stack=True)
+PLAYER = VideoPlayer.VideoPlayer()
 
 def run_async(func):
     """
