@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmc
+import xbmcgui
 
 class VideoPlayer(xbmc.Player):
 
