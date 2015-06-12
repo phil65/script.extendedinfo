@@ -29,7 +29,6 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
-global window_stack
 window_stack = []
 
 
@@ -154,6 +153,9 @@ def get_google_autocomplete_items(search_string, youtube=False):
 
 
 def get_common_words_autocomplete_items(search_string):
+    """
+    get dict list with autocomplete labels from locally saved lists
+    """
     listitems = []
     k = search_string.rfind(" ")
     if k >= 0:
@@ -470,8 +472,7 @@ def get_sort_letters(path, focused_letter):
     letter_list = []
     HOME.clearProperty("LetterList")
     if ADDON.getSetting("FolderPath") == path:
-        letter_list = ADDON.getSetting("LetterList")
-        letter_list = letter_list.split()
+        letter_list = ADDON.getSetting("LetterList").split()
     else:
         if path:
             json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}' % path)
@@ -603,7 +604,7 @@ def get_http(url=None, headers=False):
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)
-    while (succeed < 5) and (not xbmc.abortRequested):
+    while (succeed < 3) and (not xbmc.abortRequested):
         try:
             response = urllib2.urlopen(request)
             data = response.read()
@@ -808,10 +809,8 @@ def save_to_file(content, filename, path=""):
     if path == "":
         text_file_path = get_browse_dialog() + filename + ".txt"
     else:
-        if not xbmcvfs.exists(ADDON_DATA_PATH):
-            xbmcvfs.mkdir(ADDON_DATA_PATH)
         if not xbmcvfs.exists(path):
-            xbmcvfs.mkdir(path)
+            xbmcvfs.mkdirs(path)
         text_file_path = os.path.join(path, filename + ".txt")
     now = time.time()
     text_file = xbmcvfs.File(text_file_path, "w")
