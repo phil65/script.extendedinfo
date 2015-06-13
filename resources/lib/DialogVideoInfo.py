@@ -50,15 +50,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
                 poster_thread.start()
             vid_id_list = [item["key"] for item in self.data["videos"]]
-            self.crew_list = []
-            crew_id_list = []
-            for item in self.data["crew"]:
-                if item["id"] not in crew_id_list:
-                    crew_id_list.append(item["id"])
-                    self.crew_list.append(item)
-                else:
-                    index = crew_id_list.index(item["id"])
-                    self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
+            crew_list = self.merge_person_listitems(self.data["crew"])
             if "dbid" not in self.data["general"]:
                 poster_thread.join()
                 self.data["general"]['Poster'] = poster_thread.listitems
@@ -90,7 +82,7 @@ class DialogVideoInfo(DialogBaseInfo):
                               (450, create_listitems(self.data["lists"], 0)),
                               (550, create_listitems(self.data["studios"], 0)),
                               (650, create_listitems(self.data["releases"], 0)),
-                              (750, create_listitems(self.crew_list, 0)),
+                              (750, create_listitems(crew_list, 0)),
                               (850, create_listitems(self.data["genres"], 0)),
                               (950, create_listitems(self.data["keywords"], 0)),
                               (1050, create_listitems(self.data["reviews"], 0)),
