@@ -184,6 +184,20 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             except:
                 log("Notice: No container with id %i available" % container_id)
 
+    def merge_person_listitems(self, items):
+        crew_id_list = []
+        crew_list = []
+        prettyprint(items)
+        for item in items:
+            if item["id"] not in crew_id_list:
+                crew_id_list.append(item["id"])
+                crew_list.append(item)
+            else:
+                index = crew_id_list.index(item["id"])
+                if "job" in crew_list[index]:
+                    crew_list[index]["job"] = crew_list[index]["job"] + " / " + item["job"]
+        return crew_list
+
     def onAction(self, action):
         focus_id = self.getFocusId()
         media_type = self.window.getProperty("type")

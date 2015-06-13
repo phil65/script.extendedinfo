@@ -48,22 +48,16 @@ class DialogActorInfo(DialogBaseInfo):
         filter_thread.start()
         db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
         self.data["general"]["DBMovies"] = str(db_movies)
-        # crew_id_list = []
-        # for item in self.data["movie_crew_roles"]:
-        #     if item["id"] not in crew_id_list:
-        #         crew_id_list.append(item["id"])
-        #         self.crew_list.append(item)
-        #     else:
-        #         index = crew_id_list.index(item["id"])
-        #         self.crew_list[index]["job"] = self.crew_list[index]["job"] + " / " + item["job"]
+        movie_crew_roles = self.merge_person_listitems(self.data["movie_crew_roles"])
+        tvshow_crew_roles = self.merge_person_listitems(self.data["tvshow_crew_roles"])
         filter_thread.join()
         self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         youtube_thread.join()
         self.listitems = [(150, create_listitems(self.data["movie_roles"], 0)),
                           (250, create_listitems(self.data["tvshow_roles"], 0)),
                           (450, create_listitems(self.data["images"], 0)),
-                          (550, create_listitems(self.data["movie_crew_roles"], 0)),
-                          (650, create_listitems(self.data["tvshow_crew_roles"], 0)),
+                          (550, create_listitems(movie_crew_roles, 0)),
+                          (650, create_listitems(tvshow_crew_roles, 0)),
                           (750, create_listitems(self.data["tagged_images"], 0)),
                           (350, create_listitems(youtube_thread.listitems, 0))]
         xbmc.executebuiltin("Dialog.Close(busydialog)")
