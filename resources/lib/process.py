@@ -360,6 +360,7 @@ def start_info_actions(infos, params):
             for i in range(0, num_items):
                 notify(item.getProperty("Image"))
         elif info == 'action':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
         elif info == 'selectautocomplete':
