@@ -94,7 +94,8 @@ def handle_trakt_movies(results):
                  'Art(poster)': movie["movie"]["images"]["poster"]["full"],
                  'Poster': movie["movie"]["images"]["poster"]["full"],
                  'Art(fanart)': movie["movie"]["images"]["fanart"]["full"],
-                 'Fanart': movie["movie"]["images"]["fanart"]["full"]}
+                 'Fanart': movie["movie"]["images"]["fanart"]["full"],
+                 'thumb': movie['movie']["images"]["poster"]["thumb"]}
         movies.append(movie)
     movies = compare_with_library(movies, False)
     return movies
@@ -136,7 +137,7 @@ def handle_trakt_tvshows(results):
                 'Banner': tvshow['show']["images"]["banner"]["full"],
                 'Art(fanart)': tvshow['show']["images"]["fanart"]["full"],
                 'Fanart': tvshow['show']["images"]["fanart"]["full"],
-                'thumb': tvshow['show']["images"]["fanart"]["thumb"]}
+                'thumb': tvshow['show']["images"]["poster"]["thumb"]}
         shows.append(show)
     return shows
 

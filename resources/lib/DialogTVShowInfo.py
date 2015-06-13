@@ -42,7 +42,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.data = extended_tvshow_info(self.tmdb_id)
             if not self.data:
                 return None
-            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]['title'] + " tv", "", "relevance", 15)
+            youtube_thread = GetYoutubeVidsThread(self.data["general"]['title'] + " tv", "", "relevance", 15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")
             for item in self.data["certifications"]:

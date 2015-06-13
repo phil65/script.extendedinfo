@@ -42,7 +42,7 @@ class DialogActorInfo(DialogBaseInfo):
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.data = extended_actor_info(self.id)
-        youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["name"], "", "relevance", 15)
+        youtube_thread = GetYoutubeVidsThread(self.data["general"]["name"], "", "relevance", 15)
         youtube_thread.start()
         filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
         filter_thread.start()

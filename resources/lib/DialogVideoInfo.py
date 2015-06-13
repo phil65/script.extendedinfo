@@ -41,7 +41,7 @@ class DialogVideoInfo(DialogBaseInfo):
         if "general" not in self.data:
             return None
         log("Blur image %s with radius %i" % (self.data["general"]["thumb"], 25))
-        youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["year"] + ", movie", "", "relevance", 15)
+        youtube_thread = GetYoutubeVidsThread(self.data["general"]["Label"] + " " + self.data["general"]["year"] + ", movie", "", "relevance", 15)
         sets_thread = SetItemsThread(self.data["general"]["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])

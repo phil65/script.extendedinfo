@@ -12,6 +12,7 @@ from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
 
+
 class DialogEpisodeInfo(DialogBaseInfo):
 
     @busy_dialog
@@ -27,7 +28,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
                 return
             # prettyprint(self.data)
             search_string = "%s tv" % (self.data["general"]['title'])
-            youtube_thread = Get_Youtube_Vids_Thread(search_string, "", "relevance", 15)
+            youtube_thread = GetYoutubeVidsThread(search_string, "", "relevance", 15)
             youtube_thread.start()
             if "dbid" not in self.data["general"]:  # need to add comparing for episodes
                 poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
