@@ -11,7 +11,6 @@ from local_db import *
 from YouTube import *
 from Trakt import *
 
-
 def start_info_actions(infos, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
@@ -403,11 +402,12 @@ def start_info_actions(infos, params):
             set_mbids_for_artists(True, False)
         elif info == 'deletecache':
             HOME.clearProperties()
-            for the_file in os.listdir(ADDON_DATA_PATH):
-                file_path = os.path.join(ADDON_DATA_PATH, the_file)
+            import shutil
+            for rel_path in os.listdir(ADDON_DATA_PATH):
+                path = os.path.join(ADDON_DATA_PATH, rel_path)
                 try:
-                    if os.path.isfile(file_path) and not the_file == "settings.xml":
-                        os.unlink(file_path)
+                    if os.path.isdir(path):
+                        shutil.rmtree(path)
                 except Exception as e:
                     log(e)
             notify("Cache deleted")
