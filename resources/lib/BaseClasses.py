@@ -96,21 +96,14 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
 
     @busy_dialog
     def onFocus(self, control_id):
+        old_page = self.page
         if control_id == 600:
             if self.page < self.total_pages:
                 self.page += 1
-            else:
-                self.page = 1
-                return
-            self.update_content()
-            self.update_ui()
-        if control_id == 700:
+        elif control_id == 700:
             if self.page > 1:
                 self.page -= 1
-            else:
-                return
-            # else:
-            #     self.page = self.total_pages
+        if self.page != old_page:
             self.update_content()
             self.update_ui()
 
