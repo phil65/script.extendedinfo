@@ -33,66 +33,62 @@ class DialogVideoInfo(DialogBaseInfo):
             self.tmdb_id = tmdb_id
         else:
             self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
-        if self.tmdb_id:
-            self.data = extended_movie_info(self.tmdb_id, self.dbid)
-            if "general" not in self.data:
-                return None
-            log("Blur image %s with radius %i" % (self.data["general"]["thumb"], 25))
-            youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["year"] + ", movie", "", "relevance", 15)
-            sets_thread = SetItemsThread(self.data["general"]["SetId"])
-            self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
-            lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
-            self.omdb_thread.start()
-            sets_thread.start()
-            youtube_thread.start()
-            lists_thread.start()
-            if "dbid" not in self.data["general"]:
-                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
-                poster_thread.start()
-            vid_id_list = [item["key"] for item in self.data["videos"]]
-            crew_list = self.merge_person_listitems(self.data["crew"])
-            if "dbid" not in self.data["general"]:
-                poster_thread.join()
-                self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
-            filter_thread.start()
-            lists_thread.join()
-            self.data["lists"] = lists_thread.listitems
-            sets_thread.join()
-            cert_list = get_certification_list("movie")
-            for item in self.data["releases"]:
-                if item["iso_3166_1"] in cert_list:
-                    language = item["iso_3166_1"]
-                    certification = item["certification"]
-                    language_certs = cert_list[language]
-                    hit = dictfind(language_certs, "certification", certification)
-                    if hit:
-                        item["meaning"] = hit["meaning"]
-            self.set_listitems = sets_thread.listitems
-            self.setinfo = sets_thread.setinfo
-            id_list = sets_thread.id_list
-            self.data["similar"] = [item for item in self.data["similar"] if item["id"] not in id_list]
-            youtube_thread.join()
-            youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
-            filter_thread.join()
-            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
-                              (150, create_listitems(self.data["similar"], 0)),
-                              (250, create_listitems(self.set_listitems, 0)),
-                              (450, create_listitems(self.data["lists"], 0)),
-                              (550, create_listitems(self.data["studios"], 0)),
-                              (650, create_listitems(self.data["releases"], 0)),
-                              (750, create_listitems(crew_list, 0)),
-                              (850, create_listitems(self.data["genres"], 0)),
-                              (950, create_listitems(self.data["keywords"], 0)),
-                              (1050, create_listitems(self.data["reviews"], 0)),
-                              (1150, create_listitems(self.data["videos"], 0)),
-                              (1250, create_listitems(self.data["images"], 0)),
-                              (1350, create_listitems(self.data["backdrops"], 0)),
-                              (350, create_listitems(youtube_vids, 0))]
-        else:
+        if not self.tmdb_id:
             notify(ADDON.getLocalizedString(32143))
-            self.close()
+            return None
+        self.close()
+        self.data = extended_movie_info(self.tmdb_id, self.dbid)
+        if "general" not in self.data:
+            return None
+        log("Blur image %s with radius %i" % (self.data["general"]["thumb"], 25))
+        youtube_thread = Get_Youtube_Vids_Thread(self.data["general"]["Label"] + " " + self.data["general"]["year"] + ", movie", "", "relevance", 15)
+        sets_thread = SetItemsThread(self.data["general"]["SetId"])
+        self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
+        lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
+        self.omdb_thread.start()
+        sets_thread.start()
+        youtube_thread.start()
+        lists_thread.start()
+        vid_id_list = [item["key"] for item in self.data["videos"]]
+        crew_list = self.merge_person_listitems(self.data["crew"])
+        if "dbid" not in self.data["general"]:
+            self.data["general"]['Poster'] = get_file(self.data["general"]["Poster"])
+        filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
+        filter_thread.start()
+        lists_thread.join()
+        self.data["lists"] = lists_thread.listitems
+        sets_thread.join()
+        cert_list = get_certification_list("movie")
+        for item in self.data["releases"]:
+            if item["iso_3166_1"] in cert_list:
+                language = item["iso_3166_1"]
+                certification = item["certification"]
+                language_certs = cert_list[language]
+                hit = dictfind(language_certs, "certification", certification)
+                if hit:
+                    item["meaning"] = hit["meaning"]
+        self.set_listitems = sets_thread.listitems
+        self.setinfo = sets_thread.setinfo
+        id_list = sets_thread.id_list
+        self.data["similar"] = [item for item in self.data["similar"] if item["id"] not in id_list]
+        youtube_thread.join()
+        youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
+        filter_thread.join()
+        self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+        self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
+                          (150, create_listitems(self.data["similar"], 0)),
+                          (250, create_listitems(self.set_listitems, 0)),
+                          (450, create_listitems(self.data["lists"], 0)),
+                          (550, create_listitems(self.data["studios"], 0)),
+                          (650, create_listitems(self.data["releases"], 0)),
+                          (750, create_listitems(crew_list, 0)),
+                          (850, create_listitems(self.data["genres"], 0)),
+                          (950, create_listitems(self.data["keywords"], 0)),
+                          (1050, create_listitems(self.data["reviews"], 0)),
+                          (1150, create_listitems(self.data["videos"], 0)),
+                          (1250, create_listitems(self.data["images"], 0)),
+                          (1350, create_listitems(self.data["backdrops"], 0)),
+                          (350, create_listitems(youtube_vids, 0))]
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
