@@ -363,6 +363,7 @@ def start_info_actions(infos, params):
             xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
+            return None
         elif info == 'selectautocomplete':
             window_id = xbmcgui.getCurrentWindowDialogId()
             window = xbmcgui.Window(window_id)
