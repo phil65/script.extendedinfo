@@ -14,6 +14,7 @@ from TheMovieDB import *
 import time
 from threading import Timer
 from BaseClasses import DialogBaseList
+from WindowManager import wm
 
 SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
                    xbmc.getLocalizedString(172): "release_date",
@@ -185,7 +186,7 @@ class DialogVideoList(DialogBaseList):
         focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            pop_window_stack()
+            wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
@@ -244,7 +245,7 @@ class DialogVideoList(DialogBaseList):
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
         if control_id in [500]:
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
             media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")

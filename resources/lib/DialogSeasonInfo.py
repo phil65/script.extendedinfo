@@ -11,7 +11,7 @@ import DialogActorInfo
 import DialogEpisodeInfo
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
-
+from WindowManager import wm
 
 class DialogSeasonInfo(DialogBaseInfo):
 
@@ -62,7 +62,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         if control_id in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
@@ -72,17 +72,13 @@ class DialogSeasonInfo(DialogBaseInfo):
             if not self.tmdb_id:
                 response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=self.tmdb_id, season=season, episode=episode)
             dialog.doModal()
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
-            add_to_window_stack(self)
-            self.close()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem)
-            PLAYER.wait_for_video_end()
-            pop_window_stack()
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

@@ -5,6 +5,7 @@
 
 import xbmc
 import xbmcgui
+from WindowManager import wm
 
 class VideoPlayer(xbmc.Player):
 
@@ -21,10 +22,13 @@ class VideoPlayer(xbmc.Player):
     def onPlayBackStarted(self):
         self.stopped = False
 
-    def playYoutubeVideo(self, youtube_id="", listitem=None):
+    def playYoutubeVideo(self, youtube_id="", listitem=None, window=False):
         """
         play youtube vid with info from *listitem
         """
+        if window:
+            wm.add_to_stack(window)
+            window.close()
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), xbmc.getLocalizedString(515): 'Youtube Video'})
@@ -35,6 +39,9 @@ class VideoPlayer(xbmc.Player):
             if vid:
                 stream_url = vid.streamURL()
                 self.play(stream_url, listitem)
+                if window:
+                    self.wait_for_video_end()
+                    wm.pop_stack()
         else:
             xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257), message="no youtube id found")
 

@@ -10,7 +10,7 @@ from YouTube import *
 import DialogActorInfo
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
-
+from WindowManager import wm
 
 class DialogEpisodeInfo(DialogBaseInfo):
 
@@ -61,17 +61,13 @@ class DialogEpisodeInfo(DialogBaseInfo):
         if control_id in [1000, 750]:
             actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
             credit_id = self.getControl(control_id).getSelectedItem().getProperty("credit_id")
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
             dialog.doModal()
         elif control_id in [350, 1150]:
             listitem = self.getControl(control_id).getSelectedItem()
-            add_to_window_stack(self)
-            self.close()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem)
-            PLAYER.wait_for_video_end()
-            pop_window_stack()
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id in [1250, 1350]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

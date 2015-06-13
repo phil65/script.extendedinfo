@@ -29,7 +29,6 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
-window_stack = []
 PLAYER = VideoPlayer.VideoPlayer()
 
 def run_async(func):
@@ -353,23 +352,6 @@ def calculate_age(born, died=False):
         elif diff_months == 0 and diff_days == 0 and not died:
             notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
-
-
-def add_to_window_stack(window):
-    """
-    add window / dialog to global window stack
-    """
-    window_stack.append(window)
-
-
-def pop_window_stack():
-    """
-    get newest item from global window stack
-    """
-    if window_stack:
-        dialog = window_stack.pop()
-        dialog.doModal()
-
 
 def get_playlist_stats(path):
     start_index = -1

@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 from Utils import *
 from TheMovieDB import *
-
+from WindowManager import wm
 
 class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
@@ -189,7 +189,7 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         media_type = self.window.getProperty("type")
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            pop_window_stack()
+            wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
@@ -208,7 +208,7 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
 
     def open_video_list(self, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
         import DialogVideoList
-        add_to_window_stack(self)
+        wm.add_to_stack(self)
         self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
         dialog.doModal()

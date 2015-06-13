@@ -12,6 +12,7 @@ from YouTube import *
 import DialogVideoInfo
 import DialogTVShowInfo
 from BaseClasses import DialogBaseInfo
+from WindowManager import wm
 
 
 class DialogActorInfo(DialogBaseInfo):
@@ -77,7 +78,7 @@ class DialogActorInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if control_id in [150, 550]:
             listitem = self.getControl(control_id).getSelectedItem()
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
             dialog.doModal()
@@ -95,18 +96,18 @@ class DialogActorInfo(DialogBaseInfo):
                 w.doModal()
                 if w.type == "episode":
                     import DialogEpisodeInfo
-                    add_to_window_stack(self)
+                    wm.add_to_stack(self)
                     self.close()
                     dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=listitem.getProperty("id"))
                     dialog.doModal()
                 elif w.type == "season":
                     import DialogSeasonInfo
-                    add_to_window_stack(self)
+                    wm.add_to_stack(self)
                     self.close()
                     dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], tvshow=listitem.getLabel())
                     dialog.doModal()
             if selection == 1:
-                add_to_window_stack(self)
+                wm.add_to_stack(self)
                 self.close()
                 dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
                 dialog.doModal()
@@ -116,11 +117,7 @@ class DialogActorInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id == 350:
             listitem = self.getControl(control_id).getSelectedItem()
-            add_to_window_stack(self)
-            self.close()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem)
-            PLAYER.wait_for_video_end()
-            pop_window_stack()
+            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id == 132:
             text = self.data["general"]["biography"]
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])

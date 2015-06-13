@@ -13,6 +13,7 @@ import DialogActorInfo
 from ImageTools import *
 import threading
 from BaseClasses import DialogBaseInfo
+from WindowManager import wm
 
 
 class DialogVideoInfo(DialogBaseInfo):
@@ -119,13 +120,13 @@ class DialogVideoInfo(DialogBaseInfo):
         control = self.getControl(control_id)
         if control_id in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id)
             dialog.doModal()
         elif control_id in [150, 250]:
             movie_id = control.getSelectedItem().getProperty("id")
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
             dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id)
             dialog.doModal()
@@ -141,11 +142,7 @@ class DialogVideoInfo(DialogBaseInfo):
             else:
                 youtube_id = control.getSelectedItem().getProperty("youtube_id")
             if youtube_id:
-                add_to_window_stack(self)
-                self.close()
-                PLAYER.playYoutubeVideo(youtube_id, control.getSelectedItem())
-                PLAYER.wait_for_video_end()
-                pop_window_stack()
+                PLAYER.playYoutubeVideo(youtube_id, control.getSelectedItem(), window=self)
             else:
                 notify(ADDON.getLocalizedString(32052))
         elif control_id == 550:

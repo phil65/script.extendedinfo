@@ -8,7 +8,7 @@ import xbmcgui
 from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList
-
+from WindowManager import wm
 
 class DialogYoutubeList(DialogBaseList):
 
@@ -52,7 +52,7 @@ class DialogYoutubeList(DialogBaseList):
         focusid = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
-            pop_window_stack()
+            wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
@@ -110,7 +110,7 @@ class DialogYoutubeList(DialogBaseList):
 
     def onClick(self, control_id):
         if control_id in [500]:
-            add_to_window_stack(self)
+            wm.add_to_stack(self)
             self.close()
 
     def add_filter(self, key, value, typelabel, label):
