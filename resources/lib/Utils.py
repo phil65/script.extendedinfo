@@ -355,21 +355,6 @@ def calculate_age(born, died=False):
     return base_age
 
 
-def play_trailer(youtube_id="", listitem=None):
-    """
-    play youtube vid with info from *listitem
-    """
-    if not listitem:
-        listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-        listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
-    import YDStreamExtractor
-    YDStreamExtractor.disableDASHVideo(True)
-    vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
-    if vid:
-        stream_url = vid.streamURL()
-        PLAYER.play(item=path, listitem=listitem)
-
-
 def add_to_window_stack(window):
     """
     add window / dialog to global window stack

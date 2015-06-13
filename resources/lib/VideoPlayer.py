@@ -22,6 +22,9 @@ class VideoPlayer(xbmc.Player):
         self.stopped = False
 
     def playYoutubeVideo(self, youtube_id="", listitem=None):
+        """
+        play youtube vid with info from *listitem
+        """
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), xbmc.getLocalizedString(515): 'Youtube Video'})

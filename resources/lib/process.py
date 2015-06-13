@@ -378,7 +378,7 @@ def start_info_actions(infos, params):
         elif info == "youtubevideo":
             if params.get("id", ""):
                 xbmc.executebuiltin("Dialog.Close(all,true)")
-                play_trailer(params.get("id", ""))
+                PLAYER.playYoutubeVideo(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.sleep(100)
@@ -395,7 +395,7 @@ def start_info_actions(infos, params):
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 if trailer:
-                    play_trailer(trailer)
+                    PLAYER.playYoutubeVideo(trailer)
                 else:
                     notify("Error", "No Trailer available")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
