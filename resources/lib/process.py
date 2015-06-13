@@ -375,9 +375,8 @@ def start_info_actions(infos, params):
             xbmc.sleep(200)
             HOME.clearProperty(params.get("name", ""))
         elif info == "youtubevideo":
-            if params.get("id", ""):
-                xbmc.executebuiltin("Dialog.Close(all,true)")
-                PLAYER.playYoutubeVideo(params.get("id", ""))
+            xbmc.executebuiltin("Dialog.Close(all)")
+            PLAYER.playYoutubeVideo(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             xbmc.sleep(100)
@@ -393,10 +392,7 @@ def start_info_actions(infos, params):
             if movie_id:
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                if trailer:
-                    PLAYER.playYoutubeVideo(trailer)
-                else:
-                    notify("Error", "No Trailer available")
+                PLAYER.playYoutubeVideo(trailer)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
             set_mbids_for_artists(True, False)
