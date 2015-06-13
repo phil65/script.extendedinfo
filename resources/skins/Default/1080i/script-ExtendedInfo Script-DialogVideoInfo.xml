@@ -606,7 +606,7 @@
                                         <height>24</height>
                                         <align>left</align>
                                         <aligny>bottom</aligny>
-                                        <label>N / A</label>
+                                        <label>$LOCALIZE[416]</label>
                                         <textcolor>FF999999</textcolor>
                                         <font>font10</font>
                                         <visible>IsEmpty(Window.Property(movie.SubtitleLanguage.1)) + IsEmpty(Window.Property(movie.SubtitleLanguage.2))</visible>
@@ -2952,7 +2952,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label>Minutes</label>
+                                    <label>$LOCALIZE[12391]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
@@ -3014,7 +3014,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label>Budget</label>
+                                    <label>$ADDON[script.extendedinfo 32109]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
