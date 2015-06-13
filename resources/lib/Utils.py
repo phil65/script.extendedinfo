@@ -894,6 +894,9 @@ def create_listitems(data=None, preload_images=0):
             elif key.lower() in ["path"]:
                 listitem.setPath(path=value)
                 listitem.setProperty('%s' % (key), value)
+            elif key.lower() in ["season"]:
+                listitem.setInfo('video', {key.lower(): int(value)})
+                listitem.setProperty('%s' % (key), value)
             elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key.lower(): value})
                 # log("key: " + unicode(key) + "  value: " + unicode(value))

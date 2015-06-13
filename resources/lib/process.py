@@ -330,7 +330,7 @@ def start_info_actions(infos, params):
             else:
                 favs = get_favs()
                 HOME.setProperty('favourite.count', str(len(favs)))
-                if len(favs) > 0:
+                if favs:
                     HOME.setProperty('favourite.1.name', favs[-1]["Label"])
             data = favs, "Favourites"
         elif info == 'similarlocal' and "dbid" in params:
