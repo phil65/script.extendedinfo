@@ -16,8 +16,10 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
     def __init__(self, *args, **kwargs):
         if ADDON.getSetting("window_mode") == "true":
             xbmcgui.WindowXML.__init__(self)
+            self.window_type = "window"
         else:
             xbmcgui.WindowXMLDialog.__init__(self)
+            self.window_type = "dialog"
         self.listitem_list = kwargs.get('listitems', None)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
@@ -151,8 +153,10 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
     def __init__(self, *args, **kwargs):
         if ADDON.getSetting("window_mode") == "true":
             xbmcgui.WindowXML.__init__(self)
+            self.window_type = "window"
         else:
             xbmcgui.WindowXMLDialog.__init__(self)
+            self.window_type = "dialog"
         self.logged_in = check_login()
         self.data = None
         check_version()
@@ -180,7 +184,6 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
     def merge_person_listitems(self, items):
         crew_id_list = []
         crew_list = []
-        prettyprint(items)
         for item in items:
             if item["id"] not in crew_id_list:
                 crew_id_list.append(item["id"])
