@@ -39,7 +39,7 @@ class WindowManager():
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid, name=name, imdb_id=imdb_id)
         if dialog.data:
             if prev_window:
-                wm.add_to_stack(prev_window)
+                self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
 
@@ -51,7 +51,7 @@ class WindowManager():
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, dbid=dbid, tvdb_id=tvdb_id, imdb_id=imdb_id, name=name)
         if dialog.data:
             if prev_window:
-                wm.add_to_stack(prev_window)
+                self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
 
@@ -64,7 +64,7 @@ class WindowManager():
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
         if dialog.data:
             if prev_window:
-                wm.add_to_stack(prev_window)
+                self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
 
@@ -76,9 +76,10 @@ class WindowManager():
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
         if dialog.data:
             if prev_window:
-                wm.add_to_stack(prev_window)
+                self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
+
 
 
 wm = WindowManager()
