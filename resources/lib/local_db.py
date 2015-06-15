@@ -175,11 +175,10 @@ def handle_db_movies(movie):
 
 
 def handle_db_tvshows(tvshow):
-    path = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(tvshow['tvshowid'])
     if ADDON.getSetting("infodialog_onclick") != "false":
-        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,dbid=%s)' % str(tvshow['tvshowid'])
+        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s)' % str(tvshow['tvshowid'])
     else:
-        path = path
+        path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/)' % str(tvshow['tvshowid'])
     db_tvshow = {'Art(fanart)': tvshow["art"].get('fanart', ""),
                  'Art(poster)': tvshow["art"].get('poster', ""),
                  'Fanart': tvshow["art"].get('fanart', ""),
