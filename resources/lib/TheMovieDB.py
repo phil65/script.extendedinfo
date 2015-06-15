@@ -668,18 +668,13 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if not response:
         notify("Could not get movie information")
         return {}
-    authors = []
-    directors = []
     mpaa = ""
     set_name = ""
     set_id = ""
     genres = [item["name"] for item in response["genres"]]
     Studio = [item["name"] for item in response["production_companies"]]
-    for item in response['credits']['crew']:
-        if item["job"] == "Author":
-            authors.append(item["name"])
-        elif item["job"] == "Director":
-            directors.append(item["name"])
+    authors = [item["name"] for item in response['credits']['crew'] if item["job"] == "Author"]
+    directors = [item["name"] for item in response['credits']['crew'] if item["job"] == "Director"]
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
     movie_set = fetch(response, "belongs_to_collection")
