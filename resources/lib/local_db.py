@@ -329,11 +329,8 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
     now = time.time()
     local_items = []
     remote_items = []
-    prettyprint(tvshow_title_list)
-    prettyprint(tvshow_otitle_list)
     for online_item in online_list:
         found = False
-        prettyprint(online_item)
         if "imdb_id" in online_item and online_item["imdb_id"] in tvshow_imdb_list:
             index = tvshow_imdb_list.index(online_item["imdb_id"])
             found = True
