@@ -223,3 +223,24 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.close()
         dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
         dialog.doModal()
+
+    def open_credit_dialog(self, credit_id):
+        info = get_credit_info(credit_id)
+        listitems = handle_tmdb_seasons(info["media"]["seasons"])
+        listitems += handle_tmdb_episodes(info["media"]["episodes"])
+        if not listitems:
+            listitems += [{"label": xbmc.getLocalizedString(19055)}]
+        w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
+        w.doModal()
+        if w.type == "episode":
+            import DialogEpisodeInfo
+            wm.add_to_stack(self)
+            self.close()
+            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=info["media"]["id"])
+            dialog.doModal()
+        elif w.type == "season":
+            import DialogSeasonInfo
+            wm.add_to_stack(self)
+            self.close()
+            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], id=info["media"]["id"])
+            dialog.doModal()

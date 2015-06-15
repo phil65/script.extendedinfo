@@ -24,7 +24,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         if self.tmdb_id or (self.season and self.tvshow):
             self.data = extended_season_info(self.tmdb_id, self.tvshow, self.season)
             if not self.data:
-                return
+                return None
             search_string = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]['title'])
             youtube_thread = GetYoutubeVidsThread(search_string, "", "relevance", 15)
             youtube_thread.start()

@@ -81,25 +81,7 @@ class DialogActorInfo(DialogBaseInfo):
             options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
             selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
             if selection == 0:
-                info = get_credit_info(listitem.getProperty("credit_id"))
-                listitems = handle_tmdb_seasons(info["media"]["seasons"])
-                listitems += handle_tmdb_episodes(info["media"]["episodes"])
-                if not listitems:
-                    listitems += [{"label": xbmc.getLocalizedString(19055)}]
-                w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
-                w.doModal()
-                if w.type == "episode":
-                    import DialogEpisodeInfo
-                    wm.add_to_stack(self)
-                    self.close()
-                    dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=listitem.getProperty("id"))
-                    dialog.doModal()
-                elif w.type == "season":
-                    import DialogSeasonInfo
-                    wm.add_to_stack(self)
-                    self.close()
-                    dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], tvshow=listitem.getLabel())
-                    dialog.doModal()
+                self.open_credit_dialog(listitem.getProperty("credit_id"))
             if selection == 1:
                 wm.add_to_stack(self)
                 self.close()

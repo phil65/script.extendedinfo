@@ -95,12 +95,17 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.close()
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
         elif control_id in [1000, 750]:
-            actor_id = control.getSelectedItem().getProperty("id")
-            credit_id = control.getSelectedItem().getProperty("credit_id")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
-            dialog.doModal()
+            listitem = self.getControl(control_id).getSelectedItem()
+            credit_id = listitem.getProperty("credit_id")
+            options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32009)]
+            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
+            if selection == 0:
+                self.open_credit_dialog(credit_id)
+            if selection == 1:
+                wm.add_to_stack(self)
+                self.close()
+                dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), credit_id=credit_id)
+                dialog.doModal()
         elif control_id in [150]:
             tmdb_id = control.getSelectedItem().getProperty("id")
             dbid = control.getSelectedItem().getProperty("dbid")
