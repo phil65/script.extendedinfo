@@ -33,35 +33,39 @@ class WindowManager():
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None, name=None, imdb_id=None):
         import DialogVideoInfo
-        if prev_window:
-            wm.add_to_stack(prev_window)
-            prev_window.close()
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid, name=name, imdb_id=imdb_id)
-        dialog.doModal()
+        if dialog.data:
+            if prev_window:
+                wm.add_to_stack(prev_window)
+                prev_window.close()
+            dialog.doModal()
 
     def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         import DialogTVShowInfo
-        if prev_window:
-            wm.add_to_stack(prev_window)
-            prev_window.close()
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, dbid=dbid, tvdb_id=tvdb_id, imdb_id=imdb_id, name=name)
-        dialog.doModal()
+        if dialog.data:
+            if prev_window:
+                wm.add_to_stack(prev_window)
+                prev_window.close()
+            dialog.doModal()
 
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):
         import DialogSeasonInfo
-        if prev_window:
-            wm.add_to_stack(prev_window)
-            prev_window.close()
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
-        dialog.doModal()
+        if dialog.data:
+            if prev_window:
+                wm.add_to_stack(prev_window)
+                prev_window.close()
+            dialog.doModal()
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
         import DialogActorInfo
-        if prev_window:
-            wm.add_to_stack(prev_window)
-            prev_window.close()
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
-        dialog.doModal()
+        if dialog.data:
+            if prev_window:
+                wm.add_to_stack(prev_window)
+                prev_window.close()
+            dialog.doModal()
 
 
 wm = WindowManager()
