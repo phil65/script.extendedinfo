@@ -84,6 +84,10 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
 
 
 def create_list(list_name):
+    '''
+    creates new list on TMDB with name *list_name
+    returns newly created list id
+    '''
     session_id = get_session_id()
     url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
@@ -127,6 +131,9 @@ def change_list_status(list_id, movie_id, status):
 
 
 def get_account_lists(cache_time=0):
+    '''
+    returns movie lists for TMDB user
+    '''
     session_id = get_session_id()
     account_id = get_account_info()
     if session_id and account_id:
@@ -137,6 +144,10 @@ def get_account_lists(cache_time=0):
 
 
 def get_account_info():
+    '''
+    returns TMDB account id
+    '''
+
     session_id = get_session_id()
     response = get_tmdb_data("account?session_id=%s&" % session_id, 999999)
     if "id" in response:
@@ -154,6 +165,9 @@ def get_certification_list(media_type):
 
 
 def get_guest_session_id():
+    '''
+    returns guest session id for TMDB
+    '''
     response = get_tmdb_data("authentication/guest_session/new?", 999999)
     if "guest_session_id" in response:
         return str(response["guest_session_id"])
@@ -162,6 +176,9 @@ def get_guest_session_id():
 
 
 def get_session_id():
+    '''
+    returns session id for TMDB Account
+    '''
     request_token = auth_request_token()
     response = get_tmdb_data("authentication/session/new?request_token=%s&" % request_token, 99999)
     if response and "success" in response:
@@ -179,6 +196,9 @@ def get_request_token():
 
 
 def auth_request_token():
+    '''
+    returns request token, is used to get session_id
+    '''
     request_token = get_request_token()
     username = ADDON.getSetting("tmdb_username")
     password = ADDON.getSetting("tmdb_password")
