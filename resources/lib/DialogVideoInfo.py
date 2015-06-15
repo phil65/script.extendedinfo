@@ -25,17 +25,14 @@ class DialogVideoInfo(DialogBaseInfo):
             ADDON.setSetting("first_start_infodialog", "True")
             xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
         self.monitor = SettingsMonitor()
-        tmdb_id = kwargs.get('id')
+        self.tmdb_id = kwargs.get('id')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
-        if tmdb_id:
-            self.tmdb_id = tmdb_id
-        else:
+        if not self.tmdb_id:
             self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
         if not self.tmdb_id:
             notify(ADDON.getLocalizedString(32143))
             return None
-        self.close()
         self.data = extended_movie_info(self.tmdb_id, self.dbid)
         if "general" not in self.data:
             return None
