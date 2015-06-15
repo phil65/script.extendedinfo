@@ -158,6 +158,7 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             xbmcgui.WindowXMLDialog.__init__(self)
             self.window_type = "dialog"
         self.logged_in = check_login()
+        self.dbid = kwargs.get('dbid')
         self.data = None
         check_version()
 

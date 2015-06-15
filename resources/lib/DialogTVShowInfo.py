@@ -22,14 +22,13 @@ class DialogTVShowInfo(DialogBaseInfo):
         super(DialogTVShowInfo, self).__init__(*args, **kwargs)
         self.tmdb_id = None
         tmdb_id = kwargs.get('id', False)
-        dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdb_id')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
         if tmdb_id:
             self.tmdb_id = tmdb_id
-        elif dbid and (int(dbid) > 0):
-            tvdb_id = get_imdb_id_from_db("tvshow", dbid)
+        elif self.dbid and (int(self.dbid) > 0):
+            tvdb_id = get_imdb_id_from_db("tvshow", self.dbid)
             if tvdb_id:
                 self.tmdb_id = get_show_tmdb_id(tvdb_id)
         elif tvdb_id:
@@ -39,7 +38,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif self.name:
             self.tmdb_id = search_media(kwargs.get('name'), "", "tv")
         if self.tmdb_id:
-            self.data = extended_tvshow_info(self.tmdb_id)
+            self.data = extended_tvshow_info(self.tmdb_id, dbid=self.dbid)
             if not self.data:
                 return None
             youtube_thread = GetYoutubeVidsThread(self.data["general"]['title'] + " tv", "", "relevance", 15)
@@ -94,7 +93,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         control = self.getControl(control_id)
         if control_id == 120:
             self.close()
-            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (str(self.data["general"]['dbid'])))
+            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
         elif control_id in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
@@ -104,9 +103,10 @@ class DialogTVShowInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id in [150]:
             tmdb_id = control.getSelectedItem().getProperty("id")
+            dbid = control.getSelectedItem().getProperty("dbid")
             wm.add_to_stack(self)
             self.close()
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tmdb_id)
+            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tmdb_id, dbid=dbid)
             dialog.doModal()
         elif control_id in [250]:
             season = control.getSelectedItem().getProperty("season")
@@ -200,7 +200,7 @@ class DialogTVShowInfo(DialogBaseInfo):
     def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = extended_tvshow_info(self.tmdb_id, 0)
+            self.update = extended_tvshow_info(self.tmdb_id, 0, dbid=self.dbid)
             self.data["account_states"] = self.update["account_states"]
         if self.data["account_states"]:
             if self.data["account_states"]["favorite"]:
@@ -218,21 +218,20 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def show_manage_dialog(self):
         manage_list = []
-        tvshow_dbid = str(self.data["general"].get("dbid", ""))
         title = self.data["general"].get("TVShowTitle", "")
         # imdb_id = str(self.data["general"].get("imdb_id", ""))
         # filename = self.data["general"].get("FilenameAndPath", False)
-        if tvshow_dbid:
-            manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + tvshow_dbid + ")"],
-                            [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + tvshow_dbid + ")"],
-                            [ADDON.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ",extrathumbs)"],
-                            [ADDON.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + tvshow_dbid + ")"]]
+        if self.dbid:
+            manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
+                            [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],
+                            [ADDON.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs)"],
+                            [ADDON.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ")"]]
         else:
             manage_list += [[ADDON.getLocalizedString(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
-        # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and tvshow_dbid:
+        # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
         #     manage_list.append([ADDON.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
-        if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and tvshow_dbid:
-            manage_list.append([ADDON.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + tvshow_dbid + ")"])
+        if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
+            manage_list.append([ADDON.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
         manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
         listitems = [item[0] for item in manage_list]
         selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32133), listitems)

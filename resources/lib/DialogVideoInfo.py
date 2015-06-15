@@ -26,7 +26,6 @@ class DialogVideoInfo(DialogBaseInfo):
             xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
         self.monitor = SettingsMonitor()
         tmdb_id = kwargs.get('id')
-        self.dbid = kwargs.get('dbid')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
         if tmdb_id:
@@ -114,9 +113,10 @@ class DialogVideoInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id in [150, 250]:
             movie_id = control.getSelectedItem().getProperty("id")
+            dbid = control.getSelectedItem().getProperty("dbid")
             wm.add_to_stack(self)
             self.close()
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id)
+            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid)
             dialog.doModal()
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")

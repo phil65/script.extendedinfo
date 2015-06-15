@@ -248,15 +248,16 @@ class DialogVideoList(DialogBaseList):
             wm.add_to_stack(self)
             self.close()
             media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
+            dbid = self.getControl(control_id).getSelectedItem().getProperty("dbid")
             media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")
             if media_type:
                 self.type = media_type
             if self.type == "tv":
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id)
+                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id, dbid=dbid)
             elif self.type == "person":
                 dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id)
             else:
-                dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id)
+                dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id, dbid=dbid)
             dialog.doModal()
         elif control_id == 5002:
             self.get_genre()
