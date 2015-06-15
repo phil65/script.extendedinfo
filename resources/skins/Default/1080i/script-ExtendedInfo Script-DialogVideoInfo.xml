@@ -141,7 +141,31 @@
                                 <radioposy>30</radioposy>
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
-                                <visible>!IsEmpty(Window.Property(movie.DBID))</visible>
+                                <visible>!IsEmpty(Window.Property(movie.DBID)) + !Stringcompare(Window.Property(Type),tvshow)</visible>
+                                <onright>9</onright>
+                            </control>
+                            <control type="radiobutton" id="120">
+                                <label>$LOCALIZE[21385]</label>
+                                <textureradioonfocus colordiffuse="FF999999">icons/play.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FF999999">icons/play.png</textureradioofffocus>
+                                <textureradiooffnofocus colordiffuse="FF999999">icons/play.png</textureradiooffnofocus>
+                                <textureradioonnofocus colordiffuse="FF999999">icons/play.png</textureradioonnofocus>
+                                <width>280</width>
+                                <height>140</height>
+                                <textoffsetx>0</textoffsetx>
+                                <align>center</align>
+                                <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
+                                <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
+                                <font>font13</font>
+                                <textcolor>FF999999</textcolor>
+                                <focusedcolor>FFFAFAFA</focusedcolor>
+                                <aligny>bottom</aligny>
+                                <textoffsety>77</textoffsety>
+                                <radioposx>118</radioposx>
+                                <radioposy>30</radioposy>
+                                <radiowidth>44</radiowidth>
+                                <radioheight>44</radioheight>
+                                <visible>!IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(Type),tvshow)</visible>
                                 <onright>9</onright>
                             </control>
                             <control type="group" id="99">

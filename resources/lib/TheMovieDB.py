@@ -808,7 +808,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
              'Release_Date': fetch(response, 'first_air_date'),
              'ReleaseDate': fetch(response, 'first_air_date'),
              'Premiered': fetch(response, 'first_air_date')}
-    answer = {"general": newtv,
+    answer = {"general": merge_with_local_tvshow_info([newtv])[0],
               "actors": handle_tmdb_people(response["credits"]["cast"]),
               "similar": handle_tmdb_tvshows(response["similar"]["results"]),
               "studios": handle_tmdb_misc(response["production_companies"]),

@@ -92,7 +92,10 @@ class DialogTVShowInfo(DialogBaseInfo):
     def onClick(self, control_id):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         control = self.getControl(control_id)
-        if control_id in [1000, 750]:
+        if control_id == 120:
+            self.close()
+            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (str(self.data["general"]['dbid'])))
+        elif control_id in [1000, 750]:
             actor_id = control.getSelectedItem().getProperty("id")
             credit_id = control.getSelectedItem().getProperty("credit_id")
             wm.add_to_stack(self)
