@@ -11,6 +11,8 @@ v3.0.0
 - added local-check for Trakt and RT movie lists
 - added button id 10 to play trailer for movie info dialog
 - added genre, country and plot InfoLabels for TMDB movies
+- added local check for tvshows
+- added browsing tvshow credits (via selectdialog)
 - fixed onclick for Trakt calendar items
 - fixed limit param for some script calls
 - fixed biography dialog for actors
@@ -19,6 +21,7 @@ v3.0.0
 - fixed similarlocal call
 - fixed maps.browser call
 - fixed onclick for Trakt calendar items
+- filter out duplicates for crew roles (and merge job strings)
 - put cache files into subdirectories
 - reworked settings
 - localization
