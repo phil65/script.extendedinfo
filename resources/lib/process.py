@@ -24,8 +24,23 @@ def start_info_actions(infos, params):
         params["imdb_id"] = params["imdbid"]
     for info in infos:
         data = [], ""
+        if info == 'playmovie':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
+        elif info == 'playepisode':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %s }, "options":{ "resume": %s }  }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
+        elif info == 'playmusicvideo':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %s } }, "id": 1 }' % params.get("dbid"))
+        elif info == 'playalbum':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %s } }, "id": 1 }' % params.get("dbid"))
+        elif info == 'playsong':
+            xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
         #  Images
-        if info == 'xkcd':
+        elif info == 'xkcd':
             from MiscScraper import get_xkcd_images
             data = get_xkcd_images(), "XKCD"
         elif info == 'cyanide':

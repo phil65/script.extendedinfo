@@ -118,7 +118,7 @@ def handle_db_movies(movie):
     if ADDON.getSetting("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,dbid=%s)' % str(movie['movieid'])
     else:
-        path = trailer
+        path = 'plugin://script.extendedinfo/?info=playmovie&&dbid=%i' % movie['movieid']
     if (movie['resume']['position'] and movie['resume']['total']) > 0:
         resume = "true"
         played = '%s' % int((float(movie['resume']['position']) / float(movie['resume']['total'])) * 100)
@@ -145,6 +145,7 @@ def handle_db_movies(movie):
                 # 'SubtitleLanguage': " / ".join(subs),
                 # 'AudioLanguage': " / ".join(streams),
                 'Play': "",
+                'trailer': trailer,
                 'dbid': str(movie['movieid']),
                 'Rating': str(round(float(movie['rating']), 1)),
                 'Premiered': movie.get('year', "")}
@@ -164,6 +165,33 @@ def handle_db_movies(movie):
             db_movie['SubtitleLanguage.%d' % (i + 1)] = language
     db_movie.update(stream_info)
     return db_movie
+
+
+def handle_db_tvshows(tvshow):
+    path = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(tvshow['tvshowid'])
+    if ADDON.getSetting("infodialog_onclick") != "false":
+        path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,dbid=%s)' % str(tvshow['tvshowid'])
+    else:
+        path = path
+    db_tvshow = {'Art(fanart)': tvshow["art"].get('fanart', ""),
+                 'Art(poster)': tvshow["art"].get('poster', ""),
+                 'Fanart': tvshow["art"].get('fanart', ""),
+                 'Poster': tvshow["art"].get('poster', ""),
+                 'Banner': tvshow["art"].get('banner', ""),
+                 'DiscArt': tvshow["art"].get('discart', ""),
+                 'title': tvshow.get('label', ""),
+                 'File': tvshow.get('file', ""),
+                 'year': str(tvshow.get('year', "")),
+                 'Writer': " / ".join(tvshow['writer']),
+                 'Logo': tvshow['art'].get("clearlogo", ""),
+                 'OriginalTitle': tvshow.get('originaltitle', ""),
+                 'imdb_id': tvshow.get('imdbnumber', ""),
+                 'path': path,
+                 'Play': "",
+                 'dbid': str(tvshow['tvshowid']),
+                 'Rating': str(round(float(tvshow['rating']), 1)),
+                 'Premiered': tvshow.get('year', "")}
+    return db_tvshow
 
 
 def get_movie_from_db(movie_id):
