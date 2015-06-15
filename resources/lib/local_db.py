@@ -9,7 +9,10 @@ from Utils import *
 id_list = []
 title_list = []
 originaltitle_list = []
-
+tvshow_id_list = []
+tvshow_otitle_list = []
+tvshow_title_list = []
+tvshow_imdb_list = []
 
 def get_kodi_artists():
     filename = ADDON_DATA_PATH + "/XBMCartists.txt"
@@ -186,7 +189,6 @@ def handle_db_tvshows(tvshow):
                  'title': tvshow.get('label', ""),
                  'File': tvshow.get('file', ""),
                  'year': str(tvshow.get('year', "")),
-                 'Writer': " / ".join(tvshow['writer']),
                  'Logo': tvshow['art'].get("clearlogo", ""),
                  'OriginalTitle': tvshow.get('originaltitle', ""),
                  'imdb_id': tvshow.get('imdbnumber', ""),
@@ -207,7 +209,7 @@ def get_movie_from_db(movie_id):
 def get_tvshow_from_db(tvshow_id):
     response = get_kodi_json('"method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"], "tvshowid":%s }' % str(tvshow_id))
     if "result" in response and "tvshowdetails" in response["result"]:
-        return handle_db_movies(response["result"]["tvshowdetails"])
+        return handle_db_tvshows(response["result"]["tvshowdetails"])
     return {}
 
 def get_kodi_albums():
@@ -226,7 +228,7 @@ def create_channel_list():
         return False
 
 
-def compare_with_library(online_list=[], library_first=True, sortkey=False):
+def merge_with_local_movie_info(online_list=[], library_first=True, sortkey=False):
     global id_list
     global originaltitle_list
     global title_list
@@ -240,7 +242,7 @@ def compare_with_library(online_list=[], library_first=True, sortkey=False):
             title_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(title_list.JSON)"))
             imdb_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(imdb_list.JSON)"))
         else:
-            json_response = get_kodi_json('"method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber", "file"], "sort": { "method": "none" } }')
+            json_response = get_kodi_json('"method": "VideoLibrary.GetMovies", "params": {"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
             id_list = []
             imdb_list = []
             originaltitle_list = []
@@ -294,6 +296,79 @@ def compare_with_library(online_list=[], library_first=True, sortkey=False):
         return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
     else:
         return local_items + remote_items
+
+def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=False):
+    global tvshow_id_list
+    global tvshow_otitle_list
+    global tvshow_title_list
+    global tvshow_imdb_list
+    if not tvshow_title_list:
+        now = time.time()
+        tvshow_id_list = xbmc.getInfoLabel("Window(home).Property(tvshow_id_list.JSON)")
+        if tvshow_id_list and tvshow_id_list != "[]":
+            tvshow_id_list = simplejson.loads(tvshow_id_list)
+            tvshow_otitle_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_otitle_list.JSON)"))
+            tvshow_title_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_title_list.JSON)"))
+            tvshow_imdb_list = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_imdb_list.JSON)"))
+        else:
+            json_response = get_kodi_json('"method": "VideoLibrary.GetTVShows", "params": {"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
+            tvshow_id_list = []
+            tvshow_imdb_list = []
+            tvshow_otitle_list = []
+            tvshow_title_list = []
+            if "result" in json_response and "tvshows" in json_response["result"]:
+                for item in json_response["result"]["tvshows"]:
+                    tvshow_id_list.append(item["tvshowid"])
+                    tvshow_imdb_list.append(item["imdbnumber"])
+                    tvshow_otitle_list.append(item["originaltitle"].lower())
+                    tvshow_title_list.append(item["label"].lower())
+            HOME.setProperty("tvshow_id_list.JSON", simplejson.dumps(tvshow_id_list))
+            HOME.setProperty("tvshow_otitle_list.JSON", simplejson.dumps(tvshow_otitle_list))
+            HOME.setProperty("tvshow_title_list.JSON", simplejson.dumps(tvshow_title_list))
+            HOME.setProperty("tvshow_imdb_list.JSON", simplejson.dumps(tvshow_imdb_list))
+        log("create_light_tvshowlist: " + str(now - time.time()))
+    now = time.time()
+    local_items = []
+    remote_items = []
+    prettyprint(tvshow_title_list)
+    prettyprint(tvshow_otitle_list)
+    for online_item in online_list:
+        found = False
+        prettyprint(online_item)
+        if "imdb_id" in online_item and online_item["imdb_id"] in tvshow_imdb_list:
+            index = tvshow_imdb_list.index(online_item["imdb_id"])
+            found = True
+        elif online_item['title'].lower() in tvshow_title_list:
+            index = tvshow_title_list.index(online_item['title'].lower())
+            found = True
+        elif "OriginalTitle" in online_item and online_item["OriginalTitle"].lower() in tvshow_otitle_list:
+            index = tvshow_otitle_list.index(online_item["OriginalTitle"].lower())
+            found = True
+        if found:
+            local_item = get_tvshow_from_db(tvshow_id_list[index])
+            if local_item:
+                try:
+                    diff = abs(int(local_item["year"]) - int(online_item["year"]))
+                    if diff > 1:
+                        remote_items.append(online_item)
+                        continue
+                except:
+                    pass
+                online_item.update(local_item)
+                if library_first:
+                    local_items.append(online_item)
+                else:
+                    remote_items.append(online_item)
+            else:
+                remote_items.append(online_item)
+        else:
+            remote_items.append(online_item)
+    log("compare time: " + str(now - time.time()))
+    if sortkey:
+        return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+    else:
+        return local_items + remote_items
+
 
 
 def compare_album_with_library(online_list):

@@ -5,7 +5,7 @@
 
 from YouTube import *
 from Utils import *
-from local_db import compare_with_library, get_imdb_id_from_db
+from local_db import *
 import threading
 import re
 from urllib2 import Request, urlopen
@@ -248,7 +248,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'Premiered': fetch(movie, 'release_date')}
         movies.append(listitem)
     movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
-    movies = compare_with_library(movies, local_first, sortkey)
+    movies = merge_with_local_movie_info(movies, local_first, sortkey)
     return movies
 
 
@@ -292,7 +292,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Premiered': fetch(tv, 'first_air_date')}
         tvshows.append(newtv)
     tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
-    # tvshows = compare_with_library(tvshows, local_first, sortkey)
+    tvshows = merge_with_local_tvshow_info(tvshows, local_first, sortkey)
     return tvshows
 
 
@@ -731,7 +731,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         account_states = response["account_states"]
     else:
         account_states = None
-    synced_movie = compare_with_library([movie])
+    synced_movie = merge_with_local_movie_info([movie])
     if synced_movie:
         answer = {"general": synced_movie[0],
                   "actors": handle_tmdb_people(response["credits"]["cast"]),

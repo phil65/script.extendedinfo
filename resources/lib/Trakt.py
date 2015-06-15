@@ -5,7 +5,7 @@
 
 import datetime
 from Utils import *
-from local_db import compare_with_library
+from local_db import merge_with_local_movie_info
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -97,7 +97,7 @@ def handle_trakt_movies(results):
                  'Fanart': movie["movie"]["images"]["fanart"]["full"],
                  'thumb': movie['movie']["images"]["poster"]["thumb"]}
         movies.append(movie)
-    movies = compare_with_library(movies, False)
+    movies = merge_with_local_movie_info(movies, False)
     return movies
 
 
