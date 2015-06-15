@@ -37,11 +37,7 @@ class WindowManager():
         """
         import DialogVideoInfo
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid, name=name, imdb_id=imdb_id)
-        if dialog.data:
-            if prev_window:
-                self.add_to_stack(prev_window)
-                prev_window.close()
-            dialog.doModal()
+        self.open_dialog(dialog, prev_window)
 
     def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         """
@@ -49,11 +45,7 @@ class WindowManager():
         """
         import DialogTVShowInfo
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, dbid=dbid, tvdb_id=tvdb_id, imdb_id=imdb_id, name=name)
-        if dialog.data:
-            if prev_window:
-                self.add_to_stack(prev_window)
-                prev_window.close()
-            dialog.doModal()
+        self.open_dialog(dialog, prev_window)
 
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):
         """
@@ -62,11 +54,7 @@ class WindowManager():
         """
         import DialogSeasonInfo
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
-        if dialog.data:
-            if prev_window:
-                self.add_to_stack(prev_window)
-                prev_window.close()
-            dialog.doModal()
+        self.open_dialog(dialog, prev_window)
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
         """
@@ -74,12 +62,13 @@ class WindowManager():
         """
         import DialogActorInfo
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
+        self.open_dialog(dialog, prev_window)
+
+    def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if prev_window:
                 self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
-
-
 
 wm = WindowManager()
