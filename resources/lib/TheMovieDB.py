@@ -731,9 +731,13 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         account_states = response["account_states"]
     else:
         account_states = None
-    synced_movie = merge_with_local_movie_info([movie])
-    if synced_movie:
-        answer = {"general": synced_movie[0],
+    if dbid:
+        local_item = get_movie_from_db(dbid)
+        movie.update(local_item)
+    else:
+        movie = merge_with_local_movie_info([movie])[0]
+    if movie:
+        answer = {"general": movie,
                   "actors": handle_tmdb_people(response["credits"]["cast"]),
                   "similar": handle_tmdb_movies(response["similar"]["results"]),
                   "lists": handle_tmdb_misc(response["lists"]["results"]),
@@ -752,7 +756,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     return answer
 
 
-def extended_tvshow_info(tvshow_id=None, cache_time=7):
+def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     session_string = ""
     if check_login():
         session_string = "session_id=%s&" % (get_session_id())
@@ -776,39 +780,44 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7):
     else:
         duration = ""
     genres = [item["name"] for item in response["genres"]]
-    newtv = {'Art(fanart)': artwork.get("fanart", ""),
-             'Art(poster)': artwork.get("poster", ""),
-             'thumb': artwork.get("poster", ""),
-             'Poster': artwork.get("poster", ""),
-             'fanart': artwork.get("fanart", ""),
-             'title': fetch(response, 'name'),
-             'TVShowTitle': fetch(response, 'name'),
-             'OriginalTitle': fetch(response, 'original_name'),
-             'duration': duration,
-             'duration(h)': format_time(duration, "h"),
-             'duration(m)': format_time(duration, "m"),
-             'id': tmdb_id,
-             'Genre': " / ".join(genres),
-             'credit_id': fetch(response, 'credit_id'),
-             'Plot': clean_text(fetch(response, "overview")),
-             'year': get_year(fetch(response, 'first_air_date')),
-             'media_type': "tv",
-             'path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
-             'Rating': fetch(response, 'vote_average'),
-             'User_Rating': str(fetch(response, 'rating')),
-             'Votes': fetch(response, 'vote_count'),
-             'Status': fetch(response, 'status'),
-             'ShowType': fetch(response, 'type'),
-             'homepage': fetch(response, 'homepage'),
-             'last_air_date': fetch(response, 'last_air_date'),
-             'first_air_date': fetch(response, 'first_air_date'),
-             'number_of_episodes': fetch(response, 'number_of_episodes'),
-             'number_of_seasons': fetch(response, 'number_of_seasons'),
-             'in_production': fetch(response, 'in_production'),
-             'Release_Date': fetch(response, 'first_air_date'),
-             'ReleaseDate': fetch(response, 'first_air_date'),
-             'Premiered': fetch(response, 'first_air_date')}
-    answer = {"general": merge_with_local_tvshow_info([newtv])[0],
+    tvshow = {'Art(fanart)': artwork.get("fanart", ""),
+              'Art(poster)': artwork.get("poster", ""),
+              'thumb': artwork.get("poster", ""),
+              'Poster': artwork.get("poster", ""),
+              'fanart': artwork.get("fanart", ""),
+              'title': fetch(response, 'name'),
+              'TVShowTitle': fetch(response, 'name'),
+              'OriginalTitle': fetch(response, 'original_name'),
+              'duration': duration,
+              'duration(h)': format_time(duration, "h"),
+              'duration(m)': format_time(duration, "m"),
+              'id': tmdb_id,
+              'Genre': " / ".join(genres),
+              'credit_id': fetch(response, 'credit_id'),
+              'Plot': clean_text(fetch(response, "overview")),
+              'year': get_year(fetch(response, 'first_air_date')),
+              'media_type': "tv",
+              'path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
+              'Rating': fetch(response, 'vote_average'),
+              'User_Rating': str(fetch(response, 'rating')),
+              'Votes': fetch(response, 'vote_count'),
+              'Status': fetch(response, 'status'),
+              'ShowType': fetch(response, 'type'),
+              'homepage': fetch(response, 'homepage'),
+              'last_air_date': fetch(response, 'last_air_date'),
+              'first_air_date': fetch(response, 'first_air_date'),
+              'number_of_episodes': fetch(response, 'number_of_episodes'),
+              'number_of_seasons': fetch(response, 'number_of_seasons'),
+              'in_production': fetch(response, 'in_production'),
+              'Release_Date': fetch(response, 'first_air_date'),
+              'ReleaseDate': fetch(response, 'first_air_date'),
+              'Premiered': fetch(response, 'first_air_date')}
+    if dbid:
+        local_item = get_tvshow_from_db(dbid)
+        tvshow.update(local_item)
+    else:
+        tvshow = merge_with_local_tvshow_info([tvshow])[0]
+    answer = {"general": tvshow,
               "actors": handle_tmdb_people(response["credits"]["cast"]),
               "similar": handle_tmdb_tvshows(response["similar"]["results"]),
               "studios": handle_tmdb_misc(response["production_companies"]),
