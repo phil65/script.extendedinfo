@@ -10,10 +10,9 @@ from local_db import get_imdb_id_from_db
 from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
-import DialogActorInfo
-import DialogSeasonInfo
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+
 
 class DialogTVShowInfo(DialogBaseInfo):
 
@@ -102,23 +101,12 @@ class DialogTVShowInfo(DialogBaseInfo):
             if selection == 0:
                 self.open_credit_dialog(credit_id)
             if selection == 1:
-                wm.add_to_stack(self)
-                self.close()
-                dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), credit_id=credit_id)
-                dialog.doModal()
+                wm.open_actor_info(prev_window=self, actor_id=listitem.getProperty("id"))
         elif control_id in [150]:
-            tmdb_id = control.getSelectedItem().getProperty("id")
-            dbid = control.getSelectedItem().getProperty("dbid")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tmdb_id, dbid=dbid)
-            dialog.doModal()
+            wm.open_tvshow_info(prev_window=self, tvshow_id=control.getSelectedItem().getProperty("id"), dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [250]:
             season = control.getSelectedItem().getProperty("season")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=self.tmdb_id, season=season, tvshow=self.data["general"]['title'])
-            dialog.doModal()
+            wm.open_season_info(prev_window=self, tvshow_id=self.tmdb_id, season=season, tvshow=self.data["general"]['title'])
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
             PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)

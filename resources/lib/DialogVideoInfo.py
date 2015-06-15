@@ -9,7 +9,6 @@ from Utils import *
 from TheMovieDB import *
 from YouTube import *
 from omdb import *
-import DialogActorInfo
 from ImageTools import *
 import threading
 from BaseClasses import DialogBaseInfo
@@ -103,18 +102,9 @@ class DialogVideoInfo(DialogBaseInfo):
     def onClick(self, control_id):
         control = self.getControl(control_id)
         if control_id in [1000, 750]:
-            actor_id = control.getSelectedItem().getProperty("id")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id)
-            dialog.doModal()
+            wm.open_actor_info(prev_window=self, actor_id=control.getSelectedItem().getProperty("id"))
         elif control_id in [150, 250]:
-            movie_id = control.getSelectedItem().getProperty("id")
-            dbid = control.getSelectedItem().getProperty("dbid")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid)
-            dialog.doModal()
+            wm.open_movie_info(prev_window=self, movie_id=control.getSelectedItem().getProperty("id"), dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

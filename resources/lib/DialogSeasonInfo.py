@@ -7,11 +7,11 @@ import xbmc
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
-import DialogActorInfo
 import DialogEpisodeInfo
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+
 
 class DialogSeasonInfo(DialogBaseInfo):
 
@@ -21,7 +21,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
-        if self.tmdb_id or (self.season and self.tvshow):
+        if self.season and (self.tmdb_id or self.tvshow):
             self.data = extended_season_info(self.tmdb_id, self.tvshow, self.season)
             if not self.data:
                 return None
@@ -56,12 +56,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         control = self.getControl(control_id)
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if control_id in [1000, 750]:
-            actor_id = control.getSelectedItem().getProperty("id")
-            credit_id = control.getSelectedItem().getProperty("credit_id")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
-            dialog.doModal()
+            wm.open_actor_info(prev_window=self, actor_id=control.getSelectedItem().getProperty("id"))
         elif control_id in [2000]:
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")

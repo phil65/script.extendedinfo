@@ -10,6 +10,8 @@ from Utils import *
 from local_db import *
 from YouTube import *
 from Trakt import *
+from WindowManager import wm
+
 
 def start_info_actions(infos, params):
     if "artistname" in params:
@@ -26,23 +28,23 @@ def start_info_actions(infos, params):
         data = [], ""
         if info == 'playmovie':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playepisode':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %s }, "options":{ "resume": %s }  }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playmusicvideo':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playalbum':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playsong':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
         #  Images
         elif info == 'xkcd':
@@ -226,24 +228,15 @@ def start_info_actions(infos, params):
             data = get_popular_actors(), "PopularPeople"
         elif info == 'extendedinfo':
             HOME.setProperty('infodialogs.active', "true")
-            from DialogVideoInfo import DialogVideoInfo
-            dialog = DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""),
-                                     dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
-            dialog.doModal()
+            wm.open_movie_info(movie_id=params.get("id", ""), dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'extendedactorinfo':
             HOME.setProperty('infodialogs.active', "true")
-            from DialogActorInfo import DialogActorInfo
-            dialog = DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME,
-                                     ADDON_PATH, id=params.get("id", ""), name=params.get("name", ""))
-            dialog.doModal()
+            wm.open_actor_info(actor_id=params.get("id", ""), name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'extendedtvinfo':
             HOME.setProperty('infodialogs.active', "true")
-            from DialogTVShowInfo import DialogTVShowInfo
-            dialog = DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=params.get("id", ""), tvdb_id=params.get("tvdb_id", ""),
-                                      dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
-            dialog.doModal()
+            wm.open_tvshow_info(tvshow_id=params.get("id", ""), tvdb_id=params.get("tvdb_id", ""), dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'ratemedia':
             media_type = params.get("type", False)
@@ -265,9 +258,7 @@ def start_info_actions(infos, params):
         elif info == 'seasoninfo':
             if params.get("tvshow", False) and params.get("season", False):
                 HOME.setProperty('infodialogs.active', "true")
-                from DialogSeasonInfo import DialogSeasonInfo
-                dialog = DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, tvshow=params["tvshow"], season=params["season"])
-                dialog.doModal()
+                wm.open_season_info(tvshow=params["tvshow"], season=params["season"])
                 HOME.clearProperty('infodialogs.active')
             else:
                 notify("Error", "Required data missing in script call")

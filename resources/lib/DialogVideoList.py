@@ -7,9 +7,6 @@ import xbmc
 import xbmcgui
 import collections
 from Utils import *
-import DialogVideoInfo
-import DialogTVShowInfo
-import DialogActorInfo
 from TheMovieDB import *
 import time
 from threading import Timer
@@ -245,20 +242,17 @@ class DialogVideoList(DialogBaseList):
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
         if control_id in [500]:
-            wm.add_to_stack(self)
-            self.close()
             media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
             dbid = self.getControl(control_id).getSelectedItem().getProperty("dbid")
             media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")
             if media_type:
                 self.type = media_type
             if self.type == "tv":
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id, dbid=dbid)
+                wm.open_tvshow_info(prev_window=self, tvshow_id=media_id, dbid=dbid)
             elif self.type == "person":
-                dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id)
+                wm.open_actor_info(prev_window=self, actor_id=media_id)
             else:
-                dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=media_id, dbid=dbid)
-            dialog.doModal()
+                wm.open_movie_info(prev_window=self, movie_id=media_id, dbid=dbid)
         elif control_id == 5002:
             self.get_genre()
             self.update_content()

@@ -61,11 +61,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if control_id in [1000, 750]:
             actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
-            credit_id = self.getControl(control_id).getSelectedItem().getProperty("credit_id")
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, credit_id=credit_id)
-            dialog.doModal()
+            wm.open_actor_info(prev_window=self, actor_id=actor_id)
         elif control_id in [350, 1150]:
             listitem = self.getControl(control_id).getSelectedItem()
             PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)

@@ -9,8 +9,6 @@ from Utils import *
 from ImageTools import *
 from TheMovieDB import *
 from YouTube import *
-import DialogVideoInfo
-import DialogTVShowInfo
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
 
@@ -38,7 +36,6 @@ class DialogActorInfo(DialogBaseInfo):
                 return None
         if not self.id:
             notify(ADDON.getLocalizedString(32143))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.data = extended_actor_info(self.id)
@@ -72,10 +69,7 @@ class DialogActorInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if control_id in [150, 550]:
             listitem = self.getControl(control_id).getSelectedItem()
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-            dialog.doModal()
+            wm.open_movie_info(prev_window=self, movie_id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
         elif control_id in [250, 650]:
             listitem = self.getControl(control_id).getSelectedItem()
             options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
@@ -83,10 +77,7 @@ class DialogActorInfo(DialogBaseInfo):
             if selection == 0:
                 self.open_credit_dialog(listitem.getProperty("credit_id"))
             if selection == 1:
-                wm.add_to_stack(self)
-                self.close()
-                dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
-                dialog.doModal()
+                wm.open_tvshow_info(prev_window=self, tvshow_id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
         elif control_id in [450, 750]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)

@@ -9,6 +9,7 @@ from Utils import *
 from TheMovieDB import *
 from WindowManager import wm
 
+
 class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
@@ -239,8 +240,4 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=info["media"]["id"])
             dialog.doModal()
         elif w.type == "season":
-            import DialogSeasonInfo
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], id=info["media"]["id"])
-            dialog.doModal()
+            wm.open_season_info(prev_window=self, season=listitems[w.index]["season"], tvshow_id=info["media"]["id"])
