@@ -76,7 +76,7 @@ class WindowManager():
 
     def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
         """
-       open actor info, deal with window stack
+       open video list, deal with window stack and color
         """
         import DialogVideoList
         if prev_window:
