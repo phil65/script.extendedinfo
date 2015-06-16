@@ -31,6 +31,7 @@ ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 PLAYER = VideoPlayer.VideoPlayer()
 
+
 def run_async(func):
     """
     Decorator to run a function in a separate thread
@@ -176,45 +177,40 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
     show dialog including all video media lists (for widget selection)
     and set strings PREFIX.path and PREFIX.label with chosen values
     """
-    # rottentomatoes
-    movie = {"intheaters": "RottenTomatoes: In theaters",
-             "boxoffice": "RottenTomatoes: Box office",
-             "opening": "RottenTomatoes: Opening movies",
-             "comingsoon": "RottenTomatoes: Upcoming movies",
-             "toprentals": "RottenTomatoes: Top rentals",
-             "currentdvdreleases": "RottenTomatoes: Current DVD releases",
-             "newdvdreleases": "RottenTomatoes: New DVD releases",
-             "upcomingdvds": "RottenTomatoes: Upcoming DVDs",
+    movie = {"intheaters": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32042),
+             "boxoffice": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32055),
+             "opening": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32048),
+             "comingsoon": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32043),
+             "toprentals": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32056),
+             "currentdvdreleases": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32049),
+             "newdvdreleases": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32053),
+             "upcomingdvds": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32054),
              # tmdb
-             "incinemas": "TheMovieDB: In-cinema Movies",
-             "upcoming": "TheMovieDB: Upcoming movies",
-             "topratedmovies": "TheMovieDB: Top rated movies",
-             "popularmovies": "TheMovieDB: Popular movies",
+             "incinemas": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32042),
+             "upcoming": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32043),
+             "topratedmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32046),
+             "popularmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32044),
+             "accountlists": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32045),
              # trakt
-             "trendingmovies": "Trakt.tv: Trending movies",
+             "trendingmovies": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32047),
              # tmdb
-             "starredmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32134),
-             "ratedmovies": "TheMovieDB: %s" % ADDON.getLocalizedString(32135),
-             # local
-             # "latestdbmovies": "Local DB: Latest movies",
-             # "randomdbmovies": "Local DB: Random movies",
-             # "inprogressdbmovies": "Local DB: In progress movies",
+             "starredmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32134),
+             "ratedmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32135),
              }
-    tvshow = {"airingshows": "Trakt.tv: Airing TV shows",
-              "premiereshows": "Trakt.tv: Premiere TV shows",
-              "trendingshows": "Trakt.tv: Trending TV shows",
-              "airingtodaytvshows": "TheMovieDB: TV shows airing today",
-              "onairtvshows": "TheMovieDB: TV shows on air",
-              "topratedtvshows": "TheMovieDB: Top rated TV shows",
-              "populartvshows": "TheMovieDB: Popular TV shows",
-              "starredtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32144),
-              "ratedtvshows": "TheMovieDB: %s" % ADDON.getLocalizedString(32145),
+    tvshow = {"airingshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32028),
+              "premiereshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32029),
+              "trendingshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32032),
+              "airingtodaytvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32038),
+              "onairtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32039),
+              "topratedtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32040),
+              "populartvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32041),
+              "starredtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32144),
+              "ratedtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32145),
               }
-
     image = {"xkcd": "XKCD webcomics",
              "cyanide": "Cyanide & Happiness webcomics",
-             "dailybabe": "Daily babe",
-             "dailybabes": "Daily babes",
+             "dailybabe": "%s" % ADDON.getLocalizedString(32057),
+             "dailybabes": "%s" % ADDON.getLocalizedString(32058),
              }
 # popularpeople
     artist = {"topartists": "LastFM: Top artists",
@@ -225,7 +221,7 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
         listitems = merge_dicts(movie, tvshow, image, artist, event)
     keywords = [key for key in listitems.keys()]
     labels = [label for label in listitems.values()]
-    ret = xbmcgui.Dialog().select("Choose content", labels)
+    ret = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), labels)
     if ret > -1:
         notify(keywords[ret])
         xbmc.executebuiltin("Skin.SetString(%s.path,plugin://script.extendedinfo?info=%s)" % (string_prefix, keywords[ret]))
@@ -352,6 +348,7 @@ def calculate_age(born, died=False):
         elif diff_months == 0 and diff_days == 0 and not died:
             notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
     return base_age
+
 
 def get_playlist_stats(path):
     start_index = -1
@@ -653,11 +650,7 @@ def get_favs_by_type(fav_type):
     returns dict list containing favourites with type *fav_type
     """
     favs = get_favs()
-    fav_list = []
-    for fav in favs:
-        if fav["Type"] == fav_type:
-            fav_list.append(fav)
-    return fav_list
+    return [fav for fav in favs if fav["Type"] == fav_type]
 
 
 def get_fav_path(fav):

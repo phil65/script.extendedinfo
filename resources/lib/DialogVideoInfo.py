@@ -284,7 +284,6 @@ class DialogVideoInfo(DialogBaseInfo):
 
     def show_manage_dialog(self):
         manage_list = []
-        listitems = []
         movie_id = str(self.data["general"].get("dbid", ""))
         # filename = self.data["general"].get("FilenameAndPath", False)
         imdb_id = str(self.data["general"].get("imdb_id", ""))
@@ -300,8 +299,7 @@ class DialogVideoInfo(DialogBaseInfo):
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
             manage_list.append([ADDON.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
         manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
-        for item in manage_list:
-            listitems.append(item[0])
+        listitems = [item[0] for item in manage_list]
         selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32133), listitems)
         if selection > -1:
             for item in manage_list[selection][1].split("||"):

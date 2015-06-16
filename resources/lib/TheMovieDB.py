@@ -42,9 +42,7 @@ def check_login():
 
 
 def get_rating_from_user():
-    ratings = []
-    for i in range(1, 21):
-        ratings.append(str(float(i * 0.5)))
+    ratings = [str(float(i * 0.5)) for i in range(1, 21)]
     rating = xbmcgui.Dialog().select(ADDON.getLocalizedString(32129), ratings)
     if rating > -1:
         return (float(rating) * 0.5) + 0.5
