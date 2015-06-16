@@ -21,6 +21,7 @@ v3.0.0
 - fixed similarlocal call
 - fixed maps.browser call
 - fixed onclick for Trakt calendar items
+- fixed character InfoLabel for tvshow roles
 - filter out duplicates for crew roles (and merge job strings)
 - put cache files into subdirectories
 - improved dialog open/close behaviour
