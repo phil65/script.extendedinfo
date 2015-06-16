@@ -82,7 +82,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_rated_media_items("tv/episodes")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.open_video_list(listitems=listitems)
+            wm.open_video_list(prev_window=self, listitems=listitems)
 
     def update_states(self, forceupdate=True):
         if forceupdate:

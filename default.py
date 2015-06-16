@@ -30,9 +30,8 @@ class Main:
         if self.infos:
             start_info_actions(self.infos, self.params)
         elif not self.handle:
-            import DialogVideoList
-            dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH)
-            dialog.doModal()
+            from WindowManager import wm
+            wm.open_video_list()
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
         # except Exception:
         #     xbmc.executebuiltin('Dialog.Close(busydialog)')

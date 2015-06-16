@@ -23,6 +23,7 @@ v3.0.0
 - fixed onclick for Trakt calendar items
 - filter out duplicates for crew roles (and merge job strings)
 - put cache files into subdirectories
+- improved dialog open/close behaviour
 - reworked settings
 - localization
 - Code cleanup

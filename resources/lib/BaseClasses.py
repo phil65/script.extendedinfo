@@ -218,13 +218,6 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
                     params = '"art": {"fanart": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
 
-    def open_video_list(self, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
-        import DialogVideoList
-        wm.add_to_stack(self)
-        self.close()
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=self.data["general"]['ImageColor'], filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
-        dialog.doModal()
-
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)
         listitems = handle_tmdb_seasons(info["media"]["seasons"])

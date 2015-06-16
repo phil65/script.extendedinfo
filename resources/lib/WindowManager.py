@@ -74,6 +74,24 @@ class WindowManager():
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
         self.open_dialog(dialog, prev_window)
 
+    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
+        """
+       open actor info, deal with window stack
+        """
+        import DialogVideoList
+        if prev_window:
+            try:  # TODO rework
+                color = prev_window.data["general"]['ImageColor']
+            except:
+                color = "FFFFFFFF"
+        else:
+            color = "FFFFFFFF"
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=color, filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
+        if prev_window:
+            self.add_to_stack(prev_window)
+            prev_window.close()
+        dialog.doModal()
+
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if prev_window:
