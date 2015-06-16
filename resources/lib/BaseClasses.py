@@ -234,10 +234,6 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
         w.doModal()
         if w.type == "episode":
-            import DialogEpisodeInfo
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], show_id=info["media"]["id"])
-            dialog.doModal()
+            wm.open_episode_info(prev_window=self, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], tvshow_id=info["media"]["id"])
         elif w.type == "season":
             wm.open_season_info(prev_window=self, season=listitems[w.index]["season"], tvshow_id=info["media"]["id"])

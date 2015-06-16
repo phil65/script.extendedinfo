@@ -7,7 +7,6 @@ import xbmc
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
-import DialogEpisodeInfo
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
@@ -63,10 +62,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             if not self.tmdb_id:
                 response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
-            wm.add_to_stack(self)
-            self.close()
-            dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=self.tmdb_id, season=season, episode=episode)
-            dialog.doModal()
+            wm.open_episode_info(prev_window=self, tvshow_id=self.tmdb_id, season=season, episode=episode)
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
             PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)

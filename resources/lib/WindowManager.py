@@ -2,6 +2,7 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+
 from Utils import *
 import xbmcaddon
 ADDON = xbmcaddon.Addon()
@@ -50,10 +51,19 @@ class WindowManager():
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):
         """
        open season info, deal with window stack
-       needs *season + (*tvshow_id OR *tvshow)
+       needs *season AND (*tvshow_id OR *tvshow)
         """
         import DialogSeasonInfo
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
+        self.open_dialog(dialog, prev_window)
+
+    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None):
+        """
+       open season info, deal with window stack
+       needs *tvshow_id AND *season AND *episode
+        """
+        import DialogEpisodeInfo
+        dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=tvshow_id, season=season, episode=episode)
         self.open_dialog(dialog, prev_window)
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
