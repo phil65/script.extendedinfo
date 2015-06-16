@@ -28,7 +28,8 @@ SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
          "list": {ADDON.getLocalizedString(32157): "created_at"},
          "rating": {ADDON.getLocalizedString(32157): "created_at"}}
 TRANSLATIONS = {"movie": xbmc.getLocalizedString(20338),
-                "tv": xbmc.getLocalizedString(20364)}
+                "tv": xbmc.getLocalizedString(20364),
+                "person": ADDON.getLocalizedString(32156)}
 
 include_adult = str(ADDON.getSetting("include_adults")).lower()
 
