@@ -9,6 +9,7 @@ from local_db import *
 import threading
 import re
 from urllib2 import Request, urlopen
+from functools32 import lru_cache
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
 POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
@@ -31,6 +32,7 @@ else:
     URL_BASE = "http://api.themoviedb.org/3/"
 
 
+@lru_cache(maxsize=128)
 def check_login():
     if ADDON.getSetting("tmdb_username"):
         session_id = get_session_id()
@@ -143,6 +145,7 @@ def get_account_lists(cache_time=0):
         return []
 
 
+@lru_cache(maxsize=128)
 def get_account_info():
     '''
     returns TMDB account id
@@ -164,6 +167,7 @@ def get_certification_list(media_type):
         return []
 
 
+@lru_cache(maxsize=128)
 def get_guest_session_id():
     '''
     returns guest session id for TMDB
@@ -175,6 +179,7 @@ def get_guest_session_id():
         return None
 
 
+@lru_cache(maxsize=128)
 def get_session_id():
     '''
     returns session id for TMDB Account
@@ -190,11 +195,13 @@ def get_session_id():
         return None
 
 
+@lru_cache(maxsize=128)
 def get_request_token():
     response = get_tmdb_data("authentication/token/new?", 999999)
     return response["request_token"]
 
 
+@lru_cache(maxsize=128)
 def auth_request_token():
     '''
     returns request token, is used to get session_id
@@ -555,6 +562,7 @@ def get_tmdb_data(url="", cache_days=14, folder="TheMovieDB"):
     return get_JSON_response(url, cache_days, folder)
 
 
+@lru_cache(maxsize=128)
 def get_tmdb_config():
     return ("http://image.tmdb.org/t/p/", "w500", "w1280")
     response = get_tmdb_data("configuration?", 60)
