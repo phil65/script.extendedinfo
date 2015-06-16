@@ -7,7 +7,7 @@
     <defaultcontrol always="true">500</defaultcontrol>
     <controls>
         <control type="image">
-            <texture fallback="common/white.png" colordiffuse="$INFO[Window(home).Property(WindowColor)]">$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
+            <texture background="true" fallback="common/white.png">$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
             <width>1920</width>
             <height>1080</height>
             <fadetime>400</fadetime>
