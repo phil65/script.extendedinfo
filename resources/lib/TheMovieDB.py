@@ -300,6 +300,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Plot': fetch(tv, "overview"),
                  'year': get_year(fetch(tv, 'first_air_date')),
                  'media_type': "tv",
+                 'character': fetch(tv, 'character'),
                  'path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
                  # 'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
