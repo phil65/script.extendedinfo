@@ -164,16 +164,18 @@ class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         check_version()
 
     def onInit(self, *args, **kwargs):
+        if not self.data:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.close()
+            return
         if ADDON.getSetting("window_mode") == "true":
             self.window_id = xbmcgui.getCurrentWindowId()
         else:
             self.window_id = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
-        if not self.data:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.close()
-            return
+        # present for jurialmunkey
+        HOME.setProperty("ExtendedInfo_fanart", self.data["general"].get("fanart", ""))
 
     def fill_lists(self):
         for container_id, listitems in self.listitems:
