@@ -5,7 +5,6 @@
 
 import xbmc
 import xbmcgui
-import collections
 from Utils import *
 from TheMovieDB import *
 import time
@@ -61,12 +60,11 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 ("DEL", "<--"),
                 ("", "___"),
                 ("KEYB", "CLASSIC"))
-        key_dict = collections.OrderedDict(keys)
         listitems = []
-        for key, value in key_dict.iteritems():
-            li = xbmcgui.ListItem("[B]%s[/B]" % key, value)
-            li.setProperty("key", key)
-            li.setProperty("value", value)
+        for item in keys:
+            li = xbmcgui.ListItem("[B]%s[/B]" % item[0], item[1])
+            li.setProperty("key", item[0])
+            li.setProperty("value", item[1])
             listitems.append(li)
         self.getControl(9090).addItems(listitems)
         self.setFocusId(9090)
