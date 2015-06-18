@@ -271,7 +271,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
         movies.append(listitem)
-    movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
+    # movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
     movies = merge_with_local_movie_info(movies, local_first, sortkey)
     return movies
 
@@ -315,7 +315,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'ReleaseDate': fetch(tv, 'first_air_date'),
                  'Premiered': fetch(tv, 'first_air_date')}
         tvshows.append(newtv)
-    tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
+    # tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
     tvshows = merge_with_local_tvshow_info(tvshows, local_first, sortkey)
     return tvshows
 
