@@ -45,7 +45,7 @@ class DialogVideoInfo(DialogBaseInfo):
         youtube_thread.start()
         lists_thread.start()
         vid_id_list = [item["key"] for item in self.data["videos"]]
-        crew_list = self.merge_person_listitems(self.data["crew"])
+        crew_list = merge_dict_lists(self.data["crew"])
         if "dbid" not in self.data["general"]:
             self.data["general"]['Poster'] = get_file(self.data["general"]["Poster"])
         filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)

@@ -266,12 +266,22 @@ def start_info_actions(infos, params):
             if params.get("director", False):
                 director_id = get_person_info(params["director"], skip_dialog=True)["id"]
                 if director_id:
-                    data = get_person_movies(director_id), "DirectorMovies"
+                    movies = get_person_movies(director_id)
+                    for item in movies:
+                        del item["credit_id"]
+                    prettyprint(movies)
+                    movies = merge_dict_lists(movies, key="department")
+                    data = movies, "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer", False) and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
                 writer_id = get_person_info(params["writer"], skip_dialog=True)["id"]
                 if writer_id:
-                    data = get_person_movies(writer_id), "WriterMovies"
+                    movies = get_person_movies(writer_id)
+                    for item in movies:
+                        del item["credit_id"]
+                    prettyprint(movies)
+                    movies = merge_dict_lists(movies, key="department")
+                    data = movies, "WriterMovies"
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid", False):
                 if params.get("dbid", False):

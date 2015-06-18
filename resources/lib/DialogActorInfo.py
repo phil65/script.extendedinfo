@@ -45,8 +45,8 @@ class DialogActorInfo(DialogBaseInfo):
         filter_thread.start()
         db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
         self.data["general"]["DBMovies"] = str(db_movies)
-        movie_crew_roles = self.merge_person_listitems(self.data["movie_crew_roles"])
-        tvshow_crew_roles = self.merge_person_listitems(self.data["tvshow_crew_roles"])
+        movie_crew_roles = merge_dict_lists(self.data["movie_crew_roles"])
+        tvshow_crew_roles = merge_dict_lists(self.data["tvshow_crew_roles"])
         filter_thread.join()
         self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
         youtube_thread.join()

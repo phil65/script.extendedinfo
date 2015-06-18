@@ -205,11 +205,13 @@ def get_movie_from_db(movie_id):
         return handle_db_movies(response["result"]["moviedetails"])
     return {}
 
+
 def get_tvshow_from_db(tvshow_id):
     response = get_kodi_json('"method": "VideoLibrary.GetTVShowDetails", "params": {"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"], "tvshowid":%s }' % str(tvshow_id))
     if "result" in response and "tvshowdetails" in response["result"]:
         return handle_db_tvshows(response["result"]["tvshowdetails"])
     return {}
+
 
 def get_kodi_albums():
     json_response = get_kodi_json('"method": "AudioLibrary.GetAlbums", "params": {"properties": ["title"]}')
@@ -296,6 +298,7 @@ def merge_with_local_movie_info(online_list=[], library_first=True, sortkey=Fals
     else:
         return local_items + remote_items
 
+
 def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=False):
     global tvshow_id_list
     global tvshow_otitle_list
@@ -364,7 +367,6 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
         return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
     else:
         return local_items + remote_items
-
 
 
 def compare_album_with_library(online_list):
