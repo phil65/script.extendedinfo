@@ -143,12 +143,27 @@ msgctxt "#32027"
 msgid "Select person"
 msgstr ""
 
+#: /plugin.py:56
+msgctxt "#32028"
+msgid "Airing TV shows"
+msgstr ""
+
+#: /plugin.py:57
+msgctxt "#32029"
+msgid "Premiere TV shows"
+msgstr ""
+
 msgctxt "#32030"
 msgid "Movie appearances"
 msgstr ""
 
 msgctxt "#32031"
 msgid "TV Show appearances"
+msgstr ""
+
+#: /plugin.py:58
+msgctxt "#32032"
+msgid "Trending TV shows"
 msgstr ""
 
 msgctxt "#32033"
@@ -171,6 +186,66 @@ msgctxt "#32037"
 msgid "Overview"
 msgstr ""
 
+#: /plugin.py:59
+msgctxt "#32038"
+msgid "TV shows airing today"
+msgstr ""
+
+#: /plugin.py:60
+msgctxt "#32039"
+msgid "On-the-air TV shows"
+msgstr ""
+
+#: /plugin.py:61
+msgctxt "#32040"
+msgid "Top rated TV shows"
+msgstr ""
+
+#: /plugin.py:62
+msgctxt "#32041"
+msgid "Popular TV shows"
+msgstr ""
+
+#: /plugin.py:36 /plugin.py:45
+msgctxt "#32042"
+msgid "In-cinema movies"
+msgstr ""
+
+#: /plugin.py:46 /plugin.py:39
+msgctxt "#32043"
+msgid "Upcoming movies"
+msgstr ""
+
+#: /plugin.py:48
+msgctxt "#32044"
+msgid "Popular movies"
+msgstr ""
+
+#: /plugin.py:49
+msgctxt "#32045"
+msgid "User-created lists"
+msgstr ""
+
+#: /plugin.py:47
+msgctxt "#32046"
+msgid "Top rated movies"
+msgstr ""
+
+#: /plugin.py:51
+msgctxt "#32047"
+msgid "Trending movies"
+msgstr ""
+
+#: /plugin.py:38
+msgctxt "#32048"
+msgid "Opening movies"
+msgstr ""
+
+#: /plugin.py:41
+msgctxt "#32049"
+msgid "Current DVD releases"
+msgstr ""
+
 msgctxt "#32050"
 msgid "Online information"
 msgstr ""
@@ -181,6 +256,36 @@ msgstr ""
 
 msgctxt "#32052"
 msgid "No trailers found"
+msgstr ""
+
+#: /plugin.py:42
+msgctxt "#32053"
+msgid "New DVD releases"
+msgstr ""
+
+#: /plugin.py:43
+msgctxt "#32054"
+msgid "Upcoming DVDs"
+msgstr ""
+
+#: /plugin.py:37
+msgctxt "#32055"
+msgid "Box office"
+msgstr ""
+
+#: /plugin.py:40
+msgctxt "#32056"
+msgid "Top rentals"
+msgstr ""
+
+#: /resources/lib/Utils.py:212
+msgctxt "#32057"
+msgid "Daily babe"
+msgstr ""
+
+#: /resources/lib/Utils.py:213
+msgctxt "#32058"
+msgid "Daily babes"
 msgstr ""
 
 msgctxt "#32099"
@@ -392,6 +497,7 @@ msgctxt "#32150"
 msgid "Lower limit"
 msgstr ""
 
+#: /resources/lib/Utils.py:224
 msgctxt "#32151"
 msgid "Choose option"
 msgstr ""
