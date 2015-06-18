@@ -246,9 +246,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
             path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % tmdb_id
         else:
             path = trailer
-        listitem = {'Art(fanart)': artwork.get("fanart", ""),
-                    'Art(poster)': artwork.get("poster_small", ""),
-                    'thumb': artwork.get("poster_small", ""),
+        listitem = {'thumb': artwork.get("poster_small", ""),
                     'Poster': artwork.get("poster_small", ""),
                     'fanart': artwork.get("fanart", ""),
                     'fanart_small': artwork.get("fanart_small", ""),
@@ -292,9 +290,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i" % (tv["episode_run_time"][0])
             else:
                 duration = ""
-        newtv = {'Art(fanart)': artwork.get("fanart", ""),
-                 'Art(poster)': artwork.get("poster", ""),
-                 'thumb': artwork.get("poster", ""),
+        newtv = {'thumb': artwork.get("poster", ""),
                  'Poster': artwork.get("poster", ""),
                  'fanart': artwork.get("fanart", ""),
                  'fanart_small': artwork.get("fanart_small", ""),
@@ -328,9 +324,7 @@ def handle_tmdb_episodes(results):
     listitems = []
     for item in results:
         artwork = get_image_urls(still=item.get("still_path"))
-        listitem = {'Art(poster)': artwork.get("still", ""),
-                    'Poster': artwork.get("still", ""),
-                    'media_type': "episode",
+        listitem = {'media_type': "episode",
                     'thumb': artwork.get("still_small", ""),
                     'title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
@@ -349,8 +343,7 @@ def handle_tmdb_misc(results):
     listitems = []
     for item in results:
         artwork = get_image_urls(poster=item.get("poster_path"))
-        listitem = {'Art(poster)': artwork.get("poster", ""),
-                    'Poster': artwork.get("poster", ""),
+        listitem = {'Poster': artwork.get("poster", ""),
                     'thumb': artwork.get("poster_small", ""),
                     'title': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
@@ -378,8 +371,7 @@ def handle_tmdb_seasons(results):
             title = "Specials"
         else:
             title = "Season %s" % season_number
-        listitem = {'Art(poster)': artwork.get("poster", ""),
-                    'Poster': artwork.get("poster", ""),
+        listitem = {'Poster': artwork.get("poster", ""),
                     'media_type': "season",
                     'thumb': artwork.get("poster_small", ""),
                     'title': title,
@@ -712,9 +704,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         set_id = fetch(movie_set, "id")
     artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
-    movie = {'Art(fanart)': artwork.get("fanart", ""),
-             'Art(poster)': artwork.get("poster", ""),
-             'thumb': artwork.get("poster_small", ""),
+    movie = {'thumb': artwork.get("poster_small", ""),
              'Poster': artwork.get("poster", ""),
              'fanart': artwork.get("fanart", ""),
              'fanart_small': artwork.get("fanart_small", ""),
@@ -805,9 +795,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     else:
         duration = ""
     genres = [item["name"] for item in response["genres"]]
-    tvshow = {'Art(fanart)': artwork.get("fanart", ""),
-              'Art(poster)': artwork.get("poster", ""),
-              'thumb': artwork.get("poster", ""),
+    tvshow = {'thumb': artwork.get("poster", ""),
               'Poster': artwork.get("poster", ""),
               'fanart': artwork.get("fanart", ""),
               'fanart_small': artwork.get("fanart_small", ""),
