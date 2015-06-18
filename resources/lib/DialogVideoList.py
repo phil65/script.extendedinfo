@@ -179,16 +179,16 @@ class DialogVideoList(DialogBaseList):
             self.window.getControl(5010).setVisible(True)
 
     def onAction(self, action):
-        focusid = self.getFocusId()
+        focus_id = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
-            if not focusid == 500:
+            if not focus_id == 500:
                 return None
-            item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
+            item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
             if self.type == "tv":
                 listitems = [ADDON.getLocalizedString(32169)]
             else:
