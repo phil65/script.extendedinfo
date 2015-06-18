@@ -2,9 +2,8 @@
 <settings>
     <category label="128">
 <!--         <setting type="sep"/> -->
-        <setting label="32163" type="bool" id="infodialog_onclick" default="true"/>-->
+        <setting label="32163" type="bool" id="infodialog_onclick" default="true"/>
         <setting label="32005" type="bool" id="window_mode" default="false"/>
-        <!-- <setting label="Debug Mode" type="bool" id="debug_mode"/>-->
         <setting label="32164" type="action" action="RunScript(script.extendedinfo,info=deletecache)"/>
     </category>
     <category label="TheMovieDB">
@@ -19,6 +18,5 @@
         <setting label="32004" type="select" values="google|youtube|local" id="autocomplete_provider" default="youtube"/>
         <setting label="32003" visible="!eq(-1,local)" type="select" values="bg|cs|da|de|el|en|es|fi|fr|he|hr|hu|it|ja|ko|nl|no|pl|pt|ru|sl|sv|tr|zh" id="autocomplete_lang" default="en"/>
         <setting label="32003" visible="eq(-2,local)" type="select" values="en|de|fr|nl" id="autocomplete_lang_local" default="en"/>
-<!--         <setting label="32004" type="bool" id="autocomplete_youtube"/>
- -->    </category>
+    </category>
 </settings>
