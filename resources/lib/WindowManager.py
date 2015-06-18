@@ -12,7 +12,7 @@ ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 
 
-class WindowManager():
+class WindowManager(object):
     window_stack = []
 
     def __init__(self):
