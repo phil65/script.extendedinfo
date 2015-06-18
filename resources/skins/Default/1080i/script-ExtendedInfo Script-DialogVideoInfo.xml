@@ -2760,7 +2760,7 @@
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]</label>
+                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Property(release_date),[CR][COLOR FFAAAAAA],[/COLOR]]</label>
                                     </control>
                                 </control>
                             </itemlayout>
@@ -2800,7 +2800,7 @@
                                         <textcolor>FFFAFAFA</textcolor>
                                         <align>center</align>
                                         <font>font12</font>
-                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]</label>
+                                        <label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Property(release_date),[CR][COLOR FFAAAAAA],[/COLOR]]</label>
                                     </control>
                                 </control>
                             </focusedlayout>
