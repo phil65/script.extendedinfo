@@ -269,7 +269,6 @@ def start_info_actions(infos, params):
                     movies = get_person_movies(director_id)
                     for item in movies:
                         del item["credit_id"]
-                    prettyprint(movies)
                     movies = merge_dict_lists(movies, key="department")
                     data = movies, "DirectorMovies"
         elif info == 'writermovies':
@@ -279,7 +278,6 @@ def start_info_actions(infos, params):
                     movies = get_person_movies(writer_id)
                     for item in movies:
                         del item["credit_id"]
-                    prettyprint(movies)
                     movies = merge_dict_lists(movies, key="department")
                     data = movies, "WriterMovies"
         elif info == 'similarmoviestrakt':
@@ -381,7 +379,7 @@ def start_info_actions(infos, params):
                 notify(item.getProperty("Image"))
         elif info == 'action':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
             return None
@@ -398,7 +396,7 @@ def start_info_actions(infos, params):
         elif info == "youtubevideo":
             xbmc.executebuiltin("Dialog.Close(all)")
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             PLAYER.playYoutubeVideo(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -413,7 +411,7 @@ def start_info_actions(infos, params):
                 movie_id = ""
             if movie_id:
                 if params.get("handle"):
-                    xbmcplugin.setResolvedUrl( handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                    xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 PLAYER.playYoutubeVideo(trailer)
