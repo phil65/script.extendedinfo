@@ -3007,7 +3007,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label fallback="Release Date">$INFO[Window.Property(movie.Status)]</label>
+                                    <label fallback="$LOCALIZE[172]">$INFO[Window.Property(movie.Status)]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
