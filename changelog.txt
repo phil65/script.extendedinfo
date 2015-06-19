@@ -13,6 +13,9 @@ v3.0.0
 - added genre, country and plot InfoLabels for TMDB movies
 - added local check for tvshows
 - added browsing tvshow credits (via selectdialog)
+- added infodialogs.active property for home
+- added certification for tvshows
+- added date label to episodes
 - fixed onclick for Trakt calendar items
 - fixed limit param for some script calls
 - fixed biography dialog for actors
@@ -25,7 +28,11 @@ v3.0.0
 - filter out duplicates for crew roles (and merge job strings)
 - put cache files into subdirectories
 - improved dialog open/close behaviour
+- higher image resolution for episode stills
 - reworked settings
+- open tvshow in library when available (depends on skin setting)
+- merge duplicates for some actor / crew lists
+- some visual tweaks for infodialogs
 - localization
 - Code cleanup
 
