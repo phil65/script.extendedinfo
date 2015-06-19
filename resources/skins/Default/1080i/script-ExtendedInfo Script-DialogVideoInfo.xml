@@ -81,7 +81,7 @@
                             <height>210</height>
                             <textcolor>FFFAFAFA</textcolor>
                             <align>left</align>
-                            <label fallback="$LOCALIZE[19055]">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
+                            <label fallback="19055">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
                             <font>font12</font>
                             <autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
                         </control>
@@ -2946,7 +2946,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label fallback="$LOCALIZE[563]">$INFO[Window.Property(movie.Votes),, $LOCALIZE[20350]]</label>
+                                    <label fallback="563">$INFO[Window.Property(movie.Votes),, $LOCALIZE[20350]]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
@@ -3007,7 +3007,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label fallback="$LOCALIZE[172]">$INFO[Window.Property(movie.Status)]</label>
+                                    <label fallback="172">$INFO[Window.Property(movie.Status)]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
