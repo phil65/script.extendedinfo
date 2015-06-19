@@ -315,7 +315,6 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'TotalEpisodes': fetch(tv, 'number_of_episodes'),
                  'TotalSeasons': fetch(tv, 'number_of_seasons'),
                  'Release_Date': fetch(tv, 'first_air_date'),
-                 'ReleaseDate': fetch(tv, 'first_air_date'),
                  'Premiered': fetch(tv, 'first_air_date')}
         tvshows.append(newtv)
     # tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
@@ -635,7 +634,7 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
               'thumb': artwork.get("poster_small", ""),
               'Poster': artwork.get("poster", ""),
               'title': title,
-              'ReleaseDate': response["air_date"],
+              'release_date': response["air_date"],
               'AirDate': response["air_date"]}
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
@@ -738,7 +737,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Popularity': fetch(response, 'popularity'),
              'Status': fetch(response, 'status'),
              'path': path,
-             'ReleaseDate': fetch(response, 'release_date'),
+             'release_date': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
              'Studio': " / ".join(Studio),
              'year': get_year(fetch(response, 'release_date'))}
@@ -835,7 +834,6 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'TotalSeasons': fetch(response, 'number_of_seasons'),
               'in_production': fetch(response, 'in_production'),
               'Release_Date': fetch(response, 'first_air_date'),
-              'ReleaseDate': fetch(response, 'first_air_date'),
               'Premiered': fetch(response, 'first_air_date')}
     if dbid:
         local_item = get_tvshow_from_db(dbid)
@@ -868,7 +866,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     response = get_tmdb_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
                              (str(tvshow_id), str(season), str(episode), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     videos = []
-    # prettyprint(response)
+    prettyprint(response)
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     if "account_states" in response:

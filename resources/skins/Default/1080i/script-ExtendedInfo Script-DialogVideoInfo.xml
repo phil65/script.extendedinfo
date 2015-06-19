@@ -2990,14 +2990,14 @@
                             </control>
                             <control type="group">
                                 <width>220</width>
-                                <visible>!IsEmpty(Window.Property(movie.ReleaseDate))</visible>
+                                <visible>!IsEmpty(Window.Property(movie.release_date))</visible>
                                 <control type="label">
                                     <posx>0</posx>
                                     <posy>12</posy>
                                     <width>220</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label fallback="?">$INFO[Window.Property(movie.ReleaseDate)]</label>
+                                    <label fallback="?">$INFO[Window.Property(movie.release_date)]</label>
                                     <font>font14</font>
                                 </control>
                                 <control type="label">
