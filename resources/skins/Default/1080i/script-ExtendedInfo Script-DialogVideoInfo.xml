@@ -81,7 +81,7 @@
                             <height>210</height>
                             <textcolor>FFFAFAFA</textcolor>
                             <align>left</align>
-                            <label fallback="No info available">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
+                            <label fallback="$LOCALIZE[19055]">[B]$INFO[Window.Property(movie.TagLine),,[CR]][/B]$INFO[Window.Property(movie.Plot)]</label>
                             <font>font12</font>
                             <autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
                         </control>
