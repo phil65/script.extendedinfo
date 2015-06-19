@@ -241,6 +241,7 @@ class DialogVideoList(DialogBaseList):
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
         if control_id in [500]:
+            self.last_position = self.getControl(control_id).getSelectedPosition()
             media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
             dbid = self.getControl(control_id).getSelectedItem().getProperty("dbid")
             media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")

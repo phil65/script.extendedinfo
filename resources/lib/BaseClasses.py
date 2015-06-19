@@ -24,6 +24,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.listitem_list = kwargs.get('listitems', None)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
+        self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
         check_version()
@@ -41,6 +42,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         xbmc.sleep(200)
         if self.total_items > 0:
             xbmc.executebuiltin("SetFocus(500)")
+            self.getControl(500).selectItem(self.last_position)
         else:
             xbmc.executebuiltin("SetFocus(6000)")
 
