@@ -186,6 +186,7 @@ def handle_db_tvshows(tvshow):
                  'Banner': tvshow["art"].get('banner', ""),
                  'DiscArt': tvshow["art"].get('discart', ""),
                  'title': tvshow.get('label', ""),
+                 'genre': tvshow.get('genre', ""),
                  'File': tvshow.get('file', ""),
                  'year': str(tvshow.get('year', "")),
                  'Logo': tvshow['art'].get("clearlogo", ""),

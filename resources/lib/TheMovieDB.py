@@ -268,7 +268,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'year': get_year(fetch(movie, 'release_date')),
-                    'Genre': genres,
+                    'genre': genres,
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
         movies.append(listitem)
@@ -730,7 +730,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Plot': clean_text(fetch(response, 'overview')),
              'OriginalTitle': fetch(response, 'original_title'),
              'Country': fetch(response, 'original_language'),
-             'Genre': " / ".join(genres),
+             'genre': " / ".join(genres),
              'Rating': fetch(response, 'vote_average'),
              'Votes': fetch(response, 'vote_count'),
              'Adult': str(fetch(response, 'adult')),
@@ -809,7 +809,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'duration(h)': format_time(duration, "h"),
               'duration(m)': format_time(duration, "m"),
               'id': tmdb_id,
-              'Genre': " / ".join(genres),
+              'genre': " / ".join(genres),
               'credit_id': fetch(response, 'credit_id'),
               'Plot': clean_text(fetch(response, "overview")),
               'year': get_year(fetch(response, 'first_air_date')),
