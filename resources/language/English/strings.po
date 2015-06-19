@@ -288,6 +288,11 @@ msgctxt "#32058"
 msgid "Daily babes"
 msgstr ""
 
+#: \resources\lib\DialogVideoInfo.py:297
+msgctxt "#32059"
+msgid "Added movie to CouchPotato"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""
