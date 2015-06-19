@@ -33,7 +33,7 @@ class Main:
             HOME.setProperty('infodialogs.active', "true")
             from WindowManager import wm
             wm.open_video_list()
-            HOME.ClearProperty('infodialogs.active')
+            HOME.clearProperty('infodialogs.active')
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
         # except Exception:
         #     xbmc.executebuiltin('Dialog.Close(busydialog)')
