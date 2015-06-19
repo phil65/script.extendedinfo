@@ -40,7 +40,6 @@ RunScript(script.extendedinfo,info=upcomingdvds)        --> UpcomingDVDs.%d.xxx
 Available Properties:
 
 - 'Title':        Movie Title
-- 'Art(poster)':  Movie Poster
 - 'imdb_id':       IMDB ID
 - 'duration':     Movie duration
 - 'Year':         Release Year
@@ -48,6 +47,9 @@ Available Properties:
 - 'mpaa':         MPAA Rating
 - 'Rating':       Audience Rating (0-10)
 - 'Plot':         Movie Plot
+
+Available Art:
+- 'Poster':  Movie Poster
 
 
 ### TheMovieDB
@@ -90,8 +92,6 @@ RunScript(script.extendedinfo,info=studio)              --> StudioInfo.%d
 
 Available Properties:
 
-- 'Art(fanart)':      Movie Fanart
-- 'Art(poster)':      Movie Poster
 - 'Title':            Movie Title
 - 'OriginalTitle':    Movie OriginalTitle
 - 'ID':               TheMovieDB ID
@@ -99,6 +99,11 @@ Available Properties:
 - 'Votes':            Vote Count for Rating
 - 'Year':             Release Year
 - 'Premiered':        Release Date
+
+Available Art:
+
+- 'Fanart':      Movie Fanart
+- 'Poster':      Movie Poster
 
 
 ```
@@ -122,8 +127,11 @@ Available Properties:
 - 'Rating':           TVShow Rating
 - 'Votes':            Number of Votes for Rating
 - 'Premiered':        TV Show First Air Date
-- 'Art(poster)':      TVShow Poster
-- 'Art(fanart)':      TVShow Fanart
+
+Available Art:
+
+- 'Poster':      TVShow Poster
+- 'Fanart':      TVShow Fanart
 
 
 ### Trakt.tv
@@ -148,8 +156,11 @@ Available Properties:
 - 'Premiered'
 - 'Runtime'
 - 'Trailer'
-- 'Art(poster)'
-- 'Art(fanart)'
+
+Available Art:
+
+- 'Poster'
+- 'Fanart'
 
 
 ```
@@ -178,9 +189,12 @@ Available Properties:
 - 'Watchers':         Amount of Watchers
 - 'AirDay':           Day episode is aired
 - 'AirShortTime':     Time episode is aired
-- 'Art(poster)':      TVShow Poster
-- 'Art(banner)':      TVShow Banner
-- 'Art(fanart)':      TVShow Fanart
+
+Available Art:
+
+- 'Poster':      TVShow Poster
+- 'Banner':      TVShow Banner
+- 'Fanart':      TVShow Fanart
 
 ```
 RunScript(script.extendedinfo,info=airingshows)         --> AiringShows.%d
@@ -199,9 +213,12 @@ Available Properties:
 - 'Certification': TVShow Mpaa Rating
 - 'Studio':        TVShow Studio
 - 'Thumb':         Episode Thumb
-- 'Art(poster)':   TVShow Poster
-- 'Art(banner)':   TVShow Banner
-- 'Art(fanart)':   TVShow Fanart
+
+Available Art:
+
+- 'Poster':   TVShow Poster
+- 'Banner':   TVShow Banner
+- 'Fanart':   TVShow Fanart
 
 
 ### TheAudioDB
