@@ -698,7 +698,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     Studio = [item["name"] for item in response["production_companies"]]
     authors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Writing"]
     directors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Directing"]
-    if response['releases']['countries']:
+    us_cert = dictfind(response['releases']['countries'], "iso_3166_1", "US")
+    if us_cert:
+        mpaa = us_cert["certification"]
+    elif response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
     movie_set = fetch(response, "belongs_to_collection")
     if movie_set:
@@ -796,7 +799,10 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         duration = "%i" % (response["episode_run_time"][0])
     else:
         duration = ""
-    if response['content_ratings']['results']:
+    us_cert = dictfind(response['content_ratings']['results'], "iso_3166_1", "US")
+    if us_cert:
+        mpaa = us_cert["rating"]
+    elif response['content_ratings']['results']:
         mpaa = response['content_ratings']['results'][0]['rating']
     else:
         mpaa = ""
