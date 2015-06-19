@@ -575,7 +575,6 @@ def get_company_data(company_id):
 
 def get_credit_info(credit_id):
     response = get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), ADDON.getSetting("LanguageID")), 30)
-    prettyprint(response)
     return response
     # if response and "results" in response:
     #     return handle_tmdb_movies(response["results"])
@@ -866,7 +865,6 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     response = get_tmdb_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
                              (str(tvshow_id), str(season), str(episode), ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID"), session_string), cache_time)
     videos = []
-    prettyprint(response)
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     if "account_states" in response:
@@ -878,9 +876,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
               "account_states": account_states,
               "crew": handle_tmdb_people(response["credits"]["crew"]),
               "guest_stars": handle_tmdb_people(response["credits"]["guest_stars"]),
-              # "genres": handle_tmdb_misc(response["genres"]),
               "videos": videos,
-              # "seasons": handle_tmdb_seasons(response["seasons"]),
               "images": handle_tmdb_images(response["images"]["stills"])}
     return answer
 

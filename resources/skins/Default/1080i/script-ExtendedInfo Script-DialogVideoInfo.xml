@@ -2916,7 +2916,7 @@
                                 <posy>5</posy>
                                 <width>135</width>
                                 <height>67</height>
-                                <visible>!StringCompare(Window.Property(type),Season)</visible>
+                                <visible>!StringCompare(Window.Property(type),Season) + !StringCompare(Window.Property(type),episode)</visible>
                                 <aspectratio align="center">keep</aspectratio>
                                 <texture colordiffuse="FFFAFAFA" fallback="flags/rating/MPAA_NR_Certificate_US.png">$INFO[Window.Property(movie.mpaa),flags/rating/,.png]</texture>
                             </control>
