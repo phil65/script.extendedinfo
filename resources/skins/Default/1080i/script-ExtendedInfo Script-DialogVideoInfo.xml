@@ -2946,7 +2946,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label fallback="Rating">$INFO[Window.Property(movie.Votes),, Votes]</label>
+                                    <label fallback="$LOCALIZE[563]">$INFO[Window.Property(movie.Votes),, $LOCALIZE[20350]]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
