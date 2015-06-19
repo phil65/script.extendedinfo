@@ -18,7 +18,7 @@ ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
 from process import start_info_actions
-
+from Utils import *
 
 class Main:
 
@@ -29,9 +29,11 @@ class Main:
         self._parse_argv()
         if self.infos:
             start_info_actions(self.infos, self.params)
-        elif not self.handle:
+        else:
+            HOME.setProperty('infodialogs.active', "true")
             from WindowManager import wm
             wm.open_video_list()
+            HOME.ClearProperty('infodialogs.active')
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
         # except Exception:
         #     xbmc.executebuiltin('Dialog.Close(busydialog)')
