@@ -374,9 +374,8 @@ def compare_album_with_library(online_list):
                 continue
             json_response = get_kodi_json('"method": "AudioLibrary.get_album_details", "params": {"properties": ["thumbnail"], "albumid":%s }' % str(local_item["albumid"]))
             album = json_response["result"]["albumdetails"]
-            online_item.update({"dbid": album["albumid"]})
-            online_item.update(
-                {"path": 'XBMC.RunScript(service.skin.widgets,albumid=' + str(album["albumid"]) + ')'})
+            online_item["dbid"] = album["albumid"]
+            online_item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
             if album["thumbnail"]:
                 online_item.update({"thumb": album["thumbnail"]})
                 online_item.update({"Icon": album["thumbnail"]})
