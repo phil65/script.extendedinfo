@@ -46,6 +46,15 @@ def start_info_actions(infos, params):
             if params.get("handle"):
                 xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
+        elif info == "openinfodialog":
+            if xbmc.getCondVisibility("Container.Content(movies)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(seasons)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
+            elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
         #  Images
         elif info == 'xkcd':
             from MiscScraper import get_xkcd_images
