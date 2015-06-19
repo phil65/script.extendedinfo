@@ -797,6 +797,10 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         duration = "%i" % (response["episode_run_time"][0])
     else:
         duration = ""
+    if response['content_ratings']['results']:
+        mpaa = response['content_ratings']['results'][0]['rating']
+    else:
+        mpaa = ""
     genres = [item["name"] for item in response["genres"]]
     tvshow = {'thumb': artwork.get("poster", ""),
               'Poster': artwork.get("poster", ""),
@@ -809,6 +813,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'duration(h)': format_time(duration, "h"),
               'duration(m)': format_time(duration, "m"),
               'id': tmdb_id,
+              'mpaa': mpaa,
               'genre': " / ".join(genres),
               'credit_id': fetch(response, 'credit_id'),
               'Plot': clean_text(fetch(response, "overview")),
