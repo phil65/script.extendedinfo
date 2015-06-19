@@ -738,7 +738,7 @@ def save_to_file(content, filename, path=""):
     text_file = xbmcvfs.File(text_file_path, "w")
     simplejson.dump(content, text_file)
     text_file.close()
-    log("saved textfile %s. Time: %f" % (path, time.time() - now))
+    log("saved textfile %s. Time: %f" % (text_file_path, time.time() - now))
     return True
 
 
