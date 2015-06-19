@@ -1760,7 +1760,7 @@
                         </control>
                         <control type="image">
                             <posx>0</posx>
-                            <posy>130</posy>
+                            <posy>105</posy>
                             <width>28</width>
                             <height>28</height>
                             <texture colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
@@ -1770,7 +1770,7 @@
                         </control>
                         <control type="image">
                             <posx>1883</posx>
-                            <posy>130</posy>
+                            <posy>105</posy>
                             <width>28</width>
                             <height>28</height>
                             <texture colordiffuse="$INFO[Window(home).Property(movie.ImageColor)]">arrowright.png</texture>
@@ -1794,7 +1794,7 @@
                             <scrolltime>300</scrolltime>
                             <orientation>horizontal</orientation>
                             <preloaditems>2</preloaditems>
-                            <itemlayout height="400" width="373">
+                            <itemlayout height="400" width="379">
                                 <control type="group">
                                     <posx>50</posx>
                                     <control type="image">
@@ -1823,7 +1823,7 @@
                                     </control>
                                 </control>
                             </itemlayout>
-                            <focusedlayout height="400" width="373">
+                            <focusedlayout height="400" width="379">
                                 <control type="group">
                                     <posx>50</posx>
                                     <control type="image">
@@ -2037,7 +2037,7 @@
                             <scrolltime>300</scrolltime>
                             <orientation>horizontal</orientation>
                             <preloaditems>2</preloaditems>
-                            <itemlayout height="400" width="240">
+                            <itemlayout height="400" width="241">
                                 <control type="group">
                                     <posx>50</posx>
                                     <control type="image">
@@ -2065,7 +2065,7 @@
                                     </control>
                                 </control>
                             </itemlayout>
-                            <focusedlayout height="400" width="240">
+                            <focusedlayout height="400" width="241">
                                 <control type="group">
                                     <posx>50</posx>
                                     <control type="image">
