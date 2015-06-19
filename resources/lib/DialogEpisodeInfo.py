@@ -7,7 +7,6 @@ import xbmc
 from Utils import *
 from TheMovieDB import *
 from YouTube import *
-import DialogActorInfo
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
@@ -30,13 +29,12 @@ class DialogEpisodeInfo(DialogBaseInfo):
             search_string = "%s tv" % (self.data["general"]['title'])
             youtube_thread = GetYoutubeVidsThread(search_string, "", "relevance", 15)
             youtube_thread.start()
-            if "dbid" not in self.data["general"]:  # need to add comparing for episodes
-                poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
-                poster_thread.start()
-            if "dbid" not in self.data["general"]:
-                poster_thread.join()
-                self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)
+            # if "dbid" not in self.data["general"]:  # need to add comparing for episodes
+            #     poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
+            #     poster_thread.start()
+            #     poster_thread.join()
+            #     self.data["general"]['Poster'] = poster_thread.listitems
+            filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
             filter_thread.start()
             youtube_thread.join()
             filter_thread.join()

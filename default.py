@@ -20,6 +20,7 @@ sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib'))
 from process import start_info_actions
 from Utils import *
 
+
 class Main:
 
     def __init__(self):

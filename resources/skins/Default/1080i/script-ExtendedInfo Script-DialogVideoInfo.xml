@@ -3130,6 +3130,16 @@
                 <aspectratio aligny="top">scale</aspectratio>
                 <texture>$INFO[Window.Property(movie.Poster)]</texture>
             </control>
+            <control type="image">
+                <posy>0</posy>
+                <width>729</width>
+                <height>1080</height>
+                <fadetime>300</fadetime>
+                <aspectratio aligny="center">keep</aspectratio>
+                <visible>Stringcompare(Window.Property(type),episode)</visible>
+                <texture>$INFO[Window.Property(movie.thumb)]</texture>
+            </control>
+
         </control>
     </controls>
 </window>
