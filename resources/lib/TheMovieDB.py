@@ -718,7 +718,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'duration(m)': format_time(fetch(response, 'runtime'), "m"),
              'mpaa': mpaa,
              'Director': " / ".join(directors),
-             'Writer': " / ".join(authors),
+             'writer': " / ".join(authors),
              'Budget': millify(fetch(response, 'budget')),
              'Revenue': millify(fetch(response, 'revenue')),
              'Homepage': fetch(response, 'homepage'),

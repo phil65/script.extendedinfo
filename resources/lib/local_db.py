@@ -133,16 +133,14 @@ def handle_db_movies(movie):
         resume = "false"
         played = '0'
     stream_info = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
-    db_movie = {'Art(fanart)': movie["art"].get('fanart', ""),
-                'Art(poster)': movie["art"].get('poster', ""),
-                'Fanart': movie["art"].get('fanart', ""),
+    db_movie = {'Fanart': movie["art"].get('fanart', ""),
                 'Poster': movie["art"].get('poster', ""),
                 'Banner': movie["art"].get('banner', ""),
                 'DiscArt': movie["art"].get('discart', ""),
                 'title': movie.get('label', ""),
                 'File': movie.get('file', ""),
                 'year': str(movie.get('year', "")),
-                'Writer': " / ".join(movie['writer']),
+                'writer': " / ".join(movie['writer']),
                 'Logo': movie['art'].get("clearlogo", ""),
                 'OriginalTitle': movie.get('originaltitle', ""),
                 'imdb_id': movie.get('imdbnumber', ""),
@@ -179,14 +177,12 @@ def handle_db_tvshows(tvshow):
         path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s)' % str(tvshow['tvshowid'])
     else:
         path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % str(tvshow['tvshowid'])
-    db_tvshow = {'Art(fanart)': tvshow["art"].get('fanart', ""),
-                 'Art(poster)': tvshow["art"].get('poster', ""),
-                 'Fanart': tvshow["art"].get('fanart', ""),
+    db_tvshow = {'Fanart': tvshow["art"].get('fanart', ""),
                  'Poster': tvshow["art"].get('poster', ""),
                  'Banner': tvshow["art"].get('banner', ""),
                  'DiscArt': tvshow["art"].get('discart', ""),
                  'title': tvshow.get('label', ""),
-                 'genre': tvshow.get('genre', ""),
+                 'genre': " / ".join(tvshow.get('genre', "")),
                  'File': tvshow.get('file', ""),
                  'year': str(tvshow.get('year', "")),
                  'Logo': tvshow['art'].get("clearlogo", ""),

@@ -20,9 +20,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.tmdb_id = kwargs.get('show_id')
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
-        self.episodenumber = kwargs.get('episode')
+        self.episode_number = kwargs.get('episode')
         if self.tmdb_id or self.showname:
-            self.data = extended_episode_info(self.tmdb_id, self.season, self.episodenumber)
+            self.data = extended_episode_info(self.tmdb_id, self.season, self.episode_number)
             if not self.data:
                 return
             # prettyprint(self.data)
@@ -85,7 +85,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
     def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = extended_episode_info(self.tmdb_id, self.season, self.episodenumber, 0)
+            self.update = extended_episode_info(self.tmdb_id, self.season, self.episode_number, 0)
             self.data["account_states"] = self.update["account_states"]
         if self.data["account_states"]:
             # if self.data["account_states"]["favorite"]:
