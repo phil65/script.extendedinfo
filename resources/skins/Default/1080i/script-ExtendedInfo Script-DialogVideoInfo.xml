@@ -3137,7 +3137,7 @@
                 <fadetime>300</fadetime>
                 <aspectratio aligny="center">keep</aspectratio>
                 <visible>Stringcompare(Window.Property(type),episode)</visible>
-                <texture>$INFO[Window.Property(movie.thumb)]</texture>
+                <texture>$INFO[Window.Property(movie.still_original)]</texture>
             </control>
 
         </control>

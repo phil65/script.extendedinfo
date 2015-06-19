@@ -328,7 +328,8 @@ def handle_tmdb_episodes(results):
     for item in results:
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'media_type': "episode",
-                    'thumb': artwork.get("still_small", ""),
+                    'thumb': artwork.get("still", ""),
+                    'still_original': artwork.get("still_original", ""),
                     'title': clean_text(fetch(item, 'name')),
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
