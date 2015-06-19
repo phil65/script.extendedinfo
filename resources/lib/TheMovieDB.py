@@ -696,8 +696,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     set_id = ""
     genres = [item["name"] for item in response["genres"]]
     Studio = [item["name"] for item in response["production_companies"]]
-    authors = [item["name"] for item in response['credits']['crew'] if item["job"] == "Author"]
-    directors = [item["name"] for item in response['credits']['crew'] if item["job"] == "Director"]
+    authors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Writing"]
+    directors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Directing"]
     if response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
     movie_set = fetch(response, "belongs_to_collection")
