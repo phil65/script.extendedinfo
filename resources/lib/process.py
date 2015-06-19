@@ -394,7 +394,7 @@ def start_info_actions(infos, params):
             xbmc.sleep(200)
             HOME.clearProperty(params.get("name", ""))
         elif info == "youtubevideo":
-            xbmc.executebuiltin("Dialog.Close(all)")
+            xbmc.executebuiltin("Dialog.Close(all,true)")
             if params.get("handle"):
                 xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
             PLAYER.playYoutubeVideo(params.get("id", ""))
