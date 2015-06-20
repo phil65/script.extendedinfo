@@ -99,7 +99,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
-    @busy_dialog
     def onFocus(self, control_id):
         old_page = self.page
         if control_id == 600:
@@ -109,8 +108,10 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             if self.page > 1:
                 self.page -= 1
         if self.page != old_page:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.update_content()
             self.update_ui()
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onClick(self, control_id):
         if control_id == 5001:
