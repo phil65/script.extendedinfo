@@ -228,14 +228,15 @@ def handle_tmdb_multi_search(results=[]):
 
 
 def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
-    response = get_tmdb_data("genre/movie/list?language=%s&" % (ADDON.getSetting("LanguageID")), 9999)
+    response = get_tmdb_data("genre/movie/list?language=%s&" % (ADDON.getSetting("LanguageID")), 30)
     id_list = [item["id"] for item in response["genres"]]
     label_list = [item["name"] for item in response["genres"]]
     movies = []
     log("starting handle_tmdb_movies")
     for movie in results:
         if "genre_ids" in movie:
-            genres = " / ".join([label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"]])
+            genre_list = [label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"] if genre_id in id_list]
+            genres = " / ".join(genre_list)
         else:
             genres = ""
         tmdb_id = str(fetch(movie, 'id'))
