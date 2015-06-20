@@ -894,7 +894,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32118]</label>
+                            <label>$ADDON[script.extendedinfo 32118]$INFO[Container(350).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1012,7 +1012,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$ADDON[script.extendedinfo 32119]</label>
+                            <label>$ADDON[script.extendedinfo 32119]$INFO[Container(450).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
@@ -1112,7 +1112,7 @@
                             <height>25</height>
                             <aligny>center</aligny>
                             <font>font14</font>
-                            <label>$LOCALIZE[20445]</label>
+                            <label>$LOCALIZE[20445]$INFO[Container(750).NumItems, (,)]</label>
                         </control>
                         <control type="image">
                             <posx>0</posx>
