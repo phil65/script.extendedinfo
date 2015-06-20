@@ -772,12 +772,12 @@ def convert_youtube_url(raw_string):
 def extract_youtube_id(raw_string):
     if raw_string and 'youtube.com/v' in raw_string:
         vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
-        for id in vid_ids:
-            return id
+        for vid_id in vid_ids:
+            return vid_id
     if raw_string and 'youtube.com/watch' in raw_string:
         vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
-        for id in vid_ids:
-            return id
+        for vid_id in vid_ids:
+            return vid_id
     return ""
 
 

@@ -53,11 +53,8 @@ def get_trakt_calendar_shows(content):
                     'Plot': episode["show"]["overview"],
                     'genre': " / ".join(episode["show"]["genres"]),
                     'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                    'Art(poster)': poster,
                     'Poster': poster,
-                    'Art(banner)': banner,
                     'Banner': banner,
-                    'Art(fanart)': fanart,
                     'Fanart': fanart}
             shows.append(show)
             count += 1
@@ -91,9 +88,7 @@ def handle_trakt_movies(results):
                  'Votes': movie["movie"]["votes"],
                  'Watchers': movie["watchers"],
                  'genre': " / ".join(movie["movie"]["genres"]),
-                 'Art(poster)': movie["movie"]["images"]["poster"]["full"],
                  'Poster': movie["movie"]["images"]["poster"]["full"],
-                 'Art(fanart)': movie["movie"]["images"]["fanart"]["full"],
                  'Fanart': movie["movie"]["images"]["fanart"]["full"],
                  'thumb': movie['movie']["images"]["poster"]["thumb"]}
         movies.append(movie)
