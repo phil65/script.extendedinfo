@@ -1148,7 +1148,7 @@
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
                             </animation>
-                            <itemlayout height="400" width="540">
+                            <itemlayout height="400" width="665">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
@@ -1178,7 +1178,7 @@
                                     </control>
                                 </control>
                             </itemlayout>
-                            <focusedlayout height="400" width="540">
+                            <focusedlayout height="400" width="665">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
