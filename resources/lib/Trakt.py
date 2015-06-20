@@ -118,7 +118,7 @@ def handle_trakt_tvshows(results):
                 'mpaa': tvshow['show']["certification"],
                 'Studio': tvshow['show']["network"],
                 'Plot': tvshow['show']["overview"],
-                'id': tvshow['show']['ids']["tvdb"],
+                'id': tvshow['show']['ids']["tmdb"],
                 'tvdb_id': tvshow['show']['ids']["tvdb"],
                 'imdb_id': tvshow['show']['ids']["imdb"],
                 'path': path,
@@ -131,11 +131,8 @@ def handle_trakt_tvshows(results):
                 'Votes': tvshow['show']["votes"],
                 'Watchers': fetch(tvshow, "watchers"),
                 'genre': " / ".join(tvshow['show']["genres"]),
-                'Art(poster)': tvshow['show']["images"]["poster"]["full"],
                 'Poster': tvshow['show']["images"]["poster"]["full"],
-                'Art(banner)': tvshow['show']["images"]["banner"]["full"],
                 'Banner': tvshow['show']["images"]["banner"]["full"],
-                'Art(fanart)': tvshow['show']["images"]["fanart"]["full"],
                 'Fanart': tvshow['show']["images"]["fanart"]["full"],
                 'thumb': tvshow['show']["images"]["poster"]["thumb"]}
         shows.append(show)
