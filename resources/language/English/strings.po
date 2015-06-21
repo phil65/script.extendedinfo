@@ -293,6 +293,11 @@ msgctxt "#32059"
 msgid "Added movie to CouchPotato"
 msgstr ""
 
+#: \resources\lib\DialogYoutubeList.py:35
+msgctxt "#32060"
+msgid "Relevance"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""
@@ -337,6 +342,7 @@ msgctxt "#32109"
 msgid "Budget"
 msgstr ""
 
+#: \resources\lib\DialogVideoList.py:155
 msgctxt "#32110"
 msgid "Popularity"
 msgstr ""
@@ -369,6 +375,7 @@ msgctxt "#32117"
 msgid "Official videos"
 msgstr ""
 
+#: \resources\lib\DialogYoutubeList.py:13
 msgctxt "#32118"
 msgid "YouTube videos"
 msgstr ""

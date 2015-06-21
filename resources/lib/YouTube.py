@@ -8,6 +8,7 @@ from Utils import *
 YT_KEY_2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
+
 def handle_youtube_videos(results):
     videos = []
     log("starting handle_youtube_videos")
@@ -31,7 +32,7 @@ def handle_youtube_videos(results):
     return videos
 
 
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=50, extended=False):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, item_info=False):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
@@ -46,9 +47,18 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
         url = "videos?id=%s&part=contentDetails&key=%s" % (",".join(video_ids), YT_KEY_2)
         ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
         for i, item in enumerate(videos):
-            item["duration"] = ext_results["items"][i]['contentDetails']['duration'][2:].lower()
+            for ext_item in ext_results["items"]:
+                if item["youtube_id"] == ext_item['id']:
+                    item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
+                    break
+            else:
+                item["duration"] = ""
     if videos:
-        return videos
+        if item_info:
+            return videos, results["pageInfo"]["resultsPerPage"], results["pageInfo"]["totalResults"]
+        else:
+            return videos
+
     else:
         return []
 

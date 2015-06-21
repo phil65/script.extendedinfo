@@ -263,11 +263,11 @@
                         </control>
                         <control type="label">
                             <posx>30</posx>
-                            <posy>-15</posy>
+                            <posy>-25</posy>
                             <width>380</width>
                             <height>5</height>
                             <align>center</align>
-                            <label>$INFO[ListItem.Date]</label>
+                            <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
                             <shadowcolor>floorshadow</shadowcolor>
                             <textcolor>floor</textcolor>
@@ -337,11 +337,11 @@
                         </control>
                         <control type="label">
                             <posx>30</posx>
-                            <posy>-15</posy>
+                            <posy>-25</posy>
                             <width>380</width>
                             <height>5</height>
                             <align>center</align>
-                            <label>$INFO[ListItem.Date]</label>
+                            <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
                             <shadowcolor>floorshadow</shadowcolor>
                             <textcolor>floor</textcolor>
