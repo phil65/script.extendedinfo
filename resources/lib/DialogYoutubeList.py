@@ -11,6 +11,13 @@ from BaseClasses import DialogBaseList
 from WindowManager import wm
 
 TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
+SORTS = {"videos": {ADDON.getLocalizedString(32110): "date",
+                   xbmc.getLocalizedString(172): "rating",
+                   ADDON.getLocalizedString(32108): "relevance",
+                   # "Release Date": "primary_release_date",
+                   xbmc.getLocalizedString(20376): "title",
+                   ADDON.getLocalizedString(32112): "videoCount",
+                   ADDON.getLocalizedString(32111): "viewCount"}}
 
 
 class DialogYoutubeList(DialogBaseList):
@@ -24,8 +31,8 @@ class DialogYoutubeList(DialogBaseList):
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.list_id = kwargs.get("list_id", False)
-        self.sort = kwargs.get('sort', "popularity")
-        self.sort_label = kwargs.get('sort_label', "Popularity")
+        self.sort = kwargs.get('sort', "relevance")
+        self.sort_label = kwargs.get('sort_label', "Relevance")
         self.order = kwargs.get('order', "desc")
         force = kwargs.get('force', False)
         self.filters = kwargs.get('filters', [])
@@ -111,7 +118,20 @@ class DialogYoutubeList(DialogBaseList):
                 self.update_content(force_update=True)
                 self.update_ui()
 
+    def get_sort_type(self):
+        listitems = []
+        sort_strings = []
+        sort_key = self.type
+        for (key, value) in SORTS[sort_key].iteritems():
+            listitems.append(key)
+            sort_strings.append(value)
+        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
+        if index > -1:
+            self.sort = sort_strings[index]
+            self.sort_label = listitems[index]
+
     def onClick(self, control_id):
+        super(DialogYoutubeList, self).onClick(control_id)
         if control_id in [500]:
             wm.add_to_stack(self)
             self.close()
@@ -121,4 +141,4 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
-        return get_youtube_search_videos(self.search_string), "20", "20"
+        return get_youtube_search_videos(self.search_string, orderby=self.sort), "20", "20"
