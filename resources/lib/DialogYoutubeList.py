@@ -133,8 +133,10 @@ class DialogYoutubeList(DialogBaseList):
     def onClick(self, control_id):
         super(DialogYoutubeList, self).onClick(control_id)
         if control_id in [500]:
-            wm.add_to_stack(self)
-            self.close()
+            self.last_position = self.getControl(control_id).getSelectedPosition()
+            youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
+            if youtube_id:
+                PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
 
     def add_filter(self, key, value, typelabel, label):
         self.force_overwrite = False

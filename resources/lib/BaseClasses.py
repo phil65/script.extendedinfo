@@ -8,6 +8,7 @@ import xbmcgui
 from Utils import *
 from TheMovieDB import *
 from WindowManager import wm
+from T9Search import T9Search
 
 
 class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
@@ -118,6 +119,15 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.get_sort_type()
             self.update_content()
             self.update_ui()
+        elif control_id == 6000:
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
+            dialog.doModal()
+            if dialog.classic_mode:
+                result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
+                if result and result > -1:
+                    self.search(result)
+            if self.total_items > 0:
+                self.setFocusId(500)
 
     def add_filter(self, key, value, typelabel, label):
         index = -1
