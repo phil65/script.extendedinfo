@@ -92,6 +92,24 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
+    def open_youtube_list(self, prev_window=None, search_string="test", filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="videos"):
+        """
+       open video list, deal with window stack and color
+        """
+        import DialogYoutubeList
+        if prev_window:
+            try:  # TODO rework
+                color = prev_window.data["general"]['ImageColor']
+            except:
+                color = "FFFFFFFF"
+        else:
+            color = "FFFFFFFF"
+        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, search_string=search_string, color=color, filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
+        if prev_window:
+            self.add_to_stack(prev_window)
+            prev_window.close()
+        dialog.doModal()
+
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if prev_window:

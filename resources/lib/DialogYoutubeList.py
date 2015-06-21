@@ -10,13 +10,16 @@ from YouTube import *
 from BaseClasses import DialogBaseList
 from WindowManager import wm
 
+TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
+
+
 class DialogYoutubeList(DialogBaseList):
 
     def __init__(self, *args, **kwargs):
         super(DialogYoutubeList, self).__init__(*args, **kwargs)
         self.layout = "landscape"
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.type = kwargs.get('type', "movie")
+        self.type = kwargs.get('type', "videos")
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
@@ -37,7 +40,7 @@ class DialogYoutubeList(DialogBaseList):
     def update_ui(self):
         super(DialogYoutubeList, self).update_ui()
         self.window.setProperty("Type", TRANSLATIONS[self.type])
-        if self.type == "tv":
+        if self.type == "videos":
             self.window.getControl(5006).setVisible(False)
             self.window.getControl(5008).setVisible(False)
             self.window.getControl(5009).setVisible(False)
@@ -59,13 +62,13 @@ class DialogYoutubeList(DialogBaseList):
             if not focusid == 500:
                 return None
             item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
-            if self.type == "tv":
+            if self.type == "videos":
                 listitems = [ADDON.getLocalizedString(32169)]
             else:
                 listitems = [ADDON.getLocalizedString(32113)]
             if self.logged_in:
                 listitems += [xbmc.getLocalizedString(14076)]
-                if not self.type == "tv":
+                if not self.type == "videos":
                     listitems += [ADDON.getLocalizedString(32107)]
                 if self.mode == "list":
                     listitems += [ADDON.getLocalizedString(32035)]
@@ -118,4 +121,4 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
-        return get_youtube_search_videos("test"), "20", "20"
+        return get_youtube_search_videos(self.search_string), "20", "20"

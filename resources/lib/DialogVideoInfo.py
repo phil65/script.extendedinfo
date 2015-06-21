@@ -51,7 +51,6 @@ class DialogVideoInfo(DialogBaseInfo):
         filter_thread.start()
         lists_thread.join()
         self.data["lists"] = lists_thread.listitems
-        sets_thread.join()
         cert_list = get_certification_list("movie")
         for item in self.data["releases"]:
             if item["iso_3166_1"] in cert_list:
@@ -61,6 +60,7 @@ class DialogVideoInfo(DialogBaseInfo):
                 hit = dictfind(language_certs, "certification", certification)
                 if hit:
                     item["meaning"] = hit["meaning"]
+        sets_thread.join()
         self.set_listitems = sets_thread.listitems
         self.setinfo = sets_thread.setinfo
         id_list = sets_thread.id_list

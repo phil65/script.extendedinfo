@@ -40,8 +40,9 @@
                     <posy>107</posy>
                     <width>330</width>
                     <height>432</height>
-                    <visible>!Stringcompare(Window.Property(layout),landscape)</visible>
-                    <animation effect="fade" time="320" delay="300">Visible</animation>
+                    <visible>!Stringcompare(Window.Property(layout),landscape) + Control.HasFocus(500)</visible>
+                    <animation effect="fade" time="320" delay="200">Visible</animation>
+                    <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                     <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
                     <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
@@ -56,8 +57,9 @@
                     <posy>135</posy>
                     <width>440</width>
                     <height>410</height>
-                    <visible>Stringcompare(Window.Property(layout),landscape)</visible>
-                    <animation effect="fade" time="320" delay="300">Visible</animation>
+                    <visible>Stringcompare(Window.Property(layout),landscape) + Control.HasFocus(500)</visible>
+                    <animation effect="fade" time="320" delay="200">Visible</animation>
+                    <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                     <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>

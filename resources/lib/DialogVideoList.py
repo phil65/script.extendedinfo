@@ -367,7 +367,6 @@ class DialogVideoList(DialogBaseList):
                     self.search(result)
             if self.total_items > 0:
                 self.setFocusId(500)
-
         elif control_id == 7000:
             if self.type == "tv":
                 listitems = [ADDON.getLocalizedString(32145)]  # rated tv
