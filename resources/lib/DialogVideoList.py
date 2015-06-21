@@ -152,7 +152,7 @@ class DialogVideoList(DialogBaseList):
         self.mode = kwargs.get("mode", "filter")
         self.list_id = kwargs.get("list_id", False)
         self.sort = kwargs.get('sort', "popularity")
-        self.sort_label = kwargs.get('sort_label', "Popularity")
+        self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32110))
         self.order = kwargs.get('order', "desc")
         force = kwargs.get('force', False)
         self.logged_in = check_login()
