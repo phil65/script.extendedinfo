@@ -5,9 +5,8 @@
 
 from Utils import *
 
-YT_KEY = 'AI39si4DkJJhM8cm7GES91cODBmRR-1uKQuVNkJtbZIVJ6tRgSvNeUh4somGAjUwGlvHFj3d0kdvJdLqD0aQKTh6ttX7t_GjpQ'
 YT_KEY_2 = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
-
+BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 def handle_youtube_videos(results):
     videos = []
@@ -32,26 +31,31 @@ def handle_youtube_videos(results):
     return videos
 
 
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=50):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=50, extended=False):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
     search_string = url_quote(search_string.replace('"', ''))
-    base_url = 'https://www.googleapis.com/youtube/v3/search?part=id%2Csnippet&type=video'
-    url = '&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, YT_KEY_2, hd_string, int(limit))
-    results = get_JSON_response(base_url + url, 0.5, "YouTube")
-    if results:
-        return handle_youtube_videos(results["items"])
+    url = 'search?part=id%%2Csnippet&type=video&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, YT_KEY_2, hd_string, int(limit))
+    results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+    videos = handle_youtube_videos(results["items"])
+    if extended:
+        video_ids = [item["youtube_id"] for item in videos]
+        url = "videos?id=%s&part=contentDetails&key=%s" % (",".join(video_ids), YT_KEY_2)
+        ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+        for i, item in enumerate(videos):
+            item["duration"] = ext_results["items"][i]['contentDetails']['duration'][2:].lower()
+    if videos:
+        return videos
     else:
         return []
 
 
 def get_youtube_playlist_videos(playlistid=""):
-    base_url = 'https://www.googleapis.com/youtube/v3/playlistItems?part=id%2Csnippet&maxResults=50'
-    url = '&playlistId=%s&key=%s' % (playlistid, YT_KEY_2)
-    results = get_JSON_response(base_url + url, 0.5, "YouTube")
+    url = 'playlistItems?part=id%%2Csnippet&maxResults=50&playlistId=%s&key=%s' % (playlistid, YT_KEY_2)
+    results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     if results:
         return handle_youtube_videos(results["items"])
     else:
@@ -59,7 +63,7 @@ def get_youtube_playlist_videos(playlistid=""):
 
 
 def get_youtube_user_playlists(username=""):
-    base_url = 'https://www.googleapis.com/youtube/v3/channels?part=contentDetails'
-    url = '&forUsername=%s&key=%s' % (username, YT_KEY_2)
-    results = get_JSON_response(base_url + url, 30, "YouTube")
+    url = 'channels?part=contentDetails&forUsername=%s&key=%s' % (username, YT_KEY_2)
+    results = get_JSON_response(BASE_URL + url, 30, "YouTube")
     return results["items"][0]["contentDetails"]["relatedPlaylists"]
+
