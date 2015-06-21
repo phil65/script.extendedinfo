@@ -11,13 +11,13 @@ from BaseClasses import DialogBaseList
 from WindowManager import wm
 
 TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
-SORTS = {"videos": {ADDON.getLocalizedString(32110): "date",
-                   xbmc.getLocalizedString(172): "rating",
-                   ADDON.getLocalizedString(32108): "relevance",
-                   # "Release Date": "primary_release_date",
-                   xbmc.getLocalizedString(20376): "title",
-                   ADDON.getLocalizedString(32112): "videoCount",
-                   ADDON.getLocalizedString(32111): "viewCount"}}
+SORTS = {"videos": {xbmc.getLocalizedString(552): "date",
+                    xbmc.getLocalizedString(563): "rating",
+                    ADDON.getLocalizedString(32060): "relevance",
+                    # "Release Date": "primary_release_date",
+                    xbmc.getLocalizedString(369): "title",
+                    ADDON.getLocalizedString(32112): "videoCount",
+                    xbmc.getLocalizedString(567): "viewCount"}}
 
 
 class DialogYoutubeList(DialogBaseList):
@@ -32,7 +32,7 @@ class DialogYoutubeList(DialogBaseList):
         self.mode = kwargs.get("mode", "filter")
         self.list_id = kwargs.get("list_id", False)
         self.sort = kwargs.get('sort', "relevance")
-        self.sort_label = kwargs.get('sort_label', "Relevance")
+        self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32060))
         self.order = kwargs.get('order', "desc")
         force = kwargs.get('force', False)
         self.filters = kwargs.get('filters', [])
@@ -48,6 +48,7 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).update_ui()
         self.window.setProperty("Type", TRANSLATIONS[self.type])
         if self.type == "videos":
+            self.window.getControl(5004).setVisible(False)
             self.window.getControl(5006).setVisible(False)
             self.window.getControl(5008).setVisible(False)
             self.window.getControl(5009).setVisible(False)
@@ -59,13 +60,9 @@ class DialogYoutubeList(DialogBaseList):
             self.window.getControl(5010).setVisible(True)
 
     def onAction(self, action):
+        super(DialogYoutubeList, self).onAction(action)
         focusid = self.getFocusId()
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            wm.pop_stack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
-        elif action == xbmcgui.ACTION_CONTEXT_MENU:
+        if action == xbmcgui.ACTION_CONTEXT_MENU:
             if not focusid == 500:
                 return None
             item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
@@ -79,8 +76,6 @@ class DialogYoutubeList(DialogBaseList):
                     listitems += [ADDON.getLocalizedString(32107)]
                 if self.mode == "list":
                     listitems += [ADDON.getLocalizedString(32035)]
-            # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', ADDON_PATH, labels=listitems)
-            # context_menu.doModal()
             selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), listitems)
             if selection == 0:
                 rating = get_rating_from_user()
@@ -143,4 +138,4 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
-        return get_youtube_search_videos(self.search_string, orderby=self.sort), "20", "20"
+        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, item_info=True)

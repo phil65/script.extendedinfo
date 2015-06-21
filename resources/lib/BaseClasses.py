@@ -47,6 +47,13 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         else:
             xbmc.executebuiltin("SetFocus(6000)")
 
+    def onAction(self, action):
+        if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+            wm.pop_stack()
+        elif action in self.ACTION_EXIT_SCRIPT:
+            self.close()
+
     def search(self, label):
         self.search_string = label
         self.mode = "search"
