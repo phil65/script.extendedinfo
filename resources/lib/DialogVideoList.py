@@ -55,9 +55,6 @@ class DialogVideoList(DialogBaseList):
             self.update_content(force_update=force)
             # notify(str(self.totalpages))
 
-    def onAction(self, action):
-        super(DialogVideoList, self).onAction(action)
-
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
         if control_id in [500]:

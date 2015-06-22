@@ -42,57 +42,6 @@ class DialogYoutubeList(DialogBaseList):
             # notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
-    def onAction(self, action):
-        super(DialogYoutubeList, self).onAction(action)
-        focus_id = self.getFocusId()
-        if action == xbmcgui.ACTION_CONTEXT_MENU:
-            if not focus_id == 500:
-                return None
-            item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
-            if self.type == "videos":
-                listitems = [ADDON.getLocalizedString(32169)]
-            else:
-                listitems = [ADDON.getLocalizedString(32113)]
-            if self.logged_in:
-                listitems += [xbmc.getLocalizedString(14076)]
-                if not self.type == "videos":
-                    listitems += [ADDON.getLocalizedString(32107)]
-                if self.mode == "list":
-                    listitems += [ADDON.getLocalizedString(32035)]
-            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), listitems)
-            if selection == 0:
-                rating = get_rating_from_user()
-                if rating:
-                    send_rating_for_media_item(self.type, item_id, rating)
-                    xbmc.sleep(2000)
-                    self.update(force_update=True)
-            elif selection == 1:
-                change_fav_status(item_id, self.type, "true")
-            elif selection == 2:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                listitems = [ADDON.getLocalizedString(32139)]
-                account_lists = get_account_lists()
-                for item in account_lists:
-                    listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-                listitems.append(ADDON.getLocalizedString(32138))
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
-                if index == 0:
-                    listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
-                    if listname:
-                        list_id = create_list(listname)
-                        xbmc.sleep(1000)
-                        change_list_status(list_id, item_id, True)
-                elif index == len(listitems) - 1:
-                    self.remove_list_dialog(account_lists)
-                elif index > 0:
-                    change_list_status(account_lists[index - 1]["id"], item_id, True)
-                    # xbmc.sleep(2000)
-                    # self.update(force_update=True)
-            elif selection == 3:
-                change_list_status(self.list_id, item_id, False)
-                self.update(force_update=True)
-
     def onClick(self, control_id):
         super(DialogYoutubeList, self).onClick(control_id)
         if control_id in [500]:
