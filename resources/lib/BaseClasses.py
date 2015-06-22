@@ -100,7 +100,10 @@ class DialogBaseList(object):
                 if result and result > -1:
                     self.search(result)
             if self.search_string:
-                self.last_searches.appendleft({"label": self.search_string})
+                listitem = {"label": self.search_string}
+                if listitem in self.last_searches:
+                    self.last_searches.remove(listitem)
+                self.last_searches.appendleft(listitem)
                 setting_string = str(list(self.last_searches))
                 ADDON.setSetting("search_history", setting_string)
             if self.total_items > 0:
