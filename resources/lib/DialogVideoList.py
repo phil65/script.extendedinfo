@@ -285,7 +285,7 @@ class DialogVideoList(DialogBaseList):
         index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
         if index > -1:
             if sort_strings[index] == "vote_average":
-                self.add_filter("vote_count.gte", "10", "Vote Count (greater)", "10")
+                self.add_filter("vote_count.gte", "10", "%s (%s)" % (ADDON.getLocalizedString(32111), xbmc.getLocalizedString(21406)), "10")
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
 
