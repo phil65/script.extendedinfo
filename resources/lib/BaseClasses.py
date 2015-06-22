@@ -53,6 +53,8 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
+        elif action == xbmcgui.ACTION_CONTEXT_MENU:
+            self.context_menu()
 
     def search(self, label):
         self.search_string = label

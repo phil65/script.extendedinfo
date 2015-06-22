@@ -42,21 +42,6 @@ class DialogYoutubeList(DialogBaseList):
             # notify(str(self.totalpages))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
 
-    def update_ui(self):
-        super(DialogYoutubeList, self).update_ui()
-        self.window.setProperty("Type", TRANSLATIONS[self.type])
-        if self.type == "videos":
-            self.window.getControl(5004).setVisible(False)
-            self.window.getControl(5006).setVisible(True)
-            self.window.getControl(5008).setVisible(True)
-            self.window.getControl(5009).setVisible(False)
-            self.window.getControl(5010).setVisible(False)
-        else:
-            self.window.getControl(5006).setVisible(True)
-            self.window.getControl(5008).setVisible(True)
-            self.window.getControl(5009).setVisible(True)
-            self.window.getControl(5010).setVisible(True)
-
     def onAction(self, action):
         super(DialogYoutubeList, self).onAction(action)
         focus_id = self.getFocusId()
@@ -108,18 +93,6 @@ class DialogYoutubeList(DialogBaseList):
                 change_list_status(self.list_id, item_id, False)
                 self.update(force_update=True)
 
-    def get_sort_type(self):
-        listitems = []
-        sort_strings = []
-        sort_key = self.type
-        for (key, value) in SORTS[sort_key].iteritems():
-            listitems.append(key)
-            sort_strings.append(value)
-        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
-        if index > -1:
-            self.sort = sort_strings[index]
-            self.sort_label = listitems[index]
-
     def onClick(self, control_id):
         super(DialogYoutubeList, self).onClick(control_id)
         if control_id in [500]:
@@ -158,6 +131,47 @@ class DialogYoutubeList(DialogBaseList):
                 duration = label_list[index]
                 self.add_filter("videoDuration", duration, xbmc.getLocalizedString(180), str(label_list[index]))
                 self.update()
+        elif control_id == 5009:
+            label_list = ["any", "closedCaption", "none"]
+            index = xbmcgui.Dialog().select(xbmc.getLocalizedString(287), label_list)
+            if index > -1:
+                duration = label_list[index]
+                self.add_filter("videoDuration", duration, xbmc.getLocalizedString(287), str(label_list[index]))
+                self.update()
+
+    def update_ui(self):
+        super(DialogYoutubeList, self).update_ui()
+        self.window.setProperty("Type", TRANSLATIONS[self.type])
+        if self.type == "videos":
+            self.window.getControl(5004).setVisible(False)
+            self.window.getControl(5006).setVisible(True)
+            self.window.getControl(5008).setVisible(True)
+            self.window.getControl(5009).setVisible(True)
+            self.window.getControl(5010).setVisible(False)
+            self.window.getControl(5012).setVisible(False)
+        else:
+            self.window.getControl(5006).setVisible(True)
+            self.window.getControl(5008).setVisible(True)
+            self.window.getControl(5009).setVisible(True)
+            self.window.getControl(5010).setVisible(True)
+
+    def get_sort_type(self):
+        listitems = []
+        sort_strings = []
+        sort_key = self.type
+        for (key, value) in SORTS[sort_key].iteritems():
+            listitems.append(key)
+            sort_strings.append(value)
+        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
+        if index > -1:
+            self.sort = sort_strings[index]
+            self.sort_label = listitems[index]
+
+    def context_menu(self):
+        focus_id = self.getFocusId()
+        if not focus_id == 500:
+            return None
+        item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
 
     def add_filter(self, key, value, typelabel, label):
         self.force_overwrite = True
