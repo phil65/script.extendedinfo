@@ -8,6 +8,8 @@ import xbmcgui
 from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList
+from WindowManager import wm
+
 
 TRANSLATIONS = {"video": xbmc.getLocalizedString(157),
                 "playlist": xbmc.getLocalizedString(559),
@@ -62,7 +64,10 @@ class DialogYoutubeList(DialogBaseList):
         if control_id in [500]:
             self.last_position = self.getControl(control_id).getSelectedPosition()
             youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
-            if youtube_id:
+            if self.type == "channel":
+                log(youtube_id)
+                wm.open_youtube_list(channel=youtube_id)
+            else:
                 PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
         elif control_id == 5002:
             label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065), xbmc.getLocalizedString(636)]

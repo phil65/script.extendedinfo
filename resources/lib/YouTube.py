@@ -81,7 +81,7 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
     else:
         hd_string = ""
     search_string = "&q=%s" % url_quote(search_string.replace('"', ''))
-    url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page_string, search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
+    url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page, search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
     results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     if media_type == "video":
         videos = handle_youtube_videos(results["items"])
