@@ -104,7 +104,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, search_string=search_string, color=color, filters=filters, force=force, filter_label=filter_label, type=media_type)
+        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH, search_string=search_string, color=color, filters=filters, force=force, filter_label=filter_label, type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
             prev_window.close()

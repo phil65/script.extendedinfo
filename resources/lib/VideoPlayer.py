@@ -7,6 +7,7 @@ import xbmc
 import xbmcgui
 from WindowManager import wm
 
+
 class VideoPlayer(xbmc.Player):
 
     def __init__(self, *args, **kwargs):
@@ -46,6 +47,7 @@ class VideoPlayer(xbmc.Player):
             xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257), message="no youtube id found")
 
     def wait_for_video_end(self):
+        xbmc.sleep(500)
         while not self.stopped:
             xbmc.sleep(200)
         self.stopped = False

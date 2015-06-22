@@ -36,21 +36,18 @@
                 <visible>IntegerGreaterThan(Container(500).NumItems,0)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <control type="image">
-                    <posx>25</posx>
-                    <posy>107</posy>
-                    <width>330</width>
-                    <height>432</height>
+                    <posx>75</posx>
+                    <posy>135</posy>
+                    <width>440</width>
+                    <height>410</height>
                     <visible>Control.HasFocus(500)</visible>
                     <animation effect="fade" time="320" delay="200">Visible</animation>
                     <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
-                    <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
-                    <animation effect="slide" end="384,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                    <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
+                    <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
                 </control>
             </control>
             <control type="panel" id="500">
@@ -68,135 +65,139 @@
                 <onup>700</onup>
                 <ondown>600</ondown>
                 <orientation>vertical</orientation>
-                <itemlayout width="384" height="425">
+                <itemlayout height="425" width="440">
                     <control type="group">
-                        <posy>150</posy>
-                        <posx>80</posx>
+                        <posx>75</posx>
+                        <posy>160</posy>
                         <control type="image">
-                            <posx>11</posx>
-                            <posy>30</posy>
-                            <width>193</width>
-                            <height>290</height>
-                            <aspectratio scalediffuse="false">scale</aspectratio>
-                            <texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+                            <posx>25</posx>
+                            <width>390</width>
+                            <height>220</height>
                             <fadetime>200</fadetime>
+                            <aspectratio aligny="center">scale</aspectratio>
+                            <texture background="true">$INFO[ListItem.Icon]</texture>
+                            <bordertexture border="5">thumbs/bordershadow4.png</bordertexture>
+                            <bordersize>5</bordersize>
                         </control>
                         <control type="image">
-                            <posx>-8.5</posx>
-                            <posy>10.5</posy>
-                            <width>232</width>
-                            <height>328</height>
-                            <aspectratio scalediffuse="false">stretch</aspectratio>
-                            <texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
-                            <bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
-                            <bordersize>19.5</bordersize>
-                        </control>
-                        <control type="image">
-                            <width>55</width>
-                            <height>55</height>
-                            <posy>30</posy>
-                            <posx>149</posx>
-                            <texture>flags/local.png</texture>
-                            <visible>!IsEmpty(ListItem.Property(DBID))</visible>
-                        </control>
-                        <control type="textbox">
-                            <posx>0</posx>
-                            <width>228</width>
-                            <height>69</height>
-                            <posy>320</posy>
-                            <textcolor>FFFAFAFA</textcolor>
-                            <align>center</align>
-                            <font>font12</font>
-                            <label>$INFO[ListItem.Label]</label>
-                        </control>
-                        <control type="image">
-                            <width>48</width>
-                            <height>48</height>
-                            <posy>2</posy>
-                            <posx>-10</posx>
-                            <texture>circle.png</texture>
-                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                            <posx>25</posx>
+                            <width>390</width>
+                            <height>220</height>
+                            <texture colordiffuse="55FFFFFF">common/bgcolor.png</texture>
                         </control>
                         <control type="label">
-                            <width>46</width>
-                            <height>40</height>
-                            <posy>6</posy>
+                            <posx>35</posx>
+                            <posy>215</posy>
+                            <width>440</width>
+                            <label>$INFO[ListItem.Label2]</label>
+                            <font>font12</font>
+                            <textcolor>AAFFFFFF</textcolor>
+                        </control>
+                        <control type="image">
+                            <posx>280</posx>
+                            <posy>218</posy>
+                            <width>130</width>
+                            <height>30</height>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <animation effect="fade" delay="800" time="400">WindowOpen</animation>
+                            <animation effect="fade" time="160">WindowClose</animation>
+                            <animation effect="fade" time="240">VisibleChange</animation>
+                        </control>
+                        <control type="textbox">
+                            <posx>20</posx>
+                            <posy>242</posy>
+                            <height>104</height>
+                            <width>400</width>
+                            <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
-                            <aligny>center</aligny>
-                            <posx>-9</posx>
+                            <font>font12</font>
+                            <textcolor>FFFAFAFA</textcolor>
+                        </control>
+                        <control type="label">
+                            <posx>30</posx>
+                            <posy>-25</posy>
+                            <width>380</width>
+                            <height>5</height>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
-                            <textcolor>FF000000</textcolor>
-                            <label>$INFO[ListItem.Property(User_Rating)]</label>
-                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                            <shadowcolor>floorshadow</shadowcolor>
+                            <textcolor>floor</textcolor>
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout width="384" height="425">
+                <focusedlayout height="425" width="440">
                     <control type="group">
-                        <posy>150</posy>
-                        <posx>80</posx>
-                        <animation effect="zoom" center="176,340" start="100" end="127" time="280" tween="back" reversible="false">Focus</animation>
-                        <animation effect="zoom" center="176,340" start="127" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
+                        <posx>75</posx>
+                        <posy>160</posy>
+                        <animation type="Focus">
+                            <effect type="zoom" time="150" start="95" end="100" center="245,260" />
+                            <effect type="zoom" time="150" start="105" end="100" delay="150" center="245,260" />
+                        </animation>
+                        <!--
                         <control type="image">
-                            <posx>11</posx>
-                            <posy>30</posy>
-                            <width>193</width>
-                            <height>290</height>
-                            <aspectratio scalediffuse="false">scale</aspectratio>
-                            <texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-                            <fadetime>0</fadetime>
+                            <posy>-45</posy>
+                            <width>440</width>
+                            <height>410</height>
+                            <texture colordiffuse="FFFFFFFF" border="40">buttons/roundedbutton-focus.png</texture>
+                        </control>-->
+                        <control type="image">
+                            <posx>25</posx>
+                            <width>390</width>
+                            <height>220</height>
+                            <aspectratio aligny="center">scale</aspectratio>
+                            <texture background="true">$INFO[ListItem.Icon]</texture>
+                            <bordertexture border="5">thumbs/bordershadow4.png</bordertexture>
+                            <bordersize>5</bordersize>
                         </control>
                         <control type="image">
-                            <posx>-8.5</posx>
-                            <posy>10.5</posy>
-                            <width>232</width>
-                            <height>328</height>
-                            <aspectratio scalediffuse="false">stretch</aspectratio>
-                            <texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
-                            <bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
-                            <bordersize>19.5</bordersize>
-                            <fadetime>0</fadetime>
-                        </control>
-                        <control type="image">
-                            <width>55</width>
-                            <height>55</height>
-                            <posy>30</posy>
-                            <posx>149</posx>
-                            <texture>flags/local.png</texture>
-                            <visible>!IsEmpty(ListItem.Property(DBID))</visible>
-                        </control>
-                        <control type="image">
-                            <width>48</width>
-                            <height>48</height>
-                            <posy>2</posy>
-                            <posx>-10</posx>
-                            <texture>circle.png</texture>
-                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                            <animation effect="fade" time="300" start="100" end="0" delay="100">Focus</animation>
+                            <animation effect="fade" time="300" start="0" end="100">UnFocus</animation>
+                            <posx>25</posx>
+                            <width>390</width>
+                            <height>220</height>
+                            <texture colordiffuse="55FFFFFF">common/bgcolor.png</texture>
                         </control>
                         <control type="label">
-                            <width>46</width>
-                            <height>40</height>
-                            <posy>6</posy>
-                            <align>center</align>
-                            <aligny>center</aligny>
-                            <posx>-9</posx>
-                            <font>font10</font>
-                            <textcolor>FF000000</textcolor>
-                            <label>$INFO[ListItem.Property(User_Rating)]</label>
-                            <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                            <posx>35</posx>
+                            <posy>215</posy>
+                            <width>440</width>
+                            <label>$INFO[ListItem.Label2]</label>
+                            <font>font12</font>
+                            <textcolor>AAFFFFFF</textcolor>
                         </control>
-                    </control>
-                    <control type="textbox">
-                        <posx>80</posx>
-                        <width>228</width>
-                        <height>69</height>
-                        <posy>470</posy>
-                        <textcolor>FFFAFAFA</textcolor>
-                        <align>center</align>
-                        <font>font12</font>
-                        <label>$INFO[ListItem.Label]</label>
-                        <animation effect="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false">Focus</animation>
-                        <animation effect="slide" start="0,50" end="0" time="200" tween="cubic" reversible="false">UnFocus</animation>
+                        <control type="image">
+                            <posx>280</posx>
+                            <posy>218</posy>
+                            <width>130</width>
+                            <height>30</height>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <animation effect="fade" delay="800" time="400">WindowOpen</animation>
+                            <animation effect="fade" time="160">WindowClose</animation>
+                            <animation effect="fade" time="240">VisibleChange</animation>
+                        </control>
+                        <control type="textbox">
+                            <posx>20</posx>
+                            <posy>242</posy>
+                            <height>104</height>
+                            <width>400</width>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Label]</label>
+                            <animation effect="fade" time="300" start="70" end="100" delay="100" reversible="false">Focus</animation>
+                            <animation effect="fade" time="300" start="100" end="50" reversible="false">UnFocus</animation>
+                            <font>font12</font>
+                        </control>
+                        <control type="label">
+                            <posx>30</posx>
+                            <posy>-25</posy>
+                            <width>380</width>
+                            <height>5</height>
+                            <align>center</align>
+                            <label>$INFO[ListItem.Property(date)]</label>
+                            <font>font10</font>
+                            <shadowcolor>floorshadow</shadowcolor>
+                            <textcolor>floor</textcolor>
+                        </control>
                     </control>
                 </focusedlayout>
             </control>
@@ -382,10 +383,10 @@
                 <radioposx>288</radioposx>
                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-focus.png</texturefocus>
                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(WindowColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                <textureradioonfocus>moviedb.png</textureradioonfocus>
-                <textureradioofffocus>moviedb.png</textureradioofffocus>
-                <textureradioonnofocus>moviedb.png</textureradioonnofocus>
-                <textureradiooffnofocus>moviedb.png</textureradiooffnofocus>
+                <textureradioonfocus>common/youtube.png</textureradioonfocus>
+                <textureradioofffocus>common/youtube.png</textureradioofffocus>
+                <textureradioonnofocus>common/youtube.png</textureradioonnofocus>
+                <textureradiooffnofocus>common/youtube.png</textureradiooffnofocus>
             </control>
             <control type="grouplist" id="9000">
                 <posy>250</posy>
