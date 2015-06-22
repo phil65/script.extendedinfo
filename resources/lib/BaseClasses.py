@@ -103,7 +103,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
 
     def set_filter_url(self):
         filter_list = []
-        # prettyprint(self.filters)
         for item in self.filters:
             filter_list.append("%s=%s" % (item["type"], item["id"]))
         self.filter_url = "&".join(filter_list)
@@ -112,7 +111,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
 
     def set_filter_label(self):
         filter_list = []
-        # prettyprint(self.filters)
         for item in self.filters:
             filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], item["label"].decode("utf-8").replace("|", " | ").replace(",", " + ")))
         self.filter_label = "  -  ".join(filter_list)
@@ -127,6 +125,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.total_pages = data.get("results_per_page", "")
         self.total_items = data.get("total_results", "")
         self.next_page_token = data.get("next_page_token", "")
+        self.prev_page_token = data.get("prev_page_token", "")
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):

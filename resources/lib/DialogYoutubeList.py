@@ -93,7 +93,7 @@ class DialogYoutubeList(DialogBaseList):
                 self.update()
         elif control_id == 5006:
             value_list = ["2d", "3d", "any"]
-            label_list = ["2d", "3d", xbmc.getLocalizedString(593)]
+            label_list = ["2D", "3D", xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
                 self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))

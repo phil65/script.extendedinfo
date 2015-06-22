@@ -75,7 +75,9 @@ def handle_youtube_channels(results):
     return channels
 
 
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, page=1, filter_string="", media_type="video"):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
+    if page:
+        page = "&pageToken=%s" % page
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
