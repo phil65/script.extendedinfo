@@ -50,15 +50,18 @@ class DialogYoutubeList(DialogBaseList):
             if youtube_id:
                 PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
         elif control_id == 5002:
-            label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065)]
-            deltas = [1, 7, 31, 365]
+            label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065), xbmc.getLocalizedString(636)]
+            deltas = [1, 7, 31, 365, "custom"]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
                 delta = deltas[index]
-                d = datetime.datetime.now() - datetime.timedelta(delta)
-                date_string = d.isoformat('T')[:-7] + "Z"
-                self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
-                self.update()
+                if delta == "custom":
+                    delta = xbmcgui.Dialog().input(ADDON.getLocalizedString(32067), "", type=xbmcgui.INPUT_NUMERIC)
+                if delta:
+                    d = datetime.datetime.now() - datetime.timedelta(int(delta))
+                    date_string = d.isoformat('T')[:-7] + "Z"
+                    self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
+                    self.update()
         elif control_id == 5003:
             label_list = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
@@ -66,10 +69,11 @@ class DialogYoutubeList(DialogBaseList):
                 self.add_filter("regionCode", label_list[index], xbmc.getLocalizedString(248), str(label_list[index]))
                 self.update()
         elif control_id == 5006:
-            label_list = ["2d", "3d", "any"]
+            value_list = ["2d", "3d", "any"]
+            label_list = ["2d", "3d", xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
-                self.add_filter("videoDimension", label_list[index], "Dimensions", str(label_list[index]))
+                self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))
                 self.update()
         elif control_id == 5008:
             value_list = ["long", "medium", "short", "any"]
