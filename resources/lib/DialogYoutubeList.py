@@ -133,4 +133,8 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
+        if self.search_string:
+            self.filter_label = ADDON.getLocalizedString(32146) % self.search_string
+        else:
+            self.filter_label = ""
         return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, item_info=True)

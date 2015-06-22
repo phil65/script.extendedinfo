@@ -382,7 +382,10 @@ class DialogVideoList(DialogBaseList):
             starred = ADDON.getLocalizedString(32134)
         if self.mode == "search":
             url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, include_adult)
-            self.filter_label = ADDON.getLocalizedString(32146) % self.search_string
+            if self.search_string:
+                self.filter_label = ADDON.getLocalizedString(32146) % self.search_string
+            else:
+                self.filter_label = ""
         elif self.mode == "list":
             url = "list/%s?language=%s&" % (str(self.list_id), ADDON.getSetting("LanguageID"))
             # self.filter_label = ADDON.getLocalizedString(32036)
