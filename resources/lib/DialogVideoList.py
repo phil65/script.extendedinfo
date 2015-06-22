@@ -209,11 +209,11 @@ class DialogVideoList(DialogBaseList):
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(True)
 
-    def next_page(self):
+    def go_to_next_page(self):
         if self.page < self.total_pages:
             self.page += 1
 
-    def prev_page(self):
+    def go_to_prev_page(self):
         if self.page > 1:
             self.page -= 1
 

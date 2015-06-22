@@ -61,9 +61,9 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
     def onFocus(self, control_id):
         old_page = self.page
         if control_id == 600:
-            self.next_page()
+            self.go_to_next_page()
         elif control_id == 700:
-            self.prev_page()
+            self.go_to_prev_page()
         if self.page != old_page:
             self.update()
 

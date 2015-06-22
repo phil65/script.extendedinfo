@@ -148,11 +148,11 @@ class DialogYoutubeList(DialogBaseList):
             self.window.getControl(5012).setVisible(False)
         super(DialogYoutubeList, self).update_ui()
 
-    def next_page(self):
+    def go_to_next_page(self):
         if self.page < self.total_pages:
             self.page += 1
 
-    def prev_page(self):
+    def go_to_prev_page(self):
         if self.page > 1:
             self.page -= 1
 
