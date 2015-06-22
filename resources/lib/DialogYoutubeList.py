@@ -13,11 +13,22 @@ TRANSLATIONS = {"video": xbmc.getLocalizedString(157),
                 "playlist": xbmc.getLocalizedString(559),
                 "channel": xbmc.getLocalizedString(19029)}
 SORTS = {"video": {xbmc.getLocalizedString(552): "date",
-                    xbmc.getLocalizedString(563): "rating",
-                    ADDON.getLocalizedString(32060): "relevance",
-                    xbmc.getLocalizedString(369): "title",
-                    ADDON.getLocalizedString(32112): "videoCount",
-                    xbmc.getLocalizedString(567): "viewCount"}}
+                   xbmc.getLocalizedString(563): "rating",
+                   ADDON.getLocalizedString(32060): "relevance",
+                   xbmc.getLocalizedString(369): "title",
+                   xbmc.getLocalizedString(567): "viewCount"},
+         "playlist": {xbmc.getLocalizedString(552): "date",
+                      xbmc.getLocalizedString(563): "rating",
+                      ADDON.getLocalizedString(32060): "relevance",
+                      xbmc.getLocalizedString(369): "title",
+                      ADDON.getLocalizedString(32068): "videoCount",
+                      xbmc.getLocalizedString(567): "viewCount"},
+         "channel": {xbmc.getLocalizedString(552): "date",
+                     xbmc.getLocalizedString(563): "rating",
+                     ADDON.getLocalizedString(32060): "relevance",
+                     xbmc.getLocalizedString(369): "title",
+                     ADDON.getLocalizedString(32068): "videoCount",
+                     xbmc.getLocalizedString(567): "viewCount"}}
 
 
 class DialogYoutubeList(DialogBaseList):
