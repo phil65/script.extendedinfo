@@ -63,36 +63,34 @@ class DialogYoutubeList(DialogBaseList):
             label_list = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
-                country_code = label_list[index]
-                self.add_filter("regionCode", country_code, xbmc.getLocalizedString(248), str(label_list[index]))
+                self.add_filter("regionCode", label_list[index], xbmc.getLocalizedString(248), str(label_list[index]))
                 self.update()
         elif control_id == 5006:
             label_list = ["2d", "3d", "any"]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
-                vid_dimensions = label_list[index]
-                self.add_filter("videoDimension", vid_dimensions, "Dimensions", str(label_list[index]))
+                self.add_filter("videoDimension", label_list[index], "Dimensions", str(label_list[index]))
                 self.update()
         elif control_id == 5008:
-            label_list = ["long", "medium", "short", "any"]
+            value_list = ["long", "medium", "short", "any"]
+            label_list = [xbmc.getLocalizedString(33013), xbmc.getLocalizedString(601), xbmc.getLocalizedString(33012), xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
-                duration = label_list[index]
-                self.add_filter("videoDuration", duration, xbmc.getLocalizedString(180), str(label_list[index]))
+                self.add_filter("videoDuration", value_list[index], xbmc.getLocalizedString(180), str(label_list[index]))
                 self.update()
         elif control_id == 5009:
-            label_list = ["closedCaption", "none", "any"]
+            value_list = ["closedCaption", "none", "any"]
+            label_list = [xbmc.getLocalizedString(107), xbmc.getLocalizedString(106), xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(xbmc.getLocalizedString(287), label_list)
             if index > -1:
-                duration = label_list[index]
-                self.add_filter("videoDuration", duration, xbmc.getLocalizedString(287), str(label_list[index]))
+                self.add_filter("videoDuration", value_list[index], xbmc.getLocalizedString(287), str(label_list[index]))
                 self.update()
         elif control_id == 5012:
-            label_list = ["high", "standard", "any"]
+            value_list = ["high", "standard", "any"]
+            label_list = [xbmc.getLocalizedString(419), xbmc.getLocalizedString(602), xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(xbmc.getLocalizedString(169), label_list)
             if index > -1:
-                duration = label_list[index]
-                self.add_filter("videoDefinition", duration, xbmc.getLocalizedString(169), str(label_list[index]))
+                self.add_filter("videoDefinition", value_list[index], xbmc.getLocalizedString(169), str(label_list[index]))
                 self.update()
 
     def update_ui(self):
