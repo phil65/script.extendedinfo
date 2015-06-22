@@ -61,11 +61,11 @@ class DialogYoutubeList(DialogBaseList):
 
     def onAction(self, action):
         super(DialogYoutubeList, self).onAction(action)
-        focusid = self.getFocusId()
+        focus_id = self.getFocusId()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
-            if not focusid == 500:
+            if not focus_id == 500:
                 return None
-            item_id = self.getControl(focusid).getSelectedItem().getProperty("id")
+            item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
             if self.type == "videos":
                 listitems = [ADDON.getLocalizedString(32169)]
             else:
@@ -82,8 +82,7 @@ class DialogYoutubeList(DialogBaseList):
                 if rating:
                     send_rating_for_media_item(self.type, item_id, rating)
                     xbmc.sleep(2000)
-                    self.update_content(force_update=True)
-                    self.update_ui()
+                    self.update(force_update=True)
             elif selection == 1:
                 change_fav_status(item_id, self.type, "true")
             elif selection == 2:
@@ -106,12 +105,10 @@ class DialogYoutubeList(DialogBaseList):
                 elif index > 0:
                     change_list_status(account_lists[index - 1]["id"], item_id, True)
                     # xbmc.sleep(2000)
-                    # self.update_content(force_update=True)
-                    # self.update_ui()
+                    # self.update(force_update=True)
             elif selection == 3:
                 change_list_status(self.list_id, item_id, False)
-                self.update_content(force_update=True)
-                self.update_ui()
+                self.update(force_update=True)
 
     def get_sort_type(self):
         listitems = []

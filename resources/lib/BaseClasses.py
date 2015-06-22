@@ -59,8 +59,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.mode = "search"
         self.filters = []
         self.page = 1
-        self.update_content()
-        self.update_ui()
+        self.update()
 
     def set_filter_url(self):
         filter_list = []
@@ -107,6 +106,11 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         else:
             self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
 
+    @busy_dialog
+    def update(self, force_update=False):
+        self.update_content(force_update=force_update)
+        self.update_ui()
+
     def onFocus(self, control_id):
         old_page = self.page
         if control_id == 600:
@@ -116,16 +120,12 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             if self.page > 1:
                 self.page -= 1
         if self.page != old_page:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            self.update_content()
-            self.update_ui()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            self.update()
 
     def onClick(self, control_id):
         if control_id == 5001:
             self.get_sort_type()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 6000:
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
             dialog.doModal()

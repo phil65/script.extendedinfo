@@ -94,8 +94,7 @@ class DialogVideoList(DialogBaseList):
                 if rating:
                     send_rating_for_media_item(self.type, item_id, rating)
                     xbmc.sleep(2000)
-                    self.update_content(force_update=True)
-                    self.update_ui()
+                    self.update(force_update=True)
             elif selection == 1:
                 change_fav_status(item_id, self.type, "true")
             elif selection == 2:
@@ -118,12 +117,10 @@ class DialogVideoList(DialogBaseList):
                 elif index > 0:
                     change_list_status(account_lists[index - 1]["id"], item_id, True)
                     # xbmc.sleep(2000)
-                    # self.update_content(force_update=True)
-                    # self.update_ui()
+                    # self.update(force_update=True)
             elif selection == 3:
                 change_list_status(self.list_id, item_id, False)
-                self.update_content(force_update=True)
-                self.update_ui()
+                self.update(force_update=True)
 
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
@@ -142,8 +139,7 @@ class DialogVideoList(DialogBaseList):
                 wm.open_movie_info(prev_window=self, movie_id=media_id, dbid=dbid)
         elif control_id == 5002:
             self.get_genre()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5003:
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading=ADDON.getLocalizedString(32151), line1=ADDON.getLocalizedString(32106), nolabel=ADDON.getLocalizedString(32150), yeslabel=ADDON.getLocalizedString(32149))
@@ -163,8 +159,7 @@ class DialogVideoList(DialogBaseList):
                     self.add_filter("primary_release_date.%s" % order, value, xbmc.getLocalizedString(345), label)
                 self.mode = "filter"
                 self.page = 1
-                self.update_content()
-                self.update_ui()
+                self.update()
         # elif control_id == 5011:
         #     dialog = xbmcgui.Dialog()
         #     ret = True
@@ -181,8 +176,7 @@ class DialogVideoList(DialogBaseList):
         #         self.add_filter("vote_average.%s" % order, float(result) / 10.0, ADDON.getLocalizedString(32112), label)
         #         self.mode = "filter"
         #         self.page = 1
-        #         self.update_content()
-        #         self.update_ui()
+        #         self.update()
         elif control_id == 5012:
             dialog = xbmcgui.Dialog()
             ret = True
@@ -199,38 +193,31 @@ class DialogVideoList(DialogBaseList):
                 self.add_filter("vote_count.%s" % order, result, ADDON.getLocalizedString(32111), label)
                 self.mode = "filter"
                 self.page = 1
-                self.update_content()
-                self.update_ui()
+                self.update()
 
         elif control_id == 5004:
             if self.order == "asc":
                 self.order = "desc"
             else:
                 self.order = "asc"
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5005:
             self.filters = []
             self.page = 1
             self.mode = "filter"
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5006:
             self.get_certification()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5008:
             self.get_actor()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5009:
             self.get_keyword()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5010:
             self.get_company()
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 5007:
             self.filters = []
             self.page = 1
@@ -243,8 +230,7 @@ class DialogVideoList(DialogBaseList):
                 self.filters = []
             if self.mode == "list":
                 self.mode = "filter"
-            self.update_content()
-            self.update_ui()
+            self.update()
         elif control_id == 7000:
             if self.type == "tv":
                 listitems = [ADDON.getLocalizedString(32145)]  # rated tv
@@ -269,16 +255,14 @@ class DialogVideoList(DialogBaseList):
                 self.sort_label = ADDON.getLocalizedString(32157)
                 self.filters = []
                 self.page = 1
-                self.update_content()
-                self.update_ui()
+                self.update()
             elif index == 1:
                 self.mode = "favorites"
                 self.sort = "created_at"
                 self.sort_label = ADDON.getLocalizedString(32157)
                 self.filters = []
                 self.page = 1
-                self.update_content()
-                self.update_ui()
+                self.update()
             else:
                 # offset = len(listitems) - len(account_lists)
                 # notify(str(offset))
