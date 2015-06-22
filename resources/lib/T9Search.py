@@ -14,14 +14,14 @@ class T9Search(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         self.callback = kwargs.get("call")
         self.search_string = kwargs.get("start_value", "")
+        self.last_searches = kwargs.get("history", "")
         self.previous = False
         self.prev_time = 0
         self.timer = None
         self.color_timer = None
 
     def onInit(self):
-        if self.search_string:
-            self.get_autocomplete_labels_async()
+        self.get_autocomplete_labels_async()
         self.classic_mode = False
         self.update_search_label_async()
         keys = (("1", "ABC1"),
@@ -112,5 +112,8 @@ class T9Search(xbmcgui.WindowXMLDialog):
     @run_async
     def get_autocomplete_labels_async(self):
         self.getControl(9091).reset()
-        listitems = get_autocomplete_items(self.search_string)
+        if self.search_string:
+            listitems = get_autocomplete_items(self.search_string)
+        else:
+            listitems = list(self.last_searches)
         self.getControl(9091).addItems(create_listitems(listitems))
