@@ -79,7 +79,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         elif control_id == 6000:
             settings_string = ADDON.getSetting("search_history")
             if settings_string:
-                self.last_searches = deque(ast.literal_eval(settings_string))
+                self.last_searches = deque(ast.literal_eval(settings_string), maxlen=10)
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
