@@ -89,7 +89,7 @@ class DialogYoutubeList(DialogBaseList):
             label_list = [xbmc.getLocalizedString(107), xbmc.getLocalizedString(106), xbmc.getLocalizedString(593)]
             index = xbmcgui.Dialog().select(xbmc.getLocalizedString(287), label_list)
             if index > -1:
-                self.add_filter("videoDuration", value_list[index], xbmc.getLocalizedString(287), str(label_list[index]))
+                self.add_filter("videoCaption", value_list[index], xbmc.getLocalizedString(287), str(label_list[index]))
                 self.update()
         elif control_id == 5012:
             value_list = ["high", "standard", "any"]
