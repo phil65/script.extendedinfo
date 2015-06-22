@@ -581,7 +581,7 @@
                     <focusedcolor>FFFAFAFA</focusedcolor>
                 </control>
                 <control type="button" id="5012">
-                    <label>$ADDON[script.extendedinfo 32111]</label>
+                    <label>$LOCALIZE[169]</label>
                     <width>400</width>
                     <height>90</height>
                     <textoffsetx>40</textoffsetx>

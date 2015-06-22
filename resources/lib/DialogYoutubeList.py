@@ -81,11 +81,18 @@ class DialogYoutubeList(DialogBaseList):
                 self.add_filter("videoDuration", duration, xbmc.getLocalizedString(180), str(label_list[index]))
                 self.update()
         elif control_id == 5009:
-            label_list = ["any", "closedCaption", "none"]
+            label_list = ["closedCaption", "none", "any"]
             index = xbmcgui.Dialog().select(xbmc.getLocalizedString(287), label_list)
             if index > -1:
                 duration = label_list[index]
                 self.add_filter("videoDuration", duration, xbmc.getLocalizedString(287), str(label_list[index]))
+                self.update()
+        elif control_id == 5012:
+            label_list = ["high", "standard", "any"]
+            index = xbmcgui.Dialog().select(xbmc.getLocalizedString(169), label_list)
+            if index > -1:
+                duration = label_list[index]
+                self.add_filter("videoDefinition", duration, xbmc.getLocalizedString(169), str(label_list[index]))
                 self.update()
 
     def update_ui(self):
@@ -97,7 +104,7 @@ class DialogYoutubeList(DialogBaseList):
             self.window.getControl(5008).setVisible(True)
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(False)
-            self.window.getControl(5012).setVisible(False)
+            self.window.getControl(5012).setVisible(True)
         else:
             self.window.getControl(5006).setVisible(True)
             self.window.getControl(5008).setVisible(True)
