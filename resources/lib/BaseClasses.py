@@ -9,6 +9,7 @@ from Utils import *
 from TheMovieDB import *
 from WindowManager import wm
 from T9Search import T9Search
+from collections import deque
 
 
 class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
@@ -23,6 +24,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             xbmcgui.WindowXMLDialog.__init__(self)
             self.window_type = "dialog"
         self.listitem_list = kwargs.get('listitems', None)
+        self.last_searches = deque(maxlen=10)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
         self.last_position = 0
@@ -135,12 +137,14 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.mode = "filter"
             self.update()
         elif control_id == 6000:
-            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
+            if self.search_string:
+                self.last_searches.appendleft({"label": self.search_string})
             if self.total_items > 0:
                 self.setFocusId(500)
 
