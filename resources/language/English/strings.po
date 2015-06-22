@@ -298,6 +298,12 @@ msgctxt "#32060"
 msgid "Relevance"
 msgstr ""
 
+#: \resources\skins\Default\1080i\script-ExtendedInfo
+#: Script-YoutubeList.xml:113
+msgctxt "#32061"
+msgid "views"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""
@@ -347,6 +353,7 @@ msgctxt "#32110"
 msgid "Popularity"
 msgstr ""
 
+#: \resources\lib\DialogVideoList.py:288
 msgctxt "#32111"
 msgid "Vote count"
 msgstr ""

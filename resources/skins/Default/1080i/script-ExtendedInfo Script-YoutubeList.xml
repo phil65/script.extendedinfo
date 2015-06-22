@@ -206,9 +206,8 @@
                             <width>400</width>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
-                            <animation effect="fade" time="300" start="70" end="100" delay="100" reversible="false">Focus</animation>
-                            <animation effect="fade" time="300" start="100" end="50" reversible="false">UnFocus</animation>
                             <font>font12</font>
+                            <textcolor>FFFAFAFA</textcolor>
                         </control>
                         <control type="label">
                             <posx>30</posx>
