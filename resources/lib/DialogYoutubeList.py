@@ -119,10 +119,12 @@ class DialogYoutubeList(DialogBaseList):
                 self.type = "channel"
             elif self.type == "channel":
                 self.type = "video"
+            if self.sort not in SORTS[self.type].values():
+                self.sort = "relevance"
+                self.sort_label = ADDON.getLocalizedString(32060)
             self.update()
 
     def update_ui(self):
-        super(DialogYoutubeList, self).update_ui()
         self.window.setProperty("Type", TRANSLATIONS[self.type])
         if self.type == "video":
             self.window.getControl(5004).setVisible(False)
@@ -145,6 +147,7 @@ class DialogYoutubeList(DialogBaseList):
             self.window.getControl(5009).setVisible(False)
             self.window.getControl(5010).setVisible(False)
             self.window.getControl(5012).setVisible(False)
+        super(DialogYoutubeList, self).update_ui()
 
     def get_sort_type(self):
         listitems = []

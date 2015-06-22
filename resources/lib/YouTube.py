@@ -11,7 +11,6 @@ BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 def handle_youtube_videos(results):
     videos = []
-    log("starting handle_youtube_videos")
     for item in results:
             thumb = ""
             if "thumbnails" in item["snippet"]:
@@ -34,7 +33,6 @@ def handle_youtube_videos(results):
 
 def handle_youtube_playlists(results):
     playlists = []
-    log("starting handle_youtube_playlists")
     for item in results:
             thumb = ""
             if "thumbnails" in item["snippet"]:
@@ -57,7 +55,6 @@ def handle_youtube_playlists(results):
 
 def handle_youtube_channels(results):
     channels = []
-    log("starting handle_youtube_channels")
     for item in results:
             thumb = ""
             if "thumbnails" in item["snippet"]:
@@ -67,13 +64,13 @@ def handle_youtube_channels(results):
             except:
                 channel_id = item["snippet"]["resourceId"]["channelId"]
             channel = {'thumb': thumb,
-                        'youtube_id': channel_id,
-                        'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
-                        'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
-                        'Description': item["snippet"]["description"],
-                        'title': item["snippet"]["title"],
-                        # 'Author': item["author"][0]["name"]["$t"],
-                        'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+                       'youtube_id': channel_id,
+                       'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                       'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                       'Description': item["snippet"]["description"],
+                       'title': item["snippet"]["title"],
+                       # 'Author': item["author"][0]["name"]["$t"],
+                       'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             channels.append(channel)
     return channels
 
@@ -87,7 +84,6 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
     search_string = url_quote(search_string.replace('"', ''))
     url = 'search?part=id%%2Csnippet&type=%s&q=%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
     results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
-    prettyprint(results)
     if media_type == "video":
         videos = handle_youtube_videos(results["items"])
         if extended:

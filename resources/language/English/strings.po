@@ -294,6 +294,7 @@ msgid "Added movie to CouchPotato"
 msgstr ""
 
 #: \resources\lib\DialogYoutubeList.py:35
+#: \resources\lib\DialogYoutubeList.py:124
 msgctxt "#32060"
 msgid "Relevance"
 msgstr ""
