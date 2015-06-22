@@ -40,7 +40,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.window_id = xbmcgui.getCurrentWindowDialogId()
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("WindowColor", self.color)
-        self.window.setProperty("layout", self.layout)
         self.update_ui()
         xbmc.sleep(200)
         if self.total_items > 0:
