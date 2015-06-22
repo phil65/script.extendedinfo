@@ -7,7 +7,16 @@
     <defaultcontrol always="true">500</defaultcontrol>
     <controls>
         <control type="image">
-            <texture>diffuseoverlay.png</texture>
+            <texture background="true" fallback="common/white.png">$INFO[Container(500).ListItem.Thumb]</texture>
+            <width>1920</width>
+            <height>1080</height>
+            <fadetime>400</fadetime>
+            <animation effect="fade" end="100" time="560">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+        </control>
+        <control type="image">
+            <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">diffuseoverlay.png</texture>
+            <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation>
             <width>1920</width>
             <height>1080</height>
             <animation effect="fade" end="100" time="360">WindowOpen</animation>
