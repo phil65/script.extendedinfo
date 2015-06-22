@@ -59,7 +59,8 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.mode = "search"
         self.filters = []
         self.page = 1
-        self.update()
+        self.update_content()
+        self.update_ui()
 
     def set_filter_url(self):
         filter_list = []
