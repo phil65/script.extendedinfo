@@ -10,7 +10,8 @@ from YouTube import *
 from BaseClasses import DialogBaseList
 
 TRANSLATIONS = {"video": xbmc.getLocalizedString(157),
-                "playlist": xbmc.getLocalizedString(559)}
+                "playlist": xbmc.getLocalizedString(559),
+                "channel": xbmc.getLocalizedString(19029)}
 SORTS = {"video": {xbmc.getLocalizedString(552): "date",
                     xbmc.getLocalizedString(563): "rating",
                     ADDON.getLocalizedString(32060): "relevance",
@@ -28,6 +29,7 @@ class DialogYoutubeList(DialogBaseList):
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.filter_url = ""
+        self.next_page = ""
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "relevance")
         self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32060))
@@ -152,8 +154,7 @@ class DialogYoutubeList(DialogBaseList):
         item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
 
     def add_filter(self, key, value, typelabel, label):
-        self.force_overwrite = True
-        super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
+        super(DialogYoutubeList, self).add_filter(key, value, typelabel, label, force_overwrite=True)
         self.mode = "filter"
         self.page = 1
 

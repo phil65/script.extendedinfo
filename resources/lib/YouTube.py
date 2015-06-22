@@ -55,6 +55,29 @@ def handle_youtube_playlists(results):
     return playlists
 
 
+def handle_youtube_channels(results):
+    channels = []
+    log("starting handle_youtube_channels")
+    for item in results:
+            thumb = ""
+            if "thumbnails" in item["snippet"]:
+                thumb = item["snippet"]["thumbnails"]["high"]["url"]
+            try:
+                channel_id = item["id"]["channelId"]
+            except:
+                channel_id = item["snippet"]["resourceId"]["channelId"]
+            channel = {'thumb': thumb,
+                        'youtube_id': channel_id,
+                        'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                        'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                        'Description': item["snippet"]["description"],
+                        'title': item["snippet"]["title"],
+                        # 'Author': item["author"][0]["name"]["$t"],
+                        'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+            channels.append(channel)
+    return channels
+
+
 def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, item_info=False, page=1, filter_string="", media_type="video"):
     results = []
     if hd and not hd == "false":
@@ -89,6 +112,8 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
                     item["duration"] = ""
     elif media_type == "playlist":
         videos = handle_youtube_playlists(results["items"])
+    elif media_type == "channel":
+        videos = handle_youtube_channels(results["items"])
     if videos:
         if item_info:
             return videos, results["pageInfo"]["resultsPerPage"], results["pageInfo"]["totalResults"]

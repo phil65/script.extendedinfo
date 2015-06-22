@@ -279,10 +279,9 @@ class DialogVideoList(DialogBaseList):
 
     def add_filter(self, key, value, typelabel, label):
         if ".gte" in key or ".lte" in key:
-            self.force_overwrite = True
+            super(DialogVideoList, self).add_filter(key, value, typelabel, label, force_overwrite=True)
         else:
-            self.force_overwrite = False
-        super(DialogVideoList, self).add_filter(key, value, typelabel, label)
+            super(DialogVideoList, self).add_filter(key, value, typelabel, label, force_overwrite=False)
 
     def get_genre(self):
         response = get_tmdb_data("genre/%s/list?language=%s&" % (self.type, ADDON.getSetting("LanguageID")), 10)

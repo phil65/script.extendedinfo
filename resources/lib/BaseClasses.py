@@ -147,7 +147,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             if self.total_items > 0:
                 self.setFocusId(500)
 
-    def add_filter(self, key, value, typelabel, label):
+    def add_filter(self, key, value, typelabel, label, force_overwrite=False):
         index = -1
         new_filter = {"id": value,
                       "type": key,
@@ -162,7 +162,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         if not value:
             return False
         if index > -1:
-            if not self.force_overwrite:
+            if not force_overwrite:
                 dialog = xbmcgui.Dialog()
                 ret = dialog.yesno(heading=xbmc.getLocalizedString(587), line1=ADDON.getLocalizedString(32106), nolabel="OR", yeslabel="AND")
                 if ret:
