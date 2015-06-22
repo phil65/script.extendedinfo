@@ -152,12 +152,8 @@ class DialogVideoList(DialogBaseList):
             self.mode = "filter"
             if self.type == "tv":
                 self.type = "movie"
-                self.filters = []
             else:
                 self.type = "tv"
-                self.filters = []
-            if self.mode == "list":
-                self.mode = "filter"
             self.update()
         elif control_id == 7000:
             if self.type == "tv":

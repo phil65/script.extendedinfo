@@ -9,8 +9,9 @@ from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList
 
-TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
-SORTS = {"videos": {xbmc.getLocalizedString(552): "date",
+TRANSLATIONS = {"video": xbmc.getLocalizedString(157),
+                "playlist": xbmc.getLocalizedString(559)}
+SORTS = {"video": {xbmc.getLocalizedString(552): "date",
                     xbmc.getLocalizedString(563): "rating",
                     ADDON.getLocalizedString(32060): "relevance",
                     xbmc.getLocalizedString(369): "title",
@@ -24,7 +25,7 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).__init__(*args, **kwargs)
         self.layout = "landscape"
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.type = kwargs.get('type', "videos")
+        self.type = kwargs.get('type', "video")
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.filter_url = ""
@@ -96,22 +97,42 @@ class DialogYoutubeList(DialogBaseList):
             if index > -1:
                 self.add_filter("videoDefinition", value_list[index], xbmc.getLocalizedString(169), str(label_list[index]))
                 self.update()
+        elif control_id == 5007:
+            self.filters = []
+            self.page = 1
+            self.mode = "filter"
+            if self.type == "video":
+                self.type = "playlist"
+            elif self.type == "playlist":
+                self.type = "channel"
+            elif self.type == "channel":
+                self.type = "video"
+            self.update()
 
     def update_ui(self):
         super(DialogYoutubeList, self).update_ui()
         self.window.setProperty("Type", TRANSLATIONS[self.type])
-        if self.type == "videos":
+        if self.type == "video":
             self.window.getControl(5004).setVisible(False)
             self.window.getControl(5006).setVisible(True)
             self.window.getControl(5008).setVisible(True)
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(False)
             self.window.getControl(5012).setVisible(True)
-        else:
-            self.window.getControl(5006).setVisible(True)
-            self.window.getControl(5008).setVisible(True)
-            self.window.getControl(5009).setVisible(True)
-            self.window.getControl(5010).setVisible(True)
+        elif self.type == "playlist":
+            self.window.getControl(5004).setVisible(False)
+            self.window.getControl(5006).setVisible(False)
+            self.window.getControl(5008).setVisible(False)
+            self.window.getControl(5009).setVisible(False)
+            self.window.getControl(5010).setVisible(False)
+            self.window.getControl(5012).setVisible(False)
+        elif self.type == "channel":
+            self.window.getControl(5004).setVisible(False)
+            self.window.getControl(5006).setVisible(False)
+            self.window.getControl(5008).setVisible(False)
+            self.window.getControl(5009).setVisible(False)
+            self.window.getControl(5010).setVisible(False)
+            self.window.getControl(5012).setVisible(False)
 
     def get_sort_type(self):
         listitems = []
@@ -144,4 +165,4 @@ class DialogYoutubeList(DialogBaseList):
             self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
         else:
             self.filter_label = self.filter_label
-        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, item_info=True)
+        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, item_info=True, media_type=self.type)
