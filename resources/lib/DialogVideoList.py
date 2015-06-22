@@ -209,6 +209,14 @@ class DialogVideoList(DialogBaseList):
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(True)
 
+    def next_page(self):
+        if self.page < self.total_pages:
+            self.page += 1
+
+    def prev_page(self):
+        if self.page > 1:
+            self.page -= 1
+
     def context_menu(self):
         focus_id = self.getFocusId()
         if not focus_id == 500:
@@ -385,13 +393,13 @@ class DialogVideoList(DialogBaseList):
                 session_id = get_session_id()
                 if not session_id:
                     notify("Could not get session id")
-                    return []
+                    return [], 0, 0, ""
                 url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sort_by)
             else:
                 session_id = get_guest_session_id()
                 if not session_id:
                     notify("Could not get session id")
-                    return []
+                    return [], 0, 0, ""
                 url = "guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID"))
             self.filter_label = rated
         else:
@@ -403,15 +411,15 @@ class DialogVideoList(DialogBaseList):
         else:
             response = get_tmdb_data(url, 2)
         if self.mode == "list":
-            return handle_tmdb_movies(response["items"]), 1, len(response["items"])
+            return handle_tmdb_movies(response["items"]), 1, len(response["items"]), ""
         if "results" not in response:
             # self.close()
-            return [], 0, 0
+            return [], 0, 0, ""
         if not response["results"]:
             notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
             return handle_tmdb_multi_search(response["results"]), response["total_pages"], response["total_results"]
         elif self.type == "movie":
-            return handle_tmdb_movies(response["results"], False, None), response["total_pages"], response["total_results"]
+            return handle_tmdb_movies(response["results"], False, None), response["total_pages"], response["total_results"], ""
         else:
-            return handle_tmdb_tvshows(response["results"], False, None), response["total_pages"], response["total_results"]
+            return handle_tmdb_tvshows(response["results"], False, None), response["total_pages"], response["total_results"], ""

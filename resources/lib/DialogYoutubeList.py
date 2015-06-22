@@ -40,7 +40,6 @@ class DialogYoutubeList(DialogBaseList):
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.filter_url = ""
-        self.next_page = ""
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "relevance")
         self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32060))
@@ -149,6 +148,14 @@ class DialogYoutubeList(DialogBaseList):
             self.window.getControl(5012).setVisible(False)
         super(DialogYoutubeList, self).update_ui()
 
+    def next_page(self):
+        if self.page < self.total_pages:
+            self.page += 1
+
+    def prev_page(self):
+        if self.page > 1:
+            self.page -= 1
+
     def get_sort_type(self):
         listitems = []
         sort_strings = []
@@ -179,4 +186,4 @@ class DialogYoutubeList(DialogBaseList):
             self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
         else:
             self.filter_label = self.filter_label
-        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, item_info=True, media_type=self.type)
+        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, item_info=True, media_type=self.type, page=self.page)

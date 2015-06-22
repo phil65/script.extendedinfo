@@ -27,6 +27,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.last_searches = deque(maxlen=10)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
+        self.next_page = ""
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
@@ -57,6 +58,36 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         elif action == xbmcgui.ACTION_CONTEXT_MENU:
             self.context_menu()
 
+    def onFocus(self, control_id):
+        old_page = self.page
+        if control_id == 600:
+            self.next_page()
+        elif control_id == 700:
+            self.prev_page()
+        if self.page != old_page:
+            self.update()
+
+    def onClick(self, control_id):
+        if control_id == 5001:
+            self.get_sort_type()
+            self.update()
+        elif control_id == 5005:
+            self.filters = []
+            self.page = 1
+            self.mode = "filter"
+            self.update()
+        elif control_id == 6000:
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
+            dialog.doModal()
+            if dialog.classic_mode:
+                result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
+                if result and result > -1:
+                    self.search(result)
+            if self.search_string:
+                self.last_searches.appendleft({"label": self.search_string})
+            if self.total_items > 0:
+                self.setFocusId(500)
+
     def search(self, label):
         self.search_string = label
         self.mode = "search"
@@ -86,7 +117,7 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.total_pages, self.total_items = self.fetch_data(force=force_update)
+        self.listitems, self.total_pages, self.total_items, self.next_page = self.fetch_data(force=force_update)
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
@@ -114,38 +145,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
     def update(self, force_update=False):
         self.update_content(force_update=force_update)
         self.update_ui()
-
-    def onFocus(self, control_id):
-        old_page = self.page
-        if control_id == 600:
-            if self.page < self.total_pages:
-                self.page += 1
-        elif control_id == 700:
-            if self.page > 1:
-                self.page -= 1
-        if self.page != old_page:
-            self.update()
-
-    def onClick(self, control_id):
-        if control_id == 5001:
-            self.get_sort_type()
-            self.update()
-        elif control_id == 5005:
-            self.filters = []
-            self.page = 1
-            self.mode = "filter"
-            self.update()
-        elif control_id == 6000:
-            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
-            dialog.doModal()
-            if dialog.classic_mode:
-                result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
-                if result and result > -1:
-                    self.search(result)
-            if self.search_string:
-                self.last_searches.appendleft({"label": self.search_string})
-            if self.total_items > 0:
-                self.setFocusId(500)
 
     def add_filter(self, key, value, typelabel, label, force_overwrite=False):
         index = -1
