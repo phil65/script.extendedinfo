@@ -7,7 +7,7 @@
     <defaultcontrol always="true">500</defaultcontrol>
     <controls>
         <control type="image">
-            <texture background="true" fallback="common/white.png">$INFO[Container(500).ListItem.Thumb]</texture>
+            <texture background="true" fallback="common/white.png" colordiffuse="FFAAAAAA">$INFO[Container(500).ListItem.Thumb]</texture>
             <width>1920</width>
             <height>1080</height>
             <fadetime>400</fadetime>
@@ -16,7 +16,7 @@
         </control>
         <control type="image">
             <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">diffuseoverlay.png</texture>
-            <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation>
+            <animation effect="fade" start="100" end="85" time="0" condition="true">Conditional</animation>
             <width>1920</width>
             <height>1080</height>
             <animation effect="fade" end="100" time="360">WindowOpen</animation>
@@ -37,14 +37,14 @@
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <control type="image">
                     <posx>75</posx>
-                    <posy>135</posy>
+                    <posy>165</posy>
                     <width>440</width>
                     <height>380</height>
                     <visible>Control.HasFocus(500)</visible>
                     <animation effect="fade" time="320" delay="200">Visible</animation>
                     <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
-                    <animation effect="slide" end="0,425" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                    <animation effect="slide" end="0,410" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
@@ -55,7 +55,7 @@
                 <posy>0</posy>
                 <animation effect="zoom" end="83" center="2100,100" time="300" tween="cubic" easing="inout" condition="ControlGroup(9000).HasFocus | Control.HasFocus(6000) | Control.HasFocus(7000)">Conditional</animation>
                 <width>1920</width>
-                <height>1274</height>
+                <height>1229</height>
                 <viewtype label="31234">icon</viewtype>
                 <pagecontrol>72</pagecontrol>
                 <preloaditems>2</preloaditems>
@@ -65,10 +65,10 @@
                 <onup>700</onup>
                 <ondown>600</ondown>
                 <orientation>vertical</orientation>
-                <itemlayout height="425" width="440">
+                <itemlayout height="410" width="440">
                     <control type="group">
                         <posx>75</posx>
-                        <posy>160</posy>
+                        <posy>190</posy>
                         <control type="image">
                             <posx>25</posx>
                             <width>390</width>
@@ -141,10 +141,10 @@
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout height="425" width="440">
+                <focusedlayout height="410" width="440">
                     <control type="group">
                         <posx>75</posx>
-                        <posy>160</posy>
+                        <posy>190</posy>
                         <animation type="Focus">
                             <effect type="zoom" time="150" start="95" end="100" center="245,260" />
                             <effect type="zoom" time="150" start="105" end="100" delay="150" center="245,260" />
