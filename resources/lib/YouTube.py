@@ -53,6 +53,7 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
                     item["dimension"] = ext_item['contentDetails']['dimension']
                     item["definition"] = ext_item['contentDetails']['definition']
                     item["caption"] = ext_item['contentDetails']['caption']
+                    item["viewcount"] = ext_item['statistics']['viewCount']
                     item["likes"] = ext_item['statistics']['likeCount']
                     item["dislikes"] = ext_item['statistics']['dislikeCount']
                     vote_count = float(int(ext_item['statistics']['likeCount']) + int(ext_item['statistics']['dislikeCount']))

@@ -98,15 +98,26 @@
                             <posy>218</posy>
                             <width>130</width>
                             <height>30</height>
-                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/rating/,.png]</texture>
                             <animation effect="fade" delay="800" time="400">WindowOpen</animation>
                             <animation effect="fade" time="160">WindowClose</animation>
                             <animation effect="fade" time="240">VisibleChange</animation>
                         </control>
+                        <control type="label">
+                            <posx>30</posx>
+                            <posy>218</posy>
+                            <width>380</width>
+                            <height>30</height>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <label>$INFO[ListItem.Property(viewcount),, $ADDON[script.extendedinfo 32061]]</label>
+                            <font>font10</font>
+                            <textcolor>FFBBBBBB</textcolor>
+                        </control>
                         <control type="textbox">
                             <posx>20</posx>
-                            <posy>242</posy>
-                            <height>104</height>
+                            <posy>250</posy>
+                            <height>68</height>
                             <width>400</width>
                             <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
@@ -119,10 +130,11 @@
                             <width>380</width>
                             <height>5</height>
                             <align>center</align>
+                            <aligny>center</aligny>
                             <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
-                            <shadowcolor>floorshadow</shadowcolor>
-                            <textcolor>floor</textcolor>
+<!--                             <shadowcolor>FF222222</shadowcolor>
+ -->                            <textcolor>FFBBBBBB</textcolor>
                         </control>
                     </control>
                 </itemlayout>
@@ -171,15 +183,26 @@
                             <posy>218</posy>
                             <width>130</width>
                             <height>30</height>
-                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,stars/,.png]</texture>
+                            <texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/rating/,.png]</texture>
                             <animation effect="fade" delay="800" time="400">WindowOpen</animation>
                             <animation effect="fade" time="160">WindowClose</animation>
                             <animation effect="fade" time="240">VisibleChange</animation>
                         </control>
+                        <control type="label">
+                            <posx>30</posx>
+                            <posy>218</posy>
+                            <width>380</width>
+                            <height>30</height>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <label>$INFO[ListItem.Property(viewcount),, $ADDON[script.extendedinfo 32061]]</label>
+                            <font>font10</font>
+                            <textcolor>FFBBBBBB</textcolor>
+                        </control>
                         <control type="textbox">
                             <posx>20</posx>
-                            <posy>242</posy>
-                            <height>104</height>
+                            <posy>250</posy>
+                            <height>68</height>
                             <width>400</width>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
@@ -193,10 +216,11 @@
                             <width>380</width>
                             <height>5</height>
                             <align>center</align>
+                            <aligny>center</aligny>
                             <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
-                            <shadowcolor>floorshadow</shadowcolor>
-                            <textcolor>floor</textcolor>
+<!--                             <shadowcolor>FF222222</shadowcolor>
+ -->                            <textcolor>FFBBBBBB</textcolor>
                         </control>
                     </control>
                 </focusedlayout>
