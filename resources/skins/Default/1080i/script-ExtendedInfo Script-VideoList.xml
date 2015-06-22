@@ -259,7 +259,7 @@
                             <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
                             <font>font12</font>
-                            <textcolor>FF888888</textcolor>
+                            <textcolor>FFFAFAFA</textcolor>
                         </control>
                         <control type="label">
                             <posx>30</posx>

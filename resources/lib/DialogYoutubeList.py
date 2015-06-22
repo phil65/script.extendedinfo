@@ -8,7 +8,6 @@ import xbmcgui
 from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList
-from WindowManager import wm
 
 TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
 SORTS = {"videos": {xbmc.getLocalizedString(552): "date",
@@ -30,7 +29,6 @@ class DialogYoutubeList(DialogBaseList):
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
-        self.list_id = kwargs.get("list_id", False)
         self.sort = kwargs.get('sort', "relevance")
         self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32060))
         self.order = kwargs.get('order', "desc")
