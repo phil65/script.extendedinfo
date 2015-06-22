@@ -92,7 +92,7 @@
                             <height>5</height>
                             <align>left</align>
                             <aligny>center</aligny>
-                            <label>$INFO[ListItem.Property(duration)]</label>
+                            <label>$INFO[ListItem.Property(duration)]$INFO[ListItem.Property(itemcount),, $LOCALIZE[36913]]</label>
                             <font>font10</font>
                             <textcolor>AAFFFFFF</textcolor>
                         </control>
@@ -180,7 +180,7 @@
                             <height>5</height>
                             <align>left</align>
                             <aligny>center</aligny>
-                            <label>$INFO[ListItem.Property(duration)]</label>
+                            <label>$INFO[ListItem.Property(duration)]$INFO[ListItem.Property(itemcount),, $LOCALIZE[36913]]</label>
                             <font>font10</font>
                             <textcolor>AAFFFFFF</textcolor>
                         </control>
