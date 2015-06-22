@@ -30,12 +30,12 @@
                     <posx>75</posx>
                     <posy>135</posy>
                     <width>440</width>
-                    <height>410</height>
+                    <height>380</height>
                     <visible>Control.HasFocus(500)</visible>
                     <animation effect="fade" time="320" delay="200">Visible</animation>
                     <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
-                    <animation effect="slide" end="0,390" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+                    <animation effect="slide" end="0,425" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
                     <animation effect="slide" end="440,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
@@ -78,10 +78,13 @@
                         </control>
                         <control type="label">
                             <posx>35</posx>
-                            <posy>215</posy>
-                            <width>440</width>
-                            <label>$INFO[ListItem.Label2]</label>
-                            <font>font12</font>
+                            <posy>-25</posy>
+                            <width>380</width>
+                            <height>5</height>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <label>$INFO[ListItem.Property(duration)]</label>
+                            <font>font10</font>
                             <textcolor>AAFFFFFF</textcolor>
                         </control>
                         <control type="image">
@@ -108,7 +111,7 @@
                         <control type="textbox">
                             <posx>20</posx>
                             <posy>250</posy>
-                            <height>68</height>
+                            <height>66</height>
                             <width>400</width>
                             <label>$INFO[ListItem.Label]</label>
                             <align>center</align>
@@ -120,7 +123,7 @@
                             <posy>-25</posy>
                             <width>380</width>
                             <height>5</height>
-                            <align>center</align>
+                            <align>right</align>
                             <aligny>center</aligny>
                             <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
@@ -163,10 +166,13 @@
                         </control>
                         <control type="label">
                             <posx>35</posx>
-                            <posy>215</posy>
-                            <width>440</width>
-                            <label>$INFO[ListItem.Label2]</label>
-                            <font>font12</font>
+                            <posy>-25</posy>
+                            <width>380</width>
+                            <height>5</height>
+                            <align>left</align>
+                            <aligny>center</aligny>
+                            <label>$INFO[ListItem.Property(duration)]</label>
+                            <font>font10</font>
                             <textcolor>AAFFFFFF</textcolor>
                         </control>
                         <control type="image">
@@ -193,7 +199,7 @@
                         <control type="textbox">
                             <posx>20</posx>
                             <posy>250</posy>
-                            <height>68</height>
+                            <height>66</height>
                             <width>400</width>
                             <align>center</align>
                             <label>$INFO[ListItem.Label]</label>
@@ -205,7 +211,7 @@
                             <posy>-25</posy>
                             <width>380</width>
                             <height>5</height>
-                            <align>center</align>
+                            <align>right</align>
                             <aligny>center</aligny>
                             <label>$INFO[ListItem.Property(date)]</label>
                             <font>font10</font>
