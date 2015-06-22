@@ -27,7 +27,6 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         self.last_searches = deque(maxlen=10)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
-        self.next_page = ""
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
@@ -117,7 +116,11 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.old_items = self.listitems
         else:
             self.old_items = []
-        self.listitems, self.total_pages, self.total_items, self.next_page = self.fetch_data(force=force_update)
+        data = self.fetch_data(force=force_update)
+        self.listitems = data.get("listitems", [])
+        self.total_pages = data.get("results_per_page", "")
+        self.total_items = data.get("total_results", "")
+        self.next_page_token = data.get("next_page_token", "")
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):

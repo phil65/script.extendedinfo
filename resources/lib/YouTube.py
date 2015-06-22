@@ -75,14 +75,18 @@ def handle_youtube_channels(results):
     return channels
 
 
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, item_info=False, page=1, filter_string="", media_type="video"):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, page=1, filter_string="", media_type="video"):
+    if page == 1:
+        page_string = ""
+    else:
+        page_string = "&pageToken=%s" % page
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
-    search_string = url_quote(search_string.replace('"', ''))
-    url = 'search?part=id%%2Csnippet&type=%s&q=%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
+    search_string = "&q=%s" % url_quote(search_string.replace('"', ''))
+    url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page_string, search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
     results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     if media_type == "video":
         videos = handle_youtube_videos(results["items"])
@@ -111,13 +115,15 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
     elif media_type == "channel":
         videos = handle_youtube_channels(results["items"])
     if videos:
-        if item_info:
-            return videos, results["pageInfo"]["resultsPerPage"], results["pageInfo"]["totalResults"]
-        else:
-            return videos
-
+        info = {"listitems": videos,
+                "results_per_page": results["pageInfo"]["resultsPerPage"],
+                "total_results": results["pageInfo"]["totalResults"],
+                "next_page_token": results.get("nextPageToken", ""),
+                "prev_page_token": results.get("prevPageToken", ""),
+                }
+        return info
     else:
-        return []
+        return {}
 
 
 def get_youtube_playlist_videos(playlist_id=""):

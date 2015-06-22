@@ -418,8 +418,12 @@ class DialogVideoList(DialogBaseList):
         if not response["results"]:
             notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
-            return handle_tmdb_multi_search(response["results"]), response["total_pages"], response["total_results"]
+            listitems = handle_tmdb_multi_search(response["results"])
         elif self.type == "movie":
-            return handle_tmdb_movies(response["results"], False, None), response["total_pages"], response["total_results"], ""
+            listitems = handle_tmdb_movies(response["results"], False, None)
         else:
-            return handle_tmdb_tvshows(response["results"], False, None), response["total_pages"], response["total_results"], ""
+            listitems = handle_tmdb_tvshows(response["results"], False, None)
+        info = {"listitems": listitems,
+                "results_per_page": response["total_pages"],
+                "total_results": response["total_results"]}
+        return info

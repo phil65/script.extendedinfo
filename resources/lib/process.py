@@ -55,6 +55,13 @@ def start_info_actions(infos, params):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
             elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
+        elif info == "ratedialog":
+            if xbmc.getCondVisibility("Container.Content(movies)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=movie,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=tv,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(episodes)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=episode,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
         #  Images
         elif info == 'xkcd':
             from MiscScraper import get_xkcd_images
@@ -235,6 +242,8 @@ def start_info_actions(infos, params):
                     data = get_keywords(movie_id), "Keywords"
         elif info == 'popularpeople':
             data = get_popular_actors(), "PopularPeople"
+        elif info == 'youtubebrowser':
+            wm.open_youtube_list()
         elif info == 'extendedinfo':
             HOME.setProperty('infodialogs.active', "true")
             wm.open_movie_info(movie_id=params.get("id", ""), dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
@@ -323,7 +332,8 @@ def start_info_actions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
-                data = get_youtube_search_videos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")), "YoutubeSearch"
+                listitems = get_youtube_search_videos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")).get("listitems", [])
+                data = listitems, "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id", False):
                 data = get_youtube_playlist_videos(params.get("id", "")), "YoutubePlaylist"
