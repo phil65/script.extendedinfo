@@ -10,6 +10,7 @@ from TheMovieDB import *
 from WindowManager import wm
 from T9Search import T9Search
 from collections import deque
+import ast
 
 
 class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
@@ -76,6 +77,9 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.mode = "filter"
             self.update()
         elif control_id == 6000:
+            settings_string = ADDON.getSetting("search_history")
+            if settings_string:
+                self.last_searches = deque(ast.literal_eval(settings_string))
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
@@ -84,6 +88,8 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
                     self.search(result)
             if self.search_string:
                 self.last_searches.appendleft({"label": self.search_string})
+                setting_string = str(list(self.last_searches))
+                ADDON.setSetting("search_history", setting_string)
             if self.total_items > 0:
                 self.setFocusId(500)
 
