@@ -128,19 +128,16 @@ class DialogYoutubeList(DialogBaseList):
             if youtube_id:
                 PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
         elif control_id == 5002:
-            label_list = ["One day", "One week", "One month", "One Year"]
+            label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065)]
             deltas = [1, 7, 31, 365]
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
             if index > -1:
                 delta = deltas[index]
                 d = datetime.datetime.now() - datetime.timedelta(delta)
                 date_string = d.isoformat('T')[:-7] + "Z"
-                log(date_string)
                 self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
                 self.mode = "filter"
                 self.page = 1
-                self.set_filter_url()
-                self.set_filter_label()
                 self.update()
 
     def add_filter(self, key, value, typelabel, label):
@@ -148,6 +145,8 @@ class DialogYoutubeList(DialogBaseList):
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
+        self.set_filter_url()
+        self.set_filter_label()
         if self.search_string:
             self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
         else:

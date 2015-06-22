@@ -201,11 +201,6 @@ class DialogVideoList(DialogBaseList):
             else:
                 self.order = "asc"
             self.update()
-        elif control_id == 5005:
-            self.filters = []
-            self.page = 1
-            self.mode = "filter"
-            self.update()
         elif control_id == 5006:
             self.get_certification()
             self.update()

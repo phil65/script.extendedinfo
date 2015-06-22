@@ -127,6 +127,11 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         if control_id == 5001:
             self.get_sort_type()
             self.update()
+        elif control_id == 5005:
+            self.filters = []
+            self.page = 1
+            self.mode = "filter"
+            self.update()
         elif control_id == 6000:
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string)
             dialog.doModal()

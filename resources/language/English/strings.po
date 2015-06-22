@@ -304,6 +304,26 @@ msgctxt "#32061"
 msgid "views"
 msgstr ""
 
+#: \resources\lib\DialogYoutubeList.py:131
+msgctxt "#32062"
+msgid "One day"
+msgstr ""
+
+#: \resources\lib\DialogYoutubeList.py:131
+msgctxt "#32063"
+msgid "One week"
+msgstr ""
+
+#: \resources\lib\DialogYoutubeList.py:131
+msgctxt "#32064"
+msgid "One month"
+msgstr ""
+
+#: \resources\lib\DialogYoutubeList.py:131
+msgctxt "#32065"
+msgid "One Year"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""
