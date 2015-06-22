@@ -13,17 +13,34 @@ from collections import deque
 import ast
 
 
-class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
+class WindowXML(xbmcgui.WindowXML):
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXML.__init__(self)
+        self.window_type = "window"
+
+    def onInit(self):
+        self.window_id = xbmcgui.getCurrentWindowId()
+        self.window = xbmcgui.Window(self.window_id)
+
+
+class DialogXML(xbmcgui.WindowXMLDialog):
+
+    def __init__(self, *args, **kwargs):
+        xbmcgui.WindowXMLDialog.__init__(self)
+        self.window_type = "dialog"
+
+    def onInit(self):
+        self.window_id = xbmcgui.getCurrentWindowDialogId()
+        self.window = xbmcgui.Window(self.window_id)
+
+
+class DialogBaseList(object):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
-        if ADDON.getSetting("window_mode") == "true":
-            xbmcgui.WindowXML.__init__(self)
-            self.window_type = "window"
-        else:
-            xbmcgui.WindowXMLDialog.__init__(self)
-            self.window_type = "dialog"
+        super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
         self.last_searches = deque(maxlen=10)
         self.color = kwargs.get('color', "FFAAAAAA")
@@ -34,12 +51,8 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
         check_version()
 
     def onInit(self):
+        super(DialogBaseList, self).onInit()
         HOME.setProperty("WindowColor", self.color)
-        if ADDON.getSetting("window_mode") == "true":
-            self.window_id = xbmcgui.getCurrentWindowId()
-        else:
-            self.window_id = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("WindowColor", self.color)
         self.update_ui()
         xbmc.sleep(200)
@@ -185,31 +198,19 @@ class DialogBaseList(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "tr
             self.filters.append(new_filter)
 
 
-class DialogBaseInfo(xbmcgui.WindowXML if ADDON.getSetting("window_mode") == "true" else xbmcgui.WindowXMLDialog):
+class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else DialogXML):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
-        if ADDON.getSetting("window_mode") == "true":
-            xbmcgui.WindowXML.__init__(self)
-            self.window_type = "window"
-        else:
-            xbmcgui.WindowXMLDialog.__init__(self)
-            self.window_type = "dialog"
+        super(DialogBaseInfo, self).__init__(*args, **kwargs)
         self.logged_in = check_login()
         self.dbid = kwargs.get('dbid')
         self.data = None
         check_version()
 
     def onInit(self, *args, **kwargs):
-        if not self.data:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            self.close()
-            return
-        if ADDON.getSetting("window_mode") == "true":
-            self.window_id = xbmcgui.getCurrentWindowId()
-        else:
-            self.window_id = xbmcgui.getCurrentWindowDialogId()
+        super(DialogBaseInfo, self).onInit()
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         # present for jurialmunkey

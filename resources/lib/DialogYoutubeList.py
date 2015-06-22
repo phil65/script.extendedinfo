@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 from Utils import *
 from YouTube import *
-from BaseClasses import DialogBaseList
+from BaseClasses import DialogBaseList, WindowXML
 from WindowManager import wm
 
 
@@ -33,7 +33,7 @@ SORTS = {"video": {xbmc.getLocalizedString(552): "date",
                      xbmc.getLocalizedString(567): "viewCount"}}
 
 
-class DialogYoutubeList(DialogBaseList):
+class DialogYoutubeList(DialogBaseList, WindowXML):
 
     def __init__(self, *args, **kwargs):
         super(DialogYoutubeList, self).__init__(*args, **kwargs)

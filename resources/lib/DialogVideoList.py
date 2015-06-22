@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 from Utils import *
 from TheMovieDB import *
-from BaseClasses import DialogBaseList
+from BaseClasses import *
 from WindowManager import wm
 
 SORTS = {"movie": {ADDON.getLocalizedString(32110): "popularity",
@@ -31,7 +31,7 @@ TRANSLATIONS = {"movie": xbmc.getLocalizedString(20338),
 include_adult = str(ADDON.getSetting("include_adults")).lower()
 
 
-class DialogVideoList(DialogBaseList):
+class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode") == "true" else DialogXML):
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
