@@ -65,8 +65,11 @@ class DialogYoutubeList(DialogBaseList):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
             if self.type == "channel":
-                log(youtube_id)
-                wm.open_youtube_list(channel=youtube_id)
+                channel_filter = [{"id": youtube_id,
+                                   "type": "channelId",
+                                   "typelabel": xbmc.getLocalizedString(19029),
+                                   "label": youtube_id}]
+                wm.open_youtube_list(filters=channel_filter)
             else:
                 PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
         elif control_id == 5002:

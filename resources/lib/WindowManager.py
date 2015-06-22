@@ -92,7 +92,7 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
-    def open_youtube_list(self, prev_window=None, search_string="", filters=[], sort="relevance", filter_label="", force=False, media_type="video", channel=None):
+    def open_youtube_list(self, prev_window=None, search_string="", filters=[], sort="relevance", filter_label="", force=False, media_type="video"):
         """
        open video list, deal with window stack and color
         """
@@ -104,12 +104,6 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        if channel:
-            channel_filter = {"id": channel,
-                               "type": "channelId",
-                               "typelabel": xbmc.getLocalizedString(19029),
-                               "label": channel}
-            filters.append(channel_filter)
         dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH, search_string=search_string, color=color, filters=filters, force=force, filter_label=filter_label, type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
