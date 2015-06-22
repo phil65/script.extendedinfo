@@ -27,9 +27,6 @@ class VideoPlayer(xbmc.Player):
         """
         play youtube vid with info from *listitem
         """
-        if window:
-            wm.add_to_stack(window)
-            window.close()
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), xbmc.getLocalizedString(515): 'Youtube Video'})
@@ -38,6 +35,9 @@ class VideoPlayer(xbmc.Player):
         if youtube_id:
             vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
             if vid:
+                if window:
+                    wm.add_to_stack(window)
+                    window.close()
                 stream_url = vid.streamURL()
                 self.play(stream_url, listitem)
                 if window:
