@@ -13,7 +13,6 @@ TRANSLATIONS = {"videos": ADDON.getLocalizedString(32118)}
 SORTS = {"videos": {xbmc.getLocalizedString(552): "date",
                     xbmc.getLocalizedString(563): "rating",
                     ADDON.getLocalizedString(32060): "relevance",
-                    # "Release Date": "primary_release_date",
                     xbmc.getLocalizedString(369): "title",
                     ADDON.getLocalizedString(32112): "videoCount",
                     xbmc.getLocalizedString(567): "viewCount"}}
@@ -28,6 +27,7 @@ class DialogYoutubeList(DialogBaseList):
         self.type = kwargs.get('type', "videos")
         self.search_string = kwargs.get('search_string', "")
         self.filter_label = kwargs.get("filter_label", "")
+        self.filter_url = ""
         self.mode = kwargs.get("mode", "filter")
         self.sort = kwargs.get('sort', "relevance")
         self.sort_label = kwargs.get('sort_label', ADDON.getLocalizedString(32060))
@@ -127,14 +127,29 @@ class DialogYoutubeList(DialogBaseList):
             youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
             if youtube_id:
                 PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
+        elif control_id == 5002:
+            label_list = ["One day", "One week", "One month", "One Year"]
+            deltas = [1, 7, 31, 365]
+            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            if index > -1:
+                delta = deltas[index]
+                d = datetime.datetime.now() - datetime.timedelta(delta)
+                date_string = d.isoformat('T')[:-7] + "Z"
+                log(date_string)
+                self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
+                self.mode = "filter"
+                self.page = 1
+                self.set_filter_url()
+                self.set_filter_label()
+                self.update()
 
     def add_filter(self, key, value, typelabel, label):
-        self.force_overwrite = False
+        self.force_overwrite = True
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
 
     def fetch_data(self, force=False):
         if self.search_string:
-            self.filter_label = ADDON.getLocalizedString(32146) % self.search_string
+            self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
         else:
-            self.filter_label = ""
-        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, item_info=True)
+            self.filter_label = self.filter_label
+        return get_youtube_search_videos(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, item_info=True)

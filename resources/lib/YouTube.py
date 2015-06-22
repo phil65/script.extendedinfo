@@ -32,14 +32,14 @@ def handle_youtube_videos(results):
     return videos
 
 
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, item_info=False, page=1):
+def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, item_info=False, page=1, filter_string=""):
     results = []
     if hd and not hd == "false":
         hd_string = "&hd=true"
     else:
         hd_string = ""
     search_string = url_quote(search_string.replace('"', ''))
-    url = 'search?part=id%%2Csnippet&type=video&q=%s&order=%s&key=%s%s&maxResults=%i' % (search_string, orderby, YT_KEY_2, hd_string, int(limit))
+    url = 'search?part=id%%2Csnippet&type=video&q=%s&order=%s&%skey=%s%s&maxResults=%i' % (search_string, orderby, filter_string, YT_KEY_2, hd_string, int(limit))
     results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     videos = handle_youtube_videos(results["items"])
     if extended:
