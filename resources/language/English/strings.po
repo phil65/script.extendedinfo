@@ -324,6 +324,12 @@ msgctxt "#32065"
 msgid "One Year"
 msgstr ""
 
+#: \resources\skins\Default\1080i\script-ExtendedInfo
+#: Script-YoutubeList.xml:518
+msgctxt "#32066"
+msgid "2d / 3d"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""

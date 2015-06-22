@@ -47,8 +47,8 @@ class DialogYoutubeList(DialogBaseList):
         self.window.setProperty("Type", TRANSLATIONS[self.type])
         if self.type == "videos":
             self.window.getControl(5004).setVisible(False)
-            self.window.getControl(5006).setVisible(False)
-            self.window.getControl(5008).setVisible(False)
+            self.window.getControl(5006).setVisible(True)
+            self.window.getControl(5008).setVisible(True)
             self.window.getControl(5009).setVisible(False)
             self.window.getControl(5010).setVisible(False)
         else:
@@ -136,13 +136,34 @@ class DialogYoutubeList(DialogBaseList):
                 d = datetime.datetime.now() - datetime.timedelta(delta)
                 date_string = d.isoformat('T')[:-7] + "Z"
                 self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
-                self.mode = "filter"
-                self.page = 1
+                self.update()
+        elif control_id == 5003:
+            label_list = ["en", "de", "fr"]
+            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            if index > -1:
+                country_code = label_list[index]
+                self.add_filter("regionCode", country_code, xbmc.getLocalizedString(248), str(label_list[index]))
+                self.update()
+        elif control_id == 5006:
+            label_list = ["2d", "3d", "any"]
+            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            if index > -1:
+                vid_dimensions = label_list[index]
+                self.add_filter("videoDimension", vid_dimensions, "Dimensions", str(label_list[index]))
+                self.update()
+        elif control_id == 5008:
+            label_list = ["long", "medium", "short", "any"]
+            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            if index > -1:
+                duration = label_list[index]
+                self.add_filter("videoDuration", duration, xbmc.getLocalizedString(180), str(label_list[index]))
                 self.update()
 
     def add_filter(self, key, value, typelabel, label):
         self.force_overwrite = True
         super(DialogYoutubeList, self).add_filter(key, value, typelabel, label)
+        self.mode = "filter"
+        self.page = 1
 
     def fetch_data(self, force=False):
         self.set_filter_url()
