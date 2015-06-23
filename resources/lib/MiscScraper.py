@@ -16,7 +16,7 @@ BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
 
 def get_xkcd_images():
     now = datetime.datetime.now()
-    filename = "xkcd" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    filename = "xkcd%ix%ix%i" % (now.month, now.day, now.year)
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         return read_from_file(path)
@@ -36,13 +36,15 @@ def get_xkcd_images():
                 items.append(item)
             except:
                 log("Error when setting XKCD info")
-        save_to_file(items, filename, ADDON_DATA_PATH)
+        save_to_file(content=items,
+                     filename=filename,
+                     path=ADDON_DATA_PATH)
         return items
 
 
 def get_cyanide_images():
     now = datetime.datetime.now()
-    filename = "cyanide" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+    filename = "cyanide%ix%ix%i" % (now.month, now.day, now.year)
     path = xbmc.translatePath(ADDON_DATA_PATH + "/" + filename + ".txt")
     if xbmcvfs.exists(path):
         return read_from_file(path)
@@ -60,16 +62,18 @@ def get_cyanide_images():
                            'Poster': keyword,
                            'title': url}
                 items.append(newitem)
-        save_to_file(items, filename, ADDON_DATA_PATH)
+        save_to_file(content=items,
+                     filename=filename,
+                     path=ADDON_DATA_PATH)
         return items
 
 
 def get_babe_images(single=False):
     now = datetime.datetime.now()
     if single is True:
-        filename = "babe" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+        filename = "babe%ix%ix%i" % (now.month, now.day, now.year)
     else:
-        filename = "babes" + str(now.month) + "x" + str(now.day) + "x" + str(now.year)
+        filename = "babes%ix%ix%i" % (now.month, now.day, now.year)
     path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, "Babes", filename + ".txt"))
     if xbmcvfs.exists(path):
         return read_from_file(path)
@@ -87,9 +91,12 @@ def get_babe_images(single=False):
             url = 'http://img1.demo.jsxbabeotd.dellsports.com/static/models/2014/%s/%s/%i.jpg' % (str(month).zfill(2), str(day).zfill(2), image)
             newitem = {'thumb': url,
                        'path': "plugin://script.extendedinfo?info=setfocus",
-                       'title': "2014/" + str(month) + "/" + str(day) + " (Nr. " + str(image) + ")"}
+                       'title': "2014/%i/%i (Nr. %i)" % (month, day, image)
+                       }
             items.append(newitem)
-        save_to_file(items, filename, os.path.join(ADDON_DATA_PATH, "Babes"))
+        save_to_file(content=items,
+                     filename=filename,
+                     path=os.path.join(ADDON_DATA_PATH, "Babes"))
         return items
 
 

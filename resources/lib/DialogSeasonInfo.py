@@ -21,14 +21,16 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
         if self.season and (self.tmdb_id or self.tvshow):
-            self.data = extended_season_info(self.tmdb_id, self.tvshow, self.season)
+            self.data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
+                                             tvshow=self.tvshow,
+                                             season=self.season)
             if not self.data:
                 return None
             search_str = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]['title'])
             youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
             youtube_thread.start()
             if "dbid" not in self.data["general"]:  # need to add comparing for seasons
-                self.data["general"]['Poster'] = get_file(self.data["general"]["Poster"])
+                self.data["general"]['Poster'] = get_file(url=self.data["general"]["Poster"])
             filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
@@ -48,7 +50,11 @@ class DialogSeasonInfo(DialogBaseInfo):
         super(DialogSeasonInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "season")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
+        pass_dict_to_skin(data=self.data["general"],
+                          prefix="movie.",
+                          debug=False,
+                          precache=False,
+                          window=self.window_id)
         self.fill_lists()
 
     def onClick(self, control_id):
@@ -69,10 +75,13 @@ class DialogSeasonInfo(DialogBaseInfo):
                                  episode=episode)
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
+            PLAYER.playYoutubeVideo(youtube_id=listitem.getProperty("youtube_id"),
+                                    listitem=listitem,
+                                    window=self)
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
+                               image=image)
             dialog.doModal()
         elif control_id == 132:
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,

@@ -90,7 +90,11 @@ class DialogVideoInfo(DialogBaseInfo):
         super(DialogVideoInfo, self).onInit()
         HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
         self.window.setProperty("type", "Movie")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
+        pass_dict_to_skin(data=self.data["general"],
+                          prefix="movie.",
+                          debug=False,
+                          precache=False,
+                          window=self.window_id)
         self.fill_lists()
         pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.window_id)
         self.update_states(False)
@@ -230,9 +234,13 @@ class DialogVideoInfo(DialogBaseInfo):
             w.doModal()
         elif control_id == 6003:
             if self.data["account_states"]["favorite"]:
-                change_fav_status(self.data["general"]["id"], "movie", "false")
+                change_fav_status(media_id=self.data["general"]["id"],
+                                  media_type="movie",
+                                  status="false")
             else:
-                change_fav_status(self.data["general"]["id"], "movie", "true")
+                change_fav_status(media_id=self.data["general"]["id"],
+                                  media_type="movie",
+                                  status="true")
             self.update_states()
         elif control_id == 6006:
             wm.open_video_list(prev_window=self,
@@ -247,7 +255,8 @@ class DialogVideoInfo(DialogBaseInfo):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
             if index == 0:
-                listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
+                listname = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32137),
+                                                  type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
                     list_id = create_list(listname)
                     xbmc.sleep(1000)

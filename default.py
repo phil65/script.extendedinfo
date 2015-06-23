@@ -7,11 +7,7 @@ import sys
 import os
 import xbmc
 import xbmcaddon
-# try:
-#     import buggalo
-#     buggalo.GMAIL_RECIPIENT = "phil65@kodi.tv"
-# except:
-#     pass
+
 ADDON = xbmcaddon.Addon()
 ADDON_VERSION = ADDON.getAddonInfo('version')
 ADDON_NAME = ADDON.getAddonInfo('name')
@@ -26,7 +22,6 @@ class Main:
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
         xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
-        # try:
         self._parse_argv()
         if self.infos:
             start_info_actions(self.infos, self.params)
@@ -36,10 +31,6 @@ class Main:
             wm.open_video_list()
             HOME.clearProperty('infodialogs.active')
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
-        # except Exception:
-        #     xbmc.executebuiltin('Dialog.Close(busydialog)')
-        #     buggalo.onExceptionRaised()
-        #     xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _parse_argv(self):
         self.handle = None
