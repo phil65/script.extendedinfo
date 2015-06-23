@@ -110,11 +110,6 @@ def handle_youtube_channels(results):
                 item["itemcount"] = ext_item['statistics']['videoCount']
     return channels
 
-def get_related_videos(youtube_id):
-    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=%s&type=video&key=%s" % (youtube_id, YT_KEY)
-    results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
-    return handle_youtube_videos(results["items"], extended=True)
-
 def search_youtube(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
     if page:
         page = "&pageToken=%s" % page

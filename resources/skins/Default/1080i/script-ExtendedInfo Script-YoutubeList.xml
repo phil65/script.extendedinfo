@@ -75,7 +75,7 @@
                             <height>220</height>
                             <fadetime>200</fadetime>
                             <aspectratio aligny="center">scale</aspectratio>
-                            <texture background="true">$INFO[ListItem.Icon]</texture>
+                            <texture>$INFO[ListItem.Icon]</texture>
                             <bordertexture border="5">thumbs/bordershadow4.png</bordertexture>
                             <bordersize>5</bordersize>
                         </control>
@@ -161,7 +161,7 @@
                             <width>390</width>
                             <height>220</height>
                             <aspectratio aligny="center">scale</aspectratio>
-                            <texture background="true">$INFO[ListItem.Icon]</texture>
+                            <texture>$INFO[ListItem.Icon]</texture>
                             <bordertexture border="5">thumbs/bordershadow4.png</bordertexture>
                             <bordersize>5</bordersize>
                         </control>

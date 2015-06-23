@@ -341,6 +341,11 @@ msgctxt "#32068"
 msgid "Amount of videos"
 msgstr ""
 
+#: \resources\lib\DialogYoutubeList.py:191
+msgctxt "#32069"
+msgid "Show similar videos"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""
