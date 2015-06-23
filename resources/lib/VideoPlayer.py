@@ -30,7 +30,7 @@ class VideoPlayer(xbmc.Player):
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo(type='video',
-                             infolabels={'title': xbmc.getLocalizedString(20410),
+                             infoLabels={'title': xbmc.getLocalizedString(20410),
                                          xbmc.getLocalizedString(515): 'Youtube Video'})
         import YDStreamExtractor
         YDStreamExtractor.disableDASHVideo(True)
