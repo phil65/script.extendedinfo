@@ -114,7 +114,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                                 tvshow=self.data["general"]['title'])
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
+            PLAYER.play_youtube_video(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_company_data(control.getSelectedItem().getProperty("id"))

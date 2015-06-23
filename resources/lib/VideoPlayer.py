@@ -23,7 +23,7 @@ class VideoPlayer(xbmc.Player):
     def onPlayBackStarted(self):
         self.stopped = False
 
-    def playYoutubeVideo(self, youtube_id="", listitem=None, window=False):
+    def play_youtube_video(self, youtube_id="", listitem=None, window=False):
         """
         play youtube vid with info from *listitem
         """

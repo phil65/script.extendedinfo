@@ -88,7 +88,7 @@ class DialogActorInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id == 350:
             listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
+            PLAYER.play_youtube_video(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id == 132:
             text = self.data["general"]["biography"]
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,

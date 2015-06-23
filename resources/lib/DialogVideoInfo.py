@@ -115,7 +115,8 @@ class DialogVideoInfo(DialogBaseInfo):
                                dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
+                               image=image)
             dialog.doModal()
         elif control_id in [350, 1150, 10]:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
@@ -125,7 +126,9 @@ class DialogVideoInfo(DialogBaseInfo):
             else:
                 youtube_id = control.getSelectedItem().getProperty("youtube_id")
             if youtube_id:
-                PLAYER.playYoutubeVideo(youtube_id, control.getSelectedItem(), window=self)
+                PLAYER.play_youtube_video(youtube_id=youtube_id,
+                                          listitem=control.getSelectedItem(),
+                                          window=self)
             else:
                 notify(ADDON.getLocalizedString(32052))
         elif control_id == 550:
@@ -135,7 +138,8 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_companies",
                         "typelabel": xbmc.getLocalizedString(20388),
                         "label": company_name}]
-            wm.open_video_list(prev_window=self, filters=filters)
+            wm.open_video_list(prev_window=self,
+                               filters=filters)
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))

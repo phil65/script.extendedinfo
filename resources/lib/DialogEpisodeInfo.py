@@ -64,9 +64,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
                                actor_id=actor_id)
         elif control_id in [350, 1150]:
             listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.playYoutubeVideo(youtube_id=listitem.getProperty("youtube_id"),
-                                    listitem=listitem,
-                                    window=self)
+            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
+                                      listitem=listitem,
+                                      window=self)
         elif control_id in [1250, 1350]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,

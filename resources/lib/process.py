@@ -443,7 +443,7 @@ def start_info_actions(infos, params):
                 xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
                                           succeeded=False,
                                           listitem=xbmcgui.ListItem())
-            PLAYER.playYoutubeVideo(params.get("id", ""))
+            PLAYER.play_youtube_video(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if params.get("id", ""):
@@ -462,7 +462,7 @@ def start_info_actions(infos, params):
                                               listitem=xbmcgui.ListItem())
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                PLAYER.playYoutubeVideo(trailer)
+                PLAYER.play_youtube_video(trailer)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
             set_mbids_for_artists(True, False)

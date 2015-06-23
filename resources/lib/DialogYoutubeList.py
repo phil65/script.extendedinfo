@@ -71,9 +71,9 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                                    "label": youtube_id}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
-                PLAYER.playYoutubeVideo(youtube_id=youtube_id,
-                                        listitem=self.getControl(control_id).getSelectedItem(),
-                                        window=self)
+                PLAYER.play_youtube_video(youtube_id=youtube_id,
+                                          listitem=self.getControl(control_id).getSelectedItem(),
+                                          window=self)
         elif control_id == 5002:
             label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065), xbmc.getLocalizedString(636)]
             deltas = [1, 7, 31, 365, "custom"]
