@@ -13,6 +13,18 @@
             <fadetime>400</fadetime>
             <animation effect="fade" end="100" time="560">WindowOpen</animation>
             <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+            <animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+            <visible>!StringCompare(Window.Property(type),channel)</visible>
+        </control>
+        <control type="image">
+            <texture background="true" fallback="common/white.png" colordiffuse="FFAAAAAA">$INFO[Container(500).ListItem.Art(fanart)]</texture>
+            <width>1920</width>
+            <height>1080</height>
+            <fadetime>400</fadetime>
+            <animation effect="fade" end="100" time="560">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+            <animation effect="fade" start="0" end="100" time="200">VisibleChange</animation>
+            <visible>StringCompare(Window.Property(type),channel)</visible>
         </control>
         <control type="image">
             <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">diffuseoverlay.png</texture>

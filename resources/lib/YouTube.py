@@ -102,12 +102,13 @@ def handle_youtube_channels(results):
                        'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             channels.append(channel)
     channel_ids = [item["youtube_id"] for item in channels]
-    url = "channels?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(channel_ids), YT_KEY)
+    url = "channels?id=%s&part=contentDetails%%2Cstatistics%%2CbrandingSettings&key=%s" % (",".join(channel_ids), YT_KEY)
     ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     for i, item in enumerate(channels):
         for ext_item in ext_results["items"]:
             if item["youtube_id"] == ext_item['id']:
                 item["itemcount"] = ext_item['statistics']['videoCount']
+                item["fanart"] =  ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
     return channels
 
 def search_youtube(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
