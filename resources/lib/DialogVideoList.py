@@ -165,7 +165,8 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                 for item in account_lists:
                     listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136), listitems)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136),
+                                            list=listitems)
             if index == -1:
                 pass
             elif index == 0:
