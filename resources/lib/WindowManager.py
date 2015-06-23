@@ -34,7 +34,7 @@ class WindowManager(object):
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None, name=None, imdb_id=None):
         """
-       open movie info, deal with window stack
+        open movie info, deal with window stack
         """
         import DialogVideoInfo
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid, name=name, imdb_id=imdb_id)
@@ -42,7 +42,7 @@ class WindowManager(object):
 
     def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         """
-       open tvshow info, deal with window stack
+        open tvshow info, deal with window stack
         """
         import DialogTVShowInfo
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, dbid=dbid, tvdb_id=tvdb_id, imdb_id=imdb_id, name=name)
@@ -50,8 +50,8 @@ class WindowManager(object):
 
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):
         """
-       open season info, deal with window stack
-       needs *season AND (*tvshow_id OR *tvshow)
+        open season info, deal with window stack
+        needs *season AND (*tvshow_id OR *tvshow)
         """
         import DialogSeasonInfo
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
@@ -59,8 +59,8 @@ class WindowManager(object):
 
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None):
         """
-       open season info, deal with window stack
-       needs *tvshow_id AND *season AND *episode
+        open season info, deal with window stack
+        needs *tvshow_id AND *season AND *episode
         """
         import DialogEpisodeInfo
         dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=tvshow_id, season=season, episode=episode)
@@ -68,7 +68,7 @@ class WindowManager(object):
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
         """
-       open actor info, deal with window stack
+        open actor info, deal with window stack
         """
         import DialogActorInfo
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
@@ -76,7 +76,7 @@ class WindowManager(object):
 
     def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
         """
-       open video list, deal with window stack and color
+        open video list, deal with window stack and color
         """
         import DialogVideoList
         if prev_window:
@@ -94,7 +94,7 @@ class WindowManager(object):
 
     def open_youtube_list(self, prev_window=None, search_string="", filters=[], sort="relevance", filter_label="", force=False, media_type="video"):
         """
-       open video list, deal with window stack and color
+        open video list, deal with window stack and color
         """
         import DialogYoutubeList
         if prev_window:
