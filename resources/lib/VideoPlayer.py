@@ -35,12 +35,12 @@ class VideoPlayer(xbmc.Player):
         if youtube_id:
             vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
             if vid:
-                if window:
+                if window and window.window_type == "dialog":
                     wm.add_to_stack(window)
                     window.close()
                 stream_url = vid.streamURL()
                 self.play(stream_url, listitem)
-                if window:
+                if window and window.window_type == "dialog":
                     self.wait_for_video_end()
                     wm.pop_stack()
         else:
