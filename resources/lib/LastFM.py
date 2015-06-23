@@ -139,59 +139,71 @@ def get_events(id, past_events=False):
         url = 'method=Artist.getPastEvents&mbid=%s' % (id)
     else:
         url = 'method=Artist.getEvents&mbid=%s' % (id)
-    results = get_JSON_response(BASE_URL + url, 1, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                cache_days=1,
+                                folder="LastFM")
     return handle_lastfm_events(results)
 
 
 def get_artist_podcast(artist):  # todo
-    results = get_JSON_response(BASE_URL + "method=Artist.getPodcast&limit=100", folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + "method=Artist.getPodcast&limit=100",
+                                folder="LastFM")
     return handle_lastfm_artists(results['artists'])
 
 
 def get_hyped_artists():
-    results = get_JSON_response(BASE_URL + "method=Chart.getHypedArtists&limit=100", folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + "method=Chart.getHypedArtists&limit=100",
+                                folder="LastFM")
     return handle_lastfm_artists(results['artists'])
 
 
 def get_top_artists():
-    results = get_JSON_response(BASE_URL + "method=Chart.getTopArtists&limit=100", folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + "method=Chart.getTopArtists&limit=100",
+                                folder="LastFM")
     return handle_lastfm_artists(results['artists'])
 
 
 def get_album_shouts(artist_name, album_title):
     url = 'method=Album.getShouts&artist=%s&album=%s' % (url_quote(artist_name), url_quote(album_title))
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_shouts(results)
 
 
 def get_artist_shouts(artist_name):
     url = 'method=Artist.GetShouts&artist=%s' % (url_quote(artist_name))
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_shouts(results)
 
 
 def get_artist_images(artist_mbid):
     url = 'method=Artist.getImages&mbid=%s' % (artist_mbid)
-    results = get_JSON_response(BASE_URL + url, 0, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                cache_days=0,
+                                folder="LastFM")
 #    prettyprint(results)
     return handle_lastfm_events(results)
 
 
 def get_track_shouts(artist_name, track_title):
     url = 'method=Track.getShouts&artist=%s&track=%s' % (url_quote(artist_name), url_quote(track_title))
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_shouts(results)
 
 
 def get_event_shouts(event_id):
     url = 'method=event.GetShouts&event=%s' % (event_id)
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_shouts(results)
 
 
 def get_venue_id(venue_name=""):
     url = '&method=Venue.search&venue=%s' % (url_quote(venue_name))
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     if "results" in results:
         matches = results["results"]["matches"]
         if "venue" in matches:
@@ -204,13 +216,15 @@ def get_venue_id(venue_name=""):
 
 def get_artist_albums(artist_mbid):
     url = 'method=Artist.getTopAlbums&mbid=%s' % (artist_mbid)
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_albums(results)
 
 
 def get_similar_artists(artist_mbid):
     url = 'method=Artist.getSimilar&mbid=%s&limit=400' % (artist_mbid)
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     if results is not None and "similarartists" in results:
         return handle_lastfm_artists(results['similarartists'])
 
@@ -229,17 +243,22 @@ def get_near_events(tag=False, festivals_only=False, lat="", lon="", location=""
         url += '&location=%s' % (url_quote(location))
     if distance:
         url += '&distance=%s' % (distance)
-    results = get_JSON_response(BASE_URL + url, 0.5, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                cache_days=0.5,
+                                folder="LastFM")
     return handle_lastfm_events(results)
 
 
 def get_venue_events(venueid=""):
     url = 'method=Venue.getEvents&venue=%s' % (venueid)
-    results = get_JSON_response(BASE_URL + url, 0.5, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                cache_days=0.5,
+                                folder="LastFM")
     return handle_lastfm_events(results)
 
 
 def get_track_info(artist="", track=""):
     url = 'method=track.getInfo&artist=%s&track=%s' % (url_quote(artist), url_quote(track))
-    results = get_JSON_response(BASE_URL + url, folder="LastFM")
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="LastFM")
     return handle_lastfm_tracks(results)

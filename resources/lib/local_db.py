@@ -14,6 +14,7 @@ tvshow_otitle_list = []
 tvshow_title_list = []
 tvshow_imdb_list = []
 
+
 def get_kodi_artists():
     filename = ADDON_DATA_PATH + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:

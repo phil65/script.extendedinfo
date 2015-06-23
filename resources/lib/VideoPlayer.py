@@ -29,22 +29,27 @@ class VideoPlayer(xbmc.Player):
         """
         if not listitem:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), xbmc.getLocalizedString(515): 'Youtube Video'})
+            listitem.setInfo(type='video',
+                             infolabels={'title': xbmc.getLocalizedString(20410),
+                                         xbmc.getLocalizedString(515): 'Youtube Video'})
         import YDStreamExtractor
         YDStreamExtractor.disableDASHVideo(True)
         if youtube_id:
-            vid = YDStreamExtractor.getVideoInfo(youtube_id, quality=1)
+            vid = YDStreamExtractor.getVideoInfo(youtube_id,
+                                                 quality=1)
             if vid:
                 if window and window.window_type == "dialog":
                     wm.add_to_stack(window)
                     window.close()
                 stream_url = vid.streamURL()
-                self.play(stream_url, listitem)
+                self.play(item=stream_url,
+                          listitem=listitem)
                 if window and window.window_type == "dialog":
                     self.wait_for_video_end()
                     wm.pop_stack()
         else:
-            xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257), message="no youtube id found")
+            xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257),
+                                          message="no youtube id found")
 
     def wait_for_video_end(self):
         xbmc.sleep(500)

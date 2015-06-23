@@ -71,15 +71,20 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                                    "label": youtube_id}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
-                PLAYER.playYoutubeVideo(youtube_id, self.getControl(control_id).getSelectedItem(), window=self)
+                PLAYER.playYoutubeVideo(youtube_id=youtube_id,
+                                        listitem=self.getControl(control_id).getSelectedItem(),
+                                        window=self)
         elif control_id == 5002:
             label_list = [ADDON.getLocalizedString(32062), ADDON.getLocalizedString(32063), ADDON.getLocalizedString(32064), ADDON.getLocalizedString(32065), xbmc.getLocalizedString(636)]
             deltas = [1, 7, 31, 365, "custom"]
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                            list=label_list)
             if index > -1:
                 delta = deltas[index]
                 if delta == "custom":
-                    delta = xbmcgui.Dialog().input(ADDON.getLocalizedString(32067), "", type=xbmcgui.INPUT_NUMERIC)
+                    delta = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32067),
+                                                   default="",
+                                                   type=xbmcgui.INPUT_NUMERIC)
                 if delta:
                     d = datetime.datetime.now() - datetime.timedelta(int(delta))
                     date_str = d.isoformat('T')[:-7] + "Z"
@@ -87,35 +92,40 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                     self.update()
         elif control_id == 5003:
             label_list = ["en", "de", "fr"]
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                            list=label_list)
             if index > -1:
                 self.add_filter("regionCode", label_list[index], xbmc.getLocalizedString(248), str(label_list[index]))
                 self.update()
         elif control_id == 5006:
             value_list = ["2d", "3d", "any"]
             label_list = ["2D", "3D", xbmc.getLocalizedString(593)]
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                            list=label_list)
             if index > -1:
                 self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))
                 self.update()
         elif control_id == 5008:
             value_list = ["long", "medium", "short", "any"]
             label_list = [xbmc.getLocalizedString(33013), xbmc.getLocalizedString(601), xbmc.getLocalizedString(33012), xbmc.getLocalizedString(593)]
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), label_list)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                            list=label_list)
             if index > -1:
                 self.add_filter("videoDuration", value_list[index], xbmc.getLocalizedString(180), str(label_list[index]))
                 self.update()
         elif control_id == 5009:
             value_list = ["closedCaption", "none", "any"]
             label_list = [xbmc.getLocalizedString(107), xbmc.getLocalizedString(106), xbmc.getLocalizedString(593)]
-            index = xbmcgui.Dialog().select(xbmc.getLocalizedString(287), label_list)
+            index = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(287),
+                                            list=label_list)
             if index > -1:
                 self.add_filter("videoCaption", value_list[index], xbmc.getLocalizedString(287), str(label_list[index]))
                 self.update()
         elif control_id == 5012:
             value_list = ["high", "standard", "any"]
             label_list = [xbmc.getLocalizedString(419), xbmc.getLocalizedString(602), xbmc.getLocalizedString(593)]
-            index = xbmcgui.Dialog().select(xbmc.getLocalizedString(169), label_list)
+            index = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(169),
+                                            list=label_list)
             if index > -1:
                 self.add_filter("videoDefinition", value_list[index], xbmc.getLocalizedString(169), str(label_list[index]))
                 self.update()
@@ -178,7 +188,8 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         for (key, value) in SORTS[sort_key].iteritems():
             listitems.append(key)
             sort_strings.append(value)
-        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32104), listitems)
+        index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32104),
+                                        list=listitems)
         if index > -1:
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
@@ -190,7 +201,8 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         youtube_id = self.getControl(focus_id).getSelectedItem().getProperty("youtube_id")
         if self.type == "video":
             listitems = [ADDON.getLocalizedString(32069)]
-            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), listitems)
+            selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                                list=listitems)
             if selection < 0:
                 return None
             elif selection == 0:
@@ -201,7 +213,11 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                 wm.open_youtube_list(filters=related_filter)
 
     def add_filter(self, key, value, typelabel, label):
-        super(DialogYoutubeList, self).add_filter(key, value, typelabel, label, force_overwrite=True)
+        super(DialogYoutubeList, self).add_filter(key=key,
+                                                  value=value,
+                                                  typelabel=typelabel,
+                                                  label=label,
+                                                  force_overwrite=True)
         self.mode = "filter"
         self.page = 1
 
