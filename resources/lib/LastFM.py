@@ -15,61 +15,59 @@ def handle_lastfm_events(results):
     events = []
     if not results:
         return []
-    if "events" in results:
-        if "@attr" in results["events"]:
-            if not isinstance(results['events']['event'], list):
-                results['events']['event'] = [results['events']['event']]
-            for event in results['events']['event']:
-                artists = event['artists']['artist']
-                if isinstance(artists, list):
-                    my_arts = ' / '.join(artists)
-                else:
-                    my_arts = artists
-                try:
-                    if event['venue']['location']['geo:point']['geo:long']:
-                        lon = event['venue']['location']['geo:point']['geo:long']
-                        lat = event['venue']['location']['geo:point']['geo:lat']
-                        search_str = lat + "," + lon
-                    elif event['venue']['location']['street']:
-                        search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
-                    elif event['venue']['location']['city']:
-                        search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['name'])
-                    else:
-                        search_str = url_quote(event['venue']['name'])
-                except:
-                    search_str = ""
-                if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
-                    builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
-                else:
-                    builtin = "Notification(Please install script.maps.browser)"
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_str, search_str, GOOGLE_MAPS_KEY)
-                event = {'date': event['startDate'][:-3],
-                         'name': event['venue']['name'],
-                         'id': event['venue']['id'],
-                         'venue_id': event['venue']['id'],
-                         'event_id': event['id'],
-                         'street': event['venue']['location']['street'],
-                         'eventname': event['title'],
-                         'website': event['website'],
-                         'description': clean_text(event['description']),
-                         'postalcode': event['venue']['location']['postalcode'],
-                         'city': event['venue']['location']['city'],
-                         'country': event['venue']['location']['country'],
-                         'lat': event['venue']['location']['geo:point']['geo:lat'],
-                         'lon': event['venue']['location']['geo:point']['geo:long'],
-                         'artists': my_arts,
-                         'googlemap': googlemap,
-                         'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
-                         'artist_image': event['image'][-1]['#text'],
-                         'thumb': event['image'][-1]['#text'],
-                         'venue_image': event['venue']['image'][-1]['#text'],
-                         'headliner': event['artists']['headliner']}
-                events.append(event)
-    elif "error" in results:
+    if "error" in results:
         notify("Error", results["message"])
-    else:
-        log("Error in handle_lastfm_events. JSON query follows:")
-        prettyprint(results)
+        return []
+    if "@attr" not in results["events"]:
+        continue
+    if not isinstance(results['events']['event'], list):
+        results['events']['event'] = [results['events']['event']]
+    for event in results['events']['event']:
+        artists = event['artists']['artist']
+        if isinstance(artists, list):
+            my_arts = ' / '.join(artists)
+        else:
+            my_arts = artists
+        try:
+            if event['venue']['location']['geo:point']['geo:long']:
+                lon = event['venue']['location']['geo:point']['geo:long']
+                lat = event['venue']['location']['geo:point']['geo:lat']
+                search_str = lat + "," + lon
+            elif event['venue']['location']['street']:
+                search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
+            elif event['venue']['location']['city']:
+                search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['name'])
+            else:
+                search_str = url_quote(event['venue']['name'])
+        except:
+            search_str = ""
+        if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
+            builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
+        else:
+            builtin = "Notification(Please install script.maps.browser)"
+        googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_str, search_str, GOOGLE_MAPS_KEY)
+        event = {'date': event['startDate'][:-3],
+                 'name': event['venue']['name'],
+                 'id': event['venue']['id'],
+                 'venue_id': event['venue']['id'],
+                 'event_id': event['id'],
+                 'street': event['venue']['location']['street'],
+                 'eventname': event['title'],
+                 'website': event['website'],
+                 'description': clean_text(event['description']),
+                 'postalcode': event['venue']['location']['postalcode'],
+                 'city': event['venue']['location']['city'],
+                 'country': event['venue']['location']['country'],
+                 'lat': event['venue']['location']['geo:point']['geo:lat'],
+                 'lon': event['venue']['location']['geo:point']['geo:long'],
+                 'artists': my_arts,
+                 'googlemap': googlemap,
+                 'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
+                 'artist_image': event['image'][-1]['#text'],
+                 'thumb': event['image'][-1]['#text'],
+                 'venue_image': event['venue']['image'][-1]['#text'],
+                 'headliner': event['artists']['headliner']}
+        events.append(event)
     return events
 
 
@@ -182,7 +180,6 @@ def get_artist_images(artist_mbid):
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0,
                                 folder="LastFM")
-#    prettyprint(results)
     return handle_lastfm_events(results)
 
 
