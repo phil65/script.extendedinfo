@@ -19,7 +19,7 @@ def handle_lastfm_events(results):
         notify("Error", results["message"])
         return []
     if "@attr" not in results["events"]:
-        continue
+        return []
     if not isinstance(results['events']['event'], list):
         results['events']['event'] = [results['events']['event']]
     for event in results['events']['event']:
