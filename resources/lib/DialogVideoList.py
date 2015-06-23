@@ -447,9 +447,11 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             self.set_filter_label()
             url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, ADDON.getSetting("LanguageID"), self.page, include_adult)
         if force:
-            response = get_tmdb_data(url, 0)
+            response = get_tmdb_data(url=url,
+                                     cache_days=0)
         else:
-            response = get_tmdb_data(url, 2)
+            response = get_tmdb_data(url=url,
+                                     cache_days=2)
         if self.mode == "list":
             info = {"listitems": handle_tmdb_movies(response["items"]),
                     "results_per_page": 1,
@@ -465,9 +467,13 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         if self.mode == "search":
             listitems = handle_tmdb_multi_search(response["results"])
         elif self.type == "movie":
-            listitems = handle_tmdb_movies(response["results"], False, None)
+            listitems = handle_tmdb_movies(results=response["results"],
+                                           local_first=False,
+                                           sortkey=None)
         else:
-            listitems = handle_tmdb_tvshows(response["results"], False, None)
+            listitems = handle_tmdb_tvshows(results=response["results"],
+                                            local_first=False,
+                                            sortkey=None)
         info = {"listitems": listitems,
                 "results_per_page": response["total_pages"],
                 "total_results": response["total_results"]}
