@@ -721,7 +721,8 @@ def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8", 'ignore')
     message = u'%s: %s' % (ADDON_ID, txt)
-    xbmc.log(msg=message.encode("utf-8", 'ignore'), level=xbmc.LOGDEBUG)
+    xbmc.log(msg=message.encode("utf-8", 'ignore'),
+             level=xbmc.LOGDEBUG)
 
 
 def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
@@ -880,8 +881,9 @@ def set_window_props(name, data, prefix="", debug=False):
 def create_listitems(data=None, preload_images=0):
     INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
     FLOAT_INFOLABELS = ["rating"]
-    STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle", "sorttitle", "duration", "studio", "tagline", "writer",
-                         "tvshowtitle", "premiered", "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
+    STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle",
+                         "sorttitle", "duration", "studio", "tagline", "writer", "tvshowtitle", "premiered",
+                         "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
     if not data:
         return []
     itemlist = []
