@@ -76,7 +76,7 @@ def handle_youtube_channels(results):
             channels.append(channel)
     return channels
 
-
+# TODO: rewrite
 def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
     if page:
         page = "&pageToken=%s" % page

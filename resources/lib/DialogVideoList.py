@@ -365,7 +365,7 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         self.page = 1
         self.mode = "filter"
 
-    def fetch_data(self, force=False):
+    def fetch_data(self, force=False): # TODO: rewrite
         sort_by = self.sort + "." + self.order
         if self.type == "tv":
             temp = "tv"
@@ -393,13 +393,17 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                 session_id = get_session_id()
                 if not session_id:
                     notify("Could not get session id")
-                    return [], 0, 0, ""
+                    return {"listitems": [],
+                            "results_per_page": 0,
+                            "total_results": 0}
                 url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sort_by)
             else:
                 session_id = get_guest_session_id()
                 if not session_id:
                     notify("Could not get session id")
-                    return [], 0, 0, ""
+                    return {"listitems": [],
+                            "results_per_page": 0,
+                            "total_results": 0}
                 url = "guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID"))
             self.filter_label = rated
         else:
@@ -417,7 +421,9 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             return info
         if "results" not in response:
             # self.close()
-            return [], 0, 0, ""
+            return {"listitems": [],
+                    "results_per_page": 0,
+                    "total_results": 0}
         if not response["results"]:
             notify(xbmc.getLocalizedString(284))
         if self.mode == "search":
