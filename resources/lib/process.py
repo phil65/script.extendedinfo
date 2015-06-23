@@ -186,7 +186,7 @@ def start_info_actions(infos, params):
             data = get_fav_items("tv"), "StarredTVShows"
         elif info == 'similarmovies':
             dbid = params.get("dbid", False)
-            if params.get("id", False):
+            if params.get("id"):
                 movie_id = params["id"]
             elif dbid and int(dbid) > 0:
                 movie_id = get_imdb_id_from_db("movie", dbid)
@@ -230,22 +230,22 @@ def start_info_actions(infos, params):
                 company_id = get_company_data(params["studio"])[0]["id"]
                 data = get_company_data(company_id), "StudioInfo"
         elif info == 'set':
-            if params.get("dbid", False) and "show" not in str(params.get("type", "")):
+            if params.get("dbid") and "show" not in str(params.get("type", "")):
                 name = get_set_name_from_db(params["dbid"])
                 if name:
                     params["setid"] = get_set_id(name)
-            if params.get("setid", False):
+            if params.get("setid"):
                 set_data, info = get_set_movies(params["setid"])
                 if set_data:
                     data = set_data, "MovieSetItems"
         elif info == 'movielists':
-            if params.get("dbid", False):
+            if params.get("dbid"):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
                     data = get_movie_lists(movie_id), "MovieLists"
         elif info == 'keywords':
-            if params.get("dbid", False):
+            if params.get("dbid"):
                 movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 log("MovieDB Id:" + str(movie_id))
                 if movie_id:
@@ -277,7 +277,7 @@ def start_info_actions(infos, params):
         elif info == 'ratemedia':
             media_type = params.get("type", False)
             if media_type:
-                if params.get("id", False) and params["id"]:
+                if params.get("id") and params["id"]:
                     tmdb_id = params["id"]
                 elif media_type == "movie":
                     tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
@@ -294,7 +294,7 @@ def start_info_actions(infos, params):
                     if rating:
                         send_rating_for_media_item(media_type, tmdb_id, rating)
         elif info == 'seasoninfo':
-            if params.get("tvshow", False) and params.get("season", False):
+            if params.get("tvshow") and params.get("season"):
                 HOME.setProperty('infodialogs.active', "true")
                 wm.open_season_info(tvshow=params["tvshow"],
                                     season=params["season"])
@@ -302,33 +302,35 @@ def start_info_actions(infos, params):
             else:
                 notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
-            if params.get("director", False):
-                director_id = get_person_info(params["director"], skip_dialog=True)["id"]
-                if director_id:
-                    movies = get_person_movies(director_id)
+            if params.get("director"):
+                director_info = get_person_info(person_label=params["director"],
+                                                skip_dialog=True)
+                if director_info["id"]:
+                    movies = get_person_movies(director_info["id"])
                     for item in movies:
                         del item["credit_id"]
                     movies = merge_dict_lists(movies, key="department")
                     data = movies, "DirectorMovies"
         elif info == 'writermovies':
-            if params.get("writer", False) and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
-                writer_id = get_person_info(params["writer"], skip_dialog=True)["id"]
-                if writer_id:
-                    movies = get_person_movies(writer_id)
+            if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
+                writer_info = get_person_info(person_label=params["writer"],
+                                              skip_dialog=True)
+                if writer_info["id"]:
+                    movies = get_person_movies(writer_info["id"])
                     for item in movies:
                         del item["credit_id"]
                     movies = merge_dict_lists(movies, key="department")
                     data = movies, "WriterMovies"
         elif info == 'similarmoviestrakt':
-            if params.get("id", False) or params.get("dbid", False):
-                if params.get("dbid", False):
+            if params.get("id", False) or params.get("dbid"):
+                if params.get("dbid"):
                     movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 else:
                     movie_id = params.get("id", "")
                 data = get_trakt_similar("movie", movie_id), "SimilarMovies"
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
-                if params.get("dbid", False):
+                if params.get("dbid"):
                     if params.get("type") == "episode":
                         tvshow_id = get_tvshow_id_from_db_by_episode(params["dbid"])
                     else:
@@ -352,11 +354,11 @@ def start_info_actions(infos, params):
                 data = get_events(params.get("artist_mbid")), "ArtistEvents"
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
-            if params.get("id", False):
+            if params.get("id"):
                 listitems = search_youtube(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")).get("listitems", [])
                 data = listitems, "YoutubeSearch"
         elif info == 'youtubeplaylist':
-            if params.get("id", False):
+            if params.get("id"):
                 data = get_youtube_playlist_videos(params.get("id", "")), "YoutubePlaylist"
         elif info == 'youtubeusersearch':
             user_name = params.get("id", "")
