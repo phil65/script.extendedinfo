@@ -141,6 +141,20 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
+    def open_slideshow(self, image):
+        import SlideShow
+        dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
+                                     image=image)
+        dialog.doModal()
+
+    def open_textviewer(self, header="", text="", color="FFFFFFFF"):
+        from TextViewerDialog import TextViewerDialog
+        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                             header=header,
+                             text=text,
+                             color=color)
+        w.doModal()
+
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if prev_window:

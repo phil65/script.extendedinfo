@@ -40,7 +40,10 @@ class DialogActorInfo(DialogBaseInfo):
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.data = extended_actor_info(self.id)
-        youtube_thread = GetYoutubeVidsThread(self.data["general"]["name"], "", "relevance", 15)
+        youtube_thread = GetYoutubeVidsThread(search_str=self.data["general"]["name"],
+                                              hd="",
+                                              order="relevance",
+                                              limit=15)
         youtube_thread.start()
         filter_thread = FilterImageThread(image=self.data["general"]["thumb"],
                                           radius=25)
@@ -74,34 +77,27 @@ class DialogActorInfo(DialogBaseInfo):
 
     def onClick(self, control_id):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
+        control = self.getControl(control_id)
         if control_id in [150, 550]:
-            listitem = self.getControl(control_id).getSelectedItem()
             wm.open_movie_info(prev_window=self,
-                               movie_id=listitem.getProperty("id"),
-                               dbid=listitem.getProperty("dbid"))
+                               movie_id=control.getSelectedItem().getProperty("id"),
+                               dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [250, 650]:
-            listitem = self.getControl(control_id).getSelectedItem()
             selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
                                                 list=[ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)])
             if selection == 0:
-                self.open_credit_dialog(listitem.getProperty("credit_id"))
+                self.open_credit_dialog(credit_id=control.getSelectedItem().getProperty("credit_id"))
             if selection == 1:
                 wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=listitem.getProperty("id"),
-                                    dbid=listitem.getProperty("dbid"))
+                                    tvshow_id=control.getSelectedItem().getProperty("id"),
+                                    dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [450, 750]:
-            image = self.getControl(control_id).getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
-            dialog.doModal()
+            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 350:
-            listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
-                                      listitem=listitem,
+            PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
+                                      listitem=control.getSelectedItem(),
                                       window=self)
         elif control_id == 132:
-            text = self.data["general"]["biography"]
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=ADDON.getLocalizedString(32037),
-                                 text=text,
-                                 color=self.data["general"]['ImageColor'])
-            w.doModal()
+            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+                               text=self.data["general"]["biography"],
+                               color=self.data["general"]['ImageColor'])

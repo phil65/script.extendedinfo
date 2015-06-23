@@ -21,7 +21,9 @@ def get_kodi_artists():
         return read_from_file(filename)
     else:
         json_response = get_kodi_json('"method": "AudioLibrary.GetArtists", "params": {"properties": ["musicbrainzartistid","thumbnail"]}')
-        save_to_file(json_response, "XBMCartists", ADDON_DATA_PATH)
+        save_to_file(content=json_response,
+                     filename="XBMCartists",
+                     path=ADDON_DATA_PATH)
         return json_response
 
 
@@ -94,7 +96,9 @@ def get_similar_movies_from_db(dbid):
         if comp_movie['director'] and item['director'] and comp_movie['director'][0] == item['director'][0]:
             quota += 0.6
         quotalist.append((quota, item["movieid"]))
-    quotalist = sorted(quotalist, key=lambda quota: quota[0], reverse=True)
+    quotalist = sorted(quotalist,
+                       key=lambda quota: quota[0],
+                       reverse=True)
     movies = []
     for i, list_movie in enumerate(quotalist):
         if comp_movie['movieid'] is not list_movie[1]:
@@ -360,8 +364,12 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
             remote_items.append(online_item)
     log("compare time: " + str(now - time.time()))
     if sortkey:
-        local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
-        remote_items = sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+        local_items = sorted(local_items,
+                             key=lambda k: k[sortkey],
+                             reverse=True)
+        remote_items = sorted(remote_items,
+                              key=lambda k: k[sortkey],
+                              reverse=True)
     return local_items + remote_items
 
 

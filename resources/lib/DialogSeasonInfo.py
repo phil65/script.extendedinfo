@@ -79,13 +79,8 @@ class DialogSeasonInfo(DialogBaseInfo):
                                       listitem=listitem,
                                       window=self)
         elif control_id in [1250, 1350]:
-            image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
-                               image=image)
-            dialog.doModal()
+            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=ADDON.getLocalizedString(32037),
-                                 text=self.data["general"]["Plot"],
-                                 color=self.data["general"]['ImageColor'])
-            w.doModal()
+            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+                               text=self.data["general"]["Plot"],
+                               color=self.data["general"]['ImageColor'])

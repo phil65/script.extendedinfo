@@ -22,7 +22,9 @@ class DialogVideoInfo(DialogBaseInfo):
         super(DialogVideoInfo, self).__init__(*args, **kwargs)
         if not ADDON.getSetting("first_start_infodialog"):
             ADDON.setSetting("first_start_infodialog", "True")
-            xbmcgui.Dialog().ok(ADDON_NAME, ADDON.getLocalizedString(32140), ADDON.getLocalizedString(32141))
+            xbmcgui.Dialog().ok(heading=ADDON_NAME,
+                                line1=ADDON.getLocalizedString(32140),
+                                line2=ADDON.getLocalizedString(32141))
         self.tmdb_id = kwargs.get('id')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
@@ -37,7 +39,11 @@ class DialogVideoInfo(DialogBaseInfo):
         if "general" not in self.data:
             return None
         log("Blur image %s with radius %i" % (self.data["general"]["thumb"], 25))
-        youtube_thread = GetYoutubeVidsThread(self.data["general"]["Label"] + " " + self.data["general"]["year"] + ", movie", "", "relevance", 15)
+        search_str = "%s %s, movie" % (self.data["general"]["Label"], self.data["general"]["year"])
+        youtube_thread = GetYoutubeVidsThread(search_str=search_str,
+                                              hd="",
+                                              order="relevance",
+                                              limit=15)
         sets_thread = SetItemsThread(self.data["general"]["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.data["general"]["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
@@ -70,7 +76,8 @@ class DialogVideoInfo(DialogBaseInfo):
         youtube_thread.join()
         youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
         filter_thread.join()
-        self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+        self.data["general"]['ImageFilter'] = filter_thread.image
+        self.data["general"]['ImageColor'] = filter_thread.imagecolor
         self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
                           (150, create_listitems(self.data["similar"], 0)),
                           (250, create_listitems(self.set_listitems, 0)),
@@ -115,9 +122,7 @@ class DialogVideoInfo(DialogBaseInfo):
                                dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
-                               image=image)
-            dialog.doModal()
+            wm.open_slideshow(image=image)
         elif control_id in [350, 1150, 10]:
             listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
             listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
@@ -143,11 +148,9 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=xbmc.getLocalizedString(207),
-                                 text=text,
-                                 color=self.data["general"]['ImageColor'])
-            w.doModal()
+            wm.open_textviewer(header=xbmc.getLocalizedString(207),
+                               text=text,
+                               color=self.data["general"]['ImageColor'])
         elif control_id == 950:
             keyword_id = control.getSelectedItem().getProperty("id")
             keyword_name = control.getSelectedItem().getLabel()
@@ -231,11 +234,9 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=xbmc.getLocalizedString(207),
-                                 text=self.data["general"]["Plot"],
-                                 color=self.data["general"]['ImageColor'])
-            w.doModal()
+            wm.open_textviewer(header=xbmc.getLocalizedString(207),
+                               text=self.data["general"]["Plot"],
+                               color=self.data["general"]['ImageColor'])
         elif control_id == 6003:
             if self.data["account_states"]["favorite"]:
                 change_fav_status(media_id=self.data["general"]["id"],

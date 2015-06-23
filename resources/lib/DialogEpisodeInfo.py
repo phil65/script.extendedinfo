@@ -68,24 +68,20 @@ class DialogEpisodeInfo(DialogBaseInfo):
                                       listitem=listitem,
                                       window=self)
         elif control_id in [1250, 1350]:
-            image = self.getControl(control_id).getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
-                               image=image)
-            dialog.doModal()
+            wm.open_slideshow(image=self.getControl(control_id).getSelectedItem().getProperty("original"))
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=ADDON.getLocalizedString(32037),
-                                 text=self.season["general"]["Plot"],
-                                 color=self.season["general"]['ImageColor'])
-            w.doModal()
+            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+                               text=self.data["general"]["Plot"],
+                               color=self.data["general"]['ImageColor'])
         elif control_id == 6001:
             rating = get_rating_from_user()
-            if rating:
-                identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
-                send_rating_for_media_item(media_type="episode",
-                                           media_id=identifier,
-                                           rating=rating)
-                self.update_states()
+            if not rating:
+                return None
+            identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
+            send_rating_for_media_item(media_type="episode",
+                                       media_id=identifier,
+                                       rating=rating)
+            self.update_states()
         elif control_id == 6006:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_rated_media_items("tv/episodes")

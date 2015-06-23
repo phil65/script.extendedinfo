@@ -47,7 +47,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                 return None
             youtube_thread = GetYoutubeVidsThread(search_str=self.data["general"]['title'] + " tv",
                                                   hd="",
-                                                  order="relevance", 15)
+                                                  order="relevance",
+                                                  limit=15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")
             for item in self.data["certifications"]:
@@ -123,15 +124,13 @@ class DialogTVShowInfo(DialogBaseInfo):
                                 tvshow_id=control.getSelectedItem().getProperty("id"),
                                 dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [250]:
-            season = control.getSelectedItem().getProperty("season")
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.tmdb_id,
-                                season=season,
+                                season=control.getSelectedItem().getProperty("season"),
                                 tvshow=self.data["general"]['title'])
         elif control_id in [350, 1150]:
-            listitem = control.getSelectedItem()
-            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
-                                      listitem=listitem,
+            PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
+                                      listitem=control.getSelectedItem(),
                                       window=self)
         elif control_id == 550:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -139,47 +138,28 @@ class DialogTVShowInfo(DialogBaseInfo):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
-            # xbmc.executebuiltin("ActivateWindow(busydialog)")
-            # filters = {"with_networks": control.getSelectedItem().getProperty("id")}
-            # listitems = get_company_data(control.getSelectedItem().getProperty("id"))
-            # xbmc.executebuiltin("Dialog.Close(busydialog)")
-            # wm.open_video_list(prev_window=self, filters=filters, media_type="tv")
         elif control_id == 950:
-            keyword_id = control.getSelectedItem().getProperty("id")
-            keyword_name = control.getSelectedItem().getLabel()
-            filters = [{"id": keyword_id,
+            filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": ADDON.getLocalizedString(32114),
-                        "label": keyword_name}]
+                        "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
         elif control_id == 850:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            genreid = control.getSelectedItem().getProperty("id")
-            genrename = control.getSelectedItem().getLabel()
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            filters = [{"id": genreid,
+            filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_genres",
                         "typelabel": xbmc.getLocalizedString(135),
-                        "label": genrename}]
+                        "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
         elif control_id in [1250, 1350]:
-            image = control.getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
-                               image=image)
-            dialog.doModal()
+            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 1450:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            company_id = control.getSelectedItem().getProperty("id")
-            company_name = control.getSelectedItem().getLabel()
-            filters = [{"id": company_id,
+            filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_networks",
                         "typelabel": ADDON.getLocalizedString(32152),
-                        "label": company_name}]
-            listitems = get_company_data(company_id)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+                        "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
@@ -214,23 +194,9 @@ class DialogTVShowInfo(DialogBaseInfo):
                                mode="rating",
                                media_type="tv")
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                                 header=ADDON.getLocalizedString(32037),
-                                 text=self.data["general"]["Plot"],
-                                 color=self.data["general"]['ImageColor'])
-            w.doModal()
-        # elif control_id == 650:
-        #     xbmc.executebuiltin("ActivateWindow(busydialog)")
-        #     country = control.getSelectedItem().getProperty("iso_3166_1")
-        #     certification = self.getControl(control_id).getSelectedItem().getProperty("certification")
-        #     listitems = GetMoviesWithCertification(country, certification)
-        #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     wm.open_video_list(prev_window=self, listitems=listitems)
-        # elif control_id == 450:
-        #     xbmc.executebuiltin("ActivateWindow(busydialog)")
-        #     listitems = get_movies_from_list(self.getControl(control_id).getSelectedItem().getProperty("id"))
-        #     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        #     wm.open_video_list(prev_window=self, listitems=listitems)
+            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+                               text=self.data["general"]["Plot"],
+                               color=self.data["general"]['ImageColor'])
 
     def update_states(self, forceupdate=True):
         if forceupdate:

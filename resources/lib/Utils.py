@@ -115,13 +115,10 @@ def check_version():
     """
     check version, open TextViewer if update detected
     """
+    from WindowManager import wm
     if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
-        path = os.path.join(ADDON_PATH, "changelog.txt")
-        changelog = read_from_file(path, True)
-        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                             header="Changelog",
-                             text=changelog)
-        w.doModal()
+        wm.open_textviewer(header=xbmc.getLocalizedString(24036),
+                           text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
         ADDON.setSetting("changelog_version", ADDON_VERSION)
 
 
@@ -272,63 +269,6 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
 
     def onFocus(self, control_id):
         pass
-
-
-class TextViewerDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.text = kwargs.get('text')
-        self.header = kwargs.get('header')
-        self.color = kwargs.get('color')
-
-    def onInit(self):
-        window_id = xbmcgui.getCurrentWindowDialogId()
-        xbmcgui.Window(window_id).setProperty("WindowColor", self.color)
-        self.getControl(1).setLabel(self.header)
-        self.getControl(5).setText(self.text)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, control_id):
-        pass
-
-    def onFocus(self, control_id):
-        pass
-
-
-class SlideShow(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-    ACTION_LEFT = [1]
-    ACTION_RIGHT = [2]
-
-    def __init__(self, *args, **kwargs):
-        self.imagelist = kwargs.get('imagelist')
-        self.index = kwargs.get('index')
-        self.image = kwargs.get('image')
-        self.action = None
-
-    def onInit(self):
-        if self.imagelist:
-            self.getControl(10000).addItems(create_listitems(self.imagelist))
-            xbmc.executebuiltin("Control.SetFocus(10000,%s)" % self.index)
-        else:
-            listitem = {"label": self.image,
-                        "thumb": self.image}
-            self.getControl(10000).addItems(create_listitems([listitem]))
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-        elif action in self.ACTION_LEFT:
-            self.action = "left"
-            self.close()
-        elif action in self.ACTION_RIGHT:
-            self.action = "right"
-            self.close()
 
 
 def calculate_age(born, died=False):
