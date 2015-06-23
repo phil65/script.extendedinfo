@@ -12,67 +12,68 @@ BASE_URL = "https://www.googleapis.com/youtube/v3/"
 def handle_youtube_videos(results, extended=False):
     videos = []
     for item in results:
-            thumb = ""
-            if "thumbnails" in item["snippet"]:
-                thumb = item["snippet"]["thumbnails"]["high"]["url"]
-            try:
-                video_id = item["id"]["videoId"]
-            except:
-                video_id = item["snippet"]["resourceId"]["videoId"]
-            video = {'thumb': thumb,
-                     'youtube_id': video_id,
-                     'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
-                     'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
-                     'Description': item["snippet"]["description"],
-                     'title': item["snippet"]["title"],
-                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-            videos.append(video)
-    if extended:
-        video_ids = [item["youtube_id"] for item in videos]
-        url = "videos?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(video_ids), YT_KEY)
-        ext_results = get_JSON_response(url=BASE_URL + url,
-                                        cache_days=0.5,
-                                        folder="YouTube")
-        for i, item in enumerate(videos):
-            for ext_item in ext_results["items"]:
-                if not item["youtube_id"] == ext_item['id']:
-                    continue
-                item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
-                item["dimension"] = ext_item['contentDetails']['dimension']
-                item["definition"] = ext_item['contentDetails']['definition']
-                item["caption"] = ext_item['contentDetails']['caption']
-                item["viewcount"] = millify(ext_item['statistics']['viewCount'])
-                item["likes"] = ext_item['statistics']['likeCount']
-                item["dislikes"] = ext_item['statistics']['dislikeCount']
-                vote_count = float(int(ext_item['statistics']['likeCount']) + int(ext_item['statistics']['dislikeCount']))
-                if vote_count > 0:
-                    item["rating"] = format(float(ext_item['statistics']['likeCount']) / vote_count * 10, '.2f')
-                break
-            else:
-                item["duration"] = ""
+        thumb = ""
+        if "thumbnails" in item["snippet"]:
+            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        try:
+            video_id = item["id"]["videoId"]
+        except:
+            video_id = item["snippet"]["resourceId"]["videoId"]
+        video = {'thumb': thumb,
+                 'youtube_id': video_id,
+                 'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
+                 'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
+                 'Description': item["snippet"]["description"],
+                 'title': item["snippet"]["title"],
+                 'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+        videos.append(video)
+    if not extended:
+        return videos
+    video_ids = [item["youtube_id"] for item in videos]
+    url = "videos?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(video_ids), YT_KEY)
+    ext_results = get_JSON_response(url=BASE_URL + url,
+                                    cache_days=0.5,
+                                    folder="YouTube")
+    for i, item in enumerate(videos):
+        for ext_item in ext_results["items"]:
+            if not item["youtube_id"] == ext_item['id']:
+                continue
+            item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
+            item["dimension"] = ext_item['contentDetails']['dimension']
+            item["definition"] = ext_item['contentDetails']['definition']
+            item["caption"] = ext_item['contentDetails']['caption']
+            item["viewcount"] = millify(ext_item['statistics']['viewCount'])
+            item["likes"] = ext_item['statistics']['likeCount']
+            item["dislikes"] = ext_item['statistics']['dislikeCount']
+            vote_count = float(int(ext_item['statistics']['likeCount']) + int(ext_item['statistics']['dislikeCount']))
+            if vote_count > 0:
+                item["rating"] = format(float(ext_item['statistics']['likeCount']) / vote_count * 10, '.2f')
+            break
+        else:
+            item["duration"] = ""
     return videos
 
 
 def handle_youtube_playlists(results):
     playlists = []
     for item in results:
-            thumb = ""
-            if "thumbnails" in item["snippet"]:
-                thumb = item["snippet"]["thumbnails"]["high"]["url"]
-            try:
-                playlist_id = item["id"]["playlistId"]
-            except:
-                playlist_id = item["snippet"]["resourceId"]["playlistId"]
-            playlist = {'thumb': thumb,
-                        'youtube_id': playlist_id,
-                        'Play': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
-                        'path': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
-                        'title': item["snippet"]["title"],
-                        'description': item["snippet"]["description"],
-                        'channel_title': item["snippet"]["channelTitle"],
-                        'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
-                        'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-            playlists.append(playlist)
+        thumb = ""
+        if "thumbnails" in item["snippet"]:
+            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        try:
+            playlist_id = item["id"]["playlistId"]
+        except:
+            playlist_id = item["snippet"]["resourceId"]["playlistId"]
+        playlist = {'thumb': thumb,
+                    'youtube_id': playlist_id,
+                    'Play': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
+                    'path': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
+                    'title': item["snippet"]["title"],
+                    'description': item["snippet"]["description"],
+                    'channel_title': item["snippet"]["channelTitle"],
+                    'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
+                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+        playlists.append(playlist)
     playlist_ids = [item["youtube_id"] for item in playlists]
     url = "playlists?id=%s&part=contentDetails&key=%s" % (",".join(playlist_ids), YT_KEY)
     ext_results = get_JSON_response(url=BASE_URL + url,
@@ -88,21 +89,21 @@ def handle_youtube_playlists(results):
 def handle_youtube_channels(results):
     channels = []
     for item in results:
-            thumb = ""
-            if "thumbnails" in item["snippet"]:
-                thumb = item["snippet"]["thumbnails"]["high"]["url"]
-            try:
-                channel_id = item["id"]["channelId"]
-            except:
-                channel_id = item["snippet"]["resourceId"]["channelId"]
-            channel = {'thumb': thumb,
-                       'youtube_id': channel_id,
-                       'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
-                       'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
-                       'Description': item["snippet"]["description"],
-                       'title': item["snippet"]["title"],
-                       'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-            channels.append(channel)
+        thumb = ""
+        if "thumbnails" in item["snippet"]:
+            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        try:
+            channel_id = item["id"]["channelId"]
+        except:
+            channel_id = item["snippet"]["resourceId"]["channelId"]
+        channel = {'thumb': thumb,
+                   'youtube_id': channel_id,
+                   'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                   'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                   'Description': item["snippet"]["description"],
+                   'title': item["snippet"]["title"],
+                   'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+        channels.append(channel)
     channel_ids = [item["youtube_id"] for item in channels]
     url = "channels?id=%s&part=contentDetails%%2Cstatistics%%2CbrandingSettings&key=%s" % (",".join(channel_ids), YT_KEY)
     ext_results = get_JSON_response(url=BASE_URL + url,
@@ -112,8 +113,9 @@ def handle_youtube_channels(results):
         for ext_item in ext_results["items"]:
             if item["youtube_id"] == ext_item['id']:
                 item["itemcount"] = ext_item['statistics']['videoCount']
-                item["fanart"] =  ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
+                item["fanart"] = ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
     return channels
+
 
 def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_str="", media_type="video"):
     if page:
@@ -159,6 +161,6 @@ def get_youtube_playlist_videos(playlist_id=""):
 def get_youtube_user_playlists(username=""):
     url = 'channels?part=contentDetails&forUsername=%s&key=%s' % (username, YT_KEY)
     results = get_JSON_response(url=BASE_URL + url,
-                                cache_days=30,
+                                cache_days=0.5,
                                 folder="YouTube")
     return results["items"][0]["contentDetails"]["relatedPlaylists"]

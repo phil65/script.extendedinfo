@@ -22,7 +22,8 @@ class DialogActorInfo(DialogBaseInfo):
             name = kwargs.get('name').decode("utf-8").split(" " + xbmc.getLocalizedString(20347) + " ")
             names = name[0].strip().split(" / ")
             if len(names) > 1:
-                ret = xbmcgui.Dialog().select(ADDON.getLocalizedString(32027), names)
+                ret = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32027),
+                                              list=names)
                 if ret == -1:
                     return None
                 name = names[ret]
@@ -41,14 +42,16 @@ class DialogActorInfo(DialogBaseInfo):
         self.data = extended_actor_info(self.id)
         youtube_thread = GetYoutubeVidsThread(self.data["general"]["name"], "", "relevance", 15)
         youtube_thread.start()
-        filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
+        filter_thread = FilterImageThread(image=self.data["general"]["thumb"],
+                                          radius=25)
         filter_thread.start()
         db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
         self.data["general"]["DBMovies"] = str(db_movies)
         movie_crew_roles = merge_dict_lists(self.data["movie_crew_roles"])
         tvshow_crew_roles = merge_dict_lists(self.data["tvshow_crew_roles"])
         filter_thread.join()
-        self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+        self.data["general"]['ImageFilter'] = filter_thread.image
+        self.data["general"]['ImageColor'] = filter_thread.imagecolor
         youtube_thread.join()
         self.listitems = [(150, create_listitems(self.data["movie_roles"], 0)),
                           (250, create_listitems(self.data["tvshow_roles"], 0)),
@@ -62,7 +65,11 @@ class DialogActorInfo(DialogBaseInfo):
     def onInit(self):
         super(DialogActorInfo, self).onInit()
         HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
-        pass_dict_to_skin(self.data["general"], "actor.", False, False, self.window_id)
+        pass_dict_to_skin(data=self.data["general"],
+                          prefix="actor.",
+                          debug=False,
+                          precache=False,
+                          window_id=self.window_id)
         self.fill_lists()
 
     def onClick(self, control_id):
@@ -74,8 +81,8 @@ class DialogActorInfo(DialogBaseInfo):
                                dbid=listitem.getProperty("dbid"))
         elif control_id in [250, 650]:
             listitem = self.getControl(control_id).getSelectedItem()
-            options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
-            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), options)
+            selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                                list=[ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)])
             if selection == 0:
                 self.open_credit_dialog(listitem.getProperty("credit_id"))
             if selection == 1:
@@ -88,7 +95,9 @@ class DialogActorInfo(DialogBaseInfo):
             dialog.doModal()
         elif control_id == 350:
             listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.play_youtube_video(listitem.getProperty("youtube_id"), listitem, window=self)
+            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
+                                      listitem=listitem,
+                                      window=self)
         elif control_id == 132:
             text = self.data["general"]["biography"]
             w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,

@@ -512,7 +512,9 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
     """
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = get_JSON_response(base_url + url, 30, folder="MusicBrainz")
+    results = get_JSON_response(url=base_url + url,
+                                cache_days=30,
+                                folder="MusicBrainz")
     if results and len(results["artists"]) > 0:
         log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
         return results["artists"][0]["id"]
@@ -855,7 +857,9 @@ def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
             if data:
                 items = create_listitems(data)
                 itemlist = [(item.getProperty("path"), item, bool(item.getProperty("directory"))) for item in items]
-                xbmcplugin.addDirectoryItems(handle, itemlist, len(itemlist))
+                xbmcplugin.addDirectoryItems(handle=handle,
+                                             items=itemlist,
+                                             totalItems=len(itemlist))
         xbmcplugin.endOfDirectory(handle)
     else:
         set_window_props(name, data, prefix)
