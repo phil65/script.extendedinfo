@@ -24,7 +24,10 @@ def get_trakt_calendar_shows(content):
     elif content == "premieres":
         url = 'calendars/shows/premieres/%s/14?extended=full,images' % datetime.date.today()
     try:
-        results = get_JSON_response(BASE_URL + url, 0.5, folder="Trakt", headers=HEADERS)
+        results = get_JSON_response(url=BASE_URL + url,
+                                    cache_days=0.5,
+                                    folder="Trakt",
+                                    headers=HEADERS)
     except:
         log("Error when fetching Trakt data from net")
         log("Json Query: " + url)
@@ -137,7 +140,9 @@ def handle_trakt_tvshows(results):
 
 def get_trending_shows():
     url = 'shows/trending?extended=full,images'
-    results = get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="Trakt",
+                                headers=HEADERS)
     if results is not None:
         return handle_trakt_tvshows(results)
     else:
@@ -146,7 +151,9 @@ def get_trending_shows():
 
 def get_tshow_info(imdb_id):
     url = 'show/%s?extended=full,images' % imdb_id
-    results = get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="Trakt",
+                                headers=HEADERS)
     if results is not None:
         return handle_trakt_tvshows([results])
     else:
@@ -155,7 +162,9 @@ def get_tshow_info(imdb_id):
 
 def get_trending_movies():
     url = 'movies/trending?extended=full,images'
-    results = get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
+    results = get_JSON_response(url=BASE_URL + url,
+                                folder="Trakt",
+                                headers=HEADERS)
     if results is not None:
         return handle_trakt_movies(results)
     else:
@@ -165,7 +174,9 @@ def get_trending_movies():
 def get_trakt_similar(media_type, imdb_id):
     if imdb_id is not None:
         url = '%s/%s/related?extended=full,images' % (media_type, imdb_id)
-        results = get_JSON_response(BASE_URL + url, folder="Trakt", headers=HEADERS)
+        results = get_JSON_response(url=BASE_URL + url,
+                                    folder="Trakt",
+                                    headers=HEADERS)
         if results is not None:
             if media_type == "show":
                 return handle_trakt_tvshows(results)

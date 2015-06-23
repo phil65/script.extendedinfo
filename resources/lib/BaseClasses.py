@@ -93,7 +93,10 @@ class DialogBaseList(object):
             settings_string = ADDON.getSetting("search_history")
             if settings_string:
                 self.last_searches = deque(ast.literal_eval(settings_string), maxlen=10)
-            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH, call=self.search, start_value=self.search_string, history=self.last_searches)
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
+                              call=self.search,
+                              start_value=self.search_string,
+                              history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
@@ -128,7 +131,8 @@ class DialogBaseList(object):
     def set_filter_label(self):
         filter_list = []
         for item in self.filters:
-            filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], item["label"].decode("utf-8").replace("|", " | ").replace(",", " + ")))
+            filter_label = item["label"].decode("utf-8").replace("|", " | ").replace(",", " + ")
+            filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], filter_label))
         self.filter_label = "  -  ".join(filter_list)
 
     def update_content(self, add=False, force_update=False):
@@ -187,7 +191,10 @@ class DialogBaseList(object):
         if index > -1:
             if not force_overwrite:
                 dialog = xbmcgui.Dialog()
-                ret = dialog.yesno(heading=xbmc.getLocalizedString(587), line1=ADDON.getLocalizedString(32106), nolabel="OR", yeslabel="AND")
+                ret = dialog.yesno(heading=xbmc.getLocalizedString(587),
+                                   line1=ADDON.getLocalizedString(32106),
+                                   nolabel="OR",
+                                   yeslabel="AND")
                 if ret:
                     self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
                     self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
@@ -258,6 +265,11 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
         w.doModal()
         if w.type == "episode":
-            wm.open_episode_info(prev_window=self, season=listitems[w.index]["season"], episode=listitems[w.index]["episode"], tvshow_id=info["media"]["id"])
+            wm.open_episode_info(prev_window=self,
+                                 season=listitems[w.index]["season"],
+                                 episode=listitems[w.index]["episode"],
+                                 tvshow_id=info["media"]["id"])
         elif w.type == "season":
-            wm.open_season_info(prev_window=self, season=listitems[w.index]["season"], tvshow_id=info["media"]["id"])
+            wm.open_season_info(prev_window=self,
+                                season=listitems[w.index]["season"],
+                                tvshow_id=info["media"]["id"])

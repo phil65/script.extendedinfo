@@ -289,9 +289,9 @@ def merge_with_local_movie_info(online_list=[], library_first=True, sortkey=Fals
             remote_items.append(online_item)
     log("compare time: " + str(now - time.time()))
     if sortkey:
-        return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
-    else:
-        return local_items + remote_items
+        local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
+        remote_items = sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+    return local_items + remote_items
 
 
 def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=False):
@@ -359,9 +359,9 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
             remote_items.append(online_item)
     log("compare time: " + str(now - time.time()))
     if sortkey:
-        return sorted(local_items, key=lambda k: k[sortkey], reverse=True) + sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
-    else:
-        return local_items + remote_items
+        local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
+        remote_items = sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+    return local_items + remote_items
 
 
 def compare_album_with_library(online_list):

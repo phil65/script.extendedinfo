@@ -55,14 +55,18 @@ class DialogSeasonInfo(DialogBaseInfo):
         control = self.getControl(control_id)
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if control_id in [1000, 750]:
-            wm.open_actor_info(prev_window=self, actor_id=control.getSelectedItem().getProperty("id"))
+            wm.open_actor_info(prev_window=self,
+                               actor_id=control.getSelectedItem().getProperty("id"))
         elif control_id in [2000]:
             episode = control.getSelectedItem().getProperty("episode")
             season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
                 response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
-            wm.open_episode_info(prev_window=self, tvshow_id=self.tmdb_id, season=season, episode=episode)
+            wm.open_episode_info(prev_window=self,
+                                 tvshow_id=self.tmdb_id,
+                                 season=season,
+                                 episode=episode)
         elif control_id in [350, 1150]:
             listitem = control.getSelectedItem()
             PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
@@ -71,5 +75,8 @@ class DialogSeasonInfo(DialogBaseInfo):
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
             dialog.doModal()
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                                 header=ADDON.getLocalizedString(32037),
+                                 text=self.data["general"]["Plot"],
+                                 color=self.data["general"]['ImageColor'])
             w.doModal()

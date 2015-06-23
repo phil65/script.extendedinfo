@@ -28,23 +28,33 @@ def start_info_actions(infos, params):
         data = [], ""
         if info == 'playmovie':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playepisode':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %s }, "options":{ "resume": %s }  }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playmusicvideo':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playalbum':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playsong':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == "openinfodialog":
             if xbmc.getCondVisibility("Container.Content(movies)"):
@@ -246,15 +256,23 @@ def start_info_actions(infos, params):
             wm.open_youtube_list()
         elif info == 'extendedinfo':
             HOME.setProperty('infodialogs.active', "true")
-            wm.open_movie_info(movie_id=params.get("id", ""), dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
+            wm.open_movie_info(movie_id=params.get("id", ""),
+                               dbid=params.get("dbid", None),
+                               imdb_id=params.get("imdb_id", ""),
+                               name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'extendedactorinfo':
             HOME.setProperty('infodialogs.active', "true")
-            wm.open_actor_info(actor_id=params.get("id", ""), name=params.get("name", ""))
+            wm.open_actor_info(actor_id=params.get("id", ""),
+                               name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'extendedtvinfo':
             HOME.setProperty('infodialogs.active', "true")
-            wm.open_tvshow_info(tvshow_id=params.get("id", ""), tvdb_id=params.get("tvdb_id", ""), dbid=params.get("dbid", None), imdb_id=params.get("imdb_id", ""), name=params.get("name", ""))
+            wm.open_tvshow_info(tvshow_id=params.get("id", ""),
+                                tvdb_id=params.get("tvdb_id", ""),
+                                dbid=params.get("dbid", None),
+                                imdb_id=params.get("imdb_id", ""),
+                                name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'ratemedia':
             media_type = params.get("type", False)
@@ -262,7 +280,9 @@ def start_info_actions(infos, params):
                 if params.get("id", False) and params["id"]:
                     tmdb_id = params["id"]
                 elif media_type == "movie":
-                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""), dbid=params.get("dbid", ""), name=params.get("name", ""))
+                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
+                                                dbid=params.get("dbid", ""),
+                                                name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
                     tvdb_id = get_imdb_id_from_db("tvshow", params["dbid"])
                     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
@@ -276,7 +296,8 @@ def start_info_actions(infos, params):
         elif info == 'seasoninfo':
             if params.get("tvshow", False) and params.get("season", False):
                 HOME.setProperty('infodialogs.active', "true")
-                wm.open_season_info(tvshow=params["tvshow"], season=params["season"])
+                wm.open_season_info(tvshow=params["tvshow"],
+                                    season=params["season"])
                 HOME.clearProperty('infodialogs.active')
             else:
                 notify("Error", "Required data missing in script call")
@@ -398,7 +419,9 @@ def start_info_actions(infos, params):
                 notify(item.getProperty("Image"))
         elif info == 'action':
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
             return None
@@ -415,7 +438,9 @@ def start_info_actions(infos, params):
         elif info == "youtubevideo":
             xbmc.executebuiltin("Dialog.Close(all,true)")
             if params.get("handle"):
-                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                          succeeded=False,
+                                          listitem=xbmcgui.ListItem())
             PLAYER.playYoutubeVideo(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -430,7 +455,9 @@ def start_info_actions(infos, params):
                 movie_id = ""
             if movie_id:
                 if params.get("handle"):
-                    xbmcplugin.setResolvedUrl(handle=int(params.get("handle")), succeeded=False, listitem=xbmcgui.ListItem())
+                    xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
+                                              succeeded=False,
+                                              listitem=xbmcgui.ListItem())
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 PLAYER.playYoutubeVideo(trailer)

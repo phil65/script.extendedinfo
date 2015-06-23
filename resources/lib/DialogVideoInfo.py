@@ -27,7 +27,9 @@ class DialogVideoInfo(DialogBaseInfo):
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
         if not self.tmdb_id:
-            self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id, dbid=self.dbid, name=self.name)
+            self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id,
+                                             dbid=self.dbid,
+                                             name=self.name)
         if not self.tmdb_id:
             notify(ADDON.getLocalizedString(32143))
             return None
@@ -101,9 +103,12 @@ class DialogVideoInfo(DialogBaseInfo):
     def onClick(self, control_id):
         control = self.getControl(control_id)
         if control_id in [1000, 750]:
-            wm.open_actor_info(prev_window=self, actor_id=control.getSelectedItem().getProperty("id"))
+            wm.open_actor_info(prev_window=self,
+                               actor_id=control.getSelectedItem().getProperty("id"))
         elif control_id in [150, 250]:
-            wm.open_movie_info(prev_window=self, movie_id=control.getSelectedItem().getProperty("id"), dbid=control.getSelectedItem().getProperty("dbid"))
+            wm.open_movie_info(prev_window=self,
+                               movie_id=control.getSelectedItem().getProperty("id"),
+                               dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [1250, 1350]:
             image = control.getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
@@ -130,7 +135,10 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 1050:
             author = control.getSelectedItem().getProperty("author")
             text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=text, color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                                 header=xbmc.getLocalizedString(207),
+                                 text=text,
+                                 color=self.data["general"]['ImageColor'])
             w.doModal()
         elif control_id == 950:
             keyword_id = control.getSelectedItem().getProperty("id")
@@ -139,7 +147,8 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_keywords",
                         "typelabel": ADDON.getLocalizedString(32114),
                         "label": keyword_name}]
-            wm.open_video_list(prev_window=self, filters=filters)
+            wm.open_video_list(prev_window=self,
+                               filters=filters)
         elif control_id == 850:
             genre_id = control.getSelectedItem().getProperty("id")
             genre_name = control.getSelectedItem().getLabel()
@@ -147,7 +156,8 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "with_genres",
                         "typelabel": xbmc.getLocalizedString(135),
                         "label": genre_name}]
-            wm.open_video_list(prev_window=self, filters=filters)
+            wm.open_video_list(prev_window=self,
+                               filters=filters)
         elif control_id == 650:
             country = control.getSelectedItem().getProperty("iso_3166_1")
             certification = control.getSelectedItem().getProperty("certification")
@@ -164,11 +174,15 @@ class DialogVideoInfo(DialogBaseInfo):
                         "type": "year",
                         "typelabel": xbmc.getLocalizedString(345),
                         "label": year}]
-            wm.open_video_list(prev_window=self, filters=filters)
+            wm.open_video_list(prev_window=self,
+                               filters=filters)
         elif control_id == 450:
             list_id = control.getSelectedItem().getProperty("id")
             list_title = control.getSelectedItem().getLabel()
-            wm.open_video_list(prev_window=self, mode="list", list_id=list_id, filter_label=list_title)
+            wm.open_video_list(prev_window=self,
+                               mode="list",
+                               list_id=list_id,
+                               filter_label=list_title)
         elif control_id == 6001:
             rating = get_rating_from_user()
             if rating:
@@ -185,15 +199,21 @@ class DialogVideoInfo(DialogBaseInfo):
             if index == -1:
                 pass
             elif index == 0:
-                wm.open_video_list(prev_window=self, mode="favorites")
+                wm.open_video_list(prev_window=self,
+                                   mode="favorites")
             elif index == 1:
-                wm.open_video_list(prev_window=self, mode="rating")
+                wm.open_video_list(prev_window=self,
+                                   mode="rating")
             else:
                 xbmc.executebuiltin("ActivateWindow(busydialog)")
                 list_id = account_lists[index - 2]["id"]
                 list_title = account_lists[index - 2]["name"]
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                wm.open_video_list(prev_window=self, mode="list", list_id=list_id, filter_label=list_title, force=True)
+                wm.open_video_list(prev_window=self,
+                                   mode="list",
+                                   list_id=list_id,
+                                   filter_label=list_title,
+                                   force=True)
         elif control_id == 8:
             self.close()
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.data["general"]['dbid']), "false"))
@@ -203,7 +223,10 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=xbmc.getLocalizedString(207), text=self.data["general"]["Plot"], color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                                 header=xbmc.getLocalizedString(207),
+                                 text=self.data["general"]["Plot"],
+                                 color=self.data["general"]['ImageColor'])
             w.doModal()
         elif control_id == 6003:
             if self.data["account_states"]["favorite"]:
@@ -212,7 +235,8 @@ class DialogVideoInfo(DialogBaseInfo):
                 change_fav_status(self.data["general"]["id"], "movie", "true")
             self.update_states()
         elif control_id == 6006:
-            wm.open_video_list(prev_window=self, mode="rating")
+            wm.open_video_list(prev_window=self,
+                               mode="rating")
         elif control_id == 6005:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [ADDON.getLocalizedString(32139)]

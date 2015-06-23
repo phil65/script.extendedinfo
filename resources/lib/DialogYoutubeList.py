@@ -212,4 +212,9 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
             self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
         else:
             self.filter_label = self.filter_label
-        return search_youtube(self.search_string, orderby=self.sort, extended=True, filter_string=self.filter_url, media_type=self.type, page=self.page_token)
+        return search_youtube(self.search_string,
+                              orderby=self.sort,
+                              extended=True,
+                              filter_string=self.filter_url,
+                              media_type=self.type,
+                              page=self.page_token)

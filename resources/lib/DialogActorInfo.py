@@ -69,7 +69,9 @@ class DialogActorInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
         if control_id in [150, 550]:
             listitem = self.getControl(control_id).getSelectedItem()
-            wm.open_movie_info(prev_window=self, movie_id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+            wm.open_movie_info(prev_window=self,
+                               movie_id=listitem.getProperty("id"),
+                               dbid=listitem.getProperty("dbid"))
         elif control_id in [250, 650]:
             listitem = self.getControl(control_id).getSelectedItem()
             options = [ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)]
@@ -77,7 +79,9 @@ class DialogActorInfo(DialogBaseInfo):
             if selection == 0:
                 self.open_credit_dialog(listitem.getProperty("credit_id"))
             if selection == 1:
-                wm.open_tvshow_info(prev_window=self, tvshow_id=listitem.getProperty("id"), dbid=listitem.getProperty("dbid"))
+                wm.open_tvshow_info(prev_window=self,
+                                    tvshow_id=listitem.getProperty("id"),
+                                    dbid=listitem.getProperty("dbid"))
         elif control_id in [450, 750]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
             dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
@@ -87,5 +91,8 @@ class DialogActorInfo(DialogBaseInfo):
             PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
         elif control_id == 132:
             text = self.data["general"]["biography"]
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=text, color=self.data["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                                 header=ADDON.getLocalizedString(32037),
+                                 text=text,
+                                 color=self.data["general"]['ImageColor'])
             w.doModal()

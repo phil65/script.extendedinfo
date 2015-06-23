@@ -37,7 +37,11 @@ class WindowManager(object):
         open movie info, deal with window stack
         """
         import DialogVideoInfo
-        dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=movie_id, dbid=dbid, name=name, imdb_id=imdb_id)
+        dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+                                                 id=movie_id,
+                                                 dbid=dbid,
+                                                 name=name,
+                                                 imdb_id=imdb_id)
         self.open_dialog(dialog, prev_window)
 
     def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
@@ -45,7 +49,12 @@ class WindowManager(object):
         open tvshow info, deal with window stack
         """
         import DialogTVShowInfo
-        dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, dbid=dbid, tvdb_id=tvdb_id, imdb_id=imdb_id, name=name)
+        dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+                                                   id=tvshow_id,
+                                                   dbid=dbid,
+                                                   tvdb_id=tvdb_id,
+                                                   imdb_id=imdb_id,
+                                                   name=name)
         self.open_dialog(dialog, prev_window)
 
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):
@@ -54,7 +63,10 @@ class WindowManager(object):
         needs *season AND (*tvshow_id OR *tvshow)
         """
         import DialogSeasonInfo
-        dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, id=tvshow_id, season=season, tvshow=tvshow)
+        dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+                                                   id=tvshow_id,
+                                                   season=season,
+                                                   tvshow=tvshow)
         self.open_dialog(dialog, prev_window)
 
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None):
@@ -63,7 +75,10 @@ class WindowManager(object):
         needs *tvshow_id AND *season AND *episode
         """
         import DialogEpisodeInfo
-        dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH, show_id=tvshow_id, season=season, episode=episode)
+        dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+                                                     show_id=tvshow_id,
+                                                     season=season,
+                                                     episode=episode)
         self.open_dialog(dialog, prev_window)
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
@@ -71,7 +86,9 @@ class WindowManager(object):
         open actor info, deal with window stack
         """
         import DialogActorInfo
-        dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH, id=actor_id, name=name)
+        dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH,
+                                                 id=actor_id,
+                                                 name=name)
         self.open_dialog(dialog, prev_window)
 
     def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
@@ -86,7 +103,15 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, listitems=listitems, color=color, filters=filters, mode=mode, list_id=list_id, force=force, filter_label=filter_label, type=media_type)
+        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH,
+                                                 listitems=listitems,
+                                                 color=color,
+                                                 filters=filters,
+                                                 mode=mode,
+                                                 list_id=list_id,
+                                                 force=force,
+                                                 filter_label=filter_label,
+                                                 type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
             prev_window.close()
@@ -104,7 +129,13 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH, search_string=search_string, color=color, filters=filters, force=force, filter_label=filter_label, type=media_type)
+        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH,
+                                                     search_string=search_string,
+                                                     color=color,
+                                                     filters=filters,
+                                                     force=force,
+                                                     filter_label=filter_label,
+                                                     type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
             prev_window.close()

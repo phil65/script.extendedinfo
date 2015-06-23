@@ -63,7 +63,9 @@ def send_rating_for_media_item(media_type, media_id, rating):
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id_string)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id_string)
-    request = Request(url, data=values, headers=HEADERS)
+    request = Request(url,
+                      data=values,
+                      headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
@@ -77,7 +79,9 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
         notify("Could not get session id")
         return None
     url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), session_id, TMDB_KEY)
-    request = Request(url, data=values, headers=HEADERS)
+    request = Request(url,
+                      data=values,
+                      headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
@@ -91,7 +95,9 @@ def create_list(list_name):
     session_id = get_session_id()
     url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
-    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
+    request = Request(url,
+                      data=simplejson.dumps(values),
+                      headers=HEADERS)
     response = urlopen(request).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
@@ -103,7 +109,9 @@ def remove_list(list_id):
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     log("Remove List: " + url)
     values = {'media_id': list_id}
-    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
+    request = Request(url,
+                      data=simplejson.dumps(values),
+                      headers=HEADERS)
     request.get_method = lambda: 'DELETE'
     response = urlopen(request).read()
     results = simplejson.loads(response)
@@ -120,7 +128,9 @@ def change_list_status(list_id, movie_id, status):
     url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
     log(url)
     values = {'media_id': movie_id}
-    request = Request(url, data=simplejson.dumps(values), headers=HEADERS)
+    request = Request(url,
+                      data=simplejson.dumps(values),
+                      headers=HEADERS)
     try:
         response = urlopen(request).read()
     except urllib2.HTTPError as err:
@@ -240,7 +250,8 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
         else:
             genres = ""
         tmdb_id = str(fetch(movie, 'id'))
-        artwork = get_image_urls(poster=movie.get("poster_path"), fanart=movie.get("backdrop_path"))
+        artwork = get_image_urls(poster=movie.get("poster_path"),
+                                 fanart=movie.get("backdrop_path"))
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if ADDON.getSetting("infodialog_onclick") != "false":
             # path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
@@ -284,7 +295,8 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     for tv in results:
         tmdb_id = fetch(tv, 'id')
         duration = ""
-        artwork = get_image_urls(poster=tv.get("poster_path"), fanart=tv.get("backdrop_path"))
+        artwork = get_image_urls(poster=tv.get("poster_path"),
+                                 fanart=tv.get("backdrop_path"))
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
@@ -508,7 +520,8 @@ def get_person_info(person_label, skip_dialog=False):
         if len(response["results"]) > 1 and not skip_dialog:
             listitems = create_listitems(handle_tmdb_people(response["results"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=listitems)
+            w = SelectDialog('DialogSelect.xml', ADDON_PATH,
+                             listing=listitems)
             w.doModal()
             if w.index >= 0:
                 return response["results"][w.index]
@@ -708,7 +721,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if movie_set:
         set_name = fetch(movie_set, "name")
         set_id = fetch(movie_set, "id")
-    artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
+    artwork = get_image_urls(poster=response.get("poster_path"),
+                             fanart=response.get("backdrop_path"))
     path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
     movie = {'thumb': artwork.get("poster_small", ""),
              'Poster': artwork.get("poster", ""),
@@ -793,7 +807,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
     tmdb_id = fetch(response, 'id')
-    artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
+    artwork = get_image_urls(poster=response.get("poster_path"),
+                             fanart=response.get("backdrop_path"))
     if len(response.get("episode_run_time", -1)) > 1:
         duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
     elif len(response.get("episode_run_time", -1)) == 1:
@@ -1055,7 +1070,8 @@ def get_set_movies(set_id):
     '''
     response = get_tmdb_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, ADDON.getSetting("LanguageID"), ADDON.getSetting("LanguageID")), 14)
     if response:
-        artwork = get_image_urls(poster=response.get("poster_path"), fanart=response.get("backdrop_path"))
+        artwork = get_image_urls(poster=response.get("poster_path"),
+                                 fanart=response.get("backdrop_path"))
         info = {"label": response["name"],
                 "Poster": artwork.get("poster", ""),
                 "thumb": artwork.get("poster_small", ""),

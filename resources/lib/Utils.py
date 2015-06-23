@@ -38,7 +38,9 @@ def run_async(func):
     """
     @wraps(func)
     def async_func(*args, **kwargs):
-        func_hl = threading.Thread(target=func, args=args, kwargs=kwargs)
+        func_hl = threading.Thread(target=func,
+                                   args=args,
+                                   kwargs=kwargs)
         func_hl.start()
         return func_hl
 
@@ -116,7 +118,9 @@ def check_version():
     if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
         path = os.path.join(ADDON_PATH, "changelog.txt")
         changelog = read_from_file(path, True)
-        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header="Changelog", text=changelog)
+        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                             header="Changelog",
+                             text=changelog)
         w.doModal()
         ADDON.setSetting("changelog_version", ADDON_VERSION)
 
@@ -144,7 +148,9 @@ def get_google_autocomplete_items(search_string, youtube=False):
     url = "http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (ADDON.getSetting("autocomplete_lang"), urllib.quote_plus(search_string))
     if youtube:
         url += "&ds=yt"
-    result = get_JSON_response(url, headers=headers, folder="Google")
+    result = get_JSON_response(url=url,
+                               headers=headers,
+                               folder="Google")
     for item in result[1]:
         li = {"label": item,
               "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}
@@ -782,7 +788,11 @@ def extract_youtube_id(raw_string):
 
 
 def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
-    xbmcgui.Dialog().notification(heading=header, message=message, icon=icon, time=time, sound=sound)
+    xbmcgui.Dialog().notification(heading=header,
+                                  message=message,
+                                  icon=icon,
+                                  time=time,
+                                  sound=sound)
 
 
 def get_kodi_json(params):
@@ -792,7 +802,10 @@ def get_kodi_json(params):
 
 
 def prettyprint(string):
-    log(simplejson.dumps(string, sort_keys=True, indent=4, separators=(',', ': ')))
+    log(simplejson.dumps(string,
+                         sort_keys=True,
+                         indent=4,
+                         separators=(',', ': ')))
 
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_id=10000):

@@ -64,17 +64,25 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             if media_type:
                 self.type = media_type
             if self.type == "tv":
-                wm.open_tvshow_info(prev_window=self, tvshow_id=media_id, dbid=dbid)
+                wm.open_tvshow_info(prev_window=self,
+                                    tvshow_id=media_id,
+                                    dbid=dbid)
             elif self.type == "person":
-                wm.open_actor_info(prev_window=self, actor_id=media_id)
+                wm.open_actor_info(prev_window=self,
+                                   actor_id=media_id)
             else:
-                wm.open_movie_info(prev_window=self, movie_id=media_id, dbid=dbid)
+                wm.open_movie_info(prev_window=self,
+                                   movie_id=media_id,
+                                   dbid=dbid)
         elif control_id == 5002:
             self.get_genre()
             self.update()
         elif control_id == 5003:
             dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading=ADDON.getLocalizedString(32151), line1=ADDON.getLocalizedString(32106), nolabel=ADDON.getLocalizedString(32150), yeslabel=ADDON.getLocalizedString(32149))
+            ret = dialog.yesno(heading=ADDON.getLocalizedString(32151),
+                               line1=ADDON.getLocalizedString(32106),
+                               nolabel=ADDON.getLocalizedString(32150),
+                               yeslabel=ADDON.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(345), "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
@@ -113,7 +121,10 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             dialog = xbmcgui.Dialog()
             ret = True
             if not self.type == "tv":
-                ret = dialog.yesno(heading=ADDON.getLocalizedString(32151), line1=ADDON.getLocalizedString(32106), nolabel=ADDON.getLocalizedString(32150), yeslabel=ADDON.getLocalizedString(32149))
+                ret = dialog.yesno(heading=ADDON.getLocalizedString(32151),
+                                   line1=ADDON.getLocalizedString(32106),
+                                   nolabel=ADDON.getLocalizedString(32150),
+                                   yeslabel=ADDON.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(xbmc.getLocalizedString(32111), "", type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
@@ -192,7 +203,12 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                 list_id = account_lists[index - 2]["id"]
                 list_title = account_lists[index - 2]["name"]
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH, color=self.color, filters=[], mode="list", list_id=list_id, filter_label=list_title)
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH,
+                                         color=self.color,
+                                         filters=[],
+                                         mode="list",
+                                         list_id=list_id,
+                                         filter_label=list_title)
                 dialog.doModal()
 
     def update_ui(self):
@@ -253,7 +269,8 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
             if index == 0:
-                listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137), type=xbmcgui.INPUT_ALPHANUM)
+                listname = xbmcgui.Dialog().input(ADDON.getLocalizedString(32137),
+                                                  type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
                     list_id = create_list(listname)
                     xbmc.sleep(1000)
