@@ -22,8 +22,8 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.tvshow = kwargs.get('tvshow')
         if self.season and (self.tmdb_id or self.tvshow):
             self.data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
-                                             tvshow=self.tvshow,
-                                             season=self.season)
+                                             tvshow_name=self.tvshow,
+                                             season_number=self.season)
             if not self.data:
                 return None
             search_str = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]['title'])
