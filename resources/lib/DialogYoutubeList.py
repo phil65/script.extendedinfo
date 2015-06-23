@@ -82,8 +82,8 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                     delta = xbmcgui.Dialog().input(ADDON.getLocalizedString(32067), "", type=xbmcgui.INPUT_NUMERIC)
                 if delta:
                     d = datetime.datetime.now() - datetime.timedelta(int(delta))
-                    date_string = d.isoformat('T')[:-7] + "Z"
-                    self.add_filter("publishedAfter", date_string, xbmc.getLocalizedString(172), str(label_list[index]))
+                    date_str = d.isoformat('T')[:-7] + "Z"
+                    self.add_filter("publishedAfter", date_str, xbmc.getLocalizedString(172), str(label_list[index]))
                     self.update()
         elif control_id == 5003:
             label_list = ["en", "de", "fr"]
@@ -215,6 +215,6 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         return search_youtube(self.search_str,
                               orderby=self.sort,
                               extended=True,
-                              filter_string=self.filter_url,
+                              filter_str=self.filter_url,
                               media_type=self.type,
                               page=self.page_token)

@@ -115,15 +115,15 @@ def handle_youtube_channels(results):
                 item["fanart"] =  ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
     return channels
 
-def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
+def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_str="", media_type="video"):
     if page:
         page = "&pageToken=%s" % page
     if hd and not hd == "false":
-        hd_string = "&hd=true"
+        hd = "&hd=true"
     else:
-        hd_string = ""
+        hd = ""
     search_str = "&q=%s" % url_quote(search_str.replace('"', ''))
-    url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page, search_str, orderby, filter_string, YT_KEY, hd_string, int(limit))
+    url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page, search_str, orderby, filter_str, YT_KEY, hd, int(limit))
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0.5,
                                 folder="YouTube")

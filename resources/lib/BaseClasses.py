@@ -90,9 +90,9 @@ class DialogBaseList(object):
             self.mode = "filter"
             self.update()
         elif control_id == 6000:
-            settings_string = ADDON.getSetting("search_history")
-            if settings_string:
-                self.last_searches = deque(ast.literal_eval(settings_string), maxlen=10)
+            settings_str = ADDON.getSetting("search_history")
+            if settings_str:
+                self.last_searches = deque(ast.literal_eval(settings_str), maxlen=10)
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
                               call=self.search,
                               start_value=self.search_str,
@@ -107,8 +107,8 @@ class DialogBaseList(object):
                 if listitem in self.last_searches:
                     self.last_searches.remove(listitem)
                 self.last_searches.appendleft(listitem)
-                setting_string = str(list(self.last_searches))
-                ADDON.setSetting("search_history", setting_string)
+                setting_str = str(list(self.last_searches))
+                ADDON.setSetting("search_history", setting_str)
             if self.total_items > 0:
                 self.setFocusId(500)
 

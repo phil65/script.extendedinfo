@@ -104,16 +104,16 @@ def get_similar_movies_from_db(dbid):
     return movies
 
 
-def get_db_movies(filter_string="", limit=10):
+def get_db_movies(filter_str="", limit=10):
     props = '"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]'
-    json_response = get_kodi_json('"method": "VideoLibrary.GetMovies", "params": {%s, %s, "limits": {"end": %d}}' % (props, filter_string, limit))
+    json_response = get_kodi_json('"method": "VideoLibrary.GetMovies", "params": {%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
     if "result" in json_response and "movies" in json_response["result"]:
         return [handle_db_movies(item) for item in json_response["result"]["movies"]]
 
 
-def get_db_tvshows(filter_string="", limit=10):
+def get_db_tvshows(filter_str="", limit=10):
     props = '"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]'
-    json_response = get_kodi_json('"method": "VideoLibrary.GetTVShows", "params": {%s, %s, "limits": {"end": %d}}' % (props, filter_string, limit))
+    json_response = get_kodi_json('"method": "VideoLibrary.GetTVShows", "params": {%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
     if "result" in json_response and "tvshows" in json_response["result"]:
         return [handle_db_tvshows(item) for item in json_response["result"]["tvshows"]]
 
