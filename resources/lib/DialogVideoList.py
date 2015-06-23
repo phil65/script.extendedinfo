@@ -411,7 +411,10 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         else:
             response = get_tmdb_data(url, 2)
         if self.mode == "list":
-            return handle_tmdb_movies(response["items"]), 1, len(response["items"]), ""
+            info = {"listitems": handle_tmdb_movies(response["items"]),
+                    "results_per_page": 1,
+                    "total_results": len(response["items"])}
+            return info
         if "results" not in response:
             # self.close()
             return [], 0, 0, ""
