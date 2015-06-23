@@ -9,7 +9,7 @@ YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 
-def handle_youtube_videos(results):
+def handle_youtube_videos(results, extended=False):
     videos = []
     for item in results:
             thumb = ""
@@ -28,6 +28,26 @@ def handle_youtube_videos(results):
                      # 'Author': item["author"][0]["name"]["$t"],
                      'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             videos.append(video)
+    if extended:
+        video_ids = [item["youtube_id"] for item in videos]
+        url = "videos?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(video_ids), YT_KEY)
+        ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+        for i, item in enumerate(videos):
+            for ext_item in ext_results["items"]:
+                if item["youtube_id"] == ext_item['id']:
+                    item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
+                    item["dimension"] = ext_item['contentDetails']['dimension']
+                    item["definition"] = ext_item['contentDetails']['definition']
+                    item["caption"] = ext_item['contentDetails']['caption']
+                    item["viewcount"] = millify(ext_item['statistics']['viewCount'])
+                    item["likes"] = ext_item['statistics']['likeCount']
+                    item["dislikes"] = ext_item['statistics']['dislikeCount']
+                    vote_count = float(int(ext_item['statistics']['likeCount']) + int(ext_item['statistics']['dislikeCount']))
+                    if vote_count > 0:
+                        item["rating"] = format(float(ext_item['statistics']['likeCount']) / vote_count * 10, '.2f')
+                    break
+            else:
+                item["duration"] = ""
     return videos
 
 
@@ -52,6 +72,13 @@ def handle_youtube_playlists(results):
                         # 'Author': item["author"][0]["name"]["$t"],
                         'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             playlists.append(playlist)
+    playlist_ids = [item["youtube_id"] for item in playlists]
+    url = "playlists?id=%s&part=contentDetails&key=%s" % (",".join(playlist_ids), YT_KEY)
+    ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+    for i, item in enumerate(playlists):
+        for ext_item in ext_results["items"]:
+            if item["youtube_id"] == ext_item['id']:
+                item["itemcount"] = ext_item['contentDetails']['itemCount']
     return playlists
 
 
@@ -74,10 +101,21 @@ def handle_youtube_channels(results):
                        # 'Author': item["author"][0]["name"]["$t"],
                        'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
             channels.append(channel)
+    channel_ids = [item["youtube_id"] for item in channels]
+    url = "channels?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(channel_ids), YT_KEY)
+    ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+    for i, item in enumerate(channels):
+        for ext_item in ext_results["items"]:
+            if item["youtube_id"] == ext_item['id']:
+                item["itemcount"] = ext_item['statistics']['videoCount']
     return channels
 
-# TODO: rewrite
-def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
+def get_related_videos(youtube_id):
+    url = "https://www.googleapis.com/youtube/v3/search?part=snippet&relatedToVideoId=%s&type=video&key=%s" % (youtube_id, YT_KEY)
+    results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
+    return handle_youtube_videos(results["items"], extended=True)
+
+def search_youtube(search_string="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_string="", media_type="video"):
     if page:
         page = "&pageToken=%s" % page
     if hd and not hd == "false":
@@ -88,45 +126,11 @@ def get_youtube_search_videos(search_string="", hd="", orderby="relevance", limi
     url = 'search?part=id%%2Csnippet&type=%s%s%s&order=%s&%skey=%s%s&maxResults=%i' % (media_type, page, search_string, orderby, filter_string, YT_KEY, hd_string, int(limit))
     results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
     if media_type == "video":
-        videos = handle_youtube_videos(results["items"])
-        if extended:
-            video_ids = [item["youtube_id"] for item in videos]
-            url = "videos?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(video_ids), YT_KEY)
-            ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
-            for i, item in enumerate(videos):
-                for ext_item in ext_results["items"]:
-                    if item["youtube_id"] == ext_item['id']:
-                        item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
-                        item["dimension"] = ext_item['contentDetails']['dimension']
-                        item["definition"] = ext_item['contentDetails']['definition']
-                        item["caption"] = ext_item['contentDetails']['caption']
-                        item["viewcount"] = millify(ext_item['statistics']['viewCount'])
-                        item["likes"] = ext_item['statistics']['likeCount']
-                        item["dislikes"] = ext_item['statistics']['dislikeCount']
-                        vote_count = float(int(ext_item['statistics']['likeCount']) + int(ext_item['statistics']['dislikeCount']))
-                        if vote_count > 0:
-                            item["rating"] = format(float(ext_item['statistics']['likeCount']) / vote_count * 10, '.2f')
-                        break
-                else:
-                    item["duration"] = ""
+        videos = handle_youtube_videos(results["items"], extended=True)
     elif media_type == "playlist":
         videos = handle_youtube_playlists(results["items"])
-        video_ids = [item["youtube_id"] for item in videos]
-        url = "playlists?id=%s&part=contentDetails&key=%s" % (",".join(video_ids), YT_KEY)
-        ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
-        for i, item in enumerate(videos):
-            for ext_item in ext_results["items"]:
-                if item["youtube_id"] == ext_item['id']:
-                    item["itemcount"] = ext_item['contentDetails']['itemCount']
     elif media_type == "channel":
         videos = handle_youtube_channels(results["items"])
-        video_ids = [item["youtube_id"] for item in videos]
-        url = "channels?id=%s&part=contentDetails%%2Cstatistics&key=%s" % (",".join(video_ids), YT_KEY)
-        ext_results = get_JSON_response(BASE_URL + url, 0.5, "YouTube")
-        for i, item in enumerate(videos):
-            for ext_item in ext_results["items"]:
-                if item["youtube_id"] == ext_item['id']:
-                    item["itemcount"] = ext_item['statistics']['videoCount']
     if videos:
         info = {"listitems": videos,
                 "results_per_page": results["pageInfo"]["resultsPerPage"],

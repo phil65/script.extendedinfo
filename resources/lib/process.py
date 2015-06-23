@@ -332,7 +332,7 @@ def start_info_actions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id", False):
-                listitems = get_youtube_search_videos(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")).get("listitems", [])
+                listitems = search_youtube(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")).get("listitems", [])
                 data = listitems, "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id", False):

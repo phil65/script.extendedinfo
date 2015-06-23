@@ -1105,5 +1105,5 @@ class GetYoutubeVidsThread(threading.Thread):
         self.limit = limit
 
     def run(self):
-        result = get_youtube_search_videos(self.search_string, self.hd, self.order, self.limit)
+        result = search_youtube(self.search_string, self.hd, self.order, self.limit)
         self.listitems = result.get("listitems", [])
