@@ -99,7 +99,9 @@ class DialogBaseList(object):
                               history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
-                result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
+                result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
+                                                default="",
+                                                type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
             if self.search_str:
@@ -244,13 +246,15 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
             if focus_id == 1250 and self.data["general"].get("dbid"):
-                selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), [ADDON.getLocalizedString(32006)])
+                selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
+                                                    list=[ADDON.getLocalizedString(32006)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
                     xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
             elif focus_id == 1350 and self.data["general"].get("dbid"):
-                selection = xbmcgui.Dialog().select(xbmc.getLocalizedString(22080), [ADDON.getLocalizedString(32007)])
+                selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
+                                                    list=[ADDON.getLocalizedString(32007)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"fanart": "%s"}' % path
@@ -262,7 +266,8 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         listitems += handle_tmdb_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": xbmc.getLocalizedString(19055)}]
-        w = SelectDialog('DialogSelect.xml', ADDON_PATH, listing=create_listitems(listitems))
+        w = SelectDialog('DialogSelect.xml', ADDON_PATH,
+                         listing=create_listitems(listitems))
         w.doModal()
         if w.type == "episode":
             wm.open_episode_info(prev_window=self,

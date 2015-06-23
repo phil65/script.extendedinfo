@@ -708,10 +708,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     mpaa = ""
     set_name = ""
     set_id = ""
-    genres = [item["name"] for item in response["genres"]]
-    Studio = [item["name"] for item in response["production_companies"]]
-    authors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Writing"]
-    directors = [item["name"] for item in response['credits']['crew'] if item["department"] == "Directing"]
+    genres = [i["name"] for i in response["genres"]]
+    Studio = [i["name"] for i in response["production_companies"]]
+    authors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Writing"]
+    directors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Directing"]
     us_cert = dictfind(response['releases']['countries'], "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["certification"]

@@ -22,10 +22,11 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.showname = kwargs.get('tvshow')
         self.episode_number = kwargs.get('episode')
         if self.tmdb_id or self.showname:
-            self.data = extended_episode_info(self.tmdb_id, self.season, self.episode_number)
+            self.data = extended_episode_info(tvshow_id=self.tmdb_id,
+                                              season=self.season,
+                                              episode=self.episode_number)
             if not self.data:
                 return
-            # prettyprint(self.data)
             search_str = "%s tv" % (self.data["general"]['title'])
             youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
             youtube_thread.start()
@@ -59,16 +60,23 @@ class DialogEpisodeInfo(DialogBaseInfo):
         HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if control_id in [1000, 750]:
             actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
-            wm.open_actor_info(prev_window=self, actor_id=actor_id)
+            wm.open_actor_info(prev_window=self,
+                               actor_id=actor_id)
         elif control_id in [350, 1150]:
             listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.playYoutubeVideo(listitem.getProperty("youtube_id"), listitem, window=self)
+            PLAYER.playYoutubeVideo(youtube_id=listitem.getProperty("youtube_id"),
+                                    listitem=listitem,
+                                    window=self)
         elif control_id in [1250, 1350]:
             image = self.getControl(control_id).getSelectedItem().getProperty("original")
-            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH, image=image)
+            dialog = SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
+                               image=image)
             dialog.doModal()
         elif control_id == 132:
-            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH, header=ADDON.getLocalizedString(32037), text=self.season["general"]["Plot"], color=self.season["general"]['ImageColor'])
+            w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
+                                 header=ADDON.getLocalizedString(32037),
+                                 text=self.season["general"]["Plot"],
+                                 color=self.season["general"]['ImageColor'])
             w.doModal()
         elif control_id == 6001:
             rating = get_rating_from_user()
@@ -80,7 +88,8 @@ class DialogEpisodeInfo(DialogBaseInfo):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = get_rated_media_items("tv/episodes")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            wm.open_video_list(prev_window=self, listitems=listitems)
+            wm.open_video_list(prev_window=self,
+                               listitems=listitems)
 
     def update_states(self, forceupdate=True):
         if forceupdate:
