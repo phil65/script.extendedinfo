@@ -82,7 +82,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
             rating = get_rating_from_user()
             if rating:
                 identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
-                send_rating_for_media_item("episode", identifier, rating)
+                send_rating_for_media_item(media_type="episode",
+                                           media_id=identifier,
+                                           rating=rating)
                 self.update_states()
         elif control_id == 6006:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -94,7 +96,10 @@ class DialogEpisodeInfo(DialogBaseInfo):
     def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = extended_episode_info(self.tmdb_id, self.season, self.episode_number, 0)
+            self.update = extended_episode_info(tvshow_id=self.tmdb_id,
+                                                season=self.season,
+                                                episode=self.episode_number,
+                                                cache_time=0)
             self.data["account_states"] = self.update["account_states"]
         if self.data["account_states"]:
             # if self.data["account_states"]["favorite"]:
