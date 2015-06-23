@@ -94,7 +94,7 @@ class DialogVideoInfo(DialogBaseInfo):
                           prefix="movie.",
                           debug=False,
                           precache=False,
-                          window=self.window_id)
+                          window_id=self.window_id)
         self.fill_lists()
         pass_dict_to_skin(self.setinfo, "movie.set.", False, False, self.window_id)
         self.update_states(False)

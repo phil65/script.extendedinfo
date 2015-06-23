@@ -54,7 +54,7 @@ class DialogSeasonInfo(DialogBaseInfo):
                           prefix="movie.",
                           debug=False,
                           precache=False,
-                          window=self.window_id)
+                          window_id=self.window_id)
         self.fill_lists()
 
     def onClick(self, control_id):
