@@ -39,7 +39,7 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         super(DialogYoutubeList, self).__init__(*args, **kwargs)
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         self.type = kwargs.get('type', "video")
-        self.search_string = kwargs.get('search_string', "")
+        self.search_str = kwargs.get('search_str', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.filter_url = ""
         self.page_token = ""
@@ -208,11 +208,11 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
     def fetch_data(self, force=False):
         self.set_filter_url()
         self.set_filter_label()
-        if self.search_string:
-            self.filter_label = ADDON.getLocalizedString(32146) % (self.search_string) + "  " + self.filter_label
+        if self.search_str:
+            self.filter_label = ADDON.getLocalizedString(32146) % (self.search_str) + "  " + self.filter_label
         else:
             self.filter_label = self.filter_label
-        return search_youtube(self.search_string,
+        return search_youtube(self.search_str,
                               orderby=self.sort,
                               extended=True,
                               filter_string=self.filter_url,

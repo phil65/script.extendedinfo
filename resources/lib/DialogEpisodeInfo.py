@@ -26,8 +26,8 @@ class DialogEpisodeInfo(DialogBaseInfo):
             if not self.data:
                 return
             # prettyprint(self.data)
-            search_string = "%s tv" % (self.data["general"]['title'])
-            youtube_thread = GetYoutubeVidsThread(search_string, "", "relevance", 15)
+            search_str = "%s tv" % (self.data["general"]['title'])
+            youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
             youtube_thread.start()
             # if "dbid" not in self.data["general"]:  # need to add comparing for episodes
             #     poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])

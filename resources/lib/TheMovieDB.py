@@ -504,12 +504,12 @@ def search_company(company_name):
         return ""
 
 
-def multi_search(search_string):
-    response = get_tmdb_data("search/multi?query=%s&" % url_quote(search_string), 1)
+def multi_search(search_str):
+    response = get_tmdb_data("search/multi?query=%s&" % url_quote(search_str), 1)
     if response and "results" in response:
         return response["results"]
     else:
-        log("Error when searching for %s" % search_string)
+        log("Error when searching for %s" % search_str)
         return ""
 
 
@@ -1113,13 +1113,13 @@ def search_media(media_name=None, year='', media_type="movie"):
 
 class GetYoutubeVidsThread(threading.Thread):
 
-    def __init__(self, search_string="", hd="", order="relevance", limit=15):
+    def __init__(self, search_str="", hd="", order="relevance", limit=15):
         threading.Thread.__init__(self)
-        self.search_string = search_string
+        self.search_str = search_str
         self.hd = hd
         self.order = order
         self.limit = limit
 
     def run(self):
-        result = search_youtube(self.search_string, self.hd, self.order, self.limit)
+        result = search_youtube(self.search_str, self.hd, self.order, self.limit)
         self.listitems = result.get("listitems", [])

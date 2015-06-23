@@ -37,7 +37,7 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
     def __init__(self, *args, **kwargs):
         super(DialogVideoList, self).__init__(*args, **kwargs)
         self.type = kwargs.get('type', "movie")
-        self.search_string = kwargs.get('search_string', "")
+        self.search_str = kwargs.get('search_str', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.list_id = kwargs.get("list_id", False)
@@ -393,9 +393,9 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             rated = ADDON.getLocalizedString(32135)
             starred = ADDON.getLocalizedString(32134)
         if self.mode == "search":
-            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_string), self.page, include_adult)
-            if self.search_string:
-                self.filter_label = ADDON.getLocalizedString(32146) % self.search_string
+            url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_str), self.page, include_adult)
+            if self.search_str:
+                self.filter_label = ADDON.getLocalizedString(32146) % self.search_str
             else:
                 self.filter_label = ""
         elif self.mode == "list":

@@ -95,15 +95,15 @@ class DialogBaseList(object):
                 self.last_searches = deque(ast.literal_eval(settings_string), maxlen=10)
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
                               call=self.search,
-                              start_value=self.search_string,
+                              start_value=self.search_str,
                               history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
                 result = xbmcgui.Dialog().input(xbmc.getLocalizedString(16017), "", type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
-            if self.search_string:
-                listitem = {"label": self.search_string}
+            if self.search_str:
+                listitem = {"label": self.search_str}
                 if listitem in self.last_searches:
                     self.last_searches.remove(listitem)
                 self.last_searches.appendleft(listitem)
@@ -113,7 +113,7 @@ class DialogBaseList(object):
                 self.setFocusId(500)
 
     def search(self, label):
-        self.search_string = label
+        self.search_str = label
         self.mode = "search"
         self.filters = []
         self.page = 1

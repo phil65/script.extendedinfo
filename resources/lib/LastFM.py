@@ -29,20 +29,20 @@ def handle_lastfm_events(results):
                     if event['venue']['location']['geo:point']['geo:long']:
                         lon = event['venue']['location']['geo:point']['geo:long']
                         lat = event['venue']['location']['geo:point']['geo:lat']
-                        search_string = lat + "," + lon
+                        search_str = lat + "," + lon
                     elif event['venue']['location']['street']:
-                        search_string = url_quote(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
+                        search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['location']['street'])
                     elif event['venue']['location']['city']:
-                        search_string = url_quote(event['venue']['location']['city'] + " " + event['venue']['name'])
+                        search_str = url_quote(event['venue']['location']['city'] + " " + event['venue']['name'])
                     else:
-                        search_string = url_quote(event['venue']['name'])
+                        search_str = url_quote(event['venue']['name'])
                 except:
-                    search_string = ""
+                    search_str = ""
                 if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
                     builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
                 else:
                     builtin = "Notification(Please install script.maps.browser)"
-                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_string, search_string, GOOGLE_MAPS_KEY)
+                googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_str, search_str, GOOGLE_MAPS_KEY)
                 event = {'date': event['startDate'][:-3],
                          'name': event['venue']['name'],
                          'id': event['venue']['id'],
