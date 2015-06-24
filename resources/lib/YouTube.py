@@ -25,6 +25,8 @@ def handle_youtube_videos(results, extended=False):
                  'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
                  'Description': item["snippet"]["description"],
                  'title': item["snippet"]["title"],
+                 'channel_title': item["snippet"]["channelTitle"],
+                 'channel_id': item["snippet"]["channelId"],
                  'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
         videos.append(video)
     if not extended:

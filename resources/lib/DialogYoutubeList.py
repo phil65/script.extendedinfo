@@ -198,9 +198,11 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         focus_id = self.getFocusId()
         if not focus_id == 500:
             return None
-        youtube_id = self.getControl(focus_id).getSelectedItem().getProperty("youtube_id")
+        listitem = self.getControl(focus_id).getSelectedItem()
+        youtube_id = listitem.getProperty("youtube_id")
         if self.type == "video":
-            listitems = [ADDON.getLocalizedString(32069)]
+            more_vids = "More videos from " + listitem.getProperty("channel_title")
+            listitems = [ADDON.getLocalizedString(32069), more_vids]
             selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
                                                 list=listitems)
             if selection < 0:
@@ -209,8 +211,14 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                 related_filter = [{"id": youtube_id,
                                    "type": "relatedToVideoId",
                                    "typelabel": "Related",
-                                   "label": youtube_id}]
+                                   "label": listitem.getLabel()}]
                 wm.open_youtube_list(filters=related_filter)
+            elif selection == 1:
+                channel_filter = [{"id": listitem.getProperty("channel_id"),
+                                   "type": "channelId",
+                                   "typelabel": "Related",
+                                   "label": listitem.getProperty("channel_title")}]
+                wm.open_youtube_list(filters=channel_filter)
 
     def add_filter(self, key, value, typelabel, label):
         super(DialogYoutubeList, self).add_filter(key=key,
