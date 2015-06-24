@@ -240,38 +240,6 @@ class SettingsMonitor(xbmc.Monitor):
         xbmc.sleep(300)
 
 
-# TODO: extend and use this for ContextMenu to get proper closing behaviour
-class SelectDialog(xbmcgui.WindowXMLDialog):
-    ACTION_PREVIOUS_MENU = [9, 92, 10]
-
-    def __init__(self, *args, **kwargs):
-        xbmcgui.WindowXMLDialog.__init__(self)
-        self.items = kwargs.get('listing')
-        self.index = -1
-        self.type = None
-
-    def onInit(self):
-        self.list = self.getControl(6)
-        self.getControl(3).setVisible(False)
-        self.getControl(5).setVisible(False)
-        self.getControl(1).setLabel(ADDON.getLocalizedString(32151))
-        self.list.addItems(self.items)
-        self.setFocus(self.list)
-
-    def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-
-    def onClick(self, control_id):
-        if control_id == 6 or control_id == 3:
-            self.index = int(self.list.getSelectedItem().getProperty("index"))
-            self.type = self.list.getSelectedItem().getProperty("media_type")
-            self.close()
-
-    def onFocus(self, control_id):
-        pass
-
-
 def calculate_age(born, died=False):
     """
     calculate age based on born / died

@@ -517,19 +517,15 @@ def multi_search(search_str):
 def get_person_info(person_label, skip_dialog=False):
     persons = person_label.split(" / ")
     response = get_tmdb_data("search/person?query=%s&include_adult=%s&" % (url_quote(persons[0]), include_adult), 30)
-    if response and "results" in response:
-        if len(response["results"]) > 1 and not skip_dialog:
-            listitems = create_listitems(handle_tmdb_people(response["results"]))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            w = SelectDialog('DialogSelect.xml', ADDON_PATH,
-                             listing=listitems)
-            w.doModal()
-            if w.index >= 0:
-                return response["results"][w.index]
-        elif response["results"]:
-            return response["results"][0]
-    else:
-        log("could not find Person ID")
+    if not response or "results" not in response:
+        return False
+    if len(response["results"]) > 1 and not skip_dialog:
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        listitem, index = wm.open_selectdialog(listitems=handle_tmdb_people(response["results"]))
+        if index >= 0:
+            return response["results"][index]
+    elif response["results"]:
+        return response["results"][0]
     return False
 
 

@@ -266,15 +266,13 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         listitems += handle_tmdb_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": xbmc.getLocalizedString(19055)}]
-        w = SelectDialog('DialogSelect.xml', ADDON_PATH,
-                         listing=create_listitems(listitems))
-        w.doModal()
-        if w.type == "episode":
+        listitem, index = wm.open_selectdialog(listitems=listitems)
+        if listitem["media_type"] == "episode":
             wm.open_episode_info(prev_window=self,
-                                 season=listitems[w.index]["season"],
-                                 episode=listitems[w.index]["episode"],
+                                 season=listitems[index]["season"],
+                                 episode=listitems[index]["episode"],
                                  tvshow_id=info["media"]["id"])
-        elif w.type == "season":
+        elif listitem["media_type"] == "season":
             wm.open_season_info(prev_window=self,
-                                season=listitems[w.index]["season"],
+                                season=listitems[index]["season"],
                                 tvshow_id=info["media"]["id"])

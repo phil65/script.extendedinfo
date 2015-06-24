@@ -161,6 +161,16 @@ class WindowManager(object):
                              color=color)
         w.doModal()
 
+    def open_selectdialog(self, listitems):
+        """
+        open selectdialog, return listitem dict and index
+        """
+        from SelectDialog import SelectDialog
+        w = SelectDialog('DialogSelect.xml', ADDON_PATH,
+                         listing=listitems)
+        w.doModal()
+        return w.listitem, w.index
+
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if prev_window:
