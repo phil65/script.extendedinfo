@@ -688,15 +688,15 @@ def convert_youtube_url(raw_string):
 
 
 def extract_youtube_id(raw_string):
+    vid_ids = None
     if raw_string and 'youtube.com/v' in raw_string:
         vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
-        for vid_id in vid_ids:
-            return vid_id
-    if raw_string and 'youtube.com/watch' in raw_string:
+    elif raw_string and 'youtube.com/watch' in raw_string:
         vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
-        for vid_id in vid_ids:
-            return vid_id
-    return ""
+    if vid_ids:
+        return vid_ids[0]
+    else:
+        return ""
 
 
 def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
