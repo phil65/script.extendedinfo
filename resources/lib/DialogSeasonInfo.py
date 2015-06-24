@@ -21,21 +21,24 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
         if self.season and (self.tmdb_id or self.tvshow):
-            self.data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
-                                             tvshow_name=self.tvshow,
-                                             season_number=self.season)
-            if not self.data:
+            data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
+                                        tvshow_name=self.tvshow,
+                                        season_number=self.season)
+            if data:
+                self.info, self.data = data
+            else:
+                notify(ADDON.getLocalizedString(32143))
                 return None
-            search_str = "%s %s tv" % (self.data["general"]["TVShowTitle"], self.data["general"]['title'])
+            search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
             youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
             youtube_thread.start()
-            if "dbid" not in self.data["general"]:  # need to add comparing for seasons
-                self.data["general"]['Poster'] = get_file(url=self.data["general"]["Poster"])
-            filter_thread = FilterImageThread(self.data["general"]["Poster"], 25)
+            if "dbid" not in self.info:  # need to add comparing for seasons
+                self.info['Poster'] = get_file(url=self.info["Poster"])
+            filter_thread = FilterImageThread(self.info["Poster"], 25)
             filter_thread.start()
             youtube_thread.join()
             filter_thread.join()
-            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+            self.info['ImageFilter'], self.info['ImageColor'] = filter_thread.image, filter_thread.imagecolor
             self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
                               (750, create_listitems(self.data["crew"], 0)),
                               (2000, create_listitems(self.data["episodes"], 0)),
@@ -48,12 +51,10 @@ class DialogSeasonInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
+        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
         self.window.setProperty("type", "season")
-        pass_dict_to_skin(data=self.data["general"],
+        pass_dict_to_skin(data=self.info,
                           prefix="movie.",
-                          debug=False,
-                          precache=False,
                           window_id=self.window_id)
         self.fill_lists()
 
@@ -79,5 +80,5 @@ class DialogSeasonInfo(DialogBaseInfo):
             wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 132:
             wm.open_textviewer(header=xbmc.getLocalizedString(32037),
-                               text=self.data["general"]["Plot"],
-                               color=self.data["general"]['ImageColor'])
+                               text=self.info["Plot"],
+                               color=self.info['ImageColor'])

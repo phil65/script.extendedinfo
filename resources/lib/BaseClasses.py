@@ -219,6 +219,7 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         self.logged_in = check_login()
         self.dbid = kwargs.get('dbid')
         self.data = None
+        self.info = {}
         check_version()
 
     def onInit(self, *args, **kwargs):
@@ -226,7 +227,7 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         # present for jurialmunkey
-        HOME.setProperty("ExtendedInfo_fanart", self.data["general"].get("fanart", ""))
+        HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
     def fill_lists(self):
         for container_id, listitems in self.listitems:
@@ -245,20 +246,20 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
-            if focus_id == 1250 and self.data["general"].get("dbid"):
+            if focus_id == 1250 and self.info.get("dbid"):
                 selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
                                                     list=[ADDON.getLocalizedString(32006)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"poster": "%s"}' % path
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
-            elif focus_id == 1350 and self.data["general"].get("dbid"):
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.info['dbid']))
+            elif focus_id == 1350 and self.info.get("dbid"):
                 selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
                                                     list=[ADDON.getLocalizedString(32007)])
                 if selection == 0:
                     path = self.getControl(focus_id).getSelectedItem().getProperty("original")
                     params = '"art": {"fanart": "%s"}' % path
-                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.data["general"]['dbid']))
+                    xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.info['dbid']))
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)

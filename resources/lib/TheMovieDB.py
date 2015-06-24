@@ -647,14 +647,13 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
         videos = handle_tmdb_videos(response["videos"]["results"])
     if "backdrops" in response["images"]:
         backdrops = handle_tmdb_images(response["images"]["backdrops"])
-    answer = {"general": season,
-              "actors": handle_tmdb_people(response["credits"]["cast"]),
-              "crew": handle_tmdb_people(response["credits"]["crew"]),
-              "videos": videos,
-              "episodes": handle_tmdb_episodes(response["episodes"]),
-              "images": handle_tmdb_images(response["images"]["posters"]),
-              "backdrops": backdrops}
-    return answer
+    listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
+                 "crew": handle_tmdb_people(response["credits"]["crew"]),
+                 "videos": videos,
+                 "episodes": handle_tmdb_episodes(response["episodes"]),
+                 "images": handle_tmdb_images(response["images"]["posters"]),
+                 "backdrops": backdrops}
+    return (season, listitems)
 
 
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
@@ -765,24 +764,20 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie.update(local_item)
     else:
         movie = merge_with_local_movie_info([movie])[0]
-    if movie:
-        answer = {"general": movie,
-                  "actors": handle_tmdb_people(response["credits"]["cast"]),
-                  "similar": handle_tmdb_movies(response["similar"]["results"]),
-                  "lists": handle_tmdb_misc(response["lists"]["results"]),
-                  "studios": handle_tmdb_misc(response["production_companies"]),
-                  "releases": handle_tmdb_misc(response["releases"]["countries"]),
-                  "crew": handle_tmdb_people(response["credits"]["crew"]),
-                  "genres": handle_tmdb_misc(response["genres"]),
-                  "keywords": handle_tmdb_misc(response["keywords"]["keywords"]),
-                  "reviews": handle_tmdb_misc(response["reviews"]["results"]),
-                  "videos": videos,
-                  "account_states": account_states,
-                  "images": handle_tmdb_images(response["images"]["posters"]),
-                  "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
-    else:
-        answer = []
-    return answer
+    listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
+                 "similar": handle_tmdb_movies(response["similar"]["results"]),
+                 "lists": handle_tmdb_misc(response["lists"]["results"]),
+                 "studios": handle_tmdb_misc(response["production_companies"]),
+                 "releases": handle_tmdb_misc(response["releases"]["countries"]),
+                 "crew": handle_tmdb_people(response["credits"]["crew"]),
+                 "genres": handle_tmdb_misc(response["genres"]),
+                 "keywords": handle_tmdb_misc(response["keywords"]["keywords"]),
+                 "reviews": handle_tmdb_misc(response["reviews"]["results"]),
+                 "videos": videos,
+                 "account_states": account_states,
+                 "images": handle_tmdb_images(response["images"]["posters"]),
+                 "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
+    return (movie, listitems)
 
 
 def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
@@ -855,21 +850,20 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow.update(local_item)
     else:
         tvshow = merge_with_local_tvshow_info([tvshow])[0]
-    answer = {"general": tvshow,
-              "actors": handle_tmdb_people(response["credits"]["cast"]),
-              "similar": handle_tmdb_tvshows(response["similar"]["results"]),
-              "studios": handle_tmdb_misc(response["production_companies"]),
-              "networks": handle_tmdb_misc(response["networks"]),
-              "certifications": handle_tmdb_misc(response["content_ratings"]["results"]),
-              "crew": handle_tmdb_people(response["credits"]["crew"]),
-              "genres": handle_tmdb_misc(response["genres"]),
-              "keywords": handle_tmdb_misc(response["keywords"]["results"]),
-              "videos": videos,
-              "account_states": account_states,
-              "seasons": handle_tmdb_seasons(response["seasons"]),
-              "images": handle_tmdb_images(response["images"]["posters"]),
-              "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
-    return answer
+    listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
+                 "similar": handle_tmdb_tvshows(response["similar"]["results"]),
+                 "studios": handle_tmdb_misc(response["production_companies"]),
+                 "networks": handle_tmdb_misc(response["networks"]),
+                 "certifications": handle_tmdb_misc(response["content_ratings"]["results"]),
+                 "crew": handle_tmdb_people(response["credits"]["crew"]),
+                 "genres": handle_tmdb_misc(response["genres"]),
+                 "keywords": handle_tmdb_misc(response["keywords"]["results"]),
+                 "videos": videos,
+                 "account_states": account_states,
+                 "seasons": handle_tmdb_seasons(response["seasons"]),
+                 "images": handle_tmdb_images(response["images"]["posters"]),
+                 "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
+    return (tvshow, listitems)
 
 
 def extended_episode_info(tvshow_id, season, episode, cache_time=7):
@@ -885,18 +879,14 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     videos = []
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
-    if "account_states" in response:
-        account_states = response["account_states"]
-    else:
-        account_states = None
-    answer = {"general": handle_tmdb_episodes([response])[0],
-              "actors": handle_tmdb_people(response["credits"]["cast"]),
+    account_states = response.get("account_states")
+    answer = {"actors": handle_tmdb_people(response["credits"]["cast"]),
               "account_states": account_states,
               "crew": handle_tmdb_people(response["credits"]["crew"]),
               "guest_stars": handle_tmdb_people(response["credits"]["guest_stars"]),
               "videos": videos,
               "images": handle_tmdb_images(response["images"]["stills"])}
-    return answer
+    return (handle_tmdb_episodes([response])[0], answer)
 
 
 def extended_actor_info(actor_id):
@@ -904,14 +894,13 @@ def extended_actor_info(actor_id):
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = handle_tmdb_tagged_images(response["tagged_images"]["results"])
-    answer = {"general": handle_tmdb_people([response])[0],
-              "movie_roles": handle_tmdb_movies(response["movie_credits"]["cast"]),
-              "tvshow_roles": handle_tmdb_tvshows(response["tv_credits"]["cast"]),
-              "movie_crew_roles": handle_tmdb_movies(response["movie_credits"]["crew"]),
-              "tvshow_crew_roles": handle_tmdb_tvshows(response["tv_credits"]["crew"]),
-              "tagged_images": tagged_images,
-              "images": handle_tmdb_images(response["images"]["profiles"])}
-    return answer
+    listitems = {"movie_roles": handle_tmdb_movies(response["movie_credits"]["cast"]),
+                 "tvshow_roles": handle_tmdb_tvshows(response["tv_credits"]["cast"]),
+                 "movie_crew_roles": handle_tmdb_movies(response["movie_credits"]["crew"]),
+                 "tvshow_crew_roles": handle_tmdb_tvshows(response["tv_credits"]["crew"]),
+                 "tagged_images": tagged_images,
+                 "images": handle_tmdb_images(response["images"]["profiles"])}
+    return (handle_tmdb_people([response])[0], listitems)
 
 
 def get_movie_lists(list_id):

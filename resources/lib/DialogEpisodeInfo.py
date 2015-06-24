@@ -21,21 +21,23 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.show_name = kwargs.get('tvshow')
         self.episode_number = kwargs.get('episode')
-        self.data = extended_episode_info(tvshow_id=self.tmdb_id,
-                                          season=self.season,
-                                          episode=self.episode_number)
-        if not self.data:
+        data = extended_episode_info(tvshow_id=self.tmdb_id,
+                                     season=self.season,
+                                     episode=self.episode_number)
+        if data:
+            self.info, self.data = data
+        else:
             notify(ADDON.getLocalizedString(32143))
             return None
-        search_str = "%s tv" % (self.data["general"]['title'])
+        search_str = "%s tv" % (self.info['title'])
         youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
         youtube_thread.start()  # TODO: rem threading here
-        filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
+        filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
         youtube_thread.join()
         filter_thread.join()
-        self.data["general"]['ImageFilter'] = filter_thread.image
-        self.data["general"]['ImageColor'] = filter_thread.imagecolor
+        self.info['ImageFilter'] = filter_thread.image
+        self.info['ImageColor'] = filter_thread.imagecolor
         self.listitems = [(1000, create_listitems(self.data["actors"] + self.data["guest_stars"], 0)),
                           (750, create_listitems(self.data["crew"], 0)),
                           (1150, create_listitems(self.data["videos"], 0)),
@@ -44,9 +46,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
+        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
         self.window.setProperty("type", "Episode")
-        pass_dict_to_skin(self.data["general"], "movie.", False, False, self.window_id)
+        pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
         self.fill_lists()
 
     def onClick(self, control_id):
@@ -64,13 +66,13 @@ class DialogEpisodeInfo(DialogBaseInfo):
             wm.open_slideshow(image=self.getControl(control_id).getSelectedItem().getProperty("original"))
         elif control_id == 132:
             wm.open_textviewer(header=xbmc.getLocalizedString(32037),
-                               text=self.data["general"]["Plot"],
-                               color=self.data["general"]['ImageColor'])
+                               text=self.info["Plot"],
+                               color=self.info['ImageColor'])
         elif control_id == 6001:
             rating = get_rating_from_user()
             if not rating:
                 return None
-            identifier = [self.tmdb_id, self.season, self.data["general"]["episode"]]
+            identifier = [self.tmdb_id, self.season, self.info["episode"]]
             send_rating_for_media_item(media_type="episode",
                                        media_id=identifier,
                                        rating=rating)

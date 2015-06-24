@@ -41,11 +41,14 @@ class DialogTVShowInfo(DialogBaseInfo):
                                         year="",
                                         media_type="tv")
         if self.tmdb_id:
-            self.data = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                             dbid=self.dbid)
-            if not self.data:
+            data = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                        dbid=self.dbid)
+            if data:
+                self.info, self.data = data
+            else:
+                notify(ADDON.getLocalizedString(32143))
                 return None
-            youtube_thread = GetYoutubeVidsThread(search_str=self.data["general"]['title'] + " tv",
+            youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv",
                                                   hd="",
                                                   order="relevance",
                                                   limit=15)
@@ -61,20 +64,20 @@ class DialogTVShowInfo(DialogBaseInfo):
                                    value=rating)
                     if hit:
                         item["meaning"] = hit["meaning"]
-            if "dbid" not in self.data["general"]:  # need to add comparing for tvshows
+            if "dbid" not in self.info:  # need to add comparing for tvshows
                 poster_thread = FunctionThread(function=get_file,
-                                               param=self.data["general"]["Poster"])
+                                               param=self.info["Poster"])
                 poster_thread.start()
-            if "dbid" not in self.data["general"]:
+            if "dbid" not in self.info:
                 poster_thread.join()
-                self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = FilterImageThread(image=self.data["general"]["Poster"],
+                self.info['Poster'] = poster_thread.listitems
+            filter_thread = FilterImageThread(image=self.info["Poster"],
                                               radius=25)
             filter_thread.start()
             youtube_thread.join()
             filter_thread.join()
-            self.data["general"]['ImageFilter'] = filter_thread.image
-            self.data["general"]['ImageColor'] = filter_thread.imagecolor
+            self.info['ImageFilter'] = filter_thread.image
+            self.info['ImageColor'] = filter_thread.imagecolor
             self.listitems = [(150, create_listitems(self.data["similar"], 0)),
                               (250, create_listitems(self.data["seasons"], 0)),
                               (1450, create_listitems(self.data["networks"], 0)),
@@ -93,11 +96,9 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.data["general"]["ImageColor"])
-        pass_dict_to_skin(data=self.data["general"],
+        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
+        pass_dict_to_skin(data=self.info,
                           prefix="movie.",
-                          debug=False,
-                          precache=False,
                           window_id=self.window_id)
         self.window.setProperty("type", "TVShow")
         self.fill_lists()
@@ -127,7 +128,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.tmdb_id,
                                 season=control.getSelectedItem().getProperty("season"),
-                                tvshow=self.data["general"]['title'])
+                                tvshow=self.info['title'])
         elif control_id in [350, 1150]:
             PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
                                       listitem=control.getSelectedItem(),
@@ -187,7 +188,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                                    mode="rating",
                                    media_type="tv")
         elif control_id == 6003:
-            change_fav_status(self.data["general"]["id"], "tv", "true")
+            change_fav_status(self.info["id"], "tv", "true")
             self.update_states()
         elif control_id == 6006:
             wm.open_video_list(prev_window=self,
@@ -195,8 +196,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                                media_type="tv")
         elif control_id == 132:
             wm.open_textviewer(header=xbmc.getLocalizedString(32037),
-                               text=self.data["general"]["Plot"],
-                               color=self.data["general"]['ImageColor'])
+                               text=self.info["Plot"],
+                               color=self.info['ImageColor'])
 
     def update_states(self, forceupdate=True):
         if forceupdate:
@@ -221,9 +222,9 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def show_manage_dialog(self):
         manage_list = []
-        title = self.data["general"].get("TVShowTitle", "")
-        # imdb_id = str(self.data["general"].get("imdb_id", ""))
-        # filename = self.data["general"].get("FilenameAndPath", False)
+        title = self.info.get("TVShowTitle", "")
+        # imdb_id = str(self.info.get("imdb_id", ""))
+        # filename = self.info.get("FilenameAndPath", False)
         if self.dbid:
             manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
                             [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],

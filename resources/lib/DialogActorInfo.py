@@ -39,22 +39,27 @@ class DialogActorInfo(DialogBaseInfo):
             notify(ADDON.getLocalizedString(32143))
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.data = extended_actor_info(self.id)
-        youtube_thread = GetYoutubeVidsThread(search_str=self.data["general"]["name"],
+        data = extended_actor_info(actor_id=self.id)
+        if data:
+            self.info, self.data = data
+        else:
+            notify(ADDON.getLocalizedString(32143))
+            return None
+        youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"],
                                               hd="",
                                               order="relevance",
                                               limit=15)
         youtube_thread.start()
-        filter_thread = FilterImageThread(image=self.data["general"]["thumb"],
+        filter_thread = FilterImageThread(image=self.info["thumb"],
                                           radius=25)
         filter_thread.start()
         db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
-        self.data["general"]["DBMovies"] = str(db_movies)
+        self.info["DBMovies"] = str(db_movies)
         movie_crew_roles = merge_dict_lists(self.data["movie_crew_roles"])
         tvshow_crew_roles = merge_dict_lists(self.data["tvshow_crew_roles"])
         filter_thread.join()
-        self.data["general"]['ImageFilter'] = filter_thread.image
-        self.data["general"]['ImageColor'] = filter_thread.imagecolor
+        self.info['ImageFilter'] = filter_thread.image
+        self.info['ImageColor'] = filter_thread.imagecolor
         youtube_thread.join()
         self.listitems = [(150, create_listitems(self.data["movie_roles"], 0)),
                           (250, create_listitems(self.data["tvshow_roles"], 0)),
@@ -67,11 +72,9 @@ class DialogActorInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogActorInfo, self).onInit()
-        HOME.setProperty("actor.ImageColor", self.data["general"]["ImageColor"])
-        pass_dict_to_skin(data=self.data["general"],
+        HOME.setProperty("actor.ImageColor", self.info["ImageColor"])
+        pass_dict_to_skin(data=self.info,
                           prefix="actor.",
-                          debug=False,
-                          precache=False,
                           window_id=self.window_id)
         self.fill_lists()
 
@@ -99,5 +102,5 @@ class DialogActorInfo(DialogBaseInfo):
                                       window=self)
         elif control_id == 132:
             wm.open_textviewer(header=xbmc.getLocalizedString(32037),
-                               text=self.data["general"]["biography"],
-                               color=self.data["general"]['ImageColor'])
+                               text=self.info["biography"],
+                               color=self.info['ImageColor'])
