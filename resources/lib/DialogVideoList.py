@@ -55,11 +55,12 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
 
     def onClick(self, control_id):
         super(DialogVideoList, self).onClick(control_id)
+        control = self.getControl(control_id)
         if control_id in [500]:
-            self.last_position = self.getControl(control_id).getSelectedPosition()
-            media_id = self.getControl(control_id).getSelectedItem().getProperty("id")
-            dbid = self.getControl(control_id).getSelectedItem().getProperty("dbid")
-            media_type = self.getControl(control_id).getSelectedItem().getProperty("media_type")
+            self.last_position = control.getSelectedPosition()
+            media_id = control.getSelectedItem().getProperty("id")
+            dbid = control.getSelectedItem().getProperty("dbid")
+            media_type = control.getSelectedItem().getProperty("media_type")
             if media_type:
                 self.type = media_type
             if self.type == "tv":
@@ -281,14 +282,15 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         sort_strings = [value for value in SORTS[sort_key].values()]
         index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32104),
                                         list=listitems)
-        if index > -1:
-            if sort_strings[index] == "vote_average":
-                self.add_filter(key="vote_count.gte",
-                                value="10",
-                                typelabel="%s (%s)" % (ADDON.getLocalizedString(32111), xbmc.getLocalizedString(21406)),
-                                label="10")
-            self.sort = sort_strings[index]
-            self.sort_label = listitems[index]
+        if index == -1:
+            return None
+        if sort_strings[index] == "vote_average":
+            self.add_filter(key="vote_count.gte",
+                            value="10",
+                            typelabel="%s (%s)" % (ADDON.getLocalizedString(32111), xbmc.getLocalizedString(21406)),
+                            label="10")
+        self.sort = sort_strings[index]
+        self.sort_label = listitems[index]
 
     def add_filter(self, key, value, typelabel, label):
         if ".gte" in key or ".lte" in key:
@@ -310,62 +312,65 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         label_list = [item["name"] for item in response["genres"]]
         index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
                                         list=label_list)
-        if index > -1:
-            self.add_filter("with_genres", str(id_list[index]), xbmc.getLocalizedString(135), str(label_list[index]))
-            self.mode = "filter"
-            self.page = 1
+        if index == -1:
+            return None
+        self.add_filter("with_genres", str(id_list[index]), xbmc.getLocalizedString(135), str(label_list[index]))
+        self.mode = "filter"
+        self.page = 1
 
     def get_actor(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
                                         default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
-        if result and result > -1:
-            response = get_person_info(result)
-            if result == -1:
-                return None
-            self.add_filter("with_people", str(response["id"]), ADDON.getLocalizedString(32156), response["name"])
-            self.mode = "filter"
-            self.page = 1
+        if not result or result == -1:
+            return None
+        response = get_person_info(result)
+        if not response:
+            return None
+        self.add_filter("with_people", str(response["id"]), ADDON.getLocalizedString(32156), response["name"])
+        self.mode = "filter"
+        self.page = 1
 
     def get_company(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
                                         default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
-        if result and result > -1:
-            response = search_company(result)
-            if result == -1:
-                return None
-            if len(response) > 1:
-                names = [item["name"] for item in response]
-                selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
-                                                    list=names)
-                if selection > -1:
-                    response = response[selection]
-            elif response:
-                response = response[0]
-            else:
-                notify("no company found")
-            self.add_filter(key="with_companies",
-                            value=str(response["id"]),
-                            typelabel=xbmc.getLocalizedString(20388),
-                            label=response["name"])
-            self.mode = "filter"
-            self.page = 1
+        if not result or result < 0:
+            return None
+        response = search_company(result)
+        if len(response) > 1:
+            names = [item["name"] for item in response]
+            selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
+                                                list=names)
+            if selection > -1:
+                response = response[selection]
+        elif response:
+            response = response[0]
+        else:
+            notify("no company found")
+        self.add_filter(key="with_companies",
+                        value=str(response["id"]),
+                        typelabel=xbmc.getLocalizedString(20388),
+                        label=response["name"])
+        self.mode = "filter"
+        self.page = 1
 
     def get_keyword(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
                                         default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
-        if result and result > -1:
-            response = get_keyword_id(result)
-            if not response:
-                return None
-            keyword_id = response["id"]
-            name = response["name"]
-            if result > -1:
-                self.add_filter("with_keywords", str(keyword_id), ADDON.getLocalizedString(32114), name)
-                self.mode = "filter"
-                self.page = 1
+        if not result or result == -1:
+            return None
+        response = get_keyword_id(result)
+        if not response:
+            return None
+        keyword_id = response["id"]
+        name = response["name"]
+        if result == -1:
+            return None
+        self.add_filter("with_keywords", str(keyword_id), ADDON.getLocalizedString(32114), name)
+        self.mode = "filter"
+        self.page = 1
 
     def get_certification(self):
         response = get_certification_list(self.type)
