@@ -266,7 +266,9 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             elif index == len(listitems) - 1:
                 self.remove_list_dialog(account_lists)
             elif index > 0:
-                change_list_status(account_lists[index - 1]["id"], item_id, True)
+                change_list_status(list_id=account_lists[index - 1]["id"],
+                                   movie_id=item_id,
+                                   status=True)
                 # xbmc.sleep(2000)
                 # self.update(force_update=True)
         elif selection == 3:
