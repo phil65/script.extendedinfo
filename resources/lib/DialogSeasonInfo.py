@@ -64,19 +64,16 @@ class DialogSeasonInfo(DialogBaseInfo):
             wm.open_actor_info(prev_window=self,
                                actor_id=control.getSelectedItem().getProperty("id"))
         elif control_id in [2000]:
-            episode = control.getSelectedItem().getProperty("episode")
-            season = control.getSelectedItem().getProperty("season")
             if not self.tmdb_id:
                 response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
                 self.tmdb_id = str(response['results'][0]['id'])
             wm.open_episode_info(prev_window=self,
                                  tvshow_id=self.tmdb_id,
-                                 season=season,
-                                 episode=episode)
+                                 season=control.getSelectedItem().getProperty("season"),
+                                 episode=control.getSelectedItem().getProperty("episode"))
         elif control_id in [350, 1150]:
-            listitem = control.getSelectedItem()
-            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
-                                      listitem=listitem,
+            PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
+                                      listitem=control.getSelectedItem(),
                                       window=self)
         elif control_id in [1250, 1350]:
             wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
