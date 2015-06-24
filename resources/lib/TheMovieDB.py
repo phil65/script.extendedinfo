@@ -61,7 +61,6 @@ def send_rating_for_media_item(media_type, media_id, rating):
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id)
-        log(url)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id)
     request = Request(url=url,
@@ -108,7 +107,6 @@ def create_list(list_name):
 def remove_list(list_id):
     session_id = get_session_id()
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
-    log("Remove List: " + url)
     values = {'media_id': list_id}
     request = Request(url,
                       data=simplejson.dumps(values),
@@ -127,7 +125,6 @@ def change_list_status(list_id, movie_id, status):
         method = "remove_item"
     session_id = get_session_id()
     url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
-    log(url)
     values = {'media_id': movie_id}
     request = Request(url,
                       data=simplejson.dumps(values),
@@ -243,7 +240,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
     id_list = [item["id"] for item in response["genres"]]
     label_list = [item["name"] for item in response["genres"]]
     movies = []
-    log("starting handle_tmdb_movies")
     for movie in results:
         if "genre_ids" in movie:
             genre_list = [label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"] if genre_id in id_list]
@@ -285,7 +281,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
         movies.append(listitem)
-    # movies = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in movies)]
     movies = merge_with_local_movie_info(movies, local_first, sortkey)
     return movies
 
@@ -331,7 +326,6 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Release_Date': fetch(tv, 'first_air_date'),
                  'Premiered': fetch(tv, 'first_air_date')}
         tvshows.append(newtv)
-    # tvshows = [dict(tupleized) for tupleized in set(tuple(item.items()) for item in tvshows)]
     tvshows = merge_with_local_tvshow_info(tvshows, local_first, sortkey)
     return tvshows
 
@@ -339,11 +333,14 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
 def handle_tmdb_episodes(results):
     listitems = []
     for item in results:
+        title = clean_text(fetch(item, 'name'))
+        if not title:
+            title = "%s %s" % (xbmc.getLocalizedString(20359), fetch(item, 'episode_number'))
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'media_type': "episode",
                     'thumb': artwork.get("still", ""),
                     'still_original': artwork.get("still_original", ""),
-                    'title': clean_text(fetch(item, 'name')),
+                    'title': title,
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
                     'production_code': fetch(item, 'production_code'),
@@ -876,6 +873,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
 
 
 def extended_episode_info(tvshow_id, season, episode, cache_time=7):
+    if not tvshow_id or not episode:
+        return None
     if not season:
         season = 0
     session_str = ""

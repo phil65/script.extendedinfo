@@ -21,33 +21,26 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.showname = kwargs.get('tvshow')
         self.episode_number = kwargs.get('episode')
-        if self.tmdb_id or self.showname:
-            self.data = extended_episode_info(tvshow_id=self.tmdb_id,
-                                              season=self.season,
-                                              episode=self.episode_number)
-            if not self.data:
-                return
-            search_str = "%s tv" % (self.data["general"]['title'])
-            youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
-            youtube_thread.start()
-            # if "dbid" not in self.data["general"]:  # need to add comparing for episodes
-            #     poster_thread = FunctionThread(get_file, self.data["general"]["Poster"])
-            #     poster_thread.start()
-            #     poster_thread.join()
-            #     self.data["general"]['Poster'] = poster_thread.listitems
-            filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
-            filter_thread.start()
-            youtube_thread.join()
-            filter_thread.join()
-            self.data["general"]['ImageFilter'], self.data["general"]['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            self.listitems = [(1000, create_listitems(self.data["actors"] + self.data["guest_stars"], 0)),
-                              (750, create_listitems(self.data["crew"], 0)),
-                              (1150, create_listitems(self.data["videos"], 0)),
-                              # (1250, create_listitems(self.data["guest_stars"], 0)),
-                              (1350, create_listitems(self.data["images"], 0)),
-                              (350, create_listitems(youtube_thread.listitems, 0))]
-        else:
+        self.data = extended_episode_info(tvshow_id=self.tmdb_id,
+                                          season=self.season,
+                                          episode=self.episode_number)
+        if not self.data:
             notify(ADDON.getLocalizedString(32143))
+            return None
+        search_str = "%s tv" % (self.data["general"]['title'])
+        youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
+        youtube_thread.start()  # TODO: rem threading here
+        filter_thread = FilterImageThread(self.data["general"]["thumb"], 25)
+        filter_thread.start()
+        youtube_thread.join()
+        filter_thread.join()
+        self.data["general"]['ImageFilter'] = filter_thread.image
+        self.data["general"]['ImageColor'] = filter_thread.imagecolor
+        self.listitems = [(1000, create_listitems(self.data["actors"] + self.data["guest_stars"], 0)),
+                          (750, create_listitems(self.data["crew"], 0)),
+                          (1150, create_listitems(self.data["videos"], 0)),
+                          (1350, create_listitems(self.data["images"], 0)),
+                          (350, create_listitems(youtube_thread.listitems, 0))]
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
