@@ -240,6 +240,7 @@ class SettingsMonitor(xbmc.Monitor):
         xbmc.sleep(300)
 
 
+# TODO: extend and use this for ContextMenu to get proper closing behaviour
 class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 

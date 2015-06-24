@@ -61,9 +61,10 @@ def send_rating_for_media_item(media_type, media_id, rating):
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id)
+        log(url)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id)
-    request = Request(url,
+    request = Request(url=url,
                       data=values,
                       headers=HEADERS)
     response = urlopen(request).read()

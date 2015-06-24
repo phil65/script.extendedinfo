@@ -197,7 +197,9 @@ class DialogVideoInfo(DialogBaseInfo):
         elif control_id == 6001:
             rating = get_rating_from_user()
             if rating:
-                send_rating_for_media_item("movie", self.tmdb_id, rating)
+                send_rating_for_media_item(media_type="movie",
+                                           media_id=self.tmdb_id,
+                                           rating=rating)
                 self.update_states()
         elif control_id == 6002:
             listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
@@ -258,14 +260,17 @@ class DialogVideoInfo(DialogBaseInfo):
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             listitems.append(ADDON.getLocalizedString(32138))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136),
+                                            listitems=listitems)
             if index == 0:
                 listname = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32137),
                                                   type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
                     list_id = create_list(listname)
                     xbmc.sleep(1000)
-                    change_list_status(list_id, self.tmdb_id, True)
+                    change_list_status(list_id=list_id,
+                                       movie_id=self.tmdb_id,
+                                       status=True)
             elif index == len(listitems) - 1:
                 self.remove_list_dialog(account_lists)
             elif index > 0:
@@ -322,7 +327,7 @@ class DialogVideoInfo(DialogBaseInfo):
     def show_manage_dialog(self):
         manage_list = []
         movie_id = str(self.data["general"].get("dbid", ""))
-        # filename = self.data["general"].get("FilenameAndPath", False)
+        # filename = self.data["general"].get("File", False)
         imdb_id = str(self.data["general"].get("imdb_id", ""))
         if movie_id:
             manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
@@ -332,12 +337,13 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             manage_list += [[ADDON.getLocalizedString(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % ADDON.getLocalizedString(32059)]]
         # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
-        #     manage_list.append([ADDON.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+        #     manage_list.append([ADDON.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.File)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
             manage_list.append([ADDON.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
         manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
         listitems = [item[0] for item in manage_list]
-        selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32133), listitems)
+        selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32133),
+                                            list=listitems)
         if selection > -1:
             for item in manage_list[selection][1].split("||"):
                 xbmc.executebuiltin(item)
@@ -353,7 +359,11 @@ class JoinOmdbThread(threading.Thread):
     def run(self):
         self.omdb_thread.join()
         if xbmcgui.getCurrentWindowDialogId() == self.window_id:
-            pass_dict_to_skin(self.omdb_thread.listitems, "movie.omdb.", False, False, self.window_id)
+            pass_dict_to_skin(data=self.omdb_thread.listitems,
+                              prefix="movie.omdb.",
+                              debug=False,
+                              precache=False,
+                              window_id=self.window_id)
 
 
 class SetItemsThread(threading.Thread):
