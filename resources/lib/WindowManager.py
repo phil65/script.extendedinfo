@@ -69,7 +69,7 @@ class WindowManager(object):
                                                    tvshow=tvshow)
         self.open_dialog(dialog, prev_window)
 
-    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None):
+    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None, tvshow=None):
         """
         open season info, deal with window stack
         needs *tvshow_id AND *season AND *episode
@@ -77,6 +77,7 @@ class WindowManager(object):
         import DialogEpisodeInfo
         dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                      show_id=tvshow_id,
+                                                     tvshow=tvshow,
                                                      season=season,
                                                      episode=episode)
         self.open_dialog(dialog, prev_window)

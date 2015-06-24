@@ -19,7 +19,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
         self.tmdb_id = kwargs.get('show_id')
         self.season = kwargs.get('season')
-        self.showname = kwargs.get('tvshow')
+        self.show_name = kwargs.get('tvshow')
         self.episode_number = kwargs.get('episode')
         self.data = extended_episode_info(tvshow_id=self.tmdb_id,
                                           season=self.season,

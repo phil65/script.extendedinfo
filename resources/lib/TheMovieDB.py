@@ -574,7 +574,7 @@ def get_tmdb_config():
 
 
 def get_company_data(company_id):
-    response = get_tmdb_data("company/%s/movies?append_to_response=movies&" % (company_id), 30)
+    response = get_tmdb_data("company/%s/movies?" % (company_id), 30)
     if response and "results" in response:
         return handle_tmdb_movies(response["results"])
     else:
