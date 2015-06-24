@@ -328,7 +328,7 @@ msgstr ""
 #: \resources\skins\Default\1080i\script-ExtendedInfo
 #: Script-YoutubeList.xml:518
 msgctxt "#32066"
-msgid "2d / 3d"
+msgid "2D / 3D"
 msgstr ""
 
 #: \resources\lib\DialogYoutubeList.py:59

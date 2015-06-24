@@ -284,15 +284,21 @@ def start_info_actions(infos, params):
                                                 dbid=params.get("dbid", ""),
                                                 name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
-                    tvdb_id = get_imdb_id_from_db("tvshow", params["dbid"])
+                    tvdb_id = get_imdb_id_from_db(media_type="tvshow",
+                                                  dbid=params["dbid"])
                     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
                 # elif media_type == "episode" and params["dbid"]:
-                #     tvdb_id = get_imdb_id_from_db("tvshow", params["dbid"])
+                #     tvdb_id = get_imdb_id_from_db(media_type="tvshow",
+                #                                   dbid=params["dbid"])
                 #     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
+                else:
+                    return False
                 if tmdb_id:
                     rating = get_rating_from_user()
                     if rating:
-                        send_rating_for_media_item(media_type, tmdb_id, rating)
+                        send_rating_for_media_item(media_type=media_type,
+                                                   media_id=tmdb_id,
+                                                   rating=rating)
         elif info == 'seasoninfo':
             if params.get("tvshow") and params.get("season"):
                 HOME.setProperty('infodialogs.active', "true")
@@ -334,7 +340,8 @@ def start_info_actions(infos, params):
                     if params.get("type") == "episode":
                         tvshow_id = get_tvshow_id_from_db_by_episode(params["dbid"])
                     else:
-                        tvshow_id = get_imdb_id_from_db("tvshow", params["dbid"])
+                        tvshow_id = get_imdb_id_from_db(media_type="tvshow",
+                                                        dbid=params["dbid"])
                 else:
                     tvshow_id = params.get("id", "")
                 data = get_trakt_similar("show", tvshow_id), "SimilarTVShows"
@@ -355,8 +362,10 @@ def start_info_actions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id"):
-                listitems = search_youtube(params.get("id", ""), params.get("hd", ""), params.get("orderby", "relevance")).get("listitems", [])
-                data = listitems, "YoutubeSearch"
+                listitems = search_youtube(search_str=params.get("id", ""),
+                                           hd=params.get("hd", ""),
+                                           relevance=params.get("orderby", "relevance"))
+                data = listitems.get("listitems", []), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id"):
                 data = get_youtube_playlist_videos(params.get("id", "")), "YoutubePlaylist"
@@ -366,11 +375,18 @@ def start_info_actions(infos, params):
                 playlists = get_youtube_user_playlists(user_name)
                 data = get_youtube_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
-            data = get_near_events(params.get("tag", ""), params.get("festivalsonly", ""), params.get("lat", ""), params.get("lon", ""), params.get("location", ""), params.get("distance", "")), "NearEvents"
+            info = get_near_events(tag=params.get("tag", ""),
+                                   festivals_only=params.get("festivalsonly", ""),
+                                   lat=params.get("lat", ""),
+                                   lon=params.get("lon", ""),
+                                   location=params.get("location", ""),
+                                   distance=params.get("distance", ""))
+            data = info, "NearEvents"
         elif info == 'trackinfo':
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
-                track_info = get_track_info(params["artistname"], params["trackname"])
+                track_info = get_track_info(artist=params["artistname"],
+                                            tracks=params["trackname"])
                 HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
         elif info == 'venueevents':
             if params["location"]:
@@ -449,7 +465,8 @@ def start_info_actions(infos, params):
             if params.get("id", ""):
                 movie_id = params.get("id", "")
             elif int(params.get("dbid", -1)) > 0:
-                movie_id = get_imdb_id_from_db("movie", params["dbid"])
+                movie_id = get_imdb_id_from_db(media_type="movie",
+                                               dbid=params["dbid"])
                 log("MovieDBID from local DB:" + str(movie_id))
             elif params.get("imdb_id", ""):
                 movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))
@@ -490,5 +507,9 @@ def start_info_actions(infos, params):
                 xbmcplugin.setContent(params.get("handle"), 'tvshows')
             else:
                 xbmcplugin.setContent(params.get("handle"), 'movies')
-        pass_list_to_skin(prefix, listitems, params.get("prefix", ""), params.get("handle", ""), params.get("limit", 20))
+        pass_list_to_skin(name=prefix,
+                          data=listitems,
+                          prefix=params.get("prefix", ""),
+                          handle=params.get("handle", ""),
+                          limit=params.get("limit", 20))
 
