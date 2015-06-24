@@ -369,18 +369,13 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
 
     def get_certification(self):
         response = get_certification_list(self.type)
-        country_list = []
-        for (key, value) in response.iteritems():
-            country_list.append(key)
+        country_list = [key for key in response.keys()]
         index = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(21879),
                                         list=country_list)
         if index == -1:
             return None
-        cert_list = []
         country = country_list[index]
-        for item in response[country]:
-            label = "%s  -  %s" % (item["certification"], item["meaning"])
-            cert_list.append(label)
+        cert_list = ["%s  -  %s" % (i["certification"], i["meaning"]) for i in response[country]]
         index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
                                         list=cert_list)
         if index == -1:
