@@ -147,21 +147,18 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
     def update_ui(self):
         self.window.setProperty("Type", TRANSLATIONS[self.type])
         if self.type == "video":
-            self.window.getControl(5004).setVisible(False)
             self.window.getControl(5006).setVisible(True)
             self.window.getControl(5008).setVisible(True)
             self.window.getControl(5009).setVisible(True)
             self.window.getControl(5010).setVisible(False)
             self.window.getControl(5012).setVisible(True)
         elif self.type == "playlist":
-            self.window.getControl(5004).setVisible(False)
             self.window.getControl(5006).setVisible(False)
             self.window.getControl(5008).setVisible(False)
             self.window.getControl(5009).setVisible(False)
             self.window.getControl(5010).setVisible(False)
             self.window.getControl(5012).setVisible(False)
         elif self.type == "channel":
-            self.window.getControl(5004).setVisible(False)
             self.window.getControl(5006).setVisible(False)
             self.window.getControl(5008).setVisible(False)
             self.window.getControl(5009).setVisible(False)
