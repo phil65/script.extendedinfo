@@ -100,7 +100,6 @@ class DialogBaseList(object):
             dialog.doModal()
             if dialog.classic_mode:
                 result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
-                                                default="",
                                                 type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)

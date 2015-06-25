@@ -636,7 +636,7 @@ def log(txt):
              level=xbmc.LOGDEBUG)
 
 
-def get_browse_dialog(default="", heading="Browse", dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
+def get_browse_dialog(default="", heading=xbmc.getLocalizedString(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
     dialog = xbmcgui.Dialog()
     value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
     return value

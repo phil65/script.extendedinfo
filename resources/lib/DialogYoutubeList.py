@@ -83,7 +83,6 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                 delta = deltas[index]
                 if delta == "custom":
                     delta = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32067),
-                                                   default="",
                                                    type=xbmcgui.INPUT_NUMERIC)
                 if delta:
                     d = datetime.datetime.now() - datetime.timedelta(int(delta))

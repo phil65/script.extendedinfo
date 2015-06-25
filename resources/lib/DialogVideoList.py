@@ -84,7 +84,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                                nolabel=ADDON.getLocalizedString(32150),
                                yeslabel=ADDON.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(345),
-                                            default="",
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
@@ -111,7 +110,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                                    nolabel=ADDON.getLocalizedString(32150),
                                    yeslabel=ADDON.getLocalizedString(32149))
             result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(32111),
-                                            default="",
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
@@ -322,7 +320,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
 
     def get_actor(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
-                                        default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
         if not result or result == -1:
             return None
@@ -335,7 +332,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
 
     def get_company(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
-                                        default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
         if not result or result < 0:
             return None
@@ -359,7 +355,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
 
     def get_keyword(self):
         result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
-                                        default="",
                                         type=xbmcgui.INPUT_ALPHANUM)
         if not result or result == -1:
             return None
