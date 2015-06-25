@@ -281,7 +281,8 @@ def get_playlist_stats(path):
         playlist_path = path[start_index:end_index]
     #    notify(playlist_path)
     #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlist_path))
-        json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
+        json_response = get_kodi_json(method="Files.GetDirectory",
+                                      params='{"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
         if "result" in json_response:
             played = 0
             in_progress = 0
@@ -310,7 +311,8 @@ def get_sort_letters(path, focused_letter):
         letter_list = ADDON.getSetting("LetterList").split()
     else:
         if path:
-            json_response = get_kodi_json('"method": "Files.GetDirectory", "params": {"directory": "%s", "media": "files"}' % path)
+            json_response = get_kodi_json(method="Files.GetDirectory",
+                                          params='{"directory": "%s", "media": "files"}' % path)
             if "result" in json_response and "files" in json_response["result"]:
                 for movie in json_response["result"]["files"]:
                     cleaned_label = movie["label"].replace("The ", "")
@@ -586,7 +588,8 @@ def get_favs():
     returns dict list containing favourites
     """
     items = []
-    json_response = get_kodi_json('"method": "Favourites.get_favs", "params": {"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    json_response = get_kodi_json(method="Favourites.GetFavourites",
+                                  params='{"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
     if "result" not in json_response or json_response["result"]["limits"]["total"] == 0:
         return []
     for fav in json_response["result"]["favourites"]:
@@ -707,8 +710,8 @@ def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
                                   sound=sound)
 
 
-def get_kodi_json(params):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", %s, "id": 1}' % params)
+def get_kodi_json(method, params):
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, params))
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     return simplejson.loads(json_query)
 
