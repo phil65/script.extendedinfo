@@ -24,6 +24,18 @@ class VideoPlayer(xbmc.Player):
     def onPlayBackStarted(self):
         self.stopped = False
 
+    def play(self, url, listitem, window=False):
+        if window and window.window_type == "dialog":
+            wm.add_to_stack(window)
+            window.close()
+        super(VideoPlayer, self).play(item=url,
+                                      listitem=listitem,
+                                      windowed=False,
+                                      startpos=-1)
+        if window and window.window_type == "dialog":
+            self.wait_for_video_end()
+            wm.pop_stack()
+
     def play_youtube_video(self, youtube_id="", listitem=None, window=False):
         """
         play youtube vid with info from *listitem
@@ -32,14 +44,9 @@ class VideoPlayer(xbmc.Player):
         if not listitem:
             listitem = yt_listitem
         if url:
-            if window and window.window_type == "dialog":
-                wm.add_to_stack(window)
-                window.close()
-            self.play(item=url,
-                      listitem=listitem)
-            if window and window.window_type == "dialog":
-                self.wait_for_video_end()
-                wm.pop_stack()
+            self.play(url=url,
+                      listitem=listitem,
+                      window=window)
         else:
             xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257),
                                           message="no youtube id found")
