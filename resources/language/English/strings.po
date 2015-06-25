@@ -351,6 +351,36 @@ msgctxt "#32070"
 msgid "Youtube Video"
 msgstr ""
 
+#: \resources\lib\TheMovieDB.py:870
+msgctxt "#32071"
+msgid "Released"
+msgstr ""
+
+#: \resources\lib\TheMovieDB.py:871
+msgctxt "#32072"
+msgid "Post production"
+msgstr ""
+
+#: \resources\lib\TheMovieDB.py:872
+msgctxt "#32073"
+msgid "In production"
+msgstr ""
+
+#: \resources\lib\TheMovieDB.py:873
+msgctxt "#32074"
+msgid "Ended"
+msgstr ""
+
+#: \resources\lib\TheMovieDB.py:874
+msgctxt "#32075"
+msgid "Returning series"
+msgstr ""
+
+#: \resources\lib\TheMovieDB.py:875
+msgctxt "#32076"
+msgid "Planned"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""

@@ -745,7 +745,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Votes': fetch(response, 'vote_count'),
              'Adult': str(fetch(response, 'adult')),
              'Popularity': fetch(response, 'popularity'),
-             'Status': fetch(response, 'status'),
+             'Status': translate_status(fetch(response, 'status')),
              'path': path,
              'release_date': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
@@ -835,7 +835,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'country': fetch(response, 'original_language'),
               'User_Rating': str(fetch(response, 'rating')),
               'Votes': fetch(response, 'vote_count'),
-              'Status': fetch(response, 'status'),
+              'Status': translate_status(fetch(response, 'status')),
               'ShowType': fetch(response, 'type'),
               'homepage': fetch(response, 'homepage'),
               'last_air_date': fetch(response, 'last_air_date'),
@@ -864,6 +864,19 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                  "images": handle_tmdb_images(response["images"]["posters"]),
                  "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
     return (tvshow, listitems)
+
+
+def translate_status(status_string):
+    translations = {"released": ADDON.getLocalizedString(32071),
+                    "post production": ADDON.getLocalizedString(32072),
+                    "in production": ADDON.getLocalizedString(32073),
+                    "ended": ADDON.getLocalizedString(32074),
+                    "returning series": ADDON.getLocalizedString(32075),
+                    "planned": ADDON.getLocalizedString(32076)}
+    if status_string.lower() in translations:
+        return translations[status_string.lower()]
+    else:
+        return status_string
 
 
 def extended_episode_info(tvshow_id, season, episode, cache_time=7):
