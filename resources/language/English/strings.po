@@ -346,6 +346,11 @@ msgctxt "#32069"
 msgid "Show similar videos"
 msgstr ""
 
+#: \resources\lib\VideoPlayer.py:56
+msgctxt "#32070"
+msgid "Youtube Video"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""

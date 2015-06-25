@@ -6,6 +6,7 @@
 import xbmc
 import xbmcgui
 from WindowManager import wm
+from Utils import *
 
 
 class VideoPlayer(xbmc.Player):
@@ -27,29 +28,35 @@ class VideoPlayer(xbmc.Player):
         """
         play youtube vid with info from *listitem
         """
+        url, yt_listitem = self.youtube_info_by_id(youtube_id)
         if not listitem:
-            listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo(type='video',
-                             infoLabels={'title': xbmc.getLocalizedString(20410),
-                                         xbmc.getLocalizedString(515): 'Youtube Video'})
-        import YDStreamExtractor
-        YDStreamExtractor.disableDASHVideo(True)
-        if youtube_id:
-            vid = YDStreamExtractor.getVideoInfo(youtube_id,
-                                                 quality=1)
-            if vid:
-                if window and window.window_type == "dialog":
-                    wm.add_to_stack(window)
-                    window.close()
-                stream_url = vid.streamURL()
-                self.play(item=stream_url,
-                          listitem=listitem)
-                if window and window.window_type == "dialog":
-                    self.wait_for_video_end()
-                    wm.pop_stack()
+            listitem = yt_listitem
+        if url:
+            if window and window.window_type == "dialog":
+                wm.add_to_stack(window)
+                window.close()
+            self.play(item=url,
+                      listitem=listitem)
+            if window and window.window_type == "dialog":
+                self.wait_for_video_end()
+                wm.pop_stack()
         else:
             xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257),
                                           message="no youtube id found")
+
+    def youtube_info_by_id(self, youtube_id):
+        import YDStreamExtractor
+        YDStreamExtractor.disableDASHVideo(True)
+        vid = YDStreamExtractor.getVideoInfo(youtube_id,
+                                             quality=1)
+        if not vid:
+            return None
+        listitem = xbmcgui.ListItem(label=vid.title,
+                                    thumbnailImage=vid.thumbnail)
+        listitem.setInfo(type='video',
+                         infoLabels={"genre": vid.sourceName,
+                                     "plot": vid.description})
+        return vid.streamURL(), listitem
 
     def wait_for_video_end(self):
         xbmc.sleep(500)
