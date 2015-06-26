@@ -47,8 +47,6 @@ class DialogActorInfo(DialogBaseInfo):
             notify(LANG(32143))
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"],
-                                              hd="",
-                                              order="relevance",
                                               limit=15)
         youtube_thread.start()
         filter_thread = FilterImageThread(image=self.info["thumb"],

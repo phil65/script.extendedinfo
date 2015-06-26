@@ -794,6 +794,10 @@ def set_window_props(name, data, prefix="", debug=False):
             for (key, value) in result.iteritems():
                 value = unicode(value)
                 HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
+                if key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
+                                   "discart", "characterart", "tvshow.fanart", "tvshow.poster",
+                                   "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                    HOME.setProperty('%s%s.%i.Art(%s)' % (prefix, name, count + 1, str(key)), value)
                 if debug:
                     log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
         HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
@@ -843,7 +847,9 @@ def create_listitems(data=None, preload_images=0):
             # elif key.lower() in ["season", "episode"]:
             #     listitem.setInfo('video', {key.lower(): int(value)})
             #     listitem.setProperty('%s' % (key), value)
-            elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster", "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+            elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
+                                 "discart", "characterart", "tvshow.fanart", "tvshow.poster",
+                                 "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key.lower(): value})
             elif key.lower() in INT_INFOLABELS:
                 try:
