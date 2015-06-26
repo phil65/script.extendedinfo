@@ -29,11 +29,13 @@ ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 
+
 def LANG(label_id):
     if 31000 <= label_id <= 33000:
         return ADDON.getLocalizedString(label_id)
     else:
         return xbmc.getLocalizedString(label_id)
+
 
 def run_async(func):
     """
@@ -123,6 +125,11 @@ def check_version():
         wm.open_textviewer(header=LANG(24036),
                            text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
         ADDON.setSetting("changelog_version", ADDON_VERSION)
+    if not ADDON.getSetting("first_start_infodialog"):
+        ADDON.setSetting("first_start_infodialog", "True")
+        xbmcgui.Dialog().ok(heading=ADDON_NAME,
+                            line1=LANG(32140),
+                            line2=LANG(32141))
 
 
 def get_autocomplete_items(search_str):

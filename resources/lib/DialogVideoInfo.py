@@ -23,12 +23,6 @@ class DialogVideoInfo(DialogBaseInfo):
     @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogVideoInfo, self).__init__(*args, **kwargs)
-        if not ADDON.getSetting("first_start_infodialog"):
-            ADDON.setSetting("first_start_infodialog", "True")
-            xbmcgui.Dialog().ok(heading=ADDON_NAME,
-                                line1=LANG(32140),
-                                line2=LANG(32141))
-        # self.ch = OnClickHandler()
         self.tmdb_id = kwargs.get('id')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
