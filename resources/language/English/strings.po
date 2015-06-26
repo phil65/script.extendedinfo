@@ -346,7 +346,8 @@ msgctxt "#32069"
 msgid "Show similar videos"
 msgstr ""
 
-#: \resources\lib\VideoPlayer.py:56
+#: \resources\lib\VideoPlayer.py:56 \resources\lib\DialogVideoInfo.py:133
+#: \resources\lib\DialogVideoInfo.py:145
 msgctxt "#32070"
 msgid "Youtube Video"
 msgstr ""

@@ -19,10 +19,10 @@ class DialogActorInfo(DialogBaseInfo):
         super(DialogActorInfo, self).__init__(*args, **kwargs)
         self.id = kwargs.get('id', False)
         if not self.id:
-            name = kwargs.get('name').decode("utf-8").split(" " + xbmc.getLocalizedString(20347) + " ")
+            name = kwargs.get('name').decode("utf-8").split(" " + LANG(20347) + " ")
             names = name[0].strip().split(" / ")
             if len(names) > 1:
-                ret = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32027),
+                ret = xbmcgui.Dialog().select(heading=LANG(32027),
                                               list=names)
                 if ret == -1:
                     return None
@@ -36,14 +36,14 @@ class DialogActorInfo(DialogBaseInfo):
             else:
                 return None
         if not self.id:
-            notify(ADDON.getLocalizedString(32143))
+            notify(LANG(32143))
             return None
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         data = extended_actor_info(actor_id=self.id)
         if data:
             self.info, self.data = data
         else:
-            notify(ADDON.getLocalizedString(32143))
+            notify(LANG(32143))
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"],
                                               hd="",
@@ -86,8 +86,8 @@ class DialogActorInfo(DialogBaseInfo):
                                movie_id=control.getSelectedItem().getProperty("id"),
                                dbid=control.getSelectedItem().getProperty("dbid"))
         elif control_id in [250, 650]:
-            selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
-                                                list=[ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32148)])
+            selection = xbmcgui.Dialog().select(heading=LANG(32151),
+                                                list=[LANG(32147), LANG(32148)])
             if selection == 0:
                 self.open_credit_dialog(credit_id=control.getSelectedItem().getProperty("credit_id"))
             if selection == 1:
@@ -101,6 +101,6 @@ class DialogActorInfo(DialogBaseInfo):
                                       listitem=control.getSelectedItem(),
                                       window=self)
         elif control_id == 132:
-            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+            wm.open_textviewer(header=LANG(32037),
                                text=self.info["biography"],
                                color=self.info['ImageColor'])

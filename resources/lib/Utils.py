@@ -31,6 +31,11 @@ ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
 PLAYER = VideoPlayer.VideoPlayer()
 
+def LANG(label_id):
+    if 31000 <= label_id <= 33000:
+        return ADDON.getLocalizedString(label_id)
+    else:
+        return xbmc.getLocalizedString(label_id)
 
 def run_async(func):
     """
@@ -117,7 +122,7 @@ def check_version():
     """
     from WindowManager import wm
     if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
-        wm.open_textviewer(header=xbmc.getLocalizedString(24036),
+        wm.open_textviewer(header=LANG(24036),
                            text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
         ADDON.setSetting("changelog_version", ADDON_VERSION)
 
@@ -180,40 +185,40 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
     show dialog including all video media lists (for widget selection)
     and set strings PREFIX.path and PREFIX.label with chosen values
     """
-    movie = {"intheaters": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32042),
-             "boxoffice": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32055),
-             "opening": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32048),
-             "comingsoon": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32043),
-             "toprentals": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32056),
-             "currentdvdreleases": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32049),
-             "newdvdreleases": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32053),
-             "upcomingdvds": "%s [I](RottenTomatoes)[/I]" % ADDON.getLocalizedString(32054),
+    movie = {"intheaters": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
+             "boxoffice": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
+             "opening": "%s [I](RottenTomatoes)[/I]" % LANG(32048),
+             "comingsoon": "%s [I](RottenTomatoes)[/I]" % LANG(32043),
+             "toprentals": "%s [I](RottenTomatoes)[/I]" % LANG(32056),
+             "currentdvdreleases": "%s [I](RottenTomatoes)[/I]" % LANG(32049),
+             "newdvdreleases": "%s [I](RottenTomatoes)[/I]" % LANG(32053),
+             "upcomingdvds": "%s [I](RottenTomatoes)[/I]" % LANG(32054),
              # tmdb
-             "incinemas": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32042),
-             "upcoming": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32043),
-             "topratedmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32046),
-             "popularmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32044),
-             "accountlists": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32045),
+             "incinemas": "%s [I](TheMovieDB)[/I]" % LANG(32042),
+             "upcoming": "%s [I](TheMovieDB)[/I]" % LANG(32043),
+             "topratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32046),
+             "popularmovies": "%s [I](TheMovieDB)[/I]" % LANG(32044),
+             "accountlists": "%s [I](TheMovieDB)[/I]" % LANG(32045),
              # trakt
-             "trendingmovies": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32047),
+             "trendingmovies": "%s [I](Trakt.tv)[/I]" % LANG(32047),
              # tmdb
-             "starredmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32134),
-             "ratedmovies": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32135),
+             "starredmovies": "%s [I](TheMovieDB)[/I]" % LANG(32134),
+             "ratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32135),
              }
-    tvshow = {"airingshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32028),
-              "premiereshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32029),
-              "trendingshows": "%s [I](Trakt.tv)[/I]" % ADDON.getLocalizedString(32032),
-              "airingtodaytvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32038),
-              "onairtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32039),
-              "topratedtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32040),
-              "populartvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32041),
-              "starredtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32144),
-              "ratedtvshows": "%s [I](TheMovieDB)[/I]" % ADDON.getLocalizedString(32145),
+    tvshow = {"airingshows": "%s [I](Trakt.tv)[/I]" % LANG(32028),
+              "premiereshows": "%s [I](Trakt.tv)[/I]" % LANG(32029),
+              "trendingshows": "%s [I](Trakt.tv)[/I]" % LANG(32032),
+              "airingtodaytvshows": "%s [I](TheMovieDB)[/I]" % LANG(32038),
+              "onairtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32039),
+              "topratedtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32040),
+              "populartvshows": "%s [I](TheMovieDB)[/I]" % LANG(32041),
+              "starredtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32144),
+              "ratedtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32145),
               }
     image = {"xkcd": "XKCD webcomics",
              "cyanide": "Cyanide & Happiness webcomics",
-             "dailybabe": "%s" % ADDON.getLocalizedString(32057),
-             "dailybabes": "%s" % ADDON.getLocalizedString(32058),
+             "dailybabe": "%s" % LANG(32057),
+             "dailybabes": "%s" % LANG(32058),
              }
 # popularpeople
     artist = {"topartists": "LastFM: Top artists",
@@ -224,7 +229,7 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
         listitems = merge_dicts(movie, tvshow, image, artist, event)
     keywords = [key for key in listitems.keys()]
     labels = [label for label in listitems.values()]
-    ret = xbmcgui.Dialog().select(ADDON.getLocalizedString(32151), labels)
+    ret = xbmcgui.Dialog().select(LANG(32151), labels)
     if ret > -1:
         notify(keywords[ret])
         xbmc.executebuiltin("Skin.SetString(%s.path,plugin://script.extendedinfo?info=%s)" % (string_prefix, keywords[ret]))
@@ -261,7 +266,7 @@ def calculate_age(born, died=False):
         if diff_months < 0 or (diff_months == 0 and diff_days < 0):
             base_age -= 1
         elif diff_months == 0 and diff_days == 0 and not died:
-            notify("%s (%i)" % (ADDON.getLocalizedString(32158), base_age))
+            notify("%s (%i)" % (LANG(32158), base_age))
     return base_age
 
 
@@ -279,8 +284,6 @@ def get_playlist_stats(path):
         end_index = path.rfind("/") + 1
     if (start_index > 0) and (end_index > 0):
         playlist_path = path[start_index:end_index]
-    #    notify(playlist_path)
-    #   json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "VideoLibrary.GetMovies", "params": {"filter": {"field": "path", "operator": "contains", "value": "%s"}, "properties": ["playcount", "resume"]}, "id": 1}' % (playlist_path))
         json_response = get_kodi_json(method="Files.GetDirectory",
                                       params='{"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
         if "result" in json_response:
@@ -341,7 +344,7 @@ def millify(n):
     """
     make large numbers human-readable, return string
     """
-    millnames = [' ', '.000', ' ' + ADDON.getLocalizedString(32000), ' ' + ADDON.getLocalizedString(32001), ' ' + ADDON.getLocalizedString(32002)]
+    millnames = [' ', '.000', ' ' + LANG(32000), ' ' + LANG(32001), ' ' + LANG(32002)]
     if n and n > 100:
         n = float(n)
         char_count = len(str(n))
@@ -639,7 +642,7 @@ def log(txt):
              level=xbmc.LOGDEBUG)
 
 
-def get_browse_dialog(default="", heading=xbmc.getLocalizedString(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
+def get_browse_dialog(default="", heading=LANG(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
     dialog = xbmcgui.Dialog()
     value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
     return value

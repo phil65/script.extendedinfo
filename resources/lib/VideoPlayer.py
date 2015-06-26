@@ -48,7 +48,7 @@ class VideoPlayer(xbmc.Player):
                       listitem=listitem,
                       window=window)
         else:
-            xbmcgui.Dialog().notification(heading=xbmc.getLocalizedString(257),
+            xbmcgui.Dialog().notification(heading=LANG(257),
                                           message="no youtube id found")
 
     def youtube_info_by_id(self, youtube_id):

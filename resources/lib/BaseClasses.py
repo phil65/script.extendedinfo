@@ -101,7 +101,7 @@ class DialogBaseList(object):
                               history=self.last_searches)
             dialog.doModal()
             if dialog.classic_mode:
-                result = xbmcgui.Dialog().input(heading=xbmc.getLocalizedString(16017),
+                result = xbmcgui.Dialog().input(heading=LANG(16017),
                                                 type=xbmcgui.INPUT_ALPHANUM)
                 if result and result > -1:
                     self.search(result)
@@ -168,9 +168,9 @@ class DialogBaseList(object):
         else:
             self.window.clearProperty("ArrowUp")
         if self.order == "asc":
-            self.window.setProperty("Order_Label", xbmc.getLocalizedString(584))
+            self.window.setProperty("Order_Label", LANG(584))
         else:
-            self.window.setProperty("Order_Label", xbmc.getLocalizedString(585))
+            self.window.setProperty("Order_Label", LANG(585))
 
     @busy_dialog
     def update(self, force_update=False):
@@ -192,23 +192,23 @@ class DialogBaseList(object):
         if not value:
             return False
         if index > -1:
-            if not force_overwrite:
-                dialog = xbmcgui.Dialog()
-                ret = dialog.yesno(heading=xbmc.getLocalizedString(587),
-                                   line1=ADDON.getLocalizedString(32106),
-                                   nolabel="OR",
-                                   yeslabel="AND")
-                if ret:
-                    self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
-                    self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
-                else:
-                    self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
-                    self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
-            else:
-                self.filters[index]["id"] = urllib.quote_plus(str(value))
-                self.filters[index]["label"] = str(label)
-        else:
             self.filters.append(new_filter)
+            return None
+        if force_overwrite:
+            self.filters[index]["id"] = urllib.quote_plus(str(value))
+            self.filters[index]["label"] = str(label)
+            return None
+        dialog = xbmcgui.Dialog()
+        ret = dialog.yesno(heading=LANG(587),
+                           line1=LANG(32106),
+                           nolabel="OR",
+                           yeslabel="AND")
+        if ret:
+            self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
+            self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
+        else:
+            self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
+            self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
 
 
 class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else DialogXML):
@@ -242,25 +242,25 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
     def thumbnail_options(self):
         if not self.info.get("dbid"):
             return None
-        selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
-                                            list=[ADDON.getLocalizedString(32006)])
+        selection = xbmcgui.Dialog().select(heading=LANG(22080),
+                                            list=[LANG(32006)])
         if selection == 0:
             path = self.getControl(focus_id).getSelectedItem().getProperty("original")
             params = '"art": {"poster": "%s"}' % path
-            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.info['dbid']))
+            get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
+                          params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     @ch.context(1350)
     def thumbnail_options(self):
         if not self.info.get("dbid"):
             return None
-        selection = xbmcgui.Dialog().select(heading=xbmc.getLocalizedString(22080),
-                                            list=[ADDON.getLocalizedString(32007)])
+        selection = xbmcgui.Dialog().select(heading=LANG(22080),
+                                            list=[LANG(32007)])
         if selection == 0:
             path = self.getControl(focus_id).getSelectedItem().getProperty("original")
             params = '"art": {"fanart": "%s"}' % path
-            xbmc.executeJSONRPC('{"jsonrpc": "2.0", "id": 1, "method": "VideoLibrary.Set%sDetails", "params": { %s, "%sid":%s }}' % (media_type, params, media_type.lower(), self.info['dbid']))
-
-
+            get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
+                          params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     def onAction(self, action):
         focus_id = self.getFocusId()
@@ -278,7 +278,7 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
         listitems = handle_tmdb_seasons(info["media"]["seasons"])
         listitems += handle_tmdb_episodes(info["media"]["episodes"])
         if not listitems:
-            listitems += [{"label": xbmc.getLocalizedString(19055)}]
+            listitems += [{"label": LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)
         if listitem["media_type"] == "episode":
             wm.open_episode_info(prev_window=self,

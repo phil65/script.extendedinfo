@@ -44,9 +44,9 @@ class DialogTVShowInfo(DialogBaseInfo):
             data = extended_tvshow_info(tvshow_id=self.tmdb_id,
                                         dbid=self.dbid)
             if data:
-                self.info, self.data = data
+                self.info, self.data, self.account_states = data
             else:
-                notify(ADDON.getLocalizedString(32143))
+                notify(LANG(32143))
                 return None
             youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv",
                                                   hd="",
@@ -92,7 +92,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                               (1350, create_listitems(self.data["backdrops"], 0)),
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
-            notify(ADDON.getLocalizedString(32143))
+            notify(LANG(32143))
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
@@ -113,8 +113,8 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif control_id in [1000, 750]:
             listitem = self.getControl(control_id).getSelectedItem()
             credit_id = listitem.getProperty("credit_id")
-            selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32151),
-                                                list=[ADDON.getLocalizedString(32147), ADDON.getLocalizedString(32009)])
+            selection = xbmcgui.Dialog().select(heading=LANG(32151),
+                                                list=[LANG(32147), LANG(32009)])
             if selection == 0:
                 self.open_credit_dialog(credit_id)
             if selection == 1:
@@ -142,14 +142,14 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif control_id == 950:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_keywords",
-                        "typelabel": ADDON.getLocalizedString(32114),
+                        "typelabel": LANG(32114),
                         "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
         elif control_id == 850:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_genres",
-                        "typelabel": xbmc.getLocalizedString(135),
+                        "typelabel": LANG(135),
                         "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
@@ -159,7 +159,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif control_id == 1450:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_networks",
-                        "typelabel": ADDON.getLocalizedString(32152),
+                        "typelabel": LANG(32152),
                         "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
@@ -174,8 +174,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                                            rating=rating)
                 self.update_states()
         elif control_id == 6002:
-            listitems = [ADDON.getLocalizedString(32144), ADDON.getLocalizedString(32145)]
-            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136),
+            listitems = [LANG(32144), LANG(32145)]
+            index = xbmcgui.Dialog().select(heading=LANG(32136),
                                             list=listitems)
             if index == -1:
                 pass
@@ -195,30 +195,29 @@ class DialogTVShowInfo(DialogBaseInfo):
                                mode="rating",
                                media_type="tv")
         elif control_id == 132:
-            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+            wm.open_textviewer(header=LANG(32037),
                                text=self.info["Plot"],
                                color=self.info['ImageColor'])
 
     def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                               cache_time=0,
-                                               dbid=self.dbid)
-            self.data["account_states"] = self.update["account_states"]
-        if self.data["account_states"]:
-            if self.data["account_states"]["favorite"]:
-                self.window.setProperty("FavButton_Label", ADDON.getLocalizedString(32155))
+            _, __, updated_state = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                                        cache_time=0,
+                                                        dbid=self.dbid)
+            self.account_states = updated_state
+        if self.account_states:
+            if self.account_states["favorite"]:
+                self.window.setProperty("FavButton_Label", LANG(32155))
                 self.window.setProperty("movie.favorite", "True")
             else:
-                self.window.setProperty("FavButton_Label", ADDON.getLocalizedString(32154))
+                self.window.setProperty("FavButton_Label", LANG(32154))
                 self.window.setProperty("movie.favorite", "")
-            if self.data["account_states"]["rated"]:
-                self.window.setProperty("movie.rated", str(self.data["account_states"]["rated"]["value"]))
+            if self.account_states["rated"]:
+                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
             else:
                 self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
-            # notify(str(self.data["account_states"]["rated"]["value"]))
+            self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
 
     def show_manage_dialog(self):
         manage_list = []
@@ -226,19 +225,19 @@ class DialogTVShowInfo(DialogBaseInfo):
         # imdb_id = str(self.info.get("imdb_id", ""))
         # filename = self.info.get("FilenameAndPath", False)
         if self.dbid:
-            manage_list += [[xbmc.getLocalizedString(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
-                            [xbmc.getLocalizedString(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],
-                            [ADDON.getLocalizedString(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs)"],
-                            [ADDON.getLocalizedString(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ")"]]
+            manage_list += [[LANG(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
+                            [LANG(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],
+                            [LANG(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs)"],
+                            [LANG(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ")"]]
         else:
-            manage_list += [[ADDON.getLocalizedString(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
+            manage_list += [[LANG(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
         # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
-        #     manage_list.append([ADDON.getLocalizedString(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+        #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
-            manage_list.append([ADDON.getLocalizedString(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
-        manage_list.append([xbmc.getLocalizedString(1049), "Addon.OpenSettings(script.extendedinfo)"])
+            manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
+        manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
         listitems = [item[0] for item in manage_list]
-        selection = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32133),
+        selection = xbmcgui.Dialog().select(heading=LANG(32133),
                                             list=listitems)
         if selection < 0:
             return None

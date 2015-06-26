@@ -25,9 +25,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
                                      season=self.season,
                                      episode=self.episode_number)
         if data:
-            self.info, self.data = data
+            self.info, self.data, self.account_states = data
         else:
-            notify(ADDON.getLocalizedString(32143))
+            notify(LANG(32143))
             return None
         search_str = "%s tv" % (self.info['title'])
         youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
@@ -65,7 +65,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         elif control_id in [1250, 1350]:
             wm.open_slideshow(image=self.getControl(control_id).getSelectedItem().getProperty("original"))
         elif control_id == 132:
-            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+            wm.open_textviewer(header=LANG(32037),
                                text=self.info["Plot"],
                                color=self.info['ImageColor'])
         elif control_id == 6001:
@@ -87,21 +87,12 @@ class DialogEpisodeInfo(DialogBaseInfo):
     def update_states(self, forceupdate=True):
         if forceupdate:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            self.update = extended_episode_info(tvshow_id=self.tmdb_id,
-                                                season=self.season,
-                                                episode=self.episode_number,
-                                                cache_time=0)
-            self.data["account_states"] = self.update["account_states"]
-        if self.data["account_states"]:
-            # if self.data["account_states"]["favorite"]:
-            #     self.window.setProperty("FavButton_Label", "UnStar episode")
-            #     self.window.setProperty("movie.favorite", "True")
-            # else:
-            #     self.window.setProperty("FavButton_Label", "Star episode")
-            #     self.window.setProperty("movie.favorite", "")
-            if self.data["account_states"]["rated"]:
-                self.window.setProperty("movie.rated", str(self.data["account_states"]["rated"]["value"]))
+            _, __, self.account_states = extended_episode_info(tvshow_id=self.tmdb_id,
+                                                               season=self.season,
+                                                               episode=self.episode_number,
+                                                               cache_time=0)
+        if self.account_states:
+            if self.account_states["rated"]:
+                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
             else:
                 self.window.setProperty("movie.rated", "")
-            # self.window.setProperty("movie.watchlist", str(self.data["account_states"]["watchlist"]))
-            # notify(str(self.data["account_states"]["rated"]["value"]))

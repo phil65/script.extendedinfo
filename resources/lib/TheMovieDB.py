@@ -43,7 +43,7 @@ def check_login():
 
 def get_rating_from_user():
     ratings = [str(float(i * 0.5)) for i in range(1, 21)]
-    rating = xbmcgui.Dialog().select(ADDON.getLocalizedString(32129), ratings)
+    rating = xbmcgui.Dialog().select(LANG(32129), ratings)
     if rating > -1:
         return (float(rating) * 0.5) + 0.5
     else:
@@ -335,7 +335,7 @@ def handle_tmdb_episodes(results):
     for item in results:
         title = clean_text(fetch(item, 'name'))
         if not title:
-            title = "%s %s" % (xbmc.getLocalizedString(20359), fetch(item, 'episode_number'))
+            title = "%s %s" % (LANG(20359), fetch(item, 'episode_number'))
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'media_type': "episode",
                     'thumb': artwork.get("still", ""),
@@ -531,7 +531,7 @@ def get_keyword_id(keyword):
     if response and "results" in response and response["results"]:
         if len(response["results"]) > 1:
             names = [item["name"] for item in response["results"]]
-            selection = xbmcgui.Dialog().select(ADDON.getLocalizedString(32114), names)
+            selection = xbmcgui.Dialog().select(LANG(32114), names)
             if selection > -1:
                 return response["results"][selection]
         elif response["results"]:
@@ -774,10 +774,9 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                  "keywords": handle_tmdb_misc(response["keywords"]["keywords"]),
                  "reviews": handle_tmdb_misc(response["reviews"]["results"]),
                  "videos": videos,
-                 "account_states": account_states,
                  "images": handle_tmdb_images(response["images"]["posters"]),
                  "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
-    return (movie, listitems)
+    return (movie, listitems, account_states)
 
 
 def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
@@ -859,20 +858,19 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                  "genres": handle_tmdb_misc(response["genres"]),
                  "keywords": handle_tmdb_misc(response["keywords"]["results"]),
                  "videos": videos,
-                 "account_states": account_states,
                  "seasons": handle_tmdb_seasons(response["seasons"]),
                  "images": handle_tmdb_images(response["images"]["posters"]),
                  "backdrops": handle_tmdb_images(response["images"]["backdrops"])}
-    return (tvshow, listitems)
+    return (tvshow, listitems, account_states)
 
 
 def translate_status(status_string):
-    translations = {"released": ADDON.getLocalizedString(32071),
-                    "post production": ADDON.getLocalizedString(32072),
-                    "in production": ADDON.getLocalizedString(32073),
-                    "ended": ADDON.getLocalizedString(32074),
-                    "returning series": ADDON.getLocalizedString(32075),
-                    "planned": ADDON.getLocalizedString(32076)}
+    translations = {"released": LANG(32071),
+                    "post production": LANG(32072),
+                    "in production": LANG(32073),
+                    "ended": LANG(32074),
+                    "returning series": LANG(32075),
+                    "planned": LANG(32076)}
     if status_string.lower() in translations:
         return translations[status_string.lower()]
     else:
@@ -892,14 +890,12 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     videos = []
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
-    account_states = response.get("account_states")
     answer = {"actors": handle_tmdb_people(response["credits"]["cast"]),
-              "account_states": account_states,
               "crew": handle_tmdb_people(response["credits"]["crew"]),
               "guest_stars": handle_tmdb_people(response["credits"]["guest_stars"]),
               "videos": videos,
               "images": handle_tmdb_images(response["images"]["stills"])}
-    return (handle_tmdb_episodes([response])[0], answer)
+    return (handle_tmdb_episodes([response])[0], answer, response.get("account_states"))
 
 
 def extended_actor_info(actor_id):

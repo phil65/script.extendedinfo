@@ -22,7 +22,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.list = self.getControl(6)
         self.getControl(3).setVisible(False)
         self.getControl(5).setVisible(False)
-        self.getControl(1).setLabel(ADDON.getLocalizedString(32151))
+        self.getControl(1).setLabel(LANG(32151))
         self.list.addItems(self.listitems)
         self.setFocus(self.list)
 

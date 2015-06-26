@@ -27,7 +27,7 @@ class DialogSeasonInfo(DialogBaseInfo):
             if data:
                 self.info, self.data = data
             else:
-                notify(ADDON.getLocalizedString(32143))
+                notify(LANG(32143))
                 return None
             search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
             youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
@@ -47,7 +47,7 @@ class DialogSeasonInfo(DialogBaseInfo):
                               (1350, create_listitems(self.data["backdrops"], 0)),
                               (350, create_listitems(youtube_thread.listitems, 0))]
         else:
-            notify(ADDON.getLocalizedString(32143))
+            notify(LANG(32143))
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
@@ -79,6 +79,6 @@ class DialogSeasonInfo(DialogBaseInfo):
         elif control_id in [1250, 1350]:
             wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 132:
-            wm.open_textviewer(header=xbmc.getLocalizedString(32037),
+            wm.open_textviewer(header=LANG(32037),
                                text=self.info["Plot"],
                                color=self.info['ImageColor'])
