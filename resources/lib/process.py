@@ -49,19 +49,10 @@ def start_info_actions(infos, params):
             data = discography, "discography"
         elif info == 'mostlovedtracks':
             data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
-        elif info == 'artistdetails':
-            artist_details = get_artist_details(params["artistname"])
-            pass_dict_to_skin(artist_details, params.get("prefix", ""))
-            if "audiodbid" in artist_details:
-                data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
         elif info == 'musicvideos':
             pass
             # if "audiodbid" in artist_details:
             #     data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
-        elif info == 'albuminfo':
-            if params.get("id", ""):
-                album_details = get_album_details(params.get("id", ""))
-                pass_dict_to_skin(album_details, params.get("prefix", ""))
         elif info == 'trackdetails':
             if params.get("id", ""):
                 data = get_track_details(params.get("id", "")), "Trackinfo"
@@ -317,6 +308,8 @@ def start_info_actions(infos, params):
             data = get_autocomplete_items(params["id"]), "AutoComplete"
         elif info == 'weather':
             data = get_weather_images(), "WeatherImages"
+        elif info == "sortletters":
+            data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
 
         # ACTIONS
 
@@ -341,6 +334,7 @@ def start_info_actions(infos, params):
             get_kodi_json(method="Player.Open",
                           params='{"item": {"songid": %s}}' % (params.get("dbid")))
         elif info == "openinfodialog":
+            resolve_url(params.get("handle"))
             if xbmc.getCondVisibility("Container.Content(movies)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
             elif xbmc.getCondVisibility("Container.Content(tvshows)"):
@@ -350,6 +344,7 @@ def start_info_actions(infos, params):
             elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
         elif info == "ratedialog":
+            resolve_url(params.get("handle"))
             if xbmc.getCondVisibility("Container.Content(movies)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=movie,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
             elif xbmc.getCondVisibility("Container.Content(tvshows)"):
@@ -357,6 +352,7 @@ def start_info_actions(infos, params):
             elif xbmc.getCondVisibility("Container.Content(episodes)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=episode,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
         elif info == 'youtubebrowser':
+            resolve_url(params.get("handle"))
             wm.open_youtube_list()
         elif info == 'extendedinfo':
             resolve_url(params.get("handle"))
@@ -382,6 +378,7 @@ def start_info_actions(infos, params):
                                 name=params.get("name", ""))
             HOME.clearProperty('infodialogs.active')
         elif info == 'seasoninfo':
+            resolve_url(params.get("handle"))
             if params.get("tvshow") and params.get("season"):
                 HOME.setProperty('infodialogs.active', "true")
                 wm.open_season_info(tvshow=params["tvshow"],
@@ -389,6 +386,15 @@ def start_info_actions(infos, params):
                 HOME.clearProperty('infodialogs.active')
             else:
                 notify("Error", "Required data missing in script call")
+        elif info == 'albuminfo':
+            resolve_url(params.get("handle"))
+            if params.get("id", ""):
+                album_details = get_album_details(params.get("id", ""))
+                pass_dict_to_skin(album_details, params.get("prefix", ""))
+        elif info == 'artistdetails':
+            resolve_url(params.get("handle"))
+            artist_details = get_artist_details(params["artistname"])
+            pass_dict_to_skin(artist_details, params.get("prefix", ""))
         elif info == 'ratemedia':
             resolve_url(params.get("handle"))
             media_type = params.get("type", False)
@@ -412,14 +418,16 @@ def start_info_actions(infos, params):
                                                    media_id=tmdb_id,
                                                    rating=rating)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
+            resolve_url(params.get("handle"))
             set_mbids_for_artists(False, False)
         elif info == 'setfocus':
+            resolve_url(params.get("handle"))
             xbmc.executebuiltin("SetFocus(22222)")
         elif info == 'playliststats':
+            resolve_url(params.get("handle"))
             get_playlist_stats(params.get("id", ""))
-        elif info == "sortletters":
-            data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
         elif info == 'slideshow':
+            resolve_url(params.get("handle"))
             window_id = xbmcgui.getCurrentwindow_id()
             window = xbmcgui.Window(window_id)
             # focusid = Window.getFocusId()
@@ -442,14 +450,16 @@ def start_info_actions(infos, params):
             # xbmc.executebuiltin("SendClick(103,32)")
             window.setFocusId(300)
         elif info == 'bounce':
+            resolve_url(params.get("handle"))
             HOME.setProperty(params.get("name", ""), "True")
             xbmc.sleep(200)
             HOME.clearProperty(params.get("name", ""))
         elif info == "youtubevideo":
-            xbmc.executebuiltin("Dialog.Close(all,true)")
             resolve_url(params.get("handle"))
+            xbmc.executebuiltin("Dialog.Close(all,true)")
             PLAYER.play_youtube_video(params.get("id", ""))
         elif info == 'playtrailer':
+            resolve_url(params.get("handle"))
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if params.get("id", ""):
                 movie_id = params.get("id", "")
@@ -462,14 +472,15 @@ def start_info_actions(infos, params):
             else:
                 movie_id = ""
             if movie_id:
-                resolve_url(params.get("handle"))
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 PLAYER.play_youtube_video(trailer)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
+            resolve_url(params.get("handle"))
             set_mbids_for_artists(True, False)
         elif info == 'deletecache':
+            resolve_url(params.get("handle"))
             HOME.clearProperties()
             import shutil
             for rel_path in os.listdir(ADDON_DATA_PATH):
@@ -483,6 +494,7 @@ def start_info_actions(infos, params):
         elif info == 'syncwatchlist':
             pass
         elif info == "widgetdialog":
+            resolve_url(params.get("handle"))
             widget_selectdialog()
         listitems, prefix = data
         if params.get("handle"):
