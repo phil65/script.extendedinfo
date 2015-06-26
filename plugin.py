@@ -4,19 +4,11 @@
 # This program is Free Software see LICENSE file for details
 
 import sys
-import os
 import xbmc
-import xbmcaddon
 import xbmcplugin
 import xbmcgui
-
-ADDON = xbmcaddon.Addon()
-ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_NAME = ADDON.getAddonInfo('name')
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
-from process import start_info_actions
-from Utils import *
+from resources.lib.process import start_info_actions
+from resources.lib.Utils import *
 
 
 class Main:

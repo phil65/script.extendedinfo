@@ -42,8 +42,7 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             notify(LANG(32143))
             return None
-        youtube_thread = GetYoutubeVidsThread(search_str="%s %s, movie" % (self.info["Label"], self.info["year"]),
-                                              limit=15)
+        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
@@ -53,8 +52,8 @@ class DialogVideoInfo(DialogBaseInfo):
         lists_thread.start()
         vid_id_list = [item["key"] for item in self.data["videos"]]
         crew_list = merge_dict_lists(self.data["crew"])
-        if "dbid" not in self.info:
-            self.info['Poster'] = get_file(self.info["Poster"])
+        # if "dbid" not in self.info:
+        self.info['Poster'] = get_file(self.info["Poster"])
         filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
         lists_thread.join()

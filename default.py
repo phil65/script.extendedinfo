@@ -4,17 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 import sys
-import os
 import xbmc
-import xbmcaddon
-
-ADDON = xbmcaddon.Addon()
-ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_NAME = ADDON.getAddonInfo('name')
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-sys.path.append(xbmc.translatePath(os.path.join(ADDON_PATH, 'resources', 'lib')).decode("utf-8"))
-from process import start_info_actions
-from Utils import *
+from resources.lib.process import start_info_actions
+from resources.lib.Utils import *
 
 
 class Main:
@@ -27,7 +19,7 @@ class Main:
             start_info_actions(self.infos, self.params)
         else:
             HOME.setProperty('infodialogs.active', "true")
-            from WindowManager import wm
+            from resources.lib.WindowManager import wm
             wm.open_video_list()
             HOME.clearProperty('infodialogs.active')
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')

@@ -34,7 +34,7 @@ class DialogSeasonInfo(DialogBaseInfo):
                 notify(LANG(32143))
                 return None
             search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
-            youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
+            youtube_thread = GetYoutubeVidsThread(search_str=search_str)
             youtube_thread.start()
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['Poster'] = get_file(url=self.info["Poster"])

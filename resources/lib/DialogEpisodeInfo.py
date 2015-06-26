@@ -35,7 +35,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             notify(LANG(32143))
             return None
         search_str = "%s tv" % (self.info['title'])
-        youtube_thread = GetYoutubeVidsThread(search_str, "", "relevance", 15)
+        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
         youtube_thread.start()  # TODO: rem threading here
         filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
