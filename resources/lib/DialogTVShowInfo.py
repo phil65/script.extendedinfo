@@ -12,6 +12,7 @@ from TheMovieDB import *
 from YouTube import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()
 
 

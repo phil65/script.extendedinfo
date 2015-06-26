@@ -10,6 +10,7 @@ from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
 from OnClickHandler import OnClickHandler
+import VideoPlayer
 
 ch = OnClickHandler()
 PLAYER = VideoPlayer.VideoPlayer()

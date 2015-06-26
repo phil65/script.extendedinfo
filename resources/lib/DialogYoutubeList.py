@@ -9,6 +9,7 @@ from Utils import *
 from YouTube import *
 from BaseClasses import DialogBaseList, WindowXML
 from WindowManager import wm
+import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()
 
 
