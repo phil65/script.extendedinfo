@@ -15,8 +15,8 @@ from BaseClasses import DialogBaseInfo
 from WindowManager import wm
 from OnClickHandler import OnClickHandler
 import VideoPlayer
-PLAYER = VideoPlayer.VideoPlayer()
 
+PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()
 
 

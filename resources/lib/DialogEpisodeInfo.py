@@ -10,8 +10,11 @@ from YouTube import *
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+from OnClickHandler import OnClickHandler
 import VideoPlayer
+
 PLAYER = VideoPlayer.VideoPlayer()
+ch = OnClickHandler()
 
 
 class DialogEpisodeInfo(DialogBaseInfo):
@@ -52,37 +55,50 @@ class DialogEpisodeInfo(DialogBaseInfo):
         pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
         self.fill_lists()
 
-    def onClick(self, control_id):
-        if control_id in [1000, 750]:
-            actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
-            wm.open_actor_info(prev_window=self,
-                               actor_id=actor_id)
-        elif control_id in [350, 1150]:
-            listitem = self.getControl(control_id).getSelectedItem()
-            PLAYER.play_youtube_video(youtube_id=listitem.getProperty("youtube_id"),
-                                      listitem=listitem,
-                                      window=self)
-        elif control_id in [1250, 1350]:
-            wm.open_slideshow(image=self.getControl(control_id).getSelectedItem().getProperty("original"))
-        elif control_id == 132:
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
-        elif control_id == 6001:
-            rating = get_rating_from_user()
-            if not rating:
-                return None
+    @ch.click(350)
+    @ch.click(1150)
+    def play_youtube_video(self):
+        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
+                                  listitem=self.control.getSelectedItem(),
+                                  window=self)
+
+    @ch.click(1250)
+    @ch.click(1350)
+    def open_image(self):
+        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+
+    @ch.click(750)
+    @ch.click(1000)
+    def open_actor_info(self):
+        wm.open_actor_info(prev_window=self,
+                           actor_id=self.control.getSelectedItem().getProperty("id"))
+
+    @ch.click(132)
+    def open_text(self):
+        wm.open_textviewer(header=LANG(32037),
+                           text=self.info["Plot"],
+                           color=self.info['ImageColor'])
+
+    @ch.click(6001)
+    def set_rating_dialog(self):
+        rating = get_rating_from_user()
+        if rating:
             identifier = [self.tmdb_id, self.season, self.info["episode"]]
             send_rating_for_media_item(media_type="episode",
                                        media_id=identifier,
                                        rating=rating)
             self.update_states()
-        elif control_id == 6006:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = get_rated_media_items("tv/episodes")
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            wm.open_video_list(prev_window=self,
-                               listitems=listitems)
+
+    @ch.click(6006)
+    def open_rating_list(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        listitems = get_rated_media_items("tv/episodes")
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        wm.open_video_list(prev_window=self,
+                           listitems=listitems)
+
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
 
     def update_states(self, force_update=True):
         if force_update:
