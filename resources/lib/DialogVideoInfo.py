@@ -13,7 +13,9 @@ from ImageTools import *
 import threading
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+from OnClickHandler import OnClickHandler
 
+ch = OnClickHandler()
 
 class DialogVideoInfo(DialogBaseInfo):
 
@@ -25,6 +27,7 @@ class DialogVideoInfo(DialogBaseInfo):
             xbmcgui.Dialog().ok(heading=ADDON_NAME,
                                 line1=ADDON.getLocalizedString(32140),
                                 line2=ADDON.getLocalizedString(32141))
+        # self.ch = OnClickHandler()
         self.tmdb_id = kwargs.get('id')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
@@ -114,171 +117,215 @@ class DialogVideoInfo(DialogBaseInfo):
     def onAction(self, action):
         super(DialogVideoInfo, self).onAction(action)
 
-    def onClick(self, control_id):
-        control = self.getControl(control_id)
-        if control_id in [1000, 750]:
-            wm.open_actor_info(prev_window=self,
-                               actor_id=control.getSelectedItem().getProperty("id"))
-        elif control_id in [150, 250]:
-            wm.open_movie_info(prev_window=self,
-                               movie_id=control.getSelectedItem().getProperty("id"),
-                               dbid=control.getSelectedItem().getProperty("dbid"))
-        elif control_id in [1250, 1350]:
-            image = control.getSelectedItem().getProperty("original")
-            wm.open_slideshow(image=image)
-        elif control_id in [350, 1150, 10]:
-            listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
-            listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410), 'Genre': 'Youtube Video'})
-            if control_id == 10:
-                youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
-            else:
-                youtube_id = control.getSelectedItem().getProperty("youtube_id")
-            if youtube_id:
-                PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                          listitem=control.getSelectedItem(),
-                                          window=self)
-            else:
-                notify(ADDON.getLocalizedString(32052))
-        elif control_id == 550:
-            company_id = control.getSelectedItem().getProperty("id")
-            company_name = control.getSelectedItem().getLabel()
-            filters = [{"id": company_id,
-                        "type": "with_companies",
-                        "typelabel": xbmc.getLocalizedString(20388),
-                        "label": company_name}]
+    @ch.click(1000)
+    @ch.click(750)
+    def open_actor_info(self):
+        wm.open_actor_info(prev_window=self,
+                           actor_id=self.control.getSelectedItem().getProperty("id"))
+
+    @ch.click(150)
+    @ch.click(250)
+    def open_movie_info(self):
+        wm.open_movie_info(prev_window=self,
+                           movie_id=self.control.getSelectedItem().getProperty("id"),
+                           dbid=self.control.getSelectedItem().getProperty("dbid"))
+
+    @ch.click(1250)
+    @ch.click(1350)
+    def open_image(self):
+        image = self.control.getSelectedItem().getProperty("original")
+        wm.open_slideshow(image=image)
+
+    @ch.click(350)
+    @ch.click(1150)
+    @ch.click(10)
+    @busy_dialog
+    def play_video(self):
+        listitem = xbmcgui.ListItem(xbmc.getLocalizedString(20410))
+        listitem.setInfo('video', {'title': xbmc.getLocalizedString(20410),
+                                   'Genre': ADDON.getLocalizedString(32070)})
+        if self.control_id == 10:
+            youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
+        else:
+            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+        if youtube_id:
+            PLAYER.play_youtube_video(youtube_id=youtube_id,
+                                      listitem=self.control.getSelectedItem(),
+                                      window=self)
+        else:
+            notify(ADDON.getLocalizedString(32052))
+
+    @ch.click(550)
+    def open_company_list(self):
+        company_id = self.control.getSelectedItem().getProperty("id")
+        company_name = self.control.getSelectedItem().getLabel()
+        filters = [{"id": company_id,
+                    "type": "with_companies",
+                    "typelabel": xbmc.getLocalizedString(20388),
+                    "label": company_name}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(1050)
+    def show_review(self):
+        author = self.control.getSelectedItem().getProperty("author")
+        text = "[B]%s[/B][CR]%s" % (author, clean_text(self.control.getSelectedItem().getProperty("content")))
+        wm.open_textviewer(header=xbmc.getLocalizedString(207),
+                           text=text,
+                           color=self.info['ImageColor'])
+
+    @ch.click(950)
+    def open_keyword_list(self):
+        keyword_id = self.control.getSelectedItem().getProperty("id")
+        keyword_name = self.control.getSelectedItem().getLabel()
+        filters = [{"id": keyword_id,
+                    "type": "with_keywords",
+                    "typelabel": ADDON.getLocalizedString(32114),
+                    "label": keyword_name}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(850)
+    def open_genre_list(self):
+        genre_id = self.control.getSelectedItem().getProperty("id")
+        genre_name = self.control.getSelectedItem().getLabel()
+        filters = [{"id": genre_id,
+                    "type": "with_genres",
+                    "typelabel": xbmc.getLocalizedString(135),
+                    "label": genre_name}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(650)
+    def open_cert_list(self):
+        country = self.control.getSelectedItem().getProperty("iso_3166_1")
+        certification = self.control.getSelectedItem().getProperty("certification")
+        year = self.control.getSelectedItem().getProperty("year")
+        filters = [{"id": country,
+                    "type": "certification_country",
+                    "typelabel": ADDON.getLocalizedString(32153),
+                    "label": country},
+                   {"id": certification,
+                    "type": "certification",
+                    "typelabel": ADDON.getLocalizedString(32127),
+                    "label": certification},
+                   {"id": year,
+                    "type": "year",
+                    "typelabel": xbmc.getLocalizedString(345),
+                    "label": year}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(450)
+    def open_cert_list(self):
+        list_id = self.control.getSelectedItem().getProperty("id")
+        list_title = self.control.getSelectedItem().getLabel()
+        wm.open_video_list(prev_window=self,
+                           mode="list",
+                           list_id=list_id,
+                           filter_label=list_title)
+
+    @ch.click(6002)
+    def show_list_dialog(self):
+        listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        account_lists = get_account_lists()
+        for item in account_lists:
+            listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
+        if index == -1:
+            pass
+        elif index == 0:
             wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 1050:
-            author = control.getSelectedItem().getProperty("author")
-            text = "[B]" + author + "[/B][CR]" + clean_text(control.getSelectedItem().getProperty("content"))
-            wm.open_textviewer(header=xbmc.getLocalizedString(207),
-                               text=text,
-                               color=self.info['ImageColor'])
-        elif control_id == 950:
-            keyword_id = control.getSelectedItem().getProperty("id")
-            keyword_name = control.getSelectedItem().getLabel()
-            filters = [{"id": keyword_id,
-                        "type": "with_keywords",
-                        "typelabel": ADDON.getLocalizedString(32114),
-                        "label": keyword_name}]
+                               mode="favorites")
+        elif index == 1:
             wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 850:
-            genre_id = control.getSelectedItem().getProperty("id")
-            genre_name = control.getSelectedItem().getLabel()
-            filters = [{"id": genre_id,
-                        "type": "with_genres",
-                        "typelabel": xbmc.getLocalizedString(135),
-                        "label": genre_name}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 650:
-            country = control.getSelectedItem().getProperty("iso_3166_1")
-            certification = control.getSelectedItem().getProperty("certification")
-            year = control.getSelectedItem().getProperty("year")
-            filters = [{"id": country,
-                        "type": "certification_country",
-                        "typelabel": ADDON.getLocalizedString(32153),
-                        "label": country},
-                       {"id": certification,
-                        "type": "certification",
-                        "typelabel": ADDON.getLocalizedString(32127),
-                        "label": certification},
-                       {"id": year,
-                        "type": "year",
-                        "typelabel": xbmc.getLocalizedString(345),
-                        "label": year}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 450:
-            list_id = control.getSelectedItem().getProperty("id")
-            list_title = control.getSelectedItem().getLabel()
+                               mode="rating")
+        else:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            list_id = account_lists[index - 2]["id"]
+            list_title = account_lists[index - 2]["name"]
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
             wm.open_video_list(prev_window=self,
                                mode="list",
                                list_id=list_id,
-                               filter_label=list_title)
-        elif control_id == 6001:
-            rating = get_rating_from_user()
-            if rating:
-                send_rating_for_media_item(media_type="movie",
-                                           media_id=self.tmdb_id,
-                                           rating=rating)
-                self.update_states()
-        elif control_id == 6002:
-            listitems = [ADDON.getLocalizedString(32134), ADDON.getLocalizedString(32135)]
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            account_lists = get_account_lists()
-            for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(ADDON.getLocalizedString(32136), listitems)
-            if index == -1:
-                pass
-            elif index == 0:
-                wm.open_video_list(prev_window=self,
-                                   mode="favorites")
-            elif index == 1:
-                wm.open_video_list(prev_window=self,
-                                   mode="rating")
-            else:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                list_id = account_lists[index - 2]["id"]
-                list_title = account_lists[index - 2]["name"]
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                wm.open_video_list(prev_window=self,
-                                   mode="list",
-                                   list_id=list_id,
-                                   filter_label=list_title,
-                                   force=True)
-        elif control_id == 8:
-            self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.info['dbid']), "false"))
-        elif control_id == 9:
-            self.close()
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.info['dbid']), "true"))
-        elif control_id == 445:
-            self.show_manage_dialog()
-        elif control_id == 132:
-            wm.open_textviewer(header=xbmc.getLocalizedString(207),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
-        elif control_id == 6003:
-            if self.data["account_states"]["favorite"]:
-                change_fav_status(media_id=self.info["id"],
-                                  media_type="movie",
-                                  status="false")
-            else:
-                change_fav_status(media_id=self.info["id"],
-                                  media_type="movie",
-                                  status="true")
+                               filter_label=list_title,
+                               force=True)
+
+
+    @ch.click(132)
+    def show_plot(self):
+        wm.open_textviewer(header=xbmc.getLocalizedString(207),
+                           text=self.info["Plot"],
+                           color=self.info['ImageColor'])
+
+
+    @ch.click(6001)
+    def set_rating_dialog(self):
+        rating = get_rating_from_user()
+        if rating:
+            send_rating_for_media_item(media_type="movie",
+                                       media_id=self.tmdb_id,
+                                       rating=rating)
             self.update_states()
-        elif control_id == 6006:
-            wm.open_video_list(prev_window=self,
-                               mode="rating")
-        elif control_id == 6005:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = [ADDON.getLocalizedString(32139)]
-            account_lists = get_account_lists()
-            for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-            listitems.append(ADDON.getLocalizedString(32138))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136),
-                                            listitems=listitems)
-            if index == 0:
-                listname = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32137),
-                                                  type=xbmcgui.INPUT_ALPHANUM)
-                if listname:
-                    list_id = create_list(listname)
-                    xbmc.sleep(1000)
-                    change_list_status(list_id=list_id,
-                                       movie_id=self.tmdb_id,
-                                       status=True)
-            elif index == len(listitems) - 1:
-                self.remove_list_dialog(account_lists)
-            elif index > 0:
-                change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
-                self.update_states()
+
+    @ch.click(6005)
+    def add_to_list_dialog(self):
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        listitems = [ADDON.getLocalizedString(32139)]
+        account_lists = get_account_lists()
+        for item in account_lists:
+            listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+        listitems.append(ADDON.getLocalizedString(32138))
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32136),
+                                        listitems=listitems)
+        if index == 0:
+            listname = xbmcgui.Dialog().input(heading=ADDON.getLocalizedString(32137),
+                                              type=xbmcgui.INPUT_ALPHANUM)
+            if listname:
+                list_id = create_list(listname)
+                xbmc.sleep(1000)
+                change_list_status(list_id=list_id,
+                                   movie_id=self.tmdb_id,
+                                   status=True)
+        elif index == len(listitems) - 1:
+            self.remove_list_dialog(account_lists)
+        elif index > 0:
+            change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
+            self.update_states()
+
+    @ch.click(6003)
+    def change_list_status(self):
+        if self.data["account_states"]["favorite"]:
+            change_fav_status(media_id=self.info["id"],
+                              media_type="movie",
+                              status="false")
+        else:
+            change_fav_status(media_id=self.info["id"],
+                              media_type="movie",
+                              status="true")
+        self.update_states()
+
+    @ch.click(6006)
+    def open_rating_list(self):
+        wm.open_video_list(prev_window=self,
+                           mode="rating")
+
+    @ch.click(9)
+    def play_movie_resume(self):
+        self.close()
+        xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.info['dbid']), "true"))
+
+    @ch.click(8)
+    def play_movie_no_resume(self):
+        self.close()
+        xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (str(self.info['dbid']), "false"))
+
+
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
 
     def sort_lists(self, lists):
         if not self.logged_in:
@@ -327,6 +374,7 @@ class DialogVideoInfo(DialogBaseInfo):
             remove_list(account_lists[index]["id"])
             self.update_states()
 
+    @ch.click(445)
     def show_manage_dialog(self):
         manage_list = []
         movie_id = str(self.info.get("dbid", ""))
