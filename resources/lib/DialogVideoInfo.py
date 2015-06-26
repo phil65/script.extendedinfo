@@ -92,7 +92,6 @@ class DialogVideoInfo(DialogBaseInfo):
                           (1250, create_listitems(self.data["images"], 0)),
                           (1350, create_listitems(self.data["backdrops"], 0)),
                           (350, create_listitems(youtube_vids, 0))]
-        xbmc.sleep(3000)
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
