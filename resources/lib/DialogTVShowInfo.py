@@ -199,8 +199,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                                text=self.info["Plot"],
                                color=self.info['ImageColor'])
 
-    def update_states(self, forceupdate=True):
-        if forceupdate:
+    def update_states(self, force_update=True):
+        if force_update:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, updated_state = extended_tvshow_info(tvshow_id=self.tmdb_id,
                                                         cache_time=0,

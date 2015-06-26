@@ -84,8 +84,8 @@ class DialogEpisodeInfo(DialogBaseInfo):
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
 
-    def update_states(self, forceupdate=True):
-        if forceupdate:
+    def update_states(self, force_update=True):
+        if force_update:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = extended_episode_info(tvshow_id=self.tmdb_id,
                                                                season=self.season,

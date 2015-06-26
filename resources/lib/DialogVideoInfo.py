@@ -17,6 +17,7 @@ from OnClickHandler import OnClickHandler
 
 ch = OnClickHandler()
 
+
 class DialogVideoInfo(DialogBaseInfo):
 
     @busy_dialog
@@ -328,8 +329,8 @@ class DialogVideoInfo(DialogBaseInfo):
         # misc_lists = [item for item in lists if item["id"] not in id_list]
         return own_lists + misc_lists
 
-    def update_states(self, forceupdate=True):
-        if forceupdate:
+    def update_states(self, force_update=True):
+        if force_update:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
         if self.account_states:
