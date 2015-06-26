@@ -28,19 +28,24 @@ def start_info_actions(infos, params):
         data = [], ""
         if info == 'playmovie':
             resolve_url(params.get("handle"))
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playepisode':
             resolve_url(params.get("handle"))
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %s }, "options":{ "resume": %s }  }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"episodeid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playmusicvideo':
             resolve_url(params.get("handle"))
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %s } }, "id": 1 }' % params.get("dbid"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"musicvideoid": %s}}' % (params.get("dbid")))
         elif info == 'playalbum':
             resolve_url(params.get("handle"))
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %s } }, "id": 1 }' % params.get("dbid"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"albumid": %s}}' % (params.get("dbid")))
         elif info == 'playsong':
             resolve_url(params.get("handle"))
-            xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"songid": %s}}' % (params.get("dbid")))
         elif info == "openinfodialog":
             if xbmc.getCondVisibility("Container.Content(movies)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
@@ -429,7 +434,8 @@ def start_info_actions(infos, params):
             resolve_url(params.get("handle"))
             window_id = xbmcgui.getCurrentWindowDialogId()
             window = xbmcgui.Window(window_id)
-            xbmc.executeJSONRPC('{"id": 1, "jsonrpc": "2.0", "method": "Input.SendText", "params":{"text":"%s", "done":false}}' % params.get("id"))
+            get_kodi_json(method="Input.SendText",
+                          params='{"text":"%s", "done":false}' % params.get("id"))
             # xbmc.executebuiltin("SendClick(103,32)")
             window.setFocusId(300)
         elif info == 'bounce':
