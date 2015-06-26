@@ -14,6 +14,7 @@ import threading
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
 from OnClickHandler import OnClickHandler
+PLAYER = VideoPlayer.VideoPlayer()
 
 ch = OnClickHandler()
 
@@ -40,10 +41,7 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             notify(LANG(32143))
             return None
-        log("Blur image %s with radius %i" % (self.info["thumb"], 25))
         youtube_thread = GetYoutubeVidsThread(search_str="%s %s, movie" % (self.info["Label"], self.info["year"]),
-                                              hd="",
-                                              order="relevance",
                                               limit=15)
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
@@ -93,6 +91,7 @@ class DialogVideoInfo(DialogBaseInfo):
                           (1250, create_listitems(self.data["images"], 0)),
                           (1350, create_listitems(self.data["backdrops"], 0)),
                           (350, create_listitems(youtube_vids, 0))]
+        xbmc.sleep(3000)
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
@@ -250,10 +249,9 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(6005)
     def add_to_list_dialog(self):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        listitems = [LANG(32139)]
         account_lists = get_account_lists()
-        for item in account_lists:
-            listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+        listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
+        listitems.insert(0, LANG(32139))
         listitems.append(LANG(32138))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         index = xbmcgui.Dialog().select(heading=LANG(32136),

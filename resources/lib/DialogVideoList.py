@@ -211,7 +211,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         if self.page > 1:
             self.page -= 1
 
-
     def context_menu(self):
         focus_id = self.getFocusId()
         if not focus_id == 500:

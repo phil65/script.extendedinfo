@@ -11,6 +11,7 @@ from TheMovieDB import *
 from YouTube import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+PLAYER = VideoPlayer.VideoPlayer()
 
 
 class DialogActorInfo(DialogBaseInfo):

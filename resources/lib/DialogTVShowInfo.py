@@ -12,6 +12,7 @@ from TheMovieDB import *
 from YouTube import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+PLAYER = VideoPlayer.VideoPlayer()
 
 
 class DialogTVShowInfo(DialogBaseInfo):
@@ -49,8 +50,6 @@ class DialogTVShowInfo(DialogBaseInfo):
                 notify(LANG(32143))
                 return None
             youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv",
-                                                  hd="",
-                                                  order="relevance",
                                                   limit=15)
             youtube_thread.start()
             cert_list = get_certification_list("tv")

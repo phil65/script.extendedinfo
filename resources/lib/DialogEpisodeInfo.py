@@ -10,6 +10,7 @@ from YouTube import *
 from ImageTools import *
 from BaseClasses import DialogBaseInfo
 from WindowManager import wm
+PLAYER = VideoPlayer.VideoPlayer()
 
 
 class DialogEpisodeInfo(DialogBaseInfo):
