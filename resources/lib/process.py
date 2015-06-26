@@ -27,19 +27,19 @@ def start_info_actions(infos, params):
     for info in infos:
         data = [], ""
         if info == 'playmovie':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "movieid": %s }, "options":{ "resume": %s } }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playepisode':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "episodeid": %s }, "options":{ "resume": %s }  }, "id": 1 }' % (params.get("dbid"), params.get("resume", "true")))
         elif info == 'playmusicvideo':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "musicvideoid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playalbum':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "albumid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == 'playsong':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             xbmc.executeJSONRPC('{ "jsonrpc": "2.0", "method": "Player.Open", "params": { "item": { "songid": %s } }, "id": 1 }' % params.get("dbid"))
         elif info == "openinfodialog":
             if xbmc.getCondVisibility("Container.Content(movies)"):
@@ -421,12 +421,12 @@ def start_info_actions(infos, params):
             for i in range(0, num_items):
                 notify(item.getProperty("Image"))
         elif info == 'action':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
             return None
         elif info == 'selectautocomplete':
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             window_id = xbmcgui.getCurrentWindowDialogId()
             window = xbmcgui.Window(window_id)
             xbmc.executeJSONRPC('{"id": 1, "jsonrpc": "2.0", "method": "Input.SendText", "params":{"text":"%s", "done":false}}' % params.get("id"))
@@ -438,7 +438,7 @@ def start_info_actions(infos, params):
             HOME.clearProperty(params.get("name", ""))
         elif info == "youtubevideo":
             xbmc.executebuiltin("Dialog.Close(all,true)")
-            resolve_url(params.get(handle))
+            resolve_url(params.get("handle"))
             PLAYER.play_youtube_video(params.get("id", ""))
         elif info == 'playtrailer':
             xbmc.executebuiltin("ActivateWindow(busydialog)")
@@ -453,7 +453,7 @@ def start_info_actions(infos, params):
             else:
                 movie_id = ""
             if movie_id:
-                resolve_url(params.get(handle))
+                resolve_url(params.get("handle"))
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 PLAYER.play_youtube_video(trailer)
