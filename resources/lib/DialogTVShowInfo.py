@@ -96,7 +96,6 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
         pass_dict_to_skin(data=self.info,
                           prefix="movie.",
                           window_id=self.window_id)
@@ -105,7 +104,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         self.update_states(False)
 
     def onClick(self, control_id):
-        HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         control = self.getControl(control_id)
         if control_id == 120:
             self.close()

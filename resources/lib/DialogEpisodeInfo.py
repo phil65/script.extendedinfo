@@ -46,13 +46,11 @@ class DialogEpisodeInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
         self.window.setProperty("type", "Episode")
         pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
         self.fill_lists()
 
     def onClick(self, control_id):
-        HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(movie.ImageColor)"))
         if control_id in [1000, 750]:
             actor_id = self.getControl(control_id).getSelectedItem().getProperty("id")
             wm.open_actor_info(prev_window=self,

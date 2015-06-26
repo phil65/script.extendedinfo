@@ -102,7 +102,6 @@ class DialogVideoInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
-        HOME.setProperty("movie.ImageColor", self.info["ImageColor"])
         self.window.setProperty("type", "Movie")
         pass_dict_to_skin(data=self.info,
                           prefix="movie.",

@@ -211,6 +211,7 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
         if self.page > 1:
             self.page -= 1
 
+
     def context_menu(self):
         focus_id = self.getFocusId()
         if not focus_id == 500:
@@ -226,8 +227,6 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                 listitems += [LANG(32107)]
             if self.mode == "list":
                 listitems += [LANG(32035)]
-        # context_menu = ContextMenu.ContextMenu(u'DialogContextMenu.xml', ADDON_PATH, labels=listitems)
-        # context_menu.doModal()
         selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=listitems)
         if selection == 0:
