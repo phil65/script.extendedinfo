@@ -16,7 +16,7 @@ class WindowManager(object):
     window_stack = []
 
     def __init__(self):
-        pass
+        self.reopen_window = False
 
     def add_to_stack(self, window):
         """
@@ -31,6 +31,9 @@ class WindowManager(object):
         if self.window_stack:
             dialog = self.window_stack.pop()
             dialog.doModal()
+        elif self.reopen_window:
+            xbmc.sleep(500)
+            xbmc.executebuiltin("Action(Info)")
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None, name=None, imdb_id=None):
         """
@@ -174,6 +177,9 @@ class WindowManager(object):
 
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
+            if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
+                xbmc.executebuiltin("Dialog.Close(movieinformation)")
+                self.reopen_window = True
             if prev_window:
                 self.add_to_stack(prev_window)
                 prev_window.close()
