@@ -53,7 +53,6 @@ class VideoPlayer(xbmc.Player):
 
     def youtube_info_by_id(self, youtube_id):
         import YDStreamExtractor
-        YDStreamExtractor.disableDASHVideo(True)
         vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                              quality=1)
         if not vid:
