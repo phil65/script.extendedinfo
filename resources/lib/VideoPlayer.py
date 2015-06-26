@@ -48,8 +48,8 @@ class VideoPlayer(xbmc.Player):
                       listitem=listitem,
                       window=window)
         else:
-            xbmcgui.Dialog().notification(heading=LANG(257),
-                                          message="no youtube id found")
+            notify(header=LANG(257),
+                   message="no youtube id found")
 
     def youtube_info_by_id(self, youtube_id):
         import YDStreamExtractor
@@ -57,7 +57,7 @@ class VideoPlayer(xbmc.Player):
         vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                              quality=1)
         if not vid:
-            return None
+            return None, None
         listitem = xbmcgui.ListItem(label=vid.title,
                                     thumbnailImage=vid.thumbnail)
         listitem.setInfo(type='video',

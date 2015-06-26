@@ -252,8 +252,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                                  fanart=movie.get("backdrop_path"))
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
         if ADDON.getSetting("infodialog_onclick") != "false":
-            # path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
-            path = 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedinfo,id=%s)' % tmdb_id
+            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
         else:
             path = trailer
         listitem = {'thumb': artwork.get("poster_small", ""),
@@ -317,8 +316,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'year': get_year(fetch(tv, 'first_air_date')),
                  'media_type': "tv",
                  'character': fetch(tv, 'character'),
-                 'path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
-                 # 'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
+                 'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
                  'User_Rating': str(fetch(tv, 'rating')),
                  'Votes': fetch(tv, 'vote_count'),
@@ -829,7 +827,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'Plot': clean_text(fetch(response, "overview")),
               'year': get_year(fetch(response, 'first_air_date')),
               'media_type': "tv",
-              'path': 'plugin://script.extendedinfo/?info=action&&id=RunScript(script.extendedinfo,info=extendedtvinfo,id=%s)' % tmdb_id,
+              'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
               'Popularity': fetch(response, 'popularity'),
               'Rating': fetch(response, 'vote_average'),
               'country': fetch(response, 'original_language'),

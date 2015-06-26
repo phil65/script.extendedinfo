@@ -19,7 +19,6 @@ import threading
 import datetime
 import codecs
 from functools import wraps
-import VideoPlayer
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -29,7 +28,6 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
-PLAYER = VideoPlayer.VideoPlayer()
 
 def LANG(label_id):
     if 31000 <= label_id <= 33000:

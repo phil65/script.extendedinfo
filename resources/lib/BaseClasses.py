@@ -12,6 +12,8 @@ from T9Search import T9Search
 from collections import deque
 import ast
 from OnClickHandler import OnClickHandler
+import VideoPlayer
+PLAYER = VideoPlayer.VideoPlayer()
 
 ch = OnClickHandler()
 

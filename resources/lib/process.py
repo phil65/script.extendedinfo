@@ -11,6 +11,8 @@ from local_db import *
 from YouTube import *
 from Trakt import *
 from WindowManager import wm
+import VideoPlayer
+PLAYER = VideoPlayer.VideoPlayer()
 
 
 def start_info_actions(infos, params):
@@ -26,44 +28,8 @@ def start_info_actions(infos, params):
         params["imdb_id"] = params["imdbid"]
     for info in infos:
         data = [], ""
-        if info == 'playmovie':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
-        elif info == 'playepisode':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"episodeid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
-        elif info == 'playmusicvideo':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"musicvideoid": %s}}' % (params.get("dbid")))
-        elif info == 'playalbum':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"albumid": %s}}' % (params.get("dbid")))
-        elif info == 'playsong':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"songid": %s}}' % (params.get("dbid")))
-        elif info == "openinfodialog":
-            if xbmc.getCondVisibility("Container.Content(movies)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
-            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
-            elif xbmc.getCondVisibility("Container.Content(seasons)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
-            elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
-        elif info == "ratedialog":
-            if xbmc.getCondVisibility("Container.Content(movies)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=movie,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
-            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=tv,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
-            elif xbmc.getCondVisibility("Container.Content(episodes)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=episode,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
         #  Images
-        elif info == 'xkcd':
+        if info == 'xkcd':
             from MiscScraper import get_xkcd_images
             data = get_xkcd_images(), "XKCD"
         elif info == 'cyanide':
@@ -242,61 +208,6 @@ def start_info_actions(infos, params):
                     data = get_keywords(movie_id), "Keywords"
         elif info == 'popularpeople':
             data = get_popular_actors(), "PopularPeople"
-        elif info == 'youtubebrowser':
-            wm.open_youtube_list()
-        elif info == 'extendedinfo':
-            HOME.setProperty('infodialogs.active', "true")
-            wm.open_movie_info(movie_id=params.get("id", ""),
-                               dbid=params.get("dbid", None),
-                               imdb_id=params.get("imdb_id", ""),
-                               name=params.get("name", ""))
-            HOME.clearProperty('infodialogs.active')
-        elif info == 'extendedactorinfo':
-            HOME.setProperty('infodialogs.active', "true")
-            wm.open_actor_info(actor_id=params.get("id", ""),
-                               name=params.get("name", ""))
-            HOME.clearProperty('infodialogs.active')
-        elif info == 'extendedtvinfo':
-            HOME.setProperty('infodialogs.active', "true")
-            wm.open_tvshow_info(tvshow_id=params.get("id", ""),
-                                tvdb_id=params.get("tvdb_id", ""),
-                                dbid=params.get("dbid", None),
-                                imdb_id=params.get("imdb_id", ""),
-                                name=params.get("name", ""))
-            HOME.clearProperty('infodialogs.active')
-        elif info == 'ratemedia':
-            media_type = params.get("type", False)
-            if media_type:
-                if params.get("id") and params["id"]:
-                    tmdb_id = params["id"]
-                elif media_type == "movie":
-                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
-                                                dbid=params.get("dbid", ""),
-                                                name=params.get("name", ""))
-                elif media_type == "tv" and params["dbid"]:
-                    tvdb_id = get_imdb_id_from_db(media_type="tvshow",
-                                                  dbid=params["dbid"])
-                    tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
-                # elif media_type == "episode" and params["dbid"]:
-                #     tvdb_id = get_imdb_id_from_db(media_type="tvshow",
-                #                                   dbid=params["dbid"])
-                #     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
-                else:
-                    return False
-                if tmdb_id:
-                    rating = get_rating_from_user()
-                    if rating:
-                        send_rating_for_media_item(media_type=media_type,
-                                                   media_id=tmdb_id,
-                                                   rating=rating)
-        elif info == 'seasoninfo':
-            if params.get("tvshow") and params.get("season"):
-                HOME.setProperty('infodialogs.active', "true")
-                wm.open_season_info(tvshow=params["tvshow"],
-                                    season=params["season"])
-                HOME.clearProperty('infodialogs.active')
-            else:
-                notify("Error", "Required data missing in script call")
         elif info == 'directormovies':
             if params.get("director"):
                 director_info = get_person_info(person_label=params["director"],
@@ -389,8 +300,6 @@ def start_info_actions(infos, params):
             artists = get_kodi_artists()
             from MiscScraper import get_artist_near_events
             data = get_artist_near_events(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
-        # elif info == 'channels':
-        #     channels = create_channel_list()
         elif info == 'favourites':
             if params.get("id", ""):
                 favs = get_favs_by_type(params.get("id", ""))
@@ -408,6 +317,100 @@ def start_info_actions(infos, params):
             data = get_autocomplete_items(params["id"]), "AutoComplete"
         elif info == 'weather':
             data = get_weather_images(), "WeatherImages"
+
+        # ACTIONS
+
+        elif info == 'playmovie':
+            resolve_url(params.get("handle"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
+        elif info == 'playepisode':
+            resolve_url(params.get("handle"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"episodeid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
+        elif info == 'playmusicvideo':
+            resolve_url(params.get("handle"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"musicvideoid": %s}}' % (params.get("dbid")))
+        elif info == 'playalbum':
+            resolve_url(params.get("handle"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"albumid": %s}}' % (params.get("dbid")))
+        elif info == 'playsong':
+            resolve_url(params.get("handle"))
+            get_kodi_json(method="Player.Open",
+                          params='{"item": {"songid": %s}}' % (params.get("dbid")))
+        elif info == "openinfodialog":
+            if xbmc.getCondVisibility("Container.Content(movies)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(seasons)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
+            elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
+        elif info == "ratedialog":
+            if xbmc.getCondVisibility("Container.Content(movies)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=movie,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(tvshows)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=tv,dbid=%s,id=%s)" % (xbmc.getInfoLabel("ListItem.DBID"), xbmc.getInfoLabel("ListItem.Property(id)")))
+            elif xbmc.getCondVisibility("Container.Content(episodes)"):
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=ratemedia,type=episode,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
+        elif info == 'youtubebrowser':
+            wm.open_youtube_list()
+        elif info == 'extendedinfo':
+            resolve_url(params.get("handle"))
+            HOME.setProperty('infodialogs.active', "true")
+            wm.open_movie_info(movie_id=params.get("id", ""),
+                               dbid=params.get("dbid", None),
+                               imdb_id=params.get("imdb_id", ""),
+                               name=params.get("name", ""))
+            HOME.clearProperty('infodialogs.active')
+        elif info == 'extendedactorinfo':
+            resolve_url(params.get("handle"))
+            HOME.setProperty('infodialogs.active', "true")
+            wm.open_actor_info(actor_id=params.get("id", ""),
+                               name=params.get("name", ""))
+            HOME.clearProperty('infodialogs.active')
+        elif info == 'extendedtvinfo':
+            resolve_url(params.get("handle"))
+            HOME.setProperty('infodialogs.active', "true")
+            wm.open_tvshow_info(tvshow_id=params.get("id", ""),
+                                tvdb_id=params.get("tvdb_id", ""),
+                                dbid=params.get("dbid", None),
+                                imdb_id=params.get("imdb_id", ""),
+                                name=params.get("name", ""))
+            HOME.clearProperty('infodialogs.active')
+        elif info == 'seasoninfo':
+            if params.get("tvshow") and params.get("season"):
+                HOME.setProperty('infodialogs.active', "true")
+                wm.open_season_info(tvshow=params["tvshow"],
+                                    season=params["season"])
+                HOME.clearProperty('infodialogs.active')
+            else:
+                notify("Error", "Required data missing in script call")
+        elif info == 'ratemedia':
+            resolve_url(params.get("handle"))
+            media_type = params.get("type", False)
+            if media_type:
+                if params.get("id") and params["id"]:
+                    tmdb_id = params["id"]
+                elif media_type == "movie":
+                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
+                                                dbid=params.get("dbid", ""),
+                                                name=params.get("name", ""))
+                elif media_type == "tv" and params["dbid"]:
+                    tvdb_id = get_imdb_id_from_db(media_type="tvshow",
+                                                  dbid=params["dbid"])
+                    tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
+                else:
+                    return False
+                if tmdb_id:
+                    rating = get_rating_from_user()
+                    if rating:
+                        send_rating_for_media_item(media_type=media_type,
+                                                   media_id=tmdb_id,
+                                                   rating=rating)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             set_mbids_for_artists(False, False)
         elif info == 'setfocus':
