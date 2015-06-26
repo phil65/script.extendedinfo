@@ -10,6 +10,7 @@ import threading
 import re
 from urllib2 import Request, urlopen
 from functools32 import lru_cache
+from WindowManager import wm
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
 POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]

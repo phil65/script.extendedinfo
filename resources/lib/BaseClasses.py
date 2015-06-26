@@ -15,6 +15,7 @@ from OnClickHandler import OnClickHandler
 
 ch = OnClickHandler()
 
+
 class WindowXML(xbmcgui.WindowXML):
 
     def __init__(self, *args, **kwargs):
@@ -246,25 +247,26 @@ class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else
                                             list=[LANG(32006)])
         if selection == 0:
             path = self.getControl(focus_id).getSelectedItem().getProperty("original")
+            media_type = self.window.getProperty("type")
             params = '"art": {"poster": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     @ch.context(1350)
-    def thumbnail_options(self):
+    def fanart_options(self):
         if not self.info.get("dbid"):
             return None
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32007)])
         if selection == 0:
             path = self.getControl(focus_id).getSelectedItem().getProperty("original")
+            media_type = self.window.getProperty("type")
             params = '"art": {"fanart": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     def onAction(self, action):
         focus_id = self.getFocusId()
-        media_type = self.window.getProperty("type")
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             wm.pop_stack()
