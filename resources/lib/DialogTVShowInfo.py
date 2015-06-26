@@ -50,7 +50,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             else:
                 notify(LANG(32143))
                 return None
-            youtube_thread = GetYoutubeVidsThread(search_str=search_str)
+            youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
             youtube_thread.start()
             cert_list = get_certification_list("tv")
             for item in self.data["certifications"]:

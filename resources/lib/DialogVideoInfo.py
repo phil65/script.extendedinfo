@@ -42,7 +42,7 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             notify(LANG(32143))
             return None
-        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
+        youtube_thread = GetYoutubeVidsThread(search_str="%s %s, movie" % (self.info["Label"], self.info["year"]))
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
