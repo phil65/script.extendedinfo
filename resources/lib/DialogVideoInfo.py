@@ -238,13 +238,11 @@ class DialogVideoInfo(DialogBaseInfo):
                                filter_label=account_lists[index - 2]["name"],
                                force=True)
 
-
     @ch.click(132)
     def show_plot(self):
         wm.open_textviewer(header=LANG(207),
                            text=self.info["Plot"],
                            color=self.info['ImageColor'])
-
 
     @ch.click(6001)
     def set_rating_dialog(self):
