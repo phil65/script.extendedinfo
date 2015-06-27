@@ -101,7 +101,8 @@
                     <posy>320</posy>
                     <width>135</width>
                     <height>26</height>
-                    <texture>$INFO[Container(500).ListItem.Rating,flags/stars/,.png]</texture>
+                    <animation effect="fade" start="100" end="60" time="0" condition="IsEmpty(Container(500).ListItem.Rating)">Conditional</animation>
+                    <texture fallback="flags/stars/0.0.png">$INFO[Container(500).ListItem.Rating,flags/stars/,.png]</texture>
                 </control>
                 <control type="textbox">
                     <posy>450</posy>
@@ -109,7 +110,7 @@
                     <width>395</width>
                     <height>590</height>
                     <align>justify</align>
-                    <label>$INFO[Container(500).ListItem.Plot][CR][CR]  </label>
+                    <label fallback="416">$INFO[Container(500).ListItem.Plot,,[CR][CR]  ]</label>
                     <autoscroll delay="10000" time="1600" repeat="10000">true</autoscroll>
                     <font>font12</font>
                     <textcolor>FF999999</textcolor>
