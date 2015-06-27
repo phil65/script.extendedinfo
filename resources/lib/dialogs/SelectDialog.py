@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-from Utils import *
+from ..Utils import *
 
 
 # TODO: extend and use this for ContextMenu to get proper closing behaviour
