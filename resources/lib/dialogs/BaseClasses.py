@@ -50,6 +50,7 @@ class DialogBaseList(object):
         self.last_searches = deque(maxlen=10)
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
+        self.column = None
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
@@ -68,6 +69,11 @@ class DialogBaseList(object):
             xbmc.executebuiltin("SetFocus(6000)")
 
     def onAction(self, action):
+        self.column = None
+        for i in range(0, 10):
+            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
+                self.column = i
+                break
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             wm.pop_stack()
@@ -157,6 +163,8 @@ class DialogBaseList(object):
     def update_ui(self):
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
+        if self.column is not None:
+            self.getControl(500).selectItem(self.column)
         self.window.setProperty("TotalPages", str(self.total_pages))
         self.window.setProperty("TotalItems", str(self.total_items))
         self.window.setProperty("CurrentPage", str(self.page))
