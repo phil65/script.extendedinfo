@@ -474,8 +474,13 @@ def start_info_actions(infos, params):
             if movie_id:
                 trailer = get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
-                PLAYER.play_youtube_video(trailer)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+                xbmc.sleep(100)
+                if trailer:
+                    PLAYER.play_youtube_video(trailer)
+                elif params.get("title"):
+                    wm.open_youtube_list(search_str=params.get("title", ""))
+                else:
+                    xbmc.executebuiltin("Dialog.Close(busydialog)")
         elif info == 'updatexbmcdatabasewithartistmbid':
             resolve_url(params.get("handle"))
             set_mbids_for_artists(True, False)
