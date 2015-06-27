@@ -13,8 +13,8 @@ from collections import deque
 import ast
 from OnClickHandler import OnClickHandler
 import VideoPlayer
-PLAYER = VideoPlayer.VideoPlayer()
 
+PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()
 
 
@@ -279,8 +279,10 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)
-        listitems = handle_tmdb_seasons(info["media"]["seasons"])
-        listitems += handle_tmdb_episodes(info["media"]["episodes"])
+        if "seasons" in info["media"]:
+            listitems = handle_tmdb_seasons(info["media"]["seasons"])
+        if "episodes" in info["media"]:
+            listitems += handle_tmdb_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)

@@ -51,6 +51,7 @@ class VideoPlayer(xbmc.Player):
             notify(header=LANG(257),
                    message="no youtube id found")
 
+    @busy_dialog
     def youtube_info_by_id(self, youtube_id):
         import YDStreamExtractor
         vid = YDStreamExtractor.getVideoInfo(youtube_id,

@@ -153,10 +153,11 @@ def get_google_autocomplete_items(search_str, youtube=False):
         return []
     listitems = []
     headers = {'User-agent': 'Mozilla/5.0'}
-    url = "http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (SETTING("autocomplete_lang"), urllib.quote_plus(search_str))
+    base_url = "http://clients1.google.com/complete/"
+    url = "search?hl=%s&q=%s&json=t&client=serp" % (SETTING("autocomplete_lang"), urllib.quote_plus(search_str))
     if youtube:
         url += "&ds=yt"
-    result = get_JSON_response(url=url,
+    result = get_JSON_response(url=base_url + url,
                                headers=headers,
                                folder="Google")
     for item in result[1]:
@@ -177,12 +178,13 @@ def get_common_words_autocomplete_items(search_str):
     path = os.path.join(ADDON_PATH, "resources", "data", "common_%s.txt" % SETTING("autocomplete_lang_local"))
     with codecs.open(path, encoding="utf8") as f:
         for i, line in enumerate(f.readlines()):
-            if line.startswith(search_str) and len(line) > 3:
-                li = {"label": line,
-                      "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % line}
-                listitems.append(li)
-                if len(listitems) > 10:
-                    break
+            if not line.startswith(search_str) or len(line) <= 2:
+                continue
+            li = {"label": line,
+                  "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % line}
+            listitems.append(li)
+            if len(listitems) > 10:
+                break
     return listitems
 
 

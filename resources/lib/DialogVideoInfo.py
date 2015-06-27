@@ -131,7 +131,6 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(350)
     @ch.click(1150)
     @ch.click(10)
-    @busy_dialog
     def play_video(self):
         listitem = xbmcgui.ListItem(LANG(20410))
         listitem.setInfo('video', {'title': LANG(20410),
