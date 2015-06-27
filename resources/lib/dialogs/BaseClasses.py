@@ -69,11 +69,6 @@ class DialogBaseList(object):
             xbmc.executebuiltin("SetFocus(6000)")
 
     def onAction(self, action):
-        self.column = None
-        for i in range(0, 10):
-            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
-                self.column = i
-                break
         if action in self.ACTION_PREVIOUS_MENU:
             self.close()
             wm.pop_stack()

@@ -204,10 +204,18 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
             self.window.getControl(5010).setVisible(True)
 
     def go_to_next_page(self):
+        for i in range(0, 10):
+            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
+                self.column = i
+                break
         if self.page < self.total_pages:
             self.page += 1
 
     def go_to_prev_page(self):
+        for i in range(0, 10):
+            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
+                self.column = i
+                break
         if self.page > 1:
             self.page -= 1
 
