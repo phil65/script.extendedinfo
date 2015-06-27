@@ -74,9 +74,9 @@
                 <texture>$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
                 <posx>40</posx>
                 <posy>130</posy>
-                <width>400</width>
+                <width>396</width>
                 <fadetime>200</fadetime>
-                <height>220</height>
+                <height>222</height>
                 <aspectratio>scale</aspectratio>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="rotatey" start="55" end="0" delay="3750" center="220,0" tween="sine" time="750" />
