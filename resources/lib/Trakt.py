@@ -69,7 +69,7 @@ def get_trakt_calendar_shows(content):
 def handle_trakt_movies(results):
     movies = []
     for movie in results:
-        if ADDON.getSetting("infodialog_onclick") != "false":
+        if SETTING("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie["movie"]["ids"], 'tmdb'))
         else:
             path = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))

@@ -28,6 +28,7 @@ ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
 ADDON_DATA_PATH = os.path.join(xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8"))
 ADDON_VERSION = ADDON.getAddonInfo('version')
 HOME = xbmcgui.Window(10000)
+SETTING = ADDON.getSetting
 
 
 def LANG(label_id):
@@ -121,11 +122,11 @@ def check_version():
     check version, open TextViewer if update detected
     """
     from WindowManager import wm
-    if not ADDON.getSetting("changelog_version") == ADDON_VERSION:
+    if not SETTING("changelog_version") == ADDON_VERSION:
         wm.open_textviewer(header=LANG(24036),
                            text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
         ADDON.setSetting("changelog_version", ADDON_VERSION)
-    if not ADDON.getSetting("first_start_infodialog"):
+    if not SETTING("first_start_infodialog"):
         ADDON.setSetting("first_start_infodialog", "True")
         xbmcgui.Dialog().ok(heading=ADDON_NAME,
                             line1=LANG(32140),
@@ -136,9 +137,9 @@ def get_autocomplete_items(search_str):
     """
     get dict list with autocomplete labels from google
     """
-    if ADDON.getSetting("autocomplete_provider") == "youtube":
+    if SETTING("autocomplete_provider") == "youtube":
         return get_google_autocomplete_items(search_str, True)
-    elif ADDON.getSetting("autocomplete_provider") == "google":
+    elif SETTING("autocomplete_provider") == "google":
         return get_google_autocomplete_items(search_str)
     else:
         return get_common_words_autocomplete_items(search_str)
@@ -152,7 +153,7 @@ def get_google_autocomplete_items(search_str, youtube=False):
         return []
     listitems = []
     headers = {'User-agent': 'Mozilla/5.0'}
-    url = "http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (ADDON.getSetting("autocomplete_lang"), urllib.quote_plus(search_str))
+    url = "http://clients1.google.com/complete/search?hl=%s&q=%s&json=t&client=serp" % (SETTING("autocomplete_lang"), urllib.quote_plus(search_str))
     if youtube:
         url += "&ds=yt"
     result = get_JSON_response(url=url,
@@ -173,7 +174,7 @@ def get_common_words_autocomplete_items(search_str):
     k = search_str.rfind(" ")
     if k >= 0:
         search_str = search_str[k + 1:]
-    path = os.path.join(ADDON_PATH, "resources", "data", "common_%s.txt" % ADDON.getSetting("autocomplete_lang_local"))
+    path = os.path.join(ADDON_PATH, "resources", "data", "common_%s.txt" % SETTING("autocomplete_lang_local"))
     with codecs.open(path, encoding="utf8") as f:
         for i, line in enumerate(f.readlines()):
             if line.startswith(search_str) and len(line) > 3:
@@ -315,8 +316,8 @@ def get_sort_letters(path, focused_letter):
     listitems = []
     letter_list = []
     HOME.clearProperty("LetterList")
-    if ADDON.getSetting("FolderPath") == path:
-        letter_list = ADDON.getSetting("LetterList").split()
+    if SETTING("FolderPath") == path:
+        letter_list = SETTING("LetterList").split()
     else:
         if path:
             json_response = get_kodi_json(method="Files.GetDirectory",

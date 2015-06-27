@@ -95,7 +95,7 @@ class DialogBaseList(object):
             self.mode = "filter"
             self.update()
         elif control_id == 6000:
-            settings_str = ADDON.getSetting("search_history")
+            settings_str = SETTING("search_history")
             if settings_str:
                 self.last_searches = deque(ast.literal_eval(settings_str), maxlen=10)
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
@@ -214,7 +214,7 @@ class DialogBaseList(object):
             self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
 
 
-class DialogBaseInfo(WindowXML if ADDON.getSetting("window_mode") == "true" else DialogXML):
+class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXML):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 

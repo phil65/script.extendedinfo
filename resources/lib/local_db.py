@@ -135,7 +135,7 @@ def get_db_tvshows(filter_str="", limit=10):
 
 def handle_db_movies(movie):
     trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
-    if ADDON.getSetting("infodialog_onclick") != "false":
+    if SETTING("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=extendedinfo&&dbid=%s' % str(movie['movieid'])
     else:
         path = 'plugin://script.extendedinfo/?info=playmovie&&dbid=%i' % movie['movieid']
@@ -186,7 +186,7 @@ def handle_db_movies(movie):
 
 
 def handle_db_tvshows(tvshow):
-    if ADDON.getSetting("infodialog_onclick") != "false":
+    if SETTING("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % str(tvshow['tvshowid'])
     else:
         path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % str(tvshow['tvshowid'])

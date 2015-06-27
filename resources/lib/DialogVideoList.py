@@ -28,10 +28,10 @@ TRANSLATIONS = {"movie": LANG(20338),
                 "tv": LANG(20364),
                 "person": LANG(32156)}
 
-include_adult = str(ADDON.getSetting("include_adults")).lower()
+include_adult = str(SETTING("include_adults")).lower()
 
 
-class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode") == "true" else DialogXML):
+class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "true" else DialogXML):
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
@@ -305,7 +305,7 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                                                     force_overwrite=False)
 
     def get_genre(self):
-        response = get_tmdb_data("genre/%s/list?language=%s&" % (self.type, ADDON.getSetting("LanguageID")), 10)
+        response = get_tmdb_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
         id_list = [item["id"] for item in response["genres"]]
         label_list = [item["name"] for item in response["genres"]]
         index = xbmcgui.Dialog().select(heading=LANG(32151),
@@ -403,10 +403,10 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
             else:
                 self.filter_label = ""
         elif self.mode == "list":
-            url = "list/%s?language=%s&" % (str(self.list_id), ADDON.getSetting("LanguageID"))
+            url = "list/%s?language=%s&" % (str(self.list_id), SETTING("LanguageID"))
             # self.filter_label = LANG(32036)
         elif self.mode == "favorites":
-            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, get_session_id(), sort_by)
+            url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, SETTING("LanguageID"), self.page, get_session_id(), sort_by)
             self.filter_label = starred
         elif self.mode == "rating":
             force = True  # workaround, should be updated after setting rating
@@ -417,7 +417,7 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                     return {"listitems": [],
                             "results_per_page": 0,
                             "total_results": 0}
-                url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, ADDON.getSetting("LanguageID"), self.page, session_id, sort_by)
+                url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (get_account_info(), temp, SETTING("LanguageID"), self.page, session_id, sort_by)
             else:
                 session_id = get_guest_session_id()
                 if not session_id:
@@ -425,12 +425,12 @@ class DialogVideoList(DialogBaseList, WindowXML if ADDON.getSetting("window_mode
                     return {"listitems": [],
                             "results_per_page": 0,
                             "total_results": 0}
-                url = "guest_session/%s/rated_movies?language=%s&" % (session_id, ADDON.getSetting("LanguageID"))
+                url = "guest_session/%s/rated_movies?language=%s&" % (session_id, SETTING("LanguageID"))
             self.filter_label = rated
         else:
             self.set_filter_url()
             self.set_filter_label()
-            url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, ADDON.getSetting("LanguageID"), self.page, include_adult)
+            url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, SETTING("LanguageID"), self.page, include_adult)
         if force:
             response = get_tmdb_data(url=url,
                                      cache_days=0)

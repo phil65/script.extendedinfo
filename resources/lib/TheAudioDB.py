@@ -103,7 +103,7 @@ def extended_artist_info(results):
     artists = []
     if 'artists' in results and results['artists']:
         for artist in results['artists']:
-            local_bio = 'strBiography' + ADDON.getSetting("LanguageID").upper()
+            local_bio = 'strBiography' + SETTING("LanguageID").upper()
             if local_bio in artist and artist[local_bio]:
                 description = fetch(artist, local_bio)
             elif 'strBiographyEN' in artist and artist['strBiographyEN']:

@@ -61,6 +61,9 @@ class DialogSeasonInfo(DialogBaseInfo):
                           window_id=self.window_id)
         self.fill_lists()
 
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
+
     @ch.click(750)
     @ch.click(1000)
     def open_actor_info(self):
@@ -70,7 +73,7 @@ class DialogSeasonInfo(DialogBaseInfo):
     @ch.click(2000)
     def open_episode_info(self):
         if not self.tmdb_id:
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), ADDON.getSetting("LanguageID")), 30)
+            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), SETTING("LanguageID")), 30)
             self.tmdb_id = str(response['results'][0]['id'])
         wm.open_episode_info(prev_window=self,
                              tvshow_id=self.tmdb_id,
@@ -94,6 +97,3 @@ class DialogSeasonInfo(DialogBaseInfo):
         wm.open_textviewer(header=LANG(32037),
                            text=self.info["Plot"],
                            color=self.info['ImageColor'])
-
-    def onClick(self, control_id):
-        ch.serve(control_id, self)
