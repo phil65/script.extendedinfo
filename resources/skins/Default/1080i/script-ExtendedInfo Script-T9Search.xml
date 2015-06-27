@@ -15,17 +15,17 @@
                 <effect type="zoom" start="100" end="80" center="960,540" easing="in" tween="back" time="240" />
                 <effect type="fade" start="100" end="0" time="240" />
             </animation>
-            <posx>0</posx>
-            <posy>30</posy>
+            <posx>20</posx>
+            <posy>0</posy>
             <control type="image">
-                <posx>-92</posx>
-                <width>512</width>
+                <posx>-112</posx>
+                <width>552</width>
                 <height>1080</height>
                 <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">dialogs/context_middle.png</texture>
             </control>
             <control type="panel" id="9090">
                 <left>15</left>
-                <top>-40</top>
+                <top>-31</top>
                 <width>447</width>
                 <height>708</height>
                 <onleft>9090</onleft>
@@ -96,7 +96,7 @@
             </control>
             <control type="list" id="9091">
                 <left>15</left>
-                <top>482</top>
+                <top>500</top>
                 <width>390</width>
                 <height>708</height>
                 <onleft>9091</onleft>
@@ -156,7 +156,7 @@
             </control>
             <control type="label" id="600">
                 <left>15</left>
-                <top>440</top>
+                <top>455</top>
                 <width>380</width>
                 <height>50</height>
                 <align>center</align>
