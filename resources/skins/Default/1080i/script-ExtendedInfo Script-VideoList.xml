@@ -36,7 +36,7 @@
                 <visible>IntegerGreaterThan(Container(500).NumItems,0)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <control type="image">
-                    <posx>445</posx>
+                    <posx>465</posx>
                     <posy>107</posy>
                     <width>330</width>
                     <height>432</height>
@@ -98,7 +98,7 @@
                 </control>
                 <control type="image">
                     <posx>40</posx>
-                    <posy>325</posy>
+                    <posy>320</posy>
                     <width>135</width>
                     <height>26</height>
                     <texture>$INFO[Container(500).ListItem.Rating,flags/stars/,.png]</texture>
@@ -116,7 +116,7 @@
                 </control>
             </control>
             <control type="panel" id="500">
-                <posx>420</posx>
+                <posx>440</posx>
                 <posy>0</posy>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
