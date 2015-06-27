@@ -619,11 +619,12 @@ def get_icon_panel(number):
     items = []
     offset = number * 5 - 5
     for i in range(1, 6):
-        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Label)").decode("utf-8"),
-                   'path': "plugin://script.extendedinfo/?info=action&&id=" + xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Path)").decode("utf-8"),
-                   'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Icon)").decode("utf-8"),
-                   'id': "IconPanelitem" + str(i + offset).decode("utf-8"),
-                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem" + str(i + offset) + ".Type)").decode("utf-8")}
+        infopanel_path = xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Path)" % (i + offset))
+        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Label)" % (i + offset)).decode("utf-8"),
+                   'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path.decode("utf-8"),
+                   'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Icon)" % (i + offset)).decode("utf-8"),
+                   'id': "IconPanelitem%i" % (i + offset),
+                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Type)" % (i + offset)).decode("utf-8")}
         items.append(newitem)
     return items
 
@@ -633,9 +634,9 @@ def get_weather_images():
     for i in range(1, 6):
         newitem = {'Label': "bla",
                    'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
-                   'thumb': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Area)"),
-                   'Layer': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Layer)"),
-                   'Legend': xbmc.getInfoLabel("Window(weather).Property(Map." + str(i) + ".Legend)")}
+                   'thumb': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Area)" % i),
+                   'Layer': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Layer)" % i),
+                   'Legend': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Legend)" % i)}
         items.append(newitem)
     return items
 
@@ -803,7 +804,6 @@ def set_window_props(name, data, prefix="", debug=False):
             if debug:
                 log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
     HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
-
 
 
 def create_listitems(data=None, preload_images=0):
