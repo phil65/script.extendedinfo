@@ -319,7 +319,7 @@
             </control>
             <control type="image">
                 <texture>arrowdown.png</texture>
-                <posx>900</posx>
+                <posx>1090</posx>
                 <animation effect="fade" time="250">VisibleChange</animation>
                 <posy>1040</posy>
                 <width>120</width>
@@ -330,7 +330,7 @@
             </control>
             <control type="image">
                 <texture flipy="true">arrowdown.png</texture>
-                <posx>900</posx>
+                <posx>1090</posx>
                 <animation effect="fade" time="250">VisibleChange</animation>
                 <posy>10</posy>
                 <width>120</width>
