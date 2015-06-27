@@ -49,8 +49,7 @@ class DialogActorInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"])
         youtube_thread.start()
-        filter_thread = FilterImageThread(image=self.info["thumb"],
-                                          radius=25)
+        filter_thread = FilterImageThread(image=self.info["thumb"])
         filter_thread.start()
         db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
         self.info["DBMovies"] = str(db_movies)

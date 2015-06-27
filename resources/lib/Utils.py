@@ -320,31 +320,31 @@ def get_sort_letters(path, focused_letter):
     HOME.clearProperty("LetterList")
     if SETTING("FolderPath") == path:
         letter_list = SETTING("LetterList").split()
-    else:
-        if path:
-            json_response = get_kodi_json(method="Files.GetDirectory",
-                                          params='{"directory": "%s", "media": "files"}' % path)
-            if "result" in json_response and "files" in json_response["result"]:
-                for movie in json_response["result"]["files"]:
-                    cleaned_label = movie["label"].replace("The ", "")
-                    if cleaned_label:
-                        sortletter = cleaned_label[0]
-                        if sortletter not in letter_list:
-                            letter_list.append(sortletter)
-            ADDON.setSetting("LetterList", " ".join(letter_list))
-            ADDON.setSetting("FolderPath", path)
+    elif path:
+        json_response = get_kodi_json(method="Files.GetDirectory",
+                                      params='{"directory": "%s", "media": "files"}' % path)
+        if "result" in json_response and "files" in json_response["result"]:
+            for movie in json_response["result"]["files"]:
+                cleaned_label = movie["label"].replace("The ", "")
+                if cleaned_label:
+                    sortletter = cleaned_label[0]
+                    if sortletter not in letter_list:
+                        letter_list.append(sortletter)
+        ADDON.setSetting("LetterList", " ".join(letter_list))
+        ADDON.setSetting("FolderPath", path)
     HOME.setProperty("LetterList", "".join(letter_list))
-    if letter_list and focused_letter:
-        start_ord = ord("A")
-        for i in range(0, 26):
-            letter = chr(start_ord + i)
-            if letter == focused_letter:
-                label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-            elif letter in letter_list:
-                label = letter
-            else:
-                label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
-            listitems.append({"label": label})
+    if not letter_list or not focused_letter:
+        return None
+    start_ord = ord("A")
+    for i in range(0, 26):
+        letter = chr(start_ord + i)
+        if letter == focused_letter:
+            label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
+        elif letter in letter_list:
+            label = letter
+        else:
+            label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
+        listitems.append({"label": label})
     return listitems
 
 
@@ -353,16 +353,15 @@ def millify(n):
     make large numbers human-readable, return string
     """
     millnames = [' ', '.000', ' ' + LANG(32000), ' ' + LANG(32001), ' ' + LANG(32002)]
-    if n and n > 100:
-        n = float(n)
-        char_count = len(str(n))
-        millidx = (char_count / 3) - 1
-        if millidx == 3 or char_count == 9:
-            return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-        else:
-            return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-    else:
+    if not n or n <= 100:
         return ""
+    n = float(n)
+    char_count = len(str(n))
+    millidx = (char_count / 3) - 1
+    if millidx == 3 or char_count == 9:
+        return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
+    else:
+        return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
 
 
 def media_streamdetails(filename, streamdetails):
@@ -548,31 +547,30 @@ def get_file(url):
     elif xbmcvfs.exists(vid_cache_file):
         log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
         return vid_cache_file
-    else:
-        try:
-            request = urllib2.Request(url)
-            request.add_header('Accept-encoding', 'gzip')
-            response = urllib2.urlopen(request)
-            data = response.read()
-            response.close()
-            log('image downloaded: ' + url)
-        except:
-            log('image download failed: ' + url)
-            return ""
-        if not data:
-            return ""
-        try:
-            if url.endswith(".png"):
-                image = cache_file_png
-            else:
-                image = cache_file_jpg
-            tmp_file = open(xbmc.translatePath(image), 'wb')
-            tmp_file.write(data)
-            tmp_file.close()
-            return xbmc.translatePath(image)
-        except:
-            log('failed to save image ' + url)
-            return ""
+    try:
+        request = urllib2.Request(url)
+        request.add_header('Accept-encoding', 'gzip')
+        response = urllib2.urlopen(request)
+        data = response.read()
+        response.close()
+        log('image downloaded: ' + url)
+    except:
+        log('image download failed: ' + url)
+        return ""
+    if not data:
+        return ""
+    try:
+        if url.endswith(".png"):
+            image = cache_file_png
+        else:
+            image = cache_file_jpg
+        tmp_file = open(xbmc.translatePath(image), 'wb')
+        tmp_file.write(data)
+        tmp_file.close()
+        return xbmc.translatePath(image)
+    except:
+        log('failed to save image ' + url)
+        return ""
 
 
 def get_favs_by_type(fav_type):
@@ -743,7 +741,7 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
     for (key, value) in data.iteritems():
         value = unicode(value)
         if precache:
-            if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+            if value.startswith("http") and (value.endswith(".jpg") or value.endswith(".png")):
                 if value not in image_requests and value:
                     thread = GetFileThread(value)
                     threads += [thread]
@@ -773,40 +771,39 @@ def merge_dict_lists(items, key="job"):
 def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
     if limit and int(limit) < len(data):
         data = data[:int(limit)]
-    if handle:
-        HOME.clearProperty(name)
-        if data:
-            HOME.setProperty(name + ".Count", str(len(data)))
-            if data:
-                items = create_listitems(data)
-                itemlist = [(item.getProperty("path"), item, bool(item.getProperty("directory"))) for item in items]
-                xbmcplugin.addDirectoryItems(handle=handle,
-                                             items=itemlist,
-                                             totalItems=len(itemlist))
-        xbmcplugin.endOfDirectory(handle)
-    else:
+    if not handle:
         set_window_props(name, data, prefix)
+        return None
+    HOME.clearProperty(name)
+    if data:
+        HOME.setProperty(name + ".Count", str(len(data)))
+        items = create_listitems(data)
+        itemlist = [(item.getProperty("path"), item, bool(item.getProperty("directory"))) for item in items]
+        xbmcplugin.addDirectoryItems(handle=handle,
+                                     items=itemlist,
+                                     totalItems=len(itemlist))
+    xbmcplugin.endOfDirectory(handle)
 
 
 def set_window_props(name, data, prefix="", debug=False):
-    if data is not None:
-        # log("%s%s.Count = %s" % (prefix, name, str(len(data))))
-        for (count, result) in enumerate(data):
-            if debug:
-                log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
-            for (key, value) in result.iteritems():
-                value = unicode(value)
-                HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
-                if key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
-                                   "discart", "characterart", "tvshow.fanart", "tvshow.poster",
-                                   "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                    HOME.setProperty('%s%s.%i.Art(%s)' % (prefix, name, count + 1, str(key)), value)
-                if debug:
-                    log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
-        HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
-    else:
+    if not data:
         HOME.setProperty('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
+        return None
+    for (count, result) in enumerate(data):
+        if debug:
+            log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
+        for (key, value) in result.iteritems():
+            value = unicode(value)
+            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
+            if key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
+                               "discart", "characterart", "tvshow.fanart", "tvshow.poster",
+                               "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                HOME.setProperty('%s%s.%i.Art(%s)' % (prefix, name, count + 1, str(key)), value)
+            if debug:
+                log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
+    HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+
 
 
 def create_listitems(data=None, preload_images=0):

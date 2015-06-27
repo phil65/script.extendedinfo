@@ -82,12 +82,13 @@ class DialogEpisodeInfo(DialogBaseInfo):
     @ch.click(6001)
     def set_rating_dialog(self):
         rating = get_rating_from_user()
-        if rating:
-            identifier = [self.tmdb_id, self.season, self.info["episode"]]
-            send_rating_for_media_item(media_type="episode",
-                                       media_id=identifier,
-                                       rating=rating)
-            self.update_states()
+        if not rating:
+            return None
+        identifier = [self.tmdb_id, self.season, self.info["episode"]]
+        send_rating_for_media_item(media_type="episode",
+                                   media_id=identifier,
+                                   rating=rating)
+        self.update_states()
 
     @ch.click(6006)
     def open_rating_list(self):
@@ -107,8 +108,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
                                                                season=self.season,
                                                                episode=self.episode_number,
                                                                cache_time=0)
-        if self.account_states:
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
+        if not self.account_states:
+            return None
+        if self.account_states["rated"]:
+            self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
+        else:
+            self.window.setProperty("movie.rated", "")

@@ -24,34 +24,34 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
-        if self.season and (self.tmdb_id or self.tvshow):
-            data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
-                                        tvshow_name=self.tvshow,
-                                        season_number=self.season)
-            if data:
-                self.info, self.data = data
-            else:
-                notify(LANG(32143))
-                return None
-            search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
-            youtube_thread = GetYoutubeVidsThread(search_str=search_str)
-            youtube_thread.start()
-            if "dbid" not in self.info:  # need to add comparing for seasons
-                self.info['Poster'] = get_file(url=self.info["Poster"])
-            filter_thread = FilterImageThread(self.info["Poster"], 25)
-            filter_thread.start()
-            youtube_thread.join()
-            filter_thread.join()
-            self.info['ImageFilter'], self.info['ImageColor'] = filter_thread.image, filter_thread.imagecolor
-            self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
-                              (750, create_listitems(self.data["crew"], 0)),
-                              (2000, create_listitems(self.data["episodes"], 0)),
-                              (1150, create_listitems(self.data["videos"], 0)),
-                              (1250, create_listitems(self.data["images"], 0)),
-                              (1350, create_listitems(self.data["backdrops"], 0)),
-                              (350, create_listitems(youtube_thread.listitems, 0))]
+        if not self.season or not (self.tmdb_id and self.tvshow):
+            notify(LANG(32143))
+            return None
+        data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
+                                    tvshow_name=self.tvshow,
+                                    season_number=self.season)
+        if data:
+            self.info, self.data = data
         else:
             notify(LANG(32143))
+            return None
+        search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
+        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
+        youtube_thread.start()
+        if "dbid" not in self.info:  # need to add comparing for seasons
+            self.info['Poster'] = get_file(url=self.info["Poster"])
+        filter_thread = FilterImageThread(self.info["Poster"], 25)
+        filter_thread.start()
+        youtube_thread.join()
+        filter_thread.join()
+        self.info['ImageFilter'], self.info['ImageColor'] = filter_thread.image, filter_thread.imagecolor
+        self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
+                          (750, create_listitems(self.data["crew"], 0)),
+                          (2000, create_listitems(self.data["episodes"], 0)),
+                          (1150, create_listitems(self.data["videos"], 0)),
+                          (1250, create_listitems(self.data["images"], 0)),
+                          (1350, create_listitems(self.data["backdrops"], 0)),
+                          (350, create_listitems(youtube_thread.listitems, 0))]
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()

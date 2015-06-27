@@ -60,13 +60,14 @@ class DialogVideoInfo(DialogBaseInfo):
         self.data["lists"] = lists_thread.listitems
         cert_list = get_certification_list("movie")
         for item in self.data["releases"]:
-            if item["iso_3166_1"] in cert_list:
-                language = item["iso_3166_1"]
-                certification = item["certification"]
-                language_certs = cert_list[language]
-                hit = dictfind(language_certs, "certification", certification)
-                if hit:
-                    item["meaning"] = hit["meaning"]
+            if item["iso_3166_1"] not in cert_list:
+                continue
+            language = item["iso_3166_1"]
+            certification = item["certification"]
+            language_certs = cert_list[language]
+            hit = dictfind(language_certs, "certification", certification)
+            if hit:
+                item["meaning"] = hit["meaning"]
         sets_thread.join()
         self.set_listitems = sets_thread.listitems
         self.setinfo = sets_thread.setinfo
@@ -238,11 +239,12 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(6001)
     def set_rating_dialog(self):
         rating = get_rating_from_user()
-        if rating:
-            send_rating_for_media_item(media_type="movie",
-                                       media_id=self.tmdb_id,
-                                       rating=rating)
-            self.update_states()
+        if not rating:
+            return None
+        send_rating_for_media_item(media_type="movie",
+                                   media_id=self.tmdb_id,
+                                   rating=rating)
+        self.update_states()
 
     @ch.click(6005)
     def add_to_list_dialog(self):
@@ -257,12 +259,13 @@ class DialogVideoInfo(DialogBaseInfo):
         if index == 0:
             listname = xbmcgui.Dialog().input(heading=LANG(32137),
                                               type=xbmcgui.INPUT_ALPHANUM)
-            if listname:
-                list_id = create_list(listname)
-                xbmc.sleep(1000)
-                change_list_status(list_id=list_id,
-                                   movie_id=self.tmdb_id,
-                                   status=True)
+            if not listname:
+                return None
+            list_id = create_list(listname)
+            xbmc.sleep(1000)
+            change_list_status(list_id=list_id,
+                               movie_id=self.tmdb_id,
+                               status=True)
         elif index == len(listitems) - 1:
             self.remove_list_dialog(account_lists)
         elif index > 0:
@@ -322,18 +325,19 @@ class DialogVideoInfo(DialogBaseInfo):
         if force_update:
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
-        if self.account_states:
-            if self.account_states["favorite"]:
-                self.window.setProperty("FavButton_Label", LANG(32155))
-                self.window.setProperty("movie.favorite", "True")
-            else:
-                self.window.setProperty("FavButton_Label", LANG(32154))
-                self.window.setProperty("movie.favorite", "")
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
+        if not self.account_states:
+            return None
+        if self.account_states["favorite"]:
+            self.window.setProperty("FavButton_Label", LANG(32155))
+            self.window.setProperty("movie.favorite", "True")
+        else:
+            self.window.setProperty("FavButton_Label", LANG(32154))
+            self.window.setProperty("movie.favorite", "")
+        if self.account_states["rated"]:
+            self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
+        else:
+            self.window.setProperty("movie.rated", "")
+        self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
 
     def remove_list_dialog(self, account_lists):
         listitems = []
@@ -381,10 +385,11 @@ class JoinOmdbThread(threading.Thread):
 
     def run(self):
         self.omdb_thread.join()
-        if xbmcgui.getCurrentWindowDialogId() == self.window_id:
-            pass_dict_to_skin(data=self.omdb_thread.listitems,
-                              prefix="movie.omdb.",
-                              window_id=self.window_id)
+        if not xbmcgui.getCurrentWindowDialogId() == self.window_id:
+            return None
+        pass_dict_to_skin(data=self.omdb_thread.listitems,
+                          prefix="movie.omdb.",
+                          window_id=self.window_id)
 
 
 class SetItemsThread(threading.Thread):

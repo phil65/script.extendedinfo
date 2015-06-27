@@ -42,56 +42,55 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.tmdb_id = search_media(media_name=kwargs.get('name'),
                                         year="",
                                         media_type="tv")
-        if self.tmdb_id:
-            data = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                        dbid=self.dbid)
-            if data:
-                self.info, self.data, self.account_states = data
-            else:
-                notify(LANG(32143))
-                return None
-            youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
-            youtube_thread.start()
-            cert_list = get_certification_list("tv")
-            for item in self.data["certifications"]:
-                if item["iso_3166_1"] in cert_list:
-                    # language = item["iso_3166_1"]
-                    rating = item["certification"]
-                    language_certs = cert_list[item["iso_3166_1"]]
-                    hit = dictfind(lst=language_certs,
-                                   key="certification",
-                                   value=rating)
-                    if hit:
-                        item["meaning"] = hit["meaning"]
-            if "dbid" not in self.info:  # need to add comparing for tvshows
-                poster_thread = FunctionThread(function=get_file,
-                                               param=self.info["Poster"])
-                poster_thread.start()
-            if "dbid" not in self.info:
-                poster_thread.join()
-                self.info['Poster'] = poster_thread.listitems
-            filter_thread = FilterImageThread(image=self.info["Poster"],
-                                              radius=25)
-            filter_thread.start()
-            youtube_thread.join()
-            filter_thread.join()
-            self.info['ImageFilter'] = filter_thread.image
-            self.info['ImageColor'] = filter_thread.imagecolor
-            self.listitems = [(150, create_listitems(self.data["similar"], 0)),
-                              (250, create_listitems(self.data["seasons"], 0)),
-                              (1450, create_listitems(self.data["networks"], 0)),
-                              (550, create_listitems(self.data["studios"], 0)),
-                              (650, create_listitems(self.data["certifications"], 0)),
-                              (750, create_listitems(self.data["crew"], 0)),
-                              (850, create_listitems(self.data["genres"], 0)),
-                              (950, create_listitems(self.data["keywords"], 0)),
-                              (1000, create_listitems(self.data["actors"], 0)),
-                              (1150, create_listitems(self.data["videos"], 0)),
-                              (1250, create_listitems(self.data["images"], 0)),
-                              (1350, create_listitems(self.data["backdrops"], 0)),
-                              (350, create_listitems(youtube_thread.listitems, 0))]
+        if not self.tmdb_id:
+            notify(LANG(32143))
+            return None
+        data = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                    dbid=self.dbid)
+        if data:
+            self.info, self.data, self.account_states = data
         else:
             notify(LANG(32143))
+            return None
+        youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
+        youtube_thread.start()
+        cert_list = get_certification_list("tv")
+        for item in self.data["certifications"]:
+            if not item["iso_3166_1"] in cert_list:
+                continue
+            rating = item["certification"]
+            language_certs = cert_list[item["iso_3166_1"]]
+            hit = dictfind(lst=language_certs,
+                           key="certification",
+                           value=rating)
+            if hit:
+                item["meaning"] = hit["meaning"]
+        if "dbid" not in self.info:  # need to add comparing for tvshows
+            poster_thread = FunctionThread(function=get_file,
+                                           param=self.info["Poster"])
+            poster_thread.start()
+        if "dbid" not in self.info:
+            poster_thread.join()
+            self.info['Poster'] = poster_thread.listitems
+        filter_thread = FilterImageThread(image=self.info["Poster"])
+        filter_thread.start()
+        youtube_thread.join()
+        filter_thread.join()
+        self.info['ImageFilter'] = filter_thread.image
+        self.info['ImageColor'] = filter_thread.imagecolor
+        self.listitems = [(150, create_listitems(self.data["similar"], 0)),
+                          (250, create_listitems(self.data["seasons"], 0)),
+                          (1450, create_listitems(self.data["networks"], 0)),
+                          (550, create_listitems(self.data["studios"], 0)),
+                          (650, create_listitems(self.data["certifications"], 0)),
+                          (750, create_listitems(self.data["crew"], 0)),
+                          (850, create_listitems(self.data["genres"], 0)),
+                          (950, create_listitems(self.data["keywords"], 0)),
+                          (1000, create_listitems(self.data["actors"], 0)),
+                          (1150, create_listitems(self.data["videos"], 0)),
+                          (1250, create_listitems(self.data["images"], 0)),
+                          (1350, create_listitems(self.data["backdrops"], 0)),
+                          (350, create_listitems(youtube_thread.listitems, 0))]
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()
@@ -203,24 +202,23 @@ class DialogTVShowInfo(DialogBaseInfo):
                                                         cache_time=0,
                                                         dbid=self.dbid)
             self.account_states = updated_state
-        if self.account_states:
-            if self.account_states["favorite"]:
-                self.window.setProperty("FavButton_Label", LANG(32155))
-                self.window.setProperty("movie.favorite", "True")
-            else:
-                self.window.setProperty("FavButton_Label", LANG(32154))
-                self.window.setProperty("movie.favorite", "")
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
+        if not self.account_states:
+            return None
+        if self.account_states["favorite"]:
+            self.window.setProperty("FavButton_Label", LANG(32155))
+            self.window.setProperty("movie.favorite", "True")
+        else:
+            self.window.setProperty("FavButton_Label", LANG(32154))
+            self.window.setProperty("movie.favorite", "")
+        if self.account_states["rated"]:
+            self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
+        else:
+            self.window.setProperty("movie.rated", "")
+        self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
 
     def show_manage_dialog(self):
         manage_list = []
         title = self.info.get("TVShowTitle", "")
-        # imdb_id = str(self.info.get("imdb_id", ""))
-        # filename = self.info.get("FilenameAndPath", False)
         if self.dbid:
             manage_list += [[LANG(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
                             [LANG(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],
