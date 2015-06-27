@@ -770,7 +770,7 @@ def merge_dict_lists(items, key="job"):
 
 
 def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
-    if limit and int(limit) < len(data):
+    if data and limit and int(limit) < len(data):
         data = data[:int(limit)]
     if not handle:
         set_window_props(name, data, prefix)
