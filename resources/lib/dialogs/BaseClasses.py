@@ -231,6 +231,7 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
+        HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
         self.window = xbmcgui.Window(self.window_id)
         self.window.setProperty("tmdb_logged_in", self.logged_in)
         # present for jurialmunkey

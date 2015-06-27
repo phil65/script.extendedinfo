@@ -70,7 +70,6 @@ class DialogActorInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogActorInfo, self).onInit()
-        HOME.setProperty("actor.ImageColor", self.info["ImageColor"])
         pass_dict_to_skin(data=self.info,
                           prefix="actor.",
                           window_id=self.window_id)
