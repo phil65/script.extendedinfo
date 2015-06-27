@@ -16,6 +16,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.items = kwargs.get('listing')
         self.listitems = create_listitems(self.items)
+        self.listitem = None
         self.index = -1
 
     def onInit(self):

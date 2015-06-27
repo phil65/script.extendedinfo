@@ -107,7 +107,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             self.close()
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
         elif control_id in [1000, 750]:
-            listitem = self.getControl(control_id).getSelectedItem()
+            listitem = control.getSelectedItem()
             credit_id = listitem.getProperty("credit_id")
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32147), LANG(32009)])
