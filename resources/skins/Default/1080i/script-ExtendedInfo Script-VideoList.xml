@@ -65,6 +65,21 @@
                 <aspectratio align="left">keep</aspectratio>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="0,-1000" end="0,0" delay="0" tween="sine" time="1000" />
+                    <effect type="rotatey" start="0" end="55" delay="3000" center="200" tween="sine" time="750" />
+                    <effect type="fade" start="100" end="0" delay="3750" time="0" />
+                </animation>
+            </control>
+            <control type="image">
+                <texture>$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
+                <posx>60</posx>
+                <posy>90</posy>
+                <width>400</width>
+                <fadetime>200</fadetime>
+                <height>200</height>
+                <aspectratio align="left">keep</aspectratio>
+                <animation type="WindowOpen" reversible="false">
+                    <effect type="rotatey" start="55" end="0" delay="3750" center="200" tween="sine" time="750" />
+                    <effect type="fade" start="0" end="100" delay="3750" time="0" />
                 </animation>
             </control>
             <control type="group">
@@ -326,8 +341,8 @@
             </control>
             <control type="group">
                 <animation type="WindowOpen" reversible="false">
-                    <effect type="slide" start="-200" end="0" delay="2500" tween="sine" time="500" />
-                    <effect type="slide" start="0" end="-200" delay="5500" tween="sine" time="500" />
+                    <effect type="slide" start="-200" end="0" delay="1000" tween="sine" time="500" />
+                    <effect type="slide" start="0" end="-200" delay="3000" tween="sine" time="500" />
                 </animation>
                 <animation effect="fade" start="100" end="0" time="0">WindowClose</animation>
                 <control type="image">
@@ -359,7 +374,7 @@
                 <label>$INFO[Window.Property(TotalItems),[COLOR FF999999]$ADDON[script.extendedinfo 32124]:[/COLOR] ]$INFO[Window.Property(CurrentPage),[COLOR FF999999] - $ADDON[script.extendedinfo 32125]: [/COLOR]]$INFO[Window.Property(TotalPages), / ]</label>
             </control>
             <control type="label">
-                <posx>440</posx>
+                <posx>470</posx>
                 <posy>0</posy>
                 <height>40</height>
                 <aligny>center</aligny>
@@ -368,17 +383,18 @@
                 <textcolor>FFFAFAFA</textcolor>
                 <label>$INFO[Window.Property(Filter_Label)]</label>
                 <animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(7000)">
-                    <effect type="slide" end="-420" time="320" easing="in" tween="cubic" />
+                    <effect type="slide" end="-460" time="320" easing="in" tween="cubic" />
                 </animation>
             </control>
         </control>
         <control type="group">
             <animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(7000)">
-                <effect type="slide" end="-420" time="320" easing="in" tween="cubic" />
+                <effect type="slide" end="-460" time="320" easing="in" tween="cubic" />
             </animation>
+            <posx>20</posx>
             <control type="image">
-                <posx>-92</posx>
-                <width>512</width>
+                <posx>-112</posx>
+                <width>552</width>
                 <height>1080</height>
                 <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]">dialogs/context_middle.png</texture>
             </control>
