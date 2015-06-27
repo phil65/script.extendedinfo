@@ -59,7 +59,7 @@
             <control type="image">
                 <texture>moviedb.png</texture>
                 <posx>60</posx>
-                <posy>90</posy>
+                <posy>130</posy>
                 <width>400</width>
                 <height>200</height>
                 <aspectratio align="left">keep</aspectratio>
@@ -73,7 +73,7 @@
             <control type="image">
                 <texture>$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
                 <posx>40</posx>
-                <posy>90</posy>
+                <posy>130</posy>
                 <width>400</width>
                 <fadetime>200</fadetime>
                 <height>220</height>
@@ -84,7 +84,7 @@
                 </animation>
             </control>
             <control type="group">
-                <posy>50</posy>
+                <posy>90</posy>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="0,1000" end="0,0" delay="0" tween="sine" time="1000" />
                     <effect type="fade" start="0" end="100" delay="0" tween="sine" time="1500" />
@@ -110,7 +110,7 @@
                     <posy>450</posy>
                     <posx>40</posx>
                     <width>395</width>
-                    <height>590</height>
+                    <height>550</height>
                     <align>justify</align>
                     <label fallback="416">$INFO[Container(500).ListItem.Plot,,[CR][CR]  ]</label>
                     <autoscroll delay="10000" time="1600" repeat="10000">true</autoscroll>
