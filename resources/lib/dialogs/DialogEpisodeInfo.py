@@ -4,13 +4,13 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmc
-from Utils import *
-from TheMovieDB import *
-from YouTube import *
-from ImageTools import *
+from ..Utils import *
+from ..TheMovieDB import *
+from ..YouTube import *
+from ..ImageTools import *
 from BaseClasses import DialogBaseInfo
-from WindowManager import wm
-from OnClickHandler import OnClickHandler
+from ..WindowManager import wm
+from ..OnClickHandler import OnClickHandler
 import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()

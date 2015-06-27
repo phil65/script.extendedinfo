@@ -5,10 +5,10 @@
 
 import xbmc
 import xbmcgui
-from Utils import *
-from TheMovieDB import *
+from ..Utils import *
+from ..TheMovieDB import *
 from BaseClasses import *
-from WindowManager import wm
+from ..WindowManager import wm
 
 SORTS = {"movie": {LANG(32110): "popularity",
                    LANG(172): "release_date",

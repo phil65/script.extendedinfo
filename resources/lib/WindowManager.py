@@ -39,7 +39,7 @@ class WindowManager(object):
         """
         open movie info, deal with window stack
         """
-        import DialogVideoInfo
+        from dialogs import DialogVideoInfo
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                  id=movie_id,
                                                  dbid=dbid,
@@ -51,7 +51,7 @@ class WindowManager(object):
         """
         open tvshow info, deal with window stack
         """
-        import DialogTVShowInfo
+        from dialogs import DialogTVShowInfo
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                    id=tvshow_id,
                                                    dbid=dbid,
@@ -65,7 +65,7 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
         """
-        import DialogSeasonInfo
+        from dialogs import DialogSeasonInfo
         dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                    id=tvshow_id,
                                                    season=season,
@@ -77,7 +77,7 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *tvshow_id AND *season AND *episode
         """
-        import DialogEpisodeInfo
+        from dialogs import DialogEpisodeInfo
         dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                      show_id=tvshow_id,
                                                      tvshow=tvshow,
@@ -89,7 +89,7 @@ class WindowManager(object):
         """
         open actor info, deal with window stack
         """
-        import DialogActorInfo
+        from dialogs import DialogActorInfo
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH,
                                                  id=actor_id,
                                                  name=name)
@@ -99,7 +99,7 @@ class WindowManager(object):
         """
         open video list, deal with window stack and color
         """
-        import DialogVideoList
+        from dialogs import DialogVideoList
         if prev_window:
             try:  # TODO rework
                 color = prev_window.data["general"]['ImageColor']
@@ -125,7 +125,7 @@ class WindowManager(object):
         """
         open video list, deal with window stack and color
         """
-        import DialogYoutubeList
+        from dialogs import DialogYoutubeList
         if prev_window:
             try:  # TODO rework
                 color = prev_window.data["general"]['ImageColor']
@@ -149,7 +149,7 @@ class WindowManager(object):
         """
         open slideshow dialog for single image
         """
-        import SlideShow
+        from dialogs import SlideShow
         dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
                                      image=image)
         dialog.doModal()
@@ -158,7 +158,7 @@ class WindowManager(object):
         """
         open textviewer dialog
         """
-        from TextViewerDialog import TextViewerDialog
+        from dialog.TextViewerDialog import TextViewerDialog
         w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
                              header=header,
                              text=text,
@@ -169,7 +169,7 @@ class WindowManager(object):
         """
         open selectdialog, return listitem dict and index
         """
-        from SelectDialog import SelectDialog
+        from dialog.SelectDialog import SelectDialog
         w = SelectDialog('DialogSelect.xml', ADDON_PATH,
                          listing=listitems)
         w.doModal()

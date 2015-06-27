@@ -5,14 +5,14 @@
 
 import xbmc
 import xbmcgui
-from Utils import *
-from TheMovieDB import *
-from WindowManager import wm
+from ..Utils import *
+from ..TheMovieDB import *
+from ..WindowManager import wm
 from T9Search import T9Search
 from collections import deque
 import ast
-from OnClickHandler import OnClickHandler
-import VideoPlayer
+from ..OnClickHandler import OnClickHandler
+from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()

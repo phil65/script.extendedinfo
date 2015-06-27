@@ -5,16 +5,16 @@
 
 import xbmc
 import xbmcgui
-from Utils import *
-from TheMovieDB import *
-from YouTube import *
-from omdb import *
-from ImageTools import *
+from ..Utils import *
+from ..TheMovieDB import *
+from ..YouTube import *
+from ..omdb import *
+from ..ImageTools import *
 import threading
 from BaseClasses import DialogBaseInfo
-from WindowManager import wm
-from OnClickHandler import OnClickHandler
-import VideoPlayer
+from ..WindowManager import wm
+from ..OnClickHandler import OnClickHandler
+from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()

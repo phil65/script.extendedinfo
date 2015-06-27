@@ -5,13 +5,13 @@
 
 import xbmc
 import xbmcgui
-from Utils import *
-from ImageTools import *
-from TheMovieDB import *
-from YouTube import *
+from ..Utils import *
+from ..ImageTools import *
+from ..TheMovieDB import *
+from ..YouTube import *
 from BaseClasses import DialogBaseInfo
-from WindowManager import wm
-import VideoPlayer
+from ..WindowManager import wm
+from .. import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()
 
 

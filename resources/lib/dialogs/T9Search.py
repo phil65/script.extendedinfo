@@ -6,7 +6,7 @@
 import time
 from threading import Timer
 import xbmcgui
-from Utils import *
+from ..Utils import *
 
 
 class T9Search(xbmcgui.WindowXMLDialog):
