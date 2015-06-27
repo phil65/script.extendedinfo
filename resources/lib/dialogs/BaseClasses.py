@@ -279,8 +279,9 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)
+        listitems = []
         if "seasons" in info["media"]:
-            listitems = handle_tmdb_seasons(info["media"]["seasons"])
+            listitems += handle_tmdb_seasons(info["media"]["seasons"])
         if "episodes" in info["media"]:
             listitems += handle_tmdb_episodes(info["media"]["episodes"])
         if not listitems:
