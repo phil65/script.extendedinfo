@@ -158,7 +158,7 @@ class WindowManager(object):
         """
         open textviewer dialog
         """
-        from dialog.TextViewerDialog import TextViewerDialog
+        from dialogs.TextViewerDialog import TextViewerDialog
         w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
                              header=header,
                              text=text,
@@ -169,7 +169,7 @@ class WindowManager(object):
         """
         open selectdialog, return listitem dict and index
         """
-        from dialog.SelectDialog import SelectDialog
+        from dialogs.SelectDialog import SelectDialog
         w = SelectDialog('DialogSelect.xml', ADDON_PATH,
                          listing=listitems)
         w.doModal()
