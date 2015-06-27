@@ -196,7 +196,7 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
         listitem = self.getControl(focus_id).getSelectedItem()
         youtube_id = listitem.getProperty("youtube_id")
         if self.type == "video":
-            more_vids = "More videos from " + listitem.getProperty("channel_title")
+            more_vids = "More videos from [B]%s[/B]" % listitem.getProperty("channel_title")
             listitems = [LANG(32069), more_vids]
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=listitems)

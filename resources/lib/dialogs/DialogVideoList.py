@@ -320,7 +320,7 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
                                         list=label_list)
         if index == -1:
             return None
-        self.add_filter("with_genres", str(id_list[index]), LANG(135), str(label_list[index]))
+        self.add_filter("with_genres", str(id_list[index]), LANG(135), label_list[index])
         self.mode = "filter"
         self.page = 1
 

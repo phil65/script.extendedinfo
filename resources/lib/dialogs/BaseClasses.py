@@ -138,7 +138,7 @@ class DialogBaseList(object):
     def set_filter_label(self):
         filter_list = []
         for item in self.filters:
-            filter_label = item["label"].decode("utf-8").replace("|", " | ").replace(",", " + ")
+            filter_label = item["label"].replace("|", " | ").replace(",", " + ")
             filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], filter_label))
         self.filter_label = "  -  ".join(filter_list)
 
@@ -197,7 +197,7 @@ class DialogBaseList(object):
                 break
         if not value:
             return False
-        if index > -1:
+        if index == -1:
             self.filters.append(new_filter)
             return None
         if force_overwrite:
