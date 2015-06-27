@@ -72,11 +72,11 @@
             </control>
             <control type="image">
                 <texture>$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
-                <posx>60</posx>
+                <posx>40</posx>
                 <posy>90</posy>
-                <width>400</width>
+                <width>440</width>
                 <fadetime>200</fadetime>
-                <height>200</height>
+                <height>220</height>
                 <aspectratio align="left">keep</aspectratio>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="rotatey" start="55" end="0" delay="3750" center="200" tween="sine" time="750" />
