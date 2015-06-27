@@ -65,6 +65,7 @@
                 <aspectratio align="left">keep</aspectratio>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="0,-1000" end="0,0" delay="0" tween="sine" time="1000" />
+                    <effect type="fade" start="0" end="100" delay="0" tween="sine" time="2000" />
                     <effect type="rotatey" start="0" end="55" delay="3000" center="200" tween="sine" time="750" />
                     <effect type="fade" start="100" end="0" delay="3750" time="0" />
                 </animation>
@@ -86,6 +87,7 @@
                 <posy>50</posy>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="0,1000" end="0,0" delay="0" tween="sine" time="1000" />
+                    <effect type="fade" start="0" end="100" delay="0" tween="sine" time="1500" />
                 </animation>
                 <control type="textbox">
                     <posy>270</posy>
