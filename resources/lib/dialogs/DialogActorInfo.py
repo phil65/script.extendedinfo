@@ -12,7 +12,10 @@ from ..YouTube import *
 from BaseClasses import DialogBaseInfo
 from ..WindowManager import wm
 from .. import VideoPlayer
+from ..OnClickHandler import OnClickHandler
+
 PLAYER = VideoPlayer.VideoPlayer()
+ch = OnClickHandler()
 
 
 class DialogActorInfo(DialogBaseInfo):
@@ -75,29 +78,42 @@ class DialogActorInfo(DialogBaseInfo):
                           window_id=self.window_id)
         self.fill_lists()
 
+    @ch.click(150)
+    @ch.click(550)
+    def open_movie_info(self):
+        wm.open_movie_info(prev_window=self,
+                           movie_id=self.control.getSelectedItem().getProperty("id"),
+                           dbid=self.control.getSelectedItem().getProperty("dbid"))
+
+    @ch.click(250)
+    @ch.click(650)
+    def open_tvshow_dialog(self):
+        selection = xbmcgui.Dialog().select(heading=LANG(32151),
+                                            list=[LANG(32147), LANG(32148)])
+        if selection == 0:
+            self.open_credit_dialog(credit_id=self.control.getSelectedItem().getProperty("credit_id"))
+        if selection == 1:
+            wm.open_tvshow_info(prev_window=self,
+                                tvshow_id=self.control.getSelectedItem().getProperty("id"),
+                                dbid=self.control.getSelectedItem().getProperty("dbid"))
+
+    @ch.click(450)
+    @ch.click(750)
+    def open_image(self):
+        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+
+    @ch.click(350)
+    def play_youtube_video(self):
+        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
+                                  listitem=self.control.getSelectedItem(),
+                                  window=self)
+
+    @ch.click(132)
+    def show_plot(self):
+        wm.open_textviewer(header=LANG(32037),
+                           text=self.info["biography"],
+                           color=self.info['ImageColor'])
+
     def onClick(self, control_id):
-        HOME.setProperty("WindowColor", xbmc.getInfoLabel("Window(home).Property(ActorInfo.ImageColor)"))
-        control = self.getControl(control_id)
-        if control_id in [150, 550]:
-            wm.open_movie_info(prev_window=self,
-                               movie_id=control.getSelectedItem().getProperty("id"),
-                               dbid=control.getSelectedItem().getProperty("dbid"))
-        elif control_id in [250, 650]:
-            selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=[LANG(32147), LANG(32148)])
-            if selection == 0:
-                self.open_credit_dialog(credit_id=control.getSelectedItem().getProperty("credit_id"))
-            if selection == 1:
-                wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=control.getSelectedItem().getProperty("id"),
-                                    dbid=control.getSelectedItem().getProperty("dbid"))
-        elif control_id in [450, 750]:
-            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
-        elif control_id == 350:
-            PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
-                                      listitem=control.getSelectedItem(),
-                                      window=self)
-        elif control_id == 132:
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["biography"],
-                               color=self.info['ImageColor'])
+        ch.serve(control_id, self)
+
