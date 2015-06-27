@@ -169,7 +169,7 @@
                         <control type="textbox">
                             <posx>0</posx>
                             <width>228</width>
-                            <height>69</height>
+                            <height>67</height>
                             <posy>320</posy>
                             <textcolor>FFFAFAFA</textcolor>
                             <align>center</align>
@@ -256,7 +256,7 @@
                     <control type="textbox">
                         <posx>80</posx>
                         <width>228</width>
-                        <height>69</height>
+                        <height>67</height>
                         <posy>470</posy>
                         <textcolor>FFFAFAFA</textcolor>
                         <align>center</align>
