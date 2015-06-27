@@ -271,6 +271,18 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
+    @ch.context(1150)
+    @ch.context(350)
+    def download_video(self):
+        selection = xbmcgui.Dialog().select(heading=LANG(22080),
+                                            list=[LANG(33003)])
+        if selection == 0:
+            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+            import YDStreamExtractor
+            vid = YDStreamExtractor.getVideoInfo(youtube_id,
+                                                 quality=1)
+            YDStreamExtractor.handleDownload(vid)
+
     def onAction(self, action):
         focus_id = self.getFocusId()
         if action in self.ACTION_PREVIOUS_MENU:
