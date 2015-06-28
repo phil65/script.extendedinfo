@@ -172,7 +172,7 @@
                             <width>228</width>
                             <height>67</height>
                             <posy>320</posy>
-                            <textcolor>FFFAFAFA</textcolor>
+                            <textcolor>A0FFFFFF</textcolor>
                             <align>center</align>
                             <font>font12</font>
                             <label>$INFO[ListItem.Label]</label>
@@ -263,8 +263,14 @@
                         <align>center</align>
                         <font>font12</font>
                         <label>$INFO[ListItem.Label]</label>
-                        <animation effect="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false">Focus</animation>
-                        <animation effect="slide" start="0,50" end="0" time="200" tween="cubic" reversible="false">UnFocus</animation>
+                        <animation type="Focus" reversible="false">
+                            <effect type="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false"/>
+                            <effect type="fade" start="62" end="100" time="280" />
+                        </animation>
+                        <animation type="UnFocus" reversible="false">
+                            <effect type="slide"  start="0,50" end="0" time="200" tween="cubic" reversible="false"/>
+                            <effect type="fade" start="100" end="62" time="280" />
+                        </animation>
                     </control>
                 </focusedlayout>
             </control>
