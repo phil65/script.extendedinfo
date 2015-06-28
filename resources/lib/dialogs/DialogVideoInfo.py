@@ -139,7 +139,7 @@ class DialogVideoInfo(DialogBaseInfo):
         filters = [{"id": self.control.getSelectedItem().getProperty("id"),
                     "type": "with_companies",
                     "typelabel": LANG(20388),
-                    "label": self.control.getSelectedItem().getLabel()}]
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
         wm.open_video_list(prev_window=self,
                            filters=filters)
 
@@ -156,7 +156,7 @@ class DialogVideoInfo(DialogBaseInfo):
         filters = [{"id": self.control.getSelectedItem().getProperty("id"),
                     "type": "with_keywords",
                     "typelabel": LANG(32114),
-                    "label": self.control.getSelectedItem().getLabel()}]
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
         wm.open_video_list(prev_window=self,
                            filters=filters)
 
@@ -165,7 +165,7 @@ class DialogVideoInfo(DialogBaseInfo):
         filters = [{"id": self.control.getSelectedItem().getProperty("id"),
                     "type": "with_genres",
                     "typelabel": LANG(135),
-                    "label": self.control.getSelectedItem().getLabel()}]
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
         wm.open_video_list(prev_window=self,
                            filters=filters)
 
