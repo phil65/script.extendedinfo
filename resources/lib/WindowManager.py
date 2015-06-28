@@ -76,7 +76,8 @@ class WindowManager(object):
                                    year="",
                                    media_type="tv")
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
-                                                   id=tmdb_id)
+                                                   tmdb_id=tmdb_id,
+                                                   dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
