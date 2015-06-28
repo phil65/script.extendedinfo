@@ -150,7 +150,7 @@ def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended
 
 
 def get_youtube_playlist_videos(playlist_id=""):
-    url = 'playlistItems?part=id%%2Csnippet&maxResults=50&playlist_id=%s&key=%s' % (playlist_id, YT_KEY)
+    url = 'playlistItems?part=id%%2Csnippet&maxResults=50&playlistId=%s&key=%s' % (playlist_id, YT_KEY)
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0.5,
                                 folder="YouTube")
