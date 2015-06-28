@@ -6,6 +6,7 @@
 from Utils import *
 from TheMovieDB import *
 import xbmcaddon
+from local_db import get_imdb_id_from_db
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
@@ -55,13 +56,28 @@ class WindowManager(object):
         """
         open tvshow info, deal with window stack
         """
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogTVShowInfo
+        tmdb_id = None
+        if tvshow_id:
+            tmdb_id = tvshow_id
+        elif dbid and (int(dbid) > 0):
+            tvdb_id = get_imdb_id_from_db(media_type="tvshow",
+                                          dbid=dbid)
+            if tvdb_id:
+                tmdb_id = get_show_tmdb_id(tvdb_id)
+        elif tvdb_id:
+            tmdb_id = get_show_tmdb_id(tvdb_id)
+        elif imdb_id:
+            tmdb_id = get_show_tmdb_id(tvdb_id=imdb_id,
+                                       source="imdb_id")
+        elif name:
+            tmdb_id = search_media(media_name=name,
+                                   year="",
+                                   media_type="tv")
         dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
-                                                   id=tvshow_id,
-                                                   dbid=dbid,
-                                                   tvdb_id=tvdb_id,
-                                                   imdb_id=imdb_id,
-                                                   name=name)
+                                                   id=tmdb_id)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
     def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None):

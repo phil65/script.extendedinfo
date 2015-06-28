@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from ..local_db import get_imdb_id_from_db
 from ..ImageTools import *
 from ..TheMovieDB import *
 from ..YouTube import *
@@ -18,31 +17,10 @@ PLAYER = VideoPlayer.VideoPlayer()
 
 class DialogTVShowInfo(DialogBaseInfo):
 
-    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-        self.tmdb_id = None
-        tmdb_id = kwargs.get('id', False)
-        imdb_id = kwargs.get('imdb_id')
-        tvdb_id = kwargs.get('tvdb_id')
-        self.name = kwargs.get('name')
+        self.tmdb_id = kwargs.get('tmdb_id', False)
         self.type = "TVShow"
-        if tmdb_id:
-            self.tmdb_id = tmdb_id
-        elif self.dbid and (int(self.dbid) > 0):
-            tvdb_id = get_imdb_id_from_db(media_type="tvshow",
-                                          dbid=self.dbid)
-            if tvdb_id:
-                self.tmdb_id = get_show_tmdb_id(tvdb_id)
-        elif tvdb_id:
-            self.tmdb_id = get_show_tmdb_id(tvdb_id)
-        elif imdb_id:
-            self.tmdb_id = get_show_tmdb_id(tvdb_id=imdb_id,
-                                            source="imdb_id")
-        elif self.name:
-            self.tmdb_id = search_media(media_name=kwargs.get('name'),
-                                        year="",
-                                        media_type="tv")
         if not self.tmdb_id:
             notify(LANG(32143))
             return None
