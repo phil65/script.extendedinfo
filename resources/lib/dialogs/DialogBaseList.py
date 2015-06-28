@@ -69,10 +69,23 @@ class DialogBaseList(object):
             self.get_sort_type()
             self.update()
         elif control_id == 5005:
-            self.filters = []
+            if len(self.filters) > 1:
+                listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
+                listitems.append(LANG(32078))
+                index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32077),
+                                                list=listitems)
+                if index == -1:
+                    return None
+                elif index == len(listitems) - 1:
+                    self.filters = []
+                else:
+                    del self.filters[index]
+            else:
+                self.filters = []
             self.page = 1
             self.mode = "filter"
             self.update()
+
         elif control_id == 6000:
             settings_str = SETTING("search_history")
             if settings_str:
