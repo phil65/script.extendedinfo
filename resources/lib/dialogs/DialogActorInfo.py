@@ -23,6 +23,7 @@ class DialogActorInfo(DialogBaseInfo):
     def __init__(self, *args, **kwargs):
         super(DialogActorInfo, self).__init__(*args, **kwargs)
         self.id = kwargs.get('id', False)
+        self.type = "Actor"
         if not self.id:
             name = kwargs.get('name').decode("utf-8").split(" " + LANG(20347) + " ")
             names = name[0].strip().split(" / ")

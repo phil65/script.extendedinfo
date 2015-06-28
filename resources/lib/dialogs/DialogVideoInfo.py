@@ -25,6 +25,7 @@ class DialogVideoInfo(DialogBaseInfo):
     @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogVideoInfo, self).__init__(*args, **kwargs)
+        self.type = "Movie"
         self.tmdb_id = kwargs.get('id')
         imdb_id = kwargs.get('imdb_id')
         self.name = kwargs.get('name')
@@ -95,7 +96,6 @@ class DialogVideoInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
-        self.window.setProperty("type", "Movie")
         pass_dict_to_skin(data=self.info,
                           prefix="movie.",
                           window_id=self.window_id)

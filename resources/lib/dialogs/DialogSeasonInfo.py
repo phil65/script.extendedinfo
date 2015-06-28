@@ -21,6 +21,7 @@ class DialogSeasonInfo(DialogBaseInfo):
     @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogSeasonInfo, self).__init__(*args, **kwargs)
+        self.type = "Season"
         self.tmdb_id = kwargs.get('id')
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
@@ -55,7 +56,6 @@ class DialogSeasonInfo(DialogBaseInfo):
 
     def onInit(self):
         super(DialogSeasonInfo, self).onInit()
-        self.window.setProperty("type", "season")
         pass_dict_to_skin(data=self.info,
                           prefix="movie.",
                           window_id=self.window_id)

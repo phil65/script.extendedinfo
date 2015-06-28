@@ -26,6 +26,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         imdb_id = kwargs.get('imdb_id')
         tvdb_id = kwargs.get('tvdb_id')
         self.name = kwargs.get('name')
+        self.type = "TVShow"
         if tmdb_id:
             self.tmdb_id = tmdb_id
         elif self.dbid and (int(self.dbid) > 0):
@@ -97,7 +98,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         pass_dict_to_skin(data=self.info,
                           prefix="movie.",
                           window_id=self.window_id)
-        self.window.setProperty("type", "TVShow")
         self.fill_lists()
         self.update_states(False)
 
