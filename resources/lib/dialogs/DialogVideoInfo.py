@@ -140,12 +140,9 @@ class DialogVideoInfo(DialogBaseInfo):
             youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
         else:
             youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
-        if youtube_id:
-            PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                      listitem=self.control.getSelectedItem(),
-                                      window=self)
-        else:
-            notify(LANG(32052))
+        PLAYER.play_youtube_video(youtube_id=youtube_id,
+                                  listitem=self.control.getSelectedItem(),
+                                  window=self)
 
     @ch.click(550)
     def open_company_list(self):
@@ -274,14 +271,10 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.click(6003)
     def change_list_status(self):
-        if self.account_states["favorite"]:
-            change_fav_status(media_id=self.info["id"],
-                              media_type="movie",
-                              status="false")
-        else:
-            change_fav_status(media_id=self.info["id"],
-                              media_type="movie",
-                              status="true")
+        status = str(not bool(self.account_states["favorite"])).lower()
+        change_fav_status(media_id=self.info["id"],
+                          media_type="movie",
+                          status=status)
         self.update_states()
 
     @ch.click(6006)
