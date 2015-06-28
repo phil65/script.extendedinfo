@@ -122,8 +122,8 @@
                             <scrolltime tween="quadratic">200</scrolltime>
                             <control type="radiobutton" id="8">
                                 <label>$LOCALIZE[208]</label>
-                                <textureradioonfocus colordiffuse="FF999999">icons/play.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/play.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/play.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/play.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/play.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/play.png</textureradioonnofocus>
                                 <width>280</width>
@@ -146,8 +146,8 @@
                             </control>
                             <control type="radiobutton" id="120">
                                 <label>$LOCALIZE[21385]</label>
-                                <textureradioonfocus colordiffuse="FF999999">icons/play.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/play.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/play.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/play.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/play.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/play.png</textureradioonnofocus>
                                 <width>280</width>
@@ -206,8 +206,8 @@
                                 <height>400</height>
                                 <control type="radiobutton" id="6001">
                                     <label>$ADDON[script.extendedinfo 32129]</label>
-                                    <textureradioonfocus colordiffuse="FF999999">-</textureradioonfocus>
-                                    <textureradioofffocus colordiffuse="FF999999">icons/heart.png</textureradioofffocus>
+                                    <textureradioonfocus colordiffuse="FFFAFAFA">-</textureradioonfocus>
+                                    <textureradioofffocus colordiffuse="FFFAFAFA">icons/heart.png</textureradioofffocus>
                                     <textureradiooffnofocus colordiffuse="FF999999">icons/heart.png</textureradiooffnofocus>
                                     <textureradioonnofocus colordiffuse="FF999999">-</textureradioonnofocus>
                                     <posx>0</posx>
@@ -250,8 +250,8 @@
                             <control type="radiobutton" id="6003">
                                 <label>$INFO[Window.Property(FavButton_Label)]</label>
                                 <onleft>6001</onleft>
-                                <textureradioonfocus colordiffuse="FF999999">icons/starminus.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/star.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/starminus.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/star.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/star.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/starminus.png</textureradioonnofocus>
                                 <width>280</width>
@@ -275,8 +275,8 @@
                             </control>
                             <control type="radiobutton" id="6005">
                                 <label>$ADDON[script.extendedinfo 32107]</label>
-                                <textureradioonfocus colordiffuse="FF999999">icons/checkmark.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/checkmark.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/checkmark.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/checkmark.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/checkmark.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/checkmark.png</textureradioonnofocus>
                                 <width>280</width>
@@ -299,8 +299,8 @@
                             </control>
                             <control type="radiobutton" id="6002">
                                 <label>$ADDON[script.extendedinfo 32130]</label>
-                                <textureradioonfocus colordiffuse="FF999999">icons/list2.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/list2.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/list2.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/list2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/list2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/list2.png</textureradioonnofocus>
                                 <width>280</width>
@@ -323,8 +323,8 @@
                             </control>
                             <control type="radiobutton" id="6006">
                                 <label>$ADDON[script.extendedinfo 32131]</label>
-                                <textureradioonfocus colordiffuse="FF999999">icons/list2.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/list2.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/list2.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/list2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/list2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/list2.png</textureradioonnofocus>
                                 <width>280</width>
@@ -365,8 +365,8 @@
                                 <onclick>XBMC.RunScript(script.videoextras,display,"$INFO[Window.Property(movie.FilenameAndPath)]")</onclick>
                                 <visible>System.HasAddon(script.videoextras) + IsEmpty(Window(movieinformation).Property(HideVideoExtrasButton))</visible>
                                 <visible>!IsEmpty(Window.Property(movie.FilenameAndPath))</visible>
-                                <textureradioonfocus colordiffuse="FF999999">icons/plus2.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/plus2.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/plus2.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/plus2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/plus2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/plus2.png</textureradioonnofocus>
                             </control>
@@ -386,8 +386,8 @@
                                 <radioposy>30</radioposy>
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
-                                <textureradioonfocus colordiffuse="FF999999">icons/tool2.png</textureradioonfocus>
-                                <textureradioofffocus colordiffuse="FF999999">icons/tool2.png</textureradioofffocus>
+                                <textureradioonfocus colordiffuse="FFFAFAFA">icons/tool2.png</textureradioonfocus>
+                                <textureradioofffocus colordiffuse="FFFAFAFA">icons/tool2.png</textureradioofffocus>
                                 <textureradiooffnofocus colordiffuse="FF999999">icons/tool2.png</textureradiooffnofocus>
                                 <textureradioonnofocus colordiffuse="FF999999">icons/tool2.png</textureradioonnofocus>
                                 <label>$ADDON[script.extendedinfo 32133]</label>
