@@ -110,21 +110,21 @@ class DialogTVShowInfo(DialogBaseInfo):
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_companies",
                         "typelabel": LANG(20388),
-                        "label": control.getSelectedItem().getLabel()}]
+                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
         elif control_id == 950:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": LANG(32114),
-                        "label": control.getSelectedItem().getLabel()}]
+                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
         elif control_id == 850:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_genres",
                         "typelabel": LANG(135),
-                        "label": control.getSelectedItem().getLabel()}]
+                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
@@ -132,7 +132,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_networks",
                         "typelabel": LANG(32152),
-                        "label": control.getSelectedItem().getLabel()}]
+                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
