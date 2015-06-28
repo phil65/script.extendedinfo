@@ -3,7 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmc
 import xbmcgui
 from ..Utils import *
 from ..ImageTools import *
@@ -25,26 +24,8 @@ class DialogActorInfo(DialogBaseInfo):
         self.id = kwargs.get('id', False)
         self.type = "Actor"
         if not self.id:
-            name = kwargs.get('name').decode("utf-8").split(" " + LANG(20347) + " ")
-            names = name[0].strip().split(" / ")
-            if len(names) > 1:
-                ret = xbmcgui.Dialog().select(heading=LANG(32027),
-                                              list=names)
-                if ret == -1:
-                    return None
-                name = names[ret]
-            else:
-                name = names[0]
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            self.id = get_person_info(name)
-            if self.id:
-                self.id = self.id["id"]
-            else:
-                return None
-        if not self.id:
             notify(LANG(32143))
             return None
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
         data = extended_actor_info(actor_id=self.id)
         if data:
             self.info, self.data = data
@@ -70,7 +51,6 @@ class DialogActorInfo(DialogBaseInfo):
                           (650, create_listitems(tvshow_crew_roles, 0)),
                           (750, create_listitems(self.data["tagged_images"], 0)),
                           (350, create_listitems(youtube_thread.listitems, 0))]
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
 
     def onInit(self):
         super(DialogActorInfo, self).onInit()

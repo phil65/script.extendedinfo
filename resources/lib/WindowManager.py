@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
+from TheMovieDB import *
 import xbmcaddon
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -39,12 +40,15 @@ class WindowManager(object):
         """
         open movie info, deal with window stack
         """
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogVideoInfo
+        if not movie_id:
+            movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
+                                         dbid=dbid,
+                                         name=name)
         dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
-                                                 id=movie_id,
-                                                 dbid=dbid,
-                                                 name=name,
-                                                 imdb_id=imdb_id)
+                                                 id=movie_id)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
     def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
@@ -90,9 +94,26 @@ class WindowManager(object):
         open actor info, deal with window stack
         """
         from dialogs import DialogActorInfo
+        if not actor_id:
+            name = name.decode("utf-8").split(" " + LANG(20347) + " ")
+            names = name[0].strip().split(" / ")
+            if len(names) > 1:
+                ret = xbmcgui.Dialog().select(heading=LANG(32027),
+                                              list=names)
+                if ret == -1:
+                    return None
+                name = names[ret]
+            else:
+                name = names[0]
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            actor_info = get_person_info(name)
+            if actor_info:
+                actor_id = actor_info["id"]
+        else:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
         dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH,
-                                                 id=actor_id,
-                                                 name=name)
+                                                 id=actor_id)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
     def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):

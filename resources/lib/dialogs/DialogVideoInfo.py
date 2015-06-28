@@ -22,17 +22,10 @@ ch = OnClickHandler()
 
 class DialogVideoInfo(DialogBaseInfo):
 
-    @busy_dialog
     def __init__(self, *args, **kwargs):
         super(DialogVideoInfo, self).__init__(*args, **kwargs)
         self.type = "Movie"
         self.tmdb_id = kwargs.get('id')
-        imdb_id = kwargs.get('imdb_id')
-        self.name = kwargs.get('name')
-        if not self.tmdb_id:
-            self.tmdb_id = get_movie_tmdb_id(imdb_id=imdb_id,
-                                             dbid=self.dbid,
-                                             name=self.name)
         if not self.tmdb_id:
             notify(LANG(32143))
             return None
@@ -47,13 +40,10 @@ class DialogVideoInfo(DialogBaseInfo):
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
-        self.omdb_thread.start()
-        sets_thread.start()
-        youtube_thread.start()
-        lists_thread.start()
+        for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread]:
+            thread.start()
         vid_id_list = [item["key"] for item in self.data["videos"]]
         crew_list = merge_dict_lists(self.data["crew"])
-        # if "dbid" not in self.info:
         self.info['Poster'] = get_file(self.info["Poster"])
         filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
