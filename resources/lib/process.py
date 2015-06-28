@@ -173,9 +173,13 @@ def start_info_actions(infos, params):
             if tvshow_id:
                 data = get_similar_tvshows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
-            if "studio" in params and params["studio"]:
-                company_id = get_company_data(params["studio"])[0]["id"]
-                data = get_company_data(company_id), "StudioInfo"
+            if "id" in params and params["id"]:
+                data = get_company_data(params["id"]), "StudioInfo"
+            elif "studio" in params and params["studio"]:
+                company_data = search_company(params["studio"])
+                if company_data:
+                    company_id = company_data[0]["id"]
+                    data = get_company_data(company_id), "StudioInfo"
         elif info == 'set':
             if params.get("dbid") and "show" not in str(params.get("type", "")):
                 name = get_set_name_from_db(params["dbid"])
