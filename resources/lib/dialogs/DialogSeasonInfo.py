@@ -7,7 +7,7 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..YouTube import *
 from ..ImageTools import *
-from BaseClasses import DialogBaseInfo
+from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ..OnClickHandler import OnClickHandler
 from .. import VideoPlayer

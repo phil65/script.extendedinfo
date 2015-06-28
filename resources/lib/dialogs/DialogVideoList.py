@@ -7,7 +7,8 @@ import xbmc
 import xbmcgui
 from ..Utils import *
 from ..TheMovieDB import *
-from BaseClasses import *
+from BaseClasses import WindowXML, DialogXML
+from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 
 SORTS = {"movie": {LANG(32110): "popularity",
@@ -85,22 +86,23 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
                                yeslabel=LANG(32149))
             result = xbmcgui.Dialog().input(heading=LANG(345),
                                             type=xbmcgui.INPUT_NUMERIC)
-            if result:
-                if ret:
-                    order = "lte"
-                    value = "%s-12-31" % result
-                    label = " < " + result
-                else:
-                    order = "gte"
-                    value = "%s-01-01" % result
-                    label = " > " + result
-                if self.type == "tv":
-                    self.add_filter("first_air_date.%s" % order, value, LANG(20416), label)
-                else:
-                    self.add_filter("primary_release_date.%s" % order, value, LANG(345), label)
-                self.mode = "filter"
-                self.page = 1
-                self.update()
+            if not result:
+                return None
+            if ret:
+                order = "lte"
+                value = "%s-12-31" % result
+                label = " < " + result
+            else:
+                order = "gte"
+                value = "%s-01-01" % result
+                label = " > " + result
+            if self.type == "tv":
+                self.add_filter("first_air_date.%s" % order, value, LANG(20416), label)
+            else:
+                self.add_filter("primary_release_date.%s" % order, value, LANG(345), label)
+            self.mode = "filter"
+            self.page = 1
+            self.update()
         elif control_id == 5012:
             dialog = xbmcgui.Dialog()
             ret = True

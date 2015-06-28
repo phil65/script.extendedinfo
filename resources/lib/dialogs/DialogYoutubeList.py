@@ -7,7 +7,8 @@ import xbmc
 import xbmcgui
 from ..Utils import *
 from ..YouTube import *
-from BaseClasses import DialogBaseList, WindowXML
+from BaseClasses import WindowXML
+from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from .. import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()

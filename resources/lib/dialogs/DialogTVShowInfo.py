@@ -10,7 +10,7 @@ from ..local_db import get_imdb_id_from_db
 from ..ImageTools import *
 from ..TheMovieDB import *
 from ..YouTube import *
-from BaseClasses import DialogBaseInfo
+from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from .. import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()

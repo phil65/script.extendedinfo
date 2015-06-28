@@ -11,7 +11,7 @@ from ..YouTube import *
 from ..omdb import *
 from ..ImageTools import *
 import threading
-from BaseClasses import DialogBaseInfo
+from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ..OnClickHandler import OnClickHandler
 from .. import VideoPlayer
