@@ -4,7 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from TheMovieDB import *
 import xbmcaddon
 from local_db import get_imdb_id_from_db
 ADDON = xbmcaddon.Addon()
@@ -43,6 +42,7 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogVideoInfo
+        from TheMovieDB import get_movie_tmdb_id
         if not movie_id:
             movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
                                          dbid=dbid,
