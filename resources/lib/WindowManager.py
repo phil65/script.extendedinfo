@@ -111,6 +111,7 @@ class WindowManager(object):
         open actor info, deal with window stack
         """
         from dialogs import DialogActorInfo
+        from TheMovieDB import get_person_info
         if not actor_id:
             name = name.decode("utf-8").split(" " + LANG(20347) + " ")
             names = name[0].strip().split(" / ")
