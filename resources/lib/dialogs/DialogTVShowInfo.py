@@ -108,11 +108,10 @@ class DialogTVShowInfo(DialogBaseInfo):
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
         elif control_id in [1000, 750]:
             listitem = control.getSelectedItem()
-            credit_id = listitem.getProperty("credit_id")
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32147), LANG(32009)])
             if selection == 0:
-                self.open_credit_dialog(credit_id)
+                self.open_credit_dialog(listitem.getProperty("credit_id"))
             if selection == 1:
                 wm.open_actor_info(prev_window=self,
                                    actor_id=listitem.getProperty("id"))
@@ -130,11 +129,12 @@ class DialogTVShowInfo(DialogBaseInfo):
                                       listitem=control.getSelectedItem(),
                                       window=self)
         elif control_id == 550:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-            listitems = get_company_data(control.getSelectedItem().getProperty("id"))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            filters = [{"id": control.getSelectedItem().getProperty("id"),
+                        "type": "with_companies",
+                        "typelabel": LANG(20388),
+                        "label": control.getSelectedItem().getLabel()}]
             wm.open_video_list(prev_window=self,
-                               listitems=listitems)
+                               filters=filters)
         elif control_id == 950:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_keywords",
@@ -150,8 +150,6 @@ class DialogTVShowInfo(DialogBaseInfo):
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
-        elif control_id in [1250, 1350]:
-            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 1450:
             filters = [{"id": control.getSelectedItem().getProperty("id"),
                         "type": "with_networks",
@@ -160,6 +158,8 @@ class DialogTVShowInfo(DialogBaseInfo):
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
+        elif control_id in [1250, 1350]:
+            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
         elif control_id == 445:
             self.show_manage_dialog()
         elif control_id == 6001:
