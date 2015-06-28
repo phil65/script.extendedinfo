@@ -202,7 +202,7 @@ class DialogBaseList(object):
                            yeslabel="AND")
         if ret:
             self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
-            self.filters[index]["label"] = self.filters[index]["label"] + "," + str(label)
+            self.filters[index]["label"] = self.filters[index]["label"] + "," + label
         else:
             self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
-            self.filters[index]["label"] = self.filters[index]["label"] + "|" + str(label)
+            self.filters[index]["label"] = self.filters[index]["label"] + "|" + label
