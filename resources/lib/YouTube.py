@@ -36,6 +36,8 @@ def handle_youtube_videos(results, extended=False):
     ext_results = get_JSON_response(url=BASE_URL + url,
                                     cache_days=0.5,
                                     folder="YouTube")
+    if not ext_results:
+        return videos
     for i, item in enumerate(videos):
         for ext_item in ext_results["items"]:
             if not item["youtube_id"] == ext_item['id']:

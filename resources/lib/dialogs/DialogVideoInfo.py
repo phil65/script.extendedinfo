@@ -36,7 +36,8 @@ class DialogVideoInfo(DialogBaseInfo):
         else:
             notify(LANG(32143))
             return None
-        youtube_thread = GetYoutubeVidsThread(search_str="%s %s, movie" % (self.info["Label"], self.info["year"]))
+        search_str = "%s %s, movie" % (self.info["Label"], self.info["year"])
+        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
@@ -44,20 +45,12 @@ class DialogVideoInfo(DialogBaseInfo):
         for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
             thread.start()
         self.info['Poster'] = get_file(self.info["Poster"])
-        cert_list = get_certification_list("movie")
-        for item in self.data["releases"]:
-            if item["iso_3166_1"] not in cert_list:
-                continue
-            hit = dictfind(lst=cert_list[item["iso_3166_1"]],
-                           key="certification",
-                           value=item["certification"])
-            if hit:
-                item["meaning"] = hit["meaning"]
+        cert_list = merge_with_cert_desc(self.data["releases"], "movie")
         sets_thread.join()
         self.setinfo = sets_thread.setinfo
         self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
-        youtube_thread.join()
         vid_ids = [item["key"] for item in self.data["videos"]]
+        youtube_thread.join()
         youtube_vids = [i for i in youtube_thread.listitems if i["youtube_id"] not in vid_ids]
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
@@ -112,8 +105,7 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(1250)
     @ch.click(1350)
     def open_image(self):
-        image = self.control.getSelectedItem().getProperty("original")
-        wm.open_slideshow(image=image)
+        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
 
     @ch.click(350)
     @ch.click(1150)

@@ -170,13 +170,24 @@ def get_account_info():
     else:
         return None
 
-@lru_cache(maxsize=128)
 def get_certification_list(media_type):
     response = get_tmdb_data("certification/%s/list?" % media_type, 999999)
     if "certifications" in response:
         return response["certifications"]
     else:
         return []
+
+def merge_with_cert_desc(input_list, media_type):
+    cert_list = get_certification_list(media_type)
+    for item in input_list:
+        if item["iso_3166_1"] not in cert_list:
+            continue
+        hit = dictfind(lst=cert_list[item["iso_3166_1"]],
+                       key="certification",
+                       value=item["certification"])
+        if hit:
+            item["meaning"] = hit["meaning"]
+    return input_list
 
 
 @lru_cache(maxsize=128)

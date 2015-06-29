@@ -33,15 +33,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
         youtube_thread.start()
-        cert_list = get_certification_list("tv")
-        for item in self.data["certifications"]:
-            if not item["iso_3166_1"] in cert_list:
-                continue
-            hit = dictfind(lst=cert_list[item["iso_3166_1"]],
-                           key="certification",
-                           value=item["certification"])
-            if hit:
-                item["meaning"] = hit["meaning"]
+        cert_list = merge_with_cert_desc(self.data["certifications"], "tv")
         if "dbid" not in self.info:  # need to add comparing for tvshows
             poster_thread = FunctionThread(function=get_file,
                                            param=self.info["Poster"])
