@@ -51,6 +51,17 @@ def get_rating_from_user():
         return None
 
 
+def set_rating_prompt(media_type, media_id):
+    rating = get_rating_from_user()
+    if not rating:
+        return None
+    else:
+        set_rating(media_type=media_type,
+                   media_id=media_id,
+                   rating=rating)
+        return True
+
+
 def set_rating(media_type, media_id, rating):
     '''
     media_type: movie, tv or episode
@@ -177,6 +188,18 @@ def get_certification_list(media_type):
         return response["certifications"]
     else:
         return []
+
+
+def add_movie_to_list(movie_id):
+    selection = xbmcgui.Dialog().select(heading=LANG(22080),
+                                        list=["Add movie to list"])
+    if selection == 0:
+        account_lists = get_account_lists()
+        listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
+        index = xbmcgui.Dialog().select(LANG(32136), listitems)
+        change_list_status(list_id=account_lists[index]["id"],
+                           movie_id=movie_id,
+                           status=True)
 
 
 def merge_with_cert_desc(input_list, media_type):

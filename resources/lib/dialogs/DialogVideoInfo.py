@@ -71,6 +71,12 @@ class DialogVideoInfo(DialogBaseInfo):
                           (350, youtube_vids)]
         self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
+    @ch.context(150)
+    @ch.context(250)
+    def add_list_to_account(self):
+        movie_id = self.control.getSelectedItem().getProperty("id")
+        add_movie_to_list(movie_id)
+
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
         pass_dict_to_skin(data=self.info,
@@ -85,7 +91,10 @@ class DialogVideoInfo(DialogBaseInfo):
         self.join_omdb.start()
 
     def onAction(self, action):
+        focus_id = self.getFocusId()
         super(DialogVideoInfo, self).onAction(action)
+        if action == xbmcgui.ACTION_CONTEXT_MENU:
+            ch.serve_context(focus_id, self)
 
     @ch.click(1000)
     @ch.click(750)
@@ -208,13 +217,8 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.click(6001)
     def set_rating_dialog(self):
-        rating = get_rating_from_user()
-        if not rating:
-            return None
-        set_rating(media_type="movie",
-                   media_id=self.tmdb_id,
-                   rating=rating)
-        self.update_states()
+        if set_rating_prompt("movie", self.tmdb_id):
+            self.update_states()
 
     @ch.click(6005)
     def add_to_list_dialog(self):
@@ -231,8 +235,9 @@ class DialogVideoInfo(DialogBaseInfo):
                                               type=xbmcgui.INPUT_ALPHANUM)
             if not listname:
                 return None
+            list_id = create_list(listname)
             xbmc.sleep(1000)
-            change_list_status(list_id=create_list(listname),
+            change_list_status(list_id=list_id,
                                movie_id=self.tmdb_id,
                                status=True)
         elif index == len(listitems) - 1:
