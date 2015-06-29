@@ -303,18 +303,24 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
 
 def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
+    response = get_tmdb_data("genre/tv/list?language=%s&" % (SETTING("LanguageID")), 30)
+    id_list = [item["id"] for item in response["genres"]]
+    label_list = [item["name"] for item in response["genres"]]
     for tv in results:
         tmdb_id = fetch(tv, 'id')
-        duration = ""
         artwork = get_image_urls(poster=tv.get("poster_path"),
                                  fanart=tv.get("backdrop_path"))
+        if "genre_ids" in tv:
+            genre_list = [label_list[id_list.index(genre_id)] for genre_id in tv["genre_ids"] if genre_id in id_list]
+            genres = " / ".join(genre_list)
+        else:
+            genres = ""
+        duration = ""
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
-            else:
-                duration = ""
         newtv = {'thumb': artwork.get("poster", ""),
                  'Poster': artwork.get("poster", ""),
                  'fanart': artwork.get("fanart", ""),
@@ -324,6 +330,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
                  'id': tmdb_id,
+                 'genre': genres,
                  'country': fetch(tv, 'original_language'),
                  'Popularity': fetch(tv, 'popularity'),
                  'credit_id': fetch(tv, 'credit_id'),
