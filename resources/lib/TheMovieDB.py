@@ -603,6 +603,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
         images["poster_small"] = base_url + "w342" + poster
         images["thumb"] = base_url + "w342" + poster
     if still:
+        images["thumb"] = base_url + "w300" + still
         images["still"] = base_url + "w300" + still
         images["still_original"] = base_url + "original" + still
         images["still_small"] = base_url + "w185" + still
