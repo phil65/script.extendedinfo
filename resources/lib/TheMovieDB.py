@@ -1014,7 +1014,6 @@ def get_similar_movies(movie_id):
     if "similar" in response:
         return handle_tmdb_movies(response["similar"]["results"])
     else:
-        log("No JSON Data available")
         return []
 
 
@@ -1030,7 +1029,6 @@ def get_similar_tvshows(tvshow_id):
     if "similar" in response:
         return handle_tmdb_tvshows(response["similar"]["results"])
     else:
-        log("No JSON Data available")
         return []
 
 
@@ -1043,8 +1041,6 @@ def get_tmdb_shows(tvshow_type):
     if "results" in response:
         return handle_tmdb_tvshows(response["results"], False, None)
     else:
-        log("No JSON Data available for get_tmdb_shows(%s)" % tvshow_type)
-        log(response)
         return []
 
 
@@ -1057,8 +1053,6 @@ def get_tmdb_movies(movie_type):
     if "results" in response:
         return handle_tmdb_movies(response["results"], False, None)
     else:
-        log("No JSON Data available for get_tmdb_movies(%s)" % movie_type)
-        log(response)
         return []
 
 
@@ -1078,7 +1072,6 @@ def get_set_movies(set_id):
                 "id": response["id"]}
         return handle_tmdb_movies(response.get("parts", [])), info
     else:
-        log("No JSON Data available")
         return [], {}
 
 
@@ -1088,7 +1081,6 @@ def get_person_movies(person_id):
     if "crew" in response:
         return handle_tmdb_movies(response["crew"])
     else:
-        log("No JSON Data available")
         return []
 
 
@@ -1097,15 +1089,13 @@ def search_media(media_name=None, year='', media_type="movie"):
     return list of items with type *media_type for search with *media_name
     '''
     search_query = url_quote(media_name + " " + str(year))
-    if search_query:
-        response = get_tmdb_data("search/%s?query=%s&language=%s&include_adult=%s&" % (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
-        try:
-            if not response == "Empty":
-                for item in response['results']:
-                    if item['id']:
-                        return item['id']
-        except Exception as e:
-            log(e)
+    if not search_query:
+        return None
+    response = get_tmdb_data("search/%s?query=%s&language=%s&include_adult=%s&" % (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
+    if not response == "Empty":
+        for item in response['results']:
+            if item['id']:
+                return item['id']
     return None
 
 

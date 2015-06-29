@@ -291,8 +291,6 @@ class DialogVideoInfo(DialogBaseInfo):
         if not self.logged_in:
             return lists
         account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
-        own_lists = []
-        misc_lists = []
         id_list = [item["id"] for item in account_list]
         own_lists = [item for item in lists if item["id"] in id_list]
         own_lists = [item.update({"account": "True"}) for item in own_lists]
