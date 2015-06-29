@@ -26,8 +26,7 @@ if SETTING("force_native_layout") == "true":
 else:
     INFO_DIALOG_FILE = INFO_DIALOG_FILE_CLASSIC
     LIST_DIALOG_FILE = LIST_DIALOG_FILE_CLASSIC
-log(INFO_DIALOG_FILE)
-log(LIST_DIALOG_FILE)
+
 
 class WindowManager(object):
     window_stack = []
