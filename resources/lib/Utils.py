@@ -892,8 +892,6 @@ def clean_text(text):
             text = text[:-1]
         if s == " " or e == " ":
             text = text.strip()
-        elif s == "." or e == ".":
-            text = text.strip(".")
         elif s == "\n" or e == "\n":
             text = text.strip("\n")
         else:
