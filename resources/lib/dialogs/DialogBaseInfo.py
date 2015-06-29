@@ -3,6 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+import xbmc
 import xbmcgui
 from ..Utils import *
 from ..TheMovieDB import *
@@ -83,9 +84,13 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
 
     def onAction(self, action):
         focus_id = self.getFocusId()
+        onback = self.window.getProperty("%i_onback" % focus_id)
         if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            wm.pop_stack()
+            if onback:
+                xbmc.executebuiltin(onback)
+            else:
+                self.close()
+                wm.pop_stack()
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
