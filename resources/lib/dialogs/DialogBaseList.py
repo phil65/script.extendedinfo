@@ -38,6 +38,8 @@ class DialogBaseList(object):
         super(DialogBaseList, self).onInit()
         HOME.setProperty("WindowColor", self.color)
         self.window.setProperty("WindowColor", self.color)
+        if SETTING("alt_browser_layout") == "true":
+            self.window.setProperty("alt_layout", "true")
         self.update_ui()
         xbmc.sleep(200)
         if self.total_items > 0:

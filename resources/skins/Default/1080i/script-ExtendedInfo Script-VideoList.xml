@@ -40,7 +40,7 @@
                     <posy>107</posy>
                     <width>330</width>
                     <height>432</height>
-                    <visible>Control.HasFocus(500)</visible>
+                    <visible>Control.HasFocus(500) + IsEmpty(Window.Property(alt_layout))</visible>
                     <animation type="WindowOpen" reversible="false">
                         <effect type="fade" start="0" end="100" delay="700" time="300" />
                     </animation>
@@ -48,12 +48,29 @@
                     <animation effect="fade" time="200">Hidden</animation>
                     <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
                     <animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
-                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(6) | Container(500).Column(5) | Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(4)">Conditional</animation>
+                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(4) | Container(500).Column(3)">Conditional</animation>
+                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2)">Conditional</animation>
+                    <animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Container(500).Column(4) | Container(500).Column(3) | Container(500).Column(2) | Container(500).Column(1)">Conditional</animation>
+                </control>
+                <control type="image">
+                    <posx>465</posx>
+                    <posy>50</posy>
+                    <width>800</width>
+                    <height>140</height>
+                    <visible>Control.HasFocus(500) + !IsEmpty(Window.Property(alt_layout))</visible>
+                    <animation type="WindowOpen" reversible="false">
+                        <effect type="fade" start="0" end="100" delay="700" time="300" />
+                    </animation>
+                    <animation effect="fade" time="320" delay="200">Visible</animation>
+                    <animation effect="fade" time="200">Hidden</animation>
+                    <texture colordiffuse="$INFO[Window(home).Property(WindowColor)]" border="40">buttons/roundedbutton-focus.png</texture>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6)">Conditional</animation>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6) | Container(500).Row(5)">Conditional</animation>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6) | Container(500).Row(5) | Container(500).Row(4)">Conditional</animation>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6) | Container(500).Row(5) | Container(500).Row(4) | Container(500).Row(3)">Conditional</animation>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6) | Container(500).Row(5) | Container(500).Row(4) | Container(500).Row(3) | Container(500).Row(2)">Conditional</animation>
+                    <animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Container(500).Row(6) | Container(500).Row(5) | Container(500).Row(4) | Container(500).Row(3) | Container(500).Row(2) | Container(500).Row(1)">Conditional</animation>
                 </control>
             </control>
             <control type="image">
@@ -117,16 +134,25 @@
                     <font>font12</font>
                     <textcolor>FF999999</textcolor>
                 </control>
+                <control type="image">
+                    <posx>1320</posx>
+                    <posy>40</posy>
+                    <width>580</width>
+                    <height>870</height>
+                    <fadetime>200</fadetime>
+                    <texture>$INFO[Container(500).ListItem.Thumb]</texture>
+                    <visible>!IsEmpty(Window.Property(alt_layout))</visible>
+                </control>
             </control>
             <control type="panel" id="500">
                 <posx>440</posx>
                 <posy>0</posy>
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
-                    <effect type="zoom" start="50" end="100" center="960,540" delay="0" tween="cubic" time="900" />
+                    <effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
                 </animation>
                 <width>1536</width>
-                <height>1274</height>
+                <height>1080</height>
                 <viewtype label="31234">icon</viewtype>
                 <pagecontrol>72</pagecontrol>
                 <preloaditems>2</preloaditems>
@@ -136,7 +162,7 @@
                 <onup>700</onup>
                 <ondown>600</ondown>
                 <orientation>vertical</orientation>
-                <itemlayout width="350" height="425">
+                <itemlayout width="350" height="425" condition="IsEmpty(Window.Property(alt_layout))">
                     <control type="group">
                         <posy>150</posy>
                         <posx>80</posx>
@@ -199,7 +225,7 @@
                         </control>
                     </control>
                 </itemlayout>
-                <focusedlayout width="350" height="425">
+                <focusedlayout width="350" height="425" condition="IsEmpty(Window.Property(alt_layout))">
                     <control type="group">
                         <posy>150</posy>
                         <posx>80</posx>
@@ -273,6 +299,50 @@
                         </animation>
                     </control>
                 </focusedlayout>
+                <itemlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
+                    <control type="label">
+                        <posx>80</posx>
+                        <width>700</width>
+                        <height>67</height>
+                        <posy>75</posy>
+                        <textcolor>FFFAFAFA</textcolor>
+                        <align>left</align>
+                        <font>font13</font>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posx>80</posx>
+                        <width>700</width>
+                        <height>67</height>
+                        <posy>115</posy>
+                        <textcolor>FFAAAAAA</textcolor>
+                        <align>left</align>
+                        <font>font12</font>
+                        <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+                    </control>
+                </itemlayout>
+                <focusedlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
+                    <control type="label">
+                        <posx>80</posx>
+                        <width>700</width>
+                        <height>67</height>
+                        <posy>75</posy>
+                        <textcolor>FFFAFAFA</textcolor>
+                        <align>left</align>
+                        <font>font13</font>
+                        <label>$INFO[ListItem.Label]</label>
+                    </control>
+                    <control type="label">
+                        <posx>80</posx>
+                        <width>700</width>
+                        <height>67</height>
+                        <posy>115</posy>
+                        <textcolor>FFAAAAAA</textcolor>
+                        <align>left</align>
+                        <font>font12</font>
+                        <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+                    </control>
+                </focusedlayout>
             </control>
             <control type="button" id="600">
                 <onfocus>SetFocus(500)</onfocus>
@@ -327,6 +397,9 @@
                 <animation effect="fade" end="100" time="360">WindowOpen</animation>
                 <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
             </control>
+            <control type="group">
+                <animation effect="slide" start="0" end="-290" time="250" condition="!IsEmpty(Window.Property(alt_layout))">Conditional</animation>
+
             <control type="image">
                 <texture>arrowdown.png</texture>
                 <posx>1090</posx>
@@ -336,7 +409,7 @@
                 <height>30</height>
                 <animation effect="fade" end="100" time="360">WindowOpen</animation>
                 <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
-                <visible>!IsEmpty(Window.Property(ArrowDown))</visible>
+                <visible>!IsEmpty(Window.Property(ArrowDown)) | Container(500).HasNext</visible>
             </control>
             <control type="image">
                 <texture flipy="true">arrowdown.png</texture>
@@ -347,8 +420,9 @@
                 <height>30</height>
                 <animation effect="fade" end="100" time="360">WindowOpen</animation>
                 <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
-                <visible>!IsEmpty(Window.Property(ArrowUp))</visible>
+                <visible>!IsEmpty(Window.Property(ArrowUp)) | Container(500).HasPrevious</visible>
             </control>
+        </control>
             <control type="group">
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="-200" end="0" delay="1000" tween="sine" time="500" />
