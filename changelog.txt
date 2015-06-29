@@ -16,6 +16,11 @@ v3.0.0
 - added infodialogs.active property for home
 - added certification for tvshows
 - added date label to episodes
+- added ability to download youtube / trailer videos via context menu
+- added option to override onback behaviour by skinners
+- added additional second list layout for TMDB Browser
+- added option to force native dialog layouts
+- added ability to remove single filters in browser dialog
 - fixed onclick for Trakt calendar items
 - fixed limit param for some script calls
 - fixed biography dialog for actors
@@ -35,6 +40,7 @@ v3.0.0
 - some visual tweaks for infodialogs
 - localization
 - Code cleanup
+- lot more stuff I forgot
 
 v2.0.10
 - fixed tv show lookup with year in brackets attached to lookup string
