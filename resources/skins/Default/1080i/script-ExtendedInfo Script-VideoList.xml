@@ -307,6 +307,7 @@
                         <posy>75</posy>
                         <textcolor>FFFAFAFA</textcolor>
                         <align>left</align>
+                        <aligny>top</aligny>
                         <font>font13</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
@@ -317,6 +318,7 @@
                         <posy>115</posy>
                         <textcolor>FFAAAAAA</textcolor>
                         <align>left</align>
+                        <aligny>top</aligny>
                         <font>font12</font>
                         <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
                     </control>
@@ -329,6 +331,7 @@
                         <posy>75</posy>
                         <textcolor>FFFAFAFA</textcolor>
                         <align>left</align>
+                        <aligny>top</aligny>
                         <font>font13</font>
                         <label>$INFO[ListItem.Label]</label>
                     </control>
@@ -337,8 +340,15 @@
                         <width>700</width>
                         <height>67</height>
                         <posy>115</posy>
-                        <textcolor>FFAAAAAA</textcolor>
+                        <textcolor>FFFAFAFA</textcolor>
+                      <animation type="Focus" reversible="false">
+                            <effect type="fade" start="62" end="100" time="280" />
+                        </animation>
+                        <animation type="UnFocus" reversible="false">
+                            <effect type="fade" start="100" end="62" time="280" />
+                        </animation>
                         <align>left</align>
+                        <aligny>top</aligny>
                         <font>font12</font>
                         <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
                     </control>
