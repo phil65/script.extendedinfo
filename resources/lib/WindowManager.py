@@ -121,6 +121,7 @@ class WindowManager(object):
         needs *tvshow_id AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
+        from TheMovieDB import get_tmdb_data
         if not tvshow_id and tvshow:
             response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
             tvshow_id = str(response['results'][0]['id'])
