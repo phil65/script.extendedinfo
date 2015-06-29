@@ -152,9 +152,10 @@ class DialogBaseList(object):
         if not self.listitems and self.getFocusId() == 500:
             self.setFocusId(6000)
         self.getControl(500).reset()
-        self.getControl(500).addItems(self.listitems)
-        if self.column is not None:
-            self.getControl(500).selectItem(self.column)
+        if self.listitems:
+            self.getControl(500).addItems(self.listitems)
+            if self.column is not None:
+                self.getControl(500).selectItem(self.column)
         self.window.setProperty("TotalPages", str(self.total_pages))
         self.window.setProperty("TotalItems", str(self.total_items))
         self.window.setProperty("CurrentPage", str(self.page))
