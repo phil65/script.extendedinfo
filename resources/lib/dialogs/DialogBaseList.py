@@ -149,11 +149,11 @@ class DialogBaseList(object):
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
+        if not self.listitems and self.getFocusId() == 500:
+            self.setFocusId(6000)
         self.getControl(500).reset()
         self.getControl(500).addItems(self.listitems)
-        if not self.listitems:
-            self.setFocusId(6000)
-        elif self.column is not None:
+        if self.column is not None:
             self.getControl(500).selectItem(self.column)
         self.window.setProperty("TotalPages", str(self.total_pages))
         self.window.setProperty("TotalItems", str(self.total_items))
