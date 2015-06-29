@@ -25,7 +25,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         self.type = "Episode"
         self.tmdb_id = kwargs.get('show_id')
         self.season = kwargs.get('season')
-        self.show_name = kwargs.get('tvshow')
         self.episode_number = kwargs.get('episode')
         data = extended_episode_info(tvshow_id=self.tmdb_id,
                                      season=self.season,
@@ -35,8 +34,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
         else:
             notify(LANG(32143))
             return None
-        search_str = "%s tv" % (self.info['title'])
-        youtube_thread = GetYoutubeVidsThread(search_str=search_str)
+        youtube_thread = GetYoutubeVidsThread(search_str="%s tv" % (self.info['title']))
         youtube_thread.start()  # TODO: rem threading here
         filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
@@ -44,11 +42,12 @@ class DialogEpisodeInfo(DialogBaseInfo):
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor
-        self.listitems = [(1000, create_listitems(self.data["actors"] + self.data["guest_stars"], 0)),
-                          (750, create_listitems(self.data["crew"], 0)),
-                          (1150, create_listitems(self.data["videos"], 0)),
-                          (1350, create_listitems(self.data["images"], 0)),
-                          (350, create_listitems(youtube_thread.listitems, 0))]
+        self.listitems = [(1000, self.data["actors"] + self.data["guest_stars"]),
+                          (750, self.data["crew"]),
+                          (1150, self.data["videos"]),
+                          (1350, self.data["images"]),
+                          (350, youtube_thread.listitems)]
+        self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()

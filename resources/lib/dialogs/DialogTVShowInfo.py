@@ -37,11 +37,9 @@ class DialogTVShowInfo(DialogBaseInfo):
         for item in self.data["certifications"]:
             if not item["iso_3166_1"] in cert_list:
                 continue
-            rating = item["certification"]
-            language_certs = cert_list[item["iso_3166_1"]]
-            hit = dictfind(lst=language_certs,
+            hit = dictfind(lst=cert_list[item["iso_3166_1"]],
                            key="certification",
-                           value=rating)
+                           value=item["certification"])
             if hit:
                 item["meaning"] = hit["meaning"]
         if "dbid" not in self.info:  # need to add comparing for tvshows
@@ -57,19 +55,20 @@ class DialogTVShowInfo(DialogBaseInfo):
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor
-        self.listitems = [(150, create_listitems(self.data["similar"], 0)),
-                          (250, create_listitems(self.data["seasons"], 0)),
-                          (1450, create_listitems(self.data["networks"], 0)),
-                          (550, create_listitems(self.data["studios"], 0)),
-                          (650, create_listitems(self.data["certifications"], 0)),
-                          (750, create_listitems(self.data["crew"], 0)),
-                          (850, create_listitems(self.data["genres"], 0)),
-                          (950, create_listitems(self.data["keywords"], 0)),
-                          (1000, create_listitems(self.data["actors"], 0)),
-                          (1150, create_listitems(self.data["videos"], 0)),
-                          (1250, create_listitems(self.data["images"], 0)),
-                          (1350, create_listitems(self.data["backdrops"], 0)),
-                          (350, create_listitems(youtube_thread.listitems, 0))]
+        self.listitems = [(150, self.data["similar"]),
+                          (250, self.data["seasons"]),
+                          (1450, self.data["networks"]),
+                          (550, self.data["studios"]),
+                          (650, self.data["certifications"]),
+                          (750, self.data["crew"]),
+                          (850, self.data["genres"]),
+                          (950, self.data["keywords"]),
+                          (1000, self.data["actors"]),
+                          (1150, self.data["videos"]),
+                          (1250, self.data["images"]),
+                          (1350, self.data["backdrops"]),
+                          (350, youtube_thread.listitems)]
+        self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
     def onInit(self):
         super(DialogTVShowInfo, self).onInit()

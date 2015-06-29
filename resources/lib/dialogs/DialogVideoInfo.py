@@ -42,7 +42,6 @@ class DialogVideoInfo(DialogBaseInfo):
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
         for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread]:
             thread.start()
-        vid_id_list = [item["key"] for item in self.data["videos"]]
         crew_list = merge_dict_lists(self.data["crew"])
         self.info['Poster'] = get_file(self.info["Poster"])
         filter_thread = FilterImageThread(self.info["thumb"], 25)
@@ -53,36 +52,37 @@ class DialogVideoInfo(DialogBaseInfo):
         for item in self.data["releases"]:
             if item["iso_3166_1"] not in cert_list:
                 continue
-            language = item["iso_3166_1"]
-            certification = item["certification"]
-            language_certs = cert_list[language]
-            hit = dictfind(language_certs, "certification", certification)
+            hit = dictfind(lst=cert_list[item["iso_3166_1"]],
+                           key="certification",
+                           value=item["certification"])
             if hit:
                 item["meaning"] = hit["meaning"]
         sets_thread.join()
         self.set_listitems = sets_thread.listitems
         self.setinfo = sets_thread.setinfo
-        id_list = sets_thread.id_list
-        self.data["similar"] = [item for item in self.data["similar"] if item["id"] not in id_list]
+        self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
         youtube_thread.join()
-        youtube_vids = [item for item in youtube_thread.listitems if item["youtube_id"] not in vid_id_list]
+        vid_ids = [item["key"] for item in self.data["videos"]]
+        youtube_vids = [i for i in youtube_thread.listitems if i["youtube_id"] not in vid_ids]
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor
-        self.listitems = [(1000, create_listitems(self.data["actors"], 0)),
-                          (150, create_listitems(self.data["similar"], 0)),
-                          (250, create_listitems(self.set_listitems, 0)),
-                          (450, create_listitems(self.data["lists"], 0)),
-                          (550, create_listitems(self.data["studios"], 0)),
-                          (650, create_listitems(self.data["releases"], 0)),
-                          (750, create_listitems(crew_list, 0)),
-                          (850, create_listitems(self.data["genres"], 0)),
-                          (950, create_listitems(self.data["keywords"], 0)),
-                          (1050, create_listitems(self.data["reviews"], 0)),
-                          (1150, create_listitems(self.data["videos"], 0)),
-                          (1250, create_listitems(self.data["images"], 0)),
-                          (1350, create_listitems(self.data["backdrops"], 0)),
-                          (350, create_listitems(youtube_vids, 0))]
+        self.listitems = [(1000, self.data["actors"]),
+                          (150, self.data["similar"]),
+                          (250, self.set_listitems),
+                          (450, self.data["lists"]),
+                          (550, self.data["studios"]),
+                          (650, self.data["releases"]),
+                          (750, crew_list),
+                          (850, self.data["genres"]),
+                          (950, self.data["keywords"]),
+                          (1050, self.data["reviews"]),
+                          (1150, self.data["videos"]),
+                          (1250, self.data["images"]),
+                          (1350, self.data["backdrops"]),
+                          (350, youtube_vids)]
+        self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
+
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()
@@ -319,10 +319,8 @@ class DialogVideoInfo(DialogBaseInfo):
         listitems = []
         for item in account_lists:
             listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-        prettyprint(account_lists)
         index = xbmcgui.Dialog().select(LANG(32138), listitems)
         if index >= 0:
-            # change_list_status(account_lists[index]["id"], self.tmdb_id, False)
             remove_list(account_lists[index]["id"])
             self.update_states()
 

@@ -36,21 +36,19 @@ class DialogActorInfo(DialogBaseInfo):
         youtube_thread.start()
         filter_thread = FilterImageThread(image=self.info["thumb"])
         filter_thread.start()
-        db_movies = len([item for item in self.data["movie_roles"] if "dbid" in item])
-        self.info["DBMovies"] = str(db_movies)
-        movie_crew_roles = merge_dict_lists(self.data["movie_crew_roles"])
-        tvshow_crew_roles = merge_dict_lists(self.data["tvshow_crew_roles"])
+        self.info["DBMovies"] = str(len([item for item in self.data["movie_roles"] if "dbid" in item]))
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor
         youtube_thread.join()
-        self.listitems = [(150, create_listitems(self.data["movie_roles"], 0)),
-                          (250, create_listitems(self.data["tvshow_roles"], 0)),
-                          (450, create_listitems(self.data["images"], 0)),
-                          (550, create_listitems(movie_crew_roles, 0)),
-                          (650, create_listitems(tvshow_crew_roles, 0)),
-                          (750, create_listitems(self.data["tagged_images"], 0)),
-                          (350, create_listitems(youtube_thread.listitems, 0))]
+        self.listitems = [(150, self.data["movie_roles"]),
+                          (250, self.data["tvshow_roles"]),
+                          (450, self.data["images"]),
+                          (550, merge_dict_lists(self.data["movie_crew_roles"])),
+                          (650, merge_dict_lists(self.data["tvshow_crew_roles"])),
+                          (750, self.data["tagged_images"]),
+                          (350, youtube_thread.listitems)]
+        self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
     def onInit(self):
         super(DialogActorInfo, self).onInit()
