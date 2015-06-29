@@ -294,14 +294,9 @@ class DialogVideoInfo(DialogBaseInfo):
         own_lists = []
         misc_lists = []
         id_list = [item["id"] for item in account_list]
-        for item in lists:
-            if item["id"] in id_list:
-                item["account"] = "True"
-                own_lists.append(item)
-            else:
-                misc_lists.append(item)
-        # own_lists = [item for item in lists if item["id"] in id_list]
-        # misc_lists = [item for item in lists if item["id"] not in id_list]
+        own_lists = [item for item in lists if item["id"] in id_list]
+        own_lists = [item.update({"account": "True"}) for item in own_lists]
+        misc_lists = [item for item in lists if item["id"] not in id_list]
         return own_lists + misc_lists
 
     def update_states(self, force_update=True):
