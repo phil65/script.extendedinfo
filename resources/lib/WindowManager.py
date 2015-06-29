@@ -121,9 +121,11 @@ class WindowManager(object):
         needs *tvshow_id AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
+        if not tvshow_id and tvshow:
+            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
+            tvshow_id = str(response['results'][0]['id'])
         dialog = DialogEpisodeInfo.DialogEpisodeInfo(INFO_DIALOG_FILE, ADDON_PATH,
                                                      show_id=tvshow_id,
-                                                     tvshow=tvshow,
                                                      season=season,
                                                      episode=episode)
         self.open_dialog(dialog, prev_window)

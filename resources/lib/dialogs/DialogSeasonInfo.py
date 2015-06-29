@@ -74,10 +74,8 @@ class DialogSeasonInfo(DialogBaseInfo):
 
     @ch.click(2000)
     def open_episode_info(self):
-        if not self.tmdb_id:
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(self.tvshow), SETTING("LanguageID")), 30)
-            self.tmdb_id = str(response['results'][0]['id'])
         wm.open_episode_info(prev_window=self,
+                             tvshow=self.tvshow,
                              tvshow_id=self.tmdb_id,
                              season=self.control.getSelectedItem().getProperty("season"),
                              episode=self.control.getSelectedItem().getProperty("episode"))
