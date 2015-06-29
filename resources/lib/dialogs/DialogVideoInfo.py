@@ -45,7 +45,6 @@ class DialogVideoInfo(DialogBaseInfo):
         for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
             thread.start()
         self.info['Poster'] = get_file(self.info["Poster"])
-        cert_list = merge_with_cert_desc(self.data["releases"], "movie")
         sets_thread.join()
         self.setinfo = sets_thread.setinfo
         self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
@@ -61,7 +60,7 @@ class DialogVideoInfo(DialogBaseInfo):
                           (250, sets_thread.listitems),
                           (450, lists_thread.listitems),
                           (550, self.data["studios"]),
-                          (650, self.data["releases"]),
+                          (650, merge_with_cert_desc(self.data["releases"], "movie")),
                           (750, merge_dict_lists(self.data["crew"])),
                           (850, self.data["genres"]),
                           (950, self.data["keywords"]),
@@ -71,7 +70,6 @@ class DialogVideoInfo(DialogBaseInfo):
                           (1350, self.data["backdrops"]),
                           (350, youtube_vids)]
         self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
-
 
     def onInit(self):
         super(DialogVideoInfo, self).onInit()

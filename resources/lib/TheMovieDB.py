@@ -598,6 +598,7 @@ def get_credit_info(credit_id):
     return get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
     return response
 
+
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     images = {}
     if poster:
