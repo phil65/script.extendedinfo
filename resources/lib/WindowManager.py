@@ -11,11 +11,13 @@ ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
 ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-INFO_DIALOG_FILE_CLASSIC = u'script-%s-%s' % (ADDON_NAME, "DialogVideoInfo.xml")
-LIST_DIALOG_FILE_CLASSIC = u'script-%s-%s' % (ADDON_NAME, "VideoList.xml")
+INFO_DIALOG_FILE_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (ADDON_NAME)
+LIST_DIALOG_FILE_CLASSIC = u'script-%s-VideoList.xml' % (ADDON_NAME)
+ACTOR_DIALOG_FILE_CLASSIC = u'script-%s-DialogInfo.xml' % (ADDON_NAME)
 if SETTING("force_native_layout") == "true":
-    INFO_DIALOG_FILE = u'script-%s-%s' % (ADDON_NAME, "DialogVideoInfo-classic.xml")
-    LIST_DIALOG_FILE = u'script-%s-%s' % (ADDON_NAME, "VideoList-classic.xml")
+    INFO_DIALOG_FILE = u'script-%s-DialogVideoInfo-classic.xml' % (ADDON_NAME)
+    LIST_DIALOG_FILE = u'script-%s-VideoList-classic.xml' % (ADDON_NAME)
+    ACTOR_DIALOG_FILE = u'script-%s-DialogInfo-classic.xml' % (ADDON_NAME)
     path = os.path.join(ADDON_PATH, "resources", "skins", "Default", "1080i")
     if not xbmcvfs.exists(os.path.join(path, INFO_DIALOG_FILE)):
         xbmcvfs.copy(strSource=os.path.join(path, INFO_DIALOG_FILE_CLASSIC),
@@ -23,9 +25,13 @@ if SETTING("force_native_layout") == "true":
     if not xbmcvfs.exists(os.path.join(path, LIST_DIALOG_FILE)):
         xbmcvfs.copy(strSource=os.path.join(path, LIST_DIALOG_FILE_CLASSIC),
                      strDestnation=os.path.join(path, LIST_DIALOG_FILE))
+    if not xbmcvfs.exists(os.path.join(path, ACTOR_DIALOG_FILE)):
+        xbmcvfs.copy(strSource=os.path.join(path, ACTOR_DIALOG_FILE_CLASSIC),
+                     strDestnation=os.path.join(path, ACTOR_DIALOG_FILE))
 else:
     INFO_DIALOG_FILE = INFO_DIALOG_FILE_CLASSIC
     LIST_DIALOG_FILE = LIST_DIALOG_FILE_CLASSIC
+    ACTOR_DIALOG_FILE = ACTOR_DIALOG_FILE_CLASSIC
 
 
 class WindowManager(object):
@@ -145,7 +151,7 @@ class WindowManager(object):
                 actor_id = actor_info["id"]
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        dialog = DialogActorInfo.DialogActorInfo(u'script-%s-DialogInfo.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogActorInfo.DialogActorInfo(ACTOR_DIALOG_FILE, ADDON_PATH,
                                                  id=actor_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
