@@ -418,9 +418,9 @@ def start_info_actions(infos, params):
                 if tmdb_id:
                     rating = get_rating_from_user()
                     if rating:
-                        send_rating_for_media_item(media_type=media_type,
-                                                   media_id=tmdb_id,
-                                                   rating=rating)
+                        set_rating(media_type=media_type,
+                                   media_id=tmdb_id,
+                                   rating=rating)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             resolve_url(params.get("handle"))
             set_mbids_for_artists(False, False)

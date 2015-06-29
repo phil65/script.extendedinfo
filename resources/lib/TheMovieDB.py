@@ -51,10 +51,12 @@ def get_rating_from_user():
         return None
 
 
-def send_rating_for_media_item(media_type, media_id, rating):
-    # media_type: movie, tv or episode
-    # media_id: tmdb_id / episode ident array
-    # rating: ratung value (0.5-10.0, 0.5 steps)
+def set_rating(media_type, media_id, rating):
+    '''
+    media_type: movie, tv or episode
+    media_id: tmdb_id / episode ident array
+    rating: ratung value (0.5-10.0, 0.5 steps)
+    '''
     if check_login():
         session_id = "session_id=" + get_session_id()
     else:
@@ -64,6 +66,7 @@ def send_rating_for_media_item(media_type, media_id, rating):
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id)
+            # request.get_method = lambda: 'DELETE'
     request = Request(url=url,
                       data=values,
                       headers=HEADERS)

@@ -143,9 +143,9 @@ class DialogTVShowInfo(DialogBaseInfo):
         elif control_id == 6001:
             rating = get_rating_from_user()
             if rating:
-                send_rating_for_media_item(media_type="tv",
-                                           media_id=self.tmdb_id,
-                                           rating=rating)
+                set_rating(media_type="tv",
+                           media_id=self.tmdb_id,
+                           rating=rating)
                 self.update_states()
         elif control_id == 6002:
             listitems = [LANG(32144), LANG(32145)]

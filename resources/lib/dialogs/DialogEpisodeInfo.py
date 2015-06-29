@@ -85,9 +85,9 @@ class DialogEpisodeInfo(DialogBaseInfo):
         if not rating:
             return None
         identifier = [self.tmdb_id, self.season, self.info["episode"]]
-        send_rating_for_media_item(media_type="episode",
-                                   media_id=identifier,
-                                   rating=rating)
+        set_rating(media_type="episode",
+                   media_id=identifier,
+                   rating=rating)
         self.update_states()
 
     @ch.click(6006)

@@ -241,9 +241,9 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
         if selection == 0:
             rating = get_rating_from_user()
             if rating:
-                send_rating_for_media_item(media_type=self.type,
-                                           media_id=item_id,
-                                           rating=rating)
+                set_rating(media_type=self.type,
+                           media_id=item_id,
+                           rating=rating)
                 xbmc.sleep(2000)
                 self.update(force_update=True)
         elif selection == 1:

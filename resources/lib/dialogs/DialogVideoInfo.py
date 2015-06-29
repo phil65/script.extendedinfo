@@ -228,9 +228,9 @@ class DialogVideoInfo(DialogBaseInfo):
         rating = get_rating_from_user()
         if not rating:
             return None
-        send_rating_for_media_item(media_type="movie",
-                                   media_id=self.tmdb_id,
-                                   rating=rating)
+        set_rating(media_type="movie",
+                   media_id=self.tmdb_id,
+                   rating=rating)
         self.update_states()
 
     @ch.click(6005)
