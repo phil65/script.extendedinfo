@@ -40,8 +40,8 @@ class DialogSeasonInfo(DialogBaseInfo):
         youtube_thread = GetYoutubeVidsThread(search_str=search_str)
         youtube_thread.start()
         if "dbid" not in self.info:  # need to add comparing for seasons
-            self.info['Poster'] = get_file(url=self.info["Poster"])
-        filter_thread = FilterImageThread(self.info["Poster"], 25)
+            self.info['poster'] = get_file(url=self.info["poster"])
+        filter_thread = FilterImageThread(self.info["poster"], 25)
         filter_thread.start()
         youtube_thread.join()
         filter_thread.join()
