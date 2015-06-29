@@ -260,7 +260,7 @@ def start_info_actions(infos, params):
             if params.get("id"):
                 listitems = search_youtube(search_str=params.get("id", ""),
                                            hd=params.get("hd", ""),
-                                           relevance=params.get("orderby", "relevance"))
+                                           orderby=params.get("orderby", "relevance"))
                 data = listitems.get("listitems", []), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id"):
