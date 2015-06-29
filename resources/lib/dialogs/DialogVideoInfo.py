@@ -40,13 +40,10 @@ class DialogVideoInfo(DialogBaseInfo):
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
-        for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread]:
-            thread.start()
-        crew_list = merge_dict_lists(self.data["crew"])
-        self.info['Poster'] = get_file(self.info["Poster"])
         filter_thread = FilterImageThread(self.info["thumb"], 25)
-        filter_thread.start()
-        lists_thread.join()
+        for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
+            thread.start()
+        self.info['Poster'] = get_file(self.info["Poster"])
         cert_list = get_certification_list("movie")
         for item in self.data["releases"]:
             if item["iso_3166_1"] not in cert_list:
@@ -57,7 +54,6 @@ class DialogVideoInfo(DialogBaseInfo):
             if hit:
                 item["meaning"] = hit["meaning"]
         sets_thread.join()
-        self.set_listitems = sets_thread.listitems
         self.setinfo = sets_thread.setinfo
         self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
         youtube_thread.join()
@@ -66,13 +62,14 @@ class DialogVideoInfo(DialogBaseInfo):
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor
+        lists_thread.join()
         self.listitems = [(1000, self.data["actors"]),
                           (150, self.data["similar"]),
-                          (250, self.set_listitems),
+                          (250, sets_thread.listitems),
                           (450, lists_thread.listitems),
                           (550, self.data["studios"]),
                           (650, self.data["releases"]),
-                          (750, crew_list),
+                          (750, merge_dict_lists(self.data["crew"])),
                           (850, self.data["genres"]),
                           (950, self.data["keywords"]),
                           (1050, self.data["reviews"]),
