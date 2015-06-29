@@ -170,12 +170,14 @@ def get_account_info():
     else:
         return None
 
+
 def get_certification_list(media_type):
     response = get_tmdb_data("certification/%s/list?" % media_type, 999999)
     if "certifications" in response:
         return response["certifications"]
     else:
         return []
+
 
 def merge_with_cert_desc(input_list, media_type):
     cert_list = get_certification_list(media_type)
@@ -591,7 +593,6 @@ def get_company_data(company_id):
 
 def get_credit_info(credit_id):
     return get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
-    return response
 
 
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
@@ -632,7 +633,6 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
     if not response:
         notify("Could not find season info")
         return None
-    artwork = get_image_urls(poster=response.get("poster_path"))
     if response.get("name", False):
         title = response["name"]
     elif season_number == "0":
@@ -645,6 +645,7 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
               'title': title,
               'release_date': response["air_date"],
               'AirDate': response["air_date"]}
+    artwork = get_image_urls(poster=response.get("poster_path"))
     season.update(artwork)
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
