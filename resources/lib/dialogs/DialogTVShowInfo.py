@@ -36,12 +36,12 @@ class DialogTVShowInfo(DialogBaseInfo):
         cert_list = merge_with_cert_desc(self.data["certifications"], "tv")
         if "dbid" not in self.info:  # need to add comparing for tvshows
             poster_thread = FunctionThread(function=get_file,
-                                           param=self.info["poster"])
+                                           param=self.info.get("poster", ""))
             poster_thread.start()
         if "dbid" not in self.info:
             poster_thread.join()
             self.info['poster'] = poster_thread.listitems
-        filter_thread = FilterImageThread(image=self.info["poster"])
+        filter_thread = FilterImageThread(image=self.info.get("poster", ""))
         filter_thread.start()
         youtube_thread.join()
         filter_thread.join()
