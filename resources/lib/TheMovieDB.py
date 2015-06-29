@@ -429,7 +429,6 @@ def handle_tmdb_videos(results):
 def handle_tmdb_people(results):
     people = []
     for person in results:
-        builtin = 'RunScript(script.extendedinfo,info=extendedactorinfo,id=%s)' % str(person['id'])
         artwork = get_image_urls(profile=person.get("profile_path"))
         also_known_as = " / ".join(fetch(person, 'also_known_as'))
         newperson = {'adult': str(fetch(person, 'adult')),
@@ -447,7 +446,7 @@ def handle_tmdb_people(results):
                      'id': str(person['id']),
                      'cast_id': str(fetch(person, 'cast_id')),
                      'credit_id': str(fetch(person, 'credit_id')),
-                     'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
+                     'path': "plugin://script.extendedinfo/?info=extendedactorinfo&&id=" + str(person['id']),
                      'deathday': fetch(person, 'deathday'),
                      'place_of_birth': fetch(person, 'place_of_birth'),
                      'placeofbirth': fetch(person, 'place_of_birth'),
