@@ -47,7 +47,6 @@ class DialogVideoInfo(DialogBaseInfo):
         filter_thread = FilterImageThread(self.info["thumb"], 25)
         filter_thread.start()
         lists_thread.join()
-        self.data["lists"] = lists_thread.listitems
         cert_list = get_certification_list("movie")
         for item in self.data["releases"]:
             if item["iso_3166_1"] not in cert_list:
@@ -70,7 +69,7 @@ class DialogVideoInfo(DialogBaseInfo):
         self.listitems = [(1000, self.data["actors"]),
                           (150, self.data["similar"]),
                           (250, self.set_listitems),
-                          (450, self.data["lists"]),
+                          (450, lists_thread.listitems),
                           (550, self.data["studios"]),
                           (650, self.data["releases"]),
                           (750, crew_list),

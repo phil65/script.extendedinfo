@@ -36,7 +36,6 @@ class DialogActorInfo(DialogBaseInfo):
         youtube_thread.start()
         filter_thread = FilterImageThread(image=self.info["thumb"])
         filter_thread.start()
-        self.info["DBMovies"] = str(len([item for item in self.data["movie_roles"] if "dbid" in item]))
         filter_thread.join()
         self.info['ImageFilter'] = filter_thread.image
         self.info['ImageColor'] = filter_thread.imagecolor

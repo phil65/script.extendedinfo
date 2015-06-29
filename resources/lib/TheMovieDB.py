@@ -170,7 +170,7 @@ def get_account_info():
     else:
         return None
 
-
+@lru_cache(maxsize=128)
 def get_certification_list(media_type):
     response = get_tmdb_data("certification/%s/list?" % media_type, 999999)
     if "certifications" in response:
@@ -292,7 +292,6 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
 
 def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
-    log("starting handle_tmdb_tvshows")
     for tv in results:
         tmdb_id = fetch(tv, 'id')
         duration = ""
@@ -481,7 +480,6 @@ def handle_tmdb_tagged_images(results):
 
 def handle_tmdb_companies(results):
     companies = []
-    log("starting HandleLastFMCompanyResult")
     for company in results:
         newcompany = {'parent_company': company['parent_company'],
                       'name': company['name'],
@@ -586,13 +584,8 @@ def get_company_data(company_id):
 
 
 def get_credit_info(credit_id):
-    response = get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
+    return get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
     return response
-    # if response and "results" in response:
-    #     return handle_tmdb_movies(response["results"])
-    # else:
-    #     return []
-
 
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     images = {}
@@ -626,12 +619,9 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
             if response["results"]:
                 tmdb_tvshow_id = str(response['results'][0]['id'])
     response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
-    # prettyprint(response)
     if not response:
         notify("Could not find season info")
         return None
-    videos = []
-    backdrops = []
     artwork = get_image_urls(poster=response.get("poster_path"))
     if response.get("name", False):
         title = response["name"]
@@ -649,14 +639,14 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
               'AirDate': response["air_date"]}
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
-    if "backdrops" in response["images"]:
-        backdrops = handle_tmdb_images(response["images"]["backdrops"])
+    else:
+        videos = []
     listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
                  "crew": handle_tmdb_people(response["credits"]["crew"]),
                  "videos": videos,
                  "episodes": handle_tmdb_episodes(response["episodes"]),
                  "images": handle_tmdb_images(response["images"]["posters"]),
-                 "backdrops": backdrops}
+                 "backdrops": handle_tmdb_images(response["images"].get("backdrops", []))}
     return (season, listitems)
 
 
@@ -913,7 +903,9 @@ def extended_actor_info(actor_id):
                  "tvshow_crew_roles": handle_tmdb_tvshows(response["tv_credits"]["crew"]),
                  "tagged_images": tagged_images,
                  "images": handle_tmdb_images(response["images"]["profiles"])}
-    return (handle_tmdb_people([response])[0], listitems)
+    info = handle_tmdb_people([response])[0]
+    info["DBMovies"] = str(len([d for d in listitems["movie_roles"] if "dbid" in d]))
+    return (info, listitems)
 
 
 def get_movie_lists(list_id):
