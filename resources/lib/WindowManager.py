@@ -11,7 +11,23 @@ ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
 ADDON_NAME = ADDON.getAddonInfo('name')
 ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-
+INFO_DIALOG_FILE_CLASSIC = u'script-%s-%s' % (ADDON_NAME, "DialogVideoInfo.xml")
+LIST_DIALOG_FILE_CLASSIC = u'script-%s-%s' % (ADDON_NAME, "VideoList.xml")
+if SETTING("force_native_layout") == "true":
+    INFO_DIALOG_FILE = u'script-%s-%s' % (ADDON_NAME, "DialogVideoInfo-classic.xml")
+    LIST_DIALOG_FILE = u'script-%s-%s' % (ADDON_NAME, "VideoList-classic.xml")
+    path = os.path.join(ADDON_PATH, "resources", "skins", "Default", "1080i")
+    if not xbmcvfs.exists(os.path.join(path, INFO_DIALOG_FILE)):
+        xbmcvfs.copy(strSource=os.path.join(path, INFO_DIALOG_FILE_CLASSIC),
+                     strDestnation=os.path.join(path, INFO_DIALOG_FILE))
+    if not xbmcvfs.exists(os.path.join(path, LIST_DIALOG_FILE)):
+        xbmcvfs.copy(strSource=os.path.join(path, LIST_DIALOG_FILE_CLASSIC),
+                     strDestnation=os.path.join(path, LIST_DIALOG_FILE))
+else:
+    INFO_DIALOG_FILE = INFO_DIALOG_FILE_CLASSIC
+    LIST_DIALOG_FILE = LIST_DIALOG_FILE_CLASSIC
+log(INFO_DIALOG_FILE)
+log(LIST_DIALOG_FILE)
 
 class WindowManager(object):
     window_stack = []
@@ -47,7 +63,7 @@ class WindowManager(object):
             movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
                                          dbid=dbid,
                                          name=name)
-        dialog = DialogVideoInfo.DialogVideoInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogVideoInfo.DialogVideoInfo(INFO_DIALOG_FILE, ADDON_PATH,
                                                  id=movie_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
@@ -76,7 +92,7 @@ class WindowManager(object):
             tmdb_id = search_media(media_name=name,
                                    year="",
                                    media_type="tv")
-        dialog = DialogTVShowInfo.DialogTVShowInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogTVShowInfo.DialogTVShowInfo(INFO_DIALOG_FILE, ADDON_PATH,
                                                    tmdb_id=tmdb_id,
                                                    dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -88,7 +104,7 @@ class WindowManager(object):
         needs *season AND (*tvshow_id OR *tvshow)
         """
         from dialogs import DialogSeasonInfo
-        dialog = DialogSeasonInfo.DialogSeasonInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogSeasonInfo.DialogSeasonInfo(INFO_DIALOG_FILE, ADDON_PATH,
                                                    id=tvshow_id,
                                                    season=season,
                                                    tvshow=tvshow)
@@ -100,7 +116,7 @@ class WindowManager(object):
         needs *tvshow_id AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
-        dialog = DialogEpisodeInfo.DialogEpisodeInfo(u'script-%s-DialogVideoInfo.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogEpisodeInfo.DialogEpisodeInfo(INFO_DIALOG_FILE, ADDON_PATH,
                                                      show_id=tvshow_id,
                                                      tvshow=tvshow,
                                                      season=season,
@@ -147,7 +163,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogVideoList.DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = DialogVideoList.DialogVideoList(LIST_DIALOG_FILE, ADDON_PATH,
                                                  listitems=listitems,
                                                  color=color,
                                                  filters=filters,
