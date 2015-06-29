@@ -63,6 +63,8 @@ def set_rating(media_type, media_id, rating):
         session_id = "guest_session_id=" + get_guest_session_id()
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
+        if not media_id[1]:
+            media_id[1] = "0"
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id)
