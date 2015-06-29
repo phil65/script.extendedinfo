@@ -33,7 +33,6 @@ class DialogTVShowInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
         youtube_thread.start()
-        cert_list = merge_with_cert_desc(self.data["certifications"], "tv")
         if "dbid" not in self.info:  # need to add comparing for tvshows
             poster_thread = FunctionThread(function=get_file,
                                            param=self.info.get("poster", ""))
@@ -51,7 +50,7 @@ class DialogTVShowInfo(DialogBaseInfo):
                           (250, self.data["seasons"]),
                           (1450, self.data["networks"]),
                           (550, self.data["studios"]),
-                          (650, self.data["certifications"]),
+                          (650, merge_with_cert_desc(self.data["certifications"], "tv")),
                           (750, self.data["crew"]),
                           (850, self.data["genres"]),
                           (950, self.data["keywords"]),
