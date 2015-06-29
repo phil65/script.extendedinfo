@@ -146,8 +146,8 @@ def handle_db_movies(movie):
         resume = "false"
         played = '0'
     stream_info = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
-    db_movie = {'Fanart': movie["art"].get('fanart', ""),
-                'Poster': movie["art"].get('poster', ""),
+    db_movie = {'fanart': movie["art"].get('fanart', ""),
+                'poster': movie["art"].get('poster', ""),
                 'Banner': movie["art"].get('banner', ""),
                 'DiscArt': movie["art"].get('discart', ""),
                 'title': movie.get('label', ""),
@@ -190,8 +190,8 @@ def handle_db_tvshows(tvshow):
         path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % str(tvshow['tvshowid'])
     else:
         path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % str(tvshow['tvshowid'])
-    db_tvshow = {'Fanart': tvshow["art"].get('fanart', ""),
-                 'Poster': tvshow["art"].get('poster', ""),
+    db_tvshow = {'fanart': tvshow["art"].get('fanart', ""),
+                 'poster': tvshow["art"].get('poster', ""),
                  'Banner': tvshow["art"].get('banner', ""),
                  'DiscArt': tvshow["art"].get('discart', ""),
                  'title': tvshow.get('label', ""),

@@ -30,7 +30,7 @@ def get_rottentomatoes_movies(movietype):
         movie = {'title': item["title"],
                  'imdb_id': imdb_id,
                  'thumb': poster,
-                 'Poster': poster,
+                 'poster': poster,
                  'Runtime': item["runtime"],
                  'duration': item["runtime"],
                  'duration(h)': format_time(item["runtime"], "h"),

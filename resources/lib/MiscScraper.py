@@ -30,7 +30,7 @@ def get_xkcd_images():
                 item = {'Image': results["img"],
                         'thumb': results["img"],
                         'path': "plugin://script.extendedinfo?info=setfocus",
-                        'Poster': results["img"],
+                        'poster': results["img"],
                         'title': results["title"],
                         'Description': results["alt"]}
                 items.append(item)
@@ -59,7 +59,7 @@ def get_cyanide_images():
                 newitem = {'Image': keyword,
                            'thumb': keyword,
                            'path': "plugin://script.extendedinfo?info=setfocus",
-                           'Poster': keyword,
+                           'poster': keyword,
                            'title': url}
                 items.append(newitem)
         save_to_file(content=items,

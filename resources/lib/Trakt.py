@@ -56,9 +56,9 @@ def get_trakt_calendar_shows(content):
                     'Plot': episode["show"]["overview"],
                     'genre': " / ".join(episode["show"]["genres"]),
                     'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                    'Poster': poster,
+                    'poster': poster,
                     'Banner': banner,
-                    'Fanart': fanart}
+                    'fanart': fanart}
             shows.append(show)
             count += 1
             if count > 20:
@@ -91,8 +91,8 @@ def handle_trakt_movies(results):
                  'Votes': movie["movie"]["votes"],
                  'Watchers': movie["watchers"],
                  'genre': " / ".join(movie["movie"]["genres"]),
-                 'Poster': movie["movie"]["images"]["poster"]["full"],
-                 'Fanart': movie["movie"]["images"]["fanart"]["full"],
+                 'poster': movie["movie"]["images"]["poster"]["full"],
+                 'fanart': movie["movie"]["images"]["fanart"]["full"],
                  'thumb': movie['movie']["images"]["poster"]["thumb"]}
         movies.append(movie)
     movies = merge_with_local_movie_info(online_list=movies,
@@ -130,9 +130,9 @@ def handle_trakt_tvshows(results):
                 'Votes': tvshow['show']["votes"],
                 'Watchers': fetch(tvshow, "watchers"),
                 'genre': " / ".join(tvshow['show']["genres"]),
-                'Poster': tvshow['show']["images"]["poster"]["full"],
+                'poster': tvshow['show']["images"]["poster"]["full"],
                 'Banner': tvshow['show']["images"]["banner"]["full"],
-                'Fanart': tvshow['show']["images"]["fanart"]["full"],
+                'fanart': tvshow['show']["images"]["fanart"]["full"],
                 'thumb': tvshow['show']["images"]["poster"]["thumb"]}
         shows.append(show)
     shows = merge_with_local_tvshow_info(online_list=shows,
