@@ -111,6 +111,8 @@ class DialogBaseList(object):
                 self.setFocusId(500)
 
     def search(self, label):
+        if not label:
+            return None
         self.search_str = label
         self.mode = "search"
         self.filters = []
