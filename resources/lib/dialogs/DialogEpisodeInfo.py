@@ -36,7 +36,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str="%s tv" % (self.info['title']))
         youtube_thread.start()  # TODO: rem threading here
-        filter_thread = FilterImageThread(self.info["thumb"], 25)
+        filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
         filter_thread.start()
         youtube_thread.join()
         filter_thread.join()
