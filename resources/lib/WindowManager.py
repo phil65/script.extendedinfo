@@ -73,7 +73,7 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogTVShowInfo
-        from TheMovieDB import get_show_tmdb_id
+        from TheMovieDB import get_show_tmdb_id, search_media
         tmdb_id = None
         if tvshow_id:
             tmdb_id = tvshow_id
