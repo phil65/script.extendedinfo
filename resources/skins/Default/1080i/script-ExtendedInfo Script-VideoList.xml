@@ -7,7 +7,15 @@
     <defaultcontrol always="true">500</defaultcontrol>
     <controls>
         <control type="image">
-            <texture background="true" fallback="common/white.png">$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
+            <texture>common/white.png</texture>
+            <width>1920</width>
+            <height>1080</height>
+            <fadetime>400</fadetime>
+            <animation effect="fade" end="100" time="560">WindowOpen</animation>
+            <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
+        </control>
+        <control type="image">
+            <texture background="true">$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
             <width>1920</width>
             <height>1080</height>
             <fadetime>400</fadetime>
