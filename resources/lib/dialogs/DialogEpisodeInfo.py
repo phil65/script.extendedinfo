@@ -11,7 +11,7 @@ from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ..OnClickHandler import OnClickHandler
-import VideoPlayer
+from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()
