@@ -119,9 +119,6 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(1150)
     @ch.click(10)
     def play_video(self):
-        listitem = xbmcgui.ListItem(LANG(20410))
-        listitem.setInfo('video', {'title': LANG(20410),
-                                   'Genre': LANG(32070)})
         if self.control_id == 10:
             youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
         else:
@@ -244,9 +241,8 @@ class DialogVideoInfo(DialogBaseInfo):
                                               type=xbmcgui.INPUT_ALPHANUM)
             if not listname:
                 return None
-            list_id = create_list(listname)
             xbmc.sleep(1000)
-            change_list_status(list_id=list_id,
+            change_list_status(list_id=create_list(listname),
                                movie_id=self.tmdb_id,
                                status=True)
         elif index == len(listitems) - 1:
@@ -257,10 +253,9 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.click(6003)
     def change_list_status(self):
-        status = str(not bool(self.account_states["favorite"])).lower()
         change_fav_status(media_id=self.info["id"],
                           media_type="movie",
-                          status=status)
+                          status=str(not bool(self.account_states["favorite"])).lower())
         self.update_states()
 
     @ch.click(6006)
@@ -312,9 +307,7 @@ class DialogVideoInfo(DialogBaseInfo):
         self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
 
     def remove_list_dialog(self, account_lists):
-        listitems = []
-        for item in account_lists:
-            listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+        listitems = ["%s (%i)" % (d["name"], d["item_count"]) for d in account_lists]
         index = xbmcgui.Dialog().select(LANG(32138), listitems)
         if index >= 0:
             remove_list(account_lists[index]["id"])
@@ -338,9 +331,8 @@ class DialogVideoInfo(DialogBaseInfo):
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
             manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
         manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-        listitems = [item[0] for item in manage_list]
         selection = xbmcgui.Dialog().select(heading=LANG(32133),
-                                            list=listitems)
+                                            list=[i[0] for i in manage_list])
         if selection > -1:
             for item in manage_list[selection][1].split("||"):
                 xbmc.executebuiltin(item)
