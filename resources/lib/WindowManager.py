@@ -182,8 +182,7 @@ class WindowManager(object):
                                                  type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
-            if dialog.window_type == "dialog":
-                prev_window.close()
+            prev_window.close()
         dialog.doModal()
 
     def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance", filter_label="", force=False, media_type="video"):
@@ -207,8 +206,7 @@ class WindowManager(object):
                                                      type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
-            if dialog.window_type == "dialog":
-                prev_window.close()
+            prev_window.close()
         dialog.doModal()
 
     def open_slideshow(self, image):
@@ -248,8 +246,7 @@ class WindowManager(object):
                 self.reopen_window = True
             if prev_window:
                 self.add_to_stack(prev_window)
-                if dialog.window_type == "dialog":
-                    prev_window.close()
+                prev_window.close()
             dialog.doModal()
         else:
             notify(LANG(32143))
