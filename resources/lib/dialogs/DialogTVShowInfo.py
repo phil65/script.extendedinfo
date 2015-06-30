@@ -34,18 +34,10 @@ class DialogTVShowInfo(DialogBaseInfo):
         youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
         youtube_thread.start()
         if "dbid" not in self.info:
-            poster_thread = FunctionThread(function=get_file,
-                                           param=self.info.get("poster", ""))
-            poster_thread.start()
-        if "dbid" not in self.info:
-            poster_thread.join()
-            self.info['poster'] = poster_thread.listitems
-        filter_thread = FilterImageThread(image=self.info.get("poster", ""))
-        filter_thread.start()
+            self.info['poster'] = get_file(self.info.get("poster", ""))
+        self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("poster", ""),
+                                                                         radius=25)
         youtube_thread.join()
-        filter_thread.join()
-        self.info['ImageFilter'] = filter_thread.image
-        self.info['ImageColor'] = filter_thread.imagecolor
         self.listitems = [(150, self.data["similar"]),
                           (250, self.data["seasons"]),
                           (1450, self.data["networks"]),
