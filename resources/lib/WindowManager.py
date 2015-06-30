@@ -185,7 +185,7 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
-    def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance", filter_label="", force=False, media_type="video"):
+    def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance", filter_label="", media_type="video"):
         """
         open video list, deal with window stack and color
         """
@@ -201,7 +201,6 @@ class WindowManager(object):
                                                      search_str=search_str,
                                                      color=color,
                                                      filters=filters,
-                                                     force=force,
                                                      filter_label=filter_label,
                                                      type=media_type)
         if prev_window:
