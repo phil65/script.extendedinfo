@@ -41,7 +41,7 @@ class DialogVideoInfo(DialogBaseInfo):
         sets_thread = SetItemsThread(self.info["SetId"])
         self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
         lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
-        filter_thread = FilterImageThread(self.info["thumb"], 25)
+        filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
         for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
             thread.start()
         self.info['poster'] = get_file(self.info.get("poster", ""))
