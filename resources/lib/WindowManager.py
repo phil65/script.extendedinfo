@@ -52,6 +52,7 @@ class WindowManager(object):
         """
         if self.window_stack:
             dialog = self.window_stack.pop()
+            xbmc.sleep(300)
             dialog.doModal()
         elif self.reopen_window:
             xbmc.sleep(500)
