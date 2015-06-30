@@ -251,5 +251,7 @@ class WindowManager(object):
                 if dialog.window_type == "dialog":
                     prev_window.close()
             dialog.doModal()
+        else:
+            notify(LANG(32143))
 
 wm = WindowManager()

@@ -26,7 +26,6 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.season = kwargs.get('season')
         self.tvshow = kwargs.get('tvshow')
         if not self.season or not (self.tmdb_id and self.tvshow):
-            notify(LANG(32143))
             return None
         data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
                                     tvshow_name=self.tvshow,
@@ -34,7 +33,6 @@ class DialogSeasonInfo(DialogBaseInfo):
         if data:
             self.info, self.data = data
         else:
-            notify(LANG(32143))
             return None
         search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
         youtube_thread = GetYoutubeVidsThread(search_str=search_str)

@@ -24,13 +24,11 @@ class DialogActorInfo(DialogBaseInfo):
         self.id = kwargs.get('id', False)
         self.type = "Actor"
         if not self.id:
-            notify(LANG(32143))
             return None
         data = extended_actor_info(actor_id=self.id)
         if data:
             self.info, self.data = data
         else:
-            notify(LANG(32143))
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"])
         youtube_thread.start()

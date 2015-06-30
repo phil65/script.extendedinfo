@@ -22,14 +22,12 @@ class DialogTVShowInfo(DialogBaseInfo):
         self.tmdb_id = kwargs.get('tmdb_id', False)
         self.type = "TVShow"
         if not self.tmdb_id:
-            notify(LANG(32143))
             return None
         data = extended_tvshow_info(tvshow_id=self.tmdb_id,
                                     dbid=self.dbid)
         if data:
             self.info, self.data, self.account_states = data
         else:
-            notify(LANG(32143))
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
         youtube_thread.start()

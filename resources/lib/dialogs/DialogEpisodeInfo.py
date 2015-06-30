@@ -32,7 +32,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         if data:
             self.info, self.data, self.account_states = data
         else:
-            notify(LANG(32143))
             return None
         youtube_thread = GetYoutubeVidsThread(search_str="%s tv" % (self.info['title']))
         youtube_thread.start()  # TODO: rem threading here

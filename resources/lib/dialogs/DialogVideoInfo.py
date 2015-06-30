@@ -27,14 +27,12 @@ class DialogVideoInfo(DialogBaseInfo):
         self.type = "Movie"
         self.tmdb_id = kwargs.get('id')
         if not self.tmdb_id:
-            notify(LANG(32143))
             return None
         data = extended_movie_info(movie_id=self.tmdb_id,
                                    dbid=self.dbid)
         if data:
             self.info, self.data, self.account_states = data
         else:
-            notify(LANG(32143))
             return None
         search_str = "%s %s, movie" % (self.info["Label"], self.info["year"])
         youtube_thread = GetYoutubeVidsThread(search_str=search_str)
