@@ -238,9 +238,14 @@ def get_session_id():
         pass_dict_to_skin({"tmdb_logged_in": "true"})
         return str(response["session_id"])
     else:
-        pass_dict_to_skin({"tmdb_logged_in": ""})
-        notify("login failed")
-        return None
+        request_token = auth_request_token(cache_days=0)
+        response = get_tmdb_data("authentication/session/new?request_token=%s&" % request_token, 0)
+        if response and "success" in response:
+            pass_dict_to_skin({"tmdb_logged_in": "true"})
+            return str(response["session_id"])
+    pass_dict_to_skin({"tmdb_logged_in": ""})
+    notify("login failed")
+    return None
 
 
 @lru_cache(maxsize=128)
@@ -250,14 +255,14 @@ def get_request_token():
 
 
 @lru_cache(maxsize=128)
-def auth_request_token():
+def auth_request_token(cache_days=9999):
     '''
     returns request token, is used to get session_id
     '''
     request_token = get_request_token()
     username = SETTING("tmdb_username")
     password = SETTING("tmdb_password")
-    response = get_tmdb_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), 999999)
+    response = get_tmdb_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), cache_days)
     if "success" in response and response["success"]:
         return response["request_token"]
     else:
