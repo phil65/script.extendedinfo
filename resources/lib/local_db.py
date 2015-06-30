@@ -165,8 +165,7 @@ def handle_db_movies(movie):
                 'Play': "",
                 'trailer': trailer,
                 'dbid': str(movie['movieid']),
-                'Rating': str(round(float(movie['rating']), 1)),
-                'Premiered': movie.get('year', "")}
+                'Rating': str(round(float(movie['rating']), 1))}
     streams = []
     for i, item in enumerate(movie['streamdetails']['audio']):
         language = item['language']
@@ -204,8 +203,7 @@ def handle_db_tvshows(tvshow):
                  'path': path,
                  'Play': "",
                  'dbid': str(tvshow['tvshowid']),
-                 'Rating': str(round(float(tvshow['rating']), 1)),
-                 'Premiered': tvshow.get('year', "")}
+                 'Rating': str(round(float(tvshow['rating']), 1))}
     return db_tvshow
 
 
