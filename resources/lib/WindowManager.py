@@ -83,16 +83,16 @@ class WindowManager(object):
         tmdb_id = None
         if tvshow_id:
             tmdb_id = tvshow_id
-        elif dbid and (int(dbid) > 0):
-            tvdb_id = get_imdb_id_from_db(media_type="tvshow",
-                                          dbid=dbid)
-            if tvdb_id:
-                tmdb_id = get_show_tmdb_id(tvdb_id)
         elif tvdb_id:
             tmdb_id = get_show_tmdb_id(tvdb_id)
         elif imdb_id:
             tmdb_id = get_show_tmdb_id(tvdb_id=imdb_id,
                                        source="imdb_id")
+        elif dbid and (int(dbid) > 0):
+            tvdb_id = get_imdb_id_from_db(media_type="tvshow",
+                                          dbid=dbid)
+            if tvdb_id:
+                tmdb_id = get_show_tmdb_id(tvdb_id)
         elif name:
             tmdb_id = search_media(media_name=name,
                                    year="",
