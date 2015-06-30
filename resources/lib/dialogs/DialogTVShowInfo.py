@@ -33,7 +33,7 @@ class DialogTVShowInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
         youtube_thread.start()
-        if "dbid" not in self.info:  # need to add comparing for tvshows
+        if "dbid" not in self.info:
             poster_thread = FunctionThread(function=get_file,
                                            param=self.info.get("poster", ""))
             poster_thread.start()
@@ -138,9 +138,8 @@ class DialogTVShowInfo(DialogBaseInfo):
                            rating=rating)
                 self.update_states()
         elif control_id == 6002:
-            listitems = [LANG(32144), LANG(32145)]
             index = xbmcgui.Dialog().select(heading=LANG(32136),
-                                            list=listitems)
+                                            list=[LANG(32144), LANG(32145)])
             if index == -1:
                 pass
             elif index == 0:
@@ -152,10 +151,9 @@ class DialogTVShowInfo(DialogBaseInfo):
                                    mode="rating",
                                    media_type="tv")
         elif control_id == 6003:
-            status = str(not bool(self.account_states["favorite"])).lower()
             change_fav_status(media_id=self.info["id"],
                               media_type="tv",
-                              status=status)
+                              status=str(not bool(self.account_states["favorite"])).lower())
             self.update_states()
         elif control_id == 6006:
             wm.open_video_list(prev_window=self,
@@ -202,11 +200,9 @@ class DialogTVShowInfo(DialogBaseInfo):
         if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
             manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
         manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-        listitems = [item[0] for item in manage_list]
         selection = xbmcgui.Dialog().select(heading=LANG(32133),
-                                            list=listitems)
+                                            list=[item[0] for item in manage_list])
         if selection < 0:
             return None
-        builtin_list = manage_list[selection][1].split("||")
-        for item in builtin_list:
+        for item in manage_list[selection][1].split("||"):
             xbmc.executebuiltin(item)
