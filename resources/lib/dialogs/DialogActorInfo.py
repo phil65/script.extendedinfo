@@ -32,11 +32,8 @@ class DialogActorInfo(DialogBaseInfo):
             return None
         youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"])
         youtube_thread.start()
-        filter_thread = FilterImageThread(image=self.info["thumb"])
-        filter_thread.start()
-        filter_thread.join()
-        self.info['ImageFilter'] = filter_thread.image
-        self.info['ImageColor'] = filter_thread.imagecolor
+        self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
+                                                                         radius=25)
         youtube_thread.join()
         self.listitems = [(150, self.data["movie_roles"]),
                           (250, self.data["tvshow_roles"]),
