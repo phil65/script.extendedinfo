@@ -882,18 +882,17 @@ def clean_text(text):
     text = text.replace('&amp;', '&')
     text = text.replace('&gt;', '>').replace('&lt;', '<')
     text = text.replace('&#39;', "'").replace('&quot;', '"')
+    text = re.sub("\n\\.$", "", text)
     text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
     while text:
         s = text[0]
         e = text[-1]
-        if s == u'\u200b':
+        if s in [u'\u200b', " ", "\n"]:
             text = text[1:]
-        if text and e == u'\u200b':
+        elif e in [u'\u200b', " ", "\n"]:
             text = text[:-1]
-        if s == " " or e == " ":
-            text = text.strip()
-        elif s == "\n" or e == "\n":
-            text = text.strip("\n")
+        elif s.startswith(".") and not s.startswith(".."):
+            text = text[1:]
         else:
             break
-    return text.strip()
+    return text
