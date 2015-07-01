@@ -216,7 +216,7 @@ class DialogVideoInfo(DialogBaseInfo):
         listitems.append(LANG(32138))
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         index = xbmcgui.Dialog().select(heading=LANG(32136),
-                                        listitems=listitems)
+                                        list=listitems)
         if index == 0:
             listname = xbmcgui.Dialog().input(heading=LANG(32137),
                                               type=xbmcgui.INPUT_ALPHANUM)
