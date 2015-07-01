@@ -277,7 +277,7 @@ class DialogVideoInfo(DialogBaseInfo):
         account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
         id_list = [item["id"] for item in account_list]
         own_lists = [item for item in lists if item["id"] in id_list]
-        own_lists = [item.update({"account": "True"}) for item in own_lists]
+        own_lists = [dict({"account": "True"}, **item) for item in own_lists]
         misc_lists = [item for item in lists if item["id"] not in id_list]
         return own_lists + misc_lists
 
