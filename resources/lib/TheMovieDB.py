@@ -83,7 +83,7 @@ def set_rating(media_type, media_id, rating):
     request = Request(url=url,
                       data=values,
                       headers=HEADERS)
-    response = urlopen(request).read()
+    response = urlopen(request, timeout=3).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
 
@@ -99,7 +99,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
     request = Request(url,
                       data=values,
                       headers=HEADERS)
-    response = urlopen(request).read()
+    response = urlopen(request, timeout=3).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
 
@@ -115,7 +115,7 @@ def create_list(list_name):
     request = Request(url,
                       data=simplejson.dumps(values),
                       headers=HEADERS)
-    response = urlopen(request).read()
+    response = urlopen(request, timeout=3).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
@@ -129,7 +129,7 @@ def remove_list(list_id):
                       data=simplejson.dumps(values),
                       headers=HEADERS)
     request.get_method = lambda: 'DELETE'
-    response = urlopen(request).read()
+    response = urlopen(request, timeout=3).read()
     results = simplejson.loads(response)
     notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
@@ -147,7 +147,7 @@ def change_list_status(list_id, movie_id, status):
                       data=simplejson.dumps(values),
                       headers=HEADERS)
     try:
-        response = urlopen(request).read()
+        response = urlopen(request, timeout=3).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
             notify("Error", "Not authorized to modify list")

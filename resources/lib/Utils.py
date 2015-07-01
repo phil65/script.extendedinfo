@@ -453,9 +453,9 @@ def get_http(url=None, headers=False):
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)
-    while (succeed < 3) and (not xbmc.abortRequested):
+    while (succeed < 2) and (not xbmc.abortRequested):
         try:
-            response = urllib2.urlopen(request)
+            response = urllib2.urlopen(request, timeout=3)
             data = response.read()
             return data
         except:
@@ -550,7 +550,7 @@ def get_file(url):
     try:
         request = urllib2.Request(url)
         request.add_header('Accept-encoding', 'gzip')
-        response = urllib2.urlopen(request)
+        response = urllib2.urlopen(request, timeout=3)
         data = response.read()
         response.close()
         log('image downloaded: ' + url)

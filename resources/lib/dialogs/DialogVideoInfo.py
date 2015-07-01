@@ -71,7 +71,7 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.context(150)
     @ch.context(250)
-    def add_list_to_account(self):
+    def add_movie_to_account(self):
         movie_id = self.control.getSelectedItem().getProperty("id")
         add_movie_to_list(movie_id)
 
