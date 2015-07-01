@@ -181,7 +181,7 @@ def handle_db_movies(movie):
             subs.append(language)
             db_movie['SubtitleLanguage.%d' % (i + 1)] = language
     db_movie.update(stream_info)
-    return db_movie
+    return dict((k, v) for k, v in db_movie.iteritems() if v)
 
 
 def handle_db_tvshows(tvshow):
@@ -204,7 +204,7 @@ def handle_db_tvshows(tvshow):
                  'Play': "",
                  'dbid': str(tvshow['tvshowid']),
                  'Rating': str(round(float(tvshow['rating']), 1))}
-    return db_tvshow
+    return dict((k, v) for k, v in db_tvshow.iteritems() if v)
 
 
 def get_movie_from_db(movie_id):
