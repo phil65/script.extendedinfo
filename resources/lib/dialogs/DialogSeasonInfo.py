@@ -62,6 +62,7 @@ class DialogSeasonInfo(DialogBaseInfo):
         self.fill_lists()
 
     def onClick(self, control_id):
+        super(DialogSeasonInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 
     @ch.click(750)
@@ -77,18 +78,6 @@ class DialogSeasonInfo(DialogBaseInfo):
                              tvshow_id=self.tmdb_id,
                              season=self.control.getSelectedItem().getProperty("season"),
                              episode=self.control.getSelectedItem().getProperty("episode"))
-
-    @ch.click(350)
-    @ch.click(1150)
-    def play_youtube_video(self):
-        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
-                                  listitem=self.control.getSelectedItem(),
-                                  window=self)
-
-    @ch.click(1250)
-    @ch.click(1350)
-    def open_image(self):
-        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
 
     @ch.click(132)
     def open_text(self):

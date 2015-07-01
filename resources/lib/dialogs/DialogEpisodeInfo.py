@@ -53,18 +53,6 @@ class DialogEpisodeInfo(DialogBaseInfo):
         pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
         self.fill_lists()
 
-    @ch.click(350)
-    @ch.click(1150)
-    def play_youtube_video(self):
-        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
-                                  listitem=self.control.getSelectedItem(),
-                                  window=self)
-
-    @ch.click(1250)
-    @ch.click(1350)
-    def open_image(self):
-        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
-
     @ch.click(750)
     @ch.click(1000)
     def open_actor_info(self):
@@ -91,6 +79,7 @@ class DialogEpisodeInfo(DialogBaseInfo):
                            listitems=listitems)
 
     def onClick(self, control_id):
+        super(DialogEpisodeInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 
     def update_states(self, force_update=True):

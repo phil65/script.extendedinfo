@@ -178,12 +178,9 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
             self.page_token = self.prev_page_token
 
     def get_sort_type(self):
-        listitems = []
-        sort_strings = []
         sort_key = self.type
-        for (key, value) in SORTS[sort_key].iteritems():
-            listitems.append(key)
-            sort_strings.append(value)
+        listitems = [key for key in SORTS[sort_key].keys()]
+        sort_strings = [value for value in SORTS[sort_key].values()]
         index = xbmcgui.Dialog().select(heading=LANG(32104),
                                         list=listitems)
         if index > -1:

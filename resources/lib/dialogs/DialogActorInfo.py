@@ -88,5 +88,6 @@ class DialogActorInfo(DialogBaseInfo):
                            color=self.info['ImageColor'])
 
     def onClick(self, control_id):
+        super(DialogActorInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 

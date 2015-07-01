@@ -63,6 +63,7 @@ class DialogTVShowInfo(DialogBaseInfo):
         self.update_states(False)
 
     def onClick(self, control_id):
+        super(DialogTVShowInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 
     @ch.click(120)
@@ -93,13 +94,6 @@ class DialogTVShowInfo(DialogBaseInfo):
                             tvshow_id=self.tmdb_id,
                             season=self.control.getSelectedItem().getProperty("season"),
                             tvshow=self.info['title'])
-
-    @ch.click(350)
-    @ch.click(1150)
-    def play_video(self):
-        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
-                                  listitem=self.control.getSelectedItem(),
-                                  window=self)
 
     @ch.click(550)
     def open_company_info(self):
@@ -138,11 +132,6 @@ class DialogTVShowInfo(DialogBaseInfo):
         wm.open_video_list(prev_window=self,
                            filters=filters,
                            media_type="tv")
-
-    @ch.click(1250)
-    @ch.click(1350)
-    def open_slideshow(self):
-        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
 
     @ch.click(445)
     def show_manage_dialog(self):

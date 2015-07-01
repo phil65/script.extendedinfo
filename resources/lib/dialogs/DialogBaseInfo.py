@@ -44,6 +44,21 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
             except:
                 log("Notice: No container with id %i available" % container_id)
 
+    @ch.click(350)
+    @ch.click(1150)
+    def play_youtube_video(self):
+        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
+                                  listitem=self.control.getSelectedItem(),
+                                  window=self)
+
+    @ch.click(1250)
+    @ch.click(1350)
+    def open_image(self):
+        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
+
     @ch.context(1250)
     def thumbnail_options(self):
         if not self.info.get("dbid"):

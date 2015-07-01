@@ -107,21 +107,10 @@ class DialogVideoInfo(DialogBaseInfo):
                            movie_id=self.control.getSelectedItem().getProperty("id"),
                            dbid=self.control.getSelectedItem().getProperty("dbid"))
 
-    @ch.click(1250)
-    @ch.click(1350)
-    def open_image(self):
-        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
-
-    @ch.click(350)
-    @ch.click(1150)
     @ch.click(10)
-    def play_video(self):
-        if self.control_id == 10:
-            youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
-        else:
-            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+    def play_trailer(self):
         PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                  listitem=self.control.getSelectedItem(),
+                                  listitem=self.getControl(1150).getListItem(0).getProperty("youtube_id"),
                                   window=self)
 
     @ch.click(550)
@@ -269,6 +258,7 @@ class DialogVideoInfo(DialogBaseInfo):
                       params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (str(self.info['dbid']), "false"))
 
     def onClick(self, control_id):
+        super(DialogVideoInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 
     def sort_lists(self, lists):
