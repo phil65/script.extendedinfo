@@ -186,7 +186,7 @@ def start_info_actions(infos, params):
                 if name:
                     params["setid"] = get_set_id(name)
             if params.get("setid"):
-                set_data, info = get_set_movies(params["setid"])
+                set_data, _ = get_set_movies(params["setid"])
                 if set_data:
                     data = set_data, "MovieSetItems"
         elif info == 'movielists':
@@ -271,13 +271,13 @@ def start_info_actions(infos, params):
                 playlists = get_youtube_user_playlists(user_name)
                 data = get_youtube_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
-            info = get_near_events(tag=params.get("tag", ""),
-                                   festivals_only=params.get("festivalsonly", ""),
-                                   lat=params.get("lat", ""),
-                                   lon=params.get("lon", ""),
-                                   location=params.get("location", ""),
-                                   distance=params.get("distance", ""))
-            data = info, "NearEvents"
+            eventinfo = get_near_events(tag=params.get("tag", ""),
+                                        festivals_only=params.get("festivalsonly", ""),
+                                        lat=params.get("lat", ""),
+                                        lon=params.get("lon", ""),
+                                        location=params.get("location", ""),
+                                        distance=params.get("distance", ""))
+            data = eventinfo, "NearEvents"
         elif info == 'trackinfo':
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
