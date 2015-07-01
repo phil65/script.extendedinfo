@@ -11,8 +11,11 @@ from ..TheMovieDB import *
 from ..YouTube import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
+from ..OnClickHandler import OnClickHandler
 from .. import VideoPlayer
+
 PLAYER = VideoPlayer.VideoPlayer()
+ch = OnClickHandler()
 
 
 class DialogTVShowInfo(DialogBaseInfo):
@@ -60,121 +63,88 @@ class DialogTVShowInfo(DialogBaseInfo):
         self.update_states(False)
 
     def onClick(self, control_id):
-        control = self.getControl(control_id)
-        if control_id == 120:
-            self.close()
-            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
-        elif control_id in [1000, 750]:
-            listitem = control.getSelectedItem()
+        ch.serve(control_id, self)
+
+    @ch.click(120)
+    def browse_tvshow(self):
+        self.close()
+        xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
+
+    @ch.click(750)
+    @ch.click(1000)
+    def credit_dialog(self):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32147), LANG(32009)])
             if selection == 0:
-                self.open_credit_dialog(listitem.getProperty("credit_id"))
+                self.open_credit_dialog(self.control.getSelectedItem().getProperty("credit_id"))
             if selection == 1:
                 wm.open_actor_info(prev_window=self,
-                                   actor_id=listitem.getProperty("id"))
-        elif control_id in [150]:
-            wm.open_tvshow_info(prev_window=self,
-                                tvshow_id=control.getSelectedItem().getProperty("id"),
-                                dbid=control.getSelectedItem().getProperty("dbid"))
-        elif control_id in [250]:
-            wm.open_season_info(prev_window=self,
-                                tvshow_id=self.tmdb_id,
-                                season=control.getSelectedItem().getProperty("season"),
-                                tvshow=self.info['title'])
-        elif control_id in [350, 1150]:
-            PLAYER.play_youtube_video(youtube_id=control.getSelectedItem().getProperty("youtube_id"),
-                                      listitem=control.getSelectedItem(),
-                                      window=self)
-        elif control_id == 550:
-            filters = [{"id": control.getSelectedItem().getProperty("id"),
-                        "type": "with_companies",
-                        "typelabel": LANG(20388),
-                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 950:
-            filters = [{"id": control.getSelectedItem().getProperty("id"),
-                        "type": "with_keywords",
-                        "typelabel": LANG(32114),
-                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
-        elif control_id == 850:
-            filters = [{"id": control.getSelectedItem().getProperty("id"),
-                        "type": "with_genres",
-                        "typelabel": LANG(135),
-                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters,
-                               media_type="tv")
-        elif control_id == 1450:
-            filters = [{"id": control.getSelectedItem().getProperty("id"),
-                        "type": "with_networks",
-                        "typelabel": LANG(32152),
-                        "label": control.getSelectedItem().getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters,
-                               media_type="tv")
-        elif control_id in [1250, 1350]:
-            wm.open_slideshow(image=control.getSelectedItem().getProperty("original"))
-        elif control_id == 445:
-            self.show_manage_dialog()
-        elif control_id == 6001:
-            rating = get_rating_from_user()
-            if rating:
-                set_rating(media_type="tv",
-                           media_id=self.tmdb_id,
-                           rating=rating)
-                self.update_states()
-        elif control_id == 6002:
-            index = xbmcgui.Dialog().select(heading=LANG(32136),
-                                            list=[LANG(32144), LANG(32145)])
-            if index == -1:
-                pass
-            elif index == 0:
-                wm.open_video_list(prev_window=self,
-                                   media_type="tv",
-                                   mode="favorites")
-            elif index == 1:
-                wm.open_video_list(prev_window=self,
-                                   mode="rating",
-                                   media_type="tv")
-        elif control_id == 6003:
-            change_fav_status(media_id=self.info["id"],
-                              media_type="tv",
-                              status=str(not bool(self.account_states["favorite"])).lower())
-            self.update_states()
-        elif control_id == 6006:
-            wm.open_video_list(prev_window=self,
-                               mode="rating",
-                               media_type="tv")
-        elif control_id == 132:
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
+                                   actor_id=self.control.getSelectedItem().getProperty("id"))
 
-    def update_states(self, force_update=True):
-        if force_update:
-            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, updated_state = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                                        cache_time=0,
-                                                        dbid=self.dbid)
-            self.account_states = updated_state
-        if not self.account_states:
-            return None
-        if self.account_states["favorite"]:
-            self.window.setProperty("FavButton_Label", LANG(32155))
-            self.window.setProperty("movie.favorite", "True")
-        else:
-            self.window.setProperty("FavButton_Label", LANG(32154))
-            self.window.setProperty("movie.favorite", "")
-        if self.account_states["rated"]:
-            self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-        else:
-            self.window.setProperty("movie.rated", "")
-        self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
+    @ch.click(150)
+    def open_tvshow_dialog(self):
+        wm.open_tvshow_info(prev_window=self,
+                            tvshow_id=self.control.getSelectedItem().getProperty("id"),
+                            dbid=self.control.getSelectedItem().getProperty("dbid"))
 
+    @ch.click(250)
+    def open_season_dialog(self):
+        wm.open_season_info(prev_window=self,
+                            tvshow_id=self.tmdb_id,
+                            season=self.control.getSelectedItem().getProperty("season"),
+                            tvshow=self.info['title'])
+
+    @ch.click(350)
+    @ch.click(1150)
+    def play_video(self):
+        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
+                                  listitem=self.control.getSelectedItem(),
+                                  window=self)
+
+    @ch.click(550)
+    def open_company_info(self):
+        filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+                    "type": "with_companies",
+                    "typelabel": LANG(20388),
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(950)
+    def open_keyword_info(self):
+        filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+                    "type": "with_keywords",
+                    "typelabel": LANG(32114),
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters)
+
+    @ch.click(850)
+    def open_genre_info(self):
+        filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+                    "type": "with_genres",
+                    "typelabel": LANG(135),
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters,
+                           media_type="tv")
+
+    @ch.click(1450)
+    def open_network_info(self):
+        filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+                    "type": "with_networks",
+                    "typelabel": LANG(32152),
+                    "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+        wm.open_video_list(prev_window=self,
+                           filters=filters,
+                           media_type="tv")
+
+    @ch.click(1250)
+    @ch.click(1350)
+    def open_slideshow(self):
+        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+
+    @ch.click(445)
     def show_manage_dialog(self):
         manage_list = []
         title = self.info.get("TVShowTitle", "")
@@ -196,3 +166,67 @@ class DialogTVShowInfo(DialogBaseInfo):
             return None
         for item in manage_list[selection][1].split("||"):
             xbmc.executebuiltin(item)
+
+    @ch.click(6001)
+    def set_rating(self):
+        rating = get_rating_from_user()
+        if rating:
+            set_rating(media_type="tv",
+                       media_id=self.tmdb_id,
+                       rating=rating)
+            self.update_states()
+
+    @ch.click(6002)
+    def open_list(self):
+        index = xbmcgui.Dialog().select(heading=LANG(32136),
+                                        list=[LANG(32144), LANG(32145)])
+        if index == -1:
+            pass
+        elif index == 0:
+            wm.open_video_list(prev_window=self,
+                               media_type="tv",
+                               mode="favorites")
+        elif index == 1:
+            wm.open_video_list(prev_window=self,
+                               mode="rating",
+                               media_type="tv")
+
+    @ch.click(6003)
+    def toggle_fav_status(self):
+        change_fav_status(media_id=self.info["id"],
+                          media_type="tv",
+                          status=str(not bool(self.account_states["favorite"])).lower())
+        self.update_states()
+
+    @ch.click(6006)
+    def open_rated_items(self):
+        wm.open_video_list(prev_window=self,
+                           mode="rating",
+                           media_type="tv")
+
+    @ch.click(132)
+    def open_text(self):
+        wm.open_textviewer(header=LANG(32037),
+                           text=self.info["Plot"],
+                           color=self.info['ImageColor'])
+
+    def update_states(self, force_update=True):
+        if force_update:
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            _, __, updated_state = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                                        cache_time=0,
+                                                        dbid=self.dbid)
+            self.account_states = updated_state
+        if not self.account_states:
+            return None
+        if self.account_states["favorite"]:
+            self.window.setProperty("FavButton_Label", LANG(32155))
+            self.window.setProperty("movie.favorite", "True")
+        else:
+            self.window.setProperty("FavButton_Label", LANG(32154))
+            self.window.setProperty("movie.favorite", "")
+        if self.account_states["rated"]:
+            self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
+        else:
+            self.window.setProperty("movie.rated", "")
+        self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
