@@ -282,7 +282,7 @@ def start_info_actions(infos, params):
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
                 track_info = get_track_info(artist=params["artistname"],
-                                            tracks=params["trackname"])
+                                            track=params["trackname"])
                 HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
         elif info == 'venueevents':
             if params["location"]:
