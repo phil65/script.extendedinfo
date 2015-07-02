@@ -11,20 +11,20 @@ from BaseClasses import WindowXML, DialogXML
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 
-SORTS = {"movie": {LANG(32110): "popularity",
-                   LANG(172): "release_date",
-                   LANG(32108): "revenue",
+SORTS = {"movie": {"popularity": LANG(32110),
+                   "release_date": LANG(172),
+                   "revenue": LANG(32108),
                    # "Release Date": "primary_release_date",
-                   LANG(20376): "original_title",
-                   LANG(32112): "vote_average",
-                   LANG(32111): "vote_count"},
-         "tv": {LANG(32110): "popularity",
-                LANG(20416): "first_air_date",
-                LANG(32112): "vote_average",
-                LANG(32111): "vote_count"},
-         "favorites": {LANG(32157): "created_at"},
-         "list": {LANG(32157): "created_at"},
-         "rating": {LANG(32157): "created_at"}}
+                   "original_title": LANG(20376),
+                   "vote_average": LANG(32112),
+                   "vote_count": LANG(32111)},
+         "tv": {"popularity": LANG(32110),
+                "first_air_date": LANG(20416),
+                "vote_average": LANG(32112),
+                "vote_count": LANG(32111)},
+         "favorites": {"created_at": LANG(32157)},
+         "list": {"created_at": LANG(32157)},
+         "rating": {"created_at": LANG(32157)}}
 TRANSLATIONS = {"movie": LANG(20338),
                 "tv": LANG(20364),
                 "person": LANG(32156)}
@@ -286,8 +286,8 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
             sort_key = self.mode
         else:
             sort_key = self.type
-        listitems = [key for key in SORTS[sort_key].keys()]
-        sort_strings = [value for value in SORTS[sort_key].values()]
+        listitems = [key for key in SORTS[sort_key].values()]
+        sort_strings = [value for value in SORTS[sort_key].keys()]
         index = xbmcgui.Dialog().select(heading=LANG(32104),
                                         list=listitems)
         if index == -1:

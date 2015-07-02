@@ -17,23 +17,23 @@ PLAYER = VideoPlayer.VideoPlayer()
 TRANSLATIONS = {"video": LANG(157),
                 "playlist": LANG(559),
                 "channel": LANG(19029)}
-SORTS = {"video": {LANG(552): "date",
-                   LANG(563): "rating",
-                   LANG(32060): "relevance",
-                   LANG(369): "title",
-                   LANG(567): "viewCount"},
-         "playlist": {LANG(552): "date",
-                      LANG(563): "rating",
-                      LANG(32060): "relevance",
-                      LANG(369): "title",
-                      LANG(32068): "videoCount",
-                      LANG(567): "viewCount"},
-         "channel": {LANG(552): "date",
-                     LANG(563): "rating",
-                     LANG(32060): "relevance",
-                     LANG(369): "title",
-                     LANG(32068): "videoCount",
-                     LANG(567): "viewCount"}}
+SORTS = {"video": {"date": LANG(552),
+                   "rating": LANG(563),
+                   "relevance": LANG(32060),
+                   "title": LANG(369),
+                   "viewCount": LANG(567)},
+         "playlist": {"date": LANG(552),
+                      "rating": LANG(563),
+                      "relevance": LANG(32060),
+                      "title": LANG(369),
+                      "videoCount": LANG(32068),
+                      "viewCount": LANG(567)},
+         "channel": {"date": LANG(552),
+                     "rating": LANG(563),
+                     "relevance": LANG(32060),
+                     "title": LANG(369),
+                     "videoCount": LANG(32068),
+                     "viewCount": LANG(567)}}
 
 
 class DialogYoutubeList(DialogBaseList, WindowXML):
@@ -141,7 +141,7 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
                 self.type = "channel"
             elif self.type == "channel":
                 self.type = "video"
-            if self.sort not in SORTS[self.type].values():
+            if self.sort not in SORTS[self.type].keys():
                 self.sort = "relevance"
                 self.sort_label = LANG(32060)
             self.update()
@@ -179,8 +179,8 @@ class DialogYoutubeList(DialogBaseList, WindowXML):
 
     def get_sort_type(self):
         sort_key = self.type
-        listitems = [key for key in SORTS[sort_key].keys()]
-        sort_strings = [value for value in SORTS[sort_key].values()]
+        listitems = [key for key in SORTS[sort_key].values()]
+        sort_strings = [value for value in SORTS[sort_key].keys()]
         index = xbmcgui.Dialog().select(heading=LANG(32104),
                                         list=listitems)
         if index > -1:
