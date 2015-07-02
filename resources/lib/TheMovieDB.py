@@ -52,6 +52,8 @@ def get_rating_from_user():
 
 
 def set_rating_prompt(media_type, media_id):
+    if not media_type or not media_id:
+        return None
     rating = get_rating_from_user()
     if not rating:
         return None

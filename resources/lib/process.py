@@ -404,12 +404,8 @@ def start_info_actions(infos, params):
                     tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
                 else:
                     return False
-                if tmdb_id:
-                    rating = get_rating_from_user()
-                    if rating:
-                        set_rating(media_type=media_type,
-                                   media_id=tmdb_id,
-                                   rating=rating)
+                set_rating_prompt(media_type=media_type,
+                                  media_id=tmdb_id)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             resolve_url(params.get("handle"))
             set_mbids_for_artists(False, False)

@@ -158,11 +158,8 @@ class DialogTVShowInfo(DialogBaseInfo):
 
     @ch.click(6001)
     def set_rating(self):
-        rating = get_rating_from_user()
-        if rating:
-            set_rating(media_type="tv",
-                       media_id=self.tmdb_id,
-                       rating=rating)
+        if set_rating_prompt(media_type="tv",
+                             media_id=self.tmdb_id):
             self.update_states()
 
     @ch.click(6002)
