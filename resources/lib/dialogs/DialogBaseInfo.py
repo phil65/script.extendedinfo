@@ -59,7 +59,7 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
     def onClick(self, control_id):
         ch.serve(control_id, self)
 
-    @ch.context(1250)
+    @ch.action("contextmenu", 1250)
     def thumbnail_options(self):
         if not self.info.get("dbid"):
             return None
@@ -72,7 +72,7 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
-    @ch.context(1350)
+    @ch.action("contextmenu", 1350)
     def fanart_options(self):
         if not self.info.get("dbid"):
             return None
@@ -85,8 +85,8 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
-    @ch.context(1150)
-    @ch.context(350)
+    @ch.action("contextmenu", 1150)
+    @ch.action("contextmenu", 350)
     def download_video(self):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(33003)])
@@ -109,7 +109,7 @@ class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXM
         elif action in self.ACTION_EXIT_SCRIPT:
             self.close()
         if action == xbmcgui.ACTION_CONTEXT_MENU:
-            ch.serve_context(focus_id, self)
+            ch.serve_action(action, focus_id, self)
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)

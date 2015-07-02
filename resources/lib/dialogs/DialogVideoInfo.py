@@ -69,8 +69,8 @@ class DialogVideoInfo(DialogBaseInfo):
                           (350, youtube_vids)]
         self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
-    @ch.context(150)
-    @ch.context(250)
+    @ch.action("contextmenu", 150)
+    @ch.action("contextmenu", 250)
     def add_movie_to_account(self):
         movie_id = self.control.getSelectedItem().getProperty("id")
         add_movie_to_list(movie_id)
@@ -92,7 +92,7 @@ class DialogVideoInfo(DialogBaseInfo):
         focus_id = self.getFocusId()
         super(DialogVideoInfo, self).onAction(action)
         if action == xbmcgui.ACTION_CONTEXT_MENU:
-            ch.serve_context(focus_id, self)
+            ch.serve_action(action, focus_id, self)
 
     @ch.click(1000)
     @ch.click(750)
