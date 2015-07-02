@@ -165,8 +165,7 @@ def start_info_actions(infos, params):
             elif "studio" in params and params["studio"]:
                 company_data = search_company(params["studio"])
                 if company_data:
-                    company_id = company_data[0]["id"]
-                    data = get_company_data(company_id), "StudioInfo"
+                    data = get_company_data(company_data[0]["id"]), "StudioInfo"
         elif info == 'set':
             if params.get("dbid") and "show" not in str(params.get("type", "")):
                 name = get_set_name_from_db(params["dbid"])
@@ -200,8 +199,7 @@ def start_info_actions(infos, params):
                     movies = get_person_movies(director_info["id"])
                     for item in movies:
                         del item["credit_id"]
-                    movies = merge_dict_lists(movies, key="department")
-                    data = movies, "DirectorMovies"
+                    data = merge_dict_lists(movies, key="department"), "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
                 writer_info = get_person_info(person_label=params["writer"],
@@ -210,8 +208,7 @@ def start_info_actions(infos, params):
                     movies = get_person_movies(writer_info["id"])
                     for item in movies:
                         del item["credit_id"]
-                    movies = merge_dict_lists(movies, key="department")
-                    data = movies, "WriterMovies"
+                    data = merge_dict_lists(movies, key="department"), "WriterMovies"
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid"):
                 if params.get("dbid"):

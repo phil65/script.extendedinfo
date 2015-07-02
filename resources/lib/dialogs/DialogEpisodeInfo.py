@@ -67,7 +67,8 @@ class DialogEpisodeInfo(DialogBaseInfo):
 
     @ch.click(6001)
     def set_rating_dialog(self):
-        if set_rating_prompt("episode", [self.tmdb_id, self.season, self.info["episode"]]):
+        if set_rating_prompt(media_type="episode",
+                             media_id=[self.tmdb_id, self.season, self.info["episode"]]):
             self.update_states()
 
     @ch.click(6006)
