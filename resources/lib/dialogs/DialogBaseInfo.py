@@ -10,12 +10,11 @@ from ..TheMovieDB import *
 from ..WindowManager import wm
 from ..OnClickHandler import OnClickHandler
 from .. import VideoPlayer
-from BaseClasses import DialogXML, WindowXML
 PLAYER = VideoPlayer.VideoPlayer()
 ch = OnClickHandler()
 
 
-class DialogBaseInfo(WindowXML if SETTING("window_mode") == "true" else DialogXML):
+class DialogBaseInfo(object):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 

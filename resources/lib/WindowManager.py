@@ -5,6 +5,8 @@
 
 from Utils import *
 import xbmcaddon
+from dialogs.BaseClasses import *
+
 from local_db import get_imdb_id_from_db
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
@@ -69,8 +71,9 @@ class WindowManager(object):
             movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
                                          dbid=dbid,
                                          name=name)
-        dialog = DialogVideoInfo.DialogVideoInfo(INFO_DIALOG_FILE, ADDON_PATH,
-                                                 id=movie_id)
+        movieclass = DialogVideoInfo.get_movie_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = movieclass(INFO_DIALOG_FILE, ADDON_PATH,
+                            id=movie_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
@@ -98,9 +101,10 @@ class WindowManager(object):
             tmdb_id = search_media(media_name=name,
                                    year="",
                                    media_type="tv")
-        dialog = DialogTVShowInfo.DialogTVShowInfo(INFO_DIALOG_FILE, ADDON_PATH,
-                                                   tmdb_id=tmdb_id,
-                                                   dbid=dbid)
+        tvshow_class = DialogTVShowInfo.get_tvshow_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = tvshow_class(INFO_DIALOG_FILE, ADDON_PATH,
+                              tmdb_id=tmdb_id,
+                              dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
@@ -110,10 +114,11 @@ class WindowManager(object):
         needs *season AND (*tvshow_id OR *tvshow)
         """
         from dialogs import DialogSeasonInfo
-        dialog = DialogSeasonInfo.DialogSeasonInfo(INFO_DIALOG_FILE, ADDON_PATH,
-                                                   id=tvshow_id,
-                                                   season=season,
-                                                   tvshow=tvshow)
+        season_class = DialogSeasonInfo.get_season_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = season_class(INFO_DIALOG_FILE, ADDON_PATH,
+                              id=tvshow_id,
+                              season=season,
+                              tvshow=tvshow)
         self.open_dialog(dialog, prev_window)
 
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None, tvshow=None):
@@ -123,13 +128,14 @@ class WindowManager(object):
         """
         from dialogs import DialogEpisodeInfo
         from TheMovieDB import get_tmdb_data
+        ep_class = DialogEpisodeInfo.get_episode_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         if not tvshow_id and tvshow:
             response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
             tvshow_id = str(response['results'][0]['id'])
-        dialog = DialogEpisodeInfo.DialogEpisodeInfo(INFO_DIALOG_FILE, ADDON_PATH,
-                                                     show_id=tvshow_id,
-                                                     season=season,
-                                                     episode=episode)
+        dialog = ep_class(INFO_DIALOG_FILE, ADDON_PATH,
+                          show_id=tvshow_id,
+                          season=season,
+                          episode=episode)
         self.open_dialog(dialog, prev_window)
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
@@ -155,8 +161,9 @@ class WindowManager(object):
                 actor_id = actor_info["id"]
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        dialog = DialogActorInfo.DialogActorInfo(ACTOR_DIALOG_FILE, ADDON_PATH,
-                                                 id=actor_id)
+        actor_class = DialogActorInfo.get_actor_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = actor_class(ACTOR_DIALOG_FILE, ADDON_PATH,
+                             id=actor_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
