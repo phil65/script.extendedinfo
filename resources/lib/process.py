@@ -132,14 +132,10 @@ def start_info_actions(infos, params):
         elif info == 'starredtvshows':
             data = get_fav_items("tv"), "StarredTVShows"
         elif info == 'similarmovies':
-            dbid = params.get("dbid", False)
-            if params.get("id"):
-                movie_id = params["id"]
-            elif dbid and int(dbid) > 0:
-                movie_id = get_imdb_id_from_db("movie", dbid)
-                log("IMDB Id from local DB:" + str(movie_id))
-            else:
-                movie_id = ""
+            movie_id = params.get("id", False)
+            if not movie_id:
+                movie_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                             dbid=params.get("dbid", False))
             if movie_id:
                 data = get_similar_movies(movie_id), "SimilarMovies"
         elif info == 'similartvshows':
