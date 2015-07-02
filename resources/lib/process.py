@@ -149,23 +149,14 @@ def start_info_actions(infos, params):
                 tvshow_id = tmdb_id
             elif dbid and int(dbid) > 0:
                 tvdb_id = get_imdb_id_from_db("tvshow", dbid)
-                log("IMDB Id from local DB:" + str(tvdb_id))
                 if tvdb_id:
                     tvshow_id = get_show_tmdb_id(tvdb_id)
-                    log("tvdb_id to tmdb_id: %s --> %s" %
-                        (str(tvdb_id), str(tvshow_id)))
             elif tvdb_id:
                 tvshow_id = get_show_tmdb_id(tvdb_id)
-                log("tvdb_id to tmdb_id: %s --> %s" %
-                    (tvdb_id, str(tvshow_id)))
             elif imdb_id:
                 tvshow_id = get_show_tmdb_id(imdb_id, "imdb_id")
-                log("imdb_id to tmdb_id: %s --> %s" %
-                    (imdb_id, str(tvshow_id)))
             elif name:
                 tvshow_id = search_media(name, "", "tv")
-                log("search string to tmdb_id: %s --> %s" %
-                    (name, str(tvshow_id)))
             if tvshow_id:
                 data = get_similar_tvshows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
@@ -186,17 +177,19 @@ def start_info_actions(infos, params):
                 if set_data:
                     data = set_data, "MovieSetItems"
         elif info == 'movielists':
-            if params.get("dbid"):
-                movie_id = get_imdb_id_from_db("movie", params["dbid"])
-                log("MovieDB Id:" + str(movie_id))
-                if movie_id:
-                    data = get_movie_lists(movie_id), "MovieLists"
+            movie_id = params.get("id", False)
+            if not movie_id:
+                movie_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                             dbid=params.get("dbid", False))
+            if movie_id:
+                data = get_movie_lists(movie_id), "MovieLists"
         elif info == 'keywords':
-            if params.get("dbid"):
-                movie_id = get_imdb_id_from_db("movie", params["dbid"])
-                log("MovieDB Id:" + str(movie_id))
-                if movie_id:
-                    data = get_keywords(movie_id), "Keywords"
+            movie_id = params.get("id", False)
+            if not movie_id:
+                movie_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                             dbid=params.get("dbid", False))
+            if movie_id:
+                data = get_keywords(movie_id), "Keywords"
         elif info == 'popularpeople':
             data = get_popular_actors(), "PopularPeople"
         elif info == 'directormovies':
@@ -433,7 +426,6 @@ def start_info_actions(infos, params):
             # focusid = Window.getFocusId()
             itemlist = window.getFocus()
             num_items = itemlist.getSelectedPosition()
-            log("items:" + str(num_items))
             for i in range(0, num_items):
                 notify(item.getProperty("Image"))
         elif info == 'action':
@@ -466,7 +458,6 @@ def start_info_actions(infos, params):
             elif int(params.get("dbid", -1)) > 0:
                 movie_id = get_imdb_id_from_db(media_type="movie",
                                                dbid=params["dbid"])
-                log("MovieDBID from local DB:" + str(movie_id))
             elif params.get("imdb_id", ""):
                 movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))
             else:
