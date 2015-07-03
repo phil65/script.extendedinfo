@@ -106,11 +106,7 @@ def get_tmdb_window(window_type):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=listitems)
             if selection == 0:
-                rating = get_rating_from_user()
-                if rating:
-                    set_rating(media_type=self.type,
-                               media_id=item_id,
-                               rating=rating)
+                if set_rating_prompt(self.type, item_id):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
             elif selection == 1:
@@ -260,13 +256,12 @@ def get_tmdb_window(window_type):
 
         @ch.click(5012)
         def set_vote_count_filter(self):
-            dialog = xbmcgui.Dialog()
             ret = True
             if not self.type == "tv":
-                ret = dialog.yesno(heading=LANG(32151),
-                                   line1=LANG(32106),
-                                   nolabel=LANG(32150),
-                                   yeslabel=LANG(32149))
+                ret = xbmcgui.Dialog().yesno(heading=LANG(32151),
+                                             line1=LANG(32106),
+                                             nolabel=LANG(32150),
+                                             yeslabel=LANG(32149))
             result = xbmcgui.Dialog().input(heading=LANG(32111),
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
@@ -280,11 +275,10 @@ def get_tmdb_window(window_type):
 
         @ch.click(5003)
         def set_year_filter(self):
-            dialog = xbmcgui.Dialog()
-            ret = dialog.yesno(heading=LANG(32151),
-                               line1=LANG(32106),
-                               nolabel=LANG(32150),
-                               yeslabel=LANG(32149))
+            ret = xbmcgui.Dialog().yesno(heading=LANG(32151),
+                                         line1=LANG(32106),
+                                         nolabel=LANG(32150),
+                                         yeslabel=LANG(32149))
             result = xbmcgui.Dialog().input(heading=LANG(345),
                                             type=xbmcgui.INPUT_NUMERIC)
             if not result:
