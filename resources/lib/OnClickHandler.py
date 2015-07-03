@@ -249,6 +249,7 @@ class OnClickHandler():
         #     raise ValueError('OnClick for "{}"" has not been registered'.format(control_id))
 
     def serve_action(self, action, control_id, wnd):
+        wnd.action_id = action.getId()
         if action.getId() not in self.action_maps:
             return None
         wnd.control = wnd.getControl(control_id)

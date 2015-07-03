@@ -10,6 +10,7 @@ from ..Utils import *
 from ..OnClickHandler import OnClickHandler
 ch = OnClickHandler()
 
+
 class T9Search(xbmcgui.WindowXMLDialog):
 
     def __init__(self, *args, **kwargs):
@@ -35,7 +36,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
                 ("8", "VWX8"),
                 ("9", "YZ90"),
                 ("DEL", "<--"),
-                ("", "___"),
+                (" ", "___"),
                 ("KEYB", "CLASSIC"))
         listitems = []
         for item in keys:
@@ -47,6 +48,53 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.setFocusId(9090)
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
 
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
+
+    def onAction(self, action):
+        ch.serve_action(action, self.getFocusId(), self)
+
+    @ch.click(9090)
+    def panel_click(self):
+        letters = self.control.getSelectedItem().getProperty("value")
+        number = self.control.getSelectedItem().getProperty("key")
+        self.set_t9_letter(letters, number)
+
+    @ch.click(9091)
+    def set_autocomplete(self):
+        self.search_str = self.control.getSelectedItem().getLabel()
+        self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
+        self.get_autocomplete_labels_async()
+        if self.timer:
+            self.timer.cancel()
+        self.timer = Timer(0.0, self.callback, (self.search_str,))
+        self.timer.start()
+
+    @ch.action("parentdir", "*")
+    @ch.action("parentfolder", "*")
+    @ch.action("previousmenu", "*")
+    def close_dialog(self):
+        self.close()
+
+    @ch.action("number0", "*")
+    def set_0(self):
+        self.set_t9_letter(letters=self.control.getListItem(10).getProperty("value"),
+                           number=self.control.getListItem(10).getProperty("key"))
+
+    @ch.action("number1", "*")
+    @ch.action("number2", "*")
+    @ch.action("number3", "*")
+    @ch.action("number4", "*")
+    @ch.action("number5", "*")
+    @ch.action("number6", "*")
+    @ch.action("number7", "*")
+    @ch.action("number8", "*")
+    @ch.action("number9", "*")
+    def t_9_button_click(self):
+        item_id = xbmcgui.REMOTE_9 - self.action_id
+        self.set_t9_letter(letters=self.control.getListItem(item_id).getProperty("value"),
+                           number=self.control.getListItem(item_id).getProperty("key"))
+
     @run_async
     def update_search_label_async(self):
         while True:
@@ -56,17 +104,23 @@ class T9Search(xbmcgui.WindowXMLDialog):
             else:
                 self.getControl(600).setLabel("[B]%s[/B][COLOR 00FFFFFF]_[/COLOR]" % self.search_str)
 
-    @ch.click(9090)
-    def panel_click(self):
-        letters = self.control.getSelectedItem().getProperty("value")
-        number = self.control.getSelectedItem().getProperty("key")
+    @run_async
+    def get_autocomplete_labels_async(self):
+        self.getControl(9091).reset()
+        if self.search_str:
+            listitems = get_autocomplete_items(self.search_str)
+        else:
+            listitems = list(self.last_searches)
+        self.getControl(9091).addItems(create_listitems(listitems))
+
+    def set_t9_letter(self, letters, number):
         letter_list = [c for c in letters]
         now = time.time()
         time_diff = now - self.prev_time
         if number == "DEL":
             if self.search_str:
                 self.search_str = self.search_str[:-1]
-        elif number == "":
+        elif number == " ":
             if self.search_str:
                 self.search_str += " "
         elif number == "KEYB":
@@ -91,19 +145,6 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
         self.get_autocomplete_labels_async()
 
-    @ch.click(9091)
-    def set_autocomplete(self):
-        self.search_str = self.control.getSelectedItem().getLabel()
-        self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
-        self.get_autocomplete_labels_async()
-        if self.timer:
-            self.timer.cancel()
-        self.timer = Timer(0.0, self.callback, (self.search_str,))
-        self.timer.start()
-
-    def onClick(self, control_id):
-        ch.serve(control_id, self)
-
     def color_labels(self, letter, letters):
         label = "[COLOR=FFFF3333]%s[/COLOR]" % letter
         self.getControl(9090).getSelectedItem().setLabel2(letters.replace(letter, label))
@@ -114,12 +155,3 @@ class T9Search(xbmcgui.WindowXMLDialog):
         label = item.getLabel2()
         label = label.replace("[COLOR=FFFF3333]", "").replace("[/COLOR]", "")
         item.setLabel2(label)
-
-    @run_async
-    def get_autocomplete_labels_async(self):
-        self.getControl(9091).reset()
-        if self.search_str:
-            listitems = get_autocomplete_items(self.search_str)
-        else:
-            listitems = list(self.last_searches)
-        self.getControl(9091).addItems(create_listitems(listitems))
