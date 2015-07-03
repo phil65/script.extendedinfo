@@ -66,6 +66,10 @@ def get_youtube_window(window_type):
             super(DialogYoutubeList, self).onClick(control_id)
             ch.serve(control_id, self)
 
+        def onAction(self, action):
+            super(DialogYoutubeList, self).onAction(action)
+            ch.serve_action(action, self.getFocusId(), self)
+
         @ch.click(500)
         def main_list_click(self):
             self.last_position = self.control.getSelectedPosition()
@@ -204,12 +208,9 @@ def get_youtube_window(window_type):
                 self.sort = sort_strings[index]
                 self.sort_label = listitems[index]
 
+        @ch.action("contextmenu", 500)
         def context_menu(self):
-            focus_id = self.getFocusId()
-            if not focus_id == 500:
-                return None
-            listitem = self.getControl(focus_id).getSelectedItem()
-            youtube_id = listitem.getProperty("youtube_id")
+            listitem = self.control.getSelectedItem()
             if self.type == "video":
                 more_vids = "More videos from [B]%s[/B]" % listitem.getProperty("channel_title")
                 listitems = [LANG(32069), more_vids]
@@ -218,7 +219,7 @@ def get_youtube_window(window_type):
                 if selection < 0:
                     return None
                 elif selection == 0:
-                    related_filter = [{"id": youtube_id,
+                    related_filter = [{"id": listitem.getProperty("youtube_id"),
                                        "type": "relatedToVideoId",
                                        "typelabel": "Related",
                                        "label": listitem.getLabel()}]

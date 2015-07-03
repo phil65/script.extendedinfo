@@ -58,6 +58,10 @@ def get_tmdb_window(window_type):
             super(DialogVideoList, self).onClick(control_id)
             ch.serve(control_id, self)
 
+        def onAction(self, action):
+            super(DialogVideoList, self).onAction(action)
+            ch.serve_action(action, self.getFocusId(), self)
+
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
             self.window.setProperty("Type", TRANSLATIONS[self.type])
@@ -88,11 +92,9 @@ def get_tmdb_window(window_type):
             if self.page > 1:
                 self.page -= 1
 
+        @ch.action("contextmenu", 500)
         def context_menu(self):
-            focus_id = self.getFocusId()
-            if not focus_id == 500:
-                return None
-            item_id = self.getControl(focus_id).getSelectedItem().getProperty("id")
+            item_id = self.control.getSelectedItem().getProperty("id")
             if self.type == "tv":
                 listitems = [LANG(32169)]
             else:

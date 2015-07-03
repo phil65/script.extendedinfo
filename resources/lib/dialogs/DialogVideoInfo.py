@@ -91,10 +91,8 @@ def get_movie_window(window_type):
             self.join_omdb.start()
 
         def onAction(self, action):
-            focus_id = self.getFocusId()
             super(DialogVideoInfo, self).onAction(action)
-            if action == xbmcgui.ACTION_CONTEXT_MENU:
-                ch.serve_action(action, focus_id, self)
+            ch.serve_action(action, self.getFocusId(), self)
 
         @ch.click(1000)
         @ch.click(750)
