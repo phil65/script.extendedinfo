@@ -251,8 +251,9 @@ class OnClickHandler():
     def serve_action(self, action, control_id, wnd):
         if action.getId() not in self.action_maps:
             return None
+        wnd.control = wnd.getControl(control_id)
+        wnd.control_id = control_id
         dct = self.action_maps[action.getId()]
-
         all_func = dct.get("*")
         if all_func:
             all_func(wnd)

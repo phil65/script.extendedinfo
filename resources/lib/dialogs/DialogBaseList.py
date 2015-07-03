@@ -48,6 +48,7 @@ class DialogBaseList(object):
         else:
             xbmc.executebuiltin("SetFocus(6000)")
 
+    @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
     def previous_menu(self):
         onback = self.window.getProperty("%i_onback" % self.control_id)
