@@ -10,7 +10,10 @@ from ..YouTube import *
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from .. import VideoPlayer
+from ..OnClickHandler import OnClickHandler
+
 PLAYER = VideoPlayer.VideoPlayer()
+ch = OnClickHandler()
 
 
 TRANSLATIONS = {"video": LANG(157),
@@ -61,7 +64,10 @@ def get_youtube_window(window_type):
 
         def onClick(self, control_id):
             super(DialogYoutubeList, self).onClick(control_id)
-            if control_id in [500]:
+            ch.serve(control_id, self)
+
+        @ch.click(500)
+        def main_list_click(self):
                 self.last_position = self.getControl(control_id).getSelectedPosition()
                 youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
                 if self.type == "channel":
@@ -74,61 +80,75 @@ def get_youtube_window(window_type):
                     PLAYER.play_youtube_video(youtube_id=youtube_id,
                                               listitem=self.getControl(control_id).getSelectedItem(),
                                               window=self)
-            elif control_id == 5002:
-                label_list = [LANG(32062), LANG(32063), LANG(32064), LANG(32065), LANG(636)]
-                deltas = [1, 7, 31, 365, "custom"]
-                index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=label_list)
-                if index > -1:
-                    delta = deltas[index]
-                    if delta == "custom":
-                        delta = xbmcgui.Dialog().input(heading=LANG(32067),
-                                                       type=xbmcgui.INPUT_NUMERIC)
-                    if delta:
-                        d = datetime.datetime.now() - datetime.timedelta(int(delta))
-                        date_str = d.isoformat('T')[:-7] + "Z"
-                        self.add_filter("publishedAfter", date_str, LANG(172), str(label_list[index]))
-                        self.update()
-            elif control_id == 5003:
-                label_list = ["en", "de", "fr"]
-                index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=label_list)
-                if index > -1:
-                    self.add_filter("regionCode", label_list[index], LANG(248), str(label_list[index]))
+
+        @ch.click(5002)
+        def set_published_filter(self):
+            label_list = [LANG(32062), LANG(32063), LANG(32064), LANG(32065), LANG(636)]
+            deltas = [1, 7, 31, 365, "custom"]
+            index = xbmcgui.Dialog().select(heading=LANG(32151),
+                                            list=label_list)
+            if index > -1:
+                delta = deltas[index]
+                if delta == "custom":
+                    delta = xbmcgui.Dialog().input(heading=LANG(32067),
+                                                   type=xbmcgui.INPUT_NUMERIC)
+                if delta:
+                    d = datetime.datetime.now() - datetime.timedelta(int(delta))
+                    date_str = d.isoformat('T')[:-7] + "Z"
+                    self.add_filter("publishedAfter", date_str, LANG(172), str(label_list[index]))
                     self.update()
-            elif control_id == 5006:
-                value_list = ["2d", "3d", "any"]
-                label_list = ["2D", "3D", LANG(593)]
-                index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=label_list)
-                if index > -1:
-                    self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))
-                    self.update()
-            elif control_id == 5008:
-                value_list = ["long", "medium", "short", "any"]
-                label_list = [LANG(33013), LANG(601), LANG(33012), LANG(593)]
-                index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=label_list)
-                if index > -1:
-                    self.add_filter("videoDuration", value_list[index], LANG(180), str(label_list[index]))
-                    self.update()
-            elif control_id == 5009:
-                value_list = ["closedCaption", "none", "any"]
-                label_list = [LANG(107), LANG(106), LANG(593)]
-                index = xbmcgui.Dialog().select(heading=LANG(287),
-                                                list=label_list)
-                if index > -1:
-                    self.add_filter("videoCaption", value_list[index], LANG(287), str(label_list[index]))
-                    self.update()
-            elif control_id == 5012:
-                value_list = ["high", "standard", "any"]
-                label_list = [LANG(419), LANG(602), LANG(593)]
-                index = xbmcgui.Dialog().select(heading=LANG(169),
-                                                list=label_list)
-                if index > -1:
-                    self.add_filter("videoDefinition", value_list[index], LANG(169), str(label_list[index]))
-                    self.update()
-            elif control_id == 5007:
+
+        @ch.click(5003)
+        def set_language_filter(self):
+            label_list = ["en", "de", "fr"]
+            index = xbmcgui.Dialog().select(heading=LANG(32151),
+                                            list=label_list)
+            if index > -1:
+                self.add_filter("regionCode", label_list[index], LANG(248), str(label_list[index]))
+                self.update()
+
+        @ch.click(5006)
+        def set_dimension_filter(self):
+            value_list = ["2d", "3d", "any"]
+            label_list = ["2D", "3D", LANG(593)]
+            index = xbmcgui.Dialog().select(heading=LANG(32151),
+                                            list=label_list)
+            if index > -1:
+                self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))
+                self.update()
+
+        @ch.click(5008)
+        def set_duration_filter(self):
+            value_list = ["long", "medium", "short", "any"]
+            label_list = [LANG(33013), LANG(601), LANG(33012), LANG(593)]
+            index = xbmcgui.Dialog().select(heading=LANG(32151),
+                                            list=label_list)
+            if index > -1:
+                self.add_filter("videoDuration", value_list[index], LANG(180), str(label_list[index]))
+                self.update()
+
+        @ch.click(5009)
+        def set_caption_filter(self):
+            value_list = ["closedCaption", "none", "any"]
+            label_list = [LANG(107), LANG(106), LANG(593)]
+            index = xbmcgui.Dialog().select(heading=LANG(287),
+                                            list=label_list)
+            if index > -1:
+                self.add_filter("videoCaption", value_list[index], LANG(287), str(label_list[index]))
+                self.update()
+
+        @ch.click(5012)
+        def set_definition_filter(self):
+            value_list = ["high", "standard", "any"]
+            label_list = [LANG(419), LANG(602), LANG(593)]
+            index = xbmcgui.Dialog().select(heading=LANG(169),
+                                            list=label_list)
+            if index > -1:
+                self.add_filter("videoDefinition", value_list[index], LANG(169), str(label_list[index]))
+                self.update()
+
+        @ch.click(5007)
+        def toggle_type(self):
                 self.filters = []
                 self.page = 1
                 self.mode = "filter"
