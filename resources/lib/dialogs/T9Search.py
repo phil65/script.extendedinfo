@@ -10,6 +10,20 @@ from ..Utils import *
 from ..OnClickHandler import OnClickHandler
 ch = OnClickHandler()
 
+# (keyboard key, 1st label, 2nd label)
+KEYS = ((1, "1", "ABC1"),
+        (2, "2", "DEF2"),
+        (3, "3", "GHI3"),
+        (4, "4", "JKL4"),
+        (5, "5", "MNO5"),
+        (6, "6", "PQR6"),
+        (7, "7", "STU7"),
+        (8, "8", "VWX8"),
+        (9, "9", "YZ90"),
+        (None, "DEL", "<--"),
+        (0, " ", "___"),
+        (None, "KEYB", "CLASSIC"))
+
 
 class T9Search(xbmcgui.WindowXMLDialog):
 
@@ -26,23 +40,12 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.get_autocomplete_labels_async()
         self.classic_mode = False
         self.update_search_label_async()
-        keys = (("1", "ABC1"),
-                ("2", "DEF2"),
-                ("3", "GHI3"),
-                ("4", "JKL4"),
-                ("5", "MNO5"),
-                ("6", "PQR6"),
-                ("7", "STU7"),
-                ("8", "VWX8"),
-                ("9", "YZ90"),
-                ("DEL", "<--"),
-                (" ", "___"),
-                ("KEYB", "CLASSIC"))
         listitems = []
-        for item in keys:
-            li = xbmcgui.ListItem("[B]%s[/B]" % item[0], item[1])
-            li.setProperty("key", item[0])
-            li.setProperty("value", item[1])
+        for item in KEYS:
+            li = xbmcgui.ListItem("[B]%s[/B]" % item[1], item[2])
+            li.setProperty("key", item[1])
+            li.setProperty("value", item[2])
+            li.setProperty("button", item[0])
             listitems.append(li)
         self.getControl(9090).addItems(listitems)
         self.setFocusId(9090)
