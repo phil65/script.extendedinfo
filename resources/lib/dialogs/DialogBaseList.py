@@ -23,7 +23,6 @@ class DialogBaseList(object):
     ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
-        super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
         self.last_searches = deque(maxlen=10)
         self.search_str = kwargs.get('search_str', "")
@@ -69,10 +68,7 @@ class DialogBaseList(object):
             self.update()
 
     def onClick(self, control_id):
-        if control_id == 5001:
-            self.get_sort_type()
-            self.update()
-        elif control_id == 5005:
+        if control_id == 5005:
             if len(self.filters) > 1:
                 listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
                 listitems.append(LANG(32078))

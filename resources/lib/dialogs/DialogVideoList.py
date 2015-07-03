@@ -146,6 +146,7 @@ def get_tmdb_window(window_type):
                 change_list_status(self.list_id, item_id, False)
                 self.update(force_update=True)
 
+        @ch.click(5001)
         def get_sort_type(self):
             if self.mode in ["favorites", "rating", "list"]:
                 sort_key = self.mode
@@ -164,6 +165,7 @@ def get_tmdb_window(window_type):
                                 label="10")
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
+            self.update()
 
         def add_filter(self, key, value, typelabel, label):
             if ".gte" in key or ".lte" in key:

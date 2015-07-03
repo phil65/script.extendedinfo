@@ -198,15 +198,18 @@ def get_youtube_window(window_type):
                 self.next_page_token = self.page_token
                 self.page_token = self.prev_page_token
 
+        @ch.click(5001)
         def get_sort_type(self):
             sort_key = self.type
             listitems = [key for key in SORTS[sort_key].values()]
             sort_strings = [value for value in SORTS[sort_key].keys()]
             index = xbmcgui.Dialog().select(heading=LANG(32104),
                                             list=listitems)
-            if index > -1:
-                self.sort = sort_strings[index]
-                self.sort_label = listitems[index]
+            if index == -1:
+                return None
+            self.sort = sort_strings[index]
+            self.sort_label = listitems[index]
+            self.update()
 
         @ch.action("contextmenu", 500)
         def context_menu(self):
