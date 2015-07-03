@@ -68,18 +68,18 @@ def get_youtube_window(window_type):
 
         @ch.click(500)
         def main_list_click(self):
-                self.last_position = self.getControl(control_id).getSelectedPosition()
-                youtube_id = self.getControl(control_id).getSelectedItem().getProperty("youtube_id")
-                if self.type == "channel":
-                    channel_filter = [{"id": youtube_id,
-                                       "type": "channelId",
-                                       "typelabel": LANG(19029),
-                                       "label": youtube_id}]
-                    wm.open_youtube_list(filters=channel_filter)
-                else:
-                    PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                              listitem=self.getControl(control_id).getSelectedItem(),
-                                              window=self)
+            self.last_position = self.control.getSelectedPosition()
+            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+            if self.type == "channel":
+                channel_filter = [{"id": youtube_id,
+                                   "type": "channelId",
+                                   "typelabel": LANG(19029),
+                                   "label": youtube_id}]
+                wm.open_youtube_list(filters=channel_filter)
+            else:
+                PLAYER.play_youtube_video(youtube_id=youtube_id,
+                                          listitem=self.control.getSelectedItem(),
+                                          window=self)
 
         @ch.click(5002)
         def set_published_filter(self):
@@ -87,16 +87,17 @@ def get_youtube_window(window_type):
             deltas = [1, 7, 31, 365, "custom"]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=label_list)
-            if index > -1:
-                delta = deltas[index]
-                if delta == "custom":
-                    delta = xbmcgui.Dialog().input(heading=LANG(32067),
-                                                   type=xbmcgui.INPUT_NUMERIC)
-                if delta:
-                    d = datetime.datetime.now() - datetime.timedelta(int(delta))
-                    date_str = d.isoformat('T')[:-7] + "Z"
-                    self.add_filter("publishedAfter", date_str, LANG(172), str(label_list[index]))
-                    self.update()
+            if index == -1:
+                return None
+            delta = deltas[index]
+            if delta == "custom":
+                delta = xbmcgui.Dialog().input(heading=LANG(32067),
+                                               type=xbmcgui.INPUT_NUMERIC)
+            if delta:
+                d = datetime.datetime.now() - datetime.timedelta(int(delta))
+                date_str = d.isoformat('T')[:-7] + "Z"
+                self.add_filter("publishedAfter", date_str, LANG(172), str(label_list[index]))
+                self.update()
 
         @ch.click(5003)
         def set_language_filter(self):
@@ -149,18 +150,18 @@ def get_youtube_window(window_type):
 
         @ch.click(5007)
         def toggle_type(self):
-                self.filters = []
-                self.page = 1
-                self.mode = "filter"
-                types = {"video": "playlist",
-                         "playlist": "channel",
-                         "channel": "video"}
-                if self.type in types:
-                    self.type = types[self.type]
-                if self.sort not in SORTS[self.type].keys():
-                    self.sort = "relevance"
-                    self.sort_label = LANG(32060)
-                self.update()
+            self.filters = []
+            self.page = 1
+            self.mode = "filter"
+            types = {"video": "playlist",
+                     "playlist": "channel",
+                     "channel": "video"}
+            if self.type in types:
+                self.type = types[self.type]
+            if self.sort not in SORTS[self.type].keys():
+                self.sort = "relevance"
+                self.sort_label = LANG(32060)
+            self.update()
 
         def update_ui(self):
             self.window.setProperty("Type", TRANSLATIONS[self.type])
