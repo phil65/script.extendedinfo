@@ -3,7 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmc
 import xbmcgui
 from ..Utils import *
 from ..YouTube import *
@@ -54,12 +53,7 @@ def get_youtube_window(window_type):
             self.sort_label = kwargs.get('sort_label', LANG(32060))
             self.order = kwargs.get('order', "desc")
             force = kwargs.get('force', False)
-            if self.listitem_list:
-                self.listitems = create_listitems(self.listitem_list)
-                self.total_items = len(self.listitem_list)
-            else:
-                self.update_content(force_update=force)
-                # notify(str(self.totalpages))
+            self.update_content(force_update=force)
 
         def onClick(self, control_id):
             super(DialogYoutubeList, self).onClick(control_id)
