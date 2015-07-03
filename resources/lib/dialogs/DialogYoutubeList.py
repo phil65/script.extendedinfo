@@ -136,12 +136,11 @@ def get_youtube_window(window_type):
                 self.filters = []
                 self.page = 1
                 self.mode = "filter"
-                if self.type == "video":
-                    self.type = "playlist"
-                elif self.type == "playlist":
-                    self.type = "channel"
-                elif self.type == "channel":
-                    self.type = "video"
+                types = {"video": "playlist",
+                         "playlist": "channel",
+                         "channel": "video"}
+                if self.type in types:
+                    self.type = types[self.type]
                 if self.sort not in SORTS[self.type].keys():
                     self.sort = "relevance"
                     self.sort_label = LANG(32060)
