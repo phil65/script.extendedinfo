@@ -42,16 +42,12 @@ def get_tmdb_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogVideoList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "movie")
-            self.search_str = kwargs.get('search_str', "")
-            self.filter_label = kwargs.get("filter_label", "")
-            self.mode = kwargs.get("mode", "filter")
             self.list_id = kwargs.get("list_id", False)
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', LANG(32110))
             self.order = kwargs.get('order', "desc")
             force = kwargs.get('force', False)
             self.logged_in = check_login()
-            self.filters = kwargs.get('filters', [])
             if self.listitem_list:
                 self.listitems = create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)

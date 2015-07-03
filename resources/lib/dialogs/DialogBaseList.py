@@ -26,6 +26,10 @@ class DialogBaseList(object):
         super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
         self.last_searches = deque(maxlen=10)
+        self.search_str = kwargs.get('search_str', "")
+        self.filter_label = kwargs.get("filter_label", "")
+        self.mode = kwargs.get("mode", "filter")
+        self.filters = kwargs.get('filters', [])
         self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
         self.column = None

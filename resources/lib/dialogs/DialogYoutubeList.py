@@ -43,18 +43,14 @@ def get_youtube_window(window_type):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.type = kwargs.get('type', "video")
-            self.search_str = kwargs.get('search_str', "")
-            self.filter_label = kwargs.get("filter_label", "")
             self.filter_url = ""
             self.page_token = ""
             self.next_page_token = ""
             self.prev_page_token = ""
-            self.mode = kwargs.get("mode", "filter")
             self.sort = kwargs.get('sort', "relevance")
             self.sort_label = kwargs.get('sort_label', LANG(32060))
             self.order = kwargs.get('order', "desc")
             force = kwargs.get('force', False)
-            self.filters = kwargs.get('filters', [])
             if self.listitem_list:
                 self.listitems = create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
