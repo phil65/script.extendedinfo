@@ -345,9 +345,8 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
             return None
         response = search_company(result)
         if len(response) > 1:
-            names = [item["name"] for item in response]
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=names)
+                                                list=[item["name"] for item in response])
             if selection > -1:
                 response = response[selection]
         elif response:
@@ -369,11 +368,7 @@ class DialogVideoList(DialogBaseList, WindowXML if SETTING("window_mode") == "tr
         response = get_keyword_id(result)
         if not response:
             return None
-        keyword_id = response["id"]
-        name = response["name"]
-        if result == -1:
-            return None
-        self.add_filter("with_keywords", str(keyword_id), LANG(32114), name)
+        self.add_filter("with_keywords", str(response["id"]), LANG(32114), response["name"])
         self.mode = "filter"
         self.page = 1
 
