@@ -95,19 +95,21 @@ class DialogBaseInfo(object):
                                                  quality=1)
             YDStreamExtractor.handleDownload(vid)
 
-    def onAction(self, action):
-        focus_id = self.getFocusId()
+    @ch.action("parentfolder", "*")
+    def previous_menu(self):
         onback = self.window.getProperty("%i_onback" % focus_id)
-        if action in self.ACTION_PREVIOUS_MENU:
-            if onback:
-                xbmc.executebuiltin(onback)
-            else:
-                self.close()
-                wm.pop_stack()
-        elif action in self.ACTION_EXIT_SCRIPT:
+        if onback:
+            xbmc.executebuiltin(onback)
+        else:
             self.close()
-        if action == xbmcgui.ACTION_CONTEXT_MENU:
-            ch.serve_action(action, focus_id, self)
+            wm.pop_stack()
+
+    @ch.action("previousmenu", "*")
+    def exit_script(self):
+        self.close()
+
+    def onAction(self, action):
+        ch.serve_action(action, self.getFocusId(), self)
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)

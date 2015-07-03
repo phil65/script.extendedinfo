@@ -50,8 +50,12 @@ class DialogBaseList(object):
 
     @ch.action("parentfolder", "*")
     def previous_menu(self):
-        self.close()
-        wm.pop_stack()
+        onback = self.window.getProperty("%i_onback" % focus_id)
+        if onback:
+            xbmc.executebuiltin(onback)
+        else:
+            self.close()
+            wm.pop_stack()
 
     @ch.action("previousmenu", "*")
     def exit_script(self):
