@@ -245,7 +245,7 @@ def get_tmdb_window(window_type):
                 dialog.doModal()
 
         @ch.click(5002)
-        def get_genre(self):
+        def set_genre_filter(self):
             response = get_tmdb_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
             id_list = [item["id"] for item in response["genres"]]
             label_list = [item["name"] for item in response["genres"]]
@@ -259,7 +259,7 @@ def get_tmdb_window(window_type):
             self.update()
 
         @ch.click(5012)
-        def get_vote_count(self):
+        def set_vote_count_filter(self):
             dialog = xbmcgui.Dialog()
             ret = True
             if not self.type == "tv":
@@ -279,7 +279,7 @@ def get_tmdb_window(window_type):
                 self.update()
 
         @ch.click(5003)
-        def get_release_year(self):
+        def set_year_filter(self):
             dialog = xbmcgui.Dialog()
             ret = dialog.yesno(heading=LANG(32151),
                                line1=LANG(32106),
@@ -306,7 +306,7 @@ def get_tmdb_window(window_type):
             self.update()
 
         @ch.click(5008)
-        def get_actor(self):
+        def set_actor_filter(self):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
@@ -340,7 +340,7 @@ def get_tmdb_window(window_type):
                                    dbid=dbid)
 
         @ch.click(5010)
-        def get_company(self):
+        def set_company_filter(self):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result < 0:
@@ -364,7 +364,7 @@ def get_tmdb_window(window_type):
             self.update()
 
         @ch.click(5009)
-        def get_keyword(self):
+        def set_keyword_filter(self):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
@@ -378,7 +378,7 @@ def get_tmdb_window(window_type):
             self.update()
 
         @ch.click(5006)
-        def get_certification(self):
+        def set_certification_filter(self):
             response = get_certification_list(self.type)
             country_list = [key for key in response.keys()]
             index = xbmcgui.Dialog().select(heading=LANG(21879),
