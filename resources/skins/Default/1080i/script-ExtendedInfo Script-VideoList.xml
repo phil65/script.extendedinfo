@@ -330,6 +330,26 @@
                         <font>font12</font>
                         <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
                     </control>
+                    <control type="image">
+                        <width>30</width>
+                        <height>30</height>
+                        <posy>120</posy>
+                        <posx>758</posx>
+                        <texture>icons/database.png</texture>
+                        <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                    </control>
+                    <control type="label">
+                        <width>46</width>
+                        <height>40</height>
+                        <posy>76</posy>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <posx>750</posx>
+                        <font>font10</font>
+                        <textcolor>FFFAFAFA</textcolor>
+                        <label>$INFO[ListItem.Property(User_Rating)]</label>
+                        <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+                    </control>
                 </itemlayout>
                 <focusedlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
                     <control type="label">
@@ -349,7 +369,7 @@
                         <height>67</height>
                         <posy>115</posy>
                         <textcolor>FFFAFAFA</textcolor>
-                      <animation type="Focus" reversible="false">
+                        <animation type="Focus" reversible="false">
                             <effect type="fade" start="62" end="100" time="280" />
                         </animation>
                         <animation type="UnFocus" reversible="false">
@@ -359,6 +379,26 @@
                         <aligny>top</aligny>
                         <font>font12</font>
                         <label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+                    </control>
+                    <control type="image">
+                        <width>30</width>
+                        <height>30</height>
+                        <posy>120</posy>
+                        <posx>758</posx>
+                        <texture>icons/database.png</texture>
+                        <visible>!IsEmpty(ListItem.Property(DBID))</visible>
+                    </control>
+                    <control type="label">
+                        <width>46</width>
+                        <height>40</height>
+                        <posy>76</posy>
+                        <align>center</align>
+                        <aligny>center</aligny>
+                        <posx>750</posx>
+                        <font>font10</font>
+                        <textcolor>FFFAFAFA</textcolor>
+                        <label>$INFO[ListItem.Property(User_Rating)]</label>
+                        <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
                     </control>
                 </focusedlayout>
             </control>
@@ -417,30 +457,29 @@
             </control>
             <control type="group">
                 <animation effect="slide" start="0" end="-290" time="250" condition="!IsEmpty(Window.Property(alt_layout))">Conditional</animation>
-
-            <control type="image">
-                <texture>arrowdown.png</texture>
-                <posx>1090</posx>
-                <animation effect="fade" time="250">VisibleChange</animation>
-                <posy>1040</posy>
-                <width>120</width>
-                <height>30</height>
-                <animation effect="fade" end="100" time="360">WindowOpen</animation>
-                <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
-                <visible>!IsEmpty(Window.Property(ArrowDown)) | Container(500).HasNext</visible>
+                <control type="image">
+                    <texture>arrowdown.png</texture>
+                    <posx>1090</posx>
+                    <animation effect="fade" time="250">VisibleChange</animation>
+                    <posy>1040</posy>
+                    <width>120</width>
+                    <height>30</height>
+                    <animation effect="fade" end="100" time="360">WindowOpen</animation>
+                    <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
+                    <visible>!IsEmpty(Window.Property(ArrowDown)) | Container(500).HasNext</visible>
+                </control>
+                <control type="image">
+                    <texture flipy="true">arrowdown.png</texture>
+                    <posx>1090</posx>
+                    <animation effect="fade" time="250">VisibleChange</animation>
+                    <posy>10</posy>
+                    <width>120</width>
+                    <height>30</height>
+                    <animation effect="fade" end="100" time="360">WindowOpen</animation>
+                    <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
+                    <visible>!IsEmpty(Window.Property(ArrowUp)) | Container(500).HasPrevious</visible>
+                </control>
             </control>
-            <control type="image">
-                <texture flipy="true">arrowdown.png</texture>
-                <posx>1090</posx>
-                <animation effect="fade" time="250">VisibleChange</animation>
-                <posy>10</posy>
-                <width>120</width>
-                <height>30</height>
-                <animation effect="fade" end="100" time="360">WindowOpen</animation>
-                <animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
-                <visible>!IsEmpty(Window.Property(ArrowUp)) | Container(500).HasPrevious</visible>
-            </control>
-        </control>
             <control type="group">
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="-200" end="0" delay="1000" tween="sine" time="500" />
