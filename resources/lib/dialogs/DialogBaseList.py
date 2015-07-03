@@ -19,8 +19,6 @@ ch = OnClickHandler()
 
 
 class DialogBaseList(object):
-    ACTION_PREVIOUS_MENU = [92, 9]
-    ACTION_EXIT_SCRIPT = [13, 10]
 
     def __init__(self, *args, **kwargs):
         self.listitem_list = kwargs.get('listitems', None)
@@ -72,48 +70,52 @@ class DialogBaseList(object):
         if self.page != old_page:
             self.update()
 
-    def onClick(self, control_id):
-        if control_id == 5005:
-            if len(self.filters) > 1:
-                listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
-                listitems.append(LANG(32078))
-                index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32077),
-                                                list=listitems)
-                if index == -1:
-                    return None
-                elif index == len(listitems) - 1:
-                    self.filters = []
-                else:
-                    del self.filters[index]
-            else:
+    @ch.click(5005)
+    def reset_filters(self):
+        if len(self.filters) > 1:
+            listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
+            listitems.append(LANG(32078))
+            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32077),
+                                            list=listitems)
+            if index == -1:
+                return None
+            elif index == len(listitems) - 1:
                 self.filters = []
-            self.page = 1
-            self.mode = "filter"
-            self.update()
+            else:
+                del self.filters[index]
+        else:
+            self.filters = []
+        self.page = 1
+        self.mode = "filter"
+        self.update()
 
-        elif control_id == 6000:
-            settings_str = SETTING("search_history")
-            if settings_str:
-                self.last_searches = deque(ast.literal_eval(settings_str), maxlen=10)
-            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
-                              call=self.search,
-                              start_value=self.search_str,
-                              history=self.last_searches)
-            dialog.doModal()
-            if dialog.classic_mode:
-                result = xbmcgui.Dialog().input(heading=LANG(16017),
-                                                type=xbmcgui.INPUT_ALPHANUM)
-                if result and result > -1:
-                    self.search(result)
-            if self.search_str:
-                listitem = {"label": self.search_str}
-                if listitem in self.last_searches:
-                    self.last_searches.remove(listitem)
-                self.last_searches.appendleft(listitem)
-                setting_str = str(list(self.last_searches))
-                ADDON.setSetting("search_history", setting_str)
-            if self.total_items > 0:
-                self.setFocusId(500)
+    @ch.click(6000)
+    def open_search(self):
+        settings_str = SETTING("search_history")
+        if settings_str:
+            self.last_searches = deque(ast.literal_eval(settings_str), maxlen=10)
+        dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
+                          call=self.search,
+                          start_value=self.search_str,
+                          history=self.last_searches)
+        dialog.doModal()
+        if dialog.classic_mode:
+            result = xbmcgui.Dialog().input(heading=LANG(16017),
+                                            type=xbmcgui.INPUT_ALPHANUM)
+            if result and result > -1:
+                self.search(result)
+        if self.search_str:
+            listitem = {"label": self.search_str}
+            if listitem in self.last_searches:
+                self.last_searches.remove(listitem)
+            self.last_searches.appendleft(listitem)
+            setting_str = str(list(self.last_searches))
+            ADDON.setSetting("search_history", setting_str)
+        if self.total_items > 0:
+            self.setFocusId(500)
+
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
 
     def search(self, label):
         if not label:
