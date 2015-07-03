@@ -71,12 +71,6 @@ def get_movie_window(window_type):
                               (350, youtube_vids)]
             self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
-        @ch.action("contextmenu", 150)
-        @ch.action("contextmenu", 250)
-        def add_movie_to_account(self):
-            movie_id = self.control.getSelectedItem().getProperty("id")
-            add_movie_to_list(movie_id)
-
         def onInit(self):
             super(DialogVideoInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
@@ -93,6 +87,12 @@ def get_movie_window(window_type):
         def onAction(self, action):
             super(DialogVideoInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
+
+        @ch.action("contextmenu", 150)
+        @ch.action("contextmenu", 250)
+        def add_movie_to_account(self):
+            movie_id = self.control.getSelectedItem().getProperty("id")
+            add_movie_to_list(movie_id)
 
         @ch.click(1000)
         @ch.click(750)
@@ -249,13 +249,13 @@ def get_movie_window(window_type):
         def play_movie_resume(self):
             self.close()
             get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (str(self.info['dbid']), "true"))
+                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "true"))
 
         @ch.click(8)
         def play_movie_no_resume(self):
             self.close()
             get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (str(self.info['dbid']), "false"))
+                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "false"))
 
         def onClick(self, control_id):
             super(DialogVideoInfo, self).onClick(control_id)
