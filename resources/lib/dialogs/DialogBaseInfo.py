@@ -24,7 +24,6 @@ class DialogBaseInfo(object):
         self.dbid = kwargs.get('dbid')
         self.data = None
         self.info = {}
-        check_version()
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()

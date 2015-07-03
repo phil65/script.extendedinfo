@@ -42,9 +42,9 @@ def get_youtube_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
 
+        @busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
             self.type = kwargs.get('type', "video")
             self.filter_url = ""
             self.page_token = ""
@@ -60,7 +60,6 @@ def get_youtube_window(window_type):
             else:
                 self.update_content(force_update=force)
                 # notify(str(self.totalpages))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
         def onClick(self, control_id):
             super(DialogYoutubeList, self).onClick(control_id)

@@ -33,7 +33,6 @@ class DialogBaseList(object):
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
-        check_version()
 
     def onInit(self):
         super(DialogBaseList, self).onInit()

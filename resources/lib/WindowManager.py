@@ -253,6 +253,7 @@ class WindowManager(object):
             if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
                 xbmc.executebuiltin("Dialog.Close(movieinformation)")
                 self.reopen_window = True
+            check_version()
             if prev_window:
                 self.add_to_stack(prev_window)
                 prev_window.close()
