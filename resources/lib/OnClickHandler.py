@@ -252,10 +252,14 @@ class OnClickHandler():
         if action.getId() not in self.action_maps:
             return None
         dct = self.action_maps[action.getId()]
-        func = dct.get(control_id)
-        if func:
+
+        all_func = dct.get("*")
+        if all_func:
+            all_func(wnd)
+        ctl_func = dct.get(control_id)
+        if ctl_func:
             wnd.control = wnd.getControl(control_id)
             wnd.control_id = control_id
-            return func(wnd)
+            return ctl_func(wnd)
         # else:
         #     raise ValueError('Context Menu for "{}"" has not been registered'.format(control_id))

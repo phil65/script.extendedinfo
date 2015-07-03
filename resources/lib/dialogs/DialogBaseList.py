@@ -51,12 +51,17 @@ class DialogBaseList(object):
         else:
             xbmc.executebuiltin("SetFocus(6000)")
 
+    @ch.action("parentfolder", "*")
+    def previous_menu(self):
+        self.close()
+        wm.pop_stack()
+
+    @ch.action("previousmenu", "*")
+    def exit_script(self):
+        self.close()
+
     def onAction(self, action):
-        if action in self.ACTION_PREVIOUS_MENU:
-            self.close()
-            wm.pop_stack()
-        elif action in self.ACTION_EXIT_SCRIPT:
-            self.close()
+        ch.serve_action(action, self.getFocusId(), self)
 
     def onFocus(self, control_id):
         old_page = self.page
