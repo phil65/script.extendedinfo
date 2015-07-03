@@ -7,7 +7,8 @@ import time
 from threading import Timer
 import xbmcgui
 from ..Utils import *
-
+from ..OnClickHandler import OnClickHandler
+ch = OnClickHandler()
 
 class T9Search(xbmcgui.WindowXMLDialog):
 
@@ -55,48 +56,53 @@ class T9Search(xbmcgui.WindowXMLDialog):
             else:
                 self.getControl(600).setLabel("[B]%s[/B][COLOR 00FFFFFF]_[/COLOR]" % self.search_str)
 
+    @ch.click(9090)
+    def panel_click(self):
+        letters = self.control.getSelectedItem().getProperty("value")
+        number = self.control.getSelectedItem().getProperty("key")
+        letter_list = [c for c in letters]
+        now = time.time()
+        time_diff = now - self.prev_time
+        if number == "DEL":
+            if self.search_str:
+                self.search_str = self.search_str[:-1]
+        elif number == "":
+            if self.search_str:
+                self.search_str += " "
+        elif number == "KEYB":
+            self.classic_mode = True
+            self.close()
+        elif self.previous != letters or time_diff >= 1:
+            self.prev_time = now
+            self.previous = letters
+            self.search_str += letter_list[0]
+            self.color_labels(letter_list[0], letters)
+        elif time_diff < 1:
+            if self.color_timer:
+                self.color_timer.cancel()
+            self.prev_time = now
+            idx = (letter_list.index(self.search_str[-1]) + 1) % len(letter_list)
+            self.search_str = self.search_str[:-1] + letter_list[idx]
+            self.color_labels(letter_list[idx], letters)
+        if self.timer:
+            self.timer.cancel()
+        self.timer = Timer(1.0, self.callback, (self.search_str,))
+        self.timer.start()
+        self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
+        self.get_autocomplete_labels_async()
+
+    @ch.click(9091)
+    def set_autocomplete(self):
+        self.search_str = self.control.getSelectedItem().getLabel()
+        self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
+        self.get_autocomplete_labels_async()
+        if self.timer:
+            self.timer.cancel()
+        self.timer = Timer(0.0, self.callback, (self.search_str,))
+        self.timer.start()
+
     def onClick(self, control_id):
-        if control_id == 9090:
-            letters = self.getControl(9090).getSelectedItem().getProperty("value")
-            number = self.getControl(9090).getSelectedItem().getProperty("key")
-            letter_list = [c for c in letters]
-            now = time.time()
-            time_diff = now - self.prev_time
-            if number == "DEL":
-                if self.search_str:
-                    self.search_str = self.search_str[:-1]
-            elif number == "":
-                if self.search_str:
-                    self.search_str += " "
-            elif number == "KEYB":
-                self.classic_mode = True
-                self.close()
-            elif self.previous != letters or time_diff >= 1:
-                self.prev_time = now
-                self.previous = letters
-                self.search_str += letter_list[0]
-                self.color_labels(letter_list[0], letters)
-            elif time_diff < 1:
-                if self.color_timer:
-                    self.color_timer.cancel()
-                self.prev_time = now
-                idx = (letter_list.index(self.search_str[-1]) + 1) % len(letter_list)
-                self.search_str = self.search_str[:-1] + letter_list[idx]
-                self.color_labels(letter_list[idx], letters)
-            if self.timer:
-                self.timer.cancel()
-            self.timer = Timer(1.0, self.callback, (self.search_str,))
-            self.timer.start()
-            self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
-            self.get_autocomplete_labels_async()
-        elif control_id == 9091:
-            self.search_str = self.getControl(9091).getSelectedItem().getLabel()
-            self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
-            self.get_autocomplete_labels_async()
-            if self.timer:
-                self.timer.cancel()
-            self.timer = Timer(0.0, self.callback, (self.search_str,))
-            self.timer.start()
+        ch.serve(control_id, self)
 
     def color_labels(self, letter, letters):
         label = "[COLOR=FFFF3333]%s[/COLOR]" % letter
