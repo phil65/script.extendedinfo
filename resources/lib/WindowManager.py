@@ -179,15 +179,16 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogVideoList.DialogVideoList(LIST_DIALOG_FILE, ADDON_PATH,
-                                                 listitems=listitems,
-                                                 color=color,
-                                                 filters=filters,
-                                                 mode=mode,
-                                                 list_id=list_id,
-                                                 force=force,
-                                                 filter_label=filter_label,
-                                                 type=media_type)
+        youtube_class = DialogVideoList.get_tmdb_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = youtube_class(LIST_DIALOG_FILE, ADDON_PATH,
+                               listitems=listitems,
+                               color=color,
+                               filters=filters,
+                               mode=mode,
+                               list_id=list_id,
+                               force=force,
+                               filter_label=filter_label,
+                               type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
             prev_window.close()
@@ -205,12 +206,13 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        dialog = DialogYoutubeList.DialogYoutubeList(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH,
-                                                     search_str=search_str,
-                                                     color=color,
-                                                     filters=filters,
-                                                     filter_label=filter_label,
-                                                     type=media_type)
+        youtube_class = DialogYoutubeList.get_youtube_window(WindowXML)
+        dialog = youtube_class(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH,
+                               search_str=search_str,
+                               color=color,
+                               filters=filters,
+                               filter_label=filter_label,
+                               type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
             prev_window.close()
