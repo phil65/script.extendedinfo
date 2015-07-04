@@ -64,7 +64,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32006)])
         if selection == 0:
-            path = self.getControl(focus_id).getSelectedItem().getProperty("original")
+            path = self.control.getSelectedItem().getProperty("original")
             media_type = self.window.getProperty("type")
             params = '"art": {"poster": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
@@ -77,7 +77,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32007)])
         if selection == 0:
-            path = self.getControl(focus_id).getSelectedItem().getProperty("original")
+            path = self.control.getSelectedItem().getProperty("original")
             media_type = self.window.getProperty("type")
             params = '"art": {"fanart": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
