@@ -11,18 +11,18 @@ from ..OnClickHandler import OnClickHandler
 ch = OnClickHandler()
 
 # (index on panel, 1st label, 2nd label)
-KEYS = ((0, "1", "ABC1"),
-        (1, "2", "DEF2"),
-        (2, "3", "GHI3"),
-        (3, "4", "JKL4"),
-        (4, "5", "MNO5"),
-        (5, "6", "PQR6"),
-        (6, "7", "STU7"),
-        (7, "8", "VWX8"),
-        (8, "9", "YZ90"),
-        (9, "DEL", "<--"),
-        (10, " ", "___"),
-        (11, "KEYB", "CLASSIC"))
+KEYS = (("1", "ABC1"),
+        ("2", "DEF2"),
+        ("3", "GHI3"),
+        ("4", "JKL4"),
+        ("5", "MNO5"),
+        ("6", "PQR6"),
+        ("7", "STU7"),
+        ("8", "VWX8"),
+        ("9", "YZ90"),
+        ("DEL", "<--"),
+        (" ", "___"),
+        ("KEYB", "CLASSIC"))
 
 
 class T9Search(xbmcgui.WindowXMLDialog):
@@ -41,11 +41,11 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.classic_mode = False
         self.update_search_label_async()
         listitems = []
-        for item in KEYS:
-            li = xbmcgui.ListItem("[B]%s[/B]" % item[1], item[2])
-            li.setProperty("key", item[1])
-            li.setProperty("value", item[2])
-            li.setProperty("index", str(item[0]))
+        for i, item in enumerate(KEYS):
+            li = xbmcgui.ListItem("[B]%s[/B]" % item[0], item[1])
+            li.setProperty("key", item[0])
+            li.setProperty("value", item[1])
+            li.setProperty("index", str(i))
             listitems.append(li)
         self.getControl(9090).addItems(listitems)
         self.setFocusId(9090)
