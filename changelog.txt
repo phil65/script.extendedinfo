@@ -2,7 +2,7 @@ v3.0.0
 - API CHANGE: "imdbid" param for script call is now "imdb_id"
 - new add-on extension point: Video plugin
 - added 24 movie / TV show listings from different content providers to plugin
-- added T9 Live Search for TMDB browser
+- added T9 Live Search for TMDB browser (also works via remote)
 - added Google AutoCompletions for TMDB browser search
 - added script call for Google AutoCompletions
 - added script calls for TMDB starred/rated movies and TV shows

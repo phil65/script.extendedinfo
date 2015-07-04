@@ -104,11 +104,6 @@ class DialogBaseList(object):
                           start_value=self.search_str,
                           history=self.last_searches)
         dialog.doModal()
-        if dialog.classic_mode:
-            result = xbmcgui.Dialog().input(heading=LANG(16017),
-                                            type=xbmcgui.INPUT_ALPHANUM)
-            if result and result > -1:
-                self.search(result)
         if self.search_str:
             listitem = {"label": self.search_str}
             if listitem in self.last_searches:

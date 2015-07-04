@@ -448,7 +448,9 @@ def get_tmdb_window(window_type):
                 response = get_tmdb_data(url=url,
                                          cache_days=2)
             if self.mode == "list":
-                info = {"listitems": handle_tmdb_movies(response["items"]),
+                info = {"listitems": handle_tmdb_movies(results=response["items"],
+                                                        local_first=True,
+                                                        sortkey=None),
                         "results_per_page": 1,
                         "total_results": len(response["items"])}
                 return info

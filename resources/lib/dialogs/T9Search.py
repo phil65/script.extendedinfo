@@ -38,7 +38,6 @@ class T9Search(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self.get_autocomplete_labels_async()
-        self.classic_mode = False
         self.update_search_label_async()
         listitems = []
         for i, item in enumerate(KEYS):
@@ -128,8 +127,11 @@ class T9Search(xbmcgui.WindowXMLDialog):
             if self.search_str:
                 self.search_str += " "
         elif number == "KEYB":
-            self.classic_mode = True
             self.close()
+            result = xbmcgui.Dialog().input(heading=LANG(16017),
+                                            type=xbmcgui.INPUT_ALPHANUM)
+            if result and result > -1:
+                self.callback(result)
         elif self.previous != letters or time_diff >= 1:
             self.prev_time = now
             self.previous = letters
