@@ -104,7 +104,7 @@
                 <height>222</height>
                 <aspectratio>scale</aspectratio>
                 <animation type="WindowOpen" reversible="false">
-                    <effect type="rotatex" start="-90" end="0" delay="3750" center="300,0" tween="sine" time="750" />
+                    <effect type="rotatex" start="75" end="0" delay="3750" center="300,0" tween="sine" time="750" />
                     <effect type="fade" start="0" end="100" delay="3750" time="0" />
                 </animation>
             </control>
