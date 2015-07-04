@@ -347,7 +347,7 @@
                         <posx>750</posx>
                         <font>font10</font>
                         <textcolor>FFFAFAFA</textcolor>
-                        <label>$INFO[ListItem.Property(User_Rating)]</label>
+                        <label>$INFO[ListItem.Property(User_Rating),[B],[/B]]</label>
                         <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
                     </control>
                 </itemlayout>
@@ -397,7 +397,7 @@
                         <posx>750</posx>
                         <font>font10</font>
                         <textcolor>FFFAFAFA</textcolor>
-                        <label>$INFO[ListItem.Property(User_Rating)]</label>
+                        <label>$INFO[ListItem.Property(User_Rating),[B],[/B]]</label>
                         <visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
                     </control>
                 </focusedlayout>
