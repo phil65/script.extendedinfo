@@ -91,7 +91,7 @@
                 <animation type="WindowOpen" reversible="false">
                     <effect type="slide" start="0,-1000" end="0,0" delay="0" tween="sine" time="1000" />
                     <effect type="fade" start="0" end="100" delay="0" tween="sine" time="2000" />
-                    <effect type="rotatey" start="0" end="55" delay="3000" center="200" tween="sine" time="750" />
+                    <effect type="rotatex" start="0" end="75" delay="3000" center="300,0" tween="sine" time="750" />
                     <effect type="fade" start="100" end="0" delay="3750" time="0" />
                 </animation>
             </control>
@@ -104,7 +104,7 @@
                 <height>222</height>
                 <aspectratio>scale</aspectratio>
                 <animation type="WindowOpen" reversible="false">
-                    <effect type="rotatey" start="55" end="0" delay="3750" center="220,0" tween="sine" time="750" />
+                    <effect type="rotatex" start="-90" end="0" delay="3750" center="300,0" tween="sine" time="750" />
                     <effect type="fade" start="0" end="100" delay="3750" time="0" />
                 </animation>
             </control>
