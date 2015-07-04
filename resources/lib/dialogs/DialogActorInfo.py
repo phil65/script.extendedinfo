@@ -53,6 +53,10 @@ def get_actor_window(window_type):
                               window_id=self.window_id)
             self.fill_lists()
 
+        def onAction(self, action):
+            super(DialogActorInfo, self).onAction(action)
+            ch.serve_action(action, self.getFocusId(), self)
+
         @ch.click(150)
         @ch.click(550)
         def open_movie_info(self):
@@ -88,6 +92,12 @@ def get_actor_window(window_type):
             wm.open_textviewer(header=LANG(32037),
                                text=self.info["biography"],
                                color=self.info['ImageColor'])
+
+        @ch.action("contextmenu", 150)
+        @ch.action("contextmenu", 550)
+        def add_movie_to_account(self):
+            movie_id = self.control.getSelectedItem().getProperty("id")
+            add_movie_to_list(movie_id)
 
         def onClick(self, control_id):
             super(DialogActorInfo, self).onClick(control_id)
