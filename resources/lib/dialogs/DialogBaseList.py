@@ -21,6 +21,7 @@ ch = OnClickHandler()
 class DialogBaseList(object):
 
     def __init__(self, *args, **kwargs):
+        super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
         self.last_searches = deque(maxlen=10)
         self.search_str = kwargs.get('search_str', "")

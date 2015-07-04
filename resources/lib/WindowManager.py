@@ -179,8 +179,8 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        youtube_class = DialogVideoList.get_tmdb_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = youtube_class(LIST_DIALOG_FILE, ADDON_PATH,
+        browser_class = DialogVideoList.get_tmdb_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = browser_class(LIST_DIALOG_FILE, ADDON_PATH,
                                listitems=listitems,
                                color=color,
                                filters=filters,
