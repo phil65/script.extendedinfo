@@ -649,43 +649,6 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     return images
 
 
-def extended_season_info(tvshow_id, season_number):
-    session_str = ""
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
-    tvshow = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                           (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
-    response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
-    if not response:
-        notify("Could not find season info")
-        return None
-    if response.get("name", False):
-        title = response["name"]
-    elif season_number == "0":
-        title = "Specials"
-    else:
-        title = "Season %s" % season_number
-    season = {'SeasonDescription': clean_text(response["overview"]),
-              'Plot': clean_text(response["overview"]),
-              'TVShowTitle': fetch(tvshow, 'name'),
-              'title': title,
-              'release_date': response["air_date"],
-              'AirDate': response["air_date"]}
-    artwork = get_image_urls(poster=response.get("poster_path"))
-    season.update(artwork)
-    if "videos" in response:
-        videos = handle_tmdb_videos(response["videos"]["results"])
-    else:
-        videos = []
-    listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
-                 "crew": handle_tmdb_people(response["credits"]["crew"]),
-                 "videos": videos,
-                 "episodes": handle_tmdb_episodes(response["episodes"]),
-                 "images": handle_tmdb_images(response["images"]["posters"]),
-                 "backdrops": handle_tmdb_images(response["images"].get("backdrops", []))}
-    return (season, listitems)
-
-
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = get_imdb_id_from_db("movie", dbid)
@@ -888,17 +851,41 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     return (tvshow, listitems, account_states)
 
 
-def translate_status(status_string):
-    translations = {"released": LANG(32071),
-                    "post production": LANG(32072),
-                    "in production": LANG(32073),
-                    "ended": LANG(32074),
-                    "returning series": LANG(32075),
-                    "planned": LANG(32076)}
-    if status_string.lower() in translations:
-        return translations[status_string.lower()]
+def extended_season_info(tvshow_id, season_number):
+    session_str = ""
+    if check_login():
+        session_str = "session_id=%s&" % (get_session_id())
+    tvshow = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
+                           (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
+    response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
+    if not response:
+        notify("Could not find season info")
+        return None
+    if response.get("name", False):
+        title = response["name"]
+    elif season_number == "0":
+        title = "Specials"
     else:
-        return status_string
+        title = "Season %s" % season_number
+    season = {'SeasonDescription': clean_text(response["overview"]),
+              'Plot': clean_text(response["overview"]),
+              'TVShowTitle': fetch(tvshow, 'name'),
+              'title': title,
+              'release_date': response["air_date"],
+              'AirDate': response["air_date"]}
+    artwork = get_image_urls(poster=response.get("poster_path"))
+    season.update(artwork)
+    if "videos" in response:
+        videos = handle_tmdb_videos(response["videos"]["results"])
+    else:
+        videos = []
+    listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
+                 "crew": handle_tmdb_people(response["credits"]["crew"]),
+                 "videos": videos,
+                 "episodes": handle_tmdb_episodes(response["episodes"]),
+                 "images": handle_tmdb_images(response["images"]["posters"]),
+                 "backdrops": handle_tmdb_images(response["images"].get("backdrops", []))}
+    return (season, listitems)
 
 
 def extended_episode_info(tvshow_id, season, episode, cache_time=7):
@@ -936,6 +923,19 @@ def extended_actor_info(actor_id):
     info = handle_tmdb_people([response])[0]
     info["DBMovies"] = str(len([d for d in listitems["movie_roles"] if "dbid" in d]))
     return (info, listitems)
+
+
+def translate_status(status_string):
+    translations = {"released": LANG(32071),
+                    "post production": LANG(32072),
+                    "in production": LANG(32073),
+                    "ended": LANG(32074),
+                    "returning series": LANG(32075),
+                    "planned": LANG(32076)}
+    if status_string.lower() in translations:
+        return translations[status_string.lower()]
+    else:
+        return status_string
 
 
 def get_movie_lists(list_id):
