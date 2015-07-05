@@ -559,14 +559,13 @@ def get_file(url):
         return ""
     if not data:
         return ""
+    if url.endswith(".png"):
+        image = cache_file_png
+    else:
+        image = cache_file_jpg
     try:
-        if url.endswith(".png"):
-            image = cache_file_png
-        else:
-            image = cache_file_jpg
-        tmp_file = open(xbmc.translatePath(image), 'wb')
-        tmp_file.write(data)
-        tmp_file.close()
+        with open(xbmc.translatePath(image), "wb") as f:
+            f.write(data)
         return xbmc.translatePath(image)
     except:
         log('failed to save image ' + url)
