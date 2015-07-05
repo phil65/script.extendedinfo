@@ -23,11 +23,11 @@ def get_season_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogSeasonInfo, self).__init__(*args, **kwargs)
             self.type = "Season"
-            self.tmdb_id = kwargs.get('id')
+            self.tvshow_id = kwargs.get('id')
             self.season = kwargs.get('season')
-            if not self.season or not self.tmdb_id:
+            if not self.season or not self.tvshow_id:
                 return None
-            data = extended_season_info(tvshow_id=self.tmdb_id,
+            data = extended_season_info(tvshow_id=self.tvshow_id,
                                         season_number=self.season)
             if data:
                 self.info, self.data = data
@@ -74,7 +74,7 @@ def get_season_window(window_type):
         def open_episode_info(self):
             wm.open_episode_info(prev_window=self,
                                  tvshow=self.info["TVShowTitle"],
-                                 tvshow_id=self.tmdb_id,
+                                 tvshow_id=self.tvshow_id,
                                  season=self.control.getSelectedItem().getProperty("season"),
                                  episode=self.control.getSelectedItem().getProperty("episode"))
 

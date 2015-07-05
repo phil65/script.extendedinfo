@@ -25,10 +25,12 @@ def get_episode_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
             self.type = "Episode"
-            self.tmdb_id = kwargs.get('show_id')
+            self.tvshow_id = kwargs.get('show_id')
             self.season = kwargs.get('season')
             self.episode_number = kwargs.get('episode')
-            data = extended_episode_info(tvshow_id=self.tmdb_id,
+            if not self.tvshow_id or not self.season or not self.episode_number:
+                return None
+            data = extended_episode_info(tvshow_id=self.tvshow_id,
                                          season=self.season,
                                          episode=self.episode_number)
             if data:
@@ -70,7 +72,7 @@ def get_episode_window(window_type):
         @ch.click(6001)
         def set_rating_dialog(self):
             if set_rating_prompt(media_type="episode",
-                                 media_id=[self.tmdb_id, self.season, self.info["episode"]]):
+                                 media_id=[self.tvshow_id, self.season, self.info["episode"]]):
                 self.update_states()
 
         @ch.click(6006)
@@ -88,7 +90,7 @@ def get_episode_window(window_type):
         def update_states(self, force_update=True):
             if force_update:
                 xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-                _, __, self.account_states = extended_episode_info(tvshow_id=self.tmdb_id,
+                _, __, self.account_states = extended_episode_info(tvshow_id=self.tvshow_id,
                                                                    season=self.season,
                                                                    episode=self.episode_number,
                                                                    cache_time=0)
