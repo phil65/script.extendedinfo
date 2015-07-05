@@ -195,7 +195,7 @@ def start_info_actions(infos, params):
             if params.get("director"):
                 director_info = get_person_info(person_label=params["director"],
                                                 skip_dialog=True)
-                if director_info.get("id"):
+                if director_info and director_info.get("id"):
                     movies = get_person_movies(director_info["id"])
                     for item in movies:
                         del item["credit_id"]
@@ -204,7 +204,7 @@ def start_info_actions(infos, params):
             if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
                 writer_info = get_person_info(person_label=params["writer"],
                                               skip_dialog=True)
-                if writer_info.get("id"):
+                if writer_info and writer_info.get("id"):
                     movies = get_person_movies(writer_info["id"])
                     for item in movies:
                         del item["credit_id"]
