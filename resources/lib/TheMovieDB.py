@@ -649,17 +649,13 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     return images
 
 
-def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
-    if not tmdb_tvshow_id:
-        response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow_name), SETTING("LanguageID")), 30)
-        if response["results"]:
-            tmdb_tvshow_id = str(response['results'][0]['id'])
-        else:
-            tvshow_name = re.sub('\(.*?\)', '', tvshow_name)
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow_name), SETTING("LanguageID")), 30)
-            if response["results"]:
-                tmdb_tvshow_id = str(response['results'][0]['id'])
-    response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tmdb_tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
+def extended_season_info(tvshow_id, season_number):
+    session_str = ""
+    if check_login():
+        session_str = "session_id=%s&" % (get_session_id())
+    tvshow = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
+                           (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
+    response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
     if not response:
         notify("Could not find season info")
         return None
@@ -671,7 +667,7 @@ def extended_season_info(tmdb_tvshow_id, tvshow_name, season_number):
         title = "Season %s" % season_number
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
-              'TVShowTitle': tvshow_name,
+              'TVShowTitle': fetch(tvshow, 'name'),
               'title': title,
               'release_date': response["air_date"],
               'AirDate': response["air_date"]}

@@ -113,12 +113,24 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
         """
+        xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogSeasonInfo
+        from TheMovieDB import get_tmdb_data
+        if not tvshow_id:
+            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+            if response["results"]:
+                tvshow_id = str(response['results'][0]['id'])
+            else:
+                tvshow = re.sub('\(.*?\)', '', tvshow)
+                response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+                if response["results"]:
+                    tvshow_id = str(response['results'][0]['id'])
+
         season_class = DialogSeasonInfo.get_season_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = season_class(INFO_DIALOG_FILE, ADDON_PATH,
                               id=tvshow_id,
-                              season=season,
-                              tvshow=tvshow)
+                              season=season)
+        xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None, tvshow=None):

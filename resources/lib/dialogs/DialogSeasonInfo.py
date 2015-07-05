@@ -20,17 +20,14 @@ def get_season_window(window_type):
 
     class DialogSeasonInfo(DialogBaseInfo, window_type):
 
-        @busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogSeasonInfo, self).__init__(*args, **kwargs)
             self.type = "Season"
             self.tmdb_id = kwargs.get('id')
             self.season = kwargs.get('season')
-            self.tvshow = kwargs.get('tvshow')
-            if not self.season or not (self.tmdb_id and self.tvshow):
+            if not self.season or not self.tmdb_id:
                 return None
-            data = extended_season_info(tmdb_tvshow_id=self.tmdb_id,
-                                        tvshow_name=self.tvshow,
+            data = extended_season_info(tvshow_id=self.tmdb_id,
                                         season_number=self.season)
             if data:
                 self.info, self.data = data
@@ -76,7 +73,7 @@ def get_season_window(window_type):
         @ch.click(2000)
         def open_episode_info(self):
             wm.open_episode_info(prev_window=self,
-                                 tvshow=self.tvshow,
+                                 tvshow=self.info["TVShowTitle"],
                                  tvshow_id=self.tmdb_id,
                                  season=self.control.getSelectedItem().getProperty("season"),
                                  episode=self.control.getSelectedItem().getProperty("episode"))
