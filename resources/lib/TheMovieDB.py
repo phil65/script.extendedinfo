@@ -535,9 +535,9 @@ def search_company(company_name):
     regex = re.compile('\(.+?\)')
     company_name = regex.sub('', company_name)
     response = get_tmdb_data("search/company?query=%s&" % url_quote(company_name), 10)
-    try:
+    if response and "results" in response:
         return response["results"]
-    except:
+    else:
         log("Could not find company ID for %s" % company_name)
         return ""
 
@@ -665,9 +665,9 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
 
 def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     response = get_tmdb_data("find/%s?external_source=%s&language=%s&" % (tvdb_id, source, SETTING("LanguageID")), 30)
-    try:
+    if response and response["tv_results"]:
         return response["tv_results"][0]["id"]
-    except:
+    else:
         notify("TVShow Info not available.")
         return None
 
