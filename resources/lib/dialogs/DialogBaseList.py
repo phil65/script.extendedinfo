@@ -9,8 +9,6 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
 from T9Search import T9Search
-from collections import deque
-import ast
 from ..OnClickHandler import OnClickHandler
 from .. import VideoPlayer
 
@@ -23,7 +21,6 @@ class DialogBaseList(object):
     def __init__(self, *args, **kwargs):
         super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
-        self.last_searches = deque(maxlen=10)
         self.search_str = kwargs.get('search_str', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
@@ -96,20 +93,11 @@ class DialogBaseList(object):
 
     @ch.click(6000)
     def open_search(self):
-        settings_value = SETTING(self.__class__.__name__ + ".search")
-        if settings_value:
-            self.last_searches = deque(ast.literal_eval(settings_value), maxlen=10)
         dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
                           call=self.search,
                           start_value="",
-                          history=self.last_searches)
+                          history=self.__class__.__name__ + ".search")
         dialog.doModal()
-        if self.search_str:
-            listitem = {"label": self.search_str}
-            if listitem in self.last_searches:
-                self.last_searches.remove(listitem)
-            self.last_searches.appendleft(listitem)
-            ADDON.setSetting(self.__class__.__name__ + ".search", str(list(self.last_searches)))
         if self.total_items > 0:
             self.setFocusId(500)
 

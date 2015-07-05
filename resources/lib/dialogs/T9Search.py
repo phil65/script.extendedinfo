@@ -7,6 +7,8 @@ import time
 from threading import Timer
 import xbmcgui
 from ..Utils import *
+from collections import deque
+import ast
 from ..OnClickHandler import OnClickHandler
 ch = OnClickHandler()
 
@@ -30,11 +32,15 @@ class T9Search(xbmcgui.WindowXMLDialog):
     def __init__(self, *args, **kwargs):
         self.callback = kwargs.get("call")
         self.search_str = kwargs.get("start_value", "")
-        self.last_searches = kwargs.get("history", "")
         self.previous = False
         self.prev_time = 0
         self.timer = None
         self.color_timer = None
+        self.setting_name = kwargs.get("history")
+        if self.setting_name:
+            self.last_searches = deque(ast.literal_eval(SETTING(self.setting_name)), maxlen=10)
+        else:
+            self.last_searches = deque(maxlen=10)
 
     def onInit(self):
         self.get_autocomplete_labels_async()
@@ -76,6 +82,12 @@ class T9Search(xbmcgui.WindowXMLDialog):
     @ch.action("parentfolder", "*")
     @ch.action("previousmenu", "*")
     def close_dialog(self):
+        if self.search_str:
+            listitem = {"label": self.search_str}
+            if listitem in self.last_searches:
+                self.last_searches.remove(listitem)
+            self.last_searches.appendleft(listitem)
+            ADDON.setSetting(self.setting_name, str(list(self.last_searches)))
         self.close()
 
     @ch.action("number0", "*")
