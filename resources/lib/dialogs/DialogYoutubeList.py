@@ -208,7 +208,7 @@ def get_youtube_window(window_type):
         def context_menu(self):
             listitem = self.control.getSelectedItem()
             if self.type == "video":
-                more_vids = "More videos from [B]%s[/B]" % listitem.getProperty("channel_title")
+                more_vids = "%s [B]%s[/B]" % (ADDON.getLocalizedString(32081), listitem.getProperty("channel_title"))
                 listitems = [LANG(32069), more_vids]
                 selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                     list=listitems)

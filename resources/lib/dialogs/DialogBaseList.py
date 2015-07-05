@@ -96,9 +96,9 @@ class DialogBaseList(object):
 
     @ch.click(6000)
     def open_search(self):
-        settings_str = SETTING(self.__class__.__name__ + ".search")
-        if settings_str:
-            self.last_searches = deque(ast.literal_eval(settings_str), maxlen=10)
+        settings_value = SETTING(self.__class__.__name__ + ".search")
+        if settings_value:
+            self.last_searches = deque(ast.literal_eval(settings_value), maxlen=10)
         dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
                           call=self.search,
                           start_value="",
@@ -109,8 +109,7 @@ class DialogBaseList(object):
             if listitem in self.last_searches:
                 self.last_searches.remove(listitem)
             self.last_searches.appendleft(listitem)
-            setting_str = str(list(self.last_searches))
-            ADDON.setSetting(self.__class__.__name__ + ".search", setting_str)
+            ADDON.setSetting(self.__class__.__name__ + ".search", str(list(self.last_searches)))
         if self.total_items > 0:
             self.setFocusId(500)
 
