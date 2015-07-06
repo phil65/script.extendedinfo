@@ -681,12 +681,13 @@ def read_from_file(path="", raw=False):
     if not xbmcvfs.exists(path):
         return False
     try:
-        f = open(path)
-        log("opened textfile %s." % (path))
-        if not raw:
-            return simplejson.load(f)
-        else:
-            return f.read()
+        with open(path) as f:
+            log("opened textfile %s." % (path))
+            if not raw:
+                result = simplejson.load(f)
+            else:
+                result = f.read()
+        return result
     except:
         log("failed to load textfile: " + path)
         return False
