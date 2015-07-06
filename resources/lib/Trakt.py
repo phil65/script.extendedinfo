@@ -123,7 +123,6 @@ def handle_trakt_tvshows(results):
                 'path': path,
                 'AirDay': fetch(airs, "day"),
                 'AirShortTime': fetch(airs, "time"),
-                'Label2': fetch(airs, "day") + " " + fetch(airs, "time"),
                 'Premiered': tvshow['show']["first_aired"][:10],
                 'Country': tvshow['show']["country"],
                 'Rating': round(tvshow['show']["rating"], 1),

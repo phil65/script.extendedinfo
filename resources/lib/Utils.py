@@ -831,6 +831,8 @@ def create_listitems(data=None, preload_images=0):
                         image_requests.append(value)
             if key.lower() in ["name", "label"]:
                 listitem.setLabel(value)
+            if key.lower() in ["label2"]:
+                listitem.setLabel2(value)
             elif key.lower() in ["title"]:
                 listitem.setLabel(value)
                 listitem.setInfo('video', {key.lower(): value})

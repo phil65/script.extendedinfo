@@ -47,12 +47,14 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.update_search_label_async()
         listitems = []
         for i, item in enumerate(KEYS):
-            li = xbmcgui.ListItem("[B]%s[/B]" % item[0], item[1])
-            li.setProperty("key", item[0])
-            li.setProperty("value", item[1])
-            li.setProperty("index", str(i))
+            li = {"label": "[B]%s[/B]" % item[0],
+                  "label2": item[1],
+                  "key": item[0],
+                  "value": item[1],
+                  "index": str(i)
+                  }
             listitems.append(li)
-        self.getControl(9090).addItems(listitems)
+        self.getControl(9090).addItems(create_listitems(listitems))
         self.setFocusId(9090)
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
 

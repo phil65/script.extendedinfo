@@ -27,7 +27,6 @@ def handle_audiodb_albums(results):
             if 'strReview' in album and album['strReview']:
                 description += "[CR][CR][B]" + LANG(185) + ":[/B][CR][CR]" + album['strReview']
             album = {'artist': album['strArtist'],
-                     'Label2': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
                      'id': album['idAlbum'],
                      'audiodb_id': album['idAlbum'],
