@@ -82,12 +82,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
     @ch.action("parentfolder", "*")
     @ch.action("previousmenu", "*")
     def close_dialog(self):
-        if self.search_str:
-            listitem = {"label": self.search_str}
-            if listitem in self.last_searches:
-                self.last_searches.remove(listitem)
-            self.last_searches.appendleft(listitem)
-            ADDON.setSetting(self.setting_name, str(list(self.last_searches)))
+        self.save_autocomplete()
         self.close()
 
     @ch.action("number0", "*")
@@ -129,6 +124,14 @@ class T9Search(xbmcgui.WindowXMLDialog):
             listitems = list(self.last_searches)
         self.getControl(9091).addItems(create_listitems(listitems))
 
+    def save_autocomplete(self):
+        if self.search_str:
+            listitem = {"label": self.search_str}
+            if listitem in self.last_searches:
+                self.last_searches.remove(listitem)
+            self.last_searches.appendleft(listitem)
+            ADDON.setSetting(self.setting_name, str(list(self.last_searches)))
+
     def set_t9_letter(self, letters, number, button):
         now = time.time()
         time_diff = now - self.prev_time
@@ -164,6 +167,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
                                         type=xbmcgui.INPUT_ALPHANUM)
         if result and result > -1:
             self.callback(result)
+            self.save_autocomplete()
 
     def search(self, search_str):
         self.callback(search_str)
