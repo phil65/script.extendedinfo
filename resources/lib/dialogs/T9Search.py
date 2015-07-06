@@ -75,7 +75,7 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.get_autocomplete_labels_async()
         if self.timer:
             self.timer.cancel()
-        self.timer = Timer(0.0, self.callback, (self.search_str,))
+        self.timer = Timer(0.0, self.search, (self.search_str,))
         self.timer.start()
 
     @ch.action("parentdir", "*")
@@ -133,17 +133,12 @@ class T9Search(xbmcgui.WindowXMLDialog):
         now = time.time()
         time_diff = now - self.prev_time
         if number == "DEL":
-            if self.search_str:
-                self.search_str = self.search_str[:-1]
+            self.search_str = self.search_str[:-1]
         elif number == " ":
             if self.search_str:
                 self.search_str += " "
         elif number == "KEYB":
-            self.close()
-            result = xbmcgui.Dialog().input(heading=LANG(16017),
-                                            type=xbmcgui.INPUT_ALPHANUM)
-            if result and result > -1:
-                self.callback(result)
+            self.use_classic_search()
         elif self.previous != letters or time_diff >= 1:
             self.prev_time = now
             self.previous = letters
@@ -158,10 +153,20 @@ class T9Search(xbmcgui.WindowXMLDialog):
             self.color_labels(idx, letters, button)
         if self.timer:
             self.timer.cancel()
-        self.timer = Timer(1.0, self.callback, (self.search_str,))
+        self.timer = Timer(1.0, self.search, (self.search_str,))
         self.timer.start()
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
         self.get_autocomplete_labels_async()
+
+    def use_classic_search(self):
+        self.close()
+        result = xbmcgui.Dialog().input(heading=LANG(16017),
+                                        type=xbmcgui.INPUT_ALPHANUM)
+        if result and result > -1:
+            self.callback(result)
+
+    def search(self, search_str):
+        self.callback(search_str)
 
     def color_labels(self, index, letters, button):
         letter = letters[index]
