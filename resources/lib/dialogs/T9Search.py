@@ -12,7 +12,7 @@ import ast
 from ..OnClickHandler import OnClickHandler
 ch = OnClickHandler()
 
-# (index on panel, 1st label, 2nd label)
+# (1st label, 2nd label)
 KEYS = (("1", "ABC1"),
         ("2", "DEF2"),
         ("3", "GHI3"),

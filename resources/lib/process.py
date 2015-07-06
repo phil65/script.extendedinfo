@@ -302,6 +302,14 @@ def start_info_actions(infos, params):
             data = get_sort_letters(params["path"], params.get("id", "")), "SortLetters"
 
         # ACTIONS
+        elif info == 't9input':
+            from dialogs.T9Search import T9Search
+            dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
+                              call=None,
+                              start_value="")
+            dialog.doModal()
+            get_kodi_json(method="Input.SendText",
+                          params='{"text":"%s", "done":true}' % dialog.search_str)
 
         elif info == 'playmovie':
             resolve_url(params.get("handle"))
@@ -369,13 +377,20 @@ def start_info_actions(infos, params):
             HOME.clearProperty('infodialogs.active')
         elif info == 'seasoninfo':
             resolve_url(params.get("handle"))
-            if params.get("tvshow") and params.get("season"):
-                HOME.setProperty('infodialogs.active', "true")
-                wm.open_season_info(tvshow=params["tvshow"],
-                                    season=params["season"])
-                HOME.clearProperty('infodialogs.active')
-            else:
-                notify("Error", "Required data missing in script call")
+            HOME.setProperty('infodialogs.active', "true")
+            wm.open_season_info(tvshow=params.get("tvshow"),
+                                dbid=params.get("dbid"),
+                                season=params.get("season"))
+            HOME.clearProperty('infodialogs.active')
+        elif info == 'extendedepisodeinfo':
+            resolve_url(params.get("handle"))
+            HOME.setProperty('infodialogs.active', "true")
+            wm.open_episode_info(tvshow=params.get("tvshow"),
+                                 tvshow_id=params.get("tvshow_id"),
+                                 dbid=params.get("dbid"),
+                                 episode=params.get("episode"),
+                                 season=params.get("season"))
+            HOME.clearProperty('infodialogs.active')
         elif info == 'albuminfo':
             resolve_url(params.get("handle"))
             if params.get("id", ""):
