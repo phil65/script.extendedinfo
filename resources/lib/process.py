@@ -303,6 +303,7 @@ def start_info_actions(infos, params):
 
         # ACTIONS
         elif info == 't9input':
+            resolve_url(params.get("handle"))
             from dialogs.T9Search import T9Search
             dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
                               call=None,
