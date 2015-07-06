@@ -531,7 +531,6 @@ def handle_tmdb_companies(results):
 
 
 def search_company(company_name):
-    import re
     regex = re.compile('\(.+?\)')
     company_name = regex.sub('', company_name)
     response = get_tmdb_data("search/company?query=%s&" % url_quote(company_name), 10)

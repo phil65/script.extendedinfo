@@ -143,7 +143,9 @@ def get_tmdb_window(window_type):
                     # xbmc.sleep(2000)
                     # self.update(force_update=True)
             elif selection == 3:
-                change_list_status(self.list_id, item_id, False)
+                change_list_status(list_id=self.list_id,
+                                   movie_id=item_id,
+                                   status=False)
                 self.update(force_update=True)
 
         @ch.click(5001)
