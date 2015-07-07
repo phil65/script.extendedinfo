@@ -37,8 +37,9 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.timer = None
         self.color_timer = None
         self.setting_name = kwargs.get("history")
-        if self.setting_name:
-            self.last_searches = deque(ast.literal_eval(SETTING(self.setting_name)), maxlen=10)
+        setting_string = SETTING(self.setting_name)
+        if self.setting_name and setting_string:
+            self.last_searches = deque(ast.literal_eval(setting_string), maxlen=10)
         else:
             self.last_searches = deque(maxlen=10)
 
