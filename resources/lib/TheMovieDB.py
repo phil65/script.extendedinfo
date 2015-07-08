@@ -47,13 +47,11 @@ def set_rating_prompt(media_type, media_id):
         return False
     ratings = [str(float(i * 0.5)) for i in range(1, 21)]
     rating = xbmcgui.Dialog().select(LANG(32129), ratings)
-    if rating > -1:
-        rating = (float(rating) * 0.5) + 0.5
-    else:
+    if rating == -1:
         return False
     set_rating(media_type=media_type,
                media_id=media_id,
-               rating=rating)
+               rating=(float(rating) * 0.5) + 0.5)
     return True
 
 
