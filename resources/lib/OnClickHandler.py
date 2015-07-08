@@ -246,7 +246,7 @@ class OnClickHandler():
             try:
                 wnd.control = wnd.getControl(control_id)
             except:
-                pass
+                wnd.control = None
             return view_function(wnd)
         # else:
         #     raise ValueError('OnClick for "{}"" has not been registered'.format(control_id))
@@ -257,7 +257,7 @@ class OnClickHandler():
         try:
             wnd.control = wnd.getControl(control_id)
         except:
-            pass
+            wnd.control = None
         if action.getId() not in self.action_maps:
             return None
         dct = self.action_maps[action.getId()]
