@@ -59,6 +59,7 @@ def busy_dialog(func):
     Only one of the decorated functions may run simultaniously
     """
 
+    @wraps(func)
     def decorator(self, *args, **kwargs):
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         result = func(self, *args, **kwargs)
