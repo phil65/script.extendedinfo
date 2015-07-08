@@ -42,26 +42,19 @@ def check_login():
     return ""
 
 
-def get_rating_from_user():
+def set_rating_prompt(media_type, media_id):
+    if not media_type or not media_id:
+        return False
     ratings = [str(float(i * 0.5)) for i in range(1, 21)]
     rating = xbmcgui.Dialog().select(LANG(32129), ratings)
     if rating > -1:
-        return (float(rating) * 0.5) + 0.5
+        rating = (float(rating) * 0.5) + 0.5
     else:
-        return None
-
-
-def set_rating_prompt(media_type, media_id):
-    if not media_type or not media_id:
-        return None
-    rating = get_rating_from_user()
-    if not rating:
-        return None
-    else:
-        set_rating(media_type=media_type,
-                   media_id=media_id,
-                   rating=rating)
-        return True
+        return False
+    set_rating(media_type=media_type,
+               media_id=media_id,
+               rating=rating)
+    return True
 
 
 def set_rating(media_type, media_id, rating):
