@@ -242,26 +242,30 @@ class OnClickHandler():
     def serve(self, control_id, wnd):
         view_function = self.clicks.get(control_id)
         if view_function:
-            wnd.control = wnd.getControl(control_id)
             wnd.control_id = control_id
+            try:
+                wnd.control = wnd.getControl(control_id)
+            except:
+                pass
             return view_function(wnd)
         # else:
         #     raise ValueError('OnClick for "{}"" has not been registered'.format(control_id))
 
     def serve_action(self, action, control_id, wnd):
         wnd.action_id = action.getId()
+        wnd.control_id = control_id
+        try:
+            wnd.control = wnd.getControl(control_id)
+        except:
+            pass
         if action.getId() not in self.action_maps:
             return None
-        wnd.control = wnd.getControl(control_id)
-        wnd.control_id = control_id
         dct = self.action_maps[action.getId()]
         all_func = dct.get("*")
         if all_func:
             all_func(wnd)
         ctl_func = dct.get(control_id)
         if ctl_func:
-            wnd.control = wnd.getControl(control_id)
-            wnd.control_id = control_id
             return ctl_func(wnd)
         # else:
         #     raise ValueError('Context Menu for "{}"" has not been registered'.format(control_id))
