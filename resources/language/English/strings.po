@@ -92,7 +92,7 @@ msgid "Place of birth"
 msgstr ""
 
 msgctxt "#32015"
-msgid "Adult Actor"
+msgid "Adult actor"
 msgstr ""
 
 msgctxt "#32016"
@@ -136,7 +136,7 @@ msgid "Episode index"
 msgstr ""
 
 msgctxt "#32026"
-msgid "Related TheMovieDB lists"
+msgid "Related movie lists"
 msgstr ""
 
 msgctxt "#32027"
@@ -158,7 +158,7 @@ msgid "Movie appearances"
 msgstr ""
 
 msgctxt "#32031"
-msgid "TV Show appearances"
+msgid "TV show appearances"
 msgstr ""
 
 #: /plugin.py:58
@@ -322,7 +322,7 @@ msgstr ""
 
 #: \resources\lib\DialogYoutubeList.py:131
 msgctxt "#32065"
-msgid "One Year"
+msgid "One year"
 msgstr ""
 
 #: \resources\skins\Default\1080i\script-ExtendedInfo
@@ -349,7 +349,7 @@ msgstr ""
 #: \resources\lib\VideoPlayer.py:56 \resources\lib\DialogVideoInfo.py:133
 #: \resources\lib\DialogVideoInfo.py:145
 msgctxt "#32070"
-msgid "Youtube Video"
+msgid "Youtube video"
 msgstr ""
 
 #: \resources\lib\TheMovieDB.py:870
@@ -499,7 +499,7 @@ msgid "Movie actor roles"
 msgstr ""
 
 msgctxt "#32121"
-msgid "TV Show Roles"
+msgid "TV show roles"
 msgstr ""
 
 msgctxt "#32122"
@@ -507,7 +507,7 @@ msgid "Movie crew member"
 msgstr ""
 
 msgctxt "#32123"
-msgid "TV Show crew member"
+msgid "TV show crew member"
 msgstr ""
 
 msgctxt "#32124"
@@ -592,11 +592,11 @@ msgid "Could not find item at MovieDB"
 msgstr ""
 
 msgctxt "#32144"
-msgid "Starred TV Shows"
+msgid "Starred TV shows"
 msgstr ""
 
 msgctxt "#32145"
-msgid "Rated TV Shows"
+msgid "Rated TV shows"
 msgstr ""
 
 msgctxt "#32146"
@@ -604,11 +604,11 @@ msgid "Search for '%s'"
 msgstr ""
 
 msgctxt "#32147"
-msgid "Show actor TV Show appearances"
+msgid "Show actor TV show appearances"
 msgstr ""
 
 msgctxt "#32148"
-msgid "Show TV Show information"
+msgid "Show TV show information"
 msgstr ""
 
 msgctxt "#32149"
@@ -693,5 +693,5 @@ msgid "Releases"
 msgstr ""
 
 msgctxt "#32169"
-msgid "Rate TV Show"
+msgid "Rate TV show"
 msgstr ""
