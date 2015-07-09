@@ -248,7 +248,7 @@
                                 </control>
                             </control>
                             <control type="radiobutton" id="6003">
-                                <label>$INFO[Window.Property(FavButton_Label)]</label>
+                                <label>$INFO[Window.Property(movie.FavButton_Label)]</label>
                                 <onleft>6001</onleft>
                                 <textureradioonfocus colordiffuse="FFFAFAFA">icons/starminus.png</textureradioonfocus>
                                 <textureradioofffocus colordiffuse="FFFAFAFA">icons/star.png</textureradioofffocus>
