@@ -245,9 +245,12 @@ class OnClickHandler():
             wnd.control_id = control_id
             try:
                 wnd.control = wnd.getControl(control_id)
-                wnd.listitem = wnd.control.getSelectedItem()
             except:
                 wnd.control = None
+            try:
+                wnd.listitem = wnd.control.getSelectedItem()
+            except:
+                wnd.listitem = None
             return view_function(wnd)
         # else:
         #     raise ValueError('OnClick for "{}"" has not been registered'.format(control_id))
@@ -257,9 +260,12 @@ class OnClickHandler():
         wnd.control_id = control_id
         try:
             wnd.control = wnd.getControl(control_id)
-            wnd.listitem = wnd.control.getSelectedItem()
         except:
             wnd.control = None
+        try:
+            wnd.listitem = wnd.control.getSelectedItem()
+        except:
+            wnd.listitem = None
         if action.getId() not in self.action_maps:
             return None
         dct = self.action_maps[action.getId()]
