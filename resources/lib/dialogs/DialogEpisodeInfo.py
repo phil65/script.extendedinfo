@@ -56,6 +56,7 @@ def get_episode_window(window_type):
             super(DialogEpisodeInfo, self).onInit()
             pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
             self.fill_lists()
+            super(DialogEpisodeInfo, self).update_states()
 
         @ch.click(750)
         @ch.click(1000)
@@ -87,13 +88,12 @@ def get_episode_window(window_type):
             super(DialogEpisodeInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        def update_states(self, force_update=True):
-            if force_update:
-                xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-                _, __, self.account_states = extended_episode_info(tvshow_id=self.tvshow_id,
-                                                                   season=self.season,
-                                                                   episode=self.episode_number,
-                                                                   cache_time=0)
+        def update_states(self):
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            _, __, self.account_states = extended_episode_info(tvshow_id=self.tvshow_id,
+                                                               season=self.season,
+                                                               episode=self.episode_number,
+                                                               cache_time=0)
             super(DialogEpisodeInfo, self).update_states()
 
     return DialogEpisodeInfo

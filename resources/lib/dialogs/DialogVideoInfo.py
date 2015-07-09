@@ -80,7 +80,7 @@ def get_movie_window(window_type):
             pass_dict_to_skin(data=self.setinfo,
                               prefix="movie.set.",
                               window_id=self.window_id)
-            self.update_states(False)
+            super(DialogVideoInfo, self).update_states()
             self.join_omdb = JoinOmdbThread(self.omdb_thread, self.window_id)
             self.join_omdb.start()
 
@@ -271,10 +271,9 @@ def get_movie_window(window_type):
             misc_lists = [item for item in lists if item["id"] not in id_list]
             return own_lists + misc_lists
 
-        def update_states(self, force_update=True):
-            if force_update:
-                xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-                _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
+        def update_states(self):
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
             super(DialogVideoInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):

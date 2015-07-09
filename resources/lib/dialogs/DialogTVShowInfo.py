@@ -62,7 +62,7 @@ def get_tvshow_window(window_type):
                               prefix="movie.",
                               window_id=self.window_id)
             self.fill_lists()
-            self.update_states(False)
+            super(DialogTVShowInfo, self).update_states()
 
         def onClick(self, control_id):
             super(DialogTVShowInfo, self).onClick(control_id)
@@ -198,12 +198,11 @@ def get_tvshow_window(window_type):
                                text=self.info["Plot"],
                                color=self.info['ImageColor'])
 
-        def update_states(self, force_update=True):
-            if force_update:
-                xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-                _, __, self.account_states = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                                                  cache_time=0,
-                                                                  dbid=self.dbid)
+        def update_states(self):
+            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+            _, __, self.account_states = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                                              cache_time=0,
+                                                              dbid=self.dbid)
             super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo
