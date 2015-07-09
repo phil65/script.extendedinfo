@@ -275,19 +275,7 @@ def get_movie_window(window_type):
             if force_update:
                 xbmc.sleep(2000)  # delay because MovieDB takes some time to update
                 _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
-            if not self.account_states:
-                return None
-            if self.account_states["favorite"]:
-                self.window.setProperty("FavButton_Label", LANG(32155))
-                self.window.setProperty("movie.favorite", "True")
-            else:
-                self.window.setProperty("FavButton_Label", LANG(32154))
-                self.window.setProperty("movie.favorite", "")
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
+            super(DialogVideoInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
             listitems = ["%s (%i)" % (d["name"], d["item_count"]) for d in account_lists]

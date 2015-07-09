@@ -201,22 +201,9 @@ def get_tvshow_window(window_type):
         def update_states(self, force_update=True):
             if force_update:
                 xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-                _, __, updated_state = extended_tvshow_info(tvshow_id=self.tmdb_id,
-                                                            cache_time=0,
-                                                            dbid=self.dbid)
-                self.account_states = updated_state
-            if not self.account_states:
-                return None
-            if self.account_states["favorite"]:
-                self.window.setProperty("FavButton_Label", LANG(32155))
-                self.window.setProperty("movie.favorite", "True")
-            else:
-                self.window.setProperty("FavButton_Label", LANG(32154))
-                self.window.setProperty("movie.favorite", "")
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
-            self.window.setProperty("movie.watchlist", str(self.account_states["watchlist"]))
+                _, __, self.account_states = extended_tvshow_info(tvshow_id=self.tmdb_id,
+                                                                  cache_time=0,
+                                                                  dbid=self.dbid)
+            super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo

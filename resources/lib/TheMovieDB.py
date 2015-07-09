@@ -595,6 +595,23 @@ def get_credit_info(credit_id):
     return get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
 
 
+def get_account_props(account_states):
+    props = {}
+    if account_states.get("favorite"):
+        props["FavButton_Label"] = LANG(32155)
+        props["favorite"] = "True"
+    else:
+        props["FavButton_Label"] = LANG(32154)
+        props["favorite"] = ""
+    if account_states["rated"]:
+        props["rated"] = str(account_states["rated"]["value"])
+    else:
+        props["rated"] = ""
+    if "watchlist" in account_states:
+        props["watchlist"] = str(account_states["watchlist"])
+    return props
+
+
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     images = {}
     if poster:

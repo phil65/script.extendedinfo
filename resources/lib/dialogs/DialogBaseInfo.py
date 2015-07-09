@@ -132,3 +132,10 @@ class DialogBaseInfo(object):
                                 season=listitems[index]["season"],
                                 tvshow_id=info["media"]["id"])
 
+    def update_states(self):
+        if not self.account_states:
+            return None
+        props = get_account_props(self.account_states)
+        pass_dict_to_skin(data=props,
+                          prefix="movie.",
+                          window_id=self.window_id)

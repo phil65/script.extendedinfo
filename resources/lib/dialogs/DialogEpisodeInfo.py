@@ -94,11 +94,6 @@ def get_episode_window(window_type):
                                                                    season=self.season,
                                                                    episode=self.episode_number,
                                                                    cache_time=0)
-            if not self.account_states:
-                return None
-            if self.account_states["rated"]:
-                self.window.setProperty("movie.rated", str(self.account_states["rated"]["value"]))
-            else:
-                self.window.setProperty("movie.rated", "")
+            super(DialogEpisodeInfo, self).update_states()
 
     return DialogEpisodeInfo
