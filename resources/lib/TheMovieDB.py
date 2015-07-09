@@ -600,6 +600,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     if poster:
         images["poster"] = base_url + "w500" + poster
         images["poster_original"] = base_url + "original" + poster
+        images["original"] = base_url + "original" + poster
         images["poster_small"] = base_url + "w342" + poster
         images["thumb"] = base_url + "w342" + poster
     if still:
@@ -610,6 +611,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     if fanart:
         images["fanart"] = base_url + "w1280" + fanart
         images["fanart_original"] = base_url + "original" + fanart
+        images["original"] = base_url + "original" + fanart
         images["fanart_small"] = base_url + "w780" + fanart
     if profile:
         images["poster"] = base_url + "w500" + profile
