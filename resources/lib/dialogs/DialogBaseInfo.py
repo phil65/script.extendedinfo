@@ -45,14 +45,14 @@ class DialogBaseInfo(object):
     @ch.click(350)
     @ch.click(1150)
     def play_youtube_video(self):
-        PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
-                                  listitem=self.control.getSelectedItem(),
+        PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+                                  listitem=self.listitem,
                                   window=self)
 
     @ch.click(1250)
     @ch.click(1350)
     def open_image(self):
-        wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+        wm.open_slideshow(image=self.listitem.getProperty("original"))
 
     def onClick(self, control_id):
         ch.serve(control_id, self)
@@ -64,7 +64,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32006)])
         if selection == 0:
-            path = self.control.getSelectedItem().getProperty("original")
+            path = self.listitem.getProperty("original")
             media_type = self.window.getProperty("type")
             params = '"art": {"poster": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
@@ -77,7 +77,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32007)])
         if selection == 0:
-            path = self.control.getSelectedItem().getProperty("original")
+            path = self.listitem.getProperty("original")
             media_type = self.window.getProperty("type")
             params = '"art": {"fanart": "%s"}' % path
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
@@ -89,7 +89,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(33003)])
         if selection == 0:
-            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+            youtube_id = self.listitem.getProperty("youtube_id")
             import YDStreamExtractor
             vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                                  quality=1)

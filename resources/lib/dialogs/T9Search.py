@@ -67,13 +67,13 @@ class T9Search(xbmcgui.WindowXMLDialog):
 
     @ch.click(9090)
     def panel_click(self):
-        self.set_t9_letter(letters=self.control.getSelectedItem().getProperty("value"),
-                           number=self.control.getSelectedItem().getProperty("key"),
-                           button=int(self.control.getSelectedItem().getProperty("index")))
+        self.set_t9_letter(letters=self.listitem.getProperty("value"),
+                           number=self.listitem.getProperty("key"),
+                           button=int(self.listitem.getProperty("index")))
 
     @ch.click(9091)
     def set_autocomplete(self):
-        self.search_str = self.control.getSelectedItem().getLabel()
+        self.search_str = self.listitem.getLabel()
         self.getControl(600).setLabel("[B]%s[/B]_" % self.search_str)
         self.get_autocomplete_labels_async()
         if self.timer:
@@ -128,12 +128,13 @@ class T9Search(xbmcgui.WindowXMLDialog):
         self.getControl(9091).addItems(create_listitems(listitems))
 
     def save_autocomplete(self):
-        if self.search_str:
-            listitem = {"label": self.search_str}
-            if listitem in self.last_searches:
-                self.last_searches.remove(listitem)
-            self.last_searches.appendleft(listitem)
-            ADDON.setSetting(self.setting_name, str(list(self.last_searches)))
+        if not self.search_str:
+            return None
+        listitem = {"label": self.search_str}
+        if listitem in self.last_searches:
+            self.last_searches.remove(listitem)
+        self.last_searches.appendleft(listitem)
+        ADDON.setSetting(self.setting_name, str(list(self.last_searches)))
 
     def set_t9_letter(self, letters, number, button):
         now = time.time()

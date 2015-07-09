@@ -68,15 +68,15 @@ def get_season_window(window_type):
         @ch.click(1000)
         def open_actor_info(self):
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.control.getSelectedItem().getProperty("id"))
+                               actor_id=self.listitem.getProperty("id"))
 
         @ch.click(2000)
         def open_episode_info(self):
             wm.open_episode_info(prev_window=self,
                                  tvshow=self.info["TVShowTitle"],
                                  tvshow_id=self.tvshow_id,
-                                 season=self.control.getSelectedItem().getProperty("season"),
-                                 episode=self.control.getSelectedItem().getProperty("episode"))
+                                 season=self.listitem.getProperty("season"),
+                                 episode=self.listitem.getProperty("episode"))
 
         @ch.click(132)
         def open_text(self):

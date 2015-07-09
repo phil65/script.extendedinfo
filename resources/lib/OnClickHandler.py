@@ -245,6 +245,7 @@ class OnClickHandler():
             wnd.control_id = control_id
             try:
                 wnd.control = wnd.getControl(control_id)
+                wnd.listitem = wnd.control.getSelectedItem()
             except:
                 wnd.control = None
             return view_function(wnd)
@@ -256,6 +257,7 @@ class OnClickHandler():
         wnd.control_id = control_id
         try:
             wnd.control = wnd.getControl(control_id)
+            wnd.listitem = wnd.control.getSelectedItem()
         except:
             wnd.control = None
         if action.getId() not in self.action_maps:

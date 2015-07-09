@@ -31,7 +31,7 @@ TRANSLATIONS = {"movie": LANG(20338),
                 "tv": LANG(20364),
                 "person": LANG(32156)}
 
-include_adult = str(SETTING("include_adults")).lower()
+include_adult = SETTING("include_adults").lower()
 
 
 def get_tmdb_window(window_type):
@@ -46,13 +46,12 @@ def get_tmdb_window(window_type):
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', LANG(32110))
             self.order = kwargs.get('order', "desc")
-            force = kwargs.get('force', False)
             self.logged_in = check_login()
             if self.listitem_list:
                 self.listitems = create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
             else:
-                self.update_content(force_update=force)
+                self.update_content(force_update=kwargs.get('force', False))
 
         def onClick(self, control_id):
             super(DialogVideoList, self).onClick(control_id)
@@ -94,7 +93,7 @@ def get_tmdb_window(window_type):
 
         @ch.action("contextmenu", 500)
         def context_menu(self):
-            item_id = self.control.getSelectedItem().getProperty("id")
+            item_id = self.listitem.getProperty("id")
             if self.type == "tv":
                 listitems = [LANG(32169)]
             else:
@@ -116,37 +115,38 @@ def get_tmdb_window(window_type):
                                   media_type=self.type,
                                   status="true")
             elif selection == 2:
-                xbmc.executebuiltin("ActivateWindow(busydialog)")
-                listitems = [LANG(32139)]
-                account_lists = get_account_lists()
-                for item in account_lists:
-                    listitems.append("%s (%i)" % (item["name"], item["item_count"]))
-                listitems.append(LANG(32138))
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
-                index = xbmcgui.Dialog().select(heading=LANG(32136),
-                                                list=listitems)
-                if index == 0:
-                    listname = xbmcgui.Dialog().input(heading=LANG(32137),
-                                                      type=xbmcgui.INPUT_ALPHANUM)
-                    if listname:
-                        list_id = create_list(listname)
-                        xbmc.sleep(1000)
-                        change_list_status(list_id=list_id,
-                                           movie_id=item_id,
-                                           status=True)
-                elif index == len(listitems) - 1:
-                    self.remove_list_dialog(account_lists)
-                elif index > 0:
-                    change_list_status(list_id=account_lists[index - 1]["id"],
-                                       movie_id=item_id,
-                                       status=True)
-                    # xbmc.sleep(2000)
-                    # self.update(force_update=True)
+                self.list_dialog(item_id)
             elif selection == 3:
                 change_list_status(list_id=self.list_id,
                                    movie_id=item_id,
                                    status=False)
                 self.update(force_update=True)
+
+        def list_dialog(self, movie_id):
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            listitems = [LANG(32139)]
+            account_lists = get_account_lists()
+            for item in account_lists:
+                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            listitems.append(LANG(32138))
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            index = xbmcgui.Dialog().select(heading=LANG(32136),
+                                            list=listitems)
+            if index == 0:
+                listname = xbmcgui.Dialog().input(heading=LANG(32137),
+                                                  type=xbmcgui.INPUT_ALPHANUM)
+                if listname:
+                    list_id = create_list(listname)
+                    xbmc.sleep(1000)
+                    change_list_status(list_id=list_id,
+                                       movie_id=movie_id,
+                                       status=True)
+            elif index == len(listitems) - 1:
+                self.remove_list_dialog(account_lists)
+            elif index > 0:
+                change_list_status(list_id=account_lists[index - 1]["id"],
+                                   movie_id=item_id,
+                                   status=True)
 
         @ch.click(5001)
         def get_sort_type(self):
@@ -322,22 +322,20 @@ def get_tmdb_window(window_type):
         @ch.click(500)
         def open_media(self):
             self.last_position = self.control.getSelectedPosition()
-            media_id = self.control.getSelectedItem().getProperty("id")
-            dbid = self.control.getSelectedItem().getProperty("dbid")
-            media_type = self.control.getSelectedItem().getProperty("media_type")
+            media_type = self.listitem.getProperty("media_type")
             if media_type:
                 self.type = media_type
             if self.type == "tv":
                 wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=media_id,
-                                    dbid=dbid)
+                                    tvshow_id=self.listitem.getProperty("id"),
+                                    dbid=self.listitem.getProperty("dbid"))
             elif self.type == "person":
                 wm.open_actor_info(prev_window=self,
-                                   actor_id=media_id)
+                                   actor_id=self.listitem.getProperty("id"))
             else:
                 wm.open_movie_info(prev_window=self,
-                                   movie_id=media_id,
-                                   dbid=dbid)
+                                   movie_id=self.listitem.getProperty("id"),
+                                   dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(5010)
         def set_company_filter(self):
@@ -354,7 +352,7 @@ def get_tmdb_window(window_type):
             elif response:
                 response = response[0]
             else:
-                notify("no company found")
+                notify("No company found")
             self.add_filter(key="with_companies",
                             value=str(response["id"]),
                             typelabel=LANG(20388),

@@ -61,7 +61,7 @@ def get_episode_window(window_type):
         @ch.click(1000)
         def open_actor_info(self):
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.control.getSelectedItem().getProperty("id"))
+                               actor_id=self.listitem.getProperty("id"))
 
         @ch.click(132)
         def open_text(self):

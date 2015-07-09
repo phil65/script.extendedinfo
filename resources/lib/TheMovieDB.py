@@ -23,10 +23,10 @@ HEADERS = {
     'Content-Type': 'application/json',
     'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'
 }
-base_url = ""
-poster_size = ""
-fanart_size = ""
-include_adult = str(SETTING("include_adults")).lower()
+base_url = "http://image.tmdb.org/t/p/"
+poster_size = "w500"
+fanart_size = "w1280"
+include_adult = SETTING("include_adults").lower()
 if SETTING("use_https"):
     URL_BASE = "https://api.themoviedb.org/3/"
 else:
@@ -482,12 +482,11 @@ def handle_tmdb_people(results):
 def handle_tmdb_images(results):
     images = []
     for item in results:
+        artwork = get_image_urls(poster=item.get("file_path"))
         image = {'aspectratio': item['aspect_ratio'],
-                 'thumb': base_url + "w342" + item['file_path'],
                  'vote_average': fetch(item, "vote_average"),
-                 'iso_639_1': fetch(item, "iso_639_1"),
-                 'poster': base_url + poster_size + item['file_path'],
-                 'original': base_url + "original" + item['file_path']}
+                 'iso_639_1': fetch(item, "iso_639_1")}
+        image.update(artwork)
         images.append(image)
     return images
 
@@ -495,14 +494,13 @@ def handle_tmdb_images(results):
 def handle_tmdb_tagged_images(results):
     images = []
     for item in results:
+        artwork = get_image_urls(poster=item.get("file_path"))
         image = {'aspectratio': item['aspect_ratio'],
-                 'thumb': base_url + "w342" + item['file_path'],
                  'vote_average': fetch(item, "vote_average"),
                  'iso_639_1': fetch(item, "iso_639_1"),
                  'title': fetch(item["media"], "title"),
-                 'mediaposter': base_url + poster_size + fetch(item["media"], "poster_path"),
-                 'poster': base_url + poster_size + item['file_path'],
-                 'original': base_url + "original" + item['file_path']}
+                 'mediaposter': base_url + poster_size + fetch(item["media"], "poster_path")}
+        image.update(artwork)
         images.append(image)
     return images
 
@@ -581,26 +579,8 @@ def get_set_id(set_name):
 
 
 def get_tmdb_data(url="", cache_days=14, folder="TheMovieDB"):
-    # session_id = get_session_id()
-    # url = URL_BASE + "%sapi_key=%s&session_id=%s" % (url, TMDB_KEY, session_id)
     url = URL_BASE + "%sapi_key=%s" % (url, TMDB_KEY)
-    global base_url
-    global poster_size
-    global fanart_size
-    if not base_url:
-        base_url = True
-        base_url, poster_size, fanart_size = get_tmdb_config()
     return get_JSON_response(url, cache_days, folder)
-
-
-@lru_cache(maxsize=128)
-def get_tmdb_config():
-    return ("http://image.tmdb.org/t/p/", "w500", "w1280")
-    response = get_tmdb_data("configuration?", 60)
-    if response:
-        return (response["images"]["base_url"], response["images"]["POSTER_SIZES"][-2], response["images"]["BACKDROP_SIZES"][-2])
-    else:
-        return ("", "", "")
 
 
 def get_company_data(company_id):

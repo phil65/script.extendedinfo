@@ -91,21 +91,21 @@ def get_movie_window(window_type):
         @ch.action("contextmenu", 150)
         @ch.action("contextmenu", 250)
         def add_movie_to_account(self):
-            movie_id = self.control.getSelectedItem().getProperty("id")
+            movie_id = self.listitem.getProperty("id")
             add_movie_to_list(movie_id)
 
         @ch.click(1000)
         @ch.click(750)
         def open_actor_info(self):
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.control.getSelectedItem().getProperty("id"))
+                               actor_id=self.listitem.getProperty("id"))
 
         @ch.click(150)
         @ch.click(250)
         def open_movie_info(self):
             wm.open_movie_info(prev_window=self,
-                               movie_id=self.control.getSelectedItem().getProperty("id"),
-                               dbid=self.control.getSelectedItem().getProperty("dbid"))
+                               movie_id=self.listitem.getProperty("id"),
+                               dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(10)
         def play_trailer(self):
@@ -115,53 +115,53 @@ def get_movie_window(window_type):
 
         @ch.click(550)
         def open_company_list(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
                         "typelabel": LANG(20388),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(1050)
         def show_review(self):
-            author = self.control.getSelectedItem().getProperty("author")
-            text = "[B]%s[/B][CR]%s" % (author, clean_text(self.control.getSelectedItem().getProperty("content")))
+            author = self.listitem.getProperty("author")
+            text = "[B]%s[/B][CR]%s" % (author, clean_text(self.listitem.getProperty("content")))
             wm.open_textviewer(header=LANG(207),
                                text=text,
                                color=self.info['ImageColor'])
 
         @ch.click(950)
         def open_keyword_list(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": LANG(32114),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(850)
         def open_genre_list(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
                         "typelabel": LANG(135),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(650)
         def open_cert_list(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("iso_3166_1"),
+            filters = [{"id": self.listitem.getProperty("iso_3166_1"),
                         "type": "certification_country",
                         "typelabel": LANG(32153),
-                        "label": self.control.getSelectedItem().getProperty("iso_3166_1")},
-                       {"id": self.control.getSelectedItem().getProperty("certification"),
+                        "label": self.listitem.getProperty("iso_3166_1")},
+                       {"id": self.listitem.getProperty("certification"),
                         "type": "certification",
                         "typelabel": LANG(32127),
-                        "label": self.control.getSelectedItem().getProperty("certification")},
-                       {"id": self.control.getSelectedItem().getProperty("year"),
+                        "label": self.listitem.getProperty("certification")},
+                       {"id": self.listitem.getProperty("year"),
                         "type": "year",
                         "typelabel": LANG(345),
-                        "label": self.control.getSelectedItem().getProperty("year")}]
+                        "label": self.listitem.getProperty("year")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
@@ -169,8 +169,8 @@ def get_movie_window(window_type):
         def open_lists_list(self):
             wm.open_video_list(prev_window=self,
                                mode="list",
-                               list_id=self.control.getSelectedItem().getProperty("id"),
-                               filter_label=self.control.getSelectedItem().getLabel())
+                               list_id=self.listitem.getProperty("id"),
+                               filter_label=self.listitem.getLabel())
 
         @ch.click(6002)
         def show_list_dialog(self):

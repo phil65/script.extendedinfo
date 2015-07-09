@@ -66,7 +66,7 @@ def get_youtube_window(window_type):
         @ch.click(500)
         def main_list_click(self):
             self.last_position = self.control.getSelectedPosition()
-            youtube_id = self.control.getSelectedItem().getProperty("youtube_id")
+            youtube_id = self.listitem.getProperty("youtube_id")
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
@@ -75,7 +75,7 @@ def get_youtube_window(window_type):
                 wm.open_youtube_list(filters=channel_filter)
             else:
                 PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                          listitem=self.control.getSelectedItem(),
+                                          listitem=self.listitem,
                                           window=self)
 
         @ch.click(5002)
@@ -206,25 +206,24 @@ def get_youtube_window(window_type):
 
         @ch.action("contextmenu", 500)
         def context_menu(self):
-            listitem = self.control.getSelectedItem()
             if self.type == "video":
-                more_vids = "%s [B]%s[/B]" % (ADDON.getLocalizedString(32081), listitem.getProperty("channel_title"))
+                more_vids = "%s [B]%s[/B]" % (ADDON.getLocalizedString(32081), self.listitem.getProperty("channel_title"))
                 listitems = [LANG(32069), more_vids]
                 selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                     list=listitems)
                 if selection < 0:
                     return None
                 elif selection == 0:
-                    related_filter = [{"id": listitem.getProperty("youtube_id"),
+                    related_filter = [{"id": self.listitem.getProperty("youtube_id"),
                                        "type": "relatedToVideoId",
                                        "typelabel": "Related",
-                                       "label": listitem.getLabel()}]
+                                       "label": self.listitem.getLabel()}]
                     wm.open_youtube_list(filters=related_filter)
                 elif selection == 1:
-                    channel_filter = [{"id": listitem.getProperty("channel_id"),
+                    channel_filter = [{"id": self.listitem.getProperty("channel_id"),
                                        "type": "channelId",
                                        "typelabel": "Related",
-                                       "label": listitem.getProperty("channel_title")}]
+                                       "label": self.listitem.getProperty("channel_title")}]
                     wm.open_youtube_list(filters=channel_filter)
 
         def add_filter(self, key, value, typelabel, label):

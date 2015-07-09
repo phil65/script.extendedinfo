@@ -79,58 +79,58 @@ def get_tvshow_window(window_type):
                 selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                     list=[LANG(32147), LANG(32009)])
                 if selection == 0:
-                    self.open_credit_dialog(self.control.getSelectedItem().getProperty("credit_id"))
+                    self.open_credit_dialog(self.listitem.getProperty("credit_id"))
                 if selection == 1:
                     wm.open_actor_info(prev_window=self,
-                                       actor_id=self.control.getSelectedItem().getProperty("id"))
+                                       actor_id=self.listitem.getProperty("id"))
 
         @ch.click(150)
         def open_tvshow_dialog(self):
             wm.open_tvshow_info(prev_window=self,
-                                tvshow_id=self.control.getSelectedItem().getProperty("id"),
-                                dbid=self.control.getSelectedItem().getProperty("dbid"))
+                                tvshow_id=self.listitem.getProperty("id"),
+                                dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(250)
         def open_season_dialog(self):
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.tmdb_id,
-                                season=self.control.getSelectedItem().getProperty("season"),
+                                season=self.listitem.getProperty("season"),
                                 tvshow=self.info['title'])
 
         @ch.click(550)
         def open_company_info(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
                         "typelabel": LANG(20388),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(950)
         def open_keyword_info(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": LANG(32114),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(850)
         def open_genre_info(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
                         "typelabel": LANG(135),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
 
         @ch.click(1450)
         def open_network_info(self):
-            filters = [{"id": self.control.getSelectedItem().getProperty("id"),
+            filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_networks",
                         "typelabel": LANG(32152),
-                        "label": self.control.getSelectedItem().getLabel().decode("utf-8")}]
+                        "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")

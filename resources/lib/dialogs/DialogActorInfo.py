@@ -61,8 +61,8 @@ def get_actor_window(window_type):
         @ch.click(550)
         def open_movie_info(self):
             wm.open_movie_info(prev_window=self,
-                               movie_id=self.control.getSelectedItem().getProperty("id"),
-                               dbid=self.control.getSelectedItem().getProperty("dbid"))
+                               movie_id=self.listitem.getProperty("id"),
+                               dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(250)
         @ch.click(650)
@@ -70,21 +70,21 @@ def get_actor_window(window_type):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32147), LANG(32148)])
             if selection == 0:
-                self.open_credit_dialog(credit_id=self.control.getSelectedItem().getProperty("credit_id"))
+                self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))
             if selection == 1:
                 wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=self.control.getSelectedItem().getProperty("id"),
-                                    dbid=self.control.getSelectedItem().getProperty("dbid"))
+                                    tvshow_id=self.listitem.getProperty("id"),
+                                    dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(450)
         @ch.click(750)
         def open_image(self):
-            wm.open_slideshow(image=self.control.getSelectedItem().getProperty("original"))
+            wm.open_slideshow(image=self.listitem.getProperty("original"))
 
         @ch.click(350)
         def play_youtube_video(self):
-            PLAYER.play_youtube_video(youtube_id=self.control.getSelectedItem().getProperty("youtube_id"),
-                                      listitem=self.control.getSelectedItem(),
+            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+                                      listitem=self.listitem,
                                       window=self)
 
         @ch.click(132)
@@ -96,7 +96,7 @@ def get_actor_window(window_type):
         @ch.action("contextmenu", 150)
         @ch.action("contextmenu", 550)
         def add_movie_to_account(self):
-            movie_id = self.control.getSelectedItem().getProperty("id")
+            movie_id = self.listitem.getProperty("id")
             add_movie_to_list(movie_id)
 
         def onClick(self, control_id):
