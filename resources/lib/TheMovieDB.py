@@ -744,6 +744,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie.update(local_item)
     else:
         movie = merge_with_local_movie_info([movie])[0]
+    movie['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
                  "similar": handle_tmdb_movies(response["similar"]["results"]),
                  "lists": handle_tmdb_misc(response["lists"]["results"]),
@@ -826,6 +827,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow.update(local_item)
     else:
         tvshow = merge_with_local_tvshow_info([tvshow])[0]
+    tvshow['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
                  "similar": handle_tmdb_tvshows(response["similar"]["results"]),
                  "studios": handle_tmdb_misc(response["production_companies"]),
