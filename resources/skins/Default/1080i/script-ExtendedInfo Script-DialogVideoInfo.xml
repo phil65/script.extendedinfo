@@ -436,6 +436,7 @@
                         </animation>
                         <posy>60</posy>
                         <visible>!IsEmpty(Window.Property(movie.DBID))</visible>
+                        <visible>StringCompare(Window.Property(type),movie) | StringCompare(Window.Property(type),episode)</visible>
                         <height>75</height>
                         <control type="image">
                             <posx>30</posx>

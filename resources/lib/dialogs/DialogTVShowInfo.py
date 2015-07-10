@@ -140,10 +140,11 @@ def get_tvshow_window(window_type):
             manage_list = []
             title = self.info.get("TVShowTitle", "")
             if self.dbid:
-                manage_list += [[LANG(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=tv,dbid=" + self.dbid + ")"],
-                                [LANG(14061), "RunScript(script.artwork.downloader, mediatype=tv, dbid=" + self.dbid + ")"],
-                                [LANG(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs)"],
-                                [LANG(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=tv,dbid=" + self.dbid + ")"]]
+                artwork_call = "RunScript(script.artwork.downloader,%s)"
+                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=tv,dbid=" + self.dbid)],
+                                [LANG(14061), artwork_call % ("mediatype=tv, dbid=" + self.dbid)],
+                                [LANG(32101), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs")],
+                                [LANG(32100), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid)]]
             else:
                 manage_list += [[LANG(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
             # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
