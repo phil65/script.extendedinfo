@@ -116,6 +116,7 @@ def get_tmdb_window(window_type):
                                    movie_id=item_id,
                                    status=False)
                 self.update(force_update=True)
+                self.getControl(500).selectItem(self.position)
 
         def list_dialog(self, movie_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
