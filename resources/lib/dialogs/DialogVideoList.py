@@ -76,18 +76,12 @@ def get_tmdb_window(window_type):
                 self.window.getControl(5010).setVisible(True)
 
         def go_to_next_page(self):
-            for i in range(0, 10):
-                if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
-                    self.column = i
-                    break
+            self.get_column()
             if self.page < self.total_pages:
                 self.page += 1
 
         def go_to_prev_page(self):
-            for i in range(0, 10):
-                if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
-                    self.column = i
-                    break
+            self.get_column()
             if self.page > 1:
                 self.page -= 1
 
@@ -110,6 +104,7 @@ def get_tmdb_window(window_type):
                 if set_rating_prompt(self.type, item_id):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
+                    self.getControl(500).selectItem(self.position)
             elif selection == 1:
                 change_fav_status(media_id=item_id,
                                   media_type=self.type,

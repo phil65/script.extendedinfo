@@ -60,6 +60,13 @@ class DialogBaseList(object):
     def exit_script(self):
         self.close()
 
+    @ch.action("left", "*")
+    @ch.action("right", "*")
+    @ch.action("up", "*")
+    @ch.action("down", "*")
+    def save_position(self):
+        self.position = self.getControl(500).getSelectedPosition()
+
     def onAction(self, action):
         ch.serve_action(action, self.getFocusId(), self)
 
@@ -167,6 +174,12 @@ class DialogBaseList(object):
             self.window.setProperty("Order_Label", LANG(584))
         else:
             self.window.setProperty("Order_Label", LANG(585))
+
+    def get_column(self):
+        for i in range(0, 10):
+            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
+                self.column = i
+                break
 
     @busy_dialog
     def update(self, force_update=False):
