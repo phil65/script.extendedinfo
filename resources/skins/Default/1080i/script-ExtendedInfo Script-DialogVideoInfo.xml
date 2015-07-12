@@ -173,7 +173,7 @@
                                     <aligny>bottom</aligny>
                                     <textoffsety>77</textoffsety>
                                     <onclick>Action(Close)</onclick>
-                                    <onleft>8</onleft>
+                                    <onleft>120</onleft>
                                     <onright>6001</onright>
                                     <onup>132</onup>
                                     <ondown>1000</ondown>
