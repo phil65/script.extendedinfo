@@ -167,4 +167,7 @@ def get_youtube_user_playlists(username=""):
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0.5,
                                 folder="YouTube")
-    return results["items"][0]["contentDetails"]["relatedPlaylists"]
+    if results["items"]:
+        return results["items"][0]["contentDetails"]["relatedPlaylists"]
+    else:
+        return None

@@ -203,7 +203,7 @@ def get_venue_id(venue_name=""):
                                 folder="LastFM")
     if "results" in results:
         matches = results["results"]["matches"]
-        if "venue" in matches:
+        if "venue" in matches and matches["venue"]:
             if isinstance(matches["venue"], list):
                 return matches["venue"][0]["id"]
             else:

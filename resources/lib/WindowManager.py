@@ -144,7 +144,8 @@ class WindowManager(object):
         ep_class = DialogEpisodeInfo.get_episode_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         if not tvshow_id and tvshow:
             response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
-            tvshow_id = str(response['results'][0]['id'])
+            if response["results"]:
+                tvshow_id = str(response['results'][0]['id'])
         dialog = ep_class(INFO_DIALOG_FILE, ADDON_PATH,
                           show_id=tvshow_id,
                           season=season,
