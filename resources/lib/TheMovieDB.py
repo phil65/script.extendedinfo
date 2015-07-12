@@ -645,8 +645,9 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
         return movie_id
     elif imdb_id:
         response = get_tmdb_data("find/tt%s?external_source=imdb_id&language=%s&" % (imdb_id.replace("tt", ""), SETTING("LanguageID")), 30)
-        return response["movie_results"][0]["id"]
-    elif name:
+        if response["movie_results"]:
+            return response["movie_results"][0]["id"]
+    if name:
         return search_media(name)
     else:
         return None
