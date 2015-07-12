@@ -291,10 +291,11 @@ def get_movie_window(window_type):
             # filename = self.info.get("File", False)
             imdb_id = str(self.info.get("imdb_id", ""))
             if movie_id:
-                manage_list += [[LANG(413), "RunScript(script.artwork.downloader,mode=gui,mediatype=movie,dbid=" + movie_id + ")"],
-                                [LANG(14061), "RunScript(script.artwork.downloader, mediatype=movie, dbid=" + movie_id + ")"],
-                                [LANG(32101), "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)"],
-                                [LANG(32100), "RunScript(script.artwork.downloader,mode=custom,mediatype=movie,dbid=" + movie_id + ")"]]
+                artwork_call = "RunScript(script.artwork.downloader,%s)"
+                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=movie,dbid=" + movie_id + ")")],
+                                [LANG(14061), artwork_call % ("mediatype=movie, dbid=" + movie_id + ")")],
+                                [LANG(32101), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)")],
+                                [LANG(32100), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ")")]]
             else:
                 manage_list += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
             # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
