@@ -73,7 +73,8 @@ class WindowManager(object):
                                          name=name)
         movieclass = DialogVideoInfo.get_movie_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = movieclass(INFO_DIALOG_FILE, ADDON_PATH,
-                            id=movie_id)
+                            id=movie_id,
+                            dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
