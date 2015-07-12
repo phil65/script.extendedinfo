@@ -44,7 +44,8 @@ def get_movie_window(window_type):
             filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
             for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
                 thread.start()
-            self.info['poster'] = get_file(self.info.get("poster", ""))
+            if "dbid" not in self.info:
+                self.info['poster'] = get_file(self.info.get("poster", ""))
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
