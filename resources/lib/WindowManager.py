@@ -130,7 +130,8 @@ class WindowManager(object):
         season_class = DialogSeasonInfo.get_season_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = season_class(INFO_DIALOG_FILE, ADDON_PATH,
                               id=tvshow_id,
-                              season=season)
+                              season=season,
+                              dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
@@ -149,7 +150,8 @@ class WindowManager(object):
         dialog = ep_class(INFO_DIALOG_FILE, ADDON_PATH,
                           show_id=tvshow_id,
                           season=season,
-                          episode=episode)
+                          episode=episode,
+                          dbid=dbid)
         self.open_dialog(dialog, prev_window)
 
     def open_actor_info(self, prev_window=None, actor_id=None, name=None):
