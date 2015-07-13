@@ -101,6 +101,8 @@
                 <posy>180</posy>
                 <width>396</width>
                 <fadetime>200</fadetime>
+                            <bordertexture border="3">common/black.png</bordertexture>
+                            <bordersize>3</bordersize>
                 <height>222</height>
                 <aspectratio>scale</aspectratio>
                 <animation type="WindowOpen" reversible="false">
@@ -148,6 +150,8 @@
                     <width>580</width>
                     <height>870</height>
                     <fadetime>200</fadetime>
+                            <bordertexture border="3">common/black.png</bordertexture>
+                            <bordersize>3</bordersize>
                     <texture>$INFO[Container(500).ListItem.Thumb]</texture>
                     <visible>!IsEmpty(Window.Property(alt_layout))</visible>
                 </control>
