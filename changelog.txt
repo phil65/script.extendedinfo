@@ -1,3 +1,11 @@
+v3.0.1
+- fixed: movie poster not appearing on some occasions
+- fixed: improved behavour in case no remote info is available
+- added: additional properties for db movies
+- visual tweaks for TMDB browser list viewtype
+- improvements for movie info dialog local check
+- navigation fix for TV show info dialog
+
 v3.0.0
 - API CHANGE: "imdbid" param for script call is now "imdb_id"
 - new add-on extension point: Video plugin
