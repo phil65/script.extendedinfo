@@ -146,7 +146,7 @@ def get_tvshow_window(window_type):
                                 [LANG(32101), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs")],
                                 [LANG(32100), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid)]]
             else:
-                manage_list += [[LANG(32166), "RunScript(special://home/addons/plugin.program.sickbeard/resources/lib/addshow.py," + title + ")"]]
+                manage_list += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
             # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
             #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
