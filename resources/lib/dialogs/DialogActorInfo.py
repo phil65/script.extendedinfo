@@ -44,7 +44,6 @@ def get_actor_window(window_type):
                               (650, merge_dict_lists(self.data["tvshow_crew_roles"])),
                               (750, self.data["tagged_images"]),
                               (350, youtube_thread.listitems)]
-            self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
         def onInit(self):
             super(DialogActorInfo, self).onInit()
@@ -79,7 +78,10 @@ def get_actor_window(window_type):
         @ch.click(450)
         @ch.click(750)
         def open_image(self):
-            wm.open_slideshow(image=self.listitem.getProperty("original"))
+            listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
+            index = self.control.getSelectedPosition()
+            pos = wm.open_slideshow(listitems=listitems, index=index)
+            self.control.selectItem(pos)
 
         @ch.click(350)
         def play_youtube_video(self):

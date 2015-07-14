@@ -51,7 +51,6 @@ def get_season_window(window_type):
                               (1250, self.data["images"]),
                               (1350, self.data["backdrops"]),
                               (350, youtube_thread.listitems)]
-            self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
         def onInit(self):
             super(DialogSeasonInfo, self).onInit()

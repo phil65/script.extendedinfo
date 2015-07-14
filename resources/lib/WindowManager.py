@@ -235,14 +235,16 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
-    def open_slideshow(self, image):
+    def open_slideshow(self, listitems, index):
         """
         open slideshow dialog for single image
         """
         from dialogs import SlideShow
         dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
-                                     image=image)
+                                     listitems=listitems,
+                                     index=index)
         dialog.doModal()
+        return dialog.position
 
     def open_textviewer(self, header="", text="", color="FFFFFFFF"):
         """

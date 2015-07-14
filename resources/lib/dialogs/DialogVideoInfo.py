@@ -70,7 +70,6 @@ def get_movie_window(window_type):
                               (1250, self.data["images"]),
                               (1350, self.data["backdrops"]),
                               (350, youtube_vids)]
-            self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
         def onInit(self):
             super(DialogVideoInfo, self).onInit()

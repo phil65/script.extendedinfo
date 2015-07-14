@@ -3,18 +3,6 @@
     <defaultcontrol always="true">10000</defaultcontrol>
     <allowoverlay>no</allowoverlay>
     <controls>
-        <control type="list" id="10000">
-            <left>-125</left>
-            <top>0</top>
-            <width>2100</width>
-            <height>900</height>
-            <onleft>10000</onleft>
-            <onright>10000</onright>
-            <ondown>9001</ondown>
-            <orientation>Horizontal</orientation>
-            <itemlayout height="1" width="1"></itemlayout>
-            <focusedlayout height="1" width="1"></focusedlayout>
-        </control>
         <control type="image">
             <left>0</left>
             <top>0</top>
@@ -22,15 +10,41 @@
             <height>1080</height>
             <fadetime>500</fadetime>
             <texture>common/black.png</texture>
-        </control>
-        <control type="image">
-            <left>0</left>
+            <animation effect="fade" start="0" end="100" time="300" tween="sine">WindowOpen</animation>
+            <animation effect="fade" end="100" time="200" tween="sine">WindowClose</animation>
+                    </control>
+        <control type="wraplist" id="10000">
+            <left>-90</left>
             <top>0</top>
-            <width>1920</width>
+            <width>2100</width>
             <height>1080</height>
-            <fadetime>500</fadetime>
-            <aspectratio>keep</aspectratio>
-            <texture>$INFO[Container(10000).ListItem.Thumb]</texture>
+            <onleft>10000</onleft>
+            <onright>10000</onright>
+            <ondown>9001</ondown>
+            <animation effect="fade" start="0" end="100" time="300" tween="sine">WindowOpen</animation>
+            <animation effect="fade" end="100" time="200" tween="sine">WindowClose</animation>
+            <scrolltime tween="sine">300</scrolltime>
+            <orientation>Horizontal</orientation>
+            <itemlayout height="1080" width="1920">
+                <control type="image">
+                    <left>90</left>
+                    <top>0</top>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$INFO[ListItem.Property(Original)]</texture>
+                </control>
+            </itemlayout>
+            <focusedlayout height="1080" width="1920">
+                <control type="image">
+                    <left>90</left>
+                    <top>0</top>
+                    <width>1920</width>
+                    <height>1080</height>
+                    <aspectratio>keep</aspectratio>
+                    <texture>$INFO[ListItem.Property(Original)]</texture>
+                </control>
+            </focusedlayout>
         </control>
     </controls>
 </window>

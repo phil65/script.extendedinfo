@@ -50,7 +50,6 @@ def get_episode_window(window_type):
                               (1150, self.data["videos"]),
                               (1350, self.data["images"]),
                               (350, youtube_thread.listitems)]
-            self.listitems = [(a, create_listitems(b)) for a, b in self.listitems]
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()

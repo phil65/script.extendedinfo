@@ -38,7 +38,7 @@ class DialogBaseInfo(object):
         for container_id, listitems in self.listitems:
             try:
                 self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(listitems)
+                self.getControl(container_id).addItems(create_listitems(listitems))
             except:
                 log("Notice: No container with id %i available" % container_id)
 
@@ -52,7 +52,10 @@ class DialogBaseInfo(object):
     @ch.click(1250)
     @ch.click(1350)
     def open_image(self):
-        wm.open_slideshow(image=self.listitem.getProperty("original"))
+        listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
+        index = self.control.getSelectedPosition()
+        pos = wm.open_slideshow(listitems=listitems, index=index)
+        self.control.selectItem(pos)
 
     def onClick(self, control_id):
         ch.serve(control_id, self)
