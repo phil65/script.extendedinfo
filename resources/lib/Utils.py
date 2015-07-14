@@ -898,4 +898,4 @@ def clean_text(text):
             text = text[1:]
         else:
             break
-    return text
+    return text.strip()
