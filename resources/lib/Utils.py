@@ -741,6 +741,8 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
     threads = []
     image_requests = []
     for (key, value) in data.iteritems():
+        if not value:
+            continue
         value = unicode(value)
         if precache:
             if value.startswith("http") and (value.endswith(".jpg") or value.endswith(".png")):
