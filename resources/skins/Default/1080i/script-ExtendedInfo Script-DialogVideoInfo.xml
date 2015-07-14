@@ -870,8 +870,8 @@
                                             <width>224</width>
                                             <height>325</height>
                                             <textcolor>FFFAFAFA</textcolor>
-                                            <label>$INFO[ListItem.Property(department)]</label>
-                                            <font>Font_Bold34</font>
+                                            <label>[B]$INFO[ListItem.Property(department)][/B]</label>
+                                            <font>font13</font>
                                             <align>center</align>
                                         </control>
                                         <control type="image">
@@ -930,8 +930,8 @@
                                             <width>224</width>
                                             <height>325</height>
                                             <textcolor>FFFAFAFA</textcolor>
-                                            <label>$INFO[ListItem.Property(department)]</label>
-                                            <font>Font_Bold34</font>
+                                            <label>[B]$INFO[ListItem.Property(department)][/B]</label>
+                                            <font>font13</font>
                                             <align>center</align>
                                         </control>
                                         <control type="image">
@@ -1638,7 +1638,7 @@
                                     <control type="textbox">
                                         <posx>0</posx>
                                         <width>323</width>
-                                        <height>100</height>
+                                        <height>98</height>
                                         <textcolor>FFFAFAFA</textcolor>
                                         <posy>227</posy>
                                         <align>center</align>
@@ -1679,7 +1679,7 @@
                                         <posx>0</posx>
                                         <width>323</width>
                                         <textcolor>FFFAFAFA</textcolor>
-                                        <height>100</height>
+                                        <height>98</height>
                                         <posy>227</posy>
                                         <align>center</align>
                                         <font>font12</font>
@@ -2855,12 +2855,12 @@
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>155</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label fallback="?">$INFO[Window.Property(movie.Rating)]</label>
-                                    <font>font14</font>
+                                    <label fallback="?">[B]$INFO[Window.Property(movie.Rating)][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
@@ -2885,12 +2885,12 @@
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>155</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label>$INFO[Window.Property(movie.duration)]</label>
-                                    <font>font14</font>
+                                    <label>[B]$INFO[Window.Property(movie.duration)][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
@@ -2916,12 +2916,12 @@
                                 <visible>!IsEmpty(Window.Property(movie.release_date))</visible>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>220</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label fallback="?">$INFO[Window.Property(movie.release_date)]</label>
-                                    <font>font14</font>
+                                    <label fallback="?">[B]$INFO[Window.Property(movie.release_date)][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
@@ -2947,12 +2947,12 @@
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>220</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label>$INFO[Window.Property(movie.Budget),$]</label>
-                                    <font>font14</font>
+                                    <label>[B]$INFO[Window.Property(movie.Budget),$][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
@@ -2978,12 +2978,12 @@
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>220</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label fallback="?">$INFO[Window.Property(movie.Revenue),$]</label>
-                                    <font>font14</font>
+                                    <label fallback="?">[B]$INFO[Window.Property(movie.Revenue),$][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
@@ -3009,12 +3009,12 @@
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
-                                    <posy>12</posy>
+                                    <posy>8</posy>
                                     <width>220</width>
                                     <height>38</height>
                                     <align>center</align>
-                                    <label fallback="?">$INFO[Container(2000).NumItems]</label>
-                                    <font>font14</font>
+                                    <label fallback="?">[B]$INFO[Container(2000).NumItems][/B]</label>
+                                    <font>font13</font>
                                 </control>
                                 <control type="label">
                                     <posx>0</posx>
