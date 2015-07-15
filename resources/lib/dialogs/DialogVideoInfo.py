@@ -84,6 +84,10 @@ def get_movie_window(window_type):
             self.join_omdb = JoinOmdbThread(self.omdb_thread, self.window_id)
             self.join_omdb.start()
 
+        def onClick(self, control_id):
+            super(DialogVideoInfo, self).onClick(control_id)
+            ch.serve(control_id, self)
+
         def onAction(self, action):
             super(DialogVideoInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
@@ -257,9 +261,27 @@ def get_movie_window(window_type):
             get_kodi_json(method="Player.Open",
                           params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "false"))
 
-        def onClick(self, control_id):
-            super(DialogVideoInfo, self).onClick(control_id)
-            ch.serve(control_id, self)
+        @ch.click(445)
+        def show_manage_dialog(self):
+            manage_list = []
+            movie_id = str(self.info.get("dbid", ""))
+            imdb_id = str(self.info.get("imdb_id", ""))
+            if movie_id:
+                artwork_call = "RunScript(script.artwork.downloader,%s)"
+                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=movie,dbid=" + movie_id + ")")],
+                                [LANG(14061), artwork_call % ("mediatype=movie, dbid=" + movie_id + ")")],
+                                [LANG(32101), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)")],
+                                [LANG(32100), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ")")]]
+            else:
+                manage_list += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
+            if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
+                manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
+            manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+            selection = xbmcgui.Dialog().select(heading=LANG(32133),
+                                                list=[i[0] for i in manage_list])
+            if selection > -1:
+                for item in manage_list[selection][1].split("||"):
+                    xbmc.executebuiltin(item)
 
         def sort_lists(self, lists):
             if not self.logged_in:
@@ -283,30 +305,6 @@ def get_movie_window(window_type):
                 remove_list(account_lists[index]["id"])
                 self.update_states()
 
-        @ch.click(445)
-        def show_manage_dialog(self):
-            manage_list = []
-            movie_id = str(self.info.get("dbid", ""))
-            # filename = self.info.get("File", False)
-            imdb_id = str(self.info.get("imdb_id", ""))
-            if movie_id:
-                artwork_call = "RunScript(script.artwork.downloader,%s)"
-                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=movie,dbid=" + movie_id + ")")],
-                                [LANG(14061), artwork_call % ("mediatype=movie, dbid=" + movie_id + ")")],
-                                [LANG(32101), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)")],
-                                [LANG(32100), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ")")]]
-            else:
-                manage_list += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
-            # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and movie_id:
-            #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.File)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
-            if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
-                manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
-            manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-            selection = xbmcgui.Dialog().select(heading=LANG(32133),
-                                                list=[i[0] for i in manage_list])
-            if selection > -1:
-                for item in manage_list[selection][1].split("||"):
-                    xbmc.executebuiltin(item)
 
     class JoinOmdbThread(threading.Thread):
 

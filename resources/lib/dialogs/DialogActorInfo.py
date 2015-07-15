@@ -52,6 +52,10 @@ def get_actor_window(window_type):
                               window_id=self.window_id)
             self.fill_lists()
 
+        def onClick(self, control_id):
+            super(DialogActorInfo, self).onClick(control_id)
+            ch.serve(control_id, self)
+
         def onAction(self, action):
             super(DialogActorInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
@@ -100,9 +104,5 @@ def get_actor_window(window_type):
         def add_movie_to_account(self):
             movie_id = self.listitem.getProperty("id")
             add_movie_to_list(movie_id)
-
-        def onClick(self, control_id):
-            super(DialogActorInfo, self).onClick(control_id)
-            ch.serve(control_id, self)
 
     return DialogActorInfo

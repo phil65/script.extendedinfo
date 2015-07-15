@@ -34,6 +34,12 @@ class DialogBaseInfo(object):
         # present for jurialmunkey
         HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
+    def onAction(self, action):
+        ch.serve_action(action, self.getFocusId(), self)
+
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
+
     def fill_lists(self):
         for container_id, listitems in self.listitems:
             try:
@@ -56,9 +62,6 @@ class DialogBaseInfo(object):
         index = self.control.getSelectedPosition()
         pos = wm.open_slideshow(listitems=listitems, index=index)
         self.control.selectItem(pos)
-
-    def onClick(self, control_id):
-        ch.serve(control_id, self)
 
     @ch.action("contextmenu", 1250)
     def thumbnail_options(self):
@@ -111,9 +114,6 @@ class DialogBaseInfo(object):
     @ch.action("previousmenu", "*")
     def exit_script(self):
         self.close()
-
-    def onAction(self, action):
-        ch.serve_action(action, self.getFocusId(), self)
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)

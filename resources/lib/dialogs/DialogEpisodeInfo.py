@@ -57,6 +57,10 @@ def get_episode_window(window_type):
             self.fill_lists()
             super(DialogEpisodeInfo, self).update_states()
 
+        def onClick(self, control_id):
+            super(DialogEpisodeInfo, self).onClick(control_id)
+            ch.serve(control_id, self)
+
         @ch.click(750)
         @ch.click(1000)
         def open_actor_info(self):
@@ -82,10 +86,6 @@ def get_episode_window(window_type):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
-
-        def onClick(self, control_id):
-            super(DialogEpisodeInfo, self).onClick(control_id)
-            ch.serve(control_id, self)
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
