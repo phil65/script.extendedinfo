@@ -122,6 +122,7 @@ class DialogBaseInfo(object):
         if "videos" in self.data:
             vid_ids = [item["key"] for item in self.data["videos"]]
             listitems = [i for i in listitems if i["youtube_id"] not in vid_ids]
+        self.getControl(350).reset()
         self.getControl(350).addItems(create_listitems(listitems))
 
     def open_credit_dialog(self, credit_id):
