@@ -7,7 +7,6 @@ import xbmc
 import xbmcgui
 from ..Utils import *
 from ..TheMovieDB import *
-from ..YouTube import *
 from ..omdb import *
 from ..ImageTools import *
 import threading
@@ -36,22 +35,17 @@ def get_movie_window(window_type):
                 self.info, self.data, self.account_states = data
             else:
                 return None
-            search_str = "%s %s, movie" % (self.info["Label"], self.info["year"])
-            youtube_thread = GetYoutubeVidsThread(search_str=search_str)
             sets_thread = SetItemsThread(self.info["SetId"])
             self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
             lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
             filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
-            for thread in [self.omdb_thread, sets_thread, youtube_thread, lists_thread, filter_thread]:
+            for thread in [self.omdb_thread, sets_thread, lists_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
-            vid_ids = [item["key"] for item in self.data["videos"]]
-            youtube_thread.join()
-            youtube_vids = [i for i in youtube_thread.listitems if i["youtube_id"] not in vid_ids]
             filter_thread.join()
             self.info['ImageFilter'] = filter_thread.image
             self.info['ImageColor'] = filter_thread.imagecolor
@@ -68,10 +62,10 @@ def get_movie_window(window_type):
                               (1050, self.data["reviews"]),
                               (1150, self.data["videos"]),
                               (1250, self.data["images"]),
-                              (1350, self.data["backdrops"]),
-                              (350, youtube_vids)]
+                              (1350, self.data["backdrops"])]
 
         def onInit(self):
+            self.get_youtube_vids("%s %s, movie" % (self.info["Label"], self.info["year"]))
             super(DialogVideoInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="movie.",
@@ -304,7 +298,6 @@ def get_movie_window(window_type):
             if index >= 0:
                 remove_list(account_lists[index]["id"])
                 self.update_states()
-
 
     class JoinOmdbThread(threading.Thread):
 

@@ -7,7 +7,6 @@ import xbmcgui
 from ..Utils import *
 from ..ImageTools import *
 from ..TheMovieDB import *
-from ..YouTube import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from .. import VideoPlayer
@@ -32,20 +31,17 @@ def get_actor_window(window_type):
                 self.info, self.data = data
             else:
                 return None
-            youtube_thread = GetYoutubeVidsThread(search_str=self.info["name"])
-            youtube_thread.start()
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
                                                                              radius=25)
-            youtube_thread.join()
             self.listitems = [(150, self.data["movie_roles"]),
                               (250, self.data["tvshow_roles"]),
                               (450, self.data["images"]),
                               (550, merge_dict_lists(self.data["movie_crew_roles"])),
                               (650, merge_dict_lists(self.data["tvshow_crew_roles"])),
-                              (750, self.data["tagged_images"]),
-                              (350, youtube_thread.listitems)]
+                              (750, self.data["tagged_images"])]
 
         def onInit(self):
+            self.get_youtube_vids(self.info["name"])
             super(DialogActorInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="actor.",

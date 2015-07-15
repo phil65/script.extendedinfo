@@ -5,7 +5,6 @@
 
 from ..Utils import *
 from ..TheMovieDB import *
-from ..YouTube import *
 from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
@@ -33,14 +32,10 @@ def get_season_window(window_type):
                 self.info, self.data = data
             else:
                 return None
-            search_str = "%s %s tv" % (self.info["TVShowTitle"], self.info['title'])
-            youtube_thread = GetYoutubeVidsThread(search_str=search_str)
-            youtube_thread.start()
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['poster'] = get_file(url=self.info.get("poster", ""))
             filter_thread = FilterImageThread(self.info.get("poster", ""), 25)
             filter_thread.start()
-            youtube_thread.join()
             filter_thread.join()
             self.info['ImageFilter'] = filter_thread.image
             self.info['ImageColor'] = filter_thread.imagecolor
@@ -49,10 +44,10 @@ def get_season_window(window_type):
                               (2000, self.data["episodes"]),
                               (1150, self.data["videos"]),
                               (1250, self.data["images"]),
-                              (1350, self.data["backdrops"]),
-                              (350, youtube_thread.listitems)]
+                              (1350, self.data["backdrops"])]
 
         def onInit(self):
+            self.get_youtube_vids("%s %s tv" % (self.info["TVShowTitle"], self.info['title']))
             super(DialogSeasonInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="movie.",

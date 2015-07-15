@@ -8,7 +8,6 @@ import xbmcgui
 from ..Utils import *
 from ..ImageTools import *
 from ..TheMovieDB import *
-from ..YouTube import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ..OnClickHandler import OnClickHandler
@@ -34,13 +33,10 @@ def get_tvshow_window(window_type):
                 self.info, self.data, self.account_states = data
             else:
                 return None
-            youtube_thread = GetYoutubeVidsThread(search_str=self.info['title'] + " tv")
-            youtube_thread.start()
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("poster", ""),
                                                                              radius=25)
-            youtube_thread.join()
             self.listitems = [(150, self.data["similar"]),
                               (250, self.data["seasons"]),
                               (1450, self.data["networks"]),
@@ -52,10 +48,10 @@ def get_tvshow_window(window_type):
                               (1000, self.data["actors"]),
                               (1150, self.data["videos"]),
                               (1250, self.data["images"]),
-                              (1350, self.data["backdrops"]),
-                              (350, youtube_thread.listitems)]
+                              (1350, self.data["backdrops"])]
 
         def onInit(self):
+            self.get_youtube_vids(self.info['title'] + " tv")
             super(DialogTVShowInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="movie.",

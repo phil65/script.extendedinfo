@@ -6,7 +6,6 @@
 import xbmc
 from ..Utils import *
 from ..TheMovieDB import *
-from ..YouTube import *
 from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
@@ -37,21 +36,18 @@ def get_episode_window(window_type):
                 self.info, self.data, self.account_states = data
             else:
                 return None
-            youtube_thread = GetYoutubeVidsThread(search_str="%s tv" % (self.info['title']))
-            youtube_thread.start()  # TODO: rem threading here
             filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
             filter_thread.start()
-            youtube_thread.join()
             filter_thread.join()
             self.info['ImageFilter'] = filter_thread.image
             self.info['ImageColor'] = filter_thread.imagecolor
             self.listitems = [(1000, self.data["actors"] + self.data["guest_stars"]),
                               (750, self.data["crew"]),
                               (1150, self.data["videos"]),
-                              (1350, self.data["images"]),
-                              (350, youtube_thread.listitems)]
+                              (1350, self.data["images"])]
 
         def onInit(self):
+            self.get_youtube_vids("%s tv" % (self.info['title']))
             super(DialogEpisodeInfo, self).onInit()
             pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
             self.fill_lists()
