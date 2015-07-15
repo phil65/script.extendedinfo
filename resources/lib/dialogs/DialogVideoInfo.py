@@ -190,7 +190,7 @@ def get_movie_window(window_type):
 
         @ch.click(132)
         def show_plot(self):
-            xbmcgui.Dialog().textviewer(header=LANG(207),
+            xbmcgui.Dialog().textviewer(heading=LANG(207),
                                         text=self.info["Plot"])
 
         @ch.click(6001)
