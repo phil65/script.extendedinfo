@@ -246,17 +246,6 @@ class WindowManager(object):
         dialog.doModal()
         return dialog.position
 
-    def open_textviewer(self, header="", text="", color="FFFFFFFF"):
-        """
-        open textviewer dialog
-        """
-        from dialogs.TextViewerDialog import TextViewerDialog
-        w = TextViewerDialog('DialogTextViewer.xml', ADDON_PATH,
-                             header=header,
-                             text=text,
-                             color=color)
-        w.doModal()
-
     def open_selectdialog(self, listitems):
         """
         open selectdialog, return listitem dict and index

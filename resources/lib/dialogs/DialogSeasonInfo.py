@@ -67,8 +67,7 @@ def get_season_window(window_type):
 
         @ch.click(132)
         def open_text(self):
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
+            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+                                        text=self.info["Plot"])
 
     return DialogSeasonInfo

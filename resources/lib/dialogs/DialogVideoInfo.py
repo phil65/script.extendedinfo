@@ -119,9 +119,8 @@ def get_movie_window(window_type):
         def show_review(self):
             author = self.listitem.getProperty("author")
             text = "[B]%s[/B][CR]%s" % (author, clean_text(self.listitem.getProperty("content")))
-            wm.open_textviewer(header=LANG(207),
-                               text=text,
-                               color=self.info['ImageColor'])
+            xbmcgui.Dialog().textviewer(heading=LANG(207),
+                                        text=text)
 
         @ch.click(950)
         def open_keyword_list(self):
@@ -191,9 +190,8 @@ def get_movie_window(window_type):
 
         @ch.click(132)
         def show_plot(self):
-            wm.open_textviewer(header=LANG(207),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
+            xbmcgui.Dialog().textviewer(header=LANG(207),
+                                        text=self.info["Plot"])
 
         @ch.click(6001)
         def set_rating_dialog(self):

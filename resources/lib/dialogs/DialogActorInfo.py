@@ -88,9 +88,8 @@ def get_actor_window(window_type):
 
         @ch.click(132)
         def show_plot(self):
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["biography"],
-                               color=self.info['ImageColor'])
+            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+                                        text=self.info["biography"])
 
         @ch.action("contextmenu", 150)
         @ch.action("contextmenu", 550)

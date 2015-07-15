@@ -122,10 +122,9 @@ def check_version():
     """
     check version, open TextViewer if update detected
     """
-    from WindowManager import wm
     if not SETTING("changelog_version") == ADDON_VERSION:
-        wm.open_textviewer(header=LANG(24036),
-                           text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
+        xbmcgui.Dialog().textviewer(heading=LANG(24036),
+                                    text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
         ADDON.setSetting("changelog_version", ADDON_VERSION)
     if not SETTING("first_start_infodialog"):
         ADDON.setSetting("first_start_infodialog", "True")

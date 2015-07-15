@@ -184,9 +184,8 @@ def get_tvshow_window(window_type):
 
         @ch.click(132)
         def open_text(self):
-            wm.open_textviewer(header=LANG(32037),
-                               text=self.info["Plot"],
-                               color=self.info['ImageColor'])
+            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+                                        text=self.info["Plot"])
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
