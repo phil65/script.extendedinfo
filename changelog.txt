@@ -1,10 +1,13 @@
 v3.0.1
 - fixed: movie poster not appearing on some occasions
 - fixed: improved behavour in case no remote info is available
+- fixed: linebreaks at beginning of some biographies
 - added: additional properties for db movies
+- reworked image slideshow (now allows moving through list)
 - visual tweaks for TMDB browser list viewtype
 - improvements for movie info dialog local check
 - navigation fix for TV show info dialog
+- texture cleanup
 
 v3.0.0
 - API CHANGE: "imdbid" param for script call is now "imdb_id"
