@@ -2309,6 +2309,26 @@
                             <font>font14</font>
                             <label>$ADDON[script.extendedinfo 32119]$INFO[Container(1250).NumItems, (,)]</label>
                         </control>
+                        <control type="image">
+                            <posx>0</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window(home).Property(ImageColor)]" flipx="true">arrowright.png</texture>
+                            <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(1250).HasPrevious + Control.HasFocus(1250)</visible>
+                        </control>
+                        <control type="image">
+                            <posx>1883</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window(home).Property(ImageColor)]">arrowright.png</texture>
+                            <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(1250).HasNext + Control.HasFocus(1250)</visible>
+                        </control>
                         <control type="panel" id="1250">
                             <posy>30</posy>
                             <posx>-45</posx>
@@ -2396,10 +2416,30 @@
                             <font>font14</font>
                             <label>$LOCALIZE[20445]$INFO[Container(1350).NumItems, (,)]</label>
                         </control>
+                        <control type="image">
+                            <posx>0</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window(home).Property(ImageColor)]" flipx="true">arrowright.png</texture>
+                            <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(1350).HasPrevious + Control.HasFocus(1350)</visible>
+                        </control>
+                        <control type="image">
+                            <posx>1883</posx>
+                            <posy>200</posy>
+                            <width>28</width>
+                            <height>28</height>
+                            <texture colordiffuse="$INFO[Window(home).Property(ImageColor)]">arrowright.png</texture>
+                            <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
+                            <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
+                            <visible>Container(1350).HasNext + Control.HasFocus(1350)</visible>
+                        </control>
                         <control type="panel" id="1350">
                             <posy>30</posy>
                             <posx>-45</posx>
-                            <width>1950</width>
+                            <width>1998</width>
                             <height>600</height>
                             <onleft>1350</onleft>
                             <onright>1350</onright>
@@ -2410,7 +2450,7 @@
                             <animation type="WindowOpen" reversible="false">
                                 <effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
                             </animation>
-                            <itemlayout height="400" width="665">
+                            <itemlayout height="400" width="666">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
@@ -2440,7 +2480,7 @@
                                     </control>
                                 </control>
                             </itemlayout>
-                            <focusedlayout height="400" width="665">
+                            <focusedlayout height="400" width="666">
                                 <control type="group">
                                     <control type="image">
                                         <posy>0</posy>
