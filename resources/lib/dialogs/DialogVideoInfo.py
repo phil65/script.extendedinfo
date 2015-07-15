@@ -75,8 +75,7 @@ def get_movie_window(window_type):
                               prefix="movie.set.",
                               window_id=self.window_id)
             super(DialogVideoInfo, self).update_states()
-            self.join_omdb = JoinOmdbThread(self.omdb_thread, self.window_id)
-            self.join_omdb.start()
+            self.join_omdb_async()
 
         def onClick(self, control_id):
             super(DialogVideoInfo, self).onClick(control_id)
@@ -299,17 +298,9 @@ def get_movie_window(window_type):
                 remove_list(account_lists[index]["id"])
                 self.update_states()
 
-    class JoinOmdbThread(threading.Thread):
-
-        def __init__(self, omdb_thread, window_id):
-            threading.Thread.__init__(self)
-            self.omdb_thread = omdb_thread
-            self.window_id = window_id
-
-        def run(self):
+        @run_async
+        def join_omdb_async(self):
             self.omdb_thread.join()
-            if not xbmcgui.getCurrentWindowDialogId() == self.window_id:
-                return None
             pass_dict_to_skin(data=self.omdb_thread.listitems,
                               prefix="movie.omdb.",
                               window_id=self.window_id)
