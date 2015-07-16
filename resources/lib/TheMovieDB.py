@@ -761,6 +761,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
 
 
 def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
+    if not tvshow_id:
+        return None
     session_str = ""
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
@@ -844,6 +846,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
 
 
 def extended_season_info(tvshow_id, season_number):
+    if not tvshow_id or not season_number:
+        return None
     session_str = ""
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
@@ -902,6 +906,8 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
 
 
 def extended_actor_info(actor_id):
+    if not actor_id:
+        return None
     response = get_tmdb_data("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actor_id), 1)
     tagged_images = []
     if "tagged_images" in response:

@@ -23,11 +23,8 @@ def get_season_window(window_type):
             super(DialogSeasonInfo, self).__init__(*args, **kwargs)
             self.type = "Season"
             self.tvshow_id = kwargs.get('id')
-            self.season = kwargs.get('season')
-            if not self.season or not self.tvshow_id:
-                return None
             data = extended_season_info(tvshow_id=self.tvshow_id,
-                                        season_number=self.season)
+                                        season_number=kwargs.get('season'))
             if not data:
                 return None
             self.info, self.data = data

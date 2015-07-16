@@ -25,13 +25,9 @@ def get_episode_window(window_type):
             super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
             self.type = "Episode"
             self.tvshow_id = kwargs.get('show_id')
-            self.season = kwargs.get('season')
-            self.episode_number = kwargs.get('episode')
-            if not self.tvshow_id or not self.season or not self.episode_number:
-                return None
             data = extended_episode_info(tvshow_id=self.tvshow_id,
-                                         season=self.season,
-                                         episode=self.episode_number)
+                                         season=kwargs.get('season'),
+                                         episode=kwargs.get('episode'))
             if not data:
                 return None
             self.info, self.data, self.account_states = data
@@ -68,7 +64,7 @@ def get_episode_window(window_type):
         @ch.click(6001)
         def set_rating_dialog(self):
             if set_rating_prompt(media_type="episode",
-                                 media_id=[self.tvshow_id, self.season, self.info["episode"]]):
+                                 media_id=[self.tvshow_id, self.info["season"], self.info["episode"]]):
                 self.update_states()
 
         @ch.click(6006)
@@ -82,8 +78,8 @@ def get_episode_window(window_type):
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = extended_episode_info(tvshow_id=self.tvshow_id,
-                                                               season=self.season,
-                                                               episode=self.episode_number,
+                                                               season=self.info["season"],
+                                                               episode=self.info["episode"],
                                                                cache_time=0)
             super(DialogEpisodeInfo, self).update_states()
 

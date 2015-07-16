@@ -24,8 +24,6 @@ def get_actor_window(window_type):
             super(DialogActorInfo, self).__init__(*args, **kwargs)
             self.id = kwargs.get('id', False)
             self.type = "Actor"
-            if not self.id:
-                return None
             data = extended_actor_info(actor_id=self.id)
             if not data:
                 return None

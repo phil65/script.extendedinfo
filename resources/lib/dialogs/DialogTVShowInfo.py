@@ -25,8 +25,6 @@ def get_tvshow_window(window_type):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
             self.tmdb_id = kwargs.get('tmdb_id', False)
             self.type = "TVShow"
-            if not self.tmdb_id:
-                return None
             data = extended_tvshow_info(tvshow_id=self.tmdb_id,
                                         dbid=self.dbid)
             if not data:
@@ -148,7 +146,7 @@ def get_tvshow_window(window_type):
             manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             selection = xbmcgui.Dialog().select(heading=LANG(32133),
                                                 list=[item[0] for item in manage_list])
-            if selection < 0:
+            if selection == -1:
                 return None
             for item in manage_list[selection][1].split("||"):
                 xbmc.executebuiltin(item)
@@ -163,9 +161,7 @@ def get_tvshow_window(window_type):
         def open_list(self):
             index = xbmcgui.Dialog().select(heading=LANG(32136),
                                             list=[LANG(32144), LANG(32145)])
-            if index == -1:
-                pass
-            elif index == 0:
+            if index == 0:
                 wm.open_video_list(prev_window=self,
                                    media_type="tv",
                                    mode="favorites")
