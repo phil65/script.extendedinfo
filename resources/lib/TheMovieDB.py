@@ -6,7 +6,6 @@
 from YouTube import *
 from Utils import *
 from local_db import *
-import threading
 import re
 from urllib2 import Request, urlopen
 from functools32 import lru_cache
@@ -1117,17 +1116,3 @@ def search_media(media_name=None, year='', media_type="movie"):
             if item['id']:
                 return item['id']
     return None
-
-
-class GetYoutubeVidsThread(threading.Thread):
-
-    def __init__(self, search_str="", hd="", order="relevance", limit=15):
-        threading.Thread.__init__(self)
-        self.search_str = search_str
-        self.hd = hd
-        self.order = order
-        self.limit = limit
-
-    def run(self):
-        result = search_youtube(self.search_str, self.hd, self.order, self.limit)
-        self.listitems = result.get("listitems", [])
