@@ -36,11 +36,8 @@ def get_episode_window(window_type):
                 self.info, self.data, self.account_states = data
             else:
                 return None
-            filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
-            filter_thread.start()
-            filter_thread.join()
-            self.info['ImageFilter'] = filter_thread.image
-            self.info['ImageColor'] = filter_thread.imagecolor
+            self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
+                                                                             radius=25)
             self.listitems = [(1000, self.data["actors"] + self.data["guest_stars"]),
                               (750, self.data["crew"]),
                               (1150, self.data["videos"]),
