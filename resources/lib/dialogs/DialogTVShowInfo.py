@@ -23,9 +23,8 @@ def get_tvshow_window(window_type):
 
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-            self.tmdb_id = kwargs.get('tmdb_id', False)
             self.type = "TVShow"
-            data = extended_tvshow_info(tvshow_id=self.tmdb_id,
+            data = extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
                                         dbid=self.dbid)
             if not data:
                 return None
@@ -85,7 +84,7 @@ def get_tvshow_window(window_type):
         @ch.click(250)
         def open_season_dialog(self):
             wm.open_season_info(prev_window=self,
-                                tvshow_id=self.tmdb_id,
+                                tvshow_id=self.info["id"],
                                 season=self.listitem.getProperty("season"),
                                 tvshow=self.info['title'])
 
@@ -154,7 +153,7 @@ def get_tvshow_window(window_type):
         @ch.click(6001)
         def set_rating(self):
             if set_rating_prompt(media_type="tv",
-                                 media_id=self.tmdb_id):
+                                 media_id=self.info["id"]):
                 self.update_states()
 
         @ch.click(6002)
@@ -191,7 +190,7 @@ def get_tvshow_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = extended_tvshow_info(tvshow_id=self.tmdb_id,
+            _, __, self.account_states = extended_tvshow_info(tvshow_id=self.info["id"],
                                                               cache_time=0,
                                                               dbid=self.dbid)
             super(DialogTVShowInfo, self).update_states()
