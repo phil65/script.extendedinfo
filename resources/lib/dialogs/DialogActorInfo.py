@@ -27,10 +27,9 @@ def get_actor_window(window_type):
             if not self.id:
                 return None
             data = extended_actor_info(actor_id=self.id)
-            if data:
-                self.info, self.data = data
-            else:
+            if not data:
                 return None
+            self.info, self.data = data
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
                                                                              radius=25)
             self.listitems = [(150, self.data["movie_roles"]),

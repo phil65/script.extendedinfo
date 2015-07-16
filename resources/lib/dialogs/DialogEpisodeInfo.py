@@ -32,10 +32,9 @@ def get_episode_window(window_type):
             data = extended_episode_info(tvshow_id=self.tvshow_id,
                                          season=self.season,
                                          episode=self.episode_number)
-            if data:
-                self.info, self.data, self.account_states = data
-            else:
+            if not data:
                 return None
+            self.info, self.data, self.account_states = data
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
                                                                              radius=25)
             self.listitems = [(1000, self.data["actors"] + self.data["guest_stars"]),

@@ -29,10 +29,9 @@ def get_tvshow_window(window_type):
                 return None
             data = extended_tvshow_info(tvshow_id=self.tmdb_id,
                                         dbid=self.dbid)
-            if data:
-                self.info, self.data, self.account_states = data
-            else:
+            if not data:
                 return None
+            self.info, self.data, self.account_states = data
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("poster", ""),
@@ -51,7 +50,7 @@ def get_tvshow_window(window_type):
                               (1350, self.data["backdrops"])]
 
         def onInit(self):
-            self.get_youtube_vids(self.info['title'] + " tv")
+            self.get_youtube_vids("%s tv" % (self.info['title']))
             super(DialogTVShowInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="movie.",
@@ -71,13 +70,13 @@ def get_tvshow_window(window_type):
         @ch.click(750)
         @ch.click(1000)
         def credit_dialog(self):
-                selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                    list=[LANG(32147), LANG(32009)])
-                if selection == 0:
-                    self.open_credit_dialog(self.listitem.getProperty("credit_id"))
-                if selection == 1:
-                    wm.open_actor_info(prev_window=self,
-                                       actor_id=self.listitem.getProperty("id"))
+            selection = xbmcgui.Dialog().select(heading=LANG(32151),
+                                                list=[LANG(32147), LANG(32009)])
+            if selection == 0:
+                self.open_credit_dialog(self.listitem.getProperty("credit_id"))
+            if selection == 1:
+                wm.open_actor_info(prev_window=self,
+                                   actor_id=self.listitem.getProperty("id"))
 
         @ch.click(150)
         def open_tvshow_dialog(self):

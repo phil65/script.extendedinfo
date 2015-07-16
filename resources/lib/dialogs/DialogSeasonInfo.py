@@ -28,10 +28,9 @@ def get_season_window(window_type):
                 return None
             data = extended_season_info(tvshow_id=self.tvshow_id,
                                         season_number=self.season)
-            if data:
-                self.info, self.data = data
-            else:
+            if not data:
                 return None
+            self.info, self.data = data
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['poster'] = get_file(url=self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("poster", ""),

@@ -31,10 +31,9 @@ def get_movie_window(window_type):
                 return None
             data = extended_movie_info(movie_id=self.tmdb_id,
                                        dbid=self.dbid)
-            if data:
-                self.info, self.data, self.account_states = data
-            else:
+            if not data:
                 return None
+            self.info, self.data, self.account_states = data
             sets_thread = SetItemsThread(self.info["SetId"])
             self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
             lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
