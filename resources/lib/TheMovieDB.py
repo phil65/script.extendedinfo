@@ -68,9 +68,9 @@ def set_rating(media_type, media_id, rating):
     if media_type == "episode":
         if not media_id[1]:
             media_id[1] = "0"
-        url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (str(media_id[0]), str(media_id[1]), str(media_id[2]), TMDB_KEY, session_id)
+        url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (media_id[0], media_id[1], media_id[2], TMDB_KEY, session_id)
     else:
-        url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, str(media_id), TMDB_KEY, session_id)
+        url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, media_id, TMDB_KEY, session_id)
             # request.get_method = lambda: 'DELETE'
     request = Request(url=url,
                       data=values,
@@ -83,11 +83,11 @@ def set_rating(media_type, media_id, rating):
 def change_fav_status(media_id=None, media_type="movie", status="true"):
     session_id = get_session_id()
     account_id = get_account_info()
-    values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, str(media_id), status)
+    values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, media_id, status)
     if not session_id:
         notify("Could not get session id")
         return None
-    url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (str(account_id), session_id, TMDB_KEY)
+    url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (account_id, session_id, TMDB_KEY)
     request = Request(url,
                       data=values,
                       headers=HEADERS)
@@ -154,7 +154,7 @@ def get_account_lists(cache_time=0):
     session_id = get_session_id()
     account_id = get_account_info()
     if session_id and account_id:
-        response = get_tmdb_data("account/%s/lists?session_id=%s&" % (str(account_id), session_id), cache_time)
+        response = get_tmdb_data("account/%s/lists?session_id=%s&" % (account_id, session_id), cache_time)
         return response["results"]
     else:
         return []
@@ -591,7 +591,7 @@ def get_company_data(company_id):
 
 
 def get_credit_info(credit_id):
-    return get_tmdb_data("credit/%s?language=%s&" % (str(credit_id), SETTING("LanguageID")), 30)
+    return get_tmdb_data("credit/%s?language=%s&" % (credit_id, SETTING("LanguageID")), 30)
 
 
 def get_account_props(account_states):
@@ -640,7 +640,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = get_imdb_id_from_db("movie", dbid)
-        log("IMDB Id from local DB:" + str(movie_id))
+        log("IMDB Id from local DB: %s" % (movie_id))
         return movie_id
     elif imdb_id:
         response = get_tmdb_data("find/tt%s?external_source=imdb_id&language=%s&" % (imdb_id.replace("tt", ""), SETTING("LanguageID")), 30)
@@ -700,7 +700,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         set_id = fetch(movie_set, "id")
     artwork = get_image_urls(poster=response.get("poster_path"),
                              fanart=response.get("backdrop_path"))
-    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % str(fetch(response, "id"))
+    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % fetch(response, "id")
     movie = {'title': fetch(response, 'title'),
              'Label': fetch(response, 'title'),
              'Tagline': fetch(response, 'tagline'),
@@ -768,7 +768,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                             (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+                             (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
         return False
     videos = []
@@ -853,7 +853,7 @@ def extended_season_info(tvshow_id, season_number):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     tvshow = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                           (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
+                           (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
     response = get_tmdb_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
     if not response:
         notify("Could not find season info")
@@ -894,7 +894,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
-                             (str(tvshow_id), str(season), str(episode), SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+                             (tvshow_id, season, episode, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     videos = []
     if "videos" in response:
         videos = handle_tmdb_videos(response["videos"]["results"])
@@ -951,7 +951,7 @@ def get_rated_media_items(media_type):
         if not session_id:
             notify("Could not get session id")
             return []
-        response = get_tmdb_data("account/%s/rated/%s?session_id=%s&language=%s&" % (str(account_id), media_type, session_id, SETTING("LanguageID")), 0)
+        response = get_tmdb_data("account/%s/rated/%s?session_id=%s&language=%s&" % (account_id, media_type, session_id, SETTING("LanguageID")), 0)
     else:
         session_id = get_guest_session_id()
         if not session_id:
@@ -973,7 +973,7 @@ def get_fav_items(media_type):
     if not session_id:
         notify("Could not get session id")
         return []
-    response = get_tmdb_data("account/%s/favorite/%s?session_id=%s&language=%s&" % (str(account_id), media_type, session_id, SETTING("LanguageID")), 0)
+    response = get_tmdb_data("account/%s/favorite/%s?session_id=%s&language=%s&" % (account_id, media_type, session_id, SETTING("LanguageID")), 0)
     if "results" in response:
         if media_type == "tv":
             return handle_tmdb_tvshows(response["results"], False, None)
@@ -990,7 +990,7 @@ def get_movies_from_list(list_id, cache_time=5):
     get movie dict list from tmdb list.
     '''
 
-    response = get_tmdb_data("list/%s?language=%s&" % (str(list_id), SETTING("LanguageID")), cache_time)
+    response = get_tmdb_data("list/%s?language=%s&" % (list_id, SETTING("LanguageID")), cache_time)
     return handle_tmdb_movies(response["items"], False, None)
 
 
@@ -1046,7 +1046,7 @@ def get_similar_tvshows(tvshow_id):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_tmdb_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                             (str(tvshow_id), SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
+                             (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
     if "similar" in response:
         return handle_tmdb_tvshows(response["similar"]["results"])
     else:
@@ -1107,7 +1107,7 @@ def search_media(media_name=None, year='', media_type="movie"):
     '''
     return list of items with type *media_type for search with *media_name
     '''
-    search_query = url_quote(media_name + " " + str(year))
+    search_query = url_quote("%s %s" % (media_name, year))
     if not search_query:
         return None
     response = get_tmdb_data("search/%s?query=%s&language=%s&include_adult=%s&" % (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
