@@ -672,6 +672,8 @@ def get_trailer(movie_id=None):
 
 
 def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
+    if not movie_id:
+        return None
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     else:

@@ -26,10 +26,7 @@ def get_movie_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogVideoInfo, self).__init__(*args, **kwargs)
             self.type = "Movie"
-            self.tmdb_id = kwargs.get('id')
-            if not self.tmdb_id:
-                return None
-            data = extended_movie_info(movie_id=self.tmdb_id,
+            data = extended_movie_info(movie_id=kwargs.get('id'),
                                        dbid=self.dbid)
             if not data:
                 return None
@@ -200,7 +197,7 @@ def get_movie_window(window_type):
 
         @ch.click(6001)
         def set_rating_dialog(self):
-            if set_rating_prompt("movie", self.tmdb_id):
+            if set_rating_prompt("movie", self.info["id"]):
                 self.update_states()
 
         @ch.click(6005)
@@ -221,12 +218,12 @@ def get_movie_window(window_type):
                 list_id = create_list(listname)
                 xbmc.sleep(1000)
                 change_list_status(list_id=list_id,
-                                   movie_id=self.tmdb_id,
+                                   movie_id=self.info["id"],
                                    status=True)
             elif index == len(listitems) - 1:
                 self.remove_list_dialog(account_lists)
             elif index > 0:
-                change_list_status(account_lists[index - 1]["id"], self.tmdb_id, True)
+                change_list_status(account_lists[index - 1]["id"], self.info["id"], True)
                 self.update_states()
 
         @ch.click(6003)
@@ -287,7 +284,7 @@ def get_movie_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = extended_movie_info(self.tmdb_id, self.dbid, 0)
+            _, __, self.account_states = extended_movie_info(self.info["id"], self.dbid, 0)
             super(DialogVideoInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
