@@ -65,16 +65,16 @@ def get_movie_window(window_type):
                               (1350, self.data["backdrops"])]
 
         def onInit(self):
-            self.get_youtube_vids("%s %s, movie" % (self.info["Label"], self.info["year"]))
             super(DialogVideoInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               prefix="movie.",
                               window_id=self.window_id)
+            super(DialogVideoInfo, self).update_states()
+            self.get_youtube_vids("%s %s, movie" % (self.info["Label"], self.info["year"]))
             self.fill_lists()
             pass_dict_to_skin(data=self.setinfo,
                               prefix="movie.set.",
                               window_id=self.window_id)
-            super(DialogVideoInfo, self).update_states()
             self.join_omdb_async()
 
         def onClick(self, control_id):

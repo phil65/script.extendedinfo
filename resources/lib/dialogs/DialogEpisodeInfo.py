@@ -47,11 +47,11 @@ def get_episode_window(window_type):
                               (1350, self.data["images"])]
 
         def onInit(self):
-            self.get_youtube_vids("%s tv" % (self.info['title']))
             super(DialogEpisodeInfo, self).onInit()
             pass_dict_to_skin(self.info, "movie.", False, False, self.window_id)
-            self.fill_lists()
             super(DialogEpisodeInfo, self).update_states()
+            self.get_youtube_vids("%s tv" % (self.info['title']))
+            self.fill_lists()
 
         def onClick(self, control_id):
             super(DialogEpisodeInfo, self).onClick(control_id)
