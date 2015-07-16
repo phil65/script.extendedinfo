@@ -34,11 +34,7 @@ def get_season_window(window_type):
                 return None
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['poster'] = get_file(url=self.info.get("poster", ""))
-            filter_thread = FilterImageThread(self.info.get("poster", ""), 25)
-            filter_thread.start()
-            filter_thread.join()
-            self.info['ImageFilter'] = filter_thread.image
-            self.info['ImageColor'] = filter_thread.imagecolor
+            self.info['ImageFilter'], self.info['ImageColor'] = filter_image(self.info.get("poster", ""), 25)
             self.listitems = [(1000, self.data["actors"]),
                               (750, self.data["crew"]),
                               (2000, self.data["episodes"]),
