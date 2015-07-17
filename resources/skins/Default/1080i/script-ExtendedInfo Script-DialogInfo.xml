@@ -20,6 +20,23 @@
                 <texture>$INFO[Window.Property(actor.thumb)]</texture>
             </control>
         </control>
+            <control type="button" id="20000">
+                <height>0</height>
+                <width>0</width>
+                <texturefocus>-</texturefocus>
+                <posx>-5000</posx>
+                <onfocus>SetFocus(132)</onfocus>
+                <onclick>noop</onclick>
+                <visible allowhiddenfocus="true">Control.HasFocus(20000)</visible>
+            </control>
+            <control type="button" id="20001">
+                <height>0</height>
+                <width>0</width>
+                <texturefocus>-</texturefocus>
+                <posx>-5000</posx>
+                <onclick>noop</onclick>
+                <visible allowhiddenfocus="true">Control.HasFocus(20001)</visible>
+            </control>
         <control type="group">
             <animation effect="slide" start="5042,0" end="0,0" time="1500" tween="sine">WindowOpen</animation>
             <animation effect="slide" end="1242,0" time="450" tween="sine" condition="Control.HasFocus(132) | ControlGroup(5000).HasFocus">WindowClose</animation>
@@ -60,12 +77,6 @@
                 <posy>68</posy>
                 <width>1042</width>
                 <height>854</height>
-                <!--
-                <animation effect="slide" end="0,-360" time="300" tween="sine" condition="Control.HasFocus(350)">Conditional</animation>-->
-                <!--
-                <animation effect="slide" end="0,-360" time="300" tween="sine" condition="Control.HasFocus(350) | Control.HasFocus(250)">Conditional</animation>-->
-                <!--
-                <animation effect="slide" end="0,-360" time="300" tween="sine" condition="Control.HasFocus(350) | Control.HasFocus(250) | Control.HasFocus(150)">Conditional</animation>-->
                 <control type="label">
                     <posx>-40</posx>
                     <posy>-15</posy>
@@ -88,11 +99,11 @@
                     <width>2000</width>
                     <itemgap>15</itemgap>
                     <height>1000</height>
-                    <animation type="Conditional" condition="!IsEmpty(Window(Home).Property(Bounce.Down))" reversible="false">
+                    <animation type="Conditional" condition="!IsEmpty(Window.Property(Bounce.Down))" reversible="false">
                         <effect type="slide" end="0,20" time="60" tween="sine" />
                         <effect type="slide" end="0,-20" time="180" tween="sine" delay="80" />
                     </animation>
-                    <animation type="Conditional" condition="!IsEmpty(Window(Home).Property(Bounce.Up))" reversible="false">
+                    <animation type="Conditional" condition="!IsEmpty(Window.Property(Bounce.Up))" reversible="false">
                         <effect type="slide" end="0,-20" time="60" tween="sine" />
                         <effect type="slide" end="0,20" time="180" tween="sine" delay="80" />
                     </animation>
@@ -119,7 +130,7 @@
                             <radioposy>20</radioposy>
                             <radiowidth>46</radiowidth>
                             <radioheight>46</radioheight>
-                            <onup>RunScript(script.extendedinfo,info=bounce,name=Bounce.Up)</onup>
+                            <onup>SetFocus(20000)</onup>
                             <ondown>150</ondown>
                             <textureradioonfocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioonfocus>
                             <textureradioofffocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioofffocus>
@@ -1142,7 +1153,7 @@
                             <onleft>750</onleft>
                             <onright>750</onright>
                             <onup>450</onup>
-                            <ondown>RunScript(script.extendedinfo,info=bounce,name=Bounce.Down)</ondown>
+                            <ondown>SetFocus(20001)</ondown>
                             <scrolltime>200</scrolltime>
                             <orientation>horizontal</orientation>
                             <animation type="WindowOpen" reversible="false">
