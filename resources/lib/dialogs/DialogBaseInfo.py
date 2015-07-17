@@ -22,6 +22,7 @@ class DialogBaseInfo(object):
         super(DialogBaseInfo, self).__init__(*args, **kwargs)
         self.logged_in = check_login()
         self.dbid = kwargs.get('dbid')
+        self.bouncing = False
         self.data = None
         self.info = {}
 
@@ -39,6 +40,28 @@ class DialogBaseInfo(object):
 
     def onClick(self, control_id):
         ch.serve(control_id, self)
+
+    def onFocus(self, control_id):
+        if control_id == 20000:
+            if not self.bouncing:
+                self.bounce("up")
+            self.setFocusId(self.last_focus)
+            self.last_focus = control_id
+        elif control_id == 20001:
+            if not self.bouncing:
+                self.bounce("down")
+            self.setFocusId(self.last_focus)
+            self.last_focus = control_id
+        else:
+            self.last_focus = control_id
+
+    @run_async
+    def bounce(self, identifier):
+        self.bouncing = True
+        self.window.setProperty("Bounce.%s" % identifier, "true")
+        xbmc.sleep(200)
+        self.window.clearProperty("Bounce.%s" % identifier)
+        self.bouncing = False
 
     def fill_lists(self):
         for container_id, listitems in self.listitems:
