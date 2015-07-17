@@ -48,11 +48,15 @@ def filter_image(input_img, radius):
                 xbmc.sleep(500)
         if not img:
             return "", ""
-        img.thumbnail((200, 200), Image.ANTIALIAS)
-        img = img.convert('RGB')
-        imgfilter = MyGaussianBlur(radius=radius)
-        img = img.filter(imgfilter)
-        img.save(targetfile)
+        try:
+            img.thumbnail((200, 200), Image.ANTIALIAS)
+            img = img.convert('RGB')
+            imgfilter = MyGaussianBlur(radius=radius)
+            img = img.filter(imgfilter)
+            img.save(targetfile)
+        except:
+            log("PIL problem probably....")
+            return "", ""
     else:
         log("blurred img already created: " + targetfile)
         img = Image.open(targetfile)
