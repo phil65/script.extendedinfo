@@ -197,9 +197,9 @@ def add_movie_to_list(movie_id):
 def merge_with_cert_desc(input_list, media_type):
     cert_list = get_certification_list(media_type)
     for item in input_list:
-        if item["iso_3166_1"] not in cert_list:
+        if item["iso_3166_1"].upper() not in cert_list:
             continue
-        hit = dictfind(lst=cert_list[item["iso_3166_1"]],
+        hit = dictfind(lst=cert_list[item["iso_3166_1"].upper()],
                        key="certification",
                        value=item["certification"])
         if hit:
@@ -400,7 +400,7 @@ def handle_tmdb_misc(results):
                     'release_date': fetch(item, 'release_date'),
                     'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % fetch(item, 'id'),
                     'year': get_year(fetch(item, 'release_date')),
-                    'iso_3166_1': fetch(item, 'iso_3166_1'),
+                    'iso_3166_1': fetch(item, 'iso_3166_1').lower(),
                     'author': fetch(item, 'author'),
                     'content': clean_text(fetch(item, 'content')),
                     'id': fetch(item, 'id'),
