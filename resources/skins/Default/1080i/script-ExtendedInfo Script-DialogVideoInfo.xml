@@ -118,8 +118,6 @@
                             <posy>0</posy>
                             <width>1090</width>
                             <height>400</height>
-                            <onleft>5000</onleft>
-                            <onright>5000</onright>
                             <onup>132</onup>
                             <ondown>1000</ondown>
                             <itemgap>-10</itemgap>
@@ -147,7 +145,6 @@
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
                                 <visible>!IsEmpty(Window.Property(movie.DBID)) + !Stringcompare(Window.Property(Type),tvshow)</visible>
-                                <onright>9</onright>
                             </control>
                             <control type="radiobutton" id="120">
                                 <label>$LOCALIZE[21385]</label>
@@ -171,7 +168,6 @@
                                 <radiowidth>44</radiowidth>
                                 <radioheight>44</radioheight>
                                 <visible>!IsEmpty(Window.Property(movie.DBID)) + Stringcompare(Window.Property(Type),tvshow)</visible>
-                                <onright>9</onright>
                             </control>
                             <control type="group" id="99">
                                 <width>280</width>
@@ -203,7 +199,7 @@
                                     <height>80</height>
                                 </control>
                             </control>
-                            <control type="group" id="20000">
+                            <control type="group" id="30000">
                                 <posx>0</posx>
                                 <posy>0</posy>
                                 <visible>!StringCompare(Window.Property(type),season)</visible>
