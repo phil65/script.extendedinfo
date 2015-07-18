@@ -4,6 +4,7 @@ v3.0.1
 - fixed: linebreaks at beginning of some biographies
 - fixed: list bounce for info dialogs in case of fast repitition
 - added: additional properties for db movies
+- added: actor age for ActorInfo dialog
 - reworked image slideshow (now allows moving through list)
 - siginificant faster dialog loading times (async youtube list filling)
 - visual tweaks for TMDB browser list viewtype
