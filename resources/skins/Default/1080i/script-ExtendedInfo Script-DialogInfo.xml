@@ -3,7 +3,7 @@
     <defaultcontrol always="true">4000</defaultcontrol>
     <controls>
         <control type="group">
-            <!--left side-->
+            <!-- left side -->
             <animation effect="slide" start="-1500,0" end="0,0" delay="600" time="900" tween="sine">WindowOpen</animation>
             <animation effect="slide" end="-1500,0" time="900" tween="sine" condition="Control.HasFocus(132) | ControlGroup(5000).HasFocus">WindowClose</animation>
             <animation effect="slide" end="-749,0" time="450" tween="sine" easing="inout" condition="!Control.HasFocus(132) + !ControlGroup(5000).HasFocus">Conditional</animation>
@@ -20,29 +20,29 @@
                 <texture>$INFO[Window.Property(actor.thumb)]</texture>
             </control>
         </control>
-            <control type="button" id="20000">
-                <height>0</height>
-                <width>0</width>
-                <texturefocus>-</texturefocus>
-                <posx>-5000</posx>
-                <onfocus>SetFocus(132)</onfocus>
-                <onclick>noop</onclick>
-                <visible allowhiddenfocus="true">Control.HasFocus(20000)</visible>
-            </control>
-            <control type="button" id="20001">
-                <height>0</height>
-                <width>0</width>
-                <texturefocus>-</texturefocus>
-                <posx>-5000</posx>
-                <onclick>noop</onclick>
-                <visible allowhiddenfocus="true">Control.HasFocus(20001)</visible>
-            </control>
+        <control type="button" id="20000">
+            <height>0</height>
+            <width>0</width>
+            <texturefocus>-</texturefocus>
+            <posx>-5000</posx>
+            <onfocus>SetFocus(132)</onfocus>
+            <onclick>noop</onclick>
+            <visible allowhiddenfocus="true">Control.HasFocus(20000)</visible>
+        </control>
+        <control type="button" id="20001">
+            <height>0</height>
+            <width>0</width>
+            <texturefocus>-</texturefocus>
+            <posx>-5000</posx>
+            <onclick>noop</onclick>
+            <visible allowhiddenfocus="true">Control.HasFocus(20001)</visible>
+        </control>
         <control type="group">
             <animation effect="slide" start="5042,0" end="0,0" time="1500" tween="sine">WindowOpen</animation>
             <animation effect="slide" end="1242,0" time="450" tween="sine" condition="Control.HasFocus(132) | ControlGroup(5000).HasFocus">WindowClose</animation>
             <animation effect="slide" end="0,1080" time="450" tween="sine" condition="!Control.HasFocus(132) + !ControlGroup(5000).HasFocus">WindowClose</animation>
             <animation effect="slide" end="-749,0" time="450" tween="sine" easing="inout" condition="!Control.HasFocus(132) + !ControlGroup(5000).HasFocus">Conditional</animation>
-            <!--right side-->
+            <!-- right side -->
             <control type="image">
                 <posx>729</posx>
                 <width>1950</width>
@@ -110,90 +110,90 @@
                     <scrolltime tween="sine">400</scrolltime>
                     <orientation>vertical</orientation>
                     <usecontrolcoords>true</usecontrolcoords>
-                       <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.AlsoKnownAs),$ADDON[script.extendedinfo 32016]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.AlsoKnownAs))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.Birthday),$ADDON[script.extendedinfo 32012]: [COLOR=FFFAFAFA],[/COLOR]] $INFO[Window.Property(actor.Age),$ADDON[script.extendedinfo 32020]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.Birthday))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.PlaceOfBirth),$ADDON[script.extendedinfo 32014]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.PlaceOfBirth))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.TotalMovies),$ADDON[script.extendedinfo 32011]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.TotalMovies))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.DBMovies),$ADDON[script.extendedinfo 32021]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.DBMovies))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>10</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.Homepage),$ADDON[script.extendedinfo 32017]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.Homepage))</visible>
-                        </control>
-                        <control type="label">
-                            <align>left</align>
-                            <aligny>center</aligny>
-                            <posx>40</posx>
-                            <posy>0</posy>
-                            <width>1000</width>
-                            <height>25</height>
-                            <textcolor>FF999999</textcolor>
-                            <font>font12</font>
-                            <label>$INFO[Window.Property(actor.Deathday),$ADDON[script.extendedinfo 32013]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                            <visible>!isEmpty(Window.Property(actor.Deathday))</visible>
-                        </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.AlsoKnownAs),$ADDON[script.extendedinfo 32016]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.AlsoKnownAs))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.Birthday),$ADDON[script.extendedinfo 32012]: [COLOR=FFFAFAFA],[/COLOR]] $INFO[Window.Property(actor.Age),$ADDON[script.extendedinfo 32020]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.Birthday))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.PlaceOfBirth),$ADDON[script.extendedinfo 32014]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.PlaceOfBirth))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.TotalMovies),$ADDON[script.extendedinfo 32011]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.TotalMovies))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.DBMovies),$ADDON[script.extendedinfo 32021]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.DBMovies))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>10</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.Homepage),$ADDON[script.extendedinfo 32017]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.Homepage))</visible>
+                    </control>
+                    <control type="label">
+                        <align>left</align>
+                        <aligny>center</aligny>
+                        <posx>40</posx>
+                        <posy>0</posy>
+                        <width>1000</width>
+                        <height>25</height>
+                        <textcolor>FF999999</textcolor>
+                        <font>font12</font>
+                        <label>$INFO[Window.Property(actor.Deathday),$ADDON[script.extendedinfo 32013]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(actor.Deathday))</visible>
+                    </control>
                     <control type="group" id="140">
                         <height>255</height>
                         <control type="radiobutton" id="132">
