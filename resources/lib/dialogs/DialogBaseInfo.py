@@ -140,13 +140,17 @@ class DialogBaseInfo(object):
 
     @run_async
     def get_youtube_vids(self, search_str):
+        try:
+            youtube_list = self.getControl(350)
+        except:
+            return None
         result = search_youtube(search_str, limit=15)
         listitems = result.get("listitems", [])
         if "videos" in self.data:
             vid_ids = [item["key"] for item in self.data["videos"]]
             listitems = [i for i in listitems if i["youtube_id"] not in vid_ids]
-        self.getControl(350).reset()
-        self.getControl(350).addItems(create_listitems(listitems))
+        youtube_list.reset()
+        youtube_list.addItems(create_listitems(listitems))
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)
