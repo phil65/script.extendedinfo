@@ -336,7 +336,7 @@ def start_info_actions(infos, params):
             resolve_url(params.get("handle"))
             dbid = xbmc.getInfoLabel("ListItem.DBID")
             if not dbid:
-                xbmc.getInfoLabel("ListItem.Property(dbid)")
+                dbid = xbmc.getInfoLabel("ListItem.Property(dbid)")
             if xbmc.getCondVisibility("Container.Content(movies)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (dbid, xbmc.getInfoLabel("ListItem.Property(id)")))
             elif xbmc.getCondVisibility("Container.Content(tvshows)"):
