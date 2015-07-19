@@ -24,6 +24,7 @@ class DialogBaseInfo(object):
         self.dbid = kwargs.get('dbid')
         self.bouncing = False
         self.data = None
+        self.yt_listitems = []
         self.info = {}
 
     def onInit(self, *args, **kwargs):
@@ -145,12 +146,13 @@ class DialogBaseInfo(object):
         except:
             return None
         result = search_youtube(search_str, limit=15)
-        listitems = result.get("listitems", [])
-        if "videos" in self.data:
-            vid_ids = [item["key"] for item in self.data["videos"]]
-            listitems = [i for i in listitems if i["youtube_id"] not in vid_ids]
+        if not self.yt_listitems:
+            self.yt_listitems = result.get("listitems", [])
+            if "videos" in self.data:
+                vid_ids = [item["key"] for item in self.data["videos"]]
+                self.yt_listitems = [i for i in self.yt_listitems if i["youtube_id"] not in vid_ids]
         youtube_list.reset()
-        youtube_list.addItems(create_listitems(listitems))
+        youtube_list.addItems(create_listitems(self.yt_listitems))
 
     def open_credit_dialog(self, credit_id):
         info = get_credit_info(credit_id)
