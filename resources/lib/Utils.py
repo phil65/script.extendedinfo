@@ -161,10 +161,11 @@ def get_google_autocomplete_items(search_str, youtube=False):
     result = get_JSON_response(url=base_url + url,
                                headers=headers,
                                folder="Google")
-    for item in result[1]:
-        li = {"label": item,
-              "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}
-        listitems.append(li)
+    if result and len(result) > 1:
+        for item in result[1]:
+            li = {"label": item,
+                  "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}
+            listitems.append(li)
     return listitems
 
 
