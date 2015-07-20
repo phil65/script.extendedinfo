@@ -64,13 +64,13 @@ def get_actor_window(window_type):
         @ch.click(650)
         def open_tvshow_dialog(self):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=[LANG(32147), LANG(32148)])
+                                                list=[LANG(32148), LANG(32147)])
             if selection == 0:
-                self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))
-            if selection == 1:
                 wm.open_tvshow_info(prev_window=self,
                                     tvshow_id=self.listitem.getProperty("id"),
                                     dbid=self.listitem.getProperty("dbid"))
+            if selection == 1:
+                self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))
 
         @ch.click(450)
         @ch.click(750)
