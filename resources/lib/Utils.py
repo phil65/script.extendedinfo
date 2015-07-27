@@ -161,12 +161,26 @@ def get_google_autocomplete_items(search_str, youtube=False):
     result = get_JSON_response(url=base_url + url,
                                headers=headers,
                                folder="Google")
-    if result and len(result) > 1:
-        for item in result[1]:
-            li = {"label": item,
-                  "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % item}
-            listitems.append(li)
+    if not result or len(result) <= 1:
+        return []
+    for item in result[1]:
+        if is_hebrew(item):
+            search_str = item[::-1]
+        else:
+            search_str = item
+        li = {"label": item,
+              "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % search_str}
+        listitems.append(li)
     return listitems
+
+
+def is_hebrew(text):
+    if type(text) != unicode:
+        text = text.decode('utf-8')
+    for chr in text:
+        if ord(chr) >= 1488 and ord(chr) <= 1514:
+            return True
+    return False
 
 
 def get_common_words_autocomplete_items(search_str):
