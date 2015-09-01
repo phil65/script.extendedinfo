@@ -484,7 +484,8 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         try:
             prop = simplejson.loads(HOME.getProperty(hashed_url))
             log("prop load for %s. time: %f" % (url, time.time() - now))
-            return prop
+            if prop:
+                return prop
         except:
             log("could not load prop data for %s" % url)
     if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
@@ -503,9 +504,12 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
                 results = read_from_file(path)
             else:
                 results = []
-    HOME.setProperty(hashed_url + "_timestamp", str(now))
-    HOME.setProperty(hashed_url, simplejson.dumps(results))
-    return results
+    if results:
+        HOME.setProperty(hashed_url + "_timestamp", str(now))
+        HOME.setProperty(hashed_url, simplejson.dumps(results))
+        return results
+    else:
+        return []
 
 
 class FunctionThread(threading.Thread):
