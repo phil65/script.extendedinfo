@@ -41,7 +41,6 @@ def get_actor_window(window_type):
             self.get_youtube_vids(self.info["name"])
             super(DialogActorInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
-                              prefix="actor.",
                               window_id=self.window_id)
             self.fill_lists()
 

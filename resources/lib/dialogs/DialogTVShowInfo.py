@@ -50,7 +50,6 @@ def get_tvshow_window(window_type):
             self.get_youtube_vids("%s tv" % (self.info['title']))
             super(DialogTVShowInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
-                              prefix="movie.",
                               window_id=self.window_id)
             super(DialogTVShowInfo, self).update_states()
             self.fill_lists()
@@ -139,7 +138,7 @@ def get_tvshow_window(window_type):
             else:
                 manage_list += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
             # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
-            #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(movie.FilenameAndPath)]&amp;tvname=$INFO[Window.Property(movie.TVShowTitle)])"])
+            #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(FilenameAndPath)]&amp;tvname=$INFO[Window.Property(TVShowTitle)])"])
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
                 manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
             manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])

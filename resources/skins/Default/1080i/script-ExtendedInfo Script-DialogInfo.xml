@@ -17,7 +17,7 @@
                 <height>1080</height>
                 <aspectratio aligny="top">scale</aspectratio>
                 <fadetime>300</fadetime>
-                <texture>$INFO[Window.Property(actor.thumb)]</texture>
+                <texture>$INFO[Window.Property(thumb)]</texture>
             </control>
         </control>
         <control type="button" id="20000">
@@ -48,7 +48,7 @@
                 <width>1950</width>
                 <height>1080</height>
                 <aspectratio align="center">scale</aspectratio>
-                <texture fallback="common/black.png">$INFO[Window.Property(actor.ImageFilter)]</texture>
+                <texture fallback="common/black.png">$INFO[Window.Property(ImageFilter)]</texture>
             </control>
             <control type="image">
                 <posx>729</posx>
@@ -82,7 +82,7 @@
                     <posy>-15</posy>
                     <height>60</height>
                     <width>1050</width>
-                    <label>$INFO[Window.Property(actor.title)]</label>
+                    <label>$INFO[Window.Property(title)]</label>
                     <font>font30_title</font>
                     <scroll>true</scroll>
                 </control>
@@ -119,8 +119,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.AlsoKnownAs),$ADDON[script.extendedinfo 32016]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.AlsoKnownAs))</visible>
+                        <label>$INFO[Window.Property(AlsoKnownAs),$ADDON[script.extendedinfo 32016]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(AlsoKnownAs))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -131,8 +131,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.Birthday),$ADDON[script.extendedinfo 32012]: [COLOR=FFFAFAFA],[/COLOR]] $INFO[Window.Property(actor.Age),$ADDON[script.extendedinfo 32020]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.Birthday))</visible>
+                        <label>$INFO[Window.Property(Birthday),$ADDON[script.extendedinfo 32012]: [COLOR=FFFAFAFA],[/COLOR]] $INFO[Window.Property(Age),$ADDON[script.extendedinfo 32020]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(Birthday))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -143,8 +143,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.PlaceOfBirth),$ADDON[script.extendedinfo 32014]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.PlaceOfBirth))</visible>
+                        <label>$INFO[Window.Property(PlaceOfBirth),$ADDON[script.extendedinfo 32014]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(PlaceOfBirth))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -155,8 +155,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.TotalMovies),$ADDON[script.extendedinfo 32011]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.TotalMovies))</visible>
+                        <label>$INFO[Window.Property(TotalMovies),$ADDON[script.extendedinfo 32011]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(TotalMovies))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -167,8 +167,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.DBMovies),$ADDON[script.extendedinfo 32021]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.DBMovies))</visible>
+                        <label>$INFO[Window.Property(DBMovies),$ADDON[script.extendedinfo 32021]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(DBMovies))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -179,8 +179,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.Homepage),$ADDON[script.extendedinfo 32017]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.Homepage))</visible>
+                        <label>$INFO[Window.Property(Homepage),$ADDON[script.extendedinfo 32017]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(Homepage))</visible>
                     </control>
                     <control type="label">
                         <align>left</align>
@@ -191,8 +191,8 @@
                         <height>25</height>
                         <textcolor>FF999999</textcolor>
                         <font>font12</font>
-                        <label>$INFO[Window.Property(actor.Deathday),$ADDON[script.extendedinfo 32013]: [COLOR=FFFAFAFA],[/COLOR]]</label>
-                        <visible>!isEmpty(Window.Property(actor.Deathday))</visible>
+                        <label>$INFO[Window.Property(Deathday),$ADDON[script.extendedinfo 32013]: [COLOR=FFFAFAFA],[/COLOR]]</label>
+                        <visible>!isEmpty(Window.Property(Deathday))</visible>
                     </control>
                     <control type="group" id="140">
                         <height>255</height>
@@ -221,7 +221,7 @@
                             <width>980</width>
                             <height>210</height>
                             <align>left</align>
-                            <label fallback="No info available">$INFO[Window.Property(actor.Biography)]</label>
+                            <label fallback="No info available">$INFO[Window.Property(Biography)]</label>
                             <font>font12</font>
                             <autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
                         </control>
@@ -243,7 +243,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(150).HasPrevious + Control.HasFocus(150)</visible>
@@ -253,7 +253,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(150).HasNext + Control.HasFocus(150)</visible>
@@ -429,7 +429,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(250).HasPrevious + Control.HasFocus(250)</visible>
@@ -439,7 +439,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(250).HasNext + Control.HasFocus(250)</visible>
@@ -615,7 +615,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(550).HasPrevious + Control.HasFocus(550)</visible>
@@ -625,7 +625,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(550).HasNext + Control.HasFocus(550)</visible>
@@ -801,7 +801,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(650).HasPrevious + Control.HasFocus(650)</visible>
@@ -811,7 +811,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(650).HasNext + Control.HasFocus(650)</visible>
@@ -987,7 +987,7 @@
                             <posy>150</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(350).HasPrevious + Control.HasFocus(350)</visible>
@@ -997,7 +997,7 @@
                             <posy>150</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(350).HasNext + Control.HasFocus(350)</visible>
@@ -1105,7 +1105,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(450).HasPrevious + Control.HasFocus(450)</visible>
@@ -1115,7 +1115,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(450).HasNext + Control.HasFocus(450)</visible>
@@ -1205,7 +1205,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]" flipx="true">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]" flipx="true">arrowright.png</texture>
                             <animation effect="slide" start="30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="-150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(750).HasPrevious + Control.HasFocus(750)</visible>
@@ -1215,7 +1215,7 @@
                             <posy>200</posy>
                             <width>28</width>
                             <height>28</height>
-                            <texture colordiffuse="$INFO[Window.Property(movie.ImageColor)]">arrowright.png</texture>
+                            <texture colordiffuse="$INFO[Window.Property(ImageColor)]">arrowright.png</texture>
                             <animation effect="slide" start="-30,0" end="0,0" time="200">VisibleChange</animation>
                             <animation effect="slide" start="150" end="0" delay="640" time="320" tween="cubic">WindowOpen</animation>
                             <visible>Container(750).HasNext + Control.HasFocus(750)</visible>

@@ -43,7 +43,6 @@ def get_season_window(window_type):
             self.get_youtube_vids("%s %s tv" % (self.info["TVShowTitle"], self.info['title']))
             super(DialogSeasonInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
-                              prefix="movie.",
                               window_id=self.window_id)
             self.fill_lists()
 

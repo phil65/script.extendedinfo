@@ -178,5 +178,4 @@ class DialogBaseInfo(object):
         if not self.account_states:
             return None
         pass_dict_to_skin(data=get_account_props(self.account_states),
-                          prefix="movie.",
                           window_id=self.window_id)
