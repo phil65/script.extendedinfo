@@ -1,4 +1,10 @@
-v3.1.1
+v4.0.0 (for Kodi Jarvis)
+ - API change: remove all "movie." and "actor." prefixes in dialogs
+ - use new textviewer method instead of own windowXML class
+ - use new image resource add-ons
+ - make use of ActionHandler module
+
+ v3.1.1
 - hebrew fix for keyboard
 - more minor bugfixes
 - url-quote login data for TMDB
