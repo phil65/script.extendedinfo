@@ -9,9 +9,9 @@ from ..Utils import *
 from ..TheMovieDB import *
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 
-ch = OnClickHandler()
+ch = ActionHandler()
 
 SORTS = {"movie": {"popularity": LANG(32110),
                    "release_date": LANG(172),

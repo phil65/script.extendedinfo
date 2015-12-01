@@ -10,10 +10,10 @@ from ..TheMovieDB import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from .. import VideoPlayer
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 def get_actor_window(window_type):

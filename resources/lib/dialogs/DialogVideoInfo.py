@@ -12,11 +12,11 @@ from ..ImageTools import *
 import threading
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 def get_movie_window(window_type):

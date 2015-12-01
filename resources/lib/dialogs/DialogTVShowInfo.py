@@ -10,11 +10,11 @@ from ..ImageTools import *
 from ..TheMovieDB import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 def get_tvshow_window(window_type):

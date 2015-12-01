@@ -9,10 +9,10 @@ from ..YouTube import *
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from .. import VideoPlayer
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 TRANSLATIONS = {"video": LANG(157),

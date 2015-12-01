@@ -8,10 +8,10 @@ import xbmcgui
 from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 from .. import VideoPlayer
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 class DialogBaseInfo(object):

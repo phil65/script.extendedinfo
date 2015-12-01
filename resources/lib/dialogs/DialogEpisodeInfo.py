@@ -9,11 +9,11 @@ from ..TheMovieDB import *
 from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
-from ..OnClickHandler import OnClickHandler
+from ActionHandler import ActionHandler
 from .. import VideoPlayer
 
 PLAYER = VideoPlayer.VideoPlayer()
-ch = OnClickHandler()
+ch = ActionHandler()
 
 
 def get_episode_window(window_type):

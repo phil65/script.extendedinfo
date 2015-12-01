@@ -9,8 +9,8 @@ import xbmcgui
 from ..Utils import *
 from collections import deque
 import ast
-from ..OnClickHandler import OnClickHandler
-ch = OnClickHandler()
+from ActionHandler import ActionHandler
+ch = ActionHandler()
 
 # (1st label, 2nd label)
 KEYS = (("1", "ABC1"),
