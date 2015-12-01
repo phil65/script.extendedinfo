@@ -3,6 +3,8 @@ v4.0.0 (for Kodi Jarvis)
  - use new textviewer method instead of own windowXML class
  - use new image resource add-ons
  - make use of ActionHandler module
+ - fixes for LastFM and Youtube API
+ - misc fixes
 
  v3.1.1
 - hebrew fix for keyboard
