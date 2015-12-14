@@ -100,11 +100,9 @@ class DialogBaseList(object):
 
     @ch.click(6000)
     def open_search(self):
-        dialog = T9Search(u'script-%s-T9Search.xml' % ADDON_NAME, ADDON_PATH,
-                          call=self.search,
-                          start_value="",
-                          history=self.__class__.__name__ + ".search")
-        dialog.doModal()
+        T9Search(call=self.search,
+                 start_value="",
+                 history=self.__class__.__name__ + ".search")
         if self.total_items > 0:
             self.setFocusId(500)
 
