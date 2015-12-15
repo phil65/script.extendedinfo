@@ -17,7 +17,6 @@ import simplejson
 import re
 import threading
 import datetime
-import codecs
 from functools import wraps
 
 ADDON = xbmcaddon.Addon()
@@ -131,76 +130,6 @@ def check_version():
         xbmcgui.Dialog().ok(heading=ADDON_NAME,
                             line1=LANG(32140),
                             line2=LANG(32141))
-
-
-def get_autocomplete_items(search_str):
-    """
-    get dict list with autocomplete labels from google
-    """
-    if SETTING("autocomplete_provider") == "youtube":
-        return get_google_autocomplete_items(search_str, True)
-    elif SETTING("autocomplete_provider") == "google":
-        return get_google_autocomplete_items(search_str)
-    else:
-        return get_common_words_autocomplete_items(search_str)
-
-
-def get_google_autocomplete_items(search_str, youtube=False):
-    """
-    get dict list with autocomplete labels from google
-    """
-    if not search_str:
-        return []
-    listitems = []
-    headers = {'User-agent': 'Mozilla/5.0'}
-    base_url = "http://clients1.google.com/complete/"
-    url = "search?hl=%s&q=%s&json=t&client=serp" % (SETTING("autocomplete_lang"), urllib.quote_plus(search_str))
-    if youtube:
-        url += "&ds=yt"
-    result = get_JSON_response(url=base_url + url,
-                               headers=headers,
-                               folder="Google")
-    if not result or len(result) <= 1:
-        return []
-    for item in result[1]:
-        if is_hebrew(item):
-            search_str = item[::-1]
-        else:
-            search_str = item
-        li = {"label": item,
-              "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % search_str}
-        listitems.append(li)
-    return listitems
-
-
-def is_hebrew(text):
-    if type(text) != unicode:
-        text = text.decode('utf-8')
-    for chr in text:
-        if ord(chr) >= 1488 and ord(chr) <= 1514:
-            return True
-    return False
-
-
-def get_common_words_autocomplete_items(search_str):
-    """
-    get dict list with autocomplete labels from locally saved lists
-    """
-    listitems = []
-    k = search_str.rfind(" ")
-    if k >= 0:
-        search_str = search_str[k + 1:]
-    path = os.path.join(ADDON_PATH, "resources", "data", "common_%s.txt" % SETTING("autocomplete_lang_local"))
-    with codecs.open(path, encoding="utf8") as f:
-        for i, line in enumerate(f.readlines()):
-            if not line.startswith(search_str) or len(line) <= 2:
-                continue
-            li = {"label": line,
-                  "path": "plugin://script.extendedinfo/?info=selectautocomplete&&id=%s" % line}
-            listitems.append(li)
-            if len(listitems) > 10:
-                break
-    return listitems
 
 
 def widget_selectdialog(filter=None, string_prefix="widget"):
