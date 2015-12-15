@@ -71,10 +71,11 @@ class WindowManager(object):
             movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
                                          dbid=dbid,
                                          name=name)
-        movieclass = DialogVideoInfo.get_movie_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = movieclass(INFO_DIALOG_FILE, ADDON_PATH,
-                            id=movie_id,
-                            dbid=dbid)
+        movie_class = DialogVideoInfo.get_movie_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        dialog = movie_class(INFO_DIALOG_FILE,
+                             ADDON_PATH,
+                             id=movie_id,
+                             dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
@@ -103,7 +104,8 @@ class WindowManager(object):
                                    year="",
                                    media_type="tv")
         tvshow_class = DialogTVShowInfo.get_tvshow_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = tvshow_class(INFO_DIALOG_FILE, ADDON_PATH,
+        dialog = tvshow_class(INFO_DIALOG_FILE,
+                              ADDON_PATH,
                               tmdb_id=tmdb_id,
                               dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -128,7 +130,8 @@ class WindowManager(object):
                     tvshow_id = str(response['results'][0]['id'])
 
         season_class = DialogSeasonInfo.get_season_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = season_class(INFO_DIALOG_FILE, ADDON_PATH,
+        dialog = season_class(INFO_DIALOG_FILE,
+                              ADDON_PATH,
                               id=tvshow_id,
                               season=season,
                               dbid=dbid)
@@ -147,7 +150,8 @@ class WindowManager(object):
             response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
-        dialog = ep_class(INFO_DIALOG_FILE, ADDON_PATH,
+        dialog = ep_class(INFO_DIALOG_FILE,
+                          ADDON_PATH,
                           show_id=tvshow_id,
                           season=season,
                           episode=episode,
@@ -178,7 +182,8 @@ class WindowManager(object):
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         actor_class = DialogActorInfo.get_actor_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = actor_class(ACTOR_DIALOG_FILE, ADDON_PATH,
+        dialog = actor_class(ACTOR_DIALOG_FILE,
+                             ADDON_PATH,
                              id=actor_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
@@ -197,7 +202,8 @@ class WindowManager(object):
             color = "FFFFFFFF"
         check_version()
         browser_class = DialogVideoList.get_tmdb_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
-        dialog = browser_class(LIST_DIALOG_FILE, ADDON_PATH,
+        dialog = browser_class(LIST_DIALOG_FILE,
+                               ADDON_PATH,
                                listitems=listitems,
                                color=color,
                                filters=filters,

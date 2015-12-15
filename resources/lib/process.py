@@ -156,7 +156,9 @@ def start_info_actions(infos, params):
             elif imdb_id:
                 tvshow_id = get_show_tmdb_id(imdb_id, "imdb_id")
             elif name:
-                tvshow_id = search_media(name, "", "tv")
+                tvshow_id = search_media(media_name=name,
+                                         year="",
+                                         media_type="tv")
             if tvshow_id:
                 data = get_similar_tvshows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
