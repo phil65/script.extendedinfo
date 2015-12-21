@@ -338,9 +338,9 @@ def start_info_actions(infos, params):
             if not dbid:
                 dbid = xbmc.getInfoLabel("ListItem.Property(dbid)")
             if xbmc.getCondVisibility("Container.Content(movies)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s)" % (dbid, xbmc.getInfoLabel("ListItem.Property(id)")))
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedinfo,dbid=%s,id=%s,name=%s)" % (dbid, xbmc.getInfoLabel("ListItem.Property(id)"), xbmc.getInfoLabel("ListItem.Title")))
             elif xbmc.getCondVisibility("Container.Content(tvshows)"):
-                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s)" % (dbid, xbmc.getInfoLabel("ListItem.Property(id)")))
+                xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedtvinfo,dbid=%s,id=%s,name=%s)" % (dbid, xbmc.getInfoLabel("ListItem.Property(id)"), xbmc.getInfoLabel("ListItem.Title")))
             elif xbmc.getCondVisibility("Container.Content(seasons)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
             elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
