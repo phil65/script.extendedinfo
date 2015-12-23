@@ -1,3 +1,6 @@
+v4.0.1
+- RottenTomatoes poster fix
+
 v4.0.0 (for Kodi Jarvis)
  - API change: remove all "movie." and "actor." prefixes in dialogs
  - use new textviewer method instead of own windowXML class
