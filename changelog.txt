@@ -1,5 +1,6 @@
 v4.0.1
 - RottenTomatoes poster fix
+- kodi python api dependency bump
 
 v4.0.0 (for Kodi Jarvis)
  - API change: remove all "movie." and "actor." prefixes in dialogs
