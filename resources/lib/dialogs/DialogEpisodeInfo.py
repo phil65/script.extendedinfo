@@ -10,9 +10,9 @@ from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from .. import VideoPlayer
+from ..VideoPlayer import PLAYER
 
-PLAYER = VideoPlayer.VideoPlayer()
+
 ch = ActionHandler()
 
 

@@ -9,10 +9,10 @@ from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from .. import VideoPlayer
+from ..VideoPlayer import PLAYER
 
 ch = ActionHandler()
-PLAYER = VideoPlayer.VideoPlayer()
+
 
 
 def get_season_window(window_type):

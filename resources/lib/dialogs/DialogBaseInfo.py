@@ -9,8 +9,8 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from .. import VideoPlayer
-PLAYER = VideoPlayer.VideoPlayer()
+from ..VideoPlayer import PLAYER
+
 ch = ActionHandler()
 
 

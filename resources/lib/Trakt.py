@@ -16,7 +16,7 @@ HEADERS = {
 }
 
 
-def get_trakt_calendar_shows(content):
+def get_calendar_shows(content):
     shows = []
     url = ""
     if content == "shows":
@@ -172,7 +172,7 @@ def get_trending_movies():
         return []
 
 
-def get_trakt_similar(media_type, imdb_id):
+def get_similar(media_type, imdb_id):
     if imdb_id is not None:
         url = '%s/%s/related?extended=full,images' % (media_type, imdb_id)
         results = get_JSON_response(url=BASE_URL + url,

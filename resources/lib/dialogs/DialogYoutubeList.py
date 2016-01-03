@@ -8,12 +8,10 @@ from ..Utils import *
 from ..YouTube import *
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
-from .. import VideoPlayer
+from ..VideoPlayer import PLAYER
 from ActionHandler import ActionHandler
 
-PLAYER = VideoPlayer.VideoPlayer()
 ch = ActionHandler()
-
 
 TRANSLATIONS = {"video": LANG(157),
                 "playlist": LANG(559),

@@ -9,10 +9,9 @@ from TheMovieDB import *
 from Utils import *
 from local_db import *
 from YouTube import *
-from Trakt import *
+import Trakt
 from WindowManager import wm
-import VideoPlayer
-PLAYER = VideoPlayer.VideoPlayer()
+from VideoPlayer import PLAYER
 
 
 def start_info_actions(infos, params):
@@ -217,7 +216,7 @@ def start_info_actions(infos, params):
                     movie_id = get_imdb_id_from_db("movie", params["dbid"])
                 else:
                     movie_id = params.get("id", "")
-                data = get_trakt_similar("movie", movie_id), "SimilarMovies"
+                data = Trakt.get_similar("movie", movie_id), "SimilarMovies"
         elif info == 'similartvshowstrakt':
             if (params.get("id", "") or params["dbid"]):
                 if params.get("dbid"):
@@ -228,15 +227,15 @@ def start_info_actions(infos, params):
                                                         dbid=params["dbid"])
                 else:
                     tvshow_id = params.get("id", "")
-                data = get_trakt_similar("show", tvshow_id), "SimilarTVShows"
+                data = Trakt.get_similar("show", tvshow_id), "SimilarTVShows"
         elif info == 'airingshows':
-            data = get_trakt_calendar_shows("shows"), "AiringShows"
+            data = Trakt.get_calendar_shows("shows"), "AiringShows"
         elif info == 'premiereshows':
-            data = get_trakt_calendar_shows("premieres"), "PremiereShows"
+            data = Trakt.get_calendar_shows("premieres"), "PremiereShows"
         elif info == 'trendingshows':
-            data = get_trending_shows(), "TrendingShows"
+            data = Trakt.get_trending_shows(), "TrendingShows"
         elif info == 'trendingmovies':
-            data = get_trending_movies(), "TrendingMovies"
+            data = Trakt.get_trending_movies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
                 data = get_similar_artists_from_db(params.get("artist_mbid")), "SimilarArtists"
