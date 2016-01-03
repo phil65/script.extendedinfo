@@ -9,7 +9,7 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-import YouTube
+from .. import YouTube
 ch = ActionHandler()
 
 
