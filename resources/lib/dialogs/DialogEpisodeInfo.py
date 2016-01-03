@@ -10,6 +10,7 @@ from ..ImageTools import *
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
+from ..VideoPlayer import PLAYER
 
 ch = ActionHandler()
 
