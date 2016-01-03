@@ -344,6 +344,8 @@ def start_info_actions(infos, params):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=seasoninfo,tvshow=%s,season=%s)" % (xbmc.getInfoLabel("ListItem.TVShowTitle"), xbmc.getInfoLabel("ListItem.Season")))
             elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
                 xbmc.executebuiltin("RunScript(script.extendedinfo,info=extendedactorinfo,name=%s)" % (xbmc.getInfoLabel("ListItem.Label")))
+            else:
+                notify("Error", "Could not find valid content type")
         elif info == "ratedialog":
             resolve_url(params.get("handle"))
             if xbmc.getCondVisibility("Container.Content(movies)"):
