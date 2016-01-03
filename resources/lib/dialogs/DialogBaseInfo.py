@@ -74,9 +74,8 @@ class DialogBaseInfo(object):
     @ch.click(1250)
     @ch.click(1350)
     def open_image(self):
-        listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
-        index = self.control.getSelectedPosition()
-        pos = wm.open_slideshow(listitems=listitems, index=index)
+        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id), None),
+                                index=self.control.getSelectedPosition())
         self.control.selectItem(pos)
 
     @ch.action("contextmenu", 1250)
