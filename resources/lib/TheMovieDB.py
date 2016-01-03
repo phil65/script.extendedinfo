@@ -3,7 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from YouTube import *
 from Utils import *
 from local_db import *
 import re

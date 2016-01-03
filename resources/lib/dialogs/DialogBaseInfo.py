@@ -9,7 +9,7 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-
+import YouTube
 ch = ActionHandler()
 
 
@@ -136,7 +136,7 @@ class DialogBaseInfo(object):
             youtube_list = self.getControl(350)
         except:
             return None
-        result = search_youtube(search_str, limit=15)
+        result = YouTube.search(search_str, limit=15)
         if not self.yt_listitems:
             self.yt_listitems = result.get("listitems", [])
             if "videos" in self.data:

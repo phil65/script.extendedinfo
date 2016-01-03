@@ -8,7 +8,7 @@ from TheAudioDB import *
 from TheMovieDB import *
 from Utils import *
 from local_db import *
-from YouTube import *
+import YouTube
 import Trakt
 from WindowManager import wm
 from VideoPlayer import PLAYER
@@ -245,18 +245,18 @@ def start_info_actions(infos, params):
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id"):
-                listitems = search_youtube(search_str=params.get("id", ""),
+                listitems = YouTube.search(search_str=params.get("id", ""),
                                            hd=params.get("hd", ""),
                                            orderby=params.get("orderby", "relevance"))
                 data = listitems.get("listitems", []), "YoutubeSearch"
         elif info == 'youtubeplaylist':
             if params.get("id"):
-                data = get_youtube_playlist_videos(params.get("id", "")), "YoutubePlaylist"
+                data = YouTube.get_playlist_videos(params.get("id", "")), "YoutubePlaylist"
         elif info == 'youtubeusersearch':
             user_name = params.get("id", "")
             if user_name:
-                playlists = get_youtube_user_playlists(user_name)
-                data = get_youtube_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
+                playlists = YouTube.get_user_playlists(user_name)
+                data = YouTube.get_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
             eventinfo = get_near_events(tag=params.get("tag", ""),
                                         festivals_only=params.get("festivalsonly", ""),

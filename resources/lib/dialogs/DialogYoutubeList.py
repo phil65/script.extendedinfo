@@ -5,7 +5,7 @@
 
 import xbmcgui
 from ..Utils import *
-from ..YouTube import *
+from .. import YouTube
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from ..VideoPlayer import PLAYER
@@ -240,7 +240,7 @@ def get_youtube_window(window_type):
                 self.filter_label = LANG(32146) % (self.search_str) + "  " + self.filter_label
             else:
                 self.filter_label = self.filter_label
-            return search_youtube(self.search_str,
+            return YouTube.search(self.search_str,
                                   orderby=self.sort,
                                   extended=True,
                                   filter_str=self.filter_url,

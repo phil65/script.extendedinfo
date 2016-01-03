@@ -9,7 +9,7 @@ YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
 
 
-def handle_youtube_videos(results, extended=False):
+def handle_videos(results, extended=False):
     videos = []
     for item in results:
         thumb = ""
@@ -59,7 +59,7 @@ def handle_youtube_videos(results, extended=False):
     return videos
 
 
-def handle_youtube_playlists(results):
+def handle_playlists(results):
     playlists = []
     for item in results:
         thumb = ""
@@ -91,7 +91,7 @@ def handle_youtube_playlists(results):
     return playlists
 
 
-def handle_youtube_channels(results):
+def handle_channels(results):
     channels = []
     for item in results:
         thumb = ""
@@ -122,7 +122,7 @@ def handle_youtube_channels(results):
     return channels
 
 
-def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_str="", media_type="video"):
+def search(search_str="", hd="", orderby="relevance", limit=40, extended=False, page="", filter_str="", media_type="video"):
     if page:
         page = "&pageToken=%s" % page
     if hd and not hd == "false":
@@ -135,11 +135,11 @@ def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended
                                 cache_days=0.5,
                                 folder="YouTube")
     if media_type == "video":
-        videos = handle_youtube_videos(results["items"], extended=True)
+        videos = handle_videos(results["items"], extended=True)
     elif media_type == "playlist":
-        videos = handle_youtube_playlists(results["items"])
+        videos = handle_playlists(results["items"])
     elif media_type == "channel":
-        videos = handle_youtube_channels(results["items"])
+        videos = handle_channels(results["items"])
     if videos:
         info = {"listitems": videos,
                 "results_per_page": results["pageInfo"]["resultsPerPage"],
@@ -152,18 +152,18 @@ def search_youtube(search_str="", hd="", orderby="relevance", limit=40, extended
         return {}
 
 
-def get_youtube_playlist_videos(playlist_id=""):
+def get_playlist_videos(playlist_id=""):
     url = 'playlistItems?part=id%%2Csnippet&maxResults=50&playlistId=%s&key=%s' % (playlist_id, YT_KEY)
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0.5,
                                 folder="YouTube")
     if results:
-        return handle_youtube_videos(results["items"])
+        return handle_videos(results["items"])
     else:
         return []
 
 
-def get_youtube_user_playlists(username=""):
+def get_user_playlists(username=""):
     url = 'channels?part=contentDetails&forUsername=%s&key=%s' % (username, YT_KEY)
     results = get_JSON_response(url=BASE_URL + url,
                                 cache_days=0.5,
