@@ -13,7 +13,6 @@ from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from ..VideoPlayer import PLAYER
 
-
 ch = ActionHandler()
 
 
@@ -185,6 +184,12 @@ def get_tvshow_window(window_type):
         def open_text(self):
             xbmcgui.Dialog().textviewer(heading=LANG(32037),
                                         text=self.info["Plot"])
+
+        @ch.click(1150)
+        def play_youtube_video(self):
+            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+                                      listitem=self.listitem,
+                                      window=self)
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update

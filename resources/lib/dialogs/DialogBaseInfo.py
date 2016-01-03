@@ -9,7 +9,6 @@ from ..Utils import *
 from ..TheMovieDB import *
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from ..VideoPlayer import PLAYER
 
 ch = ActionHandler()
 
@@ -71,13 +70,6 @@ class DialogBaseInfo(object):
                 self.getControl(container_id).addItems(create_listitems(listitems))
             except:
                 log("Notice: No container with id %i available" % container_id)
-
-    @ch.click(350)
-    @ch.click(1150)
-    def play_youtube_video(self):
-        PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
-                                  listitem=self.listitem,
-                                  window=self)
 
     @ch.click(1250)
     @ch.click(1350)
