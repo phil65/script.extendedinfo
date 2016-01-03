@@ -15,7 +15,7 @@ tvshow_title_list = []
 tvshow_imdb_list = []
 
 
-def get_kodi_artists():
+def get_artists():
     filename = ADDON_DATA_PATH + "/XBMCartists.txt"
     if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
         return read_from_file(filename)
@@ -28,13 +28,13 @@ def get_kodi_artists():
         return json_response
 
 
-def get_similar_artists_from_db(artist_id):
+def get_similar_artists(artist_id):
     from LastFM import get_similar_artists
     simi_artists = get_similar_artists(artist_id)
     if simi_artists is None:
         log('Last.fm didn\'t return proper response')
         return None
-    xbmc_artists = get_kodi_artists()
+    xbmc_artists = get_artists()
     artists = []
     for simi_artist in simi_artists:
         for xbmc_artist in xbmc_artists["result"]["artists"]:
@@ -63,7 +63,7 @@ def get_similar_artists_from_db(artist_id):
     return artists
 
 
-def get_similar_movies_from_db(dbid):
+def get_similar_movies(dbid):
     movie_response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                    params='{"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
     if "moviedetails" not in movie_response['result']:
@@ -106,34 +106,34 @@ def get_similar_movies_from_db(dbid):
     movies = []
     for i, list_movie in enumerate(quotalist):
         if comp_movie['movieid'] is not list_movie[1]:
-            newmovie = get_movie_from_db(list_movie[1])
+            newmovie = get_movie(list_movie[1])
             movies.append(newmovie)
             if i == 20:
                 break
     return movies
 
 
-def get_db_movies(filter_str="", limit=10):
+def get_movies(filter_str="", limit=10):
     props = '"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]'
     json_response = get_kodi_json(method="VideoLibrary.GetMovies",
                                   params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
     if "result" in json_response and "movies" in json_response["result"]:
-        return [handle_db_movies(item) for item in json_response["result"]["movies"]]
+        return [handle_movies(item) for item in json_response["result"]["movies"]]
     else:
         return []
 
 
-def get_db_tvshows(filter_str="", limit=10):
+def get_tvshows(filter_str="", limit=10):
     props = '"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]'
     json_response = get_kodi_json(method="VideoLibrary.GetTVShows",
                                   params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
     if "result" in json_response and "tvshows" in json_response["result"]:
-        return [handle_db_tvshows(item) for item in json_response["result"]["tvshows"]]
+        return [handle_tvshows(item) for item in json_response["result"]["tvshows"]]
     else:
         return []
 
 
-def handle_db_movies(movie):
+def handle_movies(movie):
     trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
     if SETTING("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=extendedinfo&&dbid=%s' % str(movie['movieid'])
@@ -188,7 +188,7 @@ def handle_db_movies(movie):
     return dict((k, v) for k, v in db_movie.iteritems() if v)
 
 
-def handle_db_tvshows(tvshow):
+def handle_tvshows(tvshow):
     if SETTING("infodialog_onclick") != "false":
         path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % str(tvshow['tvshowid'])
     else:
@@ -211,23 +211,23 @@ def handle_db_tvshows(tvshow):
     return dict((k, v) for k, v in db_tvshow.iteritems() if v)
 
 
-def get_movie_from_db(movie_id):
+def get_movie(movie_id):
     response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
                              params='{"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid":%s }' % str(movie_id))
     if "result" in response and "moviedetails" in response["result"]:
-        return handle_db_movies(response["result"]["moviedetails"])
+        return handle_movies(response["result"]["moviedetails"])
     return {}
 
 
-def get_tvshow_from_db(tvshow_id):
+def get_tvshow(tvshow_id):
     response = get_kodi_json(method="VideoLibrary.GetTVShowDetails",
                              params='{"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"], "tvshowid":%s }' % str(tvshow_id))
     if "result" in response and "tvshowdetails" in response["result"]:
-        return handle_db_tvshows(response["result"]["tvshowdetails"])
+        return handle_tvshows(response["result"]["tvshowdetails"])
     return {}
 
 
-def get_kodi_albums():
+def get_albums():
     json_response = get_kodi_json(method="AudioLibrary.GetAlbums",
                                   params='{"properties": ["title"]}')
     if "result" in json_response and "albums" in json_response['result']:
@@ -291,7 +291,7 @@ def merge_with_local_movie_info(online_list=[], library_first=True, sortkey=Fals
             index = otitle_list.index(online_item["OriginalTitle"].lower())
             found = True
         if found:
-            local_item = get_movie_from_db(id_list[index])
+            local_item = get_movie(id_list[index])
             if local_item:
                 try:
                     diff = abs(int(local_item["year"]) - int(online_item["year"]))
@@ -362,7 +362,7 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
             index = tvshow_otitle_list.index(online_item["OriginalTitle"].lower())
             found = True
         if found:
-            local_item = get_tvshow_from_db(tvshow_id_list[index])
+            local_item = get_tvshow(tvshow_id_list[index])
             if local_item:
                 try:
                     diff = abs(int(local_item["year"]) - int(online_item["year"]))
@@ -392,7 +392,7 @@ def merge_with_local_tvshow_info(online_list=[], library_first=True, sortkey=Fal
 
 
 def compare_album_with_library(online_list):
-    local_list = get_kodi_albums()
+    local_list = get_albums()
     for online_item in online_list:
         for local_item in local_list:
             if not online_item["name"] == local_item["title"]:
@@ -409,7 +409,7 @@ def compare_album_with_library(online_list):
     return online_list
 
 
-def get_set_name_from_db(dbid):
+def get_set_name(dbid):
     json_response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                   params='{"properties": ["setid"], "movieid":%s }' % dbid)
     if "result" in json_response and "moviedetails" in json_response["result"]:
@@ -421,7 +421,7 @@ def get_set_name_from_db(dbid):
     return ""
 
 
-def get_imdb_id_from_db(media_type, dbid):
+def get_imdb_id(media_type, dbid):
     if not dbid:
         return None
     if media_type == "movie":
@@ -437,14 +437,14 @@ def get_imdb_id_from_db(media_type, dbid):
     return None
 
 
-def get_tvshow_id_from_db_by_episode(dbid):
+def get_tvshow_id_by_episode(dbid):
     if not dbid:
         return None
     json_response = get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
                                   params='{"properties": ["tvshowid"], "episodeid":%s }' % dbid)
     if "episodedetails" in json_response["result"]:
         tvshow_dbid = str(json_response['result']['episodedetails']['tvshowid'])
-        return get_imdb_id_from_db(media_type="tvshow",
-                                   dbid=tvshow_dbid)
+        return get_imdb_id(media_type="tvshow",
+                           dbid=tvshow_dbid)
     else:
         return None

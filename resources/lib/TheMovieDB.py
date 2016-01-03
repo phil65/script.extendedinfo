@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from local_db import *
+import local_db
 import re
 from urllib2 import Request, urlopen
 from functools32 import lru_cache
@@ -315,7 +315,7 @@ def handle_tmdb_movies(results=[], local_first=True, sortkey="year"):
                     'Premiered': fetch(movie, 'release_date')}
         listitem.update(artwork)
         movies.append(listitem)
-    movies = merge_with_local_movie_info(movies, local_first, sortkey)
+    movies = local_db.merge_with_local_movie_info(movies, local_first, sortkey)
     return movies
 
 
@@ -362,7 +362,7 @@ def handle_tmdb_tvshows(results, local_first=True, sortkey="year"):
                  'Premiered': fetch(tv, 'first_air_date')}
         newtv.update(artwork)
         tvshows.append(newtv)
-    tvshows = merge_with_local_tvshow_info(tvshows, local_first, sortkey)
+    tvshows = local_db.merge_with_local_tvshow_info(tvshows, local_first, sortkey)
     return tvshows
 
 
@@ -638,7 +638,7 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
 
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
-        movie_id = get_imdb_id_from_db("movie", dbid)
+        movie_id = local_db.get_imdb_id("movie", dbid)
         log("IMDB Id from local DB: %s" % (movie_id))
         return movie_id
     elif imdb_id:
@@ -740,10 +740,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     else:
         account_states = None
     if dbid:
-        local_item = get_movie_from_db(dbid)
+        local_item = local_db.get_movie(dbid)
         movie.update(local_item)
     else:
-        movie = merge_with_local_movie_info([movie])[0]
+        movie = local_db.merge_with_local_movie_info([movie])[0]
     movie['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
                  "similar": handle_tmdb_movies(response["similar"]["results"]),
@@ -825,10 +825,10 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'Premiered': fetch(response, 'first_air_date')}
     tvshow.update(artwork)
     if dbid:
-        local_item = get_tvshow_from_db(dbid)
+        local_item = local_db.get_tvshow(dbid)
         tvshow.update(local_item)
     else:
-        tvshow = merge_with_local_tvshow_info([tvshow])[0]
+        tvshow = local_db.merge_with_local_tvshow_info([tvshow])[0]
     tvshow['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_tmdb_people(response["credits"]["cast"]),
                  "similar": handle_tmdb_tvshows(response["similar"]["results"]),

@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from local_db import merge_with_local_movie_info
+import local_db
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
@@ -43,4 +43,4 @@ def get_rottentomatoes_movies(movietype):
                  'Plot': item["synopsis"]}
         if imdb_id:
             movies.append(movie)
-    return merge_with_local_movie_info(movies, False)
+    return local_db.merge_with_local_movie_info(movies, False)

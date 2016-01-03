@@ -5,7 +5,7 @@
 
 import datetime
 from Utils import *
-from local_db import *
+import local_db
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -95,12 +95,12 @@ def handle_trakt_movies(results):
                  'fanart': movie["movie"]["images"]["fanart"]["full"],
                  'thumb': movie['movie']["images"]["poster"]["thumb"]}
         movies.append(movie)
-    movies = merge_with_local_movie_info(online_list=movies,
-                                         library_first=False)
+    movies = local_db.merge_with_local_movie_info(online_list=movies,
+                                                  library_first=False)
     return movies
 
 
-def handle_trakt_tvshows(results):
+def handle_movies(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
@@ -134,8 +134,8 @@ def handle_trakt_tvshows(results):
                 'fanart': tvshow['show']["images"]["fanart"]["full"],
                 'thumb': tvshow['show']["images"]["poster"]["thumb"]}
         shows.append(show)
-    shows = merge_with_local_tvshow_info(online_list=shows,
-                                         library_first=False)
+    shows = local_db.merge_with_local_tvshow_info(online_list=shows,
+                                                  library_first=False)
     return shows
 
 
@@ -145,7 +145,7 @@ def get_trending_shows():
                                 folder="Trakt",
                                 headers=HEADERS)
     if results is not None:
-        return handle_trakt_tvshows(results)
+        return handle_movies(results)
     else:
         return []
 
@@ -156,7 +156,7 @@ def get_tshow_info(imdb_id):
                                 folder="Trakt",
                                 headers=HEADERS)
     if results is not None:
-        return handle_trakt_tvshows([results])
+        return handle_movies([results])
     else:
         return []
 
@@ -180,7 +180,7 @@ def get_similar(media_type, imdb_id):
                                     headers=HEADERS)
         if results is not None:
             if media_type == "show":
-                return handle_trakt_tvshows(results)
+                return handle_movies(results)
             elif media_type == "movie":
                 return handle_trakt_movies(results)
     else:

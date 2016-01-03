@@ -7,7 +7,7 @@ from Utils import *
 import xbmcaddon
 from dialogs.BaseClasses import *
 
-from local_db import get_imdb_id_from_db
+from local_db import get_imdb_id
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
@@ -95,8 +95,8 @@ class WindowManager(object):
             tmdb_id = get_show_tmdb_id(tvdb_id=imdb_id,
                                        source="imdb_id")
         elif dbid and (int(dbid) > 0):
-            tvdb_id = get_imdb_id_from_db(media_type="tvshow",
-                                          dbid=dbid)
+            tvdb_id = get_imdb_id(media_type="tvshow",
+                                  dbid=dbid)
             if tvdb_id:
                 tmdb_id = get_show_tmdb_id(tvdb_id)
         elif name:
