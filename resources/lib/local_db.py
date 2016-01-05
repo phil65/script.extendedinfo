@@ -29,8 +29,8 @@ def get_artists():
 
 
 def get_similar_artists(artist_id):
-    from LastFM import get_similar_artists
-    simi_artists = get_similar_artists(artist_id)
+    import LastFM
+    simi_artists = LastFM.get_similar_artists(artist_id)
     if simi_artists is None:
         log('Last.fm didn\'t return proper response')
         return None

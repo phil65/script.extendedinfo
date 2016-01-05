@@ -44,7 +44,7 @@ def start_info_actions(infos, params):
         elif info == 'discography':
             discography = get_artist_discography(params["artistname"])
             if not discography:
-                discography = get_artist_albums(params.get("artist_mbid"))
+                discography = LastFM.get_artist_albums(params.get("artist_mbid"))
             data = discography, "discography"
         elif info == 'mostlovedtracks':
             data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
@@ -57,14 +57,14 @@ def start_info_actions(infos, params):
                 data = get_track_details(params.get("id", "")), "Trackinfo"
         elif info == 'albumshouts':
             if params["artistname"] and params["albumname"]:
-                data = get_album_shouts(params["artistname"], params["albumname"]), "Shout"
+                data = LastFM.get_album_shouts(params["artistname"], params["albumname"]), "Shout"
         elif info == 'artistshouts':
             if params["artistname"]:
-                data = get_artist_shouts(params["artistname"]), "Shout"
+                data = LastFM.get_artist_shouts(params["artistname"]), "Shout"
         elif info == 'topartists':
-            data = get_top_artists(), "TopArtists"
+            data = LastFM.get_top_artists(), "TopArtists"
         elif info == 'hypedartists':
-            data = get_hyped_artists(), "HypedArtists"
+            data = LastFM.get_hyped_artists(), "HypedArtists"
         elif info == 'latestdbmovies':
             data = local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10)), "LatestMovies"
         elif info == 'randomdbmovies':
@@ -241,7 +241,7 @@ def start_info_actions(infos, params):
                 data = local_db.get_similar_artists(params.get("artist_mbid")), "SimilarArtists"
         elif info == 'artistevents':
             if params.get("artist_mbid"):
-                data = get_events(params.get("artist_mbid")), "ArtistEvents"
+                data = LastFM.get_events(params.get("artist_mbid")), "ArtistEvents"
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id"):
@@ -258,24 +258,24 @@ def start_info_actions(infos, params):
                 playlists = YouTube.get_user_playlists(user_name)
                 data = YouTube.get_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
         elif info == 'nearevents':
-            eventinfo = get_near_events(tag=params.get("tag", ""),
-                                        festivals_only=params.get("festivalsonly", ""),
-                                        lat=params.get("lat", ""),
-                                        lon=params.get("lon", ""),
-                                        location=params.get("location", ""),
-                                        distance=params.get("distance", ""))
+            eventinfo = LastFM.get_near_events(tag=params.get("tag", ""),
+                                               festivals_only=params.get("festivalsonly", ""),
+                                               lat=params.get("lat", ""),
+                                               lon=params.get("lon", ""),
+                                               location=params.get("location", ""),
+                                               distance=params.get("distance", ""))
             data = eventinfo, "NearEvents"
         elif info == 'trackinfo':
             HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
             if params["artistname"] and params["trackname"]:
-                track_info = get_track_info(artist=params["artistname"],
-                                            track=params["trackname"])
+                track_info = LastFM.get_track_info(artist=params["artistname"],
+                                                   track=params["trackname"])
                 HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
         elif info == 'venueevents':
             if params["location"]:
-                params["id"] = get_venue_id(params["location"])
+                params["id"] = LastFM.get_venue_id(params["location"])
             if params.get("id", ""):
-                data = get_venue_events(params.get("id", "")), "VenueEvents"
+                data = LastFM.get_venue_events(params.get("id", "")), "VenueEvents"
             else:
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
