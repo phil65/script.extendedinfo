@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import LastFM
-from TheAudioDB import *
+import TheAudioDB as AudioDB
 from TheMovieDB import *
 from Utils import *
 import local_db
@@ -42,19 +42,19 @@ def start_info_actions(infos, params):
             data = get_babe_images(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
-            discography = get_artist_discography(params["artistname"])
+            discography = AudioDB.get_artist_discography(params["artistname"])
             if not discography:
                 discography = LastFM.get_artist_albums(params.get("artist_mbid"))
             data = discography, "discography"
         elif info == 'mostlovedtracks':
-            data = get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
+            data = AudioDB.get_most_loved_tracks(params["artistname"]), "MostLovedTracks"
         elif info == 'musicvideos':
             pass
             # if "audiodbid" in artist_details:
             #     data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
         elif info == 'trackdetails':
             if params.get("id", ""):
-                data = get_track_details(params.get("id", "")), "Trackinfo"
+                data = AudioDB.get_track_details(params.get("id", "")), "Trackinfo"
         elif info == 'albumshouts':
             if params["artistname"] and params["albumname"]:
                 data = LastFM.get_album_shouts(params["artistname"], params["albumname"]), "Shout"
@@ -399,11 +399,11 @@ def start_info_actions(infos, params):
         elif info == 'albuminfo':
             resolve_url(params.get("handle"))
             if params.get("id", ""):
-                album_details = get_album_details(params.get("id", ""))
+                album_details = AudioDB.get_album_details(params.get("id", ""))
                 pass_dict_to_skin(album_details, params.get("prefix", ""))
         elif info == 'artistdetails':
             resolve_url(params.get("handle"))
-            artist_details = get_artist_details(params["artistname"])
+            artist_details = AudioDB.get_artist_details(params["artistname"])
             pass_dict_to_skin(artist_details, params.get("prefix", ""))
         elif info == 'ratemedia':
             resolve_url(params.get("handle"))

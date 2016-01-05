@@ -11,7 +11,7 @@ AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
 
 
-def handle_audiodb_albums(results):
+def handle_albums(results):
     albums = []
     if 'album' in results and results['album']:
         local_description = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
@@ -54,11 +54,11 @@ def handle_audiodb_albums(results):
             albums.append(album)
         albums = compare_album_with_library(albums)
     else:
-        log("Error when handling handle_audiodb_albums results")
+        log("Error when handling handle_albums results")
     return albums
 
 
-def handle_audiodb_tracks(results):
+def handle_tracks(results):
     tracks = []
     if 'track' in results and results['track']:
         for track in results['track']:
@@ -77,12 +77,12 @@ def handle_audiodb_tracks(results):
                      'Label': track['strTrack']}
             tracks.append(track)
     else:
-        log("Error when handling handle_audiodb_tracks results")
+        log("Error when handling handle_tracks results")
         prettyprint(results)
     return tracks
 
 
-def handle_audiodb_musicvideos(results):
+def handle_musicvideos(results):
     mvids = []
     if 'mvids' in results and results['mvids']:
         for mvid in results['mvids']:
@@ -94,7 +94,7 @@ def handle_audiodb_musicvideos(results):
                     'Label': mvid['strTrack']}
             mvids.append(mvid)
     else:
-        log("Error when handling handle_audiodb_musicvideos results")
+        log("Error when handling handle_musicvideos results")
     return mvids
 
 
@@ -162,7 +162,7 @@ def extended_artist_info(results):
 def get_artist_discography(search_str):
     url = 'searchalbum.php?s=%s' % (url_quote(search_str))
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-    return handle_audiodb_albums(results)
+    return handle_albums(results)
 
 
 def get_artist_details(search_str):
@@ -178,7 +178,7 @@ def get_most_loved_tracks(search_str="", mbid=""):
         url = 'track-top10.php?s=%s' % (url_quote(search_str))
     log("GetMostLoveTracks URL:" + url)
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-    return handle_audiodb_tracks(results)
+    return handle_tracks(results)
 
 
 def get_album_details(audiodb_id="", mbid=""):
@@ -187,14 +187,14 @@ def get_album_details(audiodb_id="", mbid=""):
     elif mbid:
         url = 'album-mb.php?i=%s' % (mbid)
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-    return handle_audiodb_albums(results)[0]
+    return handle_albums(results)[0]
 
 
 def get_musicvideos(audiodb_id):
     if audiodb_id:
         url = 'mvid.php?i=%s' % (audiodb_id)
         results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-        return handle_audiodb_musicvideos(results)
+        return handle_musicvideos(results)
     else:
         return []
 
@@ -203,6 +203,6 @@ def get_track_details(audiodb_id):
     if audiodb_id:
         url = 'track.php?m=%s' % (audiodb_id)
         results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-        return handle_audiodb_tracks(results)
+        return handle_tracks(results)
     else:
         return []
