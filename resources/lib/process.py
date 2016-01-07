@@ -357,6 +357,18 @@ def start_info_actions(infos, params):
         elif info == 'youtubebrowser':
             resolve_url(params.get("handle"))
             wm.open_youtube_list(search_str=params.get("id", ""))
+        elif info == 'moviedbbrowser':
+            resolve_url(params.get("handle"))
+            search_str = params.get("id", "")
+            if not search_str and params.get("search", ""):
+                result = xbmcgui.Dialog().input(heading=LANG(16017),
+                                                type=xbmcgui.INPUT_ALPHANUM)
+                if result and result > -1:
+                    search_str = result
+                else:
+                    return None
+            wm.open_video_list(search_str=search_str,
+                               mode="search")
         elif info == 'extendedinfo':
             resolve_url(params.get("handle"))
             HOME.setProperty('infodialogs.active', "true")

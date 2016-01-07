@@ -188,7 +188,7 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie"):
+    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie", search_str=""):
         """
         open video list, deal with window stack and color
         """
@@ -211,6 +211,7 @@ class WindowManager(object):
                                list_id=list_id,
                                force=force,
                                filter_label=filter_label,
+                               search_str=search_str,
                                type=media_type)
         if prev_window:
             self.add_to_stack(prev_window)
