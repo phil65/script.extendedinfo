@@ -10,7 +10,6 @@ from ..TheMovieDB import *
 from ..WindowManager import wm
 from T9Search import T9Search
 from ActionHandler import ActionHandler
-from ..VideoPlayer import PLAYER
 
 
 ch = ActionHandler()
@@ -21,8 +20,8 @@ class DialogBaseList(object):
     def __init__(self, *args, **kwargs):
         super(DialogBaseList, self).__init__(*args, **kwargs)
         self.listitem_list = kwargs.get('listitems', None)
-        self.search_str = kwargs.get('search_str', "")
-        self.filter_label = kwargs.get("filter_label", "")
+        self.search_str = kwargs.get('search_str', "").decode("utf-8")
+        self.filter_label = kwargs.get("filter_label", "").decode("utf-8")
         self.mode = kwargs.get("mode", "filter")
         self.filters = kwargs.get('filters', [])
         self.color = kwargs.get('color', "FFAAAAAA")
