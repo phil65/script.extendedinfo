@@ -6,7 +6,7 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from ..TheMovieDB import *
+from .. import TheMovieDB
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from .. import YouTube
@@ -85,9 +85,8 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32006)])
         if selection == 0:
-            path = self.listitem.getProperty("original")
             media_type = self.window.getProperty("type")
-            params = '"art": {"poster": "%s"}' % path
+            params = '"art": {"poster": "%s"}' % self.listitem.getProperty("original")
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
@@ -98,9 +97,8 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(32007)])
         if selection == 0:
-            path = self.listitem.getProperty("original")
             media_type = self.window.getProperty("type")
-            params = '"art": {"fanart": "%s"}' % path
+            params = '"art": {"fanart": "%s"}' % self.listitem.getProperty("original")
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
@@ -110,9 +108,8 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(33003)])
         if selection == 0:
-            youtube_id = self.listitem.getProperty("youtube_id")
             import YDStreamExtractor
-            vid = YDStreamExtractor.getVideoInfo(youtube_id,
+            vid = YDStreamExtractor.getVideoInfo(self.listitem.getProperty("youtube_id"),
                                                  quality=1)
             YDStreamExtractor.handleDownload(vid)
 
@@ -146,12 +143,12 @@ class DialogBaseInfo(object):
         youtube_list.addItems(create_listitems(self.yt_listitems))
 
     def open_credit_dialog(self, credit_id):
-        info = get_credit_info(credit_id)
+        info = TheMovieDB.get_credit_info(credit_id)
         listitems = []
         if "seasons" in info["media"]:
-            listitems += handle_tmdb_seasons(info["media"]["seasons"])
+            listitems += TheMovieDB.handle_seasons(info["media"]["seasons"])
         if "episodes" in info["media"]:
-            listitems += handle_tmdb_episodes(info["media"]["episodes"])
+            listitems += TheMovieDB.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)
@@ -168,5 +165,5 @@ class DialogBaseInfo(object):
     def update_states(self):
         if not self.account_states:
             return None
-        pass_dict_to_skin(data=get_account_props(self.account_states),
+        pass_dict_to_skin(data=TheMovieDB.get_account_props(self.account_states),
                           window_id=self.window_id)

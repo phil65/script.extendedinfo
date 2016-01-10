@@ -118,14 +118,14 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogSeasonInfo
-        from TheMovieDB import get_tmdb_data
+        from TheMovieDB import get_data
         if not tvshow_id:
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+            response = get_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
             else:
                 tvshow = re.sub('\(.*?\)', '', tvshow)
-                response = get_tmdb_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+                response = get_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
@@ -144,10 +144,10 @@ class WindowManager(object):
         needs *tvshow_id AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
-        from TheMovieDB import get_tmdb_data
+        from TheMovieDB import get_data
         ep_class = DialogEpisodeInfo.get_episode_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         if not tvshow_id and tvshow:
-            response = get_tmdb_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
+            response = get_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
         dialog = ep_class(INFO_DIALOG_FILE,

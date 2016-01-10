@@ -83,7 +83,7 @@ class DialogBaseList(object):
         if len(self.filters) > 1:
             listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
             listitems.append(LANG(32078))
-            index = xbmcgui.Dialog().select(heading=ADDON.getLocalizedString(32077),
+            index = xbmcgui.Dialog().select(heading=LANG(32077),
                                             list=listitems)
             if index == -1:
                 return None
