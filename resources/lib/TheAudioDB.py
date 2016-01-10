@@ -25,7 +25,7 @@ def handle_albums(results):
             else:
                 description = ""
             if 'strReview' in album and album['strReview']:
-                description += "[CR][CR][B]" + LANG(185) + ":[/B][CR][CR]" + album['strReview']
+                description += "[CR][CR][B]%s:[/B][CR][CR]%s" % (LANG(185), album['strReview'])
             album = {'artist': album['strArtist'],
                      'mbid': album['strMusicBrainzID'],
                      'id': album['idAlbum'],

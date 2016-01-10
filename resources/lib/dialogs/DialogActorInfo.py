@@ -5,7 +5,7 @@
 
 import xbmcgui
 from ..Utils import *
-from ..ImageTools import *
+from .. import ImageTools
 from .. import TheMovieDB
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
@@ -28,8 +28,8 @@ def get_actor_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("thumb", ""),
-                                                                             radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("thumb", ""),
+                                                                                        radius=25)
             self.listitems = [(150, self.data["movie_roles"]),
                               (250, self.data["tvshow_roles"]),
                               (450, self.data["images"]),
