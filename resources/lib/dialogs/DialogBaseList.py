@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from ..TheMovieDB import *
 from ..WindowManager import wm
 from T9Search import T9Search
 from ActionHandler import ActionHandler
