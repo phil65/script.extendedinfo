@@ -6,7 +6,7 @@
 import xbmcgui
 from ..Utils import *
 from ..ImageTools import *
-from ..TheMovieDB import *
+from .. import TheMovieDB
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ..VideoPlayer import PLAYER
@@ -24,7 +24,7 @@ def get_actor_window(window_type):
             super(DialogActorInfo, self).__init__(*args, **kwargs)
             self.id = kwargs.get('id', False)
             self.type = "Actor"
-            data = extended_actor_info(actor_id=self.id)
+            data = TheMovieDB.extended_actor_info(actor_id=self.id)
             if not data:
                 return None
             self.info, self.data = data
@@ -94,6 +94,6 @@ def get_actor_window(window_type):
         @ch.action("contextmenu", 550)
         def add_movie_to_account(self):
             movie_id = self.listitem.getProperty("id")
-            add_movie_to_list(movie_id)
+            TheMovieDB.add_movie_to_list(movie_id)
 
     return DialogActorInfo
