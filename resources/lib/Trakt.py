@@ -5,7 +5,7 @@
 
 import datetime
 from Utils import *
-import local_db
+from local_db import local_db
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"

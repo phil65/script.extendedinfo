@@ -5,7 +5,7 @@
 
 import xbmc
 from Utils import *
-from local_db import compare_album_with_library
+from local_db import local_db
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
@@ -52,7 +52,7 @@ def handle_albums(results):
                      'name': album['strAlbum'],
                      'Label': album['strAlbum']}
             albums.append(album)
-        albums = compare_album_with_library(albums)
+        albums = local_db.compare_album_with_library(albums)
     else:
         log("Error when handling handle_albums results")
     return albums

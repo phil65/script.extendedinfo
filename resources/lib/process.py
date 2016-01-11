@@ -7,7 +7,7 @@ import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB
 from Utils import *
-import local_db
+from local_db import local_db
 import YouTube
 import Trakt
 from WindowManager import wm
@@ -467,8 +467,7 @@ def start_info_actions(infos, params):
             window_id = xbmcgui.getCurrentwindow_id()
             window = xbmcgui.Window(window_id)
             # focusid = Window.getFocusId()
-            itemlist = window.getFocus()
-            num_items = itemlist.getSelectedPosition()
+            num_items = window.getFocus().getSelectedPosition()
             for i in range(0, num_items):
                 notify(item.getProperty("Image"))
         elif info == 'action':

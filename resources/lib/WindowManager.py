@@ -10,7 +10,7 @@ import xbmcvfs
 import os
 
 from dialogs.BaseClasses import *
-import local_db
+from local_db import local_db
 
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
