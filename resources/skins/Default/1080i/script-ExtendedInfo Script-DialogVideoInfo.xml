@@ -1080,7 +1080,7 @@
                                         </control>
                                         <control type="image">
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>59</width>
                                             <height>25</height>
                                             <texture>common/black.png</texture>
                                             <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
@@ -1167,7 +1167,7 @@
                                         </control>
                                         <control type="image">
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>59</width>
                                             <height>25</height>
                                             <texture>common/black.png</texture>
                                             <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
@@ -1328,7 +1328,7 @@
                                         </control>
                                         <control type="image">
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>59</width>
                                             <height>25</height>
                                             <texture>common/black.png</texture>
                                             <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
@@ -1406,7 +1406,7 @@
                                         </control>
                                         <control type="image">
                                             <posy>310</posy>
-                                            <width>54</width>
+                                            <width>59</width>
                                             <height>25</height>
                                             <texture>common/black.png</texture>
                                             <animation effect="fade" end="60" time="0" condition="true">Conditional</animation>
