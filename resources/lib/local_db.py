@@ -19,6 +19,8 @@ class LocalDB(object):
         self.tvshow_originaltitles = []
         self.tvshow_titles = []
         self.tvshow_imdbs = []
+        self.artists = []
+        self.albums = []
 
     def get_artists(self):
         filename = ADDON_DATA_PATH + "/XBMCartists.txt"
@@ -38,10 +40,11 @@ class LocalDB(object):
         if simi_artists is None:
             log('Last.fm didn\'t return proper response')
             return None
-        xbmc_artists = self.get_artists()
+        if not self.artists:
+            self.artists = self.get_artists()
         artists = []
         for simi_artist in simi_artists:
-            for xbmc_artist in xbmc_artists["result"]["artists"]:
+            for xbmc_artist in self.artists["result"]["artists"]:
                 if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                     artists.append(xbmc_artist)
                 elif xbmc_artist['artist'] == simi_artist['name']:
