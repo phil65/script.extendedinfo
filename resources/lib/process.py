@@ -508,7 +508,7 @@ def start_info_actions(infos, params):
             else:
                 movie_id = ""
             if movie_id:
-                trailer = get_trailer(movie_id)
+                trailer = TheMovieDB.get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 xbmc.sleep(100)
                 if trailer:
