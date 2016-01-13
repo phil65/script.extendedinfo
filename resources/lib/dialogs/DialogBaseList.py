@@ -29,6 +29,9 @@ class DialogBaseList(object):
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
+        self.page_token = ""
+        self.next_page_token = ""
+        self.prev_page_token = ""
 
     def onInit(self):
         super(DialogBaseList, self).onInit()
@@ -170,6 +173,20 @@ class DialogBaseList(object):
             self.window.setProperty("Order_Label", LANG(584))
         else:
             self.window.setProperty("Order_Label", LANG(585))
+
+    def go_to_next_page(self):
+        self.get_column()
+        if self.page < self.total_pages:
+            self.page += 1
+            self.prev_page_token = self.page_token
+            self.page_token = self.next_page_token
+
+    def go_to_prev_page(self):
+        self.get_column()
+        if self.page > 1:
+            self.page -= 1
+            self.next_page_token = self.page_token
+            self.page_token = self.prev_page_token
 
     def get_column(self):
         for i in range(0, 10):

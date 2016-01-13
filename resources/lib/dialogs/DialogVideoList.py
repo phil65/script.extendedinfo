@@ -75,16 +75,6 @@ def get_tmdb_window(window_type):
                 self.window.getControl(5009).setVisible(True)
                 self.window.getControl(5010).setVisible(True)
 
-        def go_to_next_page(self):
-            self.get_column()
-            if self.page < self.total_pages:
-                self.page += 1
-
-        def go_to_prev_page(self):
-            self.get_column()
-            if self.page > 1:
-                self.page -= 1
-
         @ch.action("contextmenu", 500)
         def context_menu(self):
             item_id = self.listitem.getProperty("id")
@@ -150,8 +140,8 @@ def get_tmdb_window(window_type):
                 sort_key = self.mode
             else:
                 sort_key = self.type
-            listitems = [key for key in SORTS[sort_key].values()]
-            sort_strings = [value for value in SORTS[sort_key].keys()]
+            listitems = [key for key in self.SORTS[sort_key].values()]
+            sort_strings = [value for value in self.SORTS[sort_key].keys()]
             index = xbmcgui.Dialog().select(heading=LANG(32104),
                                             list=listitems)
             if index == -1:

@@ -44,9 +44,6 @@ def get_youtube_window(window_type):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")
             self.filter_url = ""
-            self.page_token = ""
-            self.next_page_token = ""
-            self.prev_page_token = ""
             self.sort = kwargs.get('sort', "relevance")
             self.sort_label = kwargs.get('sort_label', LANG(32060))
             self.order = kwargs.get('order', "desc")
@@ -176,18 +173,6 @@ def get_youtube_window(window_type):
                 self.window.getControl(5009).setVisible(False)
                 self.window.getControl(5012).setVisible(False)
             super(DialogYoutubeList, self).update_ui()
-
-        def go_to_next_page(self):
-            if self.page < self.total_pages:
-                self.page += 1
-                self.prev_page_token = self.page_token
-                self.page_token = self.next_page_token
-
-        def go_to_prev_page(self):
-            if self.page > 1:
-                self.page -= 1
-                self.next_page_token = self.page_token
-                self.page_token = self.prev_page_token
 
         @ch.click(5001)
         def get_sort_type(self):
