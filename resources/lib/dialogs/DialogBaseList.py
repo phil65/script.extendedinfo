@@ -121,9 +121,7 @@ class DialogBaseList(object):
         self.update_ui()
 
     def set_filter_url(self):
-        filter_list = []
-        for item in self.filters:
-            filter_list.append("%s=%s" % (item["type"], item["id"]))
+        filter_list = ["%s=%s" % (item["type"], item["id"]) for item in self.filters]
         self.filter_url = "&".join(filter_list)
         if self.filter_url:
             self.filter_url += "&"
