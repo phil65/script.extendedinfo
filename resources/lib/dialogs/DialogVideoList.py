@@ -166,18 +166,11 @@ def get_tmdb_window(window_type):
             self.update()
 
         def add_filter(self, key, value, typelabel, label):
-            if ".gte" in key or ".lte" in key:
-                super(DialogVideoList, self).add_filter(key=key,
-                                                        value=value,
-                                                        typelabel=typelabel,
-                                                        label=label,
-                                                        force_overwrite=True)
-            else:
-                super(DialogVideoList, self).add_filter(key=key,
-                                                        value=value,
-                                                        typelabel=typelabel,
-                                                        label=label,
-                                                        force_overwrite=False)
+            super(DialogVideoList, self).add_filter(key=key,
+                                                    value=value,
+                                                    typelabel=typelabel,
+                                                    label=label,
+                                                    force_overwrite=".gte" in key or ".lte" in key)
 
         @ch.click(5004)
         def toggle_order(self):
