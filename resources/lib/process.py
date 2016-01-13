@@ -456,8 +456,8 @@ def start_info_actions(infos, params):
                     tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=tvdb_id)
                 else:
                     return False
-                set_rating_prompt(media_type=media_type,
-                                  media_id=tmdb_id)
+                TheMovieDB.set_rating_prompt(media_type=media_type,
+                                             media_id=tmdb_id)
         elif info == 'updatexbmcdatabasewithartistmbidbg':
             resolve_url(params.get("handle"))
             set_mbids_for_artists(False, False)

@@ -145,7 +145,7 @@ class WindowManager(object):
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
-        needs *tvshow_id AND *season AND *episode
+        needs (*tvshow_id OR *tvshow) AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
         from TheMovieDB import get_data
