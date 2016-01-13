@@ -350,6 +350,11 @@ def start_info_actions(infos, params):
                 params = {"tvshow": xbmc.getInfoLabel("ListItem.TVShowTitle"),
                           "season": xbmc.getInfoLabel("ListItem.Season")}
                 start_info_actions(["seasoninfo"], params)
+            elif xbmc.getCondVisibility("Container.Content(episodes)"):
+                params = {"tvshow": xbmc.getInfoLabel("ListItem.TVShowTitle"),
+                          "season": xbmc.getInfoLabel("ListItem.Season"),
+                          "episode": xbmc.getInfoLabel("ListItem.Episode")}
+                start_info_actions(["extendedepisodeinfo"], params)
             elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
                 params = {"name": xbmc.getInfoLabel("ListItem.Label")}
                 start_info_actions(["extendedactorinfo"], params)
@@ -442,13 +447,13 @@ def start_info_actions(infos, params):
                 if params.get("id") and params["id"]:
                     tmdb_id = params["id"]
                 elif media_type == "movie":
-                    tmdb_id = get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
-                                                dbid=params.get("dbid", ""),
-                                                name=params.get("name", ""))
+                    tmdb_id = TheMovieDB.get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
+                                                           dbid=params.get("dbid", ""),
+                                                           name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
                     tvdb_id = local_db.get_imdb_id(media_type="tvshow",
                                                    dbid=params["dbid"])
-                    tmdb_id = get_show_tmdb_id(tvdb_id=tvdb_id)
+                    tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=tvdb_id)
                 else:
                     return False
                 set_rating_prompt(media_type=media_type,
