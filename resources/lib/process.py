@@ -10,6 +10,7 @@ from Utils import *
 from local_db import local_db
 import YouTube
 import Trakt
+import RottenTomatoes
 from WindowManager import wm
 from VideoPlayer import PLAYER
 
@@ -20,11 +21,8 @@ def start_info_actions(infos, params):
         params["artist_mbid"] = fetch_musicbrainz_id(params["artistname"])
     prettyprint(params)
     prettyprint(infos)
-    if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"] is not ""):
+    if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"]):
         params["prefix"] = params["prefix"] + '.'
-    # NOTICE: compatibility
-    if "imdbid" in params and "imdb_id" not in params:
-        params["imdb_id"] = params["imdbid"]
     for info in infos:
         data = [], ""
         #  Images
@@ -74,29 +72,21 @@ def start_info_actions(infos, params):
             data = local_db.get_movies(method, params.get("limit", 10)), "RecommendedMovies"
     #  RottenTomatoesMovies
         elif info == 'intheaters':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("movies/in_theaters"), "InTheatersMovies"
+            data = RottenTomatoes.get_rottentomatoes_movies("movies/in_theaters"), "InTheatersMovies"
         elif info == 'boxoffice':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("movies/box_office"), "BoxOffice"
+            data = RottenTomatoes.get_rottentomatoes_movies("movies/box_office"), "BoxOffice"
         elif info == 'opening':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("movies/opening"), "Opening"
+            data = RottenTomatoes.get_rottentomatoes_movies("movies/opening"), "Opening"
         elif info == 'comingsoon':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("movies/upcoming"), "ComingSoonMovies"
+            data = RottenTomatoes.get_rottentomatoes_movies("movies/upcoming"), "ComingSoonMovies"
         elif info == 'toprentals':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("dvds/top_rentals"), "TopRentals"
+            data = RottenTomatoes.get_rottentomatoes_movies("dvds/top_rentals"), "TopRentals"
         elif info == 'currentdvdreleases':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("dvds/current_releases"), "CurrentDVDs"
+            data = RottenTomatoes.get_rottentomatoes_movies("dvds/current_releases"), "CurrentDVDs"
         elif info == 'newdvdreleases':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("dvds/new_releases"), "NewDVDs"
+            data = RottenTomatoes.get_rottentomatoes_movies("dvds/new_releases"), "NewDVDs"
         elif info == 'upcomingdvds':
-            from RottenTomatoes import get_rottentomatoes_movies
-            data = get_rottentomatoes_movies("dvds/upcoming"), "UpcomingDVDs"
+            data = RottenTomatoes.get_rottentomatoes_movies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
             data = TheMovieDB.get_tmdb_movies("now_playing"), "InCinemasMovies"

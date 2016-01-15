@@ -26,8 +26,7 @@ def get_xkcd_images():
             base_url = 'http://xkcd.com/'
             url = '%i/info.0.json' % random.randrange(1, 1190)
             results = get_JSON_response(base_url + url, 9999, folder="XKCD")
-            item = {'Image': results["img"],
-                    'thumb': results["img"],
+            item = {'thumb': results["img"],
                     'path': "plugin://script.extendedinfo?info=setfocus",
                     'poster': results["img"],
                     'title': results["title"],
@@ -54,8 +53,7 @@ def get_cyanide_images():
         if response:
             keyword = re.search("<meta property=\"og:image\".*?content=\"([^\"]*)\"", response).group(1)
             url = re.search("<meta property=\"og:url\".*?content=\"([^\"]*)\"", response).group(1)
-            newitem = {'Image': keyword,
-                       'thumb': keyword,
+            newitem = {'thumb': keyword,
                        'path': "plugin://script.extendedinfo?info=setfocus",
                        'poster': keyword,
                        'title': url}
