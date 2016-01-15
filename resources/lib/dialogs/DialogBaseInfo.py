@@ -46,14 +46,11 @@ class DialogBaseInfo(object):
             if not self.bouncing:
                 self.bounce("up")
             self.setFocusId(self.last_focus)
-            self.last_focus = control_id
         elif control_id == 20001:
             if not self.bouncing:
                 self.bounce("down")
             self.setFocusId(self.last_focus)
-            self.last_focus = control_id
-        else:
-            self.last_focus = control_id
+        self.last_focus = control_id
 
     @run_async
     def bounce(self, identifier):
@@ -74,7 +71,7 @@ class DialogBaseInfo(object):
     @ch.click(1250)
     @ch.click(1350)
     def open_image(self):
-        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id), None),
+        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id)),
                                 index=self.control.getSelectedPosition())
         self.control.selectItem(pos)
 
