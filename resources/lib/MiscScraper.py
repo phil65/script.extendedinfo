@@ -68,7 +68,7 @@ def get_cyanide_images():
 
 def get_babe_images(single=False):
     now = datetime.datetime.now()
-    if single is True:
+    if single:
         filename = "babe%ix%ix%i" % (now.month, now.day, now.year)
     else:
         filename = "babes%ix%ix%i" % (now.month, now.day, now.year)
@@ -77,7 +77,7 @@ def get_babe_images(single=False):
         return read_from_file(path)
     items = []
     for i in range(1, 10):
-        if single is True:
+        if single:
             month = now.month
             day = now.day
             image = i
@@ -100,44 +100,37 @@ def get_babe_images(single=False):
 def handle_bandsintown_events(results):
     events = []
     for event in results:
-        try:
-            venue = event['venue']
-            artists = ''
-            for art in event["artists"]:
-                artists = artists + ' / ' + art['name']
-                artists = artists.replace(" / ", "", 1)
-            event = {'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
-                     'city': venue['city'],
-                     'lat': venue['latitude'],
-                     'lon': venue['longitude'],
-                     'id': venue['id'],
-                     'url': venue['url'],
-                     'name': venue['name'],
-                     'region': venue['region'],
-                     'country': venue['country'],
-                     'artists': artists}
-            events.append(event)
-        except Exception as e:
-            log("Exception in handle_bandsintown_events")
-            log(e)
-            prettyprint(event)
+        venue = event['venue']
+        artists = ''
+        for art in event["artists"]:
+            artists = artists + ' / ' + art['name']
+            artists = artists.replace(" / ", "", 1)
+        event = {'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
+                 'city': venue['city'],
+                 'lat': venue['latitude'],
+                 'lon': venue['longitude'],
+                 'id': venue['id'],
+                 'url': venue['url'],
+                 'name': venue['name'],
+                 'region': venue['region'],
+                 'country': venue['country'],
+                 'artists': artists}
+        events.append(event)
     return events
 
 
 def get_artist_near_events(artists):  # not possible with api 2.0
     artist_str = ''
-    count = 0
-    for art in artists:
-        artist = art['artist']
+    for count, art in enumerate(artists):
+        if count > 49:
+            break
         try:
-            artist = urllib.quote(artist)
+            artist = urllib.quote(art['artist'])
         except:
-            artist = urllib.quote(artist.encode("utf-8"))
-        if count < 49:
-            if len(artist_str) > 0:
-                artist_str = artist_str + '&'
-            artist_str = artist_str + 'artists[]=' + artist
-            count += 1
+            artist = urllib.quote(art['artist'].encode("utf-8"))
+        if len(artist_str) > 0:
+            artist_str = artist_str + '&'
+        artist_str = artist_str + 'artists[]=' + artist
     base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
     url = '&%sapp_id=%s' % (artist_str, BANDSINTOWN_KEY)
     results = get_JSON_response(base_url + url, folder="BandsInTown")
