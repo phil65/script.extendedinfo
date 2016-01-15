@@ -3,7 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmcvfs
 import simplejson
 from Utils import *
 
@@ -23,16 +22,9 @@ class LocalDB(object):
         self.albums = []
 
     def get_artists(self):
-        filename = ADDON_DATA_PATH + "/XBMCartists.txt"
-        if xbmcvfs.exists(filename) and time.time() - os.path.getmtime(filename) < 0:
-            return read_from_file(filename)
-        else:
-            json_response = get_kodi_json(method="AudioLibrary.GetArtists",
-                                          params='{"properties": ["musicbrainzartistid","thumbnail"]}')
-            save_to_file(content=json_response,
-                         filename="XBMCartists",
-                         path=ADDON_DATA_PATH)
-            return json_response
+        json_response = get_kodi_json(method="AudioLibrary.GetArtists",
+                                      params='{"properties": ["musicbrainzartistid","thumbnail"]}')
+        return json_response["result"]["artists"]
 
     def get_similar_artists(self, artist_id):
         import LastFM
@@ -44,7 +36,7 @@ class LocalDB(object):
             self.artists = self.get_artists()
         artists = []
         for simi_artist in simi_artists:
-            for xbmc_artist in self.artists["result"]["artists"]:
+            for xbmc_artist in self.artists:
                 if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                     artists.append(xbmc_artist)
                 elif xbmc_artist['artist'] == simi_artist['name']:

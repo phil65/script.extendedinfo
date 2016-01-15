@@ -524,8 +524,7 @@ def get_favs_by_type(fav_type):
     """
     returns dict list containing favourites with type *fav_type
     """
-    favs = get_favs()
-    return [fav for fav in favs if fav["Type"] == fav_type]
+    return [fav for fav in get_favs() if fav["Type"] == fav_type]
 
 
 def get_fav_path(fav):
@@ -597,9 +596,7 @@ def log(txt):
 
 
 def get_browse_dialog(default="", heading=LANG(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
-    dialog = xbmcgui.Dialog()
-    value = dialog.browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
-    return value
+    return xbmcgui.Dialog().browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
 
 
 def save_to_file(content, filename, path=""):

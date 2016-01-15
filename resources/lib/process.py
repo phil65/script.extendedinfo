@@ -281,7 +281,7 @@ def start_info_actions(infos, params):
         elif info == 'topartistsnearevents':
             artists = local_db.get_artists()
             from MiscScraper import get_artist_near_events
-            data = get_artist_near_events(artists["result"]["artists"][0:49]), "TopArtistsNearEvents"
+            data = get_artist_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'favourites':
             if params.get("id", ""):
                 favs = get_favs_by_type(params.get("id", ""))
@@ -458,9 +458,6 @@ def start_info_actions(infos, params):
                     return False
                 TheMovieDB.set_rating_prompt(media_type=media_type,
                                              media_id=tmdb_id)
-        elif info == 'updatexbmcdatabasewithartistmbidbg':
-            resolve_url(params.get("handle"))
-            set_mbids_for_artists(False, False)
         elif info == 'setfocus':
             resolve_url(params.get("handle"))
             xbmc.executebuiltin("SetFocus(22222)")
@@ -522,9 +519,6 @@ def start_info_actions(infos, params):
                     wm.open_youtube_list(search_str=params.get("title", ""))
                 else:
                     xbmc.executebuiltin("Dialog.Close(busydialog)")
-        elif info == 'updatexbmcdatabasewithartistmbid':
-            resolve_url(params.get("handle"))
-            set_mbids_for_artists(True, False)
         elif info == 'deletecache':
             resolve_url(params.get("handle"))
             HOME.clearProperties()
