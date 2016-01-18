@@ -2922,7 +2922,7 @@
                                     <height>38</height>
                                     <align>center</align>
                                     <aligny>center</aligny>
-                                    <label fallback="563">$INFO[Window.Property(Votes),, $LOCALIZE[20350]]</label>
+                                    <label fallback="563">$INFO[Window.Property(Votes),, $ADDON[script.extendedinfo 32082]]</label>
                                     <font>font10</font>
                                 </control>
                             </control>
