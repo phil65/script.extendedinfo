@@ -420,17 +420,17 @@ def get_tmdb_window(window_type):
                 url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, SETTING("LanguageID"), self.page, include_adult)
             if force:
                 response = TheMovieDB.get_data(url=url,
-                                                    cache_days=0)
+                                               cache_days=0)
             else:
                 response = TheMovieDB.get_data(url=url,
-                                                    cache_days=2)
+                                               cache_days=2)
             if not response:
                 return None
             if self.mode == "list":
                 prettyprint(response)
                 info = {"listitems": TheMovieDB.handle_movies(results=response["items"],
-                                                                   local_first=True,
-                                                                   sortkey=None),
+                                                              local_first=True,
+                                                              sortkey=None),
                         "results_per_page": 1,
                         "total_results": len(response["items"])}
                 return info
@@ -445,12 +445,12 @@ def get_tmdb_window(window_type):
                 listitems = TheMovieDB.handle_multi_search(response["results"])
             elif self.type == "movie":
                 listitems = TheMovieDB.handle_movies(results=response["results"],
-                                                          local_first=False,
-                                                          sortkey=None)
+                                                     local_first=False,
+                                                     sortkey=None)
             else:
                 listitems = TheMovieDB.handle_tvshows(results=response["results"],
-                                                           local_first=False,
-                                                           sortkey=None)
+                                                      local_first=False,
+                                                      sortkey=None)
             info = {"listitems": listitems,
                     "results_per_page": response["total_pages"],
                     "total_results": response["total_results"]}
