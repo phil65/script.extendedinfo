@@ -160,12 +160,16 @@ def extended_artist_info(results):
 
 
 def get_artist_discography(search_str):
+    if not search_str:
+        return []
     url = 'searchalbum.php?s=%s' % (url_quote(search_str))
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
     return handle_albums(results)
 
 
 def get_artist_details(search_str):
+    if not search_str:
+        return []
     url = 'search.php?s=%s' % (url_quote(search_str))
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
     return extended_artist_info(results)
@@ -174,8 +178,10 @@ def get_artist_details(search_str):
 def get_most_loved_tracks(search_str="", mbid=""):
     if mbid:
         url = 'track-top10-mb.php?s=%s' % (mbid)
-    else:
+    elif search_str:
         url = 'track-top10.php?s=%s' % (url_quote(search_str))
+    else:
+        return []
     log("GetMostLoveTracks URL:" + url)
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
     return handle_tracks(results)
@@ -186,23 +192,23 @@ def get_album_details(audiodb_id="", mbid=""):
         url = 'album.php?m=%s' % (audiodb_id)
     elif mbid:
         url = 'album-mb.php?i=%s' % (mbid)
+    else:
+        return []
     results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
     return handle_albums(results)[0]
 
 
 def get_musicvideos(audiodb_id):
-    if audiodb_id:
-        url = 'mvid.php?i=%s' % (audiodb_id)
-        results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-        return handle_musicvideos(results)
-    else:
+    if not audiodb_id:
         return []
+    url = 'mvid.php?i=%s' % (audiodb_id)
+    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    return handle_musicvideos(results)
 
 
 def get_track_details(audiodb_id):
-    if audiodb_id:
-        url = 'track.php?m=%s' % (audiodb_id)
-        results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
-        return handle_tracks(results)
-    else:
+    if not audiodb_id:
         return []
+    url = 'track.php?m=%s' % (audiodb_id)
+    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    return handle_tracks(results)
