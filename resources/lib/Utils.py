@@ -388,7 +388,7 @@ def get_http(url=None, headers=False):
     """
     succeed = 0
     if not headers:
-        headers = {'User-agent': 'XBMC/14.0 ( phil65@kodi.tv )'}
+        headers = {'User-agent': 'XBMC/16.0 ( phil65@kodi.tv )'}
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)
@@ -574,12 +574,11 @@ def get_skin_string(name):
 def get_weather_images():
     items = []
     for i in range(1, 6):
-        newitem = {'Label': "bla",
-                   'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
-                   'thumb': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Area)" % i),
-                   'Layer': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Layer)" % i),
-                   'Legend': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Legend)" % i)}
-        items.append(newitem)
+        items.append({'Label': "bla",
+                      'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
+                      'thumb': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Area)" % i),
+                      'Layer': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Layer)" % i),
+                      'Legend': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Legend)" % i)})
     return items
 
 
