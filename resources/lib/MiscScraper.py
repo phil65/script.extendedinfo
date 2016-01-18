@@ -5,12 +5,12 @@
 
 import re
 import random
-import urllib
 import xbmc
 from Utils import *
 import datetime
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
+
 
 def get_xkcd_images():
     now = datetime.datetime.now()
