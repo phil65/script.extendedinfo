@@ -7,8 +7,8 @@ import urllib
 from Utils import *
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
-BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
-BASE_URL = "http://api.bandsintown.com/events/search?format=json&api_version=2.0&"
+API_KEY = 'xbmc_open_source_media_center'
+BASE_URL = "http://api.bandsintown.com/events/search?format=json&api_version=2.0&app_id=%s&" % API_KEY
 
 
 def handle_events(results):
@@ -33,19 +33,15 @@ def handle_events(results):
 
 
 def get_near_events(artists):  # not possible with api 2.0
-    artist_str = ''
+    artists = ''
     for count, art in enumerate(artists[:50]):
         try:
-            artist = urllib.quote(art['artist'])
+            artists.append(urllib.quote(art['artist']))
         except:
-            artist = urllib.quote(art['artist'].encode("utf-8"))
-        if len(artist_str) > 0:
-            artist_str = artist_str + '&'
-        artist_str = artist_str + 'artists[]=' + artist
-    url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%sapp_id=%s' % (artist_str, BANDSINTOWN_KEY)
+            artists.append(urllib.quote(art['artist'].encode("utf-8")))
+    artist_str = 'artists[]=' + '&artists[]='.join(artists)
+    url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%s' % (artist_str)
     results = get_JSON_response(url, folder="BandsInTown")
     if results:
         return handle_events(results)
-    log("get_near_events: Could not get data from " + url)
-    log(results)
     return []
