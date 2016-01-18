@@ -236,13 +236,13 @@ def get_playlist_stats(path):
         end_index = path.rfind("/") + 1
     if (start_index > 0) and (end_index > 0):
         playlist_path = path[start_index:end_index]
-        json_response = get_kodi_json(method="Files.GetDirectory",
-                                      params='{"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
-        if "result" in json_response:
+        data = get_kodi_json(method="Files.GetDirectory",
+                             params='{"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
+        if "result" in data:
             played = 0
             in_progress = 0
-            numitems = json_response["result"]["limits"]["total"]
-            for item in json_response["result"]["files"]:
+            numitems = data["result"]["limits"]["total"]
+            for item in data["result"]["files"]:
                 if "playcount" in item:
                     if item["playcount"] > 0:
                         played += 1
@@ -265,10 +265,10 @@ def get_sort_letters(path, focused_letter):
     if SETTING("FolderPath") == path:
         letter_list = SETTING("LetterList").split()
     elif path:
-        json_response = get_kodi_json(method="Files.GetDirectory",
-                                      params='{"directory": "%s", "media": "files"}' % path)
-        if "result" in json_response and "files" in json_response["result"]:
-            for movie in json_response["result"]["files"]:
+        data = get_kodi_json(method="Files.GetDirectory",
+                             params='{"directory": "%s", "media": "files"}' % path)
+        if "result" in data and "files" in data["result"]:
+            for movie in data["result"]["files"]:
                 cleaned_label = movie["label"].replace("The ", "")
                 if cleaned_label:
                     sortletter = cleaned_label[0]
@@ -542,11 +542,11 @@ def get_favs():
     returns dict list containing favourites
     """
     items = []
-    json_response = get_kodi_json(method="Favourites.GetFavourites",
-                                  params='{"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
-    if "result" not in json_response or json_response["result"]["limits"]["total"] == 0:
+    data = get_kodi_json(method="Favourites.GetFavourites",
+                         params='{"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+    if "result" not in data or data["result"]["limits"]["total"] == 0:
         return []
-    for fav in json_response["result"]["favourites"]:
+    for fav in data["result"]["favourites"]:
         path = get_fav_path(fav)
         newitem = {'Label': fav["title"],
                    'thumb': fav["thumbnail"],
@@ -676,9 +676,9 @@ def get_kodi_json(method, params):
 
 def prettyprint(string):
     log(json.dumps(string,
-                         sort_keys=True,
-                         indent=4,
-                         separators=(',', ': ')))
+                   sort_keys=True,
+                   indent=4,
+                   separators=(',', ': ')))
 
 
 def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_id=10000):
