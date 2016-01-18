@@ -260,10 +260,10 @@ def get_sort_letters(path, focused_letter):
     and put it into home window property "LetterList"
     """
     listitems = []
-    letter_list = []
+    letters = []
     HOME.clearProperty("LetterList")
     if SETTING("FolderPath") == path:
-        letter_list = SETTING("LetterList").split()
+        letters = SETTING("LetterList").split()
     elif path:
         data = get_kodi_json(method="Files.GetDirectory",
                              params='{"directory": "%s", "media": "files"}' % path)
@@ -272,19 +272,19 @@ def get_sort_letters(path, focused_letter):
                 cleaned_label = movie["label"].replace("The ", "")
                 if cleaned_label:
                     sortletter = cleaned_label[0]
-                    if sortletter not in letter_list:
-                        letter_list.append(sortletter)
-        ADDON.setSetting("LetterList", " ".join(letter_list))
+                    if sortletter not in letters:
+                        letters.append(sortletter)
+        ADDON.setSetting("LetterList", " ".join(letters))
         ADDON.setSetting("FolderPath", path)
-    HOME.setProperty("LetterList", "".join(letter_list))
-    if not letter_list or not focused_letter:
+    HOME.setProperty("LetterList", "".join(letters))
+    if not letters or not focused_letter:
         return None
     start_ord = ord("A")
     for i in range(0, 26):
         letter = chr(start_ord + i)
         if letter == focused_letter:
             label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-        elif letter in letter_list:
+        elif letter in letters:
             label = letter
         else:
             label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
@@ -312,11 +312,6 @@ def media_streamdetails(filename, streamdetails):
     info = {}
     video = streamdetails['video']
     audio = streamdetails['audio']
-    info['VideoCodec'] = ''
-    info['VideoAspect'] = ''
-    info['VideoResolution'] = ''
-    info['AudioCodec'] = ''
-    info['AudioChannels'] = ''
     if video:
         if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
             info['VideoResolution'] = "480"
@@ -343,10 +338,10 @@ def media_streamdetails(filename, streamdetails):
             info['VideoAspect'] = "2.20"
         else:
             info['VideoAspect'] = "2.35"
-    elif (('dvd') in filename and not ('hddvd' or 'hd-dvd') in filename) or (filename.endswith('.vob' or '.ifo')):
-        info['VideoResolution'] = '576'
     elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
         info['VideoResolution'] = '1080'
+    elif ('dvd' in filename) or (filename.endswith('.vob' or '.ifo')):
+        info['VideoResolution'] = '576'
     if audio:
         info['AudioCodec'] = audio[0]['codec']
         info['AudioChannels'] = audio[0]['channels']
@@ -548,12 +543,11 @@ def get_favs():
         return []
     for fav in data["result"]["favourites"]:
         path = get_fav_path(fav)
-        newitem = {'Label': fav["title"],
-                   'thumb': fav["thumbnail"],
-                   'Type': fav["type"],
-                   'Builtin': path,
-                   'path': "plugin://script.extendedinfo/?info=action&&id=" + path}
-        items.append(newitem)
+        items.append({'Label': fav["title"],
+                      'thumb': fav["thumbnail"],
+                      'Type': fav["type"],
+                      'Builtin': path,
+                      'path': "plugin://script.extendedinfo/?info=action&&id=" + path})
     return items
 
 
@@ -565,17 +559,16 @@ def get_icon_panel(number):
     offset = number * 5 - 5
     for i in range(1, 6):
         infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
-        newitem = {'Label': get_skin_string("IconPanelItem%i.Label" % (i + offset)).decode("utf-8"),
-                   'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path.decode("utf-8"),
-                   'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)).decode("utf-8"),
-                   'id': "IconPanelitem%i" % (i + offset),
-                   'Type': get_skin_string("IconPanelItem%i.Type" % (i + offset)).decode("utf-8")}
-        items.append(newitem)
+        items.append({'Label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
+                      'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path.decode("utf-8"),
+                      'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
+                      'id': "IconPanelitem%i" % (i + offset),
+                      'Type': get_skin_string("IconPanelItem%i.Type" % (i + offset))})
     return items
 
 
 def get_skin_string(name):
-    return xbmc.getInfoLabel("Skin.String(%s)")
+    return xbmc.getInfoLabel("Skin.String(%s)").decode("utf-8")
 
 
 def get_weather_images():
