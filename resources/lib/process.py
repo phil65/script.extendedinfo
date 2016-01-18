@@ -11,6 +11,7 @@ from local_db import local_db
 import YouTube
 import Trakt
 import RottenTomatoes
+import KodiJson
 from WindowManager import wm
 from VideoPlayer import PLAYER
 
@@ -298,29 +299,12 @@ def start_info_actions(infos, params):
             from T9Search import T9Search
             T9Search(call=None,
                      start_value="")
-            get_kodi_json(method="Input.SendText",
-                          params='{"text":"%s", "done":true}' % dialog.search_str)
-
-        elif info == 'playmovie':
+            KodiJson.send_text(text=dialog.search_str)
+        elif info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
             resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
-        elif info == 'playepisode':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"episodeid": %s}, "options":{"resume": %s}}' % (params.get("dbid"), params.get("resume", "true")))
-        elif info == 'playmusicvideo':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"musicvideoid": %s}}' % (params.get("dbid")))
-        elif info == 'playalbum':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"albumid": %s}}' % (params.get("dbid")))
-        elif info == 'playsong':
-            resolve_url(params.get("handle"))
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"songid": %s}}' % (params.get("dbid")))
+            KodiJson.play_media(media_type=info.replace("play", ""),
+                                dbid=params.get("dbid"),
+                                resume=params.get("resume", "true"))
         elif info == "openinfodialog":
             resolve_url(params.get("handle"))
             dbid = xbmc.getInfoLabel("ListItem.DBID")
@@ -474,8 +458,8 @@ def start_info_actions(infos, params):
                 window = xbmcgui.Window(window_id)
             except:
                 return None
-            get_kodi_json(method="Input.SendText",
-                          params='{"text":"%s", "done":false}' % params.get("id"))
+            KodiJson.send_text(text=params.get("id"),
+                               close_keyboard=False)
             # xbmc.executebuiltin("SendClick(103,32)")
             window.setFocusId(300)
         elif info == 'bounce':
