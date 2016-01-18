@@ -70,7 +70,7 @@ def set_rating(media_type, media_id, rating):
         url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (media_id[0], media_id[1], media_id[2], TMDB_KEY, session_id)
     else:
         url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, media_id, TMDB_KEY, session_id)
-            # request.get_method = lambda: 'DELETE'
+    # request.get_method = lambda: 'DELETE'
     request = Request(url=url,
                       data=values,
                       headers=HEADERS)
@@ -266,13 +266,13 @@ def handle_multi_search(results=[]):
 
 def handle_movies(results=[], local_first=True, sortkey="year"):
     response = get_data("genre/movie/list?language=%s&" % (SETTING("LanguageID")), 30)
-    id_list = [item["id"] for item in response["genres"]]
-    label_list = [item["name"] for item in response["genres"]]
+    ids = [item["id"] for item in response["genres"]]
+    labels = [item["name"] for item in response["genres"]]
     movies = []
     for movie in results:
         if "genre_ids" in movie:
-            genre_list = [label_list[id_list.index(genre_id)] for genre_id in movie["genre_ids"] if genre_id in id_list]
-            genres = " / ".join(genre_list)
+            genres = [labels[ids.index(genre_id)] for genre_id in movie["genre_ids"] if genre_id in ids]
+            genres = " / ".join(genres)
         else:
             genres = ""
         tmdb_id = str(fetch(movie, 'id'))
@@ -313,15 +313,15 @@ def handle_movies(results=[], local_first=True, sortkey="year"):
 def handle_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
     response = get_data("genre/tv/list?language=%s&" % (SETTING("LanguageID")), 30)
-    id_list = [item["id"] for item in response["genres"]]
-    label_list = [item["name"] for item in response["genres"]]
+    ids = [item["id"] for item in response["genres"]]
+    labels = [item["name"] for item in response["genres"]]
     for tv in results:
         tmdb_id = fetch(tv, 'id')
         artwork = get_image_urls(poster=tv.get("poster_path"),
                                  fanart=tv.get("backdrop_path"))
         if "genre_ids" in tv:
-            genre_list = [label_list[id_list.index(genre_id)] for genre_id in tv["genre_ids"] if genre_id in id_list]
-            genres = " / ".join(genre_list)
+            genres = [labels[ids.index(genre_id)] for genre_id in tv["genre_ids"] if genre_id in ids]
+            genres = " / ".join(genres)
         else:
             genres = ""
         duration = ""
@@ -653,7 +653,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
 
 def get_trailer(movie_id=None):
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                             (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
     notify("Could not get trailer")
@@ -668,7 +668,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     else:
         session_str = ""
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
-                             (movie_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
         notify("Could not get movie information")
         return {}
@@ -758,7 +758,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                             (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+                        (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
         return False
     videos = []
@@ -843,7 +843,7 @@ def extended_season_info(tvshow_id, season_number):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     tvshow = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                           (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
+                      (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
     response = get_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
     if not response:
         notify("Could not find season info")
@@ -884,7 +884,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
-                             (tvshow_id, season, episode, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+                        (tvshow_id, season, episode, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     videos = []
     if "videos" in response:
         videos = handle_videos(response["videos"]["results"])
@@ -929,7 +929,7 @@ def translate_status(status_string):
 
 def get_movie_lists(list_id):
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                             (list_id, SETTING("LanguageID"), SETTING("LanguageID")), 5)
+                        (list_id, SETTING("LanguageID"), SETTING("LanguageID")), 5)
     return handle_misc(response["lists"]["results"])
 
 
@@ -1005,7 +1005,7 @@ def get_keywords(movie_id):
     get dict list containing movie keywords
     '''
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                             (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -1021,7 +1021,7 @@ def get_similar_movies(movie_id):
     '''
 
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                             (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 10)
+                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 10)
     if "similar" in response:
         return handle_movies(response["similar"]["results"])
     else:
@@ -1036,7 +1036,7 @@ def get_similar_tvshows(tvshow_id):
     if check_login():
         session_str = "session_id=%s&" % (get_session_id())
     response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                             (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
+                        (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
     if "similar" in response:
         return handle_tvshows(response["similar"]["results"])
     else:
