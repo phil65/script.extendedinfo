@@ -183,9 +183,9 @@ class LocalDB(object):
 
     def handle_tvshows(self, tvshow):
         if SETTING("infodialog_onclick") != "false":
-            path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % str(tvshow['tvshowid'])
+            path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
-            path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % str(tvshow['tvshowid'])
+            path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
         db_tvshow = {'fanart': tvshow["art"].get('fanart', ""),
                      'poster': tvshow["art"].get('poster', ""),
                      'Banner': tvshow["art"].get('banner', ""),
@@ -236,12 +236,12 @@ class LocalDB(object):
     def merge_with_local_movie_info(self, online_list=[], library_first=True, sortkey=False):
         if not self.movie_titles:
             now = time.time()
-            self.movie_ids = xbmc.getInfoLabel("Window(home).Property(movie_ids.JSON)")
+            self.movie_ids = HOME.getProperty("movie_ids.JSON")
             if self.movie_ids and self.movie_ids != "[]":
                 self.movie_ids = json.loads(self.movie_ids)
-                self.movie_otitles = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_otitles.JSON)"))
-                self.movie_titles = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_titles.JSON)"))
-                self.movie_imdbs = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_imdbs.JSON)"))
+                self.movie_otitles = json.loads(HOME.getProperty("movie_otitles.JSON"))
+                self.movie_titles = json.loads(HOME.getProperty("movie_titles.JSON"))
+                self.movie_imdbs = json.loads(HOME.getProperty("movie_imdbs.JSON"))
             else:
                 data = get_kodi_json(method="VideoLibrary.GetMovies",
                                      params='{"properties": ["originaltitle", "imdbnumber"], "sort": {"method": "none"}}')
@@ -299,12 +299,12 @@ class LocalDB(object):
     def merge_with_local_tvshow_info(self, online_list=[], library_first=True, sortkey=False):
         if not self.tvshow_titles:
             now = time.time()
-            self.tvshow_ids = xbmc.getInfoLabel("Window(home).Property(tvshow_ids.JSON)")
+            self.tvshow_ids = HOME.getProperty("tvshow_ids.JSON")
             if self.tvshow_ids and self.tvshow_ids != "[]":
                 self.tvshow_ids = json.loads(self.tvshow_ids)
-                self.tvshow_originaltitles = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_originaltitles.JSON)"))
-                self.tvshow_titles = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_titles.JSON)"))
-                self.tvshow_imdbs = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_imdbs.JSON)"))
+                self.tvshow_originaltitles = json.loads(HOME.getProperty("tvshow_originaltitles.JSON"))
+                self.tvshow_titles = json.loads(HOME.getProperty("tvshow_titles.JSON"))
+                self.tvshow_imdbs = json.loads(HOME.getProperty("tvshow_imdbs.JSON"))
             else:
                 data = get_kodi_json(method="VideoLibrary.GetTVShows",
                                      params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
