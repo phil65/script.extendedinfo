@@ -46,7 +46,7 @@ def get_tmdb_window(window_type):
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', LANG(32110))
             self.order = kwargs.get('order', "desc")
-            self.logged_in = TheMovieDB.check_login()
+            self.logged_in = TheMovieDB.Login.check_login()
             if self.listitem_list:
                 self.listitems = create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
@@ -393,7 +393,7 @@ def get_tmdb_window(window_type):
                 url = "list/%s?language=%s&" % (str(self.list_id), SETTING("LanguageID"))
                 # self.filter_label = LANG(32036)
             elif self.mode == "favorites":
-                url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.get_account_info(), temp, SETTING("LanguageID"), self.page, TheMovieDB.get_session_id(), sort_by)
+                url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, TheMovieDB.get_session_id(), sort_by)
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
@@ -404,7 +404,7 @@ def get_tmdb_window(window_type):
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
-                    url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.get_account_info(), temp, SETTING("LanguageID"), self.page, session_id, sort_by)
+                    url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, session_id, sort_by)
                 else:
                     session_id = TheMovieDB.get_guest_session_id()
                     if not session_id:

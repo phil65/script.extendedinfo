@@ -31,11 +31,97 @@ else:
     URL_BASE = "http://api.themoviedb.org/3/"
 
 
-@lru_cache(maxsize=128)
-def check_login():
-    if SETTING("tmdb_username"):
-        return(bool(get_session_id()))
-    return False
+class SettingsMonitor(xbmc.Monitor):
+
+    def __init__(self):
+        xbmc.Monitor.__init__(self)
+
+    def onSettingsChanged(self):
+        global Login
+        Login = LoginProvider(username=SETTING("tmdb_username"),
+                              password=SETTING("tmdb_password"))
+        wm.dialog.Close()
+        wm.dialog.doModal()
+
+
+class LoginProvider(object):
+
+    def __init__(self, *args, **kwargs):
+        self.session_id = None
+        self.request_token = None
+        self.account_id = None
+        self.username = kwargs.get("username")
+        self.password = kwargs.get("password")
+
+    @lru_cache(maxsize=128)
+    def check_login(self):
+        if SETTING("tmdb_username"):
+            return(bool(self.get_session_id()))
+        return False
+
+    def get_account_id(self):
+        '''
+        returns TMDB account id
+        '''
+        if self.account_id:
+            return self.account_id
+        self.session_id = self.get_session_id()
+        response = get_data("account?session_id=%s&" % self.session_id, 999999)
+        self.account_id = response.get("id")
+        return self.account_id
+
+    @lru_cache(maxsize=128)
+    def get_guest_session_id(self):
+        '''
+        returns guest session id for TMDB
+        '''
+        response = get_data("authentication/guest_session/new?", 999999)
+        if "guest_session_id" in response:
+            return str(response["guest_session_id"])
+        else:
+            return None
+
+    @lru_cache(maxsize=128)
+    def get_session_id(self):
+        '''
+        returns session id for TMDB Account
+        '''
+        if self.session_id:
+            return self.session_id
+        self.request_token = self.auth_request_token()
+        response = get_data("authentication/session/new?request_token=%s&" % self.request_token, 99999)
+        if response and "success" in response:
+            pass_dict_to_skin({"tmdb_logged_in": "true"})
+            self.session_id = str(response["session_id"])
+            return self.session_id
+        else:
+            self.request_token = self.auth_request_token(cache_days=0)
+            response = get_data("authentication/session/new?request_token=%s&" % self.request_token, 0)
+            if response and "success" in response:
+                pass_dict_to_skin({"tmdb_logged_in": "true"})
+                self.session_id = str(response["session_id"])
+                return self.session_id
+        pass_dict_to_skin({"tmdb_logged_in": ""})
+        notify("login failed")
+        return None
+
+    @lru_cache(maxsize=128)
+    def get_request_token(self):
+        if self.request_token:
+            return self.request_token
+        response = get_data("authentication/token/new?", 999999)
+        self.request_token = response["request_token"]
+        return self.request_token
+
+    @lru_cache(maxsize=128)
+    def auth_request_token(self, cache_days=9999):
+        '''
+        returns request token, is used to get session_id
+        '''
+        self.request_token = self.get_request_token()
+        response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (self.request_token, url_quote(self.username), url_quote(self.password)), cache_days)
+        if response.get("success"):
+            return response["request_token"]
 
 
 def set_rating_prompt(media_type, media_id):
@@ -56,10 +142,10 @@ def set_rating(media_type, media_id, rating):
     media_id: tmdb_id / episode ident array
     rating: ratung value (0.5-10.0, 0.5 steps)
     '''
-    if check_login():
-        session_id = "session_id=" + get_session_id()
+    if Login.check_login():
+        session_id = "session_id=" + Login.get_session_id()
     else:
-        session_id = "guest_session_id=" + get_guest_session_id()
+        session_id = "guest_session_id=" + Login.get_guest_session_id()
     values = '{"value": %.1f}' % rating
     if media_type == "episode":
         if not media_id[1]:
@@ -77,8 +163,8 @@ def set_rating(media_type, media_id, rating):
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
-    session_id = get_session_id()
-    account_id = get_account_info()
+    session_id = Login.get_session_id()
+    account_id = Login.get_account_id()
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, media_id, status)
     if not session_id:
         notify("Could not get session id")
@@ -97,7 +183,7 @@ def create_list(list_name):
     creates new list on TMDB with name *list_name
     returns newly created list id
     '''
-    session_id = get_session_id()
+    session_id = Login.get_session_id()
     url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url=url,
@@ -110,7 +196,7 @@ def create_list(list_name):
 
 
 def remove_list(list_id):
-    session_id = get_session_id()
+    session_id = Login.get_session_id()
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     values = {'media_id': list_id}
     request = Request(url=url,
@@ -128,7 +214,7 @@ def change_list_status(list_id, movie_id, status):
         method = "add_item"
     else:
         method = "remove_item"
-    session_id = get_session_id()
+    session_id = Login.get_session_id()
     url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
     values = {'media_id': movie_id}
     request = Request(url,
@@ -147,24 +233,13 @@ def get_account_lists(cache_time=0):
     '''
     returns movie lists for TMDB user
     '''
-    session_id = get_session_id()
-    account_id = get_account_info()
+    session_id = Login.get_session_id()
+    account_id = Login.get_account_id()
     if session_id and account_id:
         response = get_data("account/%s/lists?session_id=%s&" % (account_id, session_id), cache_time)
         return response["results"]
     else:
         return []
-
-
-@lru_cache(maxsize=128)
-def get_account_info():
-    '''
-    returns TMDB account id
-    '''
-
-    session_id = get_session_id()
-    response = get_data("account?session_id=%s&" % session_id, 999999)
-    return response.get("id")
 
 
 def get_certification_list(media_type):
@@ -195,58 +270,6 @@ def merge_with_cert_desc(input_list, media_type):
         if hit:
             item["meaning"] = hit["meaning"]
     return input_list
-
-
-@lru_cache(maxsize=128)
-def get_guest_session_id():
-    '''
-    returns guest session id for TMDB
-    '''
-    response = get_data("authentication/guest_session/new?", 999999)
-    if "guest_session_id" in response:
-        return str(response["guest_session_id"])
-    else:
-        return None
-
-
-@lru_cache(maxsize=128)
-def get_session_id():
-    '''
-    returns session id for TMDB Account
-    '''
-    request_token = auth_request_token()
-    response = get_data("authentication/session/new?request_token=%s&" % request_token, 99999)
-    if response and "success" in response:
-        pass_dict_to_skin({"tmdb_logged_in": "true"})
-        return str(response["session_id"])
-    else:
-        request_token = auth_request_token(cache_days=0)
-        response = get_data("authentication/session/new?request_token=%s&" % request_token, 0)
-        if response and "success" in response:
-            pass_dict_to_skin({"tmdb_logged_in": "true"})
-            return str(response["session_id"])
-    pass_dict_to_skin({"tmdb_logged_in": ""})
-    notify("login failed")
-    return None
-
-
-@lru_cache(maxsize=128)
-def get_request_token():
-    response = get_data("authentication/token/new?", 999999)
-    return response["request_token"]
-
-
-@lru_cache(maxsize=128)
-def auth_request_token(cache_days=9999):
-    '''
-    returns request token, is used to get session_id
-    '''
-    request_token = get_request_token()
-    username = url_quote(SETTING("tmdb_username"))
-    password = url_quote(SETTING("tmdb_password"))
-    response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), cache_days)
-    if response.get("success"):
-        return response["request_token"]
 
 
 def handle_multi_search(results=[]):
@@ -660,8 +683,8 @@ def get_trailer(movie_id=None):
 def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if not movie_id:
         return None
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
+    if Login.check_login():
+        session_str = "session_id=%s&" % (Login.get_session_id())
     else:
         session_str = ""
     response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
@@ -752,8 +775,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     if not tvshow_id:
         return None
     session_str = ""
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
+    if Login.check_login():
+        session_str = "session_id=%s&" % (Login.get_session_id())
     response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
                         (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
@@ -837,8 +860,8 @@ def extended_season_info(tvshow_id, season_number):
     if not tvshow_id or not season_number:
         return None
     session_str = ""
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
+    if Login.check_login():
+        session_str = "session_id=%s&" % (Login.get_session_id())
     tvshow = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
                       (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
     response = get_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
@@ -878,8 +901,8 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if not season:
         season = 0
     session_str = ""
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
+    if Login.check_login():
+        session_str = "session_id=%s&" % (Login.get_session_id())
     response = get_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
                         (tvshow_id, season, episode, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     videos = []
@@ -932,15 +955,15 @@ def get_movie_lists(list_id):
 
 def get_rated_media_items(media_type):
     '''takes "tv/episodes", "tv" or "movies"'''
-    if check_login():
-        session_id = get_session_id()
-        account_id = get_account_info()
+    if Login.check_login():
+        session_id = Login.get_session_id()
+        account_id = Login.get_account_id()
         if not session_id:
             notify("Could not get session id")
             return []
         response = get_data("account/%s/rated/%s?session_id=%s&language=%s&" % (account_id, media_type, session_id, SETTING("LanguageID")), 0)
     else:
-        session_id = get_guest_session_id()
+        session_id = Login.get_guest_session_id()
         if not session_id:
             notify("Could not get session id")
             return []
@@ -955,8 +978,8 @@ def get_rated_media_items(media_type):
 
 def get_fav_items(media_type):
     '''takes "tv/episodes", "tv" or "movies"'''
-    session_id = get_session_id()
-    account_id = get_account_info()
+    session_id = Login.get_session_id()
+    account_id = Login.get_account_id()
     if not session_id:
         notify("Could not get session id")
         return []
@@ -1030,8 +1053,8 @@ def get_similar_tvshows(tvshow_id):
     return list with similar tvshows for show with *tvshow_id (TMDB ID)
     '''
     session_str = ""
-    if check_login():
-        session_str = "session_id=%s&" % (get_session_id())
+    if Login.check_login():
+        session_str = "session_id=%s&" % (Login.get_session_id())
     response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
                         (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
     if "similar" in response:
@@ -1103,3 +1126,6 @@ def search_media(media_name=None, year='', media_type="movie"):
             if item['id']:
                 return item['id']
     return None
+
+Login = LoginProvider(username=SETTING("tmdb_username"),
+                      password=SETTING("tmdb_password"))
