@@ -564,14 +564,18 @@ def get_icon_panel(number):
     items = []
     offset = number * 5 - 5
     for i in range(1, 6):
-        infopanel_path = xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Path)" % (i + offset))
-        newitem = {'Label': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Label)" % (i + offset)).decode("utf-8"),
+        infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
+        newitem = {'Label': get_skin_string("IconPanelItem%i.Label" % (i + offset)).decode("utf-8"),
                    'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path.decode("utf-8"),
-                   'thumb': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Icon)" % (i + offset)).decode("utf-8"),
+                   'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)).decode("utf-8"),
                    'id': "IconPanelitem%i" % (i + offset),
-                   'Type': xbmc.getInfoLabel("Skin.String(IconPanelItem%i.Type)" % (i + offset)).decode("utf-8")}
+                   'Type': get_skin_string("IconPanelItem%i.Type" % (i + offset)).decode("utf-8")}
         items.append(newitem)
     return items
+
+
+def get_skin_string(name):
+    return xbmc.getInfoLabel("Skin.String(%s)")
 
 
 def get_weather_images():

@@ -24,7 +24,7 @@ class LocalDB(object):
 
     def get_artists(self):
         data = get_kodi_json(method="AudioLibrary.GetArtists",
-                             params='{"properties": ["musicbrainzartistid","thumbnail"]}')
+                             params='{"properties": ["musicbrainzartistid", "thumbnail"]}')
         return data["result"]["artists"]
 
     def get_similar_artists(self, artist_id):
@@ -36,12 +36,12 @@ class LocalDB(object):
         if not self.artists:
             self.artists = self.get_artists()
         artists = []
-        for simi_artist, xbmc_artist in itertools.product(simi_artists, self.artists):
-            if xbmc_artist['musicbrainzartistid'] and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
-                artists.append(xbmc_artist)
-            elif xbmc_artist['artist'] == simi_artist['name']:
+        for simi_artist, kodi_artist in itertools.product(simi_artists, self.artists):
+            if kodi_artist['musicbrainzartistid'] and kodi_artist['musicbrainzartistid'] == simi_artist['mbid']:
+                artists.append(kodi_artist)
+            elif kodi_artist['artist'] == simi_artist['name']:
                 data = get_kodi_json(method="AudioLibrary.GetArtistDetails",
-                                     params='{"properties": ["genre", "description", "mood", "style", "born","died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
+                                     params='{"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(kodi_artist['artistid']))
                 item = data["result"]["artistdetails"]
                 artists.append({"title": item['label'],
                                 "Genre": " / ".join(item['genre']),
@@ -57,7 +57,7 @@ class LocalDB(object):
                                 "Mood": " / ".join(item['mood']),
                                 "Instrument": " / ".join(item['instrument']),
                                 "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'})
-        log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
+        log('%i of %i artists found in last.FM are in Kodi database' % (len(artists), len(simi_artists)))
         return artists
 
     def get_similar_movies(self, dbid):
