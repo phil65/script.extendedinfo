@@ -18,3 +18,9 @@ def play_media(media_type, dbid, resume=True):
 def send_text(text, close_keyboard=True):
     get_kodi_json(method="Input.SendText",
                   params='{"text":"%s", "done":%s}' % (text, "true" if close_keyboard else "false"))
+
+
+def get_artists(properties=[]):
+    data = get_kodi_json(method="AudioLibrary.GetArtists",
+                         params='{"properties": ["%s"]}' % '","'.join(properties))
+    return data["result"]["artists"]

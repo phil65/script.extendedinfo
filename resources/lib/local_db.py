@@ -5,6 +5,7 @@
 
 import simplejson as json
 import itertools
+import KodiJson
 from Utils import *
 
 
@@ -23,9 +24,8 @@ class LocalDB(object):
         self.albums = []
 
     def get_artists(self):
-        data = get_kodi_json(method="AudioLibrary.GetArtists",
-                             params='{"properties": ["musicbrainzartistid", "thumbnail"]}')
-        return data["result"]["artists"]
+        self.artists = KodiJson.get_artists(properties=["musicbrainzartistid", "thumbnail"])
+        return self.artists
 
     def get_similar_artists(self, artist_id):
         import LastFM
