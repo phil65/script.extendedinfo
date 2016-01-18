@@ -32,23 +32,22 @@ def get_movie_window(window_type):
             self.info, self.data, self.account_states = data
             sets_thread = SetItemsThread(self.info["SetId"])
             self.omdb_thread = FunctionThread(get_omdb_movie_info, self.info["imdb_id"])
-            lists_thread = FunctionThread(self.sort_lists, self.data["lists"])
             filter_thread = FilterImageThread(self.info.get("thumb", ""), 25)
-            for thread in [self.omdb_thread, sets_thread, lists_thread, filter_thread]:
+            for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
+            lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.id_list]
             filter_thread.join()
             self.info['ImageFilter'] = filter_thread.image
             self.info['ImageColor'] = filter_thread.imagecolor
-            lists_thread.join()
             self.listitems = [(1000, self.data["actors"]),
                               (150, self.data["similar"]),
                               (250, sets_thread.listitems),
-                              (450, lists_thread.listitems),
+                              (450, lists),
                               (550, self.data["studios"]),
                               (650, merge_with_cert_desc(self.data["releases"], "movie")),
                               (750, merge_dict_lists(self.data["crew"])),

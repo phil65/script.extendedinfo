@@ -38,10 +38,11 @@ class SettingsMonitor(xbmc.Monitor):
 
     def onSettingsChanged(self):
         global Login
-        Login = LoginProvider(username=SETTING("tmdb_username"),
-                              password=SETTING("tmdb_password"))
-        wm.dialog.Close()
-        wm.dialog.doModal()
+        Login = LoginProvider(username=xbmcaddon.Addon().getSetting("tmdb_username"),
+                              password=xbmcaddon.Addon().getSetting("tmdb_password"))
+        wm.active_dialog.close()
+        wm.active_dialog.logged_in = Login.check_login(cache_days=0)
+        wm.active_dialog.doModal()
 
 
 class LoginProvider(object):
@@ -50,13 +51,13 @@ class LoginProvider(object):
         self.session_id = None
         self.request_token = None
         self.account_id = None
+        self.monitor = SettingsMonitor()
         self.username = kwargs.get("username")
         self.password = kwargs.get("password")
 
-    @lru_cache(maxsize=128)
-    def check_login(self):
-        if SETTING("tmdb_username"):
-            return(bool(self.get_session_id()))
+    def check_login(self, cache_days=9999):
+        if self.username:
+            return(bool(self.get_session_id(cache_days)))
         return False
 
     def get_account_id(self):
@@ -81,46 +82,38 @@ class LoginProvider(object):
         else:
             return None
 
-    @lru_cache(maxsize=128)
-    def get_session_id(self):
+    def get_session_id(self, cache_days=9999):
         '''
         returns session id for TMDB Account
         '''
         if self.session_id:
             return self.session_id
-        self.request_token = self.auth_request_token()
-        response = get_data("authentication/session/new?request_token=%s&" % self.request_token, 99999)
-        if response and "success" in response:
-            pass_dict_to_skin({"tmdb_logged_in": "true"})
-            self.session_id = str(response["session_id"])
+        self.request_token = self.auth_request_token(cache_days=cache_days)
+        self.session_id = self.start_new_session(cache_days=cache_days)
+        if self.session_id:
             return self.session_id
-        else:
-            self.request_token = self.auth_request_token(cache_days=0)
-            response = get_data("authentication/session/new?request_token=%s&" % self.request_token, 0)
-            if response and "success" in response:
-                pass_dict_to_skin({"tmdb_logged_in": "true"})
-                self.session_id = str(response["session_id"])
-                return self.session_id
-        pass_dict_to_skin({"tmdb_logged_in": ""})
+        self.session_id = self.start_new_session(cache_days=0)
         notify("login failed")
         return None
 
-    @lru_cache(maxsize=128)
-    def get_request_token(self):
-        if self.request_token:
-            return self.request_token
-        response = get_data("authentication/token/new?", 999999)
-        self.request_token = response["request_token"]
-        return self.request_token
+    def start_new_session(self, cache_days=0):
+        response = get_data(url="authentication/session/new?request_token=%s&" % self.request_token,
+                            cache_days=cache_days)
+        if response and "success" in response:
+            self.session_id = str(response["session_id"])
+            return self.session_id
 
-    @lru_cache(maxsize=128)
     def auth_request_token(self, cache_days=9999):
         '''
         returns request token, is used to get session_id
         '''
-        self.request_token = self.get_request_token()
-        response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (self.request_token, url_quote(self.username), url_quote(self.password)), cache_days)
-        if response.get("success"):
+        if self.request_token:
+            return self.request_token
+        response = get_data("authentication/token/new?", 999999)
+        self.request_token = response["request_token"]
+        response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (self.request_token, url_quote(self.username), url_quote(self.password)),
+                            cache_days=cache_days)
+        if response and response.get("success"):
             return response["request_token"]
 
 

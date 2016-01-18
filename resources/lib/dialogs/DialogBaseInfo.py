@@ -33,6 +33,8 @@ class DialogBaseInfo(object):
         self.window.setProperty("type", self.type)
         if self.logged_in:
             self.window.setProperty("tmdb_logged_in", "true")
+        else:
+            self.window.clearProperty("tmdb_logged_in")
         # present for jurialmunkey
         HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
