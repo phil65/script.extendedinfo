@@ -297,8 +297,8 @@ def start_info_actions(infos, params):
         elif info == 't9input':
             resolve_url(params.get("handle"))
             from T9Search import T9Search
-            T9Search(call=None,
-                     start_value="")
+            dialog = T9Search(call=None,
+                              start_value="")
             KodiJson.send_text(text=dialog.search_str)
         elif info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
             resolve_url(params.get("handle"))
