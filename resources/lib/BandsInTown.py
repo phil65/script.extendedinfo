@@ -34,7 +34,7 @@ def handle_events(results):
 
 def get_near_events(artists):  # not possible with api 2.0
     artists = ''
-    for count, art in enumerate(artists[:50]):
+    for art in artists[:50]:
         try:
             artists.append(urllib.quote(art['artist']))
         except:
