@@ -188,15 +188,6 @@ def widget_selectdialog(filter=None, prefix="widget"):
         set_skin_string("%s.label" % prefix, labels[ret])
 
 
-class SettingsMonitor(xbmc.Monitor):
-
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
-
-    def onSettingsChanged(self):
-        xbmc.sleep(300)
-
-
 def calculate_age(born, died=False):
     """
     calculate age based on born / died
