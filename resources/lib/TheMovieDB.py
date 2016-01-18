@@ -87,7 +87,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
         notify("Could not get session id")
         return None
     url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (account_id, session_id, TMDB_KEY)
-    request = Request(url,
+    request = Request(url=url,
                       data=values,
                       headers=HEADERS)
     response = urlopen(request, timeout=3).read()
@@ -103,7 +103,7 @@ def create_list(list_name):
     session_id = get_session_id()
     url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
-    request = Request(url,
+    request = Request(url=url,
                       data=json.dumps(values),
                       headers=HEADERS)
     response = urlopen(request, timeout=3).read()
@@ -116,7 +116,7 @@ def remove_list(list_id):
     session_id = get_session_id()
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     values = {'media_id': list_id}
-    request = Request(url,
+    request = Request(url=url,
                       data=json.dumps(values),
                       headers=HEADERS)
     request.get_method = lambda: 'DELETE'
@@ -167,18 +167,12 @@ def get_account_info():
 
     session_id = get_session_id()
     response = get_data("account?session_id=%s&" % session_id, 999999)
-    if "id" in response:
-        return response["id"]
-    else:
-        return None
+    return response.get("id")
 
 
 def get_certification_list(media_type):
     response = get_data("certification/%s/list?" % media_type, 999999)
-    if "certifications" in response:
-        return response["certifications"]
-    else:
-        return []
+    return response.get("certifications")
 
 
 def add_movie_to_list(movie_id):
@@ -254,22 +248,19 @@ def auth_request_token(cache_days=9999):
     username = url_quote(SETTING("tmdb_username"))
     password = url_quote(SETTING("tmdb_password"))
     response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (request_token, username, password), cache_days)
-    if "success" in response and response["success"]:
+    if response.get("success"):
         return response["request_token"]
-    else:
-        return None
 
 
 def handle_multi_search(results=[]):
     listitems = []
     for item in results:
         if item["media_type"] == "movie":
-            listitem = handle_movies([item])[0]
+            listitems.append(handle_movies([item])[0])
         elif item["media_type"] == "tv":
-            listitem = handle_tvshows([item])[0]
+            listitems.append(handle_tvshows([item])[0])
         else:
-            listitem = handle_people([item])[0]
-        listitems.append(listitem)
+            listitems.append(handle_people([item])[0])
     return listitems
 
 
