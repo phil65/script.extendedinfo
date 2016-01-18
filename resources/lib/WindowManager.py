@@ -45,6 +45,7 @@ class WindowManager(object):
 
     def __init__(self):
         self.reopen_window = False
+        self.last_control = None
 
     def add_to_stack(self, window):
         """
@@ -61,8 +62,12 @@ class WindowManager(object):
             xbmc.sleep(300)
             dialog.doModal()
         elif self.reopen_window:
-            xbmc.sleep(500)
+            xbmc.sleep(600)
             xbmc.executebuiltin("Action(Info)")
+            if self.last_control:
+                xbmc.sleep(50)
+                log(self.last_control)
+                xbmc.executebuiltin("SetFocus(%s)" % self.last_control)
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None, name=None, imdb_id=None):
         """
@@ -270,8 +275,9 @@ class WindowManager(object):
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
-                xbmc.executebuiltin("Dialog.Close(movieinformation)")
                 self.reopen_window = True
+                self.last_control = xbmc.getInfoLabel("System.CurrentControlId")
+                xbmc.executebuiltin("Dialog.Close(movieinformation)")
             check_version()
             if prev_window:
                 self.add_to_stack(prev_window)
