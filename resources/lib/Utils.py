@@ -132,7 +132,7 @@ def check_version():
                             line2=LANG(32141))
 
 
-def widget_selectdialog(filter=None, string_prefix="widget"):
+def widget_selectdialog(filter=None, prefix="widget"):
     """
     show dialog including all video media lists (for widget selection)
     and set strings PREFIX.path and PREFIX.label with chosen values
@@ -184,8 +184,8 @@ def widget_selectdialog(filter=None, string_prefix="widget"):
     ret = xbmcgui.Dialog().select(LANG(32151), labels)
     if ret > -1:
         notify(keywords[ret])
-        xbmc.executebuiltin("Skin.SetString(%s.path,plugin://script.extendedinfo?info=%s)" % (string_prefix, keywords[ret]))
-        xbmc.executebuiltin("Skin.SetString(%s.label,%s)" % (string_prefix, labels[ret]))
+        set_skin_string("%s.path" % prefix, "plugin://script.extendedinfo?info=%s" % keywords[ret])
+        set_skin_string("%s.label" % prefix, labels[ret])
 
 
 class SettingsMonitor(xbmc.Monitor):
@@ -569,6 +569,10 @@ def get_icon_panel(number):
 
 def get_skin_string(name):
     return xbmc.getInfoLabel("Skin.String(%s)").decode("utf-8")
+
+
+def set_skin_string(name, value):
+    xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
 
 
 def get_weather_images():
