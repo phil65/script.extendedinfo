@@ -400,8 +400,7 @@ def get_http(url=None, headers=False):
     while (succeed < 2) and (not xbmc.abortRequested):
         try:
             response = urllib2.urlopen(request, timeout=3)
-            data = response.read()
-            return data
+            return response.read()
         except:
             log("get_http: could not get data from %s" % url)
             xbmc.sleep(1000)

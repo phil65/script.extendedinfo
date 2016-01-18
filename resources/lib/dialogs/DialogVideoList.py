@@ -112,8 +112,7 @@ def get_tmdb_window(window_type):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [LANG(32139)]
             account_lists = TheMovieDB.get_account_lists()
-            for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.append(LANG(32138))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(heading=LANG(32136),
@@ -194,8 +193,7 @@ def get_tmdb_window(window_type):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
                 account_lists = TheMovieDB.get_account_lists()
-                for item in account_lists:
-                    listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+                listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(heading=LANG(32136),
                                             list=listitems)

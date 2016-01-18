@@ -34,17 +34,14 @@ else:
 @lru_cache(maxsize=128)
 def check_login():
     if SETTING("tmdb_username"):
-        session_id = get_session_id()
-        if session_id:
-            return "True"
-    return ""
+        return(bool(get_session_id()))
+    return False
 
 
 def set_rating_prompt(media_type, media_id):
     if not media_type or not media_id:
         return False
-    ratings = [str(float(i * 0.5)) for i in range(1, 21)]
-    rating = xbmcgui.Dialog().select(LANG(32129), ratings)
+    rating = xbmcgui.Dialog().select(LANG(32129), [str(float(i * 0.5)) for i in range(1, 21)])
     if rating == -1:
         return False
     set_rating(media_type=media_type,
