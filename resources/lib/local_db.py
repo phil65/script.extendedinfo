@@ -37,7 +37,7 @@ class LocalDB(object):
             self.artists = self.get_artists()
         artists = []
         for simi_artist, xbmc_artist in itertools.product(simi_artists, self.artists):
-            if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
+            if xbmc_artist['musicbrainzartistid'] and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
                 artists.append(xbmc_artist)
             elif xbmc_artist['artist'] == simi_artist['name']:
                 data = get_kodi_json(method="AudioLibrary.GetArtistDetails",
