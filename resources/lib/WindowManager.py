@@ -46,6 +46,7 @@ class WindowManager(object):
     def __init__(self):
         self.reopen_window = False
         self.last_control = None
+        self.active_dialog = None
 
     def add_to_stack(self, window):
         """
@@ -58,9 +59,9 @@ class WindowManager(object):
         get newest item from global window stack
         """
         if self.window_stack:
-            dialog = self.window_stack.pop()
+            self.active_dialog = self.window_stack.pop()
             xbmc.sleep(300)
-            dialog.doModal()
+            self.active_dialog.doModal()
         elif self.reopen_window:
             xbmc.sleep(600)
             xbmc.executebuiltin("Action(Info)")
@@ -274,6 +275,7 @@ class WindowManager(object):
 
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
+            self.active_dialog = dialog
             if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
                 self.reopen_window = True
                 self.last_control = xbmc.getInfoLabel("System.CurrentControlId")
@@ -284,6 +286,7 @@ class WindowManager(object):
                 prev_window.close()
             dialog.doModal()
         else:
+            self.active_dialog = None
             notify(LANG(32143))
 
 wm = WindowManager()
