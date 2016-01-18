@@ -393,12 +393,12 @@ def get_tmdb_window(window_type):
                 url = "list/%s?language=%s&" % (str(self.list_id), SETTING("LanguageID"))
                 # self.filter_label = LANG(32036)
             elif self.mode == "favorites":
-                url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, TheMovieDB.get_session_id(), sort_by)
+                url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, TheMovieDB.Login.get_session_id(), sort_by)
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
                 if self.logged_in:
-                    session_id = TheMovieDB.get_session_id()
+                    session_id = TheMovieDB.Login.get_session_id()
                     if not session_id:
                         notify("Could not get session id")
                         return {"listitems": [],
@@ -406,7 +406,7 @@ def get_tmdb_window(window_type):
                                 "total_results": 0}
                     url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, session_id, sort_by)
                 else:
-                    session_id = TheMovieDB.get_guest_session_id()
+                    session_id = TheMovieDB.Login.get_guest_session_id()
                     if not session_id:
                         notify("Could not get session id")
                         return {"listitems": [],
