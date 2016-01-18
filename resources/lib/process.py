@@ -271,8 +271,8 @@ def start_info_actions(infos, params):
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
             artists = local_db.get_artists()
-            from MiscScraper import get_artist_near_events
-            data = get_artist_near_events(artists[0:49]), "TopArtistsNearEvents"
+            import BandsInTown
+            data = BandsInTown.get_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'favourites':
             if params.get("id", ""):
                 favs = get_favs_by_type(params.get("id", ""))

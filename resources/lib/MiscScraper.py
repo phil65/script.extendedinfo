@@ -11,8 +11,6 @@ from Utils import *
 import datetime
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
-BANDSINTOWN_KEY = 'xbmc_open_source_media_center'
-
 
 def get_xkcd_images():
     now = datetime.datetime.now()
@@ -93,47 +91,3 @@ def get_babe_images(single=False):
                  filename=filename,
                  path=os.path.join(ADDON_DATA_PATH, "Babes"))
     return items
-
-
-def handle_bandsintown_events(results):
-    events = []
-    for event in results:
-        venue = event['venue']
-        artists = ''
-        for art in event["artists"]:
-            artists = artists + ' / ' + art['name']
-            artists = artists.replace(" / ", "", 1)
-        event = {'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
-                 'city': venue['city'],
-                 'lat': venue['latitude'],
-                 'lon': venue['longitude'],
-                 'id': venue['id'],
-                 'url': venue['url'],
-                 'name': venue['name'],
-                 'region': venue['region'],
-                 'country': venue['country'],
-                 'artists': artists}
-        events.append(event)
-    return events
-
-
-def get_artist_near_events(artists):  # not possible with api 2.0
-    artist_str = ''
-    for count, art in enumerate(artists):
-        if count > 49:
-            break
-        try:
-            artist = urllib.quote(art['artist'])
-        except:
-            artist = urllib.quote(art['artist'].encode("utf-8"))
-        if len(artist_str) > 0:
-            artist_str = artist_str + '&'
-        artist_str = artist_str + 'artists[]=' + artist
-    base_url = 'http://api.bandsintown.com/events/search?format=json&location=use_geoip&radius=50&per_page=100&api_version=2.0'
-    url = '&%sapp_id=%s' % (artist_str, BANDSINTOWN_KEY)
-    results = get_JSON_response(base_url + url, folder="BandsInTown")
-    if results:
-        return handle_bandsintown_events(results)
-    log("get_artist_near_events: Could not get data from " + url)
-    log(results)
-    return []
