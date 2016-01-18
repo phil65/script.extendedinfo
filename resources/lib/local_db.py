@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import simplejson
+import itertools
 from Utils import *
 
 
@@ -22,9 +23,9 @@ class LocalDB(object):
         self.albums = []
 
     def get_artists(self):
-        json_response = get_kodi_json(method="AudioLibrary.GetArtists",
-                                      params='{"properties": ["musicbrainzartistid","thumbnail"]}')
-        return json_response["result"]["artists"]
+        data = get_kodi_json(method="AudioLibrary.GetArtists",
+                             params='{"properties": ["musicbrainzartistid","thumbnail"]}')
+        return data["result"]["artists"]
 
     def get_similar_artists(self, artist_id):
         import LastFM
@@ -35,29 +36,27 @@ class LocalDB(object):
         if not self.artists:
             self.artists = self.get_artists()
         artists = []
-        for simi_artist in simi_artists:
-            for xbmc_artist in self.artists:
-                if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
-                    artists.append(xbmc_artist)
-                elif xbmc_artist['artist'] == simi_artist['name']:
-                    json_response = get_kodi_json(method="AudioLibrary.GetArtistDetails",
-                                                  params='{"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
-                    item = json_response["result"]["artistdetails"]
-                    newartist = {'title': item['label'],
-                                 "Genre": " / ".join(item['genre']),
-                                 "thumb": item['thumbnail'],
-                                 "Fanart": item['fanart'],
-                                 "Description": item['description'],
-                                 "Born": item['born'],
-                                 "Died": item['died'],
-                                 "Formed": item['formed'],
-                                 "Disbanded": item['disbanded'],
-                                 "YearsActive": " / ".join(item['yearsactive']),
-                                 "Style": " / ".join(item['style']),
-                                 "Mood": " / ".join(item['mood']),
-                                 "Instrument": " / ".join(item['instrument']),
-                                 "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'}
-                    artists.append(newartist)
+        for simi_artist, xbmc_artist in itertools.product(simi_artists, self.artists):
+            if xbmc_artist['musicbrainzartistid'] != '' and xbmc_artist['musicbrainzartistid'] == simi_artist['mbid']:
+                artists.append(xbmc_artist)
+            elif xbmc_artist['artist'] == simi_artist['name']:
+                data = get_kodi_json(method="AudioLibrary.GetArtistDetails",
+                                     params='{"properties": ["genre", "description", "mood", "style", "born","died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(xbmc_artist['artistid']))
+                item = data["result"]["artistdetails"]
+                artists.append({"title": item['label'],
+                                "Genre": " / ".join(item['genre']),
+                                "thumb": item['thumbnail'],
+                                "Fanart": item['fanart'],
+                                "Description": item['description'],
+                                "Born": item['born'],
+                                "Died": item['died'],
+                                "Formed": item['formed'],
+                                "Disbanded": item['disbanded'],
+                                "YearsActive": " / ".join(item['yearsactive']),
+                                "Style": " / ".join(item['style']),
+                                "Mood": " / ".join(item['mood']),
+                                "Instrument": " / ".join(item['instrument']),
+                                "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'})
         log('%i of %i artists found in last.FM is in XBMC database' % (len(artists), len(simi_artists)))
         return artists
 
@@ -68,12 +67,12 @@ class LocalDB(object):
             return []
         comp_movie = movie_response['result']['moviedetails']
         genres = comp_movie['genre']
-        json_response = get_kodi_json(method="VideoLibrary.GetMovies",
-                                      params='{"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }')
-        if "movies" not in json_response['result']:
+        data = get_kodi_json(method="VideoLibrary.GetMovies",
+                             params='{"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }')
+        if "movies" not in data['result']:
             return []
         quotalist = []
-        for item in json_response['result']['movies']:
+        for item in data['result']['movies']:
             diff = abs(int(item['year']) - int(comp_movie['year']))
             hit = 0.0
             miss = 0.00001
@@ -112,19 +111,19 @@ class LocalDB(object):
 
     def get_movies(self, filter_str="", limit=10):
         props = '"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]'
-        json_response = get_kodi_json(method="VideoLibrary.GetMovies",
-                                      params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
-        if "result" in json_response and "movies" in json_response["result"]:
-            return [self.handle_movies(item) for item in json_response["result"]["movies"]]
+        data = get_kodi_json(method="VideoLibrary.GetMovies",
+                             params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
+        if "result" in data and "movies" in data["result"]:
+            return [self.handle_movies(item) for item in data["result"]["movies"]]
         else:
             return []
 
     def get_tvshows(self, filter_str="", limit=10):
         props = '"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]'
-        json_response = get_kodi_json(method="VideoLibrary.GetTVShows",
-                                      params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
-        if "result" in json_response and "tvshows" in json_response["result"]:
-            return [self.handle_tvshows(item) for item in json_response["result"]["tvshows"]]
+        data = get_kodi_json(method="VideoLibrary.GetTVShows",
+                             params='{%s, %s, "limits": {"end": %d}}' % (props, filter_str, limit))
+        if "result" in data and "tvshows" in data["result"]:
+            return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
         else:
             return []
 
@@ -219,18 +218,18 @@ class LocalDB(object):
         return {}
 
     def get_albums(self):
-        json_response = get_kodi_json(method="AudioLibrary.GetAlbums",
-                                      params='{"properties": ["title"]}')
-        if "result" in json_response and "albums" in json_response['result']:
-            return json_response['result']['albums']
+        data = get_kodi_json(method="AudioLibrary.GetAlbums",
+                             params='{"properties": ["title"]}')
+        if "result" in data and "albums" in data['result']:
+            return data['result']['albums']
         else:
             return []
 
     def create_channel_list(self):
-        json_response = get_kodi_json(method="PVR.GetChannels",
-                                      params='{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}')
-        if ('result' in json_response) and ("movies" in json_response["result"]):
-            return json_response
+        data = get_kodi_json(method="PVR.GetChannels",
+                             params='{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}')
+        if 'result' in data and "movies" in data["result"]:
+            return data
         else:
             return False
 
@@ -244,14 +243,14 @@ class LocalDB(object):
                 self.movie_titles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(movie_titles.JSON)"))
                 self.movie_imdbs = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(movie_imdbs.JSON)"))
             else:
-                json_response = get_kodi_json(method="VideoLibrary.GetMovies",
-                                              params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
+                data = get_kodi_json(method="VideoLibrary.GetMovies",
+                                     params='{"properties": ["originaltitle", "imdbnumber"], "sort": {"method": "none"}}')
                 self.movie_ids = []
                 self.movie_imdbs = []
                 self.movie_otitles = []
                 self.movie_titles = []
-                if "result" in json_response and "movies" in json_response["result"]:
-                    for item in json_response["result"]["movies"]:
+                if "result" in data and "movies" in data["result"]:
+                    for item in data["result"]["movies"]:
                         self.movie_ids.append(item["movieid"])
                         self.movie_imdbs.append(item["imdbnumber"])
                         self.movie_otitles.append(item["originaltitle"].lower())
@@ -307,14 +306,14 @@ class LocalDB(object):
                 self.tvshow_titles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_titles.JSON)"))
                 self.tvshow_imdbs = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_imdbs.JSON)"))
             else:
-                json_response = get_kodi_json(method="VideoLibrary.GetTVShows",
-                                              params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
+                data = get_kodi_json(method="VideoLibrary.GetTVShows",
+                                     params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
                 self.tvshow_ids = []
                 self.tvshow_imdbs = []
                 self.tvshow_originaltitles = []
                 self.tvshow_titles = []
-                if "result" in json_response and "tvshows" in json_response["result"]:
-                    for item in json_response["result"]["tvshows"]:
+                if "result" in data and "tvshows" in data["result"]:
+                    for item in data["result"]["tvshows"]:
                         self.tvshow_ids.append(item["tvshowid"])
                         self.tvshow_imdbs.append(item["imdbnumber"])
                         self.tvshow_originaltitles.append(item["originaltitle"].lower())
@@ -374,9 +373,9 @@ class LocalDB(object):
             for local_item in self.albums:
                 if not online_item["name"] == local_item["title"]:
                     continue
-                json_response = get_kodi_json(method="AudioLibrary.getAlbumDetails",
-                                              params='{"properties": ["thumbnail"], "albumid":%s }' % str(local_item["albumid"]))
-                album = json_response["result"]["albumdetails"]
+                data = get_kodi_json(method="AudioLibrary.getAlbumDetails",
+                                     params='{"properties": ["thumbnail"], "albumid":%s }' % str(local_item["albumid"]))
+                album = data["result"]["albumdetails"]
                 online_item["dbid"] = album["albumid"]
                 online_item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
                 if album["thumbnail"]:
@@ -386,38 +385,38 @@ class LocalDB(object):
         return online_list
 
     def get_set_name(self, dbid):
-        json_response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                      params='{"properties": ["setid"], "movieid":%s }' % dbid)
-        if "result" in json_response and "moviedetails" in json_response["result"]:
-            set_dbid = json_response['result']['moviedetails'].get('setid', "")
+        data = get_kodi_json(method="VideoLibrary.GetMovieDetails",
+                             params='{"properties": ["setid"], "movieid":%s }' % dbid)
+        if "result" in data and "moviedetails" in data["result"]:
+            set_dbid = data['result']['moviedetails'].get('setid', "")
             if set_dbid:
-                json_response = get_kodi_json(method="VideoLibrary.GetMovieSetDetails",
-                                              params='{"setid":%s }' % set_dbid)
-                return json_response['result']['setdetails'].get('label', "")
+                data = get_kodi_json(method="VideoLibrary.GetMovieSetDetails",
+                                     params='{"setid":%s }' % set_dbid)
+                return data['result']['setdetails'].get('label', "")
         return ""
 
     def get_imdb_id(self, media_type, dbid):
         if not dbid:
             return None
         if media_type == "movie":
-            json_response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                          params='{"properties": ["imdbnumber","title", "year"], "movieid":%s }' % dbid)
-            if "result" in json_response and "moviedetails" in json_response["result"]:
-                return json_response['result']['moviedetails']['imdbnumber']
+            data = get_kodi_json(method="VideoLibrary.GetMovieDetails",
+                                 params='{"properties": ["imdbnumber","title", "year"], "movieid":%s }' % dbid)
+            if "result" in data and "moviedetails" in data["result"]:
+                return data['result']['moviedetails']['imdbnumber']
         elif media_type == "tvshow":
-            json_response = get_kodi_json(method="VideoLibrary.GetTVShowDetails",
-                                          params='{"properties": ["imdbnumber","title", "year"], "tvshowid":%s }' % dbid)
-            if "result" in json_response and "tvshowdetails" in json_response["result"]:
-                return json_response['result']['tvshowdetails']['imdbnumber']
+            data = get_kodi_json(method="VideoLibrary.GetTVShowDetails",
+                                 params='{"properties": ["imdbnumber","title", "year"], "tvshowid":%s }' % dbid)
+            if "result" in data and "tvshowdetails" in data["result"]:
+                return data['result']['tvshowdetails']['imdbnumber']
         return None
 
     def get_tvshow_id_by_episode(self, dbid):
         if not dbid:
             return None
-        json_response = get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
-                                      params='{"properties": ["tvshowid"], "episodeid":%s }' % dbid)
-        if "episodedetails" in json_response["result"]:
-            tvshow_dbid = str(json_response['result']['episodedetails']['tvshowid'])
+        data = get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
+                             params='{"properties": ["tvshowid"], "episodeid":%s }' % dbid)
+        if "episodedetails" in data["result"]:
+            tvshow_dbid = str(data['result']['episodedetails']['tvshowid'])
             return self.get_imdb_id(media_type="tvshow",
                                     dbid=tvshow_dbid)
         else:
