@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import simplejson
+import simplejson as json
 import itertools
 from Utils import *
 
@@ -61,11 +61,11 @@ class LocalDB(object):
         return artists
 
     def get_similar_movies(self, dbid):
-        movie_response = get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                       params='{"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
-        if "moviedetails" not in movie_response['result']:
+        movie = get_kodi_json(method="VideoLibrary.GetMovieDetails",
+                              params='{"properties": ["genre","director","country","year","mpaa"], "movieid":%s }' % dbid)
+        if "moviedetails" not in movie['result']:
             return []
-        comp_movie = movie_response['result']['moviedetails']
+        comp_movie = movie['result']['moviedetails']
         genres = comp_movie['genre']
         data = get_kodi_json(method="VideoLibrary.GetMovies",
                              params='{"properties": ["genre","director","mpaa","country","year"], "sort": { "method": "random" } }')
@@ -238,10 +238,10 @@ class LocalDB(object):
             now = time.time()
             self.movie_ids = xbmc.getInfoLabel("Window(home).Property(movie_ids.JSON)")
             if self.movie_ids and self.movie_ids != "[]":
-                self.movie_ids = simplejson.loads(self.movie_ids)
-                self.movie_otitles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(movie_otitles.JSON)"))
-                self.movie_titles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(movie_titles.JSON)"))
-                self.movie_imdbs = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(movie_imdbs.JSON)"))
+                self.movie_ids = json.loads(self.movie_ids)
+                self.movie_otitles = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_otitles.JSON)"))
+                self.movie_titles = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_titles.JSON)"))
+                self.movie_imdbs = json.loads(xbmc.getInfoLabel("Window(home).Property(movie_imdbs.JSON)"))
             else:
                 data = get_kodi_json(method="VideoLibrary.GetMovies",
                                      params='{"properties": ["originaltitle", "imdbnumber"], "sort": {"method": "none"}}')
@@ -255,10 +255,10 @@ class LocalDB(object):
                         self.movie_imdbs.append(item["imdbnumber"])
                         self.movie_otitles.append(item["originaltitle"].lower())
                         self.movie_titles.append(item["label"].lower())
-                HOME.setProperty("movie_ids.JSON", simplejson.dumps(self.movie_ids))
-                HOME.setProperty("movie_otitles.JSON", simplejson.dumps(self.movie_otitles))
-                HOME.setProperty("movie_titles.JSON", simplejson.dumps(self.movie_titles))
-                HOME.setProperty("movie_imdbs.JSON", simplejson.dumps(self.movie_imdbs))
+                HOME.setProperty("movie_ids.JSON", json.dumps(self.movie_ids))
+                HOME.setProperty("movie_otitles.JSON", json.dumps(self.movie_otitles))
+                HOME.setProperty("movie_titles.JSON", json.dumps(self.movie_titles))
+                HOME.setProperty("movie_imdbs.JSON", json.dumps(self.movie_imdbs))
             log("create_light_movielist: " + str(now - time.time()))
         now = time.time()
         local_items = []
@@ -301,10 +301,10 @@ class LocalDB(object):
             now = time.time()
             self.tvshow_ids = xbmc.getInfoLabel("Window(home).Property(tvshow_ids.JSON)")
             if self.tvshow_ids and self.tvshow_ids != "[]":
-                self.tvshow_ids = simplejson.loads(self.tvshow_ids)
-                self.tvshow_originaltitles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_originaltitles.JSON)"))
-                self.tvshow_titles = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_titles.JSON)"))
-                self.tvshow_imdbs = simplejson.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_imdbs.JSON)"))
+                self.tvshow_ids = json.loads(self.tvshow_ids)
+                self.tvshow_originaltitles = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_originaltitles.JSON)"))
+                self.tvshow_titles = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_titles.JSON)"))
+                self.tvshow_imdbs = json.loads(xbmc.getInfoLabel("Window(home).Property(tvshow_imdbs.JSON)"))
             else:
                 data = get_kodi_json(method="VideoLibrary.GetTVShows",
                                      params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
@@ -318,10 +318,10 @@ class LocalDB(object):
                         self.tvshow_imdbs.append(item["imdbnumber"])
                         self.tvshow_originaltitles.append(item["originaltitle"].lower())
                         self.tvshow_titles.append(item["label"].lower())
-                HOME.setProperty("tvshow_ids.JSON", simplejson.dumps(self.tvshow_ids))
-                HOME.setProperty("tvshow_originaltitles.JSON", simplejson.dumps(self.tvshow_originaltitles))
-                HOME.setProperty("tvshow_titles.JSON", simplejson.dumps(self.tvshow_titles))
-                HOME.setProperty("tvshow_imdbs.JSON", simplejson.dumps(self.tvshow_imdbs))
+                HOME.setProperty("tvshow_ids.JSON", json.dumps(self.tvshow_ids))
+                HOME.setProperty("tvshow_originaltitles.JSON", json.dumps(self.tvshow_originaltitles))
+                HOME.setProperty("tvshow_titles.JSON", json.dumps(self.tvshow_titles))
+                HOME.setProperty("tvshow_imdbs.JSON", json.dumps(self.tvshow_imdbs))
             log("create_light_tvshowlist: " + str(now - time.time()))
         now = time.time()
         local_items = []

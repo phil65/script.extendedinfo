@@ -75,7 +75,7 @@ def set_rating(media_type, media_id, rating):
                       data=values,
                       headers=HEADERS)
     response = urlopen(request, timeout=3).read()
-    results = simplejson.loads(response)
+    results = json.loads(response)
     notify(ADDON_NAME, results["status_message"])
 
 
@@ -91,7 +91,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
                       data=values,
                       headers=HEADERS)
     response = urlopen(request, timeout=3).read()
-    results = simplejson.loads(response)
+    results = json.loads(response)
     notify(ADDON_NAME, results["status_message"])
 
 
@@ -104,10 +104,10 @@ def create_list(list_name):
     url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
     request = Request(url,
-                      data=simplejson.dumps(values),
+                      data=json.dumps(values),
                       headers=HEADERS)
     response = urlopen(request, timeout=3).read()
-    results = simplejson.loads(response)
+    results = json.loads(response)
     notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
@@ -117,11 +117,11 @@ def remove_list(list_id):
     url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
     values = {'media_id': list_id}
     request = Request(url,
-                      data=simplejson.dumps(values),
+                      data=json.dumps(values),
                       headers=HEADERS)
     request.get_method = lambda: 'DELETE'
     response = urlopen(request, timeout=3).read()
-    results = simplejson.loads(response)
+    results = json.loads(response)
     notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
@@ -135,14 +135,14 @@ def change_list_status(list_id, movie_id, status):
     url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
     values = {'media_id': movie_id}
     request = Request(url,
-                      data=simplejson.dumps(values),
+                      data=json.dumps(values),
                       headers=HEADERS)
     try:
         response = urlopen(request, timeout=3).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
             notify("Error", "Not authorized to modify list")
-    results = simplejson.loads(response)
+    results = json.loads(response)
     notify(ADDON_NAME, results["status_message"])
 
 
