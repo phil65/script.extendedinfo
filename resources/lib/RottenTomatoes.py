@@ -17,30 +17,27 @@ def get_movies(movietype):
     if not results or "movies" not in results:
         return []
     for item in results["movies"]:
-        if "alternate_ids" in item:
-            imdb_id = str(item["alternate_ids"]["imdb"])
-        else:
-            imdb_id = ""
+        if "alternate_ids" not in item:
+            continue
+        imdb_id = str(item["alternate_ids"]["imdb"])
         poster = "http://content6.flixster.com/" + item["posters"]["original"][93:]
         if SETTING("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&imdb_id=%s' % imdb_id
         else:
             search_string = "%s %s trailer" % (item["title"], str(item["year"]))
             path = "plugin://script.extendedinfo/?info=playtrailer&&title=%s&&imdb_id=%s" % (search_string, imdb_id)
-        movie = {'title': item["title"],
-                 'imdb_id': imdb_id,
-                 'thumb': poster,
-                 'poster': poster,
-                 'Runtime': item["runtime"],
-                 'duration': item["runtime"],
-                 'duration(h)': format_time(item["runtime"], "h"),
-                 'duration(m)': format_time(item["runtime"], "m"),
-                 'year': item["year"],
-                 'path': path,
-                 'Premiered': item["release_dates"].get("theater", ""),
-                 'mpaa': item["mpaa_rating"],
-                 'Rating': item["ratings"]["audience_score"] / 10.0,
-                 'Plot': item["synopsis"]}
-        if imdb_id:
-            movies.append(movie)
+        movies.append({'title': item["title"],
+                       'imdb_id': imdb_id,
+                       'thumb': poster,
+                       'poster': poster,
+                       'Runtime': item["runtime"],
+                       'duration': item["runtime"],
+                       'duration(h)': format_time(item["runtime"], "h"),
+                       'duration(m)': format_time(item["runtime"], "m"),
+                       'year': item["year"],
+                       'path': path,
+                       'Premiered': item["release_dates"].get("theater", ""),
+                       'mpaa': item["mpaa_rating"],
+                       'Rating': item["ratings"]["audience_score"] / 10.0,
+                       'Plot': item["synopsis"]})
     return local_db.merge_with_local_movie_info(movies, False)
