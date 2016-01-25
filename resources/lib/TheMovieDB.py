@@ -30,6 +30,9 @@ if SETTING("use_https"):
 else:
     URL_BASE = "http://api.themoviedb.org/3/"
 
+ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating"
+ALL_TV_PROPS = "account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos"
+
 
 class SettingsMonitor(xbmc.Monitor):
 
@@ -111,7 +114,10 @@ class LoginProvider(object):
             return self.request_token
         response = get_data("authentication/token/new?", 999999)
         self.request_token = response["request_token"]
-        response = get_data("authentication/token/validate_with_login?request_token=%s&username=%s&password=%s&" % (self.request_token, url_quote(self.username), url_quote(self.password)),
+        params = {"request_token": self.request_token,
+                  "username": self.username,
+                  "password": self.password}
+        response = get_data("authentication/token/validate_with_login?%s&" % (urllib.urlencode(params)),
                             cache_days=cache_days)
         if response and response.get("success"):
             return response["request_token"]
@@ -646,7 +652,9 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
         log("IMDB Id from local DB: %s" % (movie_id))
         return movie_id
     elif imdb_id:
-        response = get_data("find/tt%s?external_source=imdb_id&language=%s&" % (imdb_id.replace("tt", ""), SETTING("LanguageID")), 30)
+        params = {"external_source": "imdb_id",
+                  "language": SETTING("LanguageID")}
+        response = get_data("find/tt%s?%s&" % (imdb_id.replace("tt", ""), urllib.urlencode(params)), 30)
         if response["movie_results"]:
             return response["movie_results"][0]["id"]
     if name:
@@ -665,8 +673,8 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
 
 
 def get_trailer(movie_id=None):
-    response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
+                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 30)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
     notify("Could not get trailer")
@@ -680,8 +688,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         session_str = "session_id=%s&" % (Login.get_session_id())
     else:
         session_str = ""
-    response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&%s" %
-                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&%s" %
+                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
         notify("Could not get movie information")
         return {}
@@ -770,8 +778,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     session_str = ""
     if Login.check_login():
         session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                        (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+    response = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
+                        (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     if not response:
         return False
     videos = []
@@ -855,9 +863,10 @@ def extended_season_info(tvshow_id, season_number):
     session_str = ""
     if Login.check_login():
         session_str = "session_id=%s&" % (Login.get_session_id())
-    tvshow = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                      (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
-    response = get_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" % (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
+    tvshow = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
+                      (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
+    response = get_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" %
+                        (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
     if not response:
         notify("Could not find season info")
         return None
@@ -941,8 +950,8 @@ def translate_status(status_string):
 
 
 def get_movie_lists(list_id):
-    response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                        (list_id, SETTING("LanguageID"), SETTING("LanguageID")), 5)
+    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
+                        (list_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 5)
     return handle_misc(response["lists"]["results"])
 
 
@@ -954,13 +963,15 @@ def get_rated_media_items(media_type):
         if not session_id:
             notify("Could not get session id")
             return []
-        response = get_data("account/%s/rated/%s?session_id=%s&language=%s&" % (account_id, media_type, session_id, SETTING("LanguageID")), 0)
+        response = get_data("account/%s/rated/%s?session_id=%s&language=%s&" %
+                            (account_id, media_type, session_id, SETTING("LanguageID")), 0)
     else:
         session_id = Login.get_guest_session_id()
         if not session_id:
             notify("Could not get session id")
             return []
-        response = get_data("guest_session/%s/rated_movies?language=%s&" % (session_id, SETTING("LanguageID")), 0)
+        response = get_data("guest_session/%s/rated_movies?language=%s&" %
+                            (session_id, SETTING("LanguageID")), 0)
     if media_type == "tv/episodes":
         return handle_episodes(response["results"])
     elif media_type == "tv":
@@ -976,7 +987,8 @@ def get_fav_items(media_type):
     if not session_id:
         notify("Could not get session id")
         return []
-    response = get_data("account/%s/favorite/%s?session_id=%s&language=%s&" % (account_id, media_type, session_id, SETTING("LanguageID")), 0)
+    response = get_data("account/%s/favorite/%s?session_id=%s&language=%s&" %
+                        (account_id, media_type, session_id, SETTING("LanguageID")), 0)
     if "results" in response:
         if media_type == "tv":
             return handle_tvshows(response["results"], False, None)
@@ -1017,8 +1029,8 @@ def get_keywords(movie_id):
     '''
     get dict list containing movie keywords
     '''
-    response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
+                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 30)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -1033,8 +1045,8 @@ def get_similar_movies(movie_id):
     get dict list containing movies similar to *movie_id
     '''
 
-    response = get_data("movie/%s?append_to_response=account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, SETTING("LanguageID"), SETTING("LanguageID")), 10)
+    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
+                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 10)
     if "similar" in response:
         return handle_movies(response["similar"]["results"])
     else:
@@ -1048,8 +1060,8 @@ def get_similar_tvshows(tvshow_id):
     session_str = ""
     if Login.check_login():
         session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s?append_to_response=account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos&language=%s&include_image_language=en,null,%s&%s" %
-                        (tvshow_id, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
+    response = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
+                        (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
     if "similar" in response:
         return handle_tvshows(response["similar"]["results"])
     else:
@@ -1084,7 +1096,8 @@ def get_set_movies(set_id):
     '''
     return list with movies which are part of set with *set_id
     '''
-    response = get_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" % (set_id, SETTING("LanguageID"), SETTING("LanguageID")), 14)
+    response = get_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" %
+                        (set_id, SETTING("LanguageID"), SETTING("LanguageID")), 14)
     if response:
         artwork = get_image_urls(poster=response.get("poster_path"),
                                  fanart=response.get("backdrop_path"))
@@ -1113,7 +1126,8 @@ def search_media(media_name=None, year='', media_type="movie"):
     search_query = url_quote("%s %s" % (media_name, year))
     if not search_query:
         return None
-    response = get_data("search/%s?query=%s&language=%s&include_adult=%s&" % (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
+    response = get_data("search/%s?query=%s&language=%s&include_adult=%s&" %
+                        (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
     if not response == "Empty":
         for item in response['results']:
             if item['id']:
