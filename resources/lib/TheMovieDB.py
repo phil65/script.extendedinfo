@@ -533,7 +533,8 @@ def handle_companies(results):
 def search_company(company_name):
     regex = re.compile('\(.+?\)')
     company_name = regex.sub('', company_name)
-    response = get_data("search/company?query=%s&" % url_quote(company_name), 10)
+    params = {"query": company_name}
+    response = get_data("search/company?%s&" % urllib.urlencode(params), 10)
     if response and "results" in response:
         return response["results"]
     else:
@@ -542,7 +543,8 @@ def search_company(company_name):
 
 
 def multi_search(search_str):
-    response = get_data("search/multi?query=%s&" % url_quote(search_str), 1)
+    params = {"query": search_str}
+    response = get_data("search/multi?%s&" % urllib.urlencode(params), 1)
     if response and "results" in response:
         return response["results"]
     else:
