@@ -864,13 +864,16 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
 def extended_season_info(tvshow_id, season_number):
     if not tvshow_id or not season_number:
         return None
-    session_str = ""
+    params = {"append_to_response": ALL_TV_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
-        session_str = "session_id=%s&" % (Login.get_session_id())
-    tvshow = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
-                      (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
-    response = get_data("tv/%s/season/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&" %
-                        (tvshow_id, season_number, ALL_SEASON_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 7)
+        params["session_id"] = Login.get_session_id()
+    tvshow = get_data("tv/%s?%s&" % (tvshow_id, urllib.urlencode(params)), 99999)
+    params = {"append_to_response": ALL_SEASON_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
+    response = get_data("tv/%s/season/%s?%s&" % (tvshow_id, season_number, urllib.urlencode(params)), 7)
     if not response:
         notify("Could not find season info")
         return None
