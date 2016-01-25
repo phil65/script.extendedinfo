@@ -36,6 +36,7 @@ ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_image
 ALL_SEASON_PROPS = "videos,images,external_ids,credits"
 ALL_EPISODE_PROPS = "account_states,credits,external_ids,images,rating,videos"
 
+
 class SettingsMonitor(xbmc.Monitor):
 
     def __init__(self):
@@ -905,11 +906,13 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
         return None
     if not season:
         season = 0
-    session_str = ""
+    params = {"append_to_response": ALL_EPISODE_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
-        session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s/season/%s/episode/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s&" %
-                        (tvshow_id, season, episode, ALL_EPISODE_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+        params["session_id"] = Login.get_session_id()
+    response = get_data("tv/%s/season/%s/episode/%s?%s&" %
+                        (tvshow_id, season, episode, urllib.urlencode(params)), cache_time)
     videos = []
     if "videos" in response:
         videos = handle_videos(response["videos"]["results"])
