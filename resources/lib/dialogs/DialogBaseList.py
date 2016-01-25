@@ -10,7 +10,6 @@ from ..WindowManager import wm
 from T9Search import T9Search
 from ActionHandler import ActionHandler
 
-
 ch = ActionHandler()
 
 
@@ -121,11 +120,11 @@ class DialogBaseList(object):
         self.update_ui()
 
     def set_filter_label(self):
-        filter_list = []
+        filters = []
         for item in self.filters:
             filter_label = item["label"].replace("|", " | ").replace(",", " + ")
-            filter_list.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], filter_label))
-        self.filter_label = "  -  ".join(filter_list)
+            filters.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], filter_label))
+        self.filter_label = "  -  ".join(filters)
 
     def update_content(self, add=False, force_update=False):
         if add:

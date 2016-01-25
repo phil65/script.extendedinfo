@@ -693,17 +693,17 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
 
 
 def merge_dict_lists(items, key="job"):
-    crew_id_list = []
-    crew_list = []
+    crew_ids = []
+    crews = []
     for item in items:
-        if item["id"] not in crew_id_list:
-            crew_id_list.append(item["id"])
-            crew_list.append(item)
+        if item["id"] not in crew_ids:
+            crew_ids.append(item["id"])
+            crews.append(item)
         else:
-            index = crew_id_list.index(item["id"])
-            if key in crew_list[index]:
-                crew_list[index][key] = crew_list[index][key] + " / " + item[key]
-    return crew_list
+            index = crew_ids.index(item["id"])
+            if key in crews[index]:
+                crews[index][key] = crews[index][key] + " / " + item[key]
+    return crews
 
 
 def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
