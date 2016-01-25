@@ -163,7 +163,7 @@ def get_artist_discography(search_str):
     if not search_str:
         return []
     url = 'searchalbum.php?s=%s' % (url_quote(search_str))
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return handle_albums(results)
 
 
@@ -171,7 +171,7 @@ def get_artist_details(search_str):
     if not search_str:
         return []
     url = 'search.php?s=%s' % (url_quote(search_str))
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return extended_artist_info(results)
 
 
@@ -183,7 +183,7 @@ def get_most_loved_tracks(search_str="", mbid=""):
     else:
         return []
     log("GetMostLoveTracks URL:" + url)
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return handle_tracks(results)
 
 
@@ -194,7 +194,7 @@ def get_album_details(audiodb_id="", mbid=""):
         url = 'album-mb.php?i=%s' % (mbid)
     else:
         return []
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return handle_albums(results)[0]
 
 
@@ -202,7 +202,7 @@ def get_musicvideos(audiodb_id):
     if not audiodb_id:
         return []
     url = 'mvid.php?i=%s' % (audiodb_id)
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return handle_musicvideos(results)
 
 
@@ -210,5 +210,9 @@ def get_track_details(audiodb_id):
     if not audiodb_id:
         return []
     url = 'track.php?m=%s' % (audiodb_id)
-    results = get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+    results = get_data(url)
     return handle_tracks(results)
+
+def get_data(url):
+    return get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+

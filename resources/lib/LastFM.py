@@ -33,18 +33,26 @@ def handle_events(results):
             if location['geo:point']['geo:long']:
                 search_str = location['geo:point']['geo:lat'] + "," + location['geo:point']['geo:long']
             elif location['street']:
-                search_str = url_quote(location['city'] + " " + location['street'])
+                search_str = location['city'] + " " + location['street']
             elif location['city']:
-                search_str = url_quote(location['city'] + " " + event['venue']['name'])
+                search_str = location['city'] + " " + event['venue']['name']
             else:
-                search_str = url_quote(event['venue']['name'])
+                search_str = event['venue']['name']
         except:
             search_str = ""
         if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
             builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
         else:
             builtin = "Notification(Please install script.maps.browser)"
-        googlemap = 'http://maps.googleapis.com/maps/api/staticmap?&sensor=false&scale=2&maptype=roadmap&center=%s&zoom=13&markers=%s&size=640x640&key=%s' % (search_str, search_str, GOOGLE_MAPS_KEY)
+        params = {"sensor": "false",
+                  "scale": 2,
+                  "maptype": "roadmap",
+                  "center": search_str,
+                  "zoom": 13,
+                  "markers": search_str,
+                  "size": "640x640",
+                  "key": GOOGLE_MAPS_KEY}
+        map_url = 'http://maps.googleapis.com/maps/api/staticmap?&%s' % (urllib.urlencode(params))
         event = {'date': event['startDate'][:-3],
                  'name': event['venue']['name'],
                  'id': event['venue']['id'],
@@ -60,7 +68,7 @@ def handle_events(results):
                  'lat': location['geo:point']['geo:lat'],
                  'lon': location['geo:point']['geo:long'],
                  'artists': my_arts,
-                 'googlemap': googlemap,
+                 'googlemap': map_url,
                  'path': "plugin://script.extendedinfo/?info=action&&id=" + builtin,
                  'artist_image': event['image'][-1]['#text'],
                  'thumb': event['image'][-1]['#text'],
@@ -81,9 +89,6 @@ def handle_albums(results):
                      'thumb': album['image'][-1]['#text'],
                      'name': album['name']}
             albums.append(album)
-    else:
-        log("No Info in JSON answer:")
-        prettyprint(results)
     return albums
 
 
@@ -91,11 +96,11 @@ def handle_shouts(results):
     shouts = []
     if not results:
         return []
-    for shout in results['shouts']['shout']:
-        newshout = {'comment': shout['body'],
-                    'author': shout['author'],
-                    'date': shout['date'][4:]}
-        shouts.append(newshout)
+    for item in results['shouts']['shout']:
+        shout = {'comment': item['body'],
+                 'author': item['author'],
+                 'date': item['date'][4:]}
+        shouts.append(shout)
     return shouts
 
 
@@ -219,7 +224,7 @@ def get_near_events(tag=False, festivals_only=False, lat="", lon="", location=""
     if tag:
         url += '&tag=%s' % (url_quote(tag))
     if lat and lon:
-        url += '&lat=%s&long=%s' % (str(lat), str(lon))  # &distance=60
+        url += '&lat=%s&long=%s' % (lat, lon)  # &distance=60
     if location:
         url += '&location=%s' % (url_quote(location))
     if distance:
