@@ -75,8 +75,8 @@ def get_window(window_type):
         @ch.click(750)
         def open_image(self):
             listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
-            index = self.control.getSelectedPosition()
-            pos = wm.open_slideshow(listitems=listitems, index=index)
+            pos = wm.open_slideshow(listitems=listitems,
+                                    index=self.control.getSelectedPosition())
             self.control.selectItem(pos)
 
         @ch.click(350)
@@ -93,7 +93,6 @@ def get_window(window_type):
         @ch.action("contextmenu", 150)
         @ch.action("contextmenu", 550)
         def add_movie_to_account(self):
-            movie_id = self.listitem.getProperty("id")
-            TheMovieDB.add_movie_to_list(movie_id)
+            TheMovieDB.add_movie_to_list(self.listitem.getProperty("id"))
 
     return DialogActorInfo

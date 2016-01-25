@@ -6,7 +6,7 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from .. import TheMovieDB
+from .. import TheMovieDB as tmdb
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from .. import YouTube
@@ -19,7 +19,7 @@ class DialogBaseInfo(object):
 
     def __init__(self, *args, **kwargs):
         super(DialogBaseInfo, self).__init__(*args, **kwargs)
-        self.logged_in = TheMovieDB.Login.check_login()
+        self.logged_in = tmdb.Login.check_login()
         self.dbid = kwargs.get('dbid')
         self.bouncing = False
         self.data = None
@@ -143,12 +143,12 @@ class DialogBaseInfo(object):
         youtube_list.addItems(create_listitems(self.yt_listitems))
 
     def open_credit_dialog(self, credit_id):
-        info = TheMovieDB.get_credit_info(credit_id)
+        info = tmdb.get_credit_info(credit_id)
         listitems = []
         if "seasons" in info["media"]:
-            listitems += TheMovieDB.handle_seasons(info["media"]["seasons"])
+            listitems += tmdb.handle_seasons(info["media"]["seasons"])
         if "episodes" in info["media"]:
-            listitems += TheMovieDB.handle_episodes(info["media"]["episodes"])
+            listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)
@@ -165,5 +165,5 @@ class DialogBaseInfo(object):
     def update_states(self):
         if not self.account_states:
             return None
-        pass_dict_to_skin(data=TheMovieDB.get_account_props(self.account_states),
+        pass_dict_to_skin(data=tmdb.get_account_props(self.account_states),
                           window_id=self.window_id)

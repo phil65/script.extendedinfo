@@ -6,7 +6,7 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from .. import TheMovieDB
+from .. import TheMovieDB as tmdb
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
@@ -46,7 +46,7 @@ def get_window(window_type):
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', LANG(32110))
             self.order = kwargs.get('order', "desc")
-            self.logged_in = TheMovieDB.Login.check_login()
+            self.logged_in = tmdb.Login.check_login()
             if self.listitem_list:
                 self.listitems = create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
@@ -91,27 +91,27 @@ def get_window(window_type):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=listitems)
             if selection == 0:
-                if TheMovieDB.set_rating_prompt(self.type, item_id):
+                if tmdb.set_rating_prompt(self.type, item_id):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
                     self.getControl(500).selectItem(self.position)
             elif selection == 1:
-                TheMovieDB.change_fav_status(media_id=item_id,
-                                             media_type=self.type,
-                                             status="true")
+                tmdb.change_fav_status(media_id=item_id,
+                                       media_type=self.type,
+                                       status="true")
             elif selection == 2:
                 self.list_dialog(item_id)
             elif selection == 3:
-                TheMovieDB.change_list_status(list_id=self.list_id,
-                                              movie_id=item_id,
-                                              status=False)
+                tmdb.change_list_status(list_id=self.list_id,
+                                        movie_id=item_id,
+                                        status=False)
                 self.update(force_update=True)
                 self.getControl(500).selectItem(self.position)
 
         def list_dialog(self, movie_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = [LANG(32139)]
-            account_lists = TheMovieDB.get_account_lists()
+            account_lists = tmdb.get_account_lists()
             listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.append(LANG(32138))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -121,17 +121,17 @@ def get_window(window_type):
                 listname = xbmcgui.Dialog().input(heading=LANG(32137),
                                                   type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
-                    list_id = TheMovieDB.create_list(listname)
+                    list_id = tmdb.create_list(listname)
                     xbmc.sleep(1000)
-                    TheMovieDB.change_list_status(list_id=list_id,
-                                                  movie_id=movie_id,
-                                                  status=True)
+                    tmdb.change_list_status(list_id=list_id,
+                                            movie_id=movie_id,
+                                            status=True)
             elif index == len(listitems) - 1:
                 self.remove_list_dialog(account_lists)
             elif index > 0:
-                TheMovieDB.change_list_status(list_id=account_lists[index - 1]["id"],
-                                              movie_id=movie_id,
-                                              status=True)
+                tmdb.change_list_status(list_id=account_lists[index - 1]["id"],
+                                        movie_id=movie_id,
+                                        status=True)
 
         @ch.click(5001)
         def get_sort_type(self):
@@ -189,7 +189,7 @@ def get_window(window_type):
                     listitems.append(LANG(32134))
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if self.logged_in:
-                account_lists = TheMovieDB.get_account_lists()
+                account_lists = tmdb.get_account_lists()
                 listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(heading=LANG(32136),
@@ -222,14 +222,17 @@ def get_window(window_type):
 
         @ch.click(5002)
         def set_genre_filter(self):
-            response = TheMovieDB.get_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
+            response = tmdb.get_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
             id_list = [item["id"] for item in response["genres"]]
             label_list = [item["name"] for item in response["genres"]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=label_list)
             if index == -1:
                 return None
-            self.add_filter("with_genres", str(id_list[index]), LANG(135), label_list[index])
+            self.add_filter(key="with_genres",
+                            value=str(id_list[index]),
+                            typelabel=LANG(135),
+                            label=label_list[index])
             self.mode = "filter"
             self.page = 1
             self.update()
@@ -285,7 +288,7 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
                 return None
-            response = TheMovieDB.get_person_info(result)
+            response = tmdb.get_person_info(result)
             if not response:
                 return None
             self.add_filter("with_people", str(response["id"]), LANG(32156), response["name"])
@@ -317,7 +320,7 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result < 0:
                 return None
-            response = TheMovieDB.search_company(result)
+            response = tmdb.search_company(result)
             if len(response) > 1:
                 selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                     list=[item["name"] for item in response])
@@ -341,7 +344,7 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
                 return None
-            response = TheMovieDB.get_keyword_id(result)
+            response = tmdb.get_keyword_id(result)
             if not response:
                 return None
             self.add_filter("with_keywords", str(response["id"]), LANG(32114), response["name"])
@@ -351,7 +354,7 @@ def get_window(window_type):
 
         @ch.click(5006)
         def set_certification_filter(self):
-            response = TheMovieDB.get_certification_list(self.type)
+            response = tmdb.get_certification_list(self.type)
             country_list = [key for key in response.keys()]
             index = xbmcgui.Dialog().select(heading=LANG(21879),
                                             list=country_list)
@@ -396,13 +399,13 @@ def get_window(window_type):
                 params = {"sort_by": sort_by,
                           "language": SETTING("LanguageID"),
                           "page": self.page,
-                          "session_id": TheMovieDB.Login.get_session_id()}
-                url = "account/%s/favorite/%s?%s&" % (TheMovieDB.Login.get_account_id(), urllib.urlencode(params))
+                          "session_id": tmdb.Login.get_session_id()}
+                url = "account/%s/favorite/%s?%s&" % (tmdb.Login.get_account_id(), urllib.urlencode(params))
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
                 if self.logged_in:
-                    session_id = TheMovieDB.Login.get_session_id()
+                    session_id = tmdb.Login.get_session_id()
                     if not session_id:
                         notify("Could not get session id")
                         return {"listitems": [],
@@ -412,9 +415,9 @@ def get_window(window_type):
                               "language": SETTING("LanguageID"),
                               "page": self.page,
                               "session_id": session_id}
-                    url = "account/%s/rated/%s?%s&" % (TheMovieDB.Login.get_account_id(), temp, urllib.urlencode(params))
+                    url = "account/%s/rated/%s?%s&" % (tmdb.Login.get_account_id(), temp, urllib.urlencode(params))
                 else:
-                    session_id = TheMovieDB.Login.get_guest_session_id()
+                    session_id = tmdb.Login.get_guest_session_id()
                     if not session_id:
                         notify("Could not get session id")
                         return {"listitems": [],
@@ -431,17 +434,17 @@ def get_window(window_type):
                           "include_adult": include_adult}
                 url = "discover/%s?%s%s&" % (self.type, self.filter_url, urllib.urlencode(params))
             if force:
-                response = TheMovieDB.get_data(url=url,
-                                               cache_days=0)
+                response = tmdb.get_data(url=url,
+                                         cache_days=0)
             else:
-                response = TheMovieDB.get_data(url=url,
-                                               cache_days=2)
+                response = tmdb.get_data(url=url,
+                                         cache_days=2)
             if not response:
                 return None
             if self.mode == "list":
-                info = {"listitems": TheMovieDB.handle_movies(results=response["items"],
-                                                              local_first=True,
-                                                              sortkey=None),
+                info = {"listitems": tmdb.handle_movies(results=response["items"],
+                                                        local_first=True,
+                                                        sortkey=None),
                         "results_per_page": 1,
                         "total_results": len(response["items"])}
                 return info
@@ -453,15 +456,15 @@ def get_window(window_type):
             if not response["results"]:
                 notify(LANG(284))
             if self.mode == "search":
-                listitems = TheMovieDB.handle_multi_search(response["results"])
+                listitems = tmdb.handle_multi_search(response["results"])
             elif self.type == "movie":
-                listitems = TheMovieDB.handle_movies(results=response["results"],
-                                                     local_first=False,
-                                                     sortkey=None)
+                listitems = tmdb.handle_movies(results=response["results"],
+                                               local_first=False,
+                                               sortkey=None)
             else:
-                listitems = TheMovieDB.handle_tvshows(results=response["results"],
-                                                      local_first=False,
-                                                      sortkey=None)
+                listitems = tmdb.handle_tvshows(results=response["results"],
+                                                local_first=False,
+                                                sortkey=None)
             info = {"listitems": listitems,
                     "results_per_page": response["total_pages"],
                     "total_results": response["total_results"]}

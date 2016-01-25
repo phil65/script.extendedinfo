@@ -6,6 +6,7 @@
 from Utils import *
 import xbmc
 import xbmcaddon
+import xbmcgui
 import xbmcvfs
 import os
 
@@ -71,10 +72,10 @@ class WindowManager(object):
             xbmc.executebuiltin("Action(Info)")
             if self.last_control:
                 xbmc.sleep(50)
-                log(self.last_control)
                 xbmc.executebuiltin("SetFocus(%s)" % self.last_control)
 
-    def open_movie_info(self, prev_window=None, movie_id=None, dbid=None, name=None, imdb_id=None):
+    def open_movie_info(self, prev_window=None, movie_id=None, dbid=None,
+                        name=None, imdb_id=None):
         """
         open movie info, deal with window stack
         """
@@ -93,7 +94,8 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
+    def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None,
+                         tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
         """
@@ -125,7 +127,8 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_season_info(self, prev_window=None, tvshow_id=None, season=None, tvshow=None, dbid=None):
+    def open_season_info(self, prev_window=None, tvshow_id=None,
+                         season=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
@@ -152,7 +155,8 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None, episode=None, tvshow=None, dbid=None):
+    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None,
+                          episode=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
@@ -202,7 +206,8 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False, filter_label="", force=False, media_type="movie", search_str=""):
+    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False,
+                        filter_label="", force=False, media_type="movie", search_str=""):
         """
         open video list, deal with window stack and color
         """
@@ -232,7 +237,8 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
-    def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance", filter_label="", media_type="video"):
+    def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance",
+                          filter_label="", media_type="video"):
         """
         open video list, deal with window stack and color
         """
