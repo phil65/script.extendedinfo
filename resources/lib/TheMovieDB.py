@@ -1150,10 +1150,9 @@ def search_media(media_name=None, year='', media_type="movie"):
     '''
     return list of items with type *media_type for search with *media_name
     '''
-    search_query = url_quote("%s %s" % (media_name, year))
-    if not search_query:
+    if not media_name:
         return None
-    params = {"query": search_query,
+    params = {"query": "%s %s" % (media_name, year),
               "language": SETTING("language"),
               "include_adult": include_adult}
     response = get_data("search/%s?%s&" % (media_type, urllib.urlencode(params)), 1)
