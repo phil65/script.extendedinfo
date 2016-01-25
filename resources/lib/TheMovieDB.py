@@ -431,9 +431,9 @@ def handle_seasons(results):
         season_number = str(fetch(season, 'season_number'))
         artwork = get_image_urls(poster=season.get("poster_path"))
         if season_number == "0":
-            title = "Specials"
+            title = LANG(20381)
         else:
-            title = "Season %s" % season_number
+            title = "%s %s" % (LANG(20373), season_number)
         listitem = {'media_type': "season",
                     'title': title,
                     'season': season_number,
