@@ -32,6 +32,8 @@ else:
 
 ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating"
 ALL_TV_PROPS = "account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos"
+ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_images"
+ALL_SEASON_PROPS = "videos,images,external_ids,credits"
 
 
 class SettingsMonitor(xbmc.Monitor):
@@ -664,7 +666,9 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
 
 
 def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
-    response = get_data("find/%s?external_source=%s&language=%s&" % (tvdb_id, source, SETTING("LanguageID")), 30)
+    params = {"external_source": source,
+              "language": SETTING("LanguageID")}
+    response = get_data("find/%s?%s&" % (tvdb_id, urllib.urlencode(params)), 30)
     if response and response["tv_results"]:
         return response["tv_results"][0]["id"]
     else:
@@ -774,11 +778,12 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
 def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     if not tvshow_id:
         return None
-    session_str = ""
+    params = {"append_to_response": ALL_TV_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
-        session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
-                        (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+        params["session_id"] = Login.get_session_id()
+    response = get_data("tv/%s?%s&" % (tvshow_id, urllib.urlencode(params)), cache_time)
     if not response:
         return False
     videos = []
@@ -864,8 +869,8 @@ def extended_season_info(tvshow_id, season_number):
         session_str = "session_id=%s&" % (Login.get_session_id())
     tvshow = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
                       (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 99999)
-    response = get_data("tv/%s/season/%s?append_to_response=videos,images,external_ids,credits&language=%s&include_image_language=en,null,%s&" %
-                        (tvshow_id, season_number, SETTING("LanguageID"), SETTING("LanguageID")), 7)
+    response = get_data("tv/%s/season/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&" %
+                        (tvshow_id, season_number, ALL_SEASON_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 7)
     if not response:
         notify("Could not find season info")
         return None
@@ -920,7 +925,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
 def extended_actor_info(actor_id):
     if not actor_id:
         return None
-    response = get_data("person/%s?append_to_response=tv_credits,movie_credits,combined_credits,images,tagged_images&" % (actor_id), 1)
+    response = get_data("person/%s?append_to_response=%s&" % (actor_id, ALL_ACTOR_PROPS), 1)
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = handle_tagged_images(response["tagged_images"]["results"])
