@@ -176,20 +176,20 @@ def get_window(window_type):
         def update_ui(self):
             self.setProperty("Type", TRANSLATIONS[self.type])
             if self.type == "video":
-                self.window.getControl(5006).setVisible(True)
-                self.window.getControl(5008).setVisible(True)
-                self.window.getControl(5009).setVisible(True)
-                self.window.getControl(5012).setVisible(True)
+                self.getControl(5006).setVisible(True)
+                self.getControl(5008).setVisible(True)
+                self.getControl(5009).setVisible(True)
+                self.getControl(5012).setVisible(True)
             elif self.type == "playlist":
-                self.window.getControl(5006).setVisible(False)
-                self.window.getControl(5008).setVisible(False)
-                self.window.getControl(5009).setVisible(False)
-                self.window.getControl(5012).setVisible(False)
+                self.getControl(5006).setVisible(False)
+                self.getControl(5008).setVisible(False)
+                self.getControl(5009).setVisible(False)
+                self.getControl(5012).setVisible(False)
             elif self.type == "channel":
-                self.window.getControl(5006).setVisible(False)
-                self.window.getControl(5008).setVisible(False)
-                self.window.getControl(5009).setVisible(False)
-                self.window.getControl(5012).setVisible(False)
+                self.getControl(5006).setVisible(False)
+                self.getControl(5008).setVisible(False)
+                self.getControl(5009).setVisible(False)
+                self.getControl(5012).setVisible(False)
             super(DialogYoutubeList, self).update_ui()
 
         @ch.click(5001)
