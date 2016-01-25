@@ -34,7 +34,7 @@ ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,rel
 ALL_TV_PROPS = "account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos"
 ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_images"
 ALL_SEASON_PROPS = "videos,images,external_ids,credits"
-
+ALL_EPISODE_PROPS = "account_states,credits,external_ids,images,rating,videos"
 
 class SettingsMonitor(xbmc.Monitor):
 
@@ -548,8 +548,9 @@ def multi_search(search_str):
 
 
 def get_person_info(person_label, skip_dialog=False):
-    persons = person_label.split(" / ")
-    response = get_data("search/person?query=%s&include_adult=%s&" % (url_quote(persons[0]), include_adult), 30)
+    params = {"query": person_label.split(" / ")[0],
+              "include_adult": include_adult}
+    response = get_data("search/person?%s&" % (urllib.urlencode(params)), 30)
     if not response or "results" not in response:
         return False
     if len(response["results"]) > 1 and not skip_dialog:
@@ -907,8 +908,8 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     session_str = ""
     if Login.check_login():
         session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s/season/%s/episode/%s?append_to_response=account_states,credits,external_ids,images,rating,videos&language=%s&include_image_language=en,null,%s&%s&" %
-                        (tvshow_id, season, episode, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+    response = get_data("tv/%s/season/%s/episode/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s&" %
+                        (tvshow_id, season, episode, ALL_EPISODE_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
     videos = []
     if "videos" in response:
         videos = handle_videos(response["videos"]["results"])
@@ -1005,8 +1006,8 @@ def get_movies_from_list(list_id, cache_time=5):
     '''
     get movie dict list from tmdb list.
     '''
-
-    response = get_data("list/%s?language=%s&" % (list_id, SETTING("LanguageID")), cache_time)
+    params = {"language": SETTING("LanguageID")}
+    response = get_data("list/%s?%s&" % (list_id, urllib.urlencode(params)), cache_time)
     return handle_movies(response["items"], False, None)
 
 
@@ -1080,7 +1081,8 @@ def get_tmdb_shows(tvshow_type):
     return list with tv shows
     available types: airing, on_the_air, top_rated, popular
     '''
-    response = get_data("tv/%s?language=%s&" % (tvshow_type, SETTING("LanguageID")), 0.3)
+    params = {"language": SETTING("LanguageID")}
+    response = get_data("tv/%s?%s&" % (tvshow_type, urllib.urlencode(params)), 0.3)
     if "results" in response:
         return handle_tvshows(response["results"], False, None)
     else:
@@ -1092,7 +1094,8 @@ def get_tmdb_movies(movie_type):
     return list with movies
     available types: now_playing, upcoming, top_rated, popular
     '''
-    response = get_data("movie/%s?language=%s&" % (movie_type, SETTING("LanguageID")), 0.3)
+    params = {"language": SETTING("LanguageID")}
+    response = get_data("movie/%s?%s&" % (movie_type, urllib.urlencode(params)), 0.3)
     if "results" in response:
         return handle_movies(response["results"], False, None)
     else:
@@ -1118,7 +1121,8 @@ def get_set_movies(set_id):
 
 
 def get_person_movies(person_id):
-    response = get_data("person/%s/credits?language=%s&" % (person_id, SETTING("LanguageID")), 14)
+    params = {"language": SETTING("LanguageID")}
+    response = get_data("person/%s/credits?%s&" % (person_id, urllib.urlencode(params)), 14)
     # return handle_movies(response["crew"]) + handle_movies(response["cast"])
     if "crew" in response:
         return handle_movies(response["crew"])
