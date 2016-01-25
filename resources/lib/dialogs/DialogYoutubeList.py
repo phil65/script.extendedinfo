@@ -85,20 +85,27 @@ def get_window(window_type):
             if delta == "custom":
                 delta = xbmcgui.Dialog().input(heading=LANG(32067),
                                                type=xbmcgui.INPUT_NUMERIC)
-            if delta:
-                d = datetime.datetime.now() - datetime.timedelta(int(delta))
-                date_str = d.isoformat('T')[:-7] + "Z"
-                self.add_filter("publishedAfter", date_str, LANG(172), str(label_list[index]))
-                self.update()
+            if not delta:
+                return None
+            d = datetime.datetime.now() - datetime.timedelta(int(delta))
+            self.add_filter(key="publishedAfter",
+                            value=d.isoformat('T')[:-7] + "Z",
+                            typelabel=LANG(172),
+                            label=str(label_list[index]))
+            self.update()
 
         @ch.click(5003)
         def set_language_filter(self):
             label_list = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=label_list)
-            if index > -1:
-                self.add_filter("regionCode", label_list[index], LANG(248), str(label_list[index]))
-                self.update()
+            if index == -1:
+                return None
+            self.add_filter(key="regionCode",
+                            value=label_list[index],
+                            typelabel=LANG(248),
+                            label=str(label_list[index]))
+            self.update()
 
         @ch.click(5006)
         def set_dimension_filter(self):
@@ -107,7 +114,10 @@ def get_window(window_type):
             index = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=label_list)
             if index > -1:
-                self.add_filter("videoDimension", value_list[index], "Dimensions", str(label_list[index]))
+                self.add_filter(key="videoDimension",
+                                value=value_list[index],
+                                typelabel="Dimensions",
+                                label=str(label_list[index]))
                 self.update()
 
         @ch.click(5008)
@@ -117,7 +127,10 @@ def get_window(window_type):
             index = xbmcgui.Dialog().select(heading=LANG(32151),
                                             list=label_list)
             if index > -1:
-                self.add_filter("videoDuration", value_list[index], LANG(180), str(label_list[index]))
+                self.add_filter(key="videoDuration",
+                                value=value_list[index],
+                                typelabel=LANG(180),
+                                label=str(label_list[index]))
                 self.update()
 
         @ch.click(5009)
@@ -127,7 +140,10 @@ def get_window(window_type):
             index = xbmcgui.Dialog().select(heading=LANG(287),
                                             list=label_list)
             if index > -1:
-                self.add_filter("videoCaption", value_list[index], LANG(287), str(label_list[index]))
+                self.add_filter(key="videoCaption",
+                                value=value_list[index],
+                                typelabel=LANG(287),
+                                label=str(label_list[index]))
                 self.update()
 
         @ch.click(5012)
@@ -137,7 +153,10 @@ def get_window(window_type):
             index = xbmcgui.Dialog().select(heading=LANG(169),
                                             list=label_list)
             if index > -1:
-                self.add_filter("videoDefinition", value_list[index], LANG(169), str(label_list[index]))
+                self.add_filter(key="videoDefinition",
+                                value=value_list[index],
+                                typelabel=LANG(169),
+                                label=str(label_list[index]))
                 self.update()
 
         @ch.click(5007)
