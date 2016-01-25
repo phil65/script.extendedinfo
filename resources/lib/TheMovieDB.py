@@ -36,6 +36,8 @@ ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_image
 ALL_SEASON_PROPS = "videos,images,external_ids,credits"
 ALL_EPISODE_PROPS = "account_states,credits,external_ids,images,rating,videos"
 
+PLUGIN_BASE = "plugin://script.extendedinfo/?info="
+
 
 class SettingsMonitor(xbmc.Monitor):
 
@@ -300,9 +302,9 @@ def handle_movies(results=[], local_first=True, sortkey="year"):
         tmdb_id = str(fetch(movie, 'id'))
         artwork = get_image_urls(poster=movie.get("poster_path"),
                                  fanart=movie.get("backdrop_path"))
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&id=" + tmdb_id
+        trailer = PLUGIN_BASE + "playtrailer&&id=" + tmdb_id
         if SETTING("infodialog_onclick") != "false":
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % tmdb_id
+            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % tmdb_id
         else:
             path = trailer
         listitem = {'title': fetch(movie, 'title'),
@@ -365,7 +367,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'year': get_year(fetch(tv, 'first_air_date')),
                  'media_type': "tv",
                  'character': fetch(tv, 'character'),
-                 'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
+                 'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
                  'User_Rating': str(fetch(tv, 'rating')),
                  'Votes': fetch(tv, 'vote_count'),
@@ -446,7 +448,7 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        image = "http://i.ytimg.com/vi/" + fetch(item, 'key') + "/0.jpg"
+        image = "http://i.ytimg.com/vi/%s/0.jpg" % fetch(item, 'key')
         listitem = {'thumb': image,
                     'title': fetch(item, 'name'),
                     'iso_639_1': fetch(item, 'iso_639_1'),
@@ -478,7 +480,7 @@ def handle_people(results):
                   'id': str(item['id']),
                   'cast_id': str(fetch(item, 'cast_id')),
                   'credit_id': str(fetch(item, 'credit_id')),
-                  'path': "plugin://script.extendedinfo/?info=extendedactorinfo&&id=" + str(item['id']),
+                  'path': PLUGIN_BASE + "extendedactorinfo&&id=" + str(item['id']),
                   'deathday': fetch(item, 'deathday'),
                   'place_of_birth': fetch(item, 'place_of_birth'),
                   'placeofbirth': fetch(item, 'place_of_birth'),
@@ -565,7 +567,9 @@ def get_person_info(person_label, skip_dialog=False):
 
 
 def get_keyword_id(keyword):
-    response = get_data("search/keyword?query=%s&include_adult=%s&" % (url_quote(keyword), include_adult), 30)
+    params = {"query": keyword,
+              "include_adult": include_adult}
+    response = get_data("search/keyword?%s&" % (urllib.urlencode(params)), 30)
     if response and "results" in response and response["results"]:
         if len(response["results"]) > 1:
             names = [item["name"] for item in response["results"]]
@@ -581,7 +585,9 @@ def get_keyword_id(keyword):
 
 def get_set_id(set_name):
     set_name = set_name.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
-    response = get_data("search/collection?query=%s&language=%s&" % (url_quote(set_name.encode("utf-8")), SETTING("LanguageID")), 14)
+    params = {"query": set_name.encode("utf-8"),
+              "language": SETTING("LanguageID")}
+    response = get_data("search/collection?%s&" % (urllib.urlencode(params)), 14)
     if "results" in response and response["results"]:
         return response["results"][0]["id"]
     else:
@@ -687,12 +693,12 @@ def get_trailer(movie_id=None):
 def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if not movie_id:
         return None
+    params = {"append_to_response": ALL_MOVIE_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
-        session_str = "session_id=%s&" % (Login.get_session_id())
-    else:
-        session_str = ""
-    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&%s" %
-                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), cache_time)
+        params["session_id"] = Login.get_session_id()
+    response = get_data("movie/%s?%s&" % (movie_id, urllib.urlencode(params)), cache_time)
     if not response:
         notify("Could not get movie information")
         return {}
@@ -714,7 +720,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         set_id = fetch(movie_set, "id")
     artwork = get_image_urls(poster=response.get("poster_path"),
                              fanart=response.get("backdrop_path"))
-    path = 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % fetch(response, "id")
+    path = PLUGIN_BASE + 'youtubevideo&&id=%s' % fetch(response, "id")
     movie = {'title': fetch(response, 'title'),
              'Label': fetch(response, 'title'),
              'Tagline': fetch(response, 'tagline'),
@@ -823,7 +829,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'Plot': clean_text(fetch(response, "overview")),
               'year': get_year(fetch(response, 'first_air_date')),
               'media_type': "tv",
-              'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&id=%s' % tmdb_id,
+              'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
               'Popularity': fetch(response, 'popularity'),
               'Rating': fetch(response, 'vote_average'),
               'country': fetch(response, 'original_language'),
@@ -1112,8 +1118,10 @@ def get_set_movies(set_id):
     '''
     return list with movies which are part of set with *set_id
     '''
-    response = get_data("collection/%s?language=%s&append_to_response=images&include_image_language=en,null,%s&" %
-                        (set_id, SETTING("LanguageID"), SETTING("LanguageID")), 14)
+    params = {"append_to_response": "images",
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
+    response = get_data("collection/%s?%s&" % (set_id, urllib.urlencode(params)), 14)
     if response:
         artwork = get_image_urls(poster=response.get("poster_path"),
                                  fanart=response.get("backdrop_path"))
