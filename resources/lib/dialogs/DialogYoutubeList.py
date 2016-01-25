@@ -225,12 +225,9 @@ def get_window(window_type):
                                 "label": self.listitem.getProperty("channel_title")}]
                     wm.open_youtube_list(filters=filter_)
 
-        def add_filter(self, key, value, typelabel, label):
-            super(DialogYoutubeList, self).add_filter(key=key,
-                                                      value=value,
-                                                      typelabel=typelabel,
-                                                      label=label,
-                                                      force_overwrite=True)
+        def add_filter(self, **kwargs):
+            super(DialogYoutubeList, self).add_filter(force_overwrite=True,
+                                                      **kwargs)
             self.mode = "filter"
             self.page = 1
 

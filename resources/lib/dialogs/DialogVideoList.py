@@ -154,12 +154,9 @@ def get_window(window_type):
             self.sort_label = listitems[index]
             self.update()
 
-        def add_filter(self, key, value, typelabel, label):
-            super(DialogVideoList, self).add_filter(key=key,
-                                                    value=value,
-                                                    typelabel=typelabel,
-                                                    label=label,
-                                                    force_overwrite=".gte" in key or ".lte" in key)
+        def add_filter(self, **kwargs):
+            super(DialogVideoList, self).add_filter(force_overwrite=".gte" in key or ".lte" in key,
+                                                    **kwargs)
 
         @ch.click(5004)
         def toggle_order(self):
