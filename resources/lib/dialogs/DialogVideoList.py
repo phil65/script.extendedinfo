@@ -139,8 +139,8 @@ def get_window(window_type):
                 sort_key = self.mode
             else:
                 sort_key = self.type
-            listitems = [key for key in self.SORTS[sort_key].values()]
-            sort_strings = [value for value in self.SORTS[sort_key].keys()]
+            listitems = [k for k in self.SORTS[sort_key].values()]
+            sort_strings = [v for v in self.SORTS[sort_key].keys()]
             index = xbmcgui.Dialog().select(heading=LANG(32104),
                                             list=listitems)
             if index == -1:
@@ -381,7 +381,10 @@ def get_window(window_type):
                 rated = LANG(32135)
                 starred = LANG(32134)
             if self.mode == "search":
-                url = "search/multi?query=%s&page=%i&include_adult=%s&" % (urllib.quote_plus(self.search_str), self.page, include_adult)
+                params = {"query": urllib.quote_plus(self.search_str),
+                          "include_adult": include_adult,
+                          "page": self.page}
+                url = "search/multi?%s&" % (urllib.urlencode(params))
                 if self.search_str:
                     self.filter_label = LANG(32146) % self.search_str
                 else:
@@ -390,7 +393,11 @@ def get_window(window_type):
                 url = "list/%s?language=%s&" % (str(self.list_id), SETTING("LanguageID"))
                 # self.filter_label = LANG(32036)
             elif self.mode == "favorites":
-                url = "account/%s/favorite/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, TheMovieDB.Login.get_session_id(), sort_by)
+                params = {"sort_by": sort_by,
+                          "language": SETTING("LanguageID"),
+                          "page": self.page,
+                          "session_id": TheMovieDB.Login.get_session_id()}
+                url = "account/%s/favorite/%s?%s&" % (TheMovieDB.Login.get_account_id(), urllib.urlencode(params))
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
@@ -401,7 +408,11 @@ def get_window(window_type):
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
-                    url = "account/%s/rated/%s?language=%s&page=%i&session_id=%s&sort_by=%s&" % (TheMovieDB.Login.get_account_id(), temp, SETTING("LanguageID"), self.page, session_id, sort_by)
+                    params = {"sort_by": sort_by,
+                              "language": SETTING("LanguageID"),
+                              "page": self.page,
+                              "session_id": session_id}
+                    url = "account/%s/rated/%s?%s&" % (TheMovieDB.Login.get_account_id(), temp, urllib.urlencode(params))
                 else:
                     session_id = TheMovieDB.Login.get_guest_session_id()
                     if not session_id:
@@ -414,7 +425,11 @@ def get_window(window_type):
             else:
                 self.set_filter_url()
                 self.set_filter_label()
-                url = "discover/%s?sort_by=%s&%slanguage=%s&page=%i&include_adult=%s&" % (self.type, sort_by, self.filter_url, SETTING("LanguageID"), self.page, include_adult)
+                params = {"sort_by": sort_by,
+                          "language": SETTING("LanguageID"),
+                          "page": self.page,
+                          "include_adult": include_adult}
+                url = "discover/%s?%s%s&" % (self.type, self.filter_url, urllib.urlencode(params))
             if force:
                 response = TheMovieDB.get_data(url=url,
                                                cache_days=0)

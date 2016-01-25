@@ -1,6 +1,7 @@
 v4.0.1
 - RottenTomatoes poster fix
 - kodi python api dependency bump
+- API Change: now needs a <views> tag for MovieDB and Youtube browser
 
 v4.0.0 (for Kodi Jarvis)
  - API change: remove all "movie." and "actor." prefixes in dialogs
