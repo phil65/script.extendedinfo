@@ -174,7 +174,7 @@ def get_window(window_type):
             self.update()
 
         def update_ui(self):
-            self.window.setProperty("Type", TRANSLATIONS[self.type])
+            self.setProperty("Type", TRANSLATIONS[self.type])
             if self.type == "video":
                 self.window.getControl(5006).setVisible(True)
                 self.window.getControl(5008).setVisible(True)

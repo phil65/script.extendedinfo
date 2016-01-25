@@ -30,11 +30,11 @@ class DialogBaseInfo(object):
         super(DialogBaseInfo, self).onInit()
         HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
         self.window = xbmcgui.Window(self.window_id)
-        self.window.setProperty("type", self.type)
+        self.setProperty("type", self.type)
         if self.logged_in:
-            self.window.setProperty("tmdb_logged_in", "true")
+            self.setProperty("tmdb_logged_in", "true")
         else:
-            self.window.clearProperty("tmdb_logged_in")
+            self.clearProperty("tmdb_logged_in")
         # present for jurialmunkey
         HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
@@ -58,9 +58,9 @@ class DialogBaseInfo(object):
     @run_async
     def bounce(self, identifier):
         self.bouncing = True
-        self.window.setProperty("Bounce.%s" % identifier, "true")
+        self.setProperty("Bounce.%s" % identifier, "true")
         xbmc.sleep(200)
-        self.window.clearProperty("Bounce.%s" % identifier)
+        self.clearProperty("Bounce.%s" % identifier)
         self.bouncing = False
 
     def fill_lists(self):

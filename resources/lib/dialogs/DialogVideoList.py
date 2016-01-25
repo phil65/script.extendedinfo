@@ -63,7 +63,7 @@ def get_window(window_type):
 
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
-            self.window.setProperty("Type", TRANSLATIONS[self.type])
+            self.setProperty("Type", TRANSLATIONS[self.type])
             if self.type == "tv":
                 self.window.getControl(5006).setVisible(False)
                 self.window.getControl(5008).setVisible(False)

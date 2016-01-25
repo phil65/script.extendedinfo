@@ -36,9 +36,9 @@ class DialogBaseList(object):
     def onInit(self):
         super(DialogBaseList, self).onInit()
         HOME.setProperty("WindowColor", self.color)
-        self.window.setProperty("WindowColor", self.color)
+        self.setProperty("WindowColor", self.color)
         if SETTING("alt_browser_layout") == "true":
-            self.window.setProperty("alt_layout", "true")
+            self.setProperty("alt_layout", "true")
         self.update_ui()
         xbmc.sleep(200)
         if self.total_items > 0:
@@ -155,23 +155,23 @@ class DialogBaseList(object):
                 self.addItem(item)
             if self.column is not None:
                 self.getControl(500).selectItem(self.column)
-        self.window.setProperty("TotalPages", str(self.total_pages))
-        self.window.setProperty("TotalItems", str(self.total_items))
-        self.window.setProperty("CurrentPage", str(self.page))
-        self.window.setProperty("Filter_Label", self.filter_label)
-        self.window.setProperty("Sort_Label", self.sort_label)
+        self.setProperty("TotalPages", str(self.total_pages))
+        self.setProperty("TotalItems", str(self.total_items))
+        self.setProperty("CurrentPage", str(self.page))
+        self.setProperty("Filter_Label", self.filter_label)
+        self.setProperty("Sort_Label", self.sort_label)
         if self.page == self.total_pages:
-            self.window.clearProperty("ArrowDown")
+            self.clearProperty("ArrowDown")
         else:
-            self.window.setProperty("ArrowDown", "True")
+            self.setProperty("ArrowDown", "True")
         if self.page > 1:
-            self.window.setProperty("ArrowUp", "True")
+            self.setProperty("ArrowUp", "True")
         else:
-            self.window.clearProperty("ArrowUp")
+            self.clearProperty("ArrowUp")
         if self.order == "asc":
-            self.window.setProperty("Order_Label", LANG(584))
+            self.setProperty("Order_Label", LANG(584))
         else:
-            self.window.setProperty("Order_Label", LANG(585))
+            self.setProperty("Order_Label", LANG(585))
 
     def go_to_next_page(self):
         self.get_column()
