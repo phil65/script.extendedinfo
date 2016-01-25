@@ -426,13 +426,14 @@ def get_window(window_type):
                     url = "guest_session/%s/rated_movies?language=%s&" % (session_id, SETTING("LanguageID"))
                 self.filter_label = rated
             else:
-                self.set_filter_url()
                 self.set_filter_label()
                 params = {"sort_by": sort_by,
                           "language": SETTING("LanguageID"),
                           "page": self.page,
                           "include_adult": include_adult}
-                url = "discover/%s?%s%s&" % (self.type, self.filter_url, urllib.urlencode(params))
+                filters = {item["type"]: item["id"] for item in self.filters}
+                params = merge_dicts(params, filters)
+                url = "discover/%s?%s&" % (self.type, urllib.urlencode(params))
             if force:
                 response = tmdb.get_data(url=url,
                                          cache_days=0)

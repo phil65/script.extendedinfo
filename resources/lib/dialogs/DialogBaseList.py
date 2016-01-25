@@ -120,12 +120,6 @@ class DialogBaseList(object):
         self.update_content()
         self.update_ui()
 
-    def set_filter_url(self):
-        params = {item["type"]: item["id"] for item in self.filters}
-        self.filter_url = urllib.urlencode(params)
-        if self.filter_url:
-            self.filter_url += "&"
-
     def set_filter_label(self):
         filter_list = []
         for item in self.filters:
