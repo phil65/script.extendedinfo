@@ -132,6 +132,8 @@ class DialogBaseList(object):
         else:
             self.old_items = []
         data = self.fetch_data(force=force_update)
+        if not data:
+            return None
         self.listitems = data.get("listitems", [])
         self.total_pages = data.get("results_per_page", "")
         self.total_items = data.get("total_results", "")
