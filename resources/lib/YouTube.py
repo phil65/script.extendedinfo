@@ -133,15 +133,15 @@ def get_data(method, params, cache_days=0.5):
                              folder="YouTube")
 
 
-def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filter_str="", media_type="video"):
+def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filters={}, media_type="video"):
     params = {"part": "id,snippet",
               "maxResults": int(limit),
               "type": media_type,
               "order": orderby,
-              "filter_str": filter_str,
               "pageToken": page,
               "hd": str(hd and not hd == "false"),
               "q": search_str.replace('"', '')}
+    params = merge_dicts(params, filters)
     results = get_data(method="search",
                        params=params)
     if media_type == "video":

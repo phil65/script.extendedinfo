@@ -42,10 +42,10 @@ class DialogBaseList(object):
         self.update_ui()
         xbmc.sleep(200)
         if self.total_items > 0:
-            xbmc.executebuiltin("SetFocus(500)")
+            self.setFocusId(500)
             self.getControl(500).selectItem(self.last_position)
         else:
-            xbmc.executebuiltin("SetFocus(6000)")
+            self.setFocusId(6000)
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
@@ -121,8 +121,8 @@ class DialogBaseList(object):
         self.update_ui()
 
     def set_filter_url(self):
-        filter_list = ["%s=%s" % (item["type"], item["id"]) for item in self.filters]
-        self.filter_url = "&".join(filter_list)
+        params = {item["type"]: item["id"] for item in self.filters}
+        self.filter_url = urllib.urlencode(params)
         if self.filter_url:
             self.filter_url += "&"
 
@@ -149,9 +149,10 @@ class DialogBaseList(object):
     def update_ui(self):
         if not self.listitems and self.getFocusId() == 500:
             self.setFocusId(6000)
-        self.getControl(500).reset()
+        self.clearList()
         if self.listitems:
-            self.getControl(500).addItems(self.listitems)
+            for item in self.listitems:
+                self.addItem(item)
             if self.column is not None:
                 self.getControl(500).selectItem(self.column)
         self.window.setProperty("TotalPages", str(self.total_pages))

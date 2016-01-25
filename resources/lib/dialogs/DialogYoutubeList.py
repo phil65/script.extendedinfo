@@ -43,7 +43,6 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")
-            self.filter_url = ""
             self.sort = kwargs.get('sort', "relevance")
             self.sort_label = kwargs.get('sort_label', LANG(32060))
             self.order = kwargs.get('order', "desc")
@@ -75,10 +74,10 @@ def get_window(window_type):
 
         @ch.click(5002)
         def set_published_filter(self):
-            label_list = [LANG(32062), LANG(32063), LANG(32064), LANG(32065), LANG(636)]
+            labels = [LANG(32062), LANG(32063), LANG(32064), LANG(32065), LANG(636)]
             deltas = [1, 7, 31, 365, "custom"]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=label_list)
+                                            list=labels)
             if index == -1:
                 return None
             delta = deltas[index]
@@ -91,72 +90,72 @@ def get_window(window_type):
             self.add_filter(key="publishedAfter",
                             value=d.isoformat('T')[:-7] + "Z",
                             typelabel=LANG(172),
-                            label=str(label_list[index]))
+                            label=str(labels[index]))
             self.update()
 
         @ch.click(5003)
         def set_language_filter(self):
-            label_list = ["en", "de", "fr"]
+            labels = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=label_list)
+                                            list=labels)
             if index == -1:
                 return None
             self.add_filter(key="regionCode",
-                            value=label_list[index],
+                            value=labels[index],
                             typelabel=LANG(248),
-                            label=str(label_list[index]))
+                            label=str(labels[index]))
             self.update()
 
         @ch.click(5006)
         def set_dimension_filter(self):
-            value_list = ["2d", "3d", "any"]
-            label_list = ["2D", "3D", LANG(593)]
+            values = ["2d", "3d", "any"]
+            labels = ["2D", "3D", LANG(593)]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=label_list)
+                                            list=labels)
             if index > -1:
                 self.add_filter(key="videoDimension",
-                                value=value_list[index],
+                                value=values[index],
                                 typelabel="Dimensions",
-                                label=str(label_list[index]))
+                                label=str(labels[index]))
                 self.update()
 
         @ch.click(5008)
         def set_duration_filter(self):
-            value_list = ["long", "medium", "short", "any"]
-            label_list = [LANG(33013), LANG(601), LANG(33012), LANG(593)]
+            values = ["long", "medium", "short", "any"]
+            labels = [LANG(33013), LANG(601), LANG(33012), LANG(593)]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=label_list)
+                                            list=labels)
             if index > -1:
                 self.add_filter(key="videoDuration",
-                                value=value_list[index],
+                                value=values[index],
                                 typelabel=LANG(180),
-                                label=str(label_list[index]))
+                                label=str(labels[index]))
                 self.update()
 
         @ch.click(5009)
         def set_caption_filter(self):
-            value_list = ["closedCaption", "none", "any"]
-            label_list = [LANG(107), LANG(106), LANG(593)]
+            values = ["closedCaption", "none", "any"]
+            labels = [LANG(107), LANG(106), LANG(593)]
             index = xbmcgui.Dialog().select(heading=LANG(287),
-                                            list=label_list)
+                                            list=labels)
             if index > -1:
                 self.add_filter(key="videoCaption",
-                                value=value_list[index],
+                                value=values[index],
                                 typelabel=LANG(287),
-                                label=str(label_list[index]))
+                                label=str(labels[index]))
                 self.update()
 
         @ch.click(5012)
         def set_definition_filter(self):
-            value_list = ["high", "standard", "any"]
-            label_list = [LANG(419), LANG(602), LANG(593)]
+            values = ["high", "standard", "any"]
+            labels = [LANG(419), LANG(602), LANG(593)]
             index = xbmcgui.Dialog().select(heading=LANG(169),
-                                            list=label_list)
+                                            list=labels)
             if index > -1:
                 self.add_filter(key="videoDefinition",
-                                value=value_list[index],
+                                value=values[index],
                                 typelabel=LANG(169),
-                                label=str(label_list[index]))
+                                label=str(labels[index]))
                 self.update()
 
         @ch.click(5007)
@@ -195,9 +194,8 @@ def get_window(window_type):
 
         @ch.click(5001)
         def get_sort_type(self):
-            sort_key = self.type
-            listitems = [key for key in SORTS[sort_key].values()]
-            sort_strings = [value for value in SORTS[sort_key].keys()]
+            listitems = [key for key in SORTS[self.type].values()]
+            sort_strings = [value for value in SORTS[self.type].keys()]
             index = xbmcgui.Dialog().select(heading=LANG(32104),
                                             list=listitems)
             if index == -1:
@@ -215,17 +213,17 @@ def get_window(window_type):
                 if selection < 0:
                     return None
                 elif selection == 0:
-                    related_filter = [{"id": self.listitem.getProperty("youtube_id"),
-                                       "type": "relatedToVideoId",
-                                       "typelabel": "Related",
-                                       "label": self.listitem.getLabel()}]
-                    wm.open_youtube_list(filters=related_filter)
+                    filter_ = [{"id": self.listitem.getProperty("youtube_id"),
+                                "type": "relatedToVideoId",
+                                "typelabel": "Related",
+                                "label": self.listitem.getLabel()}]
+                    wm.open_youtube_list(filters=filter_)
                 elif selection == 1:
-                    channel_filter = [{"id": self.listitem.getProperty("channel_id"),
-                                       "type": "channelId",
-                                       "typelabel": "Related",
-                                       "label": self.listitem.getProperty("channel_title")}]
-                    wm.open_youtube_list(filters=channel_filter)
+                    filter_ = [{"id": self.listitem.getProperty("channel_id"),
+                                "type": "channelId",
+                                "typelabel": "Related",
+                                "label": self.listitem.getProperty("channel_title")}]
+                    wm.open_youtube_list(filters=filter_)
 
         def add_filter(self, key, value, typelabel, label):
             super(DialogYoutubeList, self).add_filter(key=key,
@@ -237,7 +235,6 @@ def get_window(window_type):
             self.page = 1
 
         def fetch_data(self, force=False):
-            self.set_filter_url()
             self.set_filter_label()
             if self.search_str:
                 self.filter_label = LANG(32146) % (self.search_str) + "  " + self.filter_label
@@ -246,7 +243,7 @@ def get_window(window_type):
             return YouTube.search(self.search_str,
                                   orderby=self.sort,
                                   extended=True,
-                                  filter_str=self.filter_url,
+                                  filters={item["type"]: item["id"] for item in self.filters},
                                   media_type=self.type,
                                   page=self.page_token)
 
