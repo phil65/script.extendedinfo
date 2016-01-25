@@ -223,16 +223,16 @@ def get_window(window_type):
         @ch.click(5002)
         def set_genre_filter(self):
             response = tmdb.get_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
-            id_list = [item["id"] for item in response["genres"]]
-            label_list = [item["name"] for item in response["genres"]]
+            ids = [item["id"] for item in response["genres"]]
+            labels = [item["name"] for item in response["genres"]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=label_list)
+                                            list=labels)
             if index == -1:
                 return None
             self.add_filter(key="with_genres",
-                            value=str(id_list[index]),
+                            value=str(ids[index]),
                             typelabel=LANG(135),
-                            label=label_list[index])
+                            label=labels[index])
             self.mode = "filter"
             self.page = 1
             self.update()
@@ -249,7 +249,10 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
                 if ret:
-                    self.add_filter("vote_count.%s" % "lte", result, LANG(32111), " < " + result)
+                    self.add_filter(key="vote_count.%s" % "lte",
+                                    value=result,
+                                    typelabel=LANG(32111),
+                                    label=" < " + result)
                 else:
                     self.add_filter("vote_count.%s" % "gte", result, LANG(32111), " > " + result)
                 self.mode = "filter"
@@ -291,7 +294,10 @@ def get_window(window_type):
             response = tmdb.get_person_info(result)
             if not response:
                 return None
-            self.add_filter("with_people", str(response["id"]), LANG(32156), response["name"])
+            self.add_filter(key="with_people",
+                            value=str(response["id"]),
+                            typelabel=LANG(32156),
+                            label=response["name"])
             self.mode = "filter"
             self.page = 1
             self.update()
@@ -355,18 +361,18 @@ def get_window(window_type):
         @ch.click(5006)
         def set_certification_filter(self):
             response = tmdb.get_certification_list(self.type)
-            country_list = [key for key in response.keys()]
+            countries = [key for key in response.keys()]
             index = xbmcgui.Dialog().select(heading=LANG(21879),
-                                            list=country_list)
+                                            list=countries)
             if index == -1:
                 return None
-            country = country_list[index]
-            cert_list = ["%s  -  %s" % (i["certification"], i["meaning"]) for i in response[country]]
+            country = countries[index]
+            certs = ["%s  -  %s" % (i["certification"], i["meaning"]) for i in response[country]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
-                                            list=cert_list)
+                                            list=certs)
             if index == -1:
                 return None
-            cert = cert_list[index].split("  -  ")[0]
+            cert = certs[index].split("  -  ")[0]
             self.add_filter("certification_country", country, LANG(32153), country)
             self.add_filter("certification", cert, LANG(32127), cert)
             self.page = 1
@@ -384,7 +390,7 @@ def get_window(window_type):
                 rated = LANG(32135)
                 starred = LANG(32134)
             if self.mode == "search":
-                params = {"query": urllib.quote_plus(self.search_str),
+                params = {"query": self.search_str,
                           "include_adult": include_adult,
                           "page": self.page}
                 url = "search/multi?%s&" % (urllib.urlencode(params))
