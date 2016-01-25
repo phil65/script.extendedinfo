@@ -461,31 +461,29 @@ def handle_videos(results):
 
 def handle_people(results):
     people = []
-    for person in results:
-        artwork = get_image_urls(profile=person.get("profile_path"))
-        also_known_as = " / ".join(fetch(person, 'also_known_as'))
-        newperson = {'adult': str(fetch(person, 'adult')),
-                     'name': person['name'],
-                     'title': person['name'],
-                     'also_known_as': also_known_as,
-                     'alsoknownas': also_known_as,
-                     'biography': clean_text(fetch(person, 'biography')),
-                     'birthday': fetch(person, 'birthday'),
-                     'age': calculate_age(fetch(person, 'birthday'), fetch(person, 'deathday')),
-                     'character': fetch(person, 'character'),
-                     'department': fetch(person, 'department'),
-                     'job': fetch(person, 'job'),
-                     'media_type': "person",
-                     'id': str(person['id']),
-                     'cast_id': str(fetch(person, 'cast_id')),
-                     'credit_id': str(fetch(person, 'credit_id')),
-                     'path': "plugin://script.extendedinfo/?info=extendedactorinfo&&id=" + str(person['id']),
-                     'deathday': fetch(person, 'deathday'),
-                     'place_of_birth': fetch(person, 'place_of_birth'),
-                     'placeofbirth': fetch(person, 'place_of_birth'),
-                     'homepage': fetch(person, 'homepage')}
-        newperson.update(artwork)
-        people.append(newperson)
+    for item in results:
+        artwork = get_image_urls(profile=item.get("profile_path"))
+        person = {'adult': str(fetch(item, 'adult')),
+                  'name': item['name'],
+                  'title': item['name'],
+                  'alsoknownas': " / ".join(fetch(item, 'also_known_as')),
+                  'biography': clean_text(fetch(item, 'biography')),
+                  'birthday': fetch(item, 'birthday'),
+                  'age': calculate_age(fetch(item, 'birthday'), fetch(item, 'deathday')),
+                  'character': fetch(item, 'character'),
+                  'department': fetch(item, 'department'),
+                  'job': fetch(item, 'job'),
+                  'media_type': "item",
+                  'id': str(item['id']),
+                  'cast_id': str(fetch(item, 'cast_id')),
+                  'credit_id': str(fetch(item, 'credit_id')),
+                  'path': "plugin://script.extendedinfo/?info=extendedactorinfo&&id=" + str(item['id']),
+                  'deathday': fetch(item, 'deathday'),
+                  'place_of_birth': fetch(item, 'place_of_birth'),
+                  'placeofbirth': fetch(item, 'place_of_birth'),
+                  'homepage': fetch(item, 'homepage')}
+        person.update(artwork)
+        people.append(person)
     return people
 
 
@@ -1065,11 +1063,12 @@ def get_similar_tvshows(tvshow_id):
     '''
     return list with similar tvshows for show with *tvshow_id (TMDB ID)
     '''
-    session_str = ""
+    params = {"append_to_response": ALL_TV_PROPS,
+              "language": SETTING("LanguageID"),
+              "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
-        session_str = "session_id=%s&" % (Login.get_session_id())
-    response = get_data("tv/%s?append_to_response=%s&language=%s&include_image_language=en,null,%s&%s" %
-                        (tvshow_id, ALL_TV_PROPS, SETTING("LanguageID"), SETTING("LanguageID"), session_str), 10)
+        params["session_id"] = Login.get_session_id()
+    response = get_data("tv/%s?%s&" % (tvshow_id, urllib.urlencode(params)), 10)
     if "similar" in response:
         return handle_tvshows(response["similar"]["results"])
     else:
@@ -1134,8 +1133,10 @@ def search_media(media_name=None, year='', media_type="movie"):
     search_query = url_quote("%s %s" % (media_name, year))
     if not search_query:
         return None
-    response = get_data("search/%s?query=%s&language=%s&include_adult=%s&" %
-                        (media_type, search_query, SETTING("LanguageID"), include_adult), 1)
+    params = {"query": search_query,
+              "language": SETTING("language"),
+              "include_adult": include_adult}
+    response = get_data("search/%s?%s&" % (media_type, urllib.urlencode(params)), 1)
     if not response == "Empty":
         for item in response['results']:
             if item['id']:
