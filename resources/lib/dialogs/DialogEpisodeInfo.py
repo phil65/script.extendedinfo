@@ -16,7 +16,7 @@ from ..VideoPlayer import PLAYER
 ch = ActionHandler()
 
 
-def get_episode_window(window_type):
+def get_window(window_type):
 
     class DialogEpisodeInfo(DialogBaseInfo, window_type):
 

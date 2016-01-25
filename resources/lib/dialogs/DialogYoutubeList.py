@@ -35,7 +35,7 @@ SORTS = {"video": {"date": LANG(552),
                      "viewCount": LANG(567)}}
 
 
-def get_youtube_window(window_type):
+def get_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
 

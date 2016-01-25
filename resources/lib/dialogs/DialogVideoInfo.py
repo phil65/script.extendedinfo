@@ -18,7 +18,7 @@ from ..VideoPlayer import PLAYER
 ch = ActionHandler()
 
 
-def get_movie_window(window_type):
+def get_window(window_type):
 
     class DialogVideoInfo(DialogBaseInfo, window_type):
 

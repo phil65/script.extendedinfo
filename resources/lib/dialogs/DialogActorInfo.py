@@ -16,7 +16,7 @@ from ActionHandler import ActionHandler
 ch = ActionHandler()
 
 
-def get_actor_window(window_type):
+def get_window(window_type):
 
     class DialogActorInfo(DialogBaseInfo, window_type):
 

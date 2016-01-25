@@ -34,7 +34,7 @@ TRANSLATIONS = {"movie": LANG(20338),
 include_adult = SETTING("include_adults").lower()
 
 
-def get_tmdb_window(window_type):
+def get_window(window_type):
 
     class DialogVideoList(DialogBaseList, window_type):
 
@@ -427,7 +427,6 @@ def get_tmdb_window(window_type):
             if not response:
                 return None
             if self.mode == "list":
-                prettyprint(response)
                 info = {"listitems": TheMovieDB.handle_movies(results=response["items"],
                                                               local_first=True,
                                                               sortkey=None),

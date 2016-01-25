@@ -145,19 +145,18 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
     results = get_data(method="search",
                        params=params)
     if media_type == "video":
-        videos = handle_videos(results["items"], extended=extended)
+        listitems = handle_videos(results["items"], extended=extended)
     elif media_type == "playlist":
-        videos = handle_playlists(results["items"])
+        listitems = handle_playlists(results["items"])
     elif media_type == "channel":
-        videos = handle_channels(results["items"])
-    if videos:
-        info = {"listitems": videos,
+        listitems = handle_channels(results["items"])
+    if listitems:
+        return {"listitems": listitems,
                 "results_per_page": results["pageInfo"]["resultsPerPage"],
                 "total_results": results["pageInfo"]["totalResults"],
                 "next_page_token": results.get("nextPageToken", ""),
                 "prev_page_token": results.get("prevPageToken", ""),
                 }
-        return info
     else:
         return {}
 

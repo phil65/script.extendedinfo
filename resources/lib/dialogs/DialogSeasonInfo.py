@@ -14,7 +14,7 @@ from ..VideoPlayer import PLAYER
 ch = ActionHandler()
 
 
-def get_season_window(window_type):
+def get_window(window_type):
 
     class DialogSeasonInfo(DialogBaseInfo, window_type):
 

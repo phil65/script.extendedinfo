@@ -81,7 +81,7 @@ class WindowManager(object):
             movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
                                          dbid=dbid,
                                          name=name)
-        movie_class = DialogVideoInfo.get_movie_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        movie_class = DialogVideoInfo.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = movie_class(INFO_DIALOG_FILE,
                              ADDON_PATH,
                              id=movie_id,
@@ -113,7 +113,7 @@ class WindowManager(object):
             tmdb_id = search_media(media_name=name,
                                    year="",
                                    media_type="tv")
-        tvshow_class = DialogTVShowInfo.get_tvshow_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        tvshow_class = DialogTVShowInfo.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = tvshow_class(INFO_DIALOG_FILE,
                               ADDON_PATH,
                               tmdb_id=tmdb_id,
@@ -139,7 +139,7 @@ class WindowManager(object):
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
-        season_class = DialogSeasonInfo.get_season_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        season_class = DialogSeasonInfo.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = season_class(INFO_DIALOG_FILE,
                               ADDON_PATH,
                               id=tvshow_id,
@@ -155,7 +155,7 @@ class WindowManager(object):
         """
         from dialogs import DialogEpisodeInfo
         from TheMovieDB import get_data
-        ep_class = DialogEpisodeInfo.get_episode_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        ep_class = DialogEpisodeInfo.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         if not tvshow_id and tvshow:
             response = get_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
             if response["results"]:
@@ -191,7 +191,7 @@ class WindowManager(object):
                 actor_id = actor_info["id"]
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        actor_class = DialogActorInfo.get_actor_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        actor_class = DialogActorInfo.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = actor_class(ACTOR_DIALOG_FILE,
                              ADDON_PATH,
                              id=actor_id)
@@ -211,7 +211,7 @@ class WindowManager(object):
         else:
             color = "FFFFFFFF"
         check_version()
-        browser_class = DialogVideoList.get_tmdb_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
+        browser_class = DialogVideoList.get_window(WindowXML if SETTING("window_mode") == "true" else DialogXML)
         dialog = browser_class(LIST_DIALOG_FILE,
                                ADDON_PATH,
                                listitems=listitems,
@@ -240,7 +240,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        youtube_class = DialogYoutubeList.get_youtube_window(WindowXML)
+        youtube_class = DialogYoutubeList.get_window(WindowXML)
         dialog = youtube_class(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH,
                                search_str=search_str,
                                color=color,
