@@ -886,9 +886,9 @@ def extended_season_info(tvshow_id, season_number):
     if response.get("name", False):
         title = response["name"]
     elif season_number == "0":
-        title = "Specials"
+        title = LANG(20381)
     else:
-        title = "Season %s" % season_number
+        title = "%s %s" % (LANG(20373), season_number)
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
               'TVShowTitle': fetch(tvshow, 'name'),
