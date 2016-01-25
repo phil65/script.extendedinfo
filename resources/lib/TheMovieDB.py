@@ -673,8 +673,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
 
 
 def get_trailer(movie_id=None):
-    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+    response = get_full_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
     notify("Could not get trailer")
@@ -949,9 +948,8 @@ def translate_status(status_string):
         return status_string
 
 
-def get_movie_lists(list_id):
-    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
-                        (list_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 5)
+def get_movie_lists(movie_id):
+    response = get_full_movie(movie_id)
     return handle_misc(response["lists"]["results"])
 
 
@@ -1025,12 +1023,19 @@ def get_actor_credits(actor_id, media_type):
     return handle_movies(response["cast"])
 
 
+def get_full_movie(movie_id):
+    params = {"include_image_language": "en,null,%s" % SETTING("LanguageID"),
+              "language": SETTING("LanguageID"),
+              "append_to_response": ALL_MOVIE_PROPS
+              }
+    return get_data("movie/%s?%s&" % (movie_id, urllib.urlencode(params)), 30)
+
+
 def get_keywords(movie_id):
     '''
     get dict list containing movie keywords
     '''
-    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 30)
+    response = get_full_movie(movie_id)
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
@@ -1044,9 +1049,7 @@ def get_similar_movies(movie_id):
     '''
     get dict list containing movies similar to *movie_id
     '''
-
-    response = get_data("movie/%s?append_to_response=%s&include_image_language=en,null,%s&language=%s&" %
-                        (movie_id, ALL_MOVIE_PROPS, SETTING("LanguageID"), SETTING("LanguageID")), 10)
+    response = get_full_movie(movie_id)
     if "similar" in response:
         return handle_movies(response["similar"]["results"])
     else:
