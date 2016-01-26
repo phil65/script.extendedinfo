@@ -24,8 +24,8 @@ def get_calendar_shows(content):
         url = 'calendars/shows/%s/14' % datetime.date.today()
     elif content == "premieres":
         url = 'calendars/shows/premieres/%s/14' % datetime.date.today()
-    params = {"extended": "full,images"}
     results = get_data(url=url,
+                       params={"extended": "full,images"},
                        cache_days=0.3)
     count = 1
     if not results:
@@ -135,10 +135,8 @@ def handle_movies(results):
 
 
 def get_trending_shows():
-    params = {"extended": "full,images"}
-    url = 'shows/trending'
-    results = get_data(url=url,
-                       params=params)
+    results = get_data(url='shows/trending',
+                       params={"extended": "full,images"})
     if results is not None:
         return handle_movies(results)
     else:
@@ -146,10 +144,8 @@ def get_trending_shows():
 
 
 def get_tshow_info(imdb_id):
-    params = {"extended": "full,images"}
-    url = 'show/%s' % imdb_id
-    results = get_data(url=url,
-                       params=params)
+    results = get_data(url='show/%s' % imdb_id,
+                       params={"extended": "full,images"})
     if results is not None:
         return handle_movies([results])
     else:
@@ -157,10 +153,8 @@ def get_tshow_info(imdb_id):
 
 
 def get_trending_movies():
-    params = {"extended": "full,images"}
-    url = 'movies/trending'
-    results = get_data(url=url,
-                       params=params)
+    results = get_data(url='movies/trending',
+                       params={"extended": "full,images"})
     if results is not None:
         return handle_trakt_movies(results)
     else:
@@ -170,10 +164,8 @@ def get_trending_movies():
 def get_similar(media_type, imdb_id):
     if not imdb_id:
         return None
-    params = {"extended": "full,images"}
-    url = '%s/%s/related' % (media_type, imdb_id)
-    results = get_data(url=url,
-                       params=params)
+    results = get_data(url='%s/%s/related' % (media_type, imdb_id),
+                       params={"extended": "full,images"})
     if results is not None:
         if media_type == "show":
             return handle_movies(results)
