@@ -222,7 +222,8 @@ def get_window(window_type):
 
         @ch.click(5002)
         def set_genre_filter(self):
-            response = tmdb.get_data("genre/%s/list?language=%s&" % (self.type, SETTING("LanguageID")), 10)
+            params = {"language": SETTING("LanguageID")}
+            response = tmdb.get_data("genre/%s/list?%s&" % (self.type, urllib.urlencode(params)), 10)
             ids = [item["id"] for item in response["genres"]]
             labels = [item["name"] for item in response["genres"]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),

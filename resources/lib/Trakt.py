@@ -14,6 +14,7 @@ HEADERS = {
     'trakt-api-key': TRAKT_KEY,
     'trakt-api-version': 2
 }
+PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def get_calendar_shows(content):
@@ -24,10 +25,8 @@ def get_calendar_shows(content):
     elif content == "premieres":
         url = 'calendars/shows/premieres/%s/14?extended=full,images' % datetime.date.today()
     try:
-        results = get_JSON_response(url=BASE_URL + url,
-                                    cache_days=0.5,
-                                    folder="Trakt",
-                                    headers=HEADERS)
+        results = get_data(url=url,
+                           cache_days=0.3)
     except:
         log("Error when fetching Trakt data from net")
         log("Json Query: " + url)
@@ -45,7 +44,7 @@ def get_calendar_shows(content):
                     'tvdb_id': episode["show"]["ids"]["tvdb"],
                     'id': episode["show"]["ids"]["tvdb"],
                     'imdb_id': episode["show"]["ids"]["imdb"],
-                    'path': 'plugin://script.extendedinfo/?info=extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"],
+                    'path': PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"],
                     'Runtime': episode["show"]["runtime"],
                     'duration': episode["show"]["runtime"],
                     'duration(h)': format_time(episode["show"]["runtime"], "h"),
@@ -70,9 +69,9 @@ def handle_trakt_movies(results):
     movies = []
     for movie in results:
         if SETTING("infodialog_onclick") != "false":
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&id=%s' % str(fetch(movie["movie"]["ids"], 'tmdb'))
+            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % str(fetch(movie["movie"]["ids"], 'tmdb'))
         else:
-            path = "plugin://script.extendedinfo/?info=playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))
+            path = PLUGIN_BASE + "playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))
         movie = {'title': movie["movie"]["title"],
                  'Runtime': movie["movie"]["runtime"],
                  'duration': movie["movie"]["runtime"],
@@ -104,7 +103,7 @@ def handle_movies(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
-        path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&tvdb_id=%s' % tvshow['show']['ids']["tvdb"]
+        path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % tvshow['show']['ids']["tvdb"]
         show = {'title': tvshow['show']["title"],
                 'Label': tvshow['show']["title"],
                 'TVShowTitle': tvshow['show']["title"],
@@ -141,9 +140,7 @@ def handle_movies(results):
 
 def get_trending_shows():
     url = 'shows/trending?extended=full,images'
-    results = get_JSON_response(url=BASE_URL + url,
-                                folder="Trakt",
-                                headers=HEADERS)
+    results = get_data(url=url)
     if results is not None:
         return handle_movies(results)
     else:
@@ -152,9 +149,7 @@ def get_trending_shows():
 
 def get_tshow_info(imdb_id):
     url = 'show/%s?extended=full,images' % imdb_id
-    results = get_JSON_response(url=BASE_URL + url,
-                                folder="Trakt",
-                                headers=HEADERS)
+    results = get_data(url=url)
     if results is not None:
         return handle_movies([results])
     else:
@@ -163,9 +158,7 @@ def get_tshow_info(imdb_id):
 
 def get_trending_movies():
     url = 'movies/trending?extended=full,images'
-    results = get_JSON_response(url=BASE_URL + url,
-                                folder="Trakt",
-                                headers=HEADERS)
+    results = get_data(url=url)
     if results is not None:
         return handle_trakt_movies(results)
     else:
@@ -173,16 +166,19 @@ def get_trending_movies():
 
 
 def get_similar(media_type, imdb_id):
-    if imdb_id is not None:
-        url = '%s/%s/related?extended=full,images' % (media_type, imdb_id)
-        results = get_JSON_response(url=BASE_URL + url,
-                                    folder="Trakt",
-                                    headers=HEADERS)
-        if results is not None:
-            if media_type == "show":
-                return handle_movies(results)
-            elif media_type == "movie":
-                return handle_trakt_movies(results)
-    else:
-        notify("Error when fetching info from Trakt.TV")
-        return[]
+    if not imdb_id:
+        return None
+    url = '%s/%s/related?extended=full,images' % (media_type, imdb_id)
+    results = get_data(url=url)
+    if results is not None:
+        if media_type == "show":
+            return handle_movies(results)
+        elif media_type == "movie":
+            return handle_trakt_movies(results)
+
+
+def get_data(url, cache_days=10):
+    return get_JSON_response(url=BASE_URL + url,
+                             folder="Trakt",
+                             headers=HEADERS,
+                             cache_days=cache_days)
