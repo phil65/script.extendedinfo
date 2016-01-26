@@ -10,9 +10,9 @@ RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
 
 
-def get_movies(movietype):
+def get_movies(movie_type):
     movies = []
-    url = movietype + '.json?apikey=%s' % (RT_KEY)
+    url = movie_type + '.json?apikey=%s' % (RT_KEY)
     results = get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if not results or "movies" not in results:
         return []

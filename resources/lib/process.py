@@ -5,7 +5,7 @@
 
 import LastFM
 import TheAudioDB as AudioDB
-import TheMovieDB
+import TheMovieDB as tmdb
 from Utils import *
 from local_db import local_db
 import YouTube
@@ -90,44 +90,44 @@ def start_info_actions(infos, params):
             data = RottenTomatoes.get_movies("dvds/upcoming"), "UpcomingDVDs"
         #  The MovieDB
         elif info == 'incinemas':
-            data = TheMovieDB.get_tmdb_movies("now_playing"), "InCinemasMovies"
+            data = tmdb.get_tmdb_movies("now_playing"), "InCinemasMovies"
         elif info == 'upcoming':
-            data = TheMovieDB.get_tmdb_movies("upcoming"), "UpcomingMovies"
+            data = tmdb.get_tmdb_movies("upcoming"), "UpcomingMovies"
         elif info == 'topratedmovies':
-            data = TheMovieDB.get_tmdb_movies("top_rated"), "TopRatedMovies"
+            data = tmdb.get_tmdb_movies("top_rated"), "TopRatedMovies"
         elif info == 'popularmovies':
-            data = TheMovieDB.get_tmdb_movies("popular"), "PopularMovies"
+            data = tmdb.get_tmdb_movies("popular"), "PopularMovies"
         elif info == 'ratedmovies':
-            data = TheMovieDB.get_rated_media_items("movies"), "RatedMovies"
+            data = tmdb.get_rated_media_items("movies"), "RatedMovies"
         elif info == 'starredmovies':
-            data = TheMovieDB.get_fav_items("movies"), "StarredMovies"
+            data = tmdb.get_fav_items("movies"), "StarredMovies"
         elif info == 'accountlists':
-            account_lists = TheMovieDB.handle_misc(TheMovieDB.get_account_lists())
+            account_lists = tmdb.handle_misc(tmdb.get_account_lists())
             for item in account_lists:
                 item["directory"] = True
             data = account_lists, "AccountLists"
         elif info == 'listmovies':
-            movies = TheMovieDB.get_movies_from_list(params["id"])
+            movies = tmdb.get_movies_from_list(params["id"])
             data = movies, "AccountLists"
         elif info == 'airingtodaytvshows':
-            data = TheMovieDB.get_tmdb_shows("airing_today"), "AiringTodayTVShows"
+            data = tmdb.get_tmdb_shows("airing_today"), "AiringTodayTVShows"
         elif info == 'onairtvshows':
-            data = TheMovieDB.get_tmdb_shows("on_the_air"), "OnAirTVShows"
+            data = tmdb.get_tmdb_shows("on_the_air"), "OnAirTVShows"
         elif info == 'topratedtvshows':
-            data = TheMovieDB.get_tmdb_shows("top_rated"), "TopRatedTVShows"
+            data = tmdb.get_tmdb_shows("top_rated"), "TopRatedTVShows"
         elif info == 'populartvshows':
-            data = TheMovieDB.get_tmdb_shows("popular"), "PopularTVShows"
+            data = tmdb.get_tmdb_shows("popular"), "PopularTVShows"
         elif info == 'ratedtvshows':
-            data = TheMovieDB.get_rated_media_items("tv"), "RatedTVShows"
+            data = tmdb.get_rated_media_items("tv"), "RatedTVShows"
         elif info == 'starredtvshows':
-            data = TheMovieDB.get_fav_items("tv"), "StarredTVShows"
+            data = tmdb.get_fav_items("tv"), "StarredTVShows"
         elif info == 'similarmovies':
             movie_id = params.get("id", False)
             if not movie_id:
-                movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                                        dbid=params.get("dbid", False))
+                movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                                  dbid=params.get("dbid", False))
             if movie_id:
-                data = TheMovieDB.get_similar_movies(movie_id), "SimilarMovies"
+                data = tmdb.get_similar_movies(movie_id), "SimilarMovies"
         elif info == 'similartvshows':
             tvshow_id = None
             dbid = params.get("dbid", False)
@@ -140,64 +140,64 @@ def start_info_actions(infos, params):
             elif dbid and int(dbid) > 0:
                 tvdb_id = local_db.get_imdb_id("tvshow", dbid)
                 if tvdb_id:
-                    tvshow_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
+                    tvshow_id = tmdb.get_show_tmdb_id(tvdb_id)
             elif tvdb_id:
-                tvshow_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
+                tvshow_id = tmdb.get_show_tmdb_id(tvdb_id)
             elif imdb_id:
-                tvshow_id = TheMovieDB.get_show_tmdb_id(imdb_id, "imdb_id")
+                tvshow_id = tmdb.get_show_tmdb_id(imdb_id, "imdb_id")
             elif name:
-                tvshow_id = TheMovieDB.search_media(media_name=name,
-                                                    year="",
-                                                    media_type="tv")
+                tvshow_id = tmdb.search_media(media_name=name,
+                                              year="",
+                                              media_type="tv")
             if tvshow_id:
-                data = TheMovieDB.get_similar_tvshows(tvshow_id), "SimilarTVShows"
+                data = tmdb.get_similar_tvshows(tvshow_id), "SimilarTVShows"
         elif info == 'studio':
             if "id" in params and params["id"]:
-                data = TheMovieDB.get_company_data(params["id"]), "StudioInfo"
+                data = tmdb.get_company_data(params["id"]), "StudioInfo"
             elif "studio" in params and params["studio"]:
-                company_data = TheMovieDB.search_company(params["studio"])
+                company_data = tmdb.search_company(params["studio"])
                 if company_data:
-                    data = TheMovieDB.get_company_data(company_data[0]["id"]), "StudioInfo"
+                    data = tmdb.get_company_data(company_data[0]["id"]), "StudioInfo"
         elif info == 'set':
             if params.get("dbid") and "show" not in str(params.get("type", "")):
                 name = local_db.get_set_name(params["dbid"])
                 if name:
-                    params["setid"] = TheMovieDB.get_set_id(name)
+                    params["setid"] = tmdb.get_set_id(name)
             if params.get("setid"):
-                set_data, _ = TheMovieDB.get_set_movies(params["setid"])
+                set_data, _ = tmdb.get_set_movies(params["setid"])
                 if set_data:
                     data = set_data, "MovieSetItems"
         elif info == 'movielists':
             movie_id = params.get("id", False)
             if not movie_id:
-                movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                                        dbid=params.get("dbid", False))
+                movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                                  dbid=params.get("dbid", False))
             if movie_id:
-                data = TheMovieDB.get_movie_lists(movie_id), "MovieLists"
+                data = tmdb.get_movie_lists(movie_id), "MovieLists"
         elif info == 'keywords':
             movie_id = params.get("id", False)
             if not movie_id:
-                movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                                        dbid=params.get("dbid", False))
+                movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
+                                                  dbid=params.get("dbid", False))
             if movie_id:
-                data = TheMovieDB.get_keywords(movie_id), "Keywords"
+                data = tmdb.get_keywords(movie_id), "Keywords"
         elif info == 'popularpeople':
-            data = TheMovieDB.get_popular_actors(), "PopularPeople"
+            data = tmdb.get_popular_actors(), "PopularPeople"
         elif info == 'directormovies':
             if params.get("director"):
-                director_info = TheMovieDB.get_person_info(person_label=params["director"],
-                                                           skip_dialog=True)
+                director_info = tmdb.get_person_info(person_label=params["director"],
+                                                     skip_dialog=True)
                 if director_info and director_info.get("id"):
-                    movies = TheMovieDB.get_person_movies(director_info["id"])
+                    movies = tmdb.get_person_movies(director_info["id"])
                     for item in movies:
                         del item["credit_id"]
                     data = merge_dict_lists(movies, key="department"), "DirectorMovies"
         elif info == 'writermovies':
             if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
-                writer_info = TheMovieDB.get_person_info(person_label=params["writer"],
-                                                         skip_dialog=True)
+                writer_info = tmdb.get_person_info(person_label=params["writer"],
+                                                   skip_dialog=True)
                 if writer_info and writer_info.get("id"):
-                    movies = TheMovieDB.get_person_movies(writer_info["id"])
+                    movies = tmdb.get_person_movies(writer_info["id"])
                     for item in movies:
                         del item["credit_id"]
                     data = merge_dict_lists(movies, key="department"), "WriterMovies"
@@ -421,17 +421,17 @@ def start_info_actions(infos, params):
                 if params.get("id") and params["id"]:
                     tmdb_id = params["id"]
                 elif media_type == "movie":
-                    tmdb_id = TheMovieDB.get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
-                                                           dbid=params.get("dbid", ""),
-                                                           name=params.get("name", ""))
+                    tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
+                                                     dbid=params.get("dbid", ""),
+                                                     name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
                     tvdb_id = local_db.get_imdb_id(media_type="tvshow",
                                                    dbid=params["dbid"])
-                    tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=tvdb_id)
+                    tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
                 else:
                     return False
-                TheMovieDB.set_rating_prompt(media_type=media_type,
-                                             media_id=tmdb_id)
+                tmdb.set_rating_prompt(media_type=media_type,
+                                       media_id=tmdb_id)
         elif info == 'setfocus':
             resolve_url(params.get("handle"))
             xbmc.executebuiltin("SetFocus(22222)")
@@ -484,7 +484,7 @@ def start_info_actions(infos, params):
             else:
                 movie_id = ""
             if movie_id:
-                trailer = TheMovieDB.get_trailer(movie_id)
+                trailer = tmdb.get_trailer(movie_id)
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 xbmc.sleep(100)
                 if trailer:
