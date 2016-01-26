@@ -428,7 +428,7 @@ def get_window(window_type):
                           "language": SETTING("LanguageID"),
                           "page": self.page,
                           "session_id": tmdb.Login.get_session_id()}
-                url = "account/%s/favorite/%s" % (tmdb.Login.get_account_id())
+                url = "account/%s/favorite/%s" % (tmdb.Login.get_account_id(), temp)
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
