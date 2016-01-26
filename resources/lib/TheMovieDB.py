@@ -75,7 +75,9 @@ class LoginProvider(object):
         if self.account_id:
             return self.account_id
         self.session_id = self.get_session_id()
-        response = get_data("account?session_id=%s&" % self.session_id, 999999)
+        response = get_data2(url="account",
+                             params={"session_id": self.session_id},
+                             cache_days=999999)
         self.account_id = response.get("id")
         return self.account_id
 
@@ -84,7 +86,8 @@ class LoginProvider(object):
         '''
         returns guest session id for TMDB
         '''
-        response = get_data("authentication/guest_session/new?", 999999)
+        response = get_data2(url="authentication/guest_session/new",
+                             cache_days=999999)
         if "guest_session_id" in response:
             return str(response["guest_session_id"])
         else:
@@ -119,7 +122,8 @@ class LoginProvider(object):
         '''
         if self.request_token:
             return self.request_token
-        response = get_data("authentication/token/new?", 999999)
+        response = get_data2(url="authentication/token/new",
+                             cache_days=999999)
         self.request_token = response["request_token"]
         params = {"request_token": self.request_token,
                   "username": self.username,
@@ -295,7 +299,9 @@ def handle_multi_search(results=[]):
 
 
 def handle_movies(results=[], local_first=True, sortkey="year"):
-    response = get_data("genre/movie/list?language=%s&" % (SETTING("LanguageID")), 30)
+    response = get_data2(url="genre/movie/list",
+                         params={"language": SETTING("LanguageID")},
+                         cache_days=30)
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     movies = []
@@ -342,7 +348,9 @@ def handle_movies(results=[], local_first=True, sortkey="year"):
 
 def handle_tvshows(results, local_first=True, sortkey="year"):
     tvshows = []
-    response = get_data("genre/tv/list?language=%s&" % (SETTING("LanguageID")), 30)
+    response = get_data2(url="genre/tv/list",
+                         params={"language": SETTING("LanguageID")},
+                         cache_days=30)
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     for tv in results:
@@ -911,11 +919,15 @@ def extended_season_info(tvshow_id, season_number):
               "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    tvshow = get_data("tv/%s?%s&" % (tvshow_id, urllib.urlencode(params)), 99999)
+    tvshow = get_data2(url="tv/%s" % (tvshow_id),
+                       params=params,
+                       cache_days=99999)
     params = {"append_to_response": ALL_SEASON_PROPS,
               "language": SETTING("LanguageID"),
               "include_image_language": "en,null,%s" % SETTING("LanguageID")}
-    response = get_data("tv/%s/season/%s?%s&" % (tvshow_id, season_number, urllib.urlencode(params)), 7)
+    response = get_data2(url="tv/%s/season/%s" % (tvshow_id, season_number),
+                         params=params,
+                         cache_days=7)
     if not response:
         notify("Could not find season info")
         return None
@@ -973,7 +985,9 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
 def extended_actor_info(actor_id):
     if not actor_id:
         return None
-    response = get_data("person/%s?append_to_response=%s&" % (actor_id, ALL_ACTOR_PROPS), 1)
+    response = get_data2(url="person/%s" % (actor_id),
+                         params={"append_to_response": ALL_ACTOR_PROPS},
+                         cache_days=1)
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = handle_tagged_images(response["tagged_images"]["results"])
@@ -1014,15 +1028,20 @@ def get_rated_media_items(media_type):
         if not session_id:
             notify("Could not get session id")
             return []
-        response = get_data("account/%s/rated/%s?session_id=%s&language=%s&" %
-                            (account_id, media_type, session_id, SETTING("LanguageID")), 0)
+        params = {"session_id": session_id,
+                  "language": SETTING("LanguageID")}
+        response = get_data2(url="account/%s/rated/%s" % (account_id, media_type),
+                             params=params,
+                             cache_days=0)
     else:
         session_id = Login.get_guest_session_id()
         if not session_id:
             notify("Could not get session id")
             return []
-        response = get_data("guest_session/%s/rated_movies?language=%s&" %
-                            (session_id, SETTING("LanguageID")), 0)
+        params = {"language": SETTING("LanguageID")}
+        response = get_data2(url="guest_session/%s/rated_movies" % (session_id),
+                             params=params,
+                             cache_days=0)
     if media_type == "tv/episodes":
         return handle_episodes(response["results"])
     elif media_type == "tv":
@@ -1038,8 +1057,11 @@ def get_fav_items(media_type):
     if not session_id:
         notify("Could not get session id")
         return []
-    response = get_data("account/%s/favorite/%s?session_id=%s&language=%s&" %
-                        (account_id, media_type, session_id, SETTING("LanguageID")), 0)
+    params = {"session_id": session_id,
+              "language": SETTING("LanguageID")}
+    response = get_data2(url="account/%s/favorite/%s" % (account_id, media_type),
+                         params=params,
+                         cache_days=0)
     if "results" in response:
         if media_type == "tv":
             return handle_tvshows(response["results"], False, None)
@@ -1055,8 +1077,9 @@ def get_movies_from_list(list_id, cache_time=5):
     '''
     get movie dict list from tmdb list.
     '''
-    params = {"language": SETTING("LanguageID")}
-    response = get_data("list/%s?%s&" % (list_id, urllib.urlencode(params)), cache_time)
+    response = get_data2(url="list/%s" % (list_id),
+                         params={"language": SETTING("LanguageID")},
+                         cache_days=cache_time)
     return handle_movies(response["items"], False, None)
 
 
@@ -1064,7 +1087,8 @@ def get_popular_actors():
     '''
     get dict list containing popular actors / directors / writers
     '''
-    response = get_data("person/popular?", 1)
+    response = get_data2(url="person/popular",
+                         cache_days=1)
     return handle_people(response["results"])
 
 
@@ -1072,7 +1096,8 @@ def get_actor_credits(actor_id, media_type):
     '''
     media_type: movie or tv
     '''
-    response = get_data("person/%s/%s_credits?" % (actor_id, media_type), 1)
+    response = get_data2(url="person/%s/%s_credits" % (actor_id, media_type),
+                         cache_days=1)
     return handle_movies(response["cast"])
 
 
@@ -1081,7 +1106,9 @@ def get_full_movie(movie_id):
               "language": SETTING("LanguageID"),
               "append_to_response": ALL_MOVIE_PROPS
               }
-    return get_data("movie/%s?%s&" % (movie_id, urllib.urlencode(params)), 30)
+    return get_data2(url="movie/%s" % (movie_id),
+                     params=params,
+                     cache_days=30)
 
 
 def get_keywords(movie_id):
