@@ -124,8 +124,9 @@ class LoginProvider(object):
         params = {"request_token": self.request_token,
                   "username": self.username,
                   "password": self.password}
-        response = get_data("authentication/token/validate_with_login?%s&" % (urllib.urlencode(params)),
-                            cache_days=cache_days)
+        response = get_data2(url="authentication/token/validate_with_login",
+                             params=params,
+                             cache_days=cache_days)
         if response and response.get("success"):
             return response["request_token"]
 
@@ -242,14 +243,17 @@ def get_account_lists(cache_time=0):
     session_id = Login.get_session_id()
     account_id = Login.get_account_id()
     if session_id and account_id:
-        response = get_data("account/%s/lists?session_id=%s&" % (account_id, session_id), cache_time)
+        response = get_data2(url="account/%s/lists" % (account_id),
+                             params={"session_id": session_id},
+                             cache_days=cache_time)
         return response["results"]
     else:
         return []
 
 
 def get_certification_list(media_type):
-    response = get_data("certification/%s/list?" % media_type, 999999)
+    response = get_data2(url="certification/%s/list" % media_type,
+                         cache_days=999999)
     return response.get("certifications")
 
 
