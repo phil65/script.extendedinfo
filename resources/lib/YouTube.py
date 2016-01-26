@@ -8,6 +8,7 @@ import urllib
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
+PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def handle_videos(results, extended=False):
@@ -22,8 +23,8 @@ def handle_videos(results, extended=False):
             video_id = item["snippet"]["resourceId"]["videoId"]
         video = {'thumb': thumb,
                  'youtube_id': video_id,
-                 'Play': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
-                 'path': 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % video_id,
+                 'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
+                 'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'Description': item["snippet"]["description"],
                  'title': item["snippet"]["title"],
                  'channel_title': item["snippet"]["channelTitle"],
@@ -71,8 +72,8 @@ def handle_playlists(results):
             playlist_id = item["snippet"]["resourceId"]["playlistId"]
         playlist = {'thumb': thumb,
                     'youtube_id': playlist_id,
-                    'Play': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
-                    'path': 'plugin://script.extendedinfo/?info=youtubeplaylist&&id=%s' % playlist_id,
+                    'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
+                    'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
                     'title': item["snippet"]["title"],
                     'description': item["snippet"]["description"],
                     'channel_title': item["snippet"]["channelTitle"],
@@ -103,8 +104,8 @@ def handle_channels(results):
             channel_id = item["snippet"]["resourceId"]["channelId"]
         channel = {'thumb': thumb,
                    'youtube_id': channel_id,
-                   'Play': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
-                   'path': 'plugin://script.extendedinfo/?info=youtubechannel&&id=%s' % channel_id,
+                   'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
+                   'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'Description': item["snippet"]["description"],
                    'title': item["snippet"]["title"],
                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
