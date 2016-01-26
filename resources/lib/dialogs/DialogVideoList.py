@@ -64,16 +64,10 @@ def get_window(window_type):
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
             self.setProperty("Type", TRANSLATIONS[self.type])
-            if self.type == "tv":
-                self.getControl(5006).setVisible(False)
-                self.getControl(5008).setVisible(False)
-                self.getControl(5009).setVisible(False)
-                self.getControl(5010).setVisible(False)
-            else:
-                self.getControl(5006).setVisible(True)
-                self.getControl(5008).setVisible(True)
-                self.getControl(5009).setVisible(True)
-                self.getControl(5010).setVisible(True)
+            self.getControl(5006).setVisible(self.type != "tv")
+            self.getControl(5008).setVisible(self.type != "tv")
+            self.getControl(5009).setVisible(self.type != "tv")
+            self.getControl(5010).setVisible(self.type != "tv")
 
         @ch.action("contextmenu", 500)
         def context_menu(self):
