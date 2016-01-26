@@ -137,7 +137,7 @@ def handle_movies(results):
 def get_trending_shows():
     results = get_data(url='shows/trending',
                        params={"extended": "full,images"})
-    if results is not None:
+    if results:
         return handle_movies(results)
     else:
         return []
@@ -146,7 +146,7 @@ def get_trending_shows():
 def get_tshow_info(imdb_id):
     results = get_data(url='show/%s' % imdb_id,
                        params={"extended": "full,images"})
-    if results is not None:
+    if results:
         return handle_movies([results])
     else:
         return []
@@ -155,22 +155,23 @@ def get_tshow_info(imdb_id):
 def get_trending_movies():
     results = get_data(url='movies/trending',
                        params={"extended": "full,images"})
-    if results is not None:
+    if results:
         return handle_trakt_movies(results)
     else:
         return []
 
 
 def get_similar(media_type, imdb_id):
-    if not imdb_id:
+    if not imdb_id or not media_type:
         return None
     results = get_data(url='%s/%s/related' % (media_type, imdb_id),
                        params={"extended": "full,images"})
-    if results is not None:
-        if media_type == "show":
-            return handle_movies(results)
-        elif media_type == "movie":
-            return handle_trakt_movies(results)
+    if not results:
+        return None
+    if media_type == "show":
+        return handle_movies(results)
+    elif media_type == "movie":
+        return handle_trakt_movies(results)
 
 
 def get_data(url, params={}, cache_days=10):
