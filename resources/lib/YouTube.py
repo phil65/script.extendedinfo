@@ -125,6 +125,8 @@ def handle_channels(results):
 
 def get_data(method, params, cache_days=0.5):
     params = {k: v for k, v in params.items() if v}
+    for k, v in params.iteritems():
+        params[k] = unicode(v).encode('utf-8')
     url = "{base_url}{method}?{params}&key={key}".format(base_url=BASE_URL,
                                                          method=method,
                                                          params=urllib.urlencode(params),
