@@ -587,9 +587,11 @@ def get_keyword_id(keyword):
 
 def get_set_id(set_name):
     set_name = set_name.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
-    params = {"query": set_name.encode("utf-8"),
+    params = {"query": set_name,
               "language": SETTING("LanguageID")}
-    response = get_data("search/collection?%s&" % (urllib.urlencode(params)), 14)
+    response = get_data2(url="search/collection",
+                         params=params,
+                         cache_days=14)
     if "results" in response and response["results"]:
         return response["results"][0]["id"]
     else:
