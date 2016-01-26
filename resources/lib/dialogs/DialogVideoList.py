@@ -223,9 +223,9 @@ def get_window(window_type):
         @ch.click(5002)
         def set_genre_filter(self):
             params = {"language": SETTING("LanguageID")}
-            response = tmdb.get_data2(url="genre/%s/list" % (self.type),
-                                      params=params,
-                                      cache_days=10)
+            response = tmdb.get_data(url="genre/%s/list" % (self.type),
+                                     params=params,
+                                     cache_days=10)
             ids = [item["id"] for item in response["genres"]]
             labels = [item["name"] for item in response["genres"]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
@@ -464,13 +464,13 @@ def get_window(window_type):
                 params = merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
             if force:
-                response = tmdb.get_data2(url=url,
-                                          params=params,
-                                          cache_days=0)
+                response = tmdb.get_data(url=url,
+                                         params=params,
+                                         cache_days=0)
             else:
-                response = tmdb.get_data2(url=url,
-                                          params=params,
-                                          cache_days=2)
+                response = tmdb.get_data(url=url,
+                                         params=params,
+                                         cache_days=2)
             if not response:
                 return None
             if self.mode == "list":

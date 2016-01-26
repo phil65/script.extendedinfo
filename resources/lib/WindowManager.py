@@ -137,12 +137,19 @@ class WindowManager(object):
         from dialogs import DialogSeasonInfo
         from TheMovieDB import get_data
         if not tvshow_id:
-            response = get_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+            params = {"query": tvshow,
+                      "language": SETTING("language")}
+            response = get_data(url="search/tv",
+                                params=params,
+                                cache_days=30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
             else:
-                tvshow = re.sub('\(.*?\)', '', tvshow)
-                response = get_data("search/tv?query=%s&language=%s&" % (url_quote(tvshow), SETTING("LanguageID")), 30)
+                params = {"query": re.sub('\(.*?\)', '', tvshow),
+                          "language": SETTING("language")}
+                response = get_data(url="search/tv",
+                                    params=params,
+                                    cache_days=30)
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
@@ -165,7 +172,11 @@ class WindowManager(object):
         from TheMovieDB import get_data
         ep_class = DialogEpisodeInfo.get_window(self.window_type)
         if not tvshow_id and tvshow:
-            response = get_data("search/tv?query=%s&language=%s&" % (urllib.quote_plus(tvshow), SETTING("LanguageID")), 30)
+            params = {"query": tvshow,
+                      "language": SETTING("language")}
+            response = get_data(url="search/tv",
+                                params=params,
+                                cache_days=30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
         dialog = ep_class(INFO_DIALOG_FILE,
