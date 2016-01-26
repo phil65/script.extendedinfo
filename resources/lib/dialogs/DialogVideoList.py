@@ -155,7 +155,7 @@ def get_window(window_type):
             self.update()
 
         def add_filter(self, **kwargs):
-            super(DialogVideoList, self).add_filter(force_overwrite=".gte" in key or ".lte" in key,
+            super(DialogVideoList, self).add_filter(force_overwrite=".gte" in kwargs["key"] or ".lte" in kwargs["key"],
                                                     **kwargs)
 
         @ch.click(5004)
@@ -254,7 +254,10 @@ def get_window(window_type):
                                     typelabel=LANG(32111),
                                     label=" < " + result)
                 else:
-                    self.add_filter("vote_count.%s" % "gte", result, LANG(32111), " > " + result)
+                    self.add_filter(key="vote_count.%s" % "gte",
+                                    value=result,
+                                    typelabel=LANG(32111),
+                                    label=" > " + result)
                 self.mode = "filter"
                 self.page = 1
                 self.update()
@@ -278,9 +281,15 @@ def get_window(window_type):
                 value = "%s-01-01" % result
                 label = " > " + result
             if self.type == "tv":
-                self.add_filter("first_air_date.%s" % order, value, LANG(20416), label)
+                self.add_filter(key="first_air_date.%s" % order,
+                                value=value,
+                                typelabel=LANG(20416),
+                                label=label)
             else:
-                self.add_filter("primary_release_date.%s" % order, value, LANG(345), label)
+                self.add_filter(key="primary_release_date.%s" % order,
+                                value=value,
+                                typelabel=LANG(345),
+                                label=label)
             self.mode = "filter"
             self.page = 1
             self.update()
@@ -353,7 +362,10 @@ def get_window(window_type):
             response = tmdb.get_keyword_id(result)
             if not response:
                 return None
-            self.add_filter("with_keywords", str(response["id"]), LANG(32114), response["name"])
+            self.add_filter(key="with_keywords",
+                            value=str(response["id"]),
+                            typelabel=LANG(32114),
+                            label=response["name"])
             self.mode = "filter"
             self.page = 1
             self.update()
@@ -373,8 +385,14 @@ def get_window(window_type):
             if index == -1:
                 return None
             cert = certs[index].split("  -  ")[0]
-            self.add_filter("certification_country", country, LANG(32153), country)
-            self.add_filter("certification", cert, LANG(32127), cert)
+            self.add_filter(key="certification_country",
+                            value=country,
+                            typelabel=LANG(32153),
+                            label=country)
+            self.add_filter(key="certification",
+                            value=cert,
+                            typelabel=LANG(32127),
+                            label=cert)
             self.page = 1
             self.mode = "filter"
             self.update()
