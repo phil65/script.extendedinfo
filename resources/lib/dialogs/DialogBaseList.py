@@ -66,7 +66,6 @@ class DialogBaseList(object):
     @ch.action("down", "*")
     def save_position(self):
         self.position = self.getCurrentListPosition()
-        notify(str(self.position), "")
 
     def onAction(self, action):
         ch.serve_action(action, self.getFocusId(), self)
