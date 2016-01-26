@@ -61,7 +61,7 @@ def get_calendar_shows(content):
     return shows
 
 
-def handle_trakt_movies(results):
+def handle_movies(results):
     movies = []
     for movie in results:
         if SETTING("infodialog_onclick") != "false":
@@ -95,7 +95,7 @@ def handle_trakt_movies(results):
     return movies
 
 
-def handle_movies(results):
+def handle_tvshows(results):
     shows = []
     for tvshow in results:
         airs = fetch(tvshow['show'], "airs")
@@ -138,7 +138,7 @@ def get_trending_shows():
     results = get_data(url='shows/trending',
                        params={"extended": "full,images"})
     if results:
-        return handle_movies(results)
+        return handle_tvshows(results)
     else:
         return []
 
@@ -147,7 +147,7 @@ def get_tshow_info(imdb_id):
     results = get_data(url='show/%s' % imdb_id,
                        params={"extended": "full,images"})
     if results:
-        return handle_movies([results])
+        return handle_tvshows([results])
     else:
         return []
 
@@ -156,7 +156,7 @@ def get_trending_movies():
     results = get_data(url='movies/trending',
                        params={"extended": "full,images"})
     if results:
-        return handle_trakt_movies(results)
+        return handle_movies(results)
     else:
         return []
 
@@ -169,9 +169,9 @@ def get_similar(media_type, imdb_id):
     if not results:
         return None
     if media_type == "show":
-        return handle_movies(results)
+        return handle_tvshows(results)
     elif media_type == "movie":
-        return handle_trakt_movies(results)
+        return handle_movies(results)
 
 
 def get_data(url, params={}, cache_days=10):
