@@ -601,6 +601,14 @@ def get_data(url="", cache_days=14, folder="TheMovieDB"):
     return get_JSON_response(url, cache_days, folder)
 
 
+def get_data2(url="", params={}, cache_days=14):
+    params["api_key"] = TMDB_KEY
+    for k, v in params.iteritems():
+        params[k] = unicode(v).encode('utf-8')
+    url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
+    return get_JSON_response(url, cache_days, "TheMovieDB")
+
+
 def get_company_data(company_id):
     response = get_data("company/%s/movies?" % (company_id), 30)
     if response and "results" in response:

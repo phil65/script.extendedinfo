@@ -223,7 +223,9 @@ def get_window(window_type):
         @ch.click(5002)
         def set_genre_filter(self):
             params = {"language": SETTING("LanguageID")}
-            response = tmdb.get_data("genre/%s/list?%s&" % (self.type, urllib.urlencode(params)), 10)
+            response = tmdb.get_data2(url="genre/%s/list" % (self.type),
+                                      params=params,
+                                      cache_days=10)
             ids = [item["id"] for item in response["genres"]]
             labels = [item["name"] for item in response["genres"]]
             index = xbmcgui.Dialog().select(heading=LANG(32151),
@@ -412,20 +414,21 @@ def get_window(window_type):
                 params = {"query": self.search_str,
                           "include_adult": include_adult,
                           "page": self.page}
-                url = "search/multi?%s&" % (urllib.urlencode(params))
+                url = "search/multi"
                 if self.search_str:
                     self.filter_label = LANG(32146) % self.search_str
                 else:
                     self.filter_label = ""
             elif self.mode == "list":
-                url = "list/%s?language=%s&" % (str(self.list_id), SETTING("LanguageID"))
+                params = {"language": SETTING("LanguageID")}
+                url = "list/%s" % (self.list_id)
                 # self.filter_label = LANG(32036)
             elif self.mode == "favorites":
                 params = {"sort_by": sort_by,
                           "language": SETTING("LanguageID"),
                           "page": self.page,
                           "session_id": tmdb.Login.get_session_id()}
-                url = "account/%s/favorite/%s?%s&" % (tmdb.Login.get_account_id(), urllib.urlencode(params))
+                url = "account/%s/favorite/%s" % (tmdb.Login.get_account_id())
                 self.filter_label = starred
             elif self.mode == "rating":
                 force = True  # workaround, should be updated after setting rating
@@ -440,7 +443,7 @@ def get_window(window_type):
                               "language": SETTING("LanguageID"),
                               "page": self.page,
                               "session_id": session_id}
-                    url = "account/%s/rated/%s?%s&" % (tmdb.Login.get_account_id(), temp, urllib.urlencode(params))
+                    url = "account/%s/rated/%s" % (tmdb.Login.get_account_id(), temp)
                 else:
                     session_id = tmdb.Login.get_guest_session_id()
                     if not session_id:
@@ -448,7 +451,8 @@ def get_window(window_type):
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
-                    url = "guest_session/%s/rated_movies?language=%s&" % (session_id, SETTING("LanguageID"))
+                    params = {"language": SETTING("LanguageID")}
+                    url = "guest_session/%s/rated_movies" % (session_id)
                 self.filter_label = rated
             else:
                 self.set_filter_label()
@@ -458,13 +462,15 @@ def get_window(window_type):
                           "include_adult": include_adult}
                 filters = {item["type"]: item["id"] for item in self.filters}
                 params = merge_dicts(params, filters)
-                url = "discover/%s?%s&" % (self.type, urllib.urlencode(params))
+                url = "discover/%s" % (self.type)
             if force:
-                response = tmdb.get_data(url=url,
-                                         cache_days=0)
+                response = tmdb.get_data2(url=url,
+                                          params=params,
+                                          cache_days=0)
             else:
-                response = tmdb.get_data(url=url,
-                                         cache_days=2)
+                response = tmdb.get_data2(url=url,
+                                          params=params,
+                                          cache_days=2)
             if not response:
                 return None
             if self.mode == "list":
