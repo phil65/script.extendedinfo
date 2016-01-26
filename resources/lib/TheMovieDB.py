@@ -105,8 +105,10 @@ class LoginProvider(object):
         return None
 
     def start_new_session(self, cache_days=0):
-        response = get_data(url="authentication/session/new?request_token=%s&" % self.request_token,
-                            cache_days=cache_days)
+        params = {"request_token": self.request_token}
+        response = get_data2(url="authentication/session/new",
+                             params=params,
+                             cache_days=cache_days)
         if response and "success" in response:
             self.session_id = str(response["session_id"])
             return self.session_id
@@ -518,15 +520,15 @@ def handle_tagged_images(results):
 
 def handle_companies(results):
     companies = []
-    for company in results:
-        newcompany = {'parent_company': company['parent_company'],
-                      'name': company['name'],
-                      'description': company['description'],
-                      'headquarters': company['headquarters'],
-                      'homepage': company['homepage'],
-                      'id': company['id'],
-                      'logo_path': company['logo_path']}
-        companies.append(newcompany)
+    for item in results:
+        company = {'parent_company': item['parent_company'],
+                   'name': item['name'],
+                   'description': item['description'],
+                   'headquarters': item['headquarters'],
+                   'homepage': item['homepage'],
+                   'id': item['id'],
+                   'logo_path': item['logo_path']}
+        companies.append(company)
     return companies
 
 
@@ -534,7 +536,9 @@ def search_company(company_name):
     regex = re.compile('\(.+?\)')
     company_name = regex.sub('', company_name)
     params = {"query": company_name}
-    response = get_data("search/company?%s&" % urllib.urlencode(params), 10)
+    response = get_data2(url="search/company",
+                         params=params,
+                         cache_days=10)
     if response and "results" in response:
         return response["results"]
     else:
@@ -544,7 +548,9 @@ def search_company(company_name):
 
 def multi_search(search_str):
     params = {"query": search_str}
-    response = get_data("search/multi?%s&" % urllib.urlencode(params), 1)
+    response = get_data2(url="search/multi",
+                         params=params,
+                         cache_days=1)
     if response and "results" in response:
         return response["results"]
     else:
@@ -555,7 +561,9 @@ def multi_search(search_str):
 def get_person_info(person_label, skip_dialog=False):
     params = {"query": person_label.split(" / ")[0],
               "include_adult": include_adult}
-    response = get_data("search/person?%s&" % (urllib.urlencode(params)), 30)
+    response = get_data2(url="search/person",
+                         params=params,
+                         cache_days=30)
     if not response or "results" not in response:
         return False
     if len(response["results"]) > 1 and not skip_dialog:
@@ -571,7 +579,9 @@ def get_person_info(person_label, skip_dialog=False):
 def get_keyword_id(keyword):
     params = {"query": keyword,
               "include_adult": include_adult}
-    response = get_data("search/keyword?%s&" % (urllib.urlencode(params)), 30)
+    response = get_data2(url="search/keyword",
+                         params=params,
+                         cache_days=30)
     if response and "results" in response and response["results"]:
         if len(response["results"]) > 1:
             names = [item["name"] for item in response["results"]]
@@ -586,8 +596,7 @@ def get_keyword_id(keyword):
 
 
 def get_set_id(set_name):
-    set_name = set_name.replace("[", "").replace("]", "").replace("Kollektion", "Collection")
-    params = {"query": set_name,
+    params = {"query": set_name.replace("[", "").replace("]", "").replace("Kollektion", "Collection"),
               "language": SETTING("LanguageID")}
     response = get_data2(url="search/collection",
                          params=params,
@@ -612,7 +621,9 @@ def get_data2(url="", params={}, cache_days=14):
 
 
 def get_company_data(company_id):
-    response = get_data("company/%s/movies?" % (company_id), 30)
+    response = get_data2(url="company/%s/movies" % (company_id),
+                         params=params,
+                         cache_days=30)
     if response and "results" in response:
         return handle_movies(response["results"])
     else:
@@ -620,7 +631,10 @@ def get_company_data(company_id):
 
 
 def get_credit_info(credit_id):
-    return get_data("credit/%s?language=%s&" % (credit_id, SETTING("LanguageID")), 30)
+    params = {"language": SETTING("LanguageID")}
+    return get_data2(url="credit/%s" % (credit_id),
+                     params=params,
+                     cache_days=30)
 
 
 def get_account_props(account_states):
@@ -674,7 +688,8 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     elif imdb_id:
         params = {"external_source": "imdb_id",
                   "language": SETTING("LanguageID")}
-        response = get_data("find/tt%s?%s&" % (imdb_id.replace("tt", ""), urllib.urlencode(params)), 30)
+        response = get_data2(url="find/tt%s" % (imdb_id.replace("tt", "")),
+                             params=params)
         if response["movie_results"]:
             return response["movie_results"][0]["id"]
     if name:
@@ -686,7 +701,8 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
 def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     params = {"external_source": source,
               "language": SETTING("LanguageID")}
-    response = get_data("find/%s?%s&" % (tvdb_id, urllib.urlencode(params)), 30)
+    response = get_data2(url="find/%s" % (tvdb_id),
+                         params=params)
     if response and response["tv_results"]:
         return response["tv_results"][0]["id"]
     else:
@@ -710,7 +726,9 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
               "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data("movie/%s?%s&" % (movie_id, urllib.urlencode(params)), cache_time)
+    response = get_data2(url="movie/%s" % (movie_id),
+                         params=params,
+                         cache_days=cache_time)
     if not response:
         notify("Could not get movie information")
         return {}
@@ -801,7 +819,9 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data("tv/%s?%s&" % (tvshow_id, urllib.urlencode(params)), cache_time)
+    response = get_data2(url="tv/%s" % (tvshow_id),
+                         params=params,
+                         cache_days=cache_time)
     if not response:
         return False
     videos = []
@@ -932,8 +952,9 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
               "include_image_language": "en,null,%s" % SETTING("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data("tv/%s/season/%s/episode/%s?%s&" %
-                        (tvshow_id, season, episode, urllib.urlencode(params)), cache_time)
+    response = get_data2(url="tv/%s/season/%s/episode/%s" % (tvshow_id, season, episode),
+                         params=params,
+                         cache_days=cache_time)
     videos = []
     if "videos" in response:
         videos = handle_videos(response["videos"]["results"])
