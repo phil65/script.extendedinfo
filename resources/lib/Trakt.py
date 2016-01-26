@@ -21,16 +21,12 @@ def get_calendar_shows(content):
     shows = []
     url = ""
     if content == "shows":
-        url = 'calendars/shows/%s/14?extended=full,images' % datetime.date.today()
+        url = 'calendars/shows/%s/14' % datetime.date.today()
     elif content == "premieres":
-        url = 'calendars/shows/premieres/%s/14?extended=full,images' % datetime.date.today()
-    try:
-        results = get_data(url=url,
-                           cache_days=0.3)
-    except:
-        log("Error when fetching Trakt data from net")
-        log("Json Query: " + url)
-        results = None
+        url = 'calendars/shows/premieres/%s/14' % datetime.date.today()
+    params = {"extended": "full,images"}
+    results = get_data(url=url,
+                       cache_days=0.3)
     count = 1
     if not results:
         return None
@@ -69,9 +65,9 @@ def handle_trakt_movies(results):
     movies = []
     for movie in results:
         if SETTING("infodialog_onclick") != "false":
-            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % str(fetch(movie["movie"]["ids"], 'tmdb'))
+            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % fetch(movie["movie"]["ids"], 'tmdb')
         else:
-            path = PLUGIN_BASE + "playtrailer&&id=" + str(fetch(movie["movie"]["ids"], 'tmdb'))
+            path = PLUGIN_BASE + "playtrailer&&id=%s" % fetch(movie["movie"]["ids"], 'tmdb')
         movie = {'title': movie["movie"]["title"],
                  'Runtime': movie["movie"]["runtime"],
                  'duration': movie["movie"]["runtime"],
@@ -139,8 +135,10 @@ def handle_movies(results):
 
 
 def get_trending_shows():
-    url = 'shows/trending?extended=full,images'
-    results = get_data(url=url)
+    params = {"extended": "full,images"}
+    url = 'shows/trending'
+    results = get_data(url=url,
+                       params=params)
     if results is not None:
         return handle_movies(results)
     else:
@@ -148,8 +146,10 @@ def get_trending_shows():
 
 
 def get_tshow_info(imdb_id):
-    url = 'show/%s?extended=full,images' % imdb_id
-    results = get_data(url=url)
+    params = {"extended": "full,images"}
+    url = 'show/%s' % imdb_id
+    results = get_data(url=url,
+                       params=params)
     if results is not None:
         return handle_movies([results])
     else:
@@ -157,8 +157,10 @@ def get_tshow_info(imdb_id):
 
 
 def get_trending_movies():
-    url = 'movies/trending?extended=full,images'
-    results = get_data(url=url)
+    params = {"extended": "full,images"}
+    url = 'movies/trending'
+    results = get_data(url=url,
+                       params=params)
     if results is not None:
         return handle_trakt_movies(results)
     else:
@@ -168,8 +170,10 @@ def get_trending_movies():
 def get_similar(media_type, imdb_id):
     if not imdb_id:
         return None
-    url = '%s/%s/related?extended=full,images' % (media_type, imdb_id)
-    results = get_data(url=url)
+    params = {"extended": "full,images"}
+    url = '%s/%s/related' % (media_type, imdb_id)
+    results = get_data(url=url,
+                       params=params)
     if results is not None:
         if media_type == "show":
             return handle_movies(results)
@@ -177,7 +181,8 @@ def get_similar(media_type, imdb_id):
             return handle_trakt_movies(results)
 
 
-def get_data(url, cache_days=10):
+def get_data(url, params={}, cache_days=10):
+    url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
     return get_JSON_response(url=BASE_URL + url,
                              folder="Trakt",
                              headers=HEADERS,
