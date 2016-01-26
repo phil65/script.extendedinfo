@@ -94,7 +94,7 @@ def get_window(window_type):
                 if tmdb.set_rating_prompt(self.type, item_id):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
-                    self.getControl(500).selectItem(self.position)
+                    self.setCurrentListPosition(self.position)
             elif selection == 1:
                 tmdb.change_fav_status(media_id=item_id,
                                        media_type=self.type,
@@ -106,7 +106,7 @@ def get_window(window_type):
                                         movie_id=item_id,
                                         status=False)
                 self.update(force_update=True)
-                self.getControl(500).selectItem(self.position)
+                self.setCurrentListPosition(self.position)
 
         def list_dialog(self, movie_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")

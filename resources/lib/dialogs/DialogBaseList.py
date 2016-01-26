@@ -42,7 +42,7 @@ class DialogBaseList(object):
         xbmc.sleep(200)
         if self.total_items > 0:
             self.setFocusId(500)
-            self.getControl(500).selectItem(self.last_position)
+            self.setCurrentListPosition(self.last_position)
         else:
             self.setFocusId(6000)
 
@@ -65,7 +65,8 @@ class DialogBaseList(object):
     @ch.action("up", "*")
     @ch.action("down", "*")
     def save_position(self):
-        self.position = self.getControl(500).getSelectedPosition()
+        self.position = self.getCurrentListPosition()
+        notify(str(self.position), "")
 
     def onAction(self, action):
         ch.serve_action(action, self.getFocusId(), self)
@@ -149,7 +150,7 @@ class DialogBaseList(object):
             for item in self.listitems:
                 self.addItem(item)
             if self.column is not None:
-                self.getControl(500).selectItem(self.column)
+                self.setCurrentListPosition(self.column)
         self.setProperty("TotalPages", str(self.total_pages))
         self.setProperty("TotalItems", str(self.total_items))
         self.setProperty("CurrentPage", str(self.page))
