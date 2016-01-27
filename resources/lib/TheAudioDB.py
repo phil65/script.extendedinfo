@@ -17,15 +17,14 @@ def handle_albums(results):
         return None
     local_desc = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
     for album in results['album']:
+        desc = ""
         if local_desc in album and album[local_desc]:
             desc = album.get(local_desc, "")
-        elif 'strDescriptionEN' in album and album['strDescriptionEN']:
+        elif album.get('strDescriptionEN'):
             desc = album['strDescriptionEN']
-        elif 'strDescription' in album and album['strDescription']:
+        elif album.get('strDescription'):
             desc = album['strDescription']
-        else:
-            desc = ""
-        if 'strReview' in album and album['strReview']:
+        if album.get('strReview'):
             desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (LANG(185), album['strReview'])
         album = {'artist': album['strArtist'],
                  'mbid': album['strMusicBrainzID'],
@@ -97,16 +96,15 @@ def extended_artist_info(results):
     artists = []
     if not results.get('artists'):
         return None
+    local_bio = 'strBiography' + SETTING("LanguageID").upper()
     for artist in results['artists']:
-        local_bio = 'strBiography' + SETTING("LanguageID").upper()
+        description = ""
         if local_bio in artist and artist[local_bio]:
             description = fetch(artist, local_bio)
-        elif 'strBiographyEN' in artist and artist['strBiographyEN']:
+        elif artist.get('strBiographyEN'):
             description = fetch(artist, 'strBiographyEN')
-        elif 'strBiography' in artist and artist['strBiography']:
+        elif artist.get('strBiography'):
             description = fetch(artist, 'strBiography')
-        else:
-            description = ""
         banner = artist.get('strArtistBanner')
         if not banner:
             banner = ""
