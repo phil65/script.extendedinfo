@@ -32,9 +32,6 @@ def get_calendar_shows(content):
         return None
     for day in results.iteritems():
         for episode in day[1]:
-            banner = episode["show"]["images"]["banner"]["full"]
-            fanart = episode["show"]["images"]["fanart"]["full"]
-            poster = episode["show"]["images"]["poster"]["full"]
             show = {'title': episode["episode"]["title"],
                     'TVShowTitle': episode["show"]["title"],
                     'tvdb_id': episode["show"]["ids"]["tvdb"],
@@ -51,9 +48,9 @@ def get_calendar_shows(content):
                     'Plot': episode["show"]["overview"],
                     'genre': " / ".join(episode["show"]["genres"]),
                     'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                    'poster': poster,
-                    'Banner': banner,
-                    'fanart': fanart}
+                    'poster': episode["show"]["images"]["poster"]["full"],
+                    'Banner': episode["show"]["images"]["banner"]["full"],
+                    'fanart': episode["show"]["images"]["fanart"]["full"]}
             shows.append(show)
             count += 1
             if count > 20:
@@ -137,28 +134,25 @@ def handle_tvshows(results):
 def get_trending_shows():
     results = get_data(url='shows/trending',
                        params={"extended": "full,images"})
-    if results:
-        return handle_tvshows(results)
-    else:
+    if not results:
         return []
+    return handle_tvshows(results)
 
 
 def get_tshow_info(imdb_id):
     results = get_data(url='show/%s' % imdb_id,
                        params={"extended": "full,images"})
-    if results:
-        return handle_tvshows([results])
-    else:
+    if not results:
         return []
+    return handle_tvshows([results])
 
 
 def get_trending_movies():
     results = get_data(url='movies/trending',
                        params={"extended": "full,images"})
     if results:
-        return handle_movies(results)
-    else:
         return []
+    return handle_movies(results)
 
 
 def get_similar(media_type, imdb_id):
