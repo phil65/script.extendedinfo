@@ -41,7 +41,7 @@ def handle_events(results):
         except:
             search_str = ""
         if xbmc.getCondVisibility("System.HasAddon(script.maps.browser)"):
-            builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (str(event['id']))
+            builtin = 'RunScript(script.maps.browser,info=eventinfo,id=%s)' % (event['id'])
         else:
             builtin = "Notification(Please install script.maps.browser)"
         params = {"sensor": "false",
@@ -216,11 +216,7 @@ def get_similar_artists(artist_mbid):
 
 
 def get_near_events(tag=False, festivals_only=False, lat="", lon="", location="", distance=""):
-    if festivals_only:
-        festivals_only = "1"
-    else:
-        festivals_only = "0"
-    url = 'method=geo.getEvents&festivalsonly=%s&limit=40' % (festivals_only)
+    url = 'method=geo.getEvents&festivalsonly=%s&limit=40' % (int(festivals_only))
     if tag:
         url += '&tag=%s' % (url_quote(tag))
     if lat and lon:
