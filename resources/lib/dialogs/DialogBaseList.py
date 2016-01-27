@@ -12,6 +12,9 @@ from ActionHandler import ActionHandler
 
 ch = ActionHandler()
 
+C_BUTTON_SEARCH = 6000
+C_BUTTON_RESET_FILTERS = 5005
+C_LIST_MAIN = 500
 
 class DialogBaseList(object):
 
@@ -41,10 +44,10 @@ class DialogBaseList(object):
         self.update_ui()
         xbmc.sleep(200)
         if self.total_items > 0:
-            self.setFocusId(500)
+            self.setFocusId(C_LIST_MAIN)
             self.setCurrentListPosition(self.last_position)
         else:
-            self.setFocusId(6000)
+            self.setFocusId(C_BUTTON_SEARCH)
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
@@ -79,7 +82,7 @@ class DialogBaseList(object):
         if self.page != old_page:
             self.update()
 
-    @ch.click(5005)
+    @ch.click(C_BUTTON_RESET_FILTERS)
     def reset_filters(self):
         if len(self.filters) > 1:
             listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
@@ -98,13 +101,13 @@ class DialogBaseList(object):
         self.mode = "filter"
         self.update()
 
-    @ch.click(6000)
+    @ch.click(C_BUTTON_SEARCH)
     def open_search(self):
         T9Search(call=self.search,
                  start_value="",
                  history=self.__class__.__name__ + ".search")
         if self.total_items > 0:
-            self.setFocusId(500)
+            self.setFocusId(C_LIST_MAIN)
 
     def onClick(self, control_id):
         ch.serve(control_id, self)
@@ -142,8 +145,8 @@ class DialogBaseList(object):
         self.listitems = self.old_items + create_listitems(self.listitems)
 
     def update_ui(self):
-        if not self.listitems and self.getFocusId() == 500:
-            self.setFocusId(6000)
+        if not self.listitems and self.getFocusId() == C_LIST_MAIN:
+            self.setFocusId(C_BUTTON_SEARCH)
         self.clearList()
         if self.listitems:
             for item in self.listitems:
@@ -194,6 +197,8 @@ class DialogBaseList(object):
         self.update_ui()
 
     def add_filter(self, key, value, typelabel, label, force_overwrite=False):
+        if not value:
+            return False
         index = -1
         new_filter = {"id": value,
                       "type": key,
@@ -205,8 +210,6 @@ class DialogBaseList(object):
             if item["type"] == key:
                 index = i
                 break
-        if not value:
-            return False
         if index == -1:
             self.filters.append(new_filter)
             return None
