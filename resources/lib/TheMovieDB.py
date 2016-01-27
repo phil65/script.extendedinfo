@@ -353,11 +353,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
         tmdb_id = fetch(tv, 'id')
         artwork = get_image_urls(poster=tv.get("poster_path"),
                                  fanart=tv.get("backdrop_path"))
-        if "genre_ids" in tv:
-            genres = [labels[ids.index(genre_id)] for genre_id in tv["genre_ids"] if genre_id in ids]
-            genres = " / ".join(genres)
-        else:
-            genres = ""
+        genres = [labels[ids.index(id_)] for id_ in tv.get("genre_ids", []) if id_ in ids]
         duration = ""
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
@@ -369,7 +365,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
                  'id': tmdb_id,
-                 'genre': genres,
+                 'genre': " / ".join(genres),
                  'country': fetch(tv, 'original_language'),
                  'Popularity': fetch(tv, 'popularity'),
                  'credit_id': fetch(tv, 'credit_id'),
