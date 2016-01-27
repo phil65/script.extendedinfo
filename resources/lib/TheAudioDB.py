@@ -13,7 +13,7 @@ BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
 
 def handle_albums(results):
     albums = []
-    if 'album' not in results or not results['album']:
+    if not results.get('album'):
         return None
     local_desc = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
     for album in results['album']:
@@ -58,7 +58,7 @@ def handle_albums(results):
 
 def handle_tracks(results):
     tracks = []
-    if 'track' not in results or not results['track']:
+    if not results.get('track'):
         return None
     for item in results['track']:
         if 'strMusicVid' in item and item['strMusicVid']:
@@ -79,7 +79,7 @@ def handle_tracks(results):
 
 
 def handle_musicvideos(results):
-    if 'mvids' not in results or not results['mvids']:
+    if not results.get('mvids'):
         return []
     mvids = []
     for item in results['mvids']:
@@ -95,7 +95,7 @@ def handle_musicvideos(results):
 
 def extended_artist_info(results):
     artists = []
-    if 'artists' not in results or not results['artists']:
+    if not results.get('artists'):
         return None
     for artist in results['artists']:
         local_bio = 'strBiography' + SETTING("LanguageID").upper()
@@ -107,9 +107,8 @@ def extended_artist_info(results):
             description = fetch(artist, 'strBiography')
         else:
             description = ""
-        if 'strArtistBanner' in artist and artist['strArtistBanner']:
-            banner = artist['strArtistBanner']
-        else:
+        banner = artist.get('strArtistBanner')
+        if not banner:
             banner = ""
         if 'strReview' in artist and artist['strReview']:
             description += "[CR]" + fetch(artist, 'strReview')
@@ -176,7 +175,6 @@ def get_most_loved_tracks(search_str="", mbid=""):
         url = 'track-top10.php?s=%s' % (url_quote(search_str))
     else:
         return []
-    log("GetMostLoveTracks URL:" + url)
     results = get_data(url)
     return handle_tracks(results)
 
