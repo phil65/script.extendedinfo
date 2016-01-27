@@ -133,65 +133,71 @@ def handle_artists(results):
     return artists
 
 
-def get_events(id, past_events=False):
+def get_events(mbid, past_events=False):
     if past_events:
-        url = 'method=Artist.getPastEvents&mbid=%s' % (id)
+        method = "Artist.getPastEvents"
     else:
-        url = 'method=Artist.getEvents&mbid=%s' % (id)
-    results = get_data(url=url,
+        method = "Artist.getEvents"
+    results = get_data(method=method,
+                       params={"mbid": mbid},
                        cache_days=1)
     return handle_events(results)
 
 
 def get_artist_podcast(artist):  # todo
-    results = get_data(url="method=Artist.getPodcast&limit=100")
+    results = get_data(method="Artist.getPodcast",
+                       params={"limit": "100"})
     return handle_artists(results['artists'])
 
 
 def get_hyped_artists():
-    results = get_data(url="method=Chart.getHypedArtists&limit=100")
+    results = get_data(method="Chart.getHypedArtists",
+                       params={"limit": "100"})
     return handle_artists(results['artists'])
 
 
 def get_top_artists():
-    results = get_data(url="method=Chart.getTopArtists&limit=100")
+    results = get_data(method="Chart.getTopArtists",
+                       params={"limit": "100"})
     return handle_artists(results['artists'])
 
 
 def get_album_shouts(artist_name, album_title):
-    url = 'method=Album.getShouts&artist=%s&album=%s' % (url_quote(artist_name), url_quote(album_title))
-    results = get_data(url=url)
+    params = {"artist": artist_name,
+              "album": album_title}
+    results = get_data(method="Album.getShouts", params=params)
     return handle_shouts(results)
 
 
 def get_artist_shouts(artist_name):
-    url = 'method=Artist.GetShouts&artist=%s' % (url_quote(artist_name))
-    results = get_data(url=url)
+    results = get_data(method="Artist.GetShouts",
+                       params={"artist": artist_name})
     return handle_shouts(results)
 
 
 def get_artist_images(artist_mbid):
-    url = 'method=Artist.getImages&mbid=%s' % (artist_mbid)
-    results = get_data(url=url,
+    results = get_data(method="Artist.getImages",
+                       params={"mbid": artist_mbid},
                        cache_days=5)
     return handle_events(results)
 
 
 def get_track_shouts(artist_name, track_title):
-    url = 'method=Track.getShouts&artist=%s&track=%s' % (url_quote(artist_name), url_quote(track_title))
-    results = get_data(url=url)
+    params = {"artist": artist_name,
+              "track": track_title}
+    results = get_data(method="Track.getShouts", params=params)
     return handle_shouts(results)
 
 
 def get_event_shouts(event_id):
-    url = 'method=event.GetShouts&event=%s' % (event_id)
-    results = get_data(url=url)
+    results = get_data(method="event.GetShouts",
+                       params={"event": event_id})
     return handle_shouts(results)
 
 
 def get_venue_id(venue_name=""):
-    url = '&method=Venue.search&venue=%s' % (url_quote(venue_name))
-    results = get_data(url=url)
+    results = get_data(method="Venue.search",
+                       params={"venue": venue_name})
     if "results" in results:
         matches = results["results"]["matches"]
         if "venue" in matches and matches["venue"]:
@@ -203,45 +209,51 @@ def get_venue_id(venue_name=""):
 
 
 def get_artist_albums(artist_mbid):
-    url = 'method=Artist.getTopAlbums&mbid=%s' % (artist_mbid)
-    results = get_data(url=url)
+    params = {"mbid": artist_mbid}
+    results = get_data(method="Artist.getTopAlbums", params=params)
     return handle_albums(results)
 
 
 def get_similar_artists(artist_mbid):
-    url = 'method=Artist.getSimilar&mbid=%s&limit=400' % (artist_mbid)
-    results = get_data(url=url)
+    params = {"mbid": artist_mbid,
+              "limit": "400"}
+    results = get_data(method="Artist.getSimilar", params=params)
     if results is not None and "similarartists" in results:
         return handle_artists(results['similarartists'])
 
 
 def get_near_events(tag=False, festivals_only=False, lat="", lon="", location="", distance=""):
-    url = 'method=geo.getEvents&festivalsonly=%s&limit=40' % (int(festivals_only))
-    if tag:
-        url += '&tag=%s' % (url_quote(tag))
-    if lat and lon:
-        url += '&lat=%s&long=%s' % (lat, lon)  # &distance=60
-    if location:
-        url += '&location=%s' % (url_quote(location))
-    if distance:
-        url += '&distance=%s' % (distance)
-    results = get_data(url=url)
+    params = {"festivalsonly": int(festivals_only),
+              "limit": "40",
+              "tag": tag,
+              "lat": lat,
+              "long": lon,
+              "location": location,
+              "distance": distance}
+    results = get_data(method="geo.getEvents", params=params)
     return handle_events(results)
 
 
-def get_venue_events(venueid=""):
-    url = 'method=Venue.getEvents&venue=%s' % (venueid)
-    results = get_data(url=url)
+def get_venue_events(venue_id=""):
+    params = {"venue": venue_id}
+    results = get_data(method="Venue.getEvents", params=params)
     return handle_events(results)
 
 
-def get_track_info(artist="", track=""):
-    url = 'method=track.getInfo&artist=%s&track=%s' % (url_quote(artist), url_quote(track))
-    results = get_data(url=url)
+def get_track_info(artist_name="", track=""):
+    params = {"artist": artist_name,
+              "track": track_title}
+    results = get_data(method="track.getInfo", params=params)
     return handle_tracks(results)
 
 
-def get_data(url, cache_days=0.5):
-    return get_JSON_response(url=BASE_URL + url,
+def get_data(method, params={}, cache_days=0.5):
+    params["method"] = method
+    params = {k: v for k, v in params.items() if v}
+    for k, v in params.iteritems():
+        params[k] = unicode(v).encode('utf-8')
+    url = "{base_url}{params}".format(base_url=BASE_URL,
+                                      params=urllib.urlencode(params))
+    return get_JSON_response(url=url,
                              cache_days=cache_days,
                              folder="LastFM")

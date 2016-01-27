@@ -233,6 +233,31 @@ def start_info_actions(infos, params):
         elif info == 'artistevents':
             if params.get("artist_mbid"):
                 data = LastFM.get_events(params.get("artist_mbid")), "ArtistEvents"
+        elif info == 'nearevents':
+            eventinfo = LastFM.get_near_events(tag=params.get("tag", ""),
+                                               festivals_only=params.get("festivalsonly", ""),
+                                               lat=params.get("lat", ""),
+                                               lon=params.get("lon", ""),
+                                               location=params.get("location", ""),
+                                               distance=params.get("distance", ""))
+            data = eventinfo, "NearEvents"
+        elif info == 'trackinfo':
+            HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
+            if params["artistname"] and params["trackname"]:
+                track_info = LastFM.get_track_info(artist_name=params["artistname"],
+                                                   track=params["trackname"])
+                HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
+        elif info == 'venueevents':
+            if params["location"]:
+                params["id"] = LastFM.get_venue_id(params["location"])
+            if params.get("id", ""):
+                data = LastFM.get_venue_events(params.get("id", "")), "VenueEvents"
+            else:
+                notify("Error", "Could not find venue")
+        elif info == 'topartistsnearevents':
+            artists = local_db.get_artists()
+            import BandsInTown
+            data = BandsInTown.get_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'youtubesearch':
             HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
             if params.get("id"):
@@ -248,31 +273,6 @@ def start_info_actions(infos, params):
             if user_name:
                 playlists = YouTube.get_user_playlists(user_name)
                 data = YouTube.get_playlist_videos(playlists["uploads"]), "YoutubeUserSearch"
-        elif info == 'nearevents':
-            eventinfo = LastFM.get_near_events(tag=params.get("tag", ""),
-                                               festivals_only=params.get("festivalsonly", ""),
-                                               lat=params.get("lat", ""),
-                                               lon=params.get("lon", ""),
-                                               location=params.get("location", ""),
-                                               distance=params.get("distance", ""))
-            data = eventinfo, "NearEvents"
-        elif info == 'trackinfo':
-            HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
-            if params["artistname"] and params["trackname"]:
-                track_info = LastFM.get_track_info(artist=params["artistname"],
-                                                   track=params["trackname"])
-                HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
-        elif info == 'venueevents':
-            if params["location"]:
-                params["id"] = LastFM.get_venue_id(params["location"])
-            if params.get("id", ""):
-                data = LastFM.get_venue_events(params.get("id", "")), "VenueEvents"
-            else:
-                notify("Error", "Could not find venue")
-        elif info == 'topartistsnearevents':
-            artists = local_db.get_artists()
-            import BandsInTown
-            data = BandsInTown.get_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'favourites':
             if params.get("id", ""):
                 favs = get_favs_by_type(params.get("id", ""))
