@@ -150,7 +150,7 @@ def get_tshow_info(imdb_id):
 def get_trending_movies():
     results = get_data(url='movies/trending',
                        params={"extended": "full,images"})
-    if results:
+    if not results:
         return []
     return handle_movies(results)
 
