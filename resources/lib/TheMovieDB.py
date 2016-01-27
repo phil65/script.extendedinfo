@@ -305,25 +305,21 @@ def handle_movies(results=[], local_first=True, sortkey="year"):
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     movies = []
+    if SETTING("infodialog_onclick") != "false":
+        path = PLUGIN_BASE + 'extendedinfo&&id=%s'
+    else:
+        path = PLUGIN_BASE + "playtrailer&&id=%s"
     for movie in results:
-        if "genre_ids" in movie:
-            genres = [labels[ids.index(genre_id)] for genre_id in movie["genre_ids"] if genre_id in ids]
-            genres = " / ".join(genres)
-        else:
-            genres = ""
+        genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
         tmdb_id = str(fetch(movie, 'id'))
         artwork = get_image_urls(poster=movie.get("poster_path"),
                                  fanart=movie.get("backdrop_path"))
         trailer = PLUGIN_BASE + "playtrailer&&id=" + tmdb_id
-        if SETTING("infodialog_onclick") != "false":
-            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % tmdb_id
-        else:
-            path = trailer
         listitem = {'title': fetch(movie, 'title'),
                     'Label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
                     'id': tmdb_id,
-                    'path': path,
+                    'path': path % tmdb_id,
                     'media_type': "movie",
                     'country': fetch(movie, 'original_language'),
                     'plot': fetch(movie, 'overview'),
@@ -337,7 +333,7 @@ def handle_movies(results=[], local_first=True, sortkey="year"):
                     'Votes': fetch(movie, 'vote_count'),
                     'User_Rating': fetch(movie, 'rating'),
                     'year': get_year(fetch(movie, 'release_date')),
-                    'genre': genres,
+                    'genre': " / ".join(genres),
                     'time_comparer': fetch(movie, 'release_date').replace("-", ""),
                     'Premiered': fetch(movie, 'release_date')}
         listitem.update(artwork)

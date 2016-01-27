@@ -63,11 +63,11 @@ def get_calendar_shows(content):
 
 def handle_movies(results):
     movies = []
+    if SETTING("infodialog_onclick") != "false":
+        path = PLUGIN_BASE + 'extendedinfo&&id=%s'
+    else:
+        path = PLUGIN_BASE + "playtrailer&&id=%s"
     for movie in results:
-        if SETTING("infodialog_onclick") != "false":
-            path = PLUGIN_BASE + 'extendedinfo&&id=%s' % fetch(movie["movie"]["ids"], 'tmdb')
-        else:
-            path = PLUGIN_BASE + "playtrailer&&id=%s" % fetch(movie["movie"]["ids"], 'tmdb')
         movie = {'title': movie["movie"]["title"],
                  'Runtime': movie["movie"]["runtime"],
                  'duration': movie["movie"]["runtime"],
@@ -78,7 +78,7 @@ def handle_movies(results):
                  'year': movie["movie"]["year"],
                  'id': movie["movie"]["ids"]["tmdb"],
                  'imdb_id': movie["movie"]["ids"]["imdb"],
-                 'path': path,
+                 'path': path % fetch(movie["movie"]["ids"], 'tmdb'),
                  'mpaa': movie["movie"]["certification"],
                  'Plot': movie["movie"]["overview"],
                  'Premiered': movie["movie"]["released"],
