@@ -12,7 +12,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 def get_movies(movie_type):
     movies = []
-    url = movie_type + '.json?apikey=%s' % (RT_KEY)
+    url = '%s.json?apikey=%s' % (movie_type, RT_KEY)
     results = get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if not results or "movies" not in results:
         return []

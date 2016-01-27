@@ -209,8 +209,8 @@ def get_venue_id(venue_name=""):
 
 
 def get_artist_albums(artist_mbid):
-    params = {"mbid": artist_mbid}
-    results = get_data(method="Artist.getTopAlbums", params=params)
+    results = get_data(method="Artist.getTopAlbums",
+                       params={"mbid": artist_mbid})
     return handle_albums(results)
 
 
@@ -235,8 +235,8 @@ def get_near_events(tag=False, festivals_only=False, lat="", lon="", location=""
 
 
 def get_venue_events(venue_id=""):
-    params = {"venue": venue_id}
-    results = get_data(method="Venue.getEvents", params=params)
+    results = get_data(method="Venue.getEvents",
+                       params={"venue": venue_id})
     return handle_events(results)
 
 

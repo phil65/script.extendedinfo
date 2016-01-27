@@ -123,7 +123,7 @@ def handle_channels(results):
     return channels
 
 
-def get_data(method, params, cache_days=0.5):
+def get_data(method, params={}, cache_days=0.5):
     params["key"] = YT_KEY
     params = {k: v for k, v in params.items() if v}
     for k, v in params.iteritems():
