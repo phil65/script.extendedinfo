@@ -488,7 +488,6 @@ def handle_people(results):
                   'credit_id': str(fetch(item, 'credit_id')),
                   'path': PLUGIN_BASE + "extendedactorinfo&&id=" + str(item['id']),
                   'deathday': fetch(item, 'deathday'),
-                  'place_of_birth': fetch(item, 'place_of_birth'),
                   'placeofbirth': fetch(item, 'place_of_birth'),
                   'homepage': fetch(item, 'homepage')}
         person.update(artwork)
@@ -503,20 +502,9 @@ def handle_images(results):
         image = {'aspectratio': item['aspect_ratio'],
                  'vote_average': fetch(item, "vote_average"),
                  'iso_639_1': fetch(item, "iso_639_1")}
-        image.update(artwork)
-        images.append(image)
-    return images
-
-
-def handle_tagged_images(results):
-    images = []
-    for item in results:
-        artwork = get_image_urls(poster=item.get("file_path"))
-        image = {'aspectratio': item['aspect_ratio'],
-                 'vote_average': fetch(item, "vote_average"),
-                 'iso_639_1': fetch(item, "iso_639_1"),
-                 'title': fetch(item["media"], "title"),
-                 'mediaposter': base_url + poster_size + fetch(item["media"], "poster_path")}
+        if item.get("media"):
+            image['title'] = fetch(item["media"], "title")
+            image['mediaposter'] = base_url + poster_size + fetch(item["media"], "poster_path")
         image.update(artwork)
         images.append(image)
     return images
@@ -977,7 +965,7 @@ def extended_actor_info(actor_id):
                         cache_days=1)
     tagged_images = []
     if "tagged_images" in response:
-        tagged_images = handle_tagged_images(response["tagged_images"]["results"])
+        tagged_images = handle_images(response["tagged_images"]["results"])
     listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
                  "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
                  "movie_crew_roles": handle_movies(response["movie_credits"]["crew"]),
