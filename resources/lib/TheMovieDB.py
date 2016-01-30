@@ -108,9 +108,8 @@ class LoginProvider(object):
         return None
 
     def start_new_session(self, cache_days=0):
-        params = {"request_token": self.request_token}
         response = get_data(url="authentication/session/new",
-                            params=params,
+                            params={"request_token": self.request_token},
                             cache_days=cache_days)
         if response and "success" in response:
             self.session_id = str(response["session_id"])
@@ -153,40 +152,56 @@ def set_rating(media_type, media_id, rating):
     media_id: tmdb_id / episode ident array
     rating: ratung value (0.5-10.0, 0.5 steps)
     '''
+    params = {}
     if Login.check_login():
-        session_id = "session_id=" + Login.get_session_id()
+        params["session_id"] = Login.get_session_id()
     else:
-        session_id = "guest_session_id=" + Login.get_guest_session_id()
-    values = '{"value": %.1f}' % rating
+        params["guest_session_id"] = Login.get_guest_session_id()
     if media_type == "episode":
         if not media_id[1]:
             media_id[1] = "0"
-        url = URL_BASE + "tv/%s/season/%s/episode/%s/rating?api_key=%s&%s" % (media_id[0], media_id[1], media_id[2], TMDB_KEY, session_id)
+        url = "tv/%s/season/%s/episode/%s/rating" % (media_id[0], media_id[1], media_id[2])
     else:
-        url = URL_BASE + "%s/%s/rating?api_key=%s&%s" % (media_type, media_id, TMDB_KEY, session_id)
+        url = "%s/%s/rating" % (media_type, media_id)
     # request.get_method = lambda: 'DELETE'
+    results = send_request(url=url,
+                           params=params,
+                           values='{"value": %.1f}' % rating)
+    if results:
+        notify(ADDON_NAME, results["status_message"])
+
+
+def send_request(url, params, values, delete=False):
+    params["api_key"] = TMDB_KEY
+    for k, v in params.iteritems():
+        params[k] = unicode(v).encode('utf-8')
+    url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
+    log(url)
     request = Request(url=url,
                       data=values,
                       headers=HEADERS)
-    response = urlopen(request, timeout=3).read()
-    results = json.loads(response)
-    notify(ADDON_NAME, results["status_message"])
+    if delete:
+        request.get_method = lambda: 'DELETE'
+    try:
+        response = urlopen(request, timeout=3).read()
+    except urllib2.HTTPError as err:
+        if err.code == 401:
+            notify("Error", "Not authorized.")
+        return None
+    return json.loads(response)
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
-    session_id = Login.get_session_id()
-    account_id = Login.get_account_id()
+    params = {"session_id": Login.get_session_id()}
     values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, media_id, status)
-    if not session_id:
+    if not params["session_id"]:
         notify("Could not get session id")
         return None
-    url = URL_BASE + "account/%s/favorite?session_id=%s&api_key=%s" % (account_id, session_id, TMDB_KEY)
-    request = Request(url=url,
-                      data=values,
-                      headers=HEADERS)
-    response = urlopen(request, timeout=3).read()
-    results = json.loads(response)
-    notify(ADDON_NAME, results["status_message"])
+    results = send_request(url="account/%s/favorite" % Login.get_account_id(),
+                           params=params,
+                           values=values)
+    if results:
+        notify(ADDON_NAME, results["status_message"])
 
 
 def create_list(list_name):
@@ -194,29 +209,22 @@ def create_list(list_name):
     creates new list on TMDB with name *list_name
     returns newly created list id
     '''
-    session_id = Login.get_session_id()
-    url = URL_BASE + "list?api_key=%s&session_id=%s" % (TMDB_KEY, session_id)
     values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
-    request = Request(url=url,
-                      data=json.dumps(values),
-                      headers=HEADERS)
-    response = urlopen(request, timeout=3).read()
-    results = json.loads(response)
-    notify(ADDON_NAME, results["status_message"])
+    results = send_request(url="list",
+                           params={"session_id": Login.get_session_id()},
+                           values=values)
+    if results:
+        notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
 
 def remove_list(list_id):
-    session_id = Login.get_session_id()
-    url = URL_BASE + "list/%s?api_key=%s&session_id=%s" % (list_id, TMDB_KEY, session_id)
-    values = {'media_id': list_id}
-    request = Request(url=url,
-                      data=json.dumps(values),
-                      headers=HEADERS)
-    request.get_method = lambda: 'DELETE'
-    response = urlopen(request, timeout=3).read()
-    results = json.loads(response)
-    notify(ADDON_NAME, results["status_message"])
+    results = send_request(url="list/%s" % list_id,
+                           params={"session_id": Login.get_session_id()},
+                           values={'media_id': list_id},
+                           delete=True)
+    if results:
+        notify(ADDON_NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -225,19 +233,11 @@ def change_list_status(list_id, movie_id, status):
         method = "add_item"
     else:
         method = "remove_item"
-    session_id = Login.get_session_id()
-    url = URL_BASE + "list/%s/%s?api_key=%s&session_id=%s" % (list_id, method, TMDB_KEY, session_id)
-    values = {'media_id': movie_id}
-    request = Request(url,
-                      data=json.dumps(values),
-                      headers=HEADERS)
-    try:
-        response = urlopen(request, timeout=3).read()
-    except urllib2.HTTPError as err:
-        if err.code == 401:
-            notify("Error", "Not authorized to modify list")
-    results = json.loads(response)
-    notify(ADDON_NAME, results["status_message"])
+    results = send_request(url="list/%s/%s" % (list_id, method),
+                           params={"session_id": Login.get_session_id()},
+                           values={'media_id': movie_id})
+    if results:
+        notify(ADDON_NAME, results["status_message"])
 
 
 def get_account_lists(cache_time=0):

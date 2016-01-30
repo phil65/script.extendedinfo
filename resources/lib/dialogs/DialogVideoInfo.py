@@ -166,7 +166,7 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                mode="list",
                                list_id=self.listitem.getProperty("id"),
-                               filter_label=self.listitem.getLabel())
+                               filter_label=self.listitem.getLabel().decode("utf-8"))
 
         @ch.click(6002)
         def show_list_dialog(self):

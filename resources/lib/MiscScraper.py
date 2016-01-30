@@ -64,10 +64,9 @@ def get_cyanide_images():
 
 def get_babe_images(single=False):
     now = datetime.datetime.now()
+    filename = "babe%ix%ix%i" % (now.month, now.day, now.year)
     if single:
-        filename = "babe%ix%ix%i" % (now.month, now.day, now.year)
-    else:
-        filename = "babes%ix%ix%i" % (now.month, now.day, now.year)
+        filename= "single" + filename
     path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, "Babes", filename + ".txt"))
     if xbmcvfs.exists(path):
         return read_from_file(path)

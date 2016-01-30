@@ -6,8 +6,8 @@
 import xbmc
 import xbmcgui
 from ..Utils import *
-from ..ImageTools import *
-from ..TheMovieDB import *
+from .. import ImageTools
+from .. import TheMovieDB
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
@@ -23,20 +23,20 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
             self.type = "TVShow"
-            data = extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
-                                        dbid=self.dbid)
+            data = TheMovieDB.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
+                                                   dbid=self.dbid)
             if not data:
                 return None
             self.info, self.data, self.account_states = data
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
-            self.info['ImageFilter'], self.info['ImageColor'] = filter_image(input_img=self.info.get("poster", ""),
-                                                                             radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("poster", ""),
+                                                                                        radius=25)
             self.listitems = [(150, self.data["similar"]),
                               (250, self.data["seasons"]),
                               (1450, self.data["networks"]),
                               (550, self.data["studios"]),
-                              (650, merge_with_cert_desc(self.data["certifications"], "tv")),
+                              (650, TheMovieDB.merge_with_cert_desc(self.data["certifications"], "tv")),
                               (750, self.data["crew"]),
                               (850, self.data["genres"]),
                               (950, self.data["keywords"]),
@@ -150,8 +150,8 @@ def get_window(window_type):
 
         @ch.click(6001)
         def set_rating(self):
-            if set_rating_prompt(media_type="tv",
-                                 media_id=self.info["id"]):
+            if TheMovieDB.set_rating_prompt(media_type="tv",
+                                            media_id=self.info["id"]):
                 self.update_states()
 
         @ch.click(6002)
@@ -169,9 +169,9 @@ def get_window(window_type):
 
         @ch.click(6003)
         def toggle_fav_status(self):
-            change_fav_status(media_id=self.info["id"],
-                              media_type="tv",
-                              status=str(not bool(self.account_states["favorite"])).lower())
+            TheMovieDB.change_fav_status(media_id=self.info["id"],
+                                         media_type="tv",
+                                         status=str(not bool(self.account_states["favorite"])).lower())
             self.update_states()
 
         @ch.click(6006)
@@ -193,9 +193,9 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = extended_tvshow_info(tvshow_id=self.info["id"],
-                                                              cache_time=0,
-                                                              dbid=self.dbid)
+            _, __, self.account_states = TheMovieDB.extended_tvshow_info(tvshow_id=self.info["id"],
+                                                                         cache_time=0,
+                                                                         dbid=self.dbid)
             super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo
