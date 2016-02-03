@@ -223,7 +223,7 @@ def get_similar_artists(artist_mbid):
 
 
 def get_near_events(tag=False, festivals_only=False, lat="", lon="", location="", distance=""):
-    params = {"festivalsonly": int(festivals_only),
+    params = {"festivalsonly": int(bool(festivals_only)),
               "limit": "40",
               "tag": tag,
               "lat": lat,
