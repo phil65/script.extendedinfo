@@ -6,7 +6,7 @@
 from Utils import *
 from local_db import local_db
 import re
-from urllib2 import Request, urlopen
+import urllib2
 from functools32 import lru_cache
 from WindowManager import wm
 
@@ -177,13 +177,13 @@ def send_request(url, params, values, delete=False):
         params[k] = unicode(v).encode('utf-8')
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     log(url)
-    request = Request(url=url,
-                      data=values,
-                      headers=HEADERS)
+    request = urllib2.Request(url=url,
+                              data=values,
+                              headers=HEADERS)
     if delete:
         request.get_method = lambda: 'DELETE'
     try:
-        response = urlopen(request, timeout=3).read()
+        response = urllib2.urlopen(request, timeout=3).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
             notify("Error", "Not authorized.")
