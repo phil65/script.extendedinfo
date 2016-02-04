@@ -510,20 +510,7 @@ def start_info_actions(infos, params):
         elif info == "widgetdialog":
             resolve_url(params.get("handle"))
             widget_selectdialog()
-        listitems, prefix = data
-        if params.get("handle"):
-            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_TITLE)
-            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-            xbmcplugin.addSortMethod(params.get("handle"), xbmcplugin.SORT_METHOD_DURATION)
-            if info.endswith("shows"):
-                xbmcplugin.setContent(params.get("handle"), 'tvshows')
-            else:
-                xbmcplugin.setContent(params.get("handle"), 'movies')
-        pass_list_to_skin(name=prefix,
-                          data=listitems,
-                          prefix=params.get("prefix", ""),
-                          handle=params.get("handle", ""),
-                          limit=params.get("limit", 20))
+        return data
 
 
 def resolve_url(handle):

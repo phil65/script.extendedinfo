@@ -16,7 +16,11 @@ class Main:
         xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
         self._parse_argv()
         if self.infos:
-            start_info_actions(self.infos, self.params)
+            listitems, prefix = start_info_actions(self.infos, self.params)
+            pass_list_to_skin(name=prefix,
+                              data=listitems,
+                              prefix=self.params.get("prefix", ""),
+                              limit=self.params.get("limit", 20))
         else:
             HOME.setProperty('infodialogs.active', "true")
             from resources.lib.WindowManager import wm
@@ -25,7 +29,6 @@ class Main:
         xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
 
     def _parse_argv(self):
-        self.handle = None
         self.infos = []
         self.params = {"handle": None,
                        "control": None}
