@@ -249,7 +249,8 @@ def get_track_info(artist_name="", track=""):
 
 def get_data(method, params={}, cache_days=0.5):
     params["method"] = method
-    params = {k: v for k, v in params.items() if v}
+    # params = {k: v for k, v in params.items() if v}
+    params = dict((key, value) for (key, value) in params.items() if value)
     for k, v in params.iteritems():
         params[k] = unicode(v).encode('utf-8')
     url = "{base_url}{params}".format(base_url=BASE_URL,

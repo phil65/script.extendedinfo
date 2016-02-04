@@ -125,7 +125,8 @@ def handle_channels(results):
 
 def get_data(method, params={}, cache_days=0.5):
     params["key"] = YT_KEY
-    params = {k: v for k, v in params.items() if v}
+    # params = {k: v for k, v in params.items() if v}
+    params = dict((key, value) for (key, value) in params.items() if value)
     for k, v in params.iteritems():
         params[k] = unicode(v).encode('utf-8')
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
