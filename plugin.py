@@ -75,7 +75,7 @@ class Main:
                 xbmcplugin.addDirectoryItem(handle=self.handle, url=url,
                                             listitem=li, isFolder=True)
             xbmcplugin.endOfDirectory(self.handle)
-        xbmc.executebuiltin('ClearProperty(extendedinfo_running,home)')
+        HOME.clearProperty("extendedinfo_running")
 
     def _parse_argv(self):
         args = sys.argv[2][1:]
