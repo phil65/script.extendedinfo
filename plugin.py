@@ -22,7 +22,7 @@ class Main:
             xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_TITLE)
             xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_VIDEO_YEAR)
             xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_DURATION)
-            if info.endswith("shows"):
+            if self.infos[0].endswith("shows"):
                 xbmcplugin.setContent(self.params.get("handle"), 'tvshows')
             else:
                 xbmcplugin.setContent(self.params.get("handle"), 'movies')
