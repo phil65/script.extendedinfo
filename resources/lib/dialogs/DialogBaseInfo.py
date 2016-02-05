@@ -22,6 +22,7 @@ class DialogBaseInfo(object):
         self.logged_in = tmdb.Login.check_login()
         self.dbid = kwargs.get('dbid')
         self.bouncing = False
+        self.last_focus = None
         self.data = None
         self.yt_listitems = []
         self.info = {}

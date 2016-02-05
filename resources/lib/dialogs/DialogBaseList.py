@@ -129,11 +129,7 @@ class DialogBaseList(object):
             filters.append("[COLOR FFAAAAAA]%s:[/COLOR] %s" % (item["typelabel"], filter_label))
         self.filter_label = "  -  ".join(filters)
 
-    def update_content(self, add=False, force_update=False):
-        if add:
-            self.old_items = self.listitems
-        else:
-            self.old_items = []
+    def update_content(self, force_update=False):
         data = self.fetch_data(force=force_update)
         if not data:
             return None
@@ -142,7 +138,7 @@ class DialogBaseList(object):
         self.total_items = data.get("total_results", "")
         self.next_page_token = data.get("next_page_token", "")
         self.prev_page_token = data.get("prev_page_token", "")
-        self.listitems = self.old_items + create_listitems(self.listitems)
+        self.listitems = create_listitems(self.listitems)
 
     def update_ui(self):
         if not self.listitems and self.getFocusId() == C_LIST_MAIN:
