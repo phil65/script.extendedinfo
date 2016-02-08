@@ -7,7 +7,7 @@ import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 from Utils import *
-from local_db import local_db
+from LocalDB import local_db
 import YouTube
 import Trakt
 import RottenTomatoes

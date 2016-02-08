@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from local_db import local_db
+from LocalDB import local_db
 import re
 import urllib2
 from functools32 import lru_cache

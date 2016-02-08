@@ -11,7 +11,7 @@ import xbmcvfs
 import os
 
 from dialogs import BaseClasses
-from local_db import local_db
+from LocalDB import local_db
 
 import TheMovieDB
 

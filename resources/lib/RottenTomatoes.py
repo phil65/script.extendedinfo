@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
-from local_db import local_db
+from LocalDB import local_db
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"

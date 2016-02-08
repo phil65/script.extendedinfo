@@ -5,7 +5,7 @@
 
 import xbmc
 from Utils import *
-from local_db import local_db
+from LocalDB import local_db
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
