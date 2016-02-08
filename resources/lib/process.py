@@ -239,11 +239,11 @@ def start_info_actions(infos, params):
                                                distance=params.get("distance", ""))
             data = eventinfo, "NearEvents"
         elif info == 'trackinfo':
-            HOME.setProperty('%sSummary' % params.get("prefix", ""), "")  # set properties
+            HOME.setProperty('%sSummary' % params.get("prefix", ""), "")
             if params["artistname"] and params["trackname"]:
                 track_info = LastFM.get_track_info(artist_name=params["artistname"],
                                                    track=params["trackname"])
-                HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])  # set properties
+                HOME.setProperty('%sSummary' % params.get("prefix", ""), track_info["summary"])
         elif info == 'venueevents':
             if params["location"]:
                 params["id"] = LastFM.get_venue_id(params["location"])
@@ -256,7 +256,7 @@ def start_info_actions(infos, params):
             import BandsInTown
             data = BandsInTown.get_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'youtubesearch':
-            HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))  # set properties
+            HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
             if params.get("id"):
                 listitems = YouTube.search(search_str=params.get("id", ""),
                                            hd=params.get("hd", ""),
