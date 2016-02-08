@@ -12,7 +12,7 @@ import YouTube
 import Trakt
 import RottenTomatoes
 import KodiJson
-import WindowManager.wm as wm
+from WindowManager import wm
 import VideoPlayer
 import MiscScraper
 
