@@ -7,13 +7,14 @@ import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 from Utils import *
-from LocalDB import local_db
+import LocalDB
 import YouTube
 import Trakt
 import RottenTomatoes
 import KodiJson
-from WindowManager import wm
-from VideoPlayer import PLAYER
+import WindowManager.wm as wm
+import VideoPlayer
+import MiscScraper
 
 
 def start_info_actions(infos, params):
@@ -28,17 +29,13 @@ def start_info_actions(infos, params):
         data = [], ""
         #  Images
         if info == 'xkcd':
-            from MiscScraper import get_xkcd_images
-            data = get_xkcd_images(), "XKCD"
+            data = MiscScraper.get_xkcd_images(), "XKCD"
         elif info == 'cyanide':
-            from MiscScraper import get_cyanide_images
-            data = get_cyanide_images(), "CyanideHappiness"
+            data = MiscScraper.get_cyanide_images(), "CyanideHappiness"
         elif info == 'dailybabes':
-            from MiscScraper import get_babe_images
-            data = get_babe_images(), "DailyBabes"
+            data = MiscScraper.get_babe_images(), "DailyBabes"
         elif info == 'dailybabe':
-            from MiscScraper import get_babe_images
-            data = get_babe_images(single=True), "DailyBabe"
+            data = MiscScraper.get_babe_images(single=True), "DailyBabe"
         # Audio
         elif info == 'discography':
             discography = AudioDB.get_artist_discography(params["artistname"])
@@ -65,12 +62,12 @@ def start_info_actions(infos, params):
         elif info == 'hypedartists':
             data = LastFM.get_hyped_artists(), "HypedArtists"
         elif info == 'latestdbmovies':
-            data = local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10)), "LatestMovies"
+            data = LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10)), "LatestMovies"
         elif info == 'randomdbmovies':
-            data = local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10)), "RandomMovies"
+            data = LocalDB.local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10)), "RandomMovies"
         elif info == 'inprogressdbmovies':
             method = '"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}'
-            data = local_db.get_movies(method, params.get("limit", 10)), "RecommendedMovies"
+            data = LocalDB.local_db.get_movies(method, params.get("limit", 10)), "RecommendedMovies"
     #  RottenTomatoesMovies
         elif info == 'intheaters':
             data = RottenTomatoes.get_movies("movies/in_theaters"), "InTheatersMovies"
@@ -138,7 +135,7 @@ def start_info_actions(infos, params):
             if tmdb_id:
                 tvshow_id = tmdb_id
             elif dbid and int(dbid) > 0:
-                tvdb_id = local_db.get_imdb_id("tvshow", dbid)
+                tvdb_id = LocalDB.local_db.get_imdb_id("tvshow", dbid)
                 if tvdb_id:
                     tvshow_id = tmdb.get_show_tmdb_id(tvdb_id)
             elif tvdb_id:
@@ -160,7 +157,7 @@ def start_info_actions(infos, params):
                     data = tmdb.get_company_data(company_data[0]["id"]), "StudioInfo"
         elif info == 'set':
             if params.get("dbid") and "show" not in str(params.get("type", "")):
-                name = local_db.get_set_name(params["dbid"])
+                name = LocalDB.local_db.get_set_name(params["dbid"])
                 if name:
                     params["setid"] = tmdb.get_set_id(name)
             if params.get("setid"):
@@ -204,7 +201,7 @@ def start_info_actions(infos, params):
         elif info == 'similarmoviestrakt':
             if params.get("id", False) or params.get("dbid"):
                 if params.get("dbid"):
-                    movie_id = local_db.get_imdb_id("movie", params["dbid"])
+                    movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
                 else:
                     movie_id = params.get("id", "")
                 data = Trakt.get_similar("movie", movie_id), "SimilarMovies"
@@ -212,10 +209,10 @@ def start_info_actions(infos, params):
             if (params.get("id", "") or params["dbid"]):
                 if params.get("dbid"):
                     if params.get("type") == "episode":
-                        tvshow_id = local_db.get_tvshow_id_by_episode(params["dbid"])
+                        tvshow_id = LocalDB.local_db.get_tvshow_id_by_episode(params["dbid"])
                     else:
-                        tvshow_id = local_db.get_imdb_id(media_type="tvshow",
-                                                         dbid=params["dbid"])
+                        tvshow_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
+                                                                 dbid=params["dbid"])
                 else:
                     tvshow_id = params.get("id", "")
                 data = Trakt.get_similar("show", tvshow_id), "SimilarTVShows"
@@ -229,7 +226,7 @@ def start_info_actions(infos, params):
             data = Trakt.get_trending_movies(), "TrendingMovies"
         elif info == 'similarartistsinlibrary':
             if params.get("artist_mbid"):
-                data = local_db.get_similar_artists(params.get("artist_mbid")), "SimilarArtists"
+                data = LocalDB.local_db.get_similar_artists(params.get("artist_mbid")), "SimilarArtists"
         elif info == 'artistevents':
             if params.get("artist_mbid"):
                 data = LastFM.get_events(params.get("artist_mbid")), "ArtistEvents"
@@ -255,7 +252,7 @@ def start_info_actions(infos, params):
             else:
                 notify("Error", "Could not find venue")
         elif info == 'topartistsnearevents':
-            artists = local_db.get_artists()
+            artists = LocalDB.local_db.get_artists()
             import BandsInTown
             data = BandsInTown.get_near_events(artists[0:49]), "TopArtistsNearEvents"
         elif info == 'youtubesearch':
@@ -283,7 +280,7 @@ def start_info_actions(infos, params):
                     HOME.setProperty('favourite.1.name', favs[-1]["Label"])
             data = favs, "Favourites"
         elif info == 'similarlocal' and "dbid" in params:
-            data = local_db.get_similar_movies(params["dbid"]), "SimilarLocalMovies"
+            data = LocalDB.local_db.get_similar_movies(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
         elif info == 'autocomplete':
@@ -296,9 +293,9 @@ def start_info_actions(infos, params):
         # ACTIONS
         elif info == 't9input':
             resolve_url(params.get("handle"))
-            from T9Search import T9Search
-            dialog = T9Search(call=None,
-                              start_value="")
+            import T9Search
+            dialog = T9Search.T9Search(call=None,
+                                       start_value="")
             KodiJson.send_text(text=dialog.search_str)
         elif info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
             resolve_url(params.get("handle"))
@@ -425,8 +422,8 @@ def start_info_actions(infos, params):
                                                      dbid=params.get("dbid", ""),
                                                      name=params.get("name", ""))
                 elif media_type == "tv" and params["dbid"]:
-                    tvdb_id = local_db.get_imdb_id(media_type="tvshow",
-                                                   dbid=params["dbid"])
+                    tvdb_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
+                                                           dbid=params["dbid"])
                     tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
                 else:
                     return False
@@ -470,15 +467,15 @@ def start_info_actions(infos, params):
         elif info == "youtubevideo":
             resolve_url(params.get("handle"))
             xbmc.executebuiltin("Dialog.Close(all,true)")
-            PLAYER.play_youtube_video(params.get("id", ""))
+            VideoPlayer.PLAYER.play_youtube_video(params.get("id", ""))
         elif info == 'playtrailer':
             resolve_url(params.get("handle"))
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             if params.get("id", ""):
                 movie_id = params.get("id", "")
             elif int(params.get("dbid", -1)) > 0:
-                movie_id = local_db.get_imdb_id(media_type="movie",
-                                                dbid=params["dbid"])
+                movie_id = LocalDB.local_db.get_imdb_id(media_type="movie",
+                                                        dbid=params["dbid"])
             elif params.get("imdb_id", ""):
                 movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))
             else:
@@ -488,7 +485,7 @@ def start_info_actions(infos, params):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
                 xbmc.sleep(100)
                 if trailer:
-                    PLAYER.play_youtube_video(trailer)
+                    VideoPlayer.PLAYER.play_youtube_video(trailer)
                 elif params.get("title"):
                     wm.open_youtube_list(search_str=params.get("title", ""))
                 else:
