@@ -283,8 +283,6 @@ def start_info_actions(infos, params):
             data = LocalDB.local_db.get_similar_movies(params["dbid"]), "SimilarLocalMovies"
         elif info == 'iconpanel':
             data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
-        elif info == 'autocomplete':
-            data = get_autocomplete_items(params["id"]), "AutoComplete"
         elif info == 'weather':
             data = get_weather_images(), "WeatherImages"
         elif info == "sortletters":
