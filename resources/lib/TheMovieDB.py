@@ -184,7 +184,7 @@ def get_certification_list(media_type):
 
 def add_movie_to_list(movie_id):
     selection = xbmcgui.Dialog().select(heading=LANG(22080),
-                                        list=["Add movie to list"])
+                                        list=[LANG(32083)])
     if selection == 0:
         account_lists = get_account_lists()
         listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
