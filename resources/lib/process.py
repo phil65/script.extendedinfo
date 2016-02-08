@@ -477,7 +477,7 @@ def start_info_actions(infos, params):
                 movie_id = LocalDB.local_db.get_imdb_id(media_type="movie",
                                                         dbid=params["dbid"])
             elif params.get("imdb_id", ""):
-                movie_id = get_movie_tmdb_id(params.get("imdb_id", ""))
+                movie_id = tmdb.get_movie_tmdb_id(params.get("imdb_id", ""))
             else:
                 movie_id = ""
             if movie_id:
