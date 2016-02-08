@@ -446,17 +446,6 @@ def start_info_actions(infos, params):
             for builtin in params.get("id", "").split("$$"):
                 xbmc.executebuiltin(builtin)
             return None
-        elif info == 'selectautocomplete':
-            resolve_url(params.get("handle"))
-            try:
-                window_id = xbmcgui.getCurrentWindowDialogId()
-                window = xbmcgui.Window(window_id)
-            except:
-                return None
-            KodiJson.send_text(text=params.get("id"),
-                               close_keyboard=False)
-            # xbmc.executebuiltin("SendClick(103,32)")
-            window.setFocusId(300)
         elif info == 'bounce':
             resolve_url(params.get("handle"))
             HOME.setProperty(params.get("name", ""), "True")
