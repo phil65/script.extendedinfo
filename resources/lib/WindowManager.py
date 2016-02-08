@@ -13,6 +13,8 @@ import os
 from dialogs import BaseClasses
 from local_db import local_db
 
+import TheMovieDB
+
 ADDON = xbmcaddon.Addon()
 ADDON_ID = ADDON.getAddonInfo('id')
 ADDON_ICON = ADDON.getAddonInfo('icon')
@@ -81,11 +83,10 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogVideoInfo
-        from TheMovieDB import get_movie_tmdb_id
         if not movie_id:
-            movie_id = get_movie_tmdb_id(imdb_id=imdb_id,
-                                         dbid=dbid,
-                                         name=name)
+            movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
+                                                    dbid=dbid,
+                                                    name=name)
         movie_class = DialogVideoInfo.get_window(self.window_type)
         dialog = movie_class(INFO_DIALOG_FILE,
                              ADDON_PATH,
@@ -101,24 +102,23 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogTVShowInfo
-        from TheMovieDB import get_show_tmdb_id, search_media
         tmdb_id = None
         if tvshow_id:
             tmdb_id = tvshow_id
         elif tvdb_id:
-            tmdb_id = get_show_tmdb_id(tvdb_id)
+            tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
         elif imdb_id:
-            tmdb_id = get_show_tmdb_id(tvdb_id=imdb_id,
-                                       source="imdb_id")
+            tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=imdb_id,
+                                                  source="imdb_id")
         elif dbid and (int(dbid) > 0):
             tvdb_id = local_db.get_imdb_id(media_type="tvshow",
                                            dbid=dbid)
             if tvdb_id:
-                tmdb_id = get_show_tmdb_id(tvdb_id)
+                tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
         elif name:
-            tmdb_id = search_media(media_name=name,
-                                   year="",
-                                   media_type="tv")
+            tmdb_id = TheMovieDB.search_media(media_name=name,
+                                              year="",
+                                              media_type="tv")
         tvshow_class = DialogTVShowInfo.get_window(self.window_type)
         dialog = tvshow_class(INFO_DIALOG_FILE,
                               ADDON_PATH,
@@ -135,21 +135,20 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogSeasonInfo
-        from TheMovieDB import get_data
         if not tvshow_id:
             params = {"query": tvshow,
                       "language": SETTING("language")}
-            response = get_data(url="search/tv",
-                                params=params,
-                                cache_days=30)
+            response = TheMovieDB.get_data(url="search/tv",
+                                           params=params,
+                                           cache_days=30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
             else:
                 params = {"query": re.sub('\(.*?\)', '', tvshow),
                           "language": SETTING("language")}
-                response = get_data(url="search/tv",
-                                    params=params,
-                                    cache_days=30)
+                response = TheMovieDB.get_data(url="search/tv",
+                                               params=params,
+                                               cache_days=30)
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
@@ -169,14 +168,13 @@ class WindowManager(object):
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
-        from TheMovieDB import get_data
         ep_class = DialogEpisodeInfo.get_window(self.window_type)
         if not tvshow_id and tvshow:
             params = {"query": tvshow,
                       "language": SETTING("language")}
-            response = get_data(url="search/tv",
-                                params=params,
-                                cache_days=30)
+            response = TheMovieDB.get_data(url="search/tv",
+                                           params=params,
+                                           cache_days=30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
         dialog = ep_class(INFO_DIALOG_FILE,
@@ -192,7 +190,6 @@ class WindowManager(object):
         open actor info, deal with window stack
         """
         from dialogs import DialogActorInfo
-        from TheMovieDB import get_person_info
         if not actor_id:
             name = name.decode("utf-8").split(" " + LANG(20347) + " ")
             names = name[0].strip().split(" / ")
@@ -205,7 +202,7 @@ class WindowManager(object):
             else:
                 name = names[0]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            actor_info = get_person_info(name)
+            actor_info = TheMovieDB.get_person_info(name)
             if actor_info:
                 actor_id = actor_info["id"]
         else:
