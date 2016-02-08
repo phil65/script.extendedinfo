@@ -8,7 +8,8 @@ import xbmc
 import xbmcvfs
 import os
 from Utils import *
-import PIL
+import PIL.Image
+import PIL.ImageFilter
 
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 ADDON_DATA_PATH_IMAGES = os.path.join(ADDON_DATA_PATH, "images")
