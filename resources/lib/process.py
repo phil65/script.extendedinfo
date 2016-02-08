@@ -239,7 +239,7 @@ def start_info_actions(infos, params):
                                                distance=params.get("distance", ""))
             data = eventinfo, "NearEvents"
         elif info == 'trackinfo':
-            HOME.setProperty('%sSummary' % params.get("prefix", ""), "")
+            HOME.clearProperty('%sSummary' % params.get("prefix", ""))
             if params["artistname"] and params["trackname"]:
                 track_info = LastFM.get_track_info(artist_name=params["artistname"],
                                                    track=params["trackname"])

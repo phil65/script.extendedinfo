@@ -60,18 +60,13 @@ def handle_tracks(results):
     if not results.get('track'):
         return None
     for item in results['track']:
-        if 'strMusicVid' in item and item['strMusicVid']:
-            thumb = "http://i.ytimg.com/vi/" + extract_youtube_id(item.get('strMusicVid', '')) + "/0.jpg"
-            path = convert_youtube_url(item['strMusicVid'])
-        else:
-            thumb = ""
-            path = ""
+        youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
         track = {'Track': item['strTrack'],
                  'Artist': item['strArtist'],
                  'mbid': item['strMusicBrainzID'],
                  'Album': item['strAlbum'],
-                 'thumb': thumb,
-                 'path': path,
+                 'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
+                 'path': convert_youtube_url(item['strMusicVid']),
                  'Label': item['strTrack']}
         tracks.append(track)
     return tracks
@@ -82,10 +77,11 @@ def handle_musicvideos(results):
         return []
     mvids = []
     for item in results['mvids']:
+        youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
         mvid = {'Track': item['strTrack'],
                 'Description': item['strDescriptionEN'],
                 'id': item['idTrack'],
-                'thumb': "http://i.ytimg.com/vi/" + extract_youtube_id(item.get('strMusicVid', '')) + "/0.jpg",
+                'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
                 'path': convert_youtube_url(item['strMusicVid']),
                 'Label': item['strTrack']}
         mvids.append(mvid)
@@ -153,56 +149,62 @@ def extended_artist_info(results):
 def get_artist_discography(search_str):
     if not search_str:
         return []
-    url = 'searchalbum.php?s=%s' % (url_quote(search_str))
-    results = get_data(url)
+    params = {"s": search_str}
+    results = get_data("searchalbum", params)
     return handle_albums(results)
 
 
 def get_artist_details(search_str):
     if not search_str:
         return []
-    url = 'search.php?s=%s' % (url_quote(search_str))
-    results = get_data(url)
+    params = {"s": search_str}
+    results = get_data("search", params)
     return extended_artist_info(results)
 
 
 def get_most_loved_tracks(search_str="", mbid=""):
     if mbid:
-        url = 'track-top10-mb.php?s=%s' % (mbid)
+        url = 'track-top10-mb'
+        params = {"s": mbid}
     elif search_str:
-        url = 'track-top10.php?s=%s' % (url_quote(search_str))
+        url = 'track-top10'
+        params = {"s": search_str}
     else:
         return []
-    results = get_data(url)
+    results = get_data(url, params)
     return handle_tracks(results)
 
 
 def get_album_details(audiodb_id="", mbid=""):
     if audiodb_id:
-        url = 'album.php?m=%s' % (audiodb_id)
+        url = 'album'
+        params = {"m": audiodb_id}
     elif mbid:
-        url = 'album-mb.php?i=%s' % (mbid)
+        url = 'album-mb'
+        params = {"i": mbid}
     else:
         return []
-    results = get_data(url)
+    results = get_data(url, params)
     return handle_albums(results)[0]
 
 
 def get_musicvideos(audiodb_id):
     if not audiodb_id:
         return []
-    url = 'mvid.php?i=%s' % (audiodb_id)
-    results = get_data(url)
+    params = {"i": audiodb_id}
+    results = get_data("mvid", params)
     return handle_musicvideos(results)
 
 
 def get_track_details(audiodb_id):
     if not audiodb_id:
         return []
-    url = 'track.php?m=%s' % (audiodb_id)
-    results = get_data(url)
+    params = {"m": audiodb_id}
+    results = get_data("track", params)
     return handle_tracks(results)
 
 
-def get_data(url):
-    return get_JSON_response(url=BASE_URL + url, folder="TheAudioDB")
+def get_data(url, params):
+    url = "%s%s.php?%s" % (BASE_URL, url, urllib.urlencode(params))
+    return get_JSON_response(url=url,
+                             folder="TheAudioDB")
