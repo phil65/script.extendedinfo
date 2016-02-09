@@ -679,15 +679,15 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
             continue
         value = unicode(value)
         if precache:
-            if value.startswith("http") and (value.endswith(".jpg") or value.endswith(".png")):
+            if value.startswith("http") and value.endswith((".jpg", ".png")):
                 if value not in image_requests and value:
                     thread = GetFileThread(value)
                     threads += [thread]
                     thread.start()
                     image_requests.append(value)
-        window.setProperty('%s%s' % (prefix, str(key)), value)
+        window.setProperty('%s%s' % (prefix, key), value)
         if debug:
-            log('%s%s' % (prefix, str(key)) + value)
+            log('%s%s' % (prefix, key) + value)
     for x in threads:
         x.join()
 

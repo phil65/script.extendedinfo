@@ -15,21 +15,21 @@ class Main:
 
     def __init__(self):
         xbmc.log("version %s started" % ADDON_VERSION)
-        xbmc.executebuiltin('SetProperty(extendedinfo_running,True,home)')
+        HOME.setProperty("extendedinfo_running", "true")
         self._parse_argv()
-        if self.infos:
-            listitems, prefix = start_info_actions(self.infos, self.params)
-            xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_TITLE)
-            xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-            xbmcplugin.addSortMethod(self.params["handle"], xbmcplugin.SORT_METHOD_DURATION)
-            if self.infos[0].endswith("shows"):
-                xbmcplugin.setContent(self.params.get("handle"), 'tvshows')
+        for info in self.infos:
+            listitems = start_info_actions(info, self.params)
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_DURATION)
+            if info.endswith("shows"):
+                xbmcplugin.setContent(self.handle, 'tvshows')
             else:
-                xbmcplugin.setContent(self.params.get("handle"), 'movies')
-            pass_list_to_skin(name=prefix,
+                xbmcplugin.setContent(self.handle, 'movies')
+            pass_list_to_skin(name=info,
                               data=listitems,
                               prefix=self.params.get("prefix", ""),
-                              handle=self.params.get("handle", ""),
+                              handle=self.handle,
                               limit=self.params.get("limit", 20))
         else:
             movie = {"intheaters": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
