@@ -33,6 +33,8 @@ def get_calendar_shows(content):
     for day in results.iteritems():
         for episode in day[1]:
             show = {'title': episode["episode"]["title"],
+                    'season': episode["episode"]["season"],
+                    'episode': episode["episode"]["number"],
                     'TVShowTitle': episode["show"]["title"],
                     'tvdb_id': episode["show"]["ids"]["tvdb"],
                     'id': episode["show"]["ids"]["tvdb"],
