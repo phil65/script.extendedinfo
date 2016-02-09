@@ -694,7 +694,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[206]$INFO[Container(1000).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -828,7 +828,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32115]$INFO[Container(750).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1021,7 +1021,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32116]$INFO[Container(150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1228,7 +1228,7 @@
                             <width>1900</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$INFO[Window.Property(set.label)]$INFO[Container(250).NumItems, (,)]</label>
                         </control>
                         <control type="textbox">
@@ -1261,7 +1261,7 @@
                             <width>1900</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[33054]$INFO[Container(250).NumItems, (,)]</label>
                             <visible>IsEmpty(Window.Property(set.label))</visible>
                         </control>
@@ -1448,7 +1448,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32117]$INFO[Container(1150).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1581,7 +1581,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32118]$INFO[Container(350).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1711,7 +1711,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[20388]$INFO[Container(550).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1828,7 +1828,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32152]$INFO[Container(1450).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -1945,7 +1945,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32168]$INFO[Container(650).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -2069,7 +2069,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[135]$INFO[Container(850).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="850">
@@ -2153,7 +2153,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32167]$INFO[Container(1050).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="1050">
@@ -2236,7 +2236,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[21861]$INFO[Container(950).NumItems, (,)]</label>
                         </control>
                         <control type="panel" id="950">
@@ -2319,7 +2319,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32119]$INFO[Container(1250).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -2426,7 +2426,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$LOCALIZE[20445]$INFO[Container(1350).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -2533,7 +2533,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32026]$INFO[Container(450).NumItems, (,)]</label>
                         </control>
                         <control type="image">
@@ -2701,7 +2701,7 @@
                             <width>500</width>
                             <height>25</height>
                             <aligny>center</aligny>
-                            <font>font14</font>
+                            <font>font13</font>
                             <label>$ADDON[script.extendedinfo 32025] $INFO[Container(2000).NumItems,(,)]</label>
                         </control>
                         <control type="panel" id="2000">
