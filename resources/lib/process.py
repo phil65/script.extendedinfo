@@ -147,9 +147,9 @@ def start_info_actions(info, params):
         if tvshow_id:
             return tmdb.get_similar_tvshows(tvshow_id)
     elif info == 'studio':
-        if "id" in params and params["id"]:
+        if params.get("id"):
             return tmdb.get_company_data(params["id"])
-        elif "studio" in params and params["studio"]:
+        elif params.get("studio"):
             company_data = tmdb.search_company(params["studio"])
             if company_data:
                 return tmdb.get_company_data(company_data[0]["id"])
@@ -286,19 +286,17 @@ def start_info_actions(info, params):
         return get_sort_letters(params["path"], params.get("id", ""))
 
     # ACTIONS
-    elif info == 't9input':
-        resolve_url(params.get("handle"))
+    resolve_url(params.get("handle"))
+    if info == 't9input':
         import T9Search
         dialog = T9Search.T9Search(call=None,
                                    start_value="")
         KodiJson.send_text(text=dialog.search_str)
     elif info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
-        resolve_url(params.get("handle"))
         KodiJson.play_media(media_type=info.replace("play", ""),
                             dbid=params.get("dbid"),
                             resume=params.get("resume", "true"))
     elif info == "openinfodialog":
-        resolve_url(params.get("handle"))
         dbid = xbmc.getInfoLabel("ListItem.DBID")
         if not dbid:
             dbid = xbmc.getInfoLabel("ListItem.Property(dbid)")
@@ -327,7 +325,6 @@ def start_info_actions(info, params):
         else:
             notify("Error", "Could not find valid content type")
     elif info == "ratedialog":
-        resolve_url(params.get("handle"))
         if xbmc.getCondVisibility("Container.Content(movies)"):
             params = {"dbid": xbmc.getInfoLabel("ListItem.DBID"),
                       "id": xbmc.getInfoLabel("ListItem.Property(id)"),
@@ -344,10 +341,8 @@ def start_info_actions(info, params):
                       "type": "episode"}
             start_info_actions("ratemedia", params)
     elif info == 'youtubebrowser':
-        resolve_url(params.get("handle"))
         wm.open_youtube_list(search_str=params.get("id", ""))
     elif info == 'moviedbbrowser':
-        resolve_url(params.get("handle"))
         search_str = params.get("id", "")
         if not search_str and params.get("search"):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
@@ -359,7 +354,6 @@ def start_info_actions(info, params):
         wm.open_video_list(search_str=search_str,
                            mode="search")
     elif info == 'extendedinfo':
-        resolve_url(params.get("handle"))
         HOME.setProperty('infodialogs.active', "true")
         wm.open_movie_info(movie_id=params.get("id", ""),
                            dbid=params.get("dbid", None),
@@ -367,13 +361,11 @@ def start_info_actions(info, params):
                            name=params.get("name", ""))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedactorinfo':
-        resolve_url(params.get("handle"))
         HOME.setProperty('infodialogs.active', "true")
         wm.open_actor_info(actor_id=params.get("id", ""),
                            name=params.get("name", ""))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedtvinfo':
-        resolve_url(params.get("handle"))
         HOME.setProperty('infodialogs.active', "true")
         wm.open_tvshow_info(tvshow_id=params.get("id", ""),
                             tvdb_id=params.get("tvdb_id", ""),
@@ -382,14 +374,12 @@ def start_info_actions(info, params):
                             name=params.get("name", ""))
         HOME.clearProperty('infodialogs.active')
     elif info == 'seasoninfo':
-        resolve_url(params.get("handle"))
         HOME.setProperty('infodialogs.active', "true")
         wm.open_season_info(tvshow=params.get("tvshow"),
                             dbid=params.get("dbid"),
                             season=params.get("season"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedepisodeinfo':
-        resolve_url(params.get("handle"))
         HOME.setProperty('infodialogs.active', "true")
         wm.open_episode_info(tvshow=params.get("tvshow"),
                              tvshow_id=params.get("tvshow_id"),
@@ -398,16 +388,13 @@ def start_info_actions(info, params):
                              season=params.get("season"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'albuminfo':
-        resolve_url(params.get("handle"))
         if params.get("id"):
             album_details = AudioDB.get_album_details(params.get("id", ""))
             pass_dict_to_skin(album_details, params.get("prefix", ""))
     elif info == 'artistdetails':
-        resolve_url(params.get("handle"))
         artist_details = AudioDB.get_artist_details(params["artistname"])
         pass_dict_to_skin(artist_details, params.get("prefix", ""))
     elif info == 'ratemedia':
-        resolve_url(params.get("handle"))
         media_type = params.get("type", False)
         if media_type:
             if params.get("id") and params["id"]:
@@ -424,14 +411,9 @@ def start_info_actions(info, params):
                 return False
             tmdb.set_rating_prompt(media_type=media_type,
                                    media_id=tmdb_id)
-    elif info == 'setfocus':
-        resolve_url(params.get("handle"))
-        xbmc.executebuiltin("SetFocus(22222)")
     elif info == 'playliststats':
-        resolve_url(params.get("handle"))
         get_playlist_stats(params.get("id", ""))
     elif info == 'slideshow':
-        resolve_url(params.get("handle"))
         window_id = xbmcgui.getCurrentwindow_id()
         window = xbmcgui.Window(window_id)
         # focusid = Window.getFocusId()
@@ -439,21 +421,17 @@ def start_info_actions(info, params):
         for i in range(0, num_items):
             notify(item.getProperty("Image"))
     elif info == 'action':
-        resolve_url(params.get("handle"))
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)
         return None
     elif info == 'bounce':
-        resolve_url(params.get("handle"))
         HOME.setProperty(params.get("name", ""), "True")
         xbmc.sleep(200)
         HOME.clearProperty(params.get("name", ""))
     elif info == "youtubevideo":
-        resolve_url(params.get("handle"))
         xbmc.executebuiltin("Dialog.Close(all,true)")
         VideoPlayer.PLAYER.play_youtube_video(params.get("id", ""))
     elif info == 'playtrailer':
-        resolve_url(params.get("handle"))
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if params.get("id"):
             movie_id = params.get("id", "")
@@ -475,7 +453,6 @@ def start_info_actions(info, params):
             else:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
     elif info == 'deletecache':
-        resolve_url(params.get("handle"))
         HOME.clearProperties()
         import shutil
         for rel_path in os.listdir(ADDON_DATA_PATH):
@@ -489,7 +466,6 @@ def start_info_actions(info, params):
     elif info == 'syncwatchlist':
         pass
     elif info == "widgetdialog":
-        resolve_url(params.get("handle"))
         widget_selectdialog()
 
 
