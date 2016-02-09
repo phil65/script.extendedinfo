@@ -219,7 +219,7 @@
                                     <align>center</align>
                                     <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                     <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                    <font>font13</font>
+                                    <font>font12</font>
                                     <textcolor>FF999999</textcolor>
                                     <focusedcolor>FFFAFAFA</focusedcolor>
                                     <onleft>9</onleft>
@@ -261,7 +261,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
@@ -286,7 +286,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
@@ -310,7 +310,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
@@ -334,7 +334,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
@@ -353,7 +353,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
@@ -378,7 +378,7 @@
                                 <align>center</align>
                                 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-focus.png</texturefocus>
                                 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/roundedbutton-nofocus.png</texturenofocus>
-                                <font>font13</font>
+                                <font>font12</font>
                                 <textcolor>FF999999</textcolor>
                                 <focusedcolor>FFFAFAFA</focusedcolor>
                                 <aligny>bottom</aligny>
