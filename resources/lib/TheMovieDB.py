@@ -286,7 +286,7 @@ def merge_with_cert_desc(input_list, media_type):
     return input_list
 
 
-def handle_multi_search(results=[]):
+def handle_multi_search(results):
     listitems = []
     for item in results:
         if item["media_type"] == "movie":
@@ -298,7 +298,7 @@ def handle_multi_search(results=[]):
     return listitems
 
 
-def handle_movies(results=[], local_first=True, sortkey="year"):
+def handle_movies(results, local_first=True, sortkey="year"):
     response = get_data(url="genre/movie/list",
                         params={"language": SETTING("LanguageID")},
                         cache_days=30)
@@ -703,7 +703,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
         return None
 
 
-def get_trailer(movie_id=None):
+def get_trailer(movie_id):
     response = get_full_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
@@ -1100,9 +1100,8 @@ def get_keywords(movie_id):
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
-            keyword_dict = {'id': fetch(keyword, 'id'),
-                            'name': keyword['name']}
-            keywords.append(keyword_dict)
+            keywords.append({'id': fetch(keyword, 'id'),
+                            'name': keyword['name']})
     return keywords
 
 
