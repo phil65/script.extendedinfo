@@ -3,6 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+import time
 import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
@@ -294,6 +295,7 @@ def start_info_actions(info, params):
             start_info_actions("extendedinfo", params)
         elif xbmc.getCondVisibility("Container.Content(tvshows)"):
             params = {"dbid": dbid,
+                      "tvdb_id": xbmc.getInfoLabel("ListItem.Property(tvdb_id)"),
                       "id": xbmc.getInfoLabel("ListItem.Property(id)"),
                       "name": xbmc.getInfoLabel("ListItem.Title")}
             start_info_actions("extendedtvinfo", params)
@@ -412,7 +414,7 @@ def start_info_actions(info, params):
             xbmc.executebuiltin(builtin)
     elif info == 'bounce':
         HOME.setProperty(params.get("name", ""), "True")
-        xbmc.sleep(200)
+        time.sleep(0.2)
         HOME.clearProperty(params.get("name", ""))
     elif info == "youtubevideo":
         xbmc.executebuiltin("Dialog.Close(all,true)")
@@ -431,7 +433,7 @@ def start_info_actions(info, params):
         if movie_id:
             trailer = tmdb.get_trailer(movie_id)
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            xbmc.sleep(100)
+            time.sleep(0.1)
             if trailer:
                 VideoPlayer.PLAYER.play_youtube_video(trailer)
             elif params.get("title"):
