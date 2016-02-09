@@ -23,7 +23,7 @@ def start_info_actions(info, params):
         params["artist_mbid"] = fetch_musicbrainz_id(params["artistname"])
     log(info)
     prettyprint(params)
-    if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"]):
+    if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
     #  Images
     if info == 'xkcd':
@@ -160,8 +160,7 @@ def start_info_actions(info, params):
                 params["setid"] = tmdb.get_set_id(name)
         if params.get("setid"):
             set_data, _ = tmdb.get_set_movies(params["setid"])
-            if set_data:
-                return set_data
+            return set_data
     elif info == 'movielists':
         movie_id = params.get("id", False)
         if not movie_id:
