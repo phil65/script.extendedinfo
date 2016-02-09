@@ -761,7 +761,7 @@ def create_listitems(data=None, preload_images=0):
                 continue
             value = unicode(value)
             if count < preload_images:
-                if value.startswith("http://") and (value.endswith(".jpg") or value.endswith(".png")):
+                if value.startswith("http://") and value.endswith((".jpg", ".png")):
                     if value not in image_requests:
                         thread = GetFileThread(value)
                         threads += [thread]
