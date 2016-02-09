@@ -110,19 +110,19 @@ def start_info_actions(info, params):
     elif info == 'starredtvshows':
         return tmdb.get_fav_items("tv")
     elif info == 'similarmovies':
-        movie_id = params.get("id", False)
+        movie_id = params.get("id")
         if not movie_id:
-            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                              dbid=params.get("dbid", False))
+            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                              dbid=params.get("dbid"))
         if movie_id:
             return tmdb.get_similar_movies(movie_id)
     elif info == 'similartvshows':
         tvshow_id = None
-        dbid = params.get("dbid", False)
-        name = params.get("name", False)
-        tmdb_id = params.get("tmdb_id", False)
-        tvdb_id = params.get("tvdb_id", False)
-        imdb_id = params.get("imdb_id", False)
+        dbid = params.get("dbid")
+        name = params.get("name")
+        tmdb_id = params.get("tmdb_id")
+        tvdb_id = params.get("tvdb_id")
+        imdb_id = params.get("imdb_id")
         if tmdb_id:
             tvshow_id = tmdb_id
         elif dbid and int(dbid) > 0:
@@ -155,17 +155,17 @@ def start_info_actions(info, params):
             set_data, _ = tmdb.get_set_movies(params["setid"])
             return set_data
     elif info == 'movielists':
-        movie_id = params.get("id", False)
+        movie_id = params.get("id")
         if not movie_id:
-            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                              dbid=params.get("dbid", False))
+            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                              dbid=params.get("dbid"))
         if movie_id:
             return tmdb.get_movie_lists(movie_id)
     elif info == 'keywords':
-        movie_id = params.get("id", False)
+        movie_id = params.get("id")
         if not movie_id:
-            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
-                                              dbid=params.get("dbid", False))
+            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                              dbid=params.get("dbid"))
         if movie_id:
             return tmdb.get_keywords(movie_id)
     elif info == 'popularpeople':
@@ -188,7 +188,7 @@ def start_info_actions(info, params):
                     del item["credit_id"]
                 return merge_dict_lists(movies, key="department")
     elif info == 'similarmoviestrakt':
-        if params.get("id", False) or params.get("dbid"):
+        if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
                 movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
             else:
@@ -345,7 +345,7 @@ def start_info_actions(info, params):
     elif info == 'extendedinfo':
         HOME.setProperty('infodialogs.active', "true")
         wm.open_movie_info(movie_id=params.get("id", ""),
-                           dbid=params.get("dbid", None),
+                           dbid=params.get("dbid"),
                            imdb_id=params.get("imdb_id", ""),
                            name=params.get("name", ""))
         HOME.clearProperty('infodialogs.active')
@@ -358,7 +358,7 @@ def start_info_actions(info, params):
         HOME.setProperty('infodialogs.active', "true")
         wm.open_tvshow_info(tmdb_id=params.get("id", ""),
                             tvdb_id=params.get("tvdb_id", ""),
-                            dbid=params.get("dbid", None),
+                            dbid=params.get("dbid"),
                             imdb_id=params.get("imdb_id", ""),
                             name=params.get("name", ""))
         HOME.clearProperty('infodialogs.active')
@@ -384,9 +384,9 @@ def start_info_actions(info, params):
         artist_details = AudioDB.get_artist_details(params["artistname"])
         pass_dict_to_skin(artist_details, params.get("prefix", ""))
     elif info == 'ratemedia':
-        media_type = params.get("type", False)
+        media_type = params.get("type")
         if media_type:
-            if params.get("id") and params["id"]:
+            if params.get("id"):
                 tmdb_id = params["id"]
             elif media_type == "movie":
                 tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
