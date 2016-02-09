@@ -356,7 +356,7 @@ def start_info_actions(info, params):
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedtvinfo':
         HOME.setProperty('infodialogs.active', "true")
-        wm.open_tvshow_info(tvshow_id=params.get("id", ""),
+        wm.open_tvshow_info(tmdb_id=params.get("id", ""),
                             tvdb_id=params.get("tvdb_id", ""),
                             dbid=params.get("dbid", None),
                             imdb_id=params.get("imdb_id", ""),

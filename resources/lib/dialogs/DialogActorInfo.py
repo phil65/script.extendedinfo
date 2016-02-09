@@ -66,7 +66,7 @@ def get_window(window_type):
                                                 list=[LANG(32148), LANG(32147)])
             if selection == 0:
                 wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=self.listitem.getProperty("id"),
+                                    tmdb_id=self.listitem.getProperty("id"),
                                     dbid=self.listitem.getProperty("dbid"))
             if selection == 1:
                 self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))

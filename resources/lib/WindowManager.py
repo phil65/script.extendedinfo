@@ -95,16 +95,15 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_tvshow_info(self, prev_window=None, tvshow_id=None, dbid=None,
+    def open_tvshow_info(self, prev_window=None, tmdb_id=None, dbid=None,
                          tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogTVShowInfo
-        tmdb_id = None
-        if tvshow_id:
-            tmdb_id = tvshow_id
+        if tmdb_id:
+            pass
         elif tvdb_id:
             tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
         elif imdb_id:

@@ -316,7 +316,7 @@ def get_window(window_type):
                 self.type = media_type
             if self.type == "tv":
                 wm.open_tvshow_info(prev_window=self,
-                                    tvshow_id=self.listitem.getProperty("id"),
+                                    tmdb_id=self.listitem.getProperty("id"),
                                     dbid=self.listitem.getProperty("dbid"))
             elif self.type == "person":
                 wm.open_actor_info(prev_window=self,

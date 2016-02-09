@@ -76,7 +76,7 @@ def get_window(window_type):
         @ch.click(150)
         def open_tvshow_dialog(self):
             wm.open_tvshow_info(prev_window=self,
-                                tvshow_id=self.listitem.getProperty("id"),
+                                tmdb_id=self.listitem.getProperty("id"),
                                 dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(250)
