@@ -551,6 +551,8 @@ def multi_search(search_str):
 
 
 def get_person_info(person_label, skip_dialog=False):
+    if not person_label:
+        return False
     params = {"query": person_label.split(" / ")[0],
               "include_adult": include_adult}
     response = get_data(url="search/person",
@@ -608,6 +610,8 @@ def get_data(url="", params={}, cache_days=14):
 
 
 def get_company_data(company_id):
+    if not company_id:
+        return []
     response = get_data(url="company/%s/movies" % (company_id),
                         params=params,
                         cache_days=30)
@@ -618,6 +622,8 @@ def get_company_data(company_id):
 
 
 def get_credit_info(credit_id):
+    if not credit_id:
+        return []
     params = {"language": SETTING("LanguageID")}
     return get_data(url="credit/%s" % (credit_id),
                     params=params,

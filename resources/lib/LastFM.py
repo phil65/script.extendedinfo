@@ -104,19 +104,6 @@ def handle_shouts(results):
     return shouts
 
 
-def handle_tracks(results):
-    if not results:
-        return {}
-    if "wiki" in results['track']:
-        summary = clean_text(results['track']['wiki']['summary'])
-    else:
-        summary = ""
-    TrackInfo = {'playcount': str(results['track']['playcount']),
-                 'thumb': str(results['track']['playcount']),
-                 'summary': summary}
-    return TrackInfo
-
-
 def handle_artists(results):
     artists = []
     if not results:
@@ -134,6 +121,8 @@ def handle_artists(results):
 
 
 def get_events(mbid, past_events=False):
+    if not mbid:
+        return []
     if past_events:
         method = "Artist.getPastEvents"
     else:
@@ -163,6 +152,8 @@ def get_top_artists():
 
 
 def get_album_shouts(artist_name, album_title):
+    if not artist_name or not album_title:
+        return []
     params = {"artist": artist_name,
               "album": album_title}
     results = get_data(method="Album.getShouts", params=params)
@@ -170,12 +161,16 @@ def get_album_shouts(artist_name, album_title):
 
 
 def get_artist_shouts(artist_name):
+    if not artist_name:
+        return []
     results = get_data(method="Artist.GetShouts",
                        params={"artist": artist_name})
     return handle_shouts(results)
 
 
 def get_artist_images(artist_mbid):
+    if not artist_mbid:
+        return []
     results = get_data(method="Artist.getImages",
                        params={"mbid": artist_mbid},
                        cache_days=5)
@@ -183,6 +178,8 @@ def get_artist_images(artist_mbid):
 
 
 def get_track_shouts(artist_name, track_title):
+    if not artist_name or not track_title:
+        return []
     params = {"artist": artist_name,
               "track": track_title}
     results = get_data(method="Track.getShouts", params=params)
@@ -190,12 +187,16 @@ def get_track_shouts(artist_name, track_title):
 
 
 def get_event_shouts(event_id):
+    if not event_id:
+        return []
     results = get_data(method="event.GetShouts",
                        params={"event": event_id})
     return handle_shouts(results)
 
 
 def get_venue_id(venue_name=""):
+    if not venue_name:
+        return []
     results = get_data(method="Venue.search",
                        params={"venue": venue_name})
     if "results" in results:
@@ -209,20 +210,26 @@ def get_venue_id(venue_name=""):
 
 
 def get_artist_albums(artist_mbid):
+    if not artist_mbid:
+        return []
     results = get_data(method="Artist.getTopAlbums",
                        params={"mbid": artist_mbid})
     return handle_albums(results)
 
 
 def get_similar_artists(artist_mbid):
+    if not artist_mbid:
+        return []
     params = {"mbid": artist_mbid,
               "limit": "400"}
     results = get_data(method="Artist.getSimilar", params=params)
-    if results is not None and "similarartists" in results:
+    if results and "similarartists" in results:
         return handle_artists(results['similarartists'])
 
 
 def get_near_events(tag=False, festivals_only=False, lat="", lon="", location="", distance=""):
+    if not location and not lat:
+        return []
     params = {"festivalsonly": int(bool(festivals_only)),
               "limit": "40",
               "tag": tag,
@@ -235,22 +242,35 @@ def get_near_events(tag=False, festivals_only=False, lat="", lon="", location=""
 
 
 def get_venue_events(venue_id=""):
+    if not venue_id:
+        return []
     results = get_data(method="Venue.getEvents",
                        params={"venue": venue_id})
     return handle_events(results)
 
 
 def get_track_info(artist_name="", track=""):
+    if not artist_name or not track:
+        return []
     params = {"artist": artist_name,
               "track": track_title}
     results = get_data(method="track.getInfo", params=params)
-    return handle_tracks(results)
+    if not results:
+        return {}
+    if "wiki" in results['track']:
+        summary = clean_text(results['track']['wiki']['summary'])
+    else:
+        summary = ""
+    track_info = {'playcount': str(results['track']['playcount']),
+                  'thumb': str(results['track']['playcount']),
+                  'summary': summary}
+    return track_info
 
 
 def get_data(method, params={}, cache_days=0.5):
     params["method"] = method
     # params = {k: v for k, v in params.items() if v}
-    params = dict((key, value) for (key, value) in params.items() if value)
+    params = dict((k, v) for (k, v) in params.items() if v)
     for k, v in params.iteritems():
         params[k] = unicode(v).encode('utf-8')
     url = "{base_url}{params}".format(base_url=BASE_URL,

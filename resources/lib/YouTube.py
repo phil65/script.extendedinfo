@@ -166,6 +166,8 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
 
 
 def get_playlist_videos(playlist_id=""):
+    if not playlist_id:
+        return []
     params = {"part": "id,snippet",
               "maxResults": "50",
               "playlistId": playlist_id}

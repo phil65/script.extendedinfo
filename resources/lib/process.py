@@ -25,7 +25,6 @@ def start_info_actions(info, params):
     prettyprint(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
-    #  Images
     if info == 'xkcd':
         return MiscScraper.get_xkcd_images()
     elif info == 'cyanide':
@@ -42,25 +41,19 @@ def start_info_actions(info, params):
         return discography
     elif info == 'mostlovedtracks':
         return AudioDB.get_most_loved_tracks(params["artistname"])
-    elif info == 'musicvideos':
-        pass
-        # if "audiodbid" in artist_details:
-        #     return get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
     elif info == 'trackdetails':
-        if params.get("id"):
-            return AudioDB.get_track_details(params.get("id", ""))
+        return AudioDB.get_track_details(params.get("id", ""))
     elif info == 'albumshouts':
-        if params["artistname"] and params["albumname"]:
-            return LastFM.get_album_shouts(params["artistname"], params["albumname"])
+        return LastFM.get_album_shouts(params["artistname"], params["albumname"])
     elif info == 'artistshouts':
-        if params["artistname"]:
-            return LastFM.get_artist_shouts(params["artistname"])
+        return LastFM.get_artist_shouts(params["artistname"])
     elif info == 'topartists':
         return LastFM.get_top_artists()
     elif info == 'hypedartists':
         return LastFM.get_hyped_artists()
     elif info == 'latestdbmovies':
-        return LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10))
+        return LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}',
+                                           params.get("limit", 10))
     elif info == 'randomdbmovies':
         return LocalDB.local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10))
     elif info == 'inprogressdbmovies':
@@ -102,8 +95,7 @@ def start_info_actions(info, params):
             item["directory"] = True
         return account_lists
     elif info == 'listmovies':
-        movies = tmdb.get_movies_from_list(params["id"])
-        return movies
+        return tmdb.get_movies_from_list(params["id"])
     elif info == 'airingtodaytvshows':
         return tmdb.get_tmdb_shows("airing_today")
     elif info == 'onairtvshows':
@@ -178,14 +170,13 @@ def start_info_actions(info, params):
     elif info == 'popularpeople':
         return tmdb.get_popular_actors()
     elif info == 'directormovies':
-        if params.get("director"):
-            director_info = tmdb.get_person_info(person_label=params["director"],
-                                                 skip_dialog=True)
-            if director_info and director_info.get("id"):
-                movies = tmdb.get_person_movies(director_info["id"])
-                for item in movies:
-                    del item["credit_id"]
-                return merge_dict_lists(movies, key="department")
+        director_info = tmdb.get_person_info(person_label=params.get("director"),
+                                             skip_dialog=True)
+        if director_info and director_info.get("id"):
+            movies = tmdb.get_person_movies(director_info["id"])
+            for item in movies:
+                del item["credit_id"]
+            return merge_dict_lists(movies, key="department")
     elif info == 'writermovies':
         if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
             writer_info = tmdb.get_person_info(person_label=params["writer"],
@@ -222,19 +213,16 @@ def start_info_actions(info, params):
     elif info == 'trendingmovies':
         return Trakt.get_trending_movies()
     elif info == 'similarartistsinlibrary':
-        if params.get("artist_mbid"):
-            return LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
+        return LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
     elif info == 'artistevents':
-        if params.get("artist_mbid"):
-            return LastFM.get_events(params.get("artist_mbid"))
+        return LastFM.get_events(params.get("artist_mbid"))
     elif info == 'nearevents':
-        eventinfo = LastFM.get_near_events(tag=params.get("tag", ""),
-                                           festivals_only=params.get("festivalsonly", ""),
-                                           lat=params.get("lat", ""),
-                                           lon=params.get("lon", ""),
-                                           location=params.get("location", ""),
-                                           distance=params.get("distance", ""))
-        return eventinfo
+        return LastFM.get_near_events(tag=params.get("tag", ""),
+                                      festivals_only=params.get("festivalsonly", ""),
+                                      lat=params.get("lat", ""),
+                                      lon=params.get("lon", ""),
+                                      location=params.get("location", ""),
+                                      distance=params.get("distance", ""))
     elif info == 'trackinfo':
         HOME.clearProperty('%sSummary' % params.get("prefix", ""))
         if params["artistname"] and params["trackname"]:
@@ -260,8 +248,7 @@ def start_info_actions(info, params):
                                        orderby=params.get("orderby", "relevance"))
             return listitems.get("listitems", [])
     elif info == 'youtubeplaylist':
-        if params.get("id"):
-            return YouTube.get_playlist_videos(params.get("id", ""))
+        return YouTube.get_playlist_videos(params.get("id", ""))
     elif info == 'youtubeusersearch':
         user_name = params.get("id", "")
         if user_name:
@@ -423,7 +410,6 @@ def start_info_actions(info, params):
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)
-        return None
     elif info == 'bounce':
         HOME.setProperty(params.get("name", ""), "True")
         xbmc.sleep(200)
