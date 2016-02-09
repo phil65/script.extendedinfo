@@ -25,105 +25,104 @@ def start_info_actions(info, params):
     prettyprint(params)
     if "prefix" in params and (not params["prefix"].endswith('.')) and (params["prefix"]):
         params["prefix"] = params["prefix"] + '.'
-    data = []
     #  Images
     if info == 'xkcd':
-        data = MiscScraper.get_xkcd_images()
+        return MiscScraper.get_xkcd_images()
     elif info == 'cyanide':
-        data = MiscScraper.get_cyanide_images()
+        return MiscScraper.get_cyanide_images()
     elif info == 'dailybabes':
-        data = MiscScraper.get_babe_images()
+        return MiscScraper.get_babe_images()
     elif info == 'dailybabe':
-        data = MiscScraper.get_babe_images(single=True)
+        return MiscScraper.get_babe_images(single=True)
     # Audio
     elif info == 'discography':
         discography = AudioDB.get_artist_discography(params["artistname"])
         if not discography:
             discography = LastFM.get_artist_albums(params.get("artist_mbid"))
-        data = discography
+        return discography
     elif info == 'mostlovedtracks':
-        data = AudioDB.get_most_loved_tracks(params["artistname"])
+        return AudioDB.get_most_loved_tracks(params["artistname"])
     elif info == 'musicvideos':
         pass
         # if "audiodbid" in artist_details:
-        #     data = get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
+        #     return get_musicvideos(artist_details["audiodbid"]), "MusicVideos"
     elif info == 'trackdetails':
         if params.get("id"):
-            data = AudioDB.get_track_details(params.get("id", ""))
+            return AudioDB.get_track_details(params.get("id", ""))
     elif info == 'albumshouts':
         if params["artistname"] and params["albumname"]:
-            data = LastFM.get_album_shouts(params["artistname"], params["albumname"])
+            return LastFM.get_album_shouts(params["artistname"], params["albumname"])
     elif info == 'artistshouts':
         if params["artistname"]:
-            data = LastFM.get_artist_shouts(params["artistname"])
+            return LastFM.get_artist_shouts(params["artistname"])
     elif info == 'topartists':
-        data = LastFM.get_top_artists()
+        return LastFM.get_top_artists()
     elif info == 'hypedartists':
-        data = LastFM.get_hyped_artists()
+        return LastFM.get_hyped_artists()
     elif info == 'latestdbmovies':
-        data = LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10))
+        return LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}', params.get("limit", 10))
     elif info == 'randomdbmovies':
-        data = LocalDB.local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10))
+        return LocalDB.local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10))
     elif info == 'inprogressdbmovies':
         method = '"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}'
-        data = LocalDB.local_db.get_movies(method, params.get("limit", 10))
+        return LocalDB.local_db.get_movies(method, params.get("limit", 10))
 #  RottenTomatoesMovies
     elif info == 'intheaters':
-        data = RottenTomatoes.get_movies("movies/in_theaters")
+        return RottenTomatoes.get_movies("movies/in_theaters")
     elif info == 'boxoffice':
-        data = RottenTomatoes.get_movies("movies/box_office")
+        return RottenTomatoes.get_movies("movies/box_office")
     elif info == 'opening':
-        data = RottenTomatoes.get_movies("movies/opening")
+        return RottenTomatoes.get_movies("movies/opening")
     elif info == 'comingsoon':
-        data = RottenTomatoes.get_movies("movies/upcoming")
+        return RottenTomatoes.get_movies("movies/upcoming")
     elif info == 'toprentals':
-        data = RottenTomatoes.get_movies("dvds/top_rentals")
+        return RottenTomatoes.get_movies("dvds/top_rentals")
     elif info == 'currentdvdreleases':
-        data = RottenTomatoes.get_movies("dvds/current_releases")
+        return RottenTomatoes.get_movies("dvds/current_releases")
     elif info == 'newdvdreleases':
-        data = RottenTomatoes.get_movies("dvds/new_releases")
+        return RottenTomatoes.get_movies("dvds/new_releases")
     elif info == 'upcomingdvds':
-        data = RottenTomatoes.get_movies("dvds/upcoming")
+        return RottenTomatoes.get_movies("dvds/upcoming")
     #  The MovieDB
     elif info == 'incinemas':
-        data = tmdb.get_tmdb_movies("now_playing")
+        return tmdb.get_tmdb_movies("now_playing")
     elif info == 'upcoming':
-        data = tmdb.get_tmdb_movies("upcoming")
+        return tmdb.get_tmdb_movies("upcoming")
     elif info == 'topratedmovies':
-        data = tmdb.get_tmdb_movies("top_rated")
+        return tmdb.get_tmdb_movies("top_rated")
     elif info == 'popularmovies':
-        data = tmdb.get_tmdb_movies("popular")
+        return tmdb.get_tmdb_movies("popular")
     elif info == 'ratedmovies':
-        data = tmdb.get_rated_media_items("movies")
+        return tmdb.get_rated_media_items("movies")
     elif info == 'starredmovies':
-        data = tmdb.get_fav_items("movies")
+        return tmdb.get_fav_items("movies")
     elif info == 'accountlists':
         account_lists = tmdb.handle_misc(tmdb.get_account_lists())
         for item in account_lists:
             item["directory"] = True
-        data = account_lists
+        return account_lists
     elif info == 'listmovies':
         movies = tmdb.get_movies_from_list(params["id"])
-        data = movies
+        return movies
     elif info == 'airingtodaytvshows':
-        data = tmdb.get_tmdb_shows("airing_today")
+        return tmdb.get_tmdb_shows("airing_today")
     elif info == 'onairtvshows':
-        data = tmdb.get_tmdb_shows("on_the_air")
+        return tmdb.get_tmdb_shows("on_the_air")
     elif info == 'topratedtvshows':
-        data = tmdb.get_tmdb_shows("top_rated")
+        return tmdb.get_tmdb_shows("top_rated")
     elif info == 'populartvshows':
-        data = tmdb.get_tmdb_shows("popular")
+        return tmdb.get_tmdb_shows("popular")
     elif info == 'ratedtvshows':
-        data = tmdb.get_rated_media_items("tv")
+        return tmdb.get_rated_media_items("tv")
     elif info == 'starredtvshows':
-        data = tmdb.get_fav_items("tv")
+        return tmdb.get_fav_items("tv")
     elif info == 'similarmovies':
         movie_id = params.get("id", False)
         if not movie_id:
             movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
                                               dbid=params.get("dbid", False))
         if movie_id:
-            data = tmdb.get_similar_movies(movie_id)
+            return tmdb.get_similar_movies(movie_id)
     elif info == 'similartvshows':
         tvshow_id = None
         dbid = params.get("dbid", False)
@@ -146,14 +145,14 @@ def start_info_actions(info, params):
                                           year="",
                                           media_type="tv")
         if tvshow_id:
-            data = tmdb.get_similar_tvshows(tvshow_id)
+            return tmdb.get_similar_tvshows(tvshow_id)
     elif info == 'studio':
         if "id" in params and params["id"]:
-            data = tmdb.get_company_data(params["id"])
+            return tmdb.get_company_data(params["id"])
         elif "studio" in params and params["studio"]:
             company_data = tmdb.search_company(params["studio"])
             if company_data:
-                data = tmdb.get_company_data(company_data[0]["id"])
+                return tmdb.get_company_data(company_data[0]["id"])
     elif info == 'set':
         if params.get("dbid") and "show" not in str(params.get("type", "")):
             name = LocalDB.local_db.get_set_name(params["dbid"])
@@ -162,23 +161,23 @@ def start_info_actions(info, params):
         if params.get("setid"):
             set_data, _ = tmdb.get_set_movies(params["setid"])
             if set_data:
-                data = set_data
+                return set_data
     elif info == 'movielists':
         movie_id = params.get("id", False)
         if not movie_id:
             movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
                                               dbid=params.get("dbid", False))
         if movie_id:
-            data = tmdb.get_movie_lists(movie_id)
+            return tmdb.get_movie_lists(movie_id)
     elif info == 'keywords':
         movie_id = params.get("id", False)
         if not movie_id:
             movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", False),
                                               dbid=params.get("dbid", False))
         if movie_id:
-            data = tmdb.get_keywords(movie_id)
+            return tmdb.get_keywords(movie_id)
     elif info == 'popularpeople':
-        data = tmdb.get_popular_actors()
+        return tmdb.get_popular_actors()
     elif info == 'directormovies':
         if params.get("director"):
             director_info = tmdb.get_person_info(person_label=params["director"],
@@ -187,7 +186,7 @@ def start_info_actions(info, params):
                 movies = tmdb.get_person_movies(director_info["id"])
                 for item in movies:
                     del item["credit_id"]
-                data = merge_dict_lists(movies, key="department")
+                return merge_dict_lists(movies, key="department")
     elif info == 'writermovies':
         if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
             writer_info = tmdb.get_person_info(person_label=params["writer"],
@@ -196,14 +195,14 @@ def start_info_actions(info, params):
                 movies = tmdb.get_person_movies(writer_info["id"])
                 for item in movies:
                     del item["credit_id"]
-                data = merge_dict_lists(movies, key="department")
+                return merge_dict_lists(movies, key="department")
     elif info == 'similarmoviestrakt':
         if params.get("id", False) or params.get("dbid"):
             if params.get("dbid"):
                 movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
             else:
                 movie_id = params.get("id", "")
-            data = Trakt.get_similar("movie", movie_id)
+            return Trakt.get_similar("movie", movie_id)
     elif info == 'similartvshowstrakt':
         if (params.get("id", "") or params["dbid"]):
             if params.get("dbid"):
@@ -214,21 +213,21 @@ def start_info_actions(info, params):
                                                              dbid=params["dbid"])
             else:
                 tvshow_id = params.get("id", "")
-            data = Trakt.get_similar("show", tvshow_id)
+            return Trakt.get_similar("show", tvshow_id)
     elif info == 'airingshows':
-        data = Trakt.get_calendar_shows("shows")
+        return Trakt.get_calendar_shows("shows")
     elif info == 'premiereshows':
-        data = Trakt.get_calendar_shows("premieres")
+        return Trakt.get_calendar_shows("premieres")
     elif info == 'trendingshows':
-        data = Trakt.get_trending_shows()
+        return Trakt.get_trending_shows()
     elif info == 'trendingmovies':
-        data = Trakt.get_trending_movies()
+        return Trakt.get_trending_movies()
     elif info == 'similarartistsinlibrary':
         if params.get("artist_mbid"):
-            data = LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
+            return LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
     elif info == 'artistevents':
         if params.get("artist_mbid"):
-            data = LastFM.get_events(params.get("artist_mbid"))
+            return LastFM.get_events(params.get("artist_mbid"))
     elif info == 'nearevents':
         eventinfo = LastFM.get_near_events(tag=params.get("tag", ""),
                                            festivals_only=params.get("festivalsonly", ""),
@@ -236,7 +235,7 @@ def start_info_actions(info, params):
                                            lon=params.get("lon", ""),
                                            location=params.get("location", ""),
                                            distance=params.get("distance", ""))
-        data = eventinfo
+        return eventinfo
     elif info == 'trackinfo':
         HOME.clearProperty('%sSummary' % params.get("prefix", ""))
         if params["artistname"] and params["trackname"]:
@@ -247,28 +246,28 @@ def start_info_actions(info, params):
         if params["location"]:
             params["id"] = LastFM.get_venue_id(params["location"])
         if params.get("id"):
-            data = LastFM.get_venue_events(params.get("id", ""))
+            return LastFM.get_venue_events(params.get("id", ""))
         else:
             notify("Error", "Could not find venue")
     elif info == 'topartistsnearevents':
         artists = LocalDB.local_db.get_artists()
         import BandsInTown
-        data = BandsInTown.get_near_events(artists[0:49])
+        return BandsInTown.get_near_events(artists[0:49])
     elif info == 'youtubesearch':
         HOME.setProperty('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
         if params.get("id"):
             listitems = YouTube.search(search_str=params.get("id", ""),
                                        hd=params.get("hd", ""),
                                        orderby=params.get("orderby", "relevance"))
-            data = listitems.get("listitems", [])
+            return listitems.get("listitems", [])
     elif info == 'youtubeplaylist':
         if params.get("id"):
-            data = YouTube.get_playlist_videos(params.get("id", ""))
+            return YouTube.get_playlist_videos(params.get("id", ""))
     elif info == 'youtubeusersearch':
         user_name = params.get("id", "")
         if user_name:
             playlists = YouTube.get_user_playlists(user_name)
-            data = YouTube.get_playlist_videos(playlists["uploads"])
+            return YouTube.get_playlist_videos(playlists["uploads"])
     elif info == 'favourites':
         if params.get("id"):
             favs = get_favs_by_type(params.get("id", ""))
@@ -277,15 +276,15 @@ def start_info_actions(info, params):
             HOME.setProperty('favourite.count', str(len(favs)))
             if favs:
                 HOME.setProperty('favourite.1.name', favs[-1]["Label"])
-        data = favs
+        return favs
     elif info == 'similarlocal' and "dbid" in params:
-        data = LocalDB.local_db.get_similar_movies(params["dbid"])
+        return LocalDB.local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
-        data = get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
+        return get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
     elif info == 'weather':
-        data = get_weather_images()
+        return get_weather_images()
     elif info == "sortletters":
-        data = get_sort_letters(params["path"], params.get("id", ""))
+        return get_sort_letters(params["path"], params.get("id", ""))
 
     # ACTIONS
     elif info == 't9input':
@@ -493,7 +492,6 @@ def start_info_actions(info, params):
     elif info == "widgetdialog":
         resolve_url(params.get("handle"))
         widget_selectdialog()
-    return data
 
 
 def resolve_url(handle):
