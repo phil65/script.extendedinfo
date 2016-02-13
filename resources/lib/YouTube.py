@@ -39,7 +39,7 @@ def handle_videos(results, extended=False):
                            params=params)
     if not ext_results:
         return videos
-    for i, item in enumerate(videos):
+    for item in videos:
         for ext_item in ext_results["items"]:
             if not item["youtube_id"] == ext_item['id']:
                 continue
@@ -80,12 +80,11 @@ def handle_playlists(results):
                     'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
         playlists.append(playlist)
-    playlist_ids = [item["youtube_id"] for item in playlists]
-    params = {"id": ",".join(playlist_ids),
+    params = {"id": ",".join([i["youtube_id"] for i in playlists]),
               "part": "contentDetails"}
     ext_results = get_data(method="playlists",
                            params=params)
-    for i, item in enumerate(playlists):
+    for item in playlists:
         for ext_item in ext_results["items"]:
             if item["youtube_id"] == ext_item['id']:
                 item["itemcount"] = ext_item['contentDetails']['itemCount']
@@ -115,7 +114,7 @@ def handle_channels(results):
               "part": "contentDetails,statistics,brandingSettings"}
     ext_results = get_data(method="channels",
                            params=params)
-    for i, item in enumerate(channels):
+    for item in channels:
         for ext_item in ext_results["items"]:
             if item["youtube_id"] == ext_item['id']:
                 item["itemcount"] = ext_item['statistics']['videoCount']
@@ -154,15 +153,13 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
         listitems = handle_playlists(results["items"])
     elif media_type == "channel":
         listitems = handle_channels(results["items"])
-    if listitems:
-        return {"listitems": listitems,
-                "results_per_page": results["pageInfo"]["resultsPerPage"],
-                "total_results": results["pageInfo"]["totalResults"],
-                "next_page_token": results.get("nextPageToken", ""),
-                "prev_page_token": results.get("prevPageToken", ""),
-                }
-    else:
+    if not listitems:
         return {}
+    return {"listitems": listitems,
+            "results_per_page": results["pageInfo"]["resultsPerPage"],
+            "total_results": results["pageInfo"]["totalResults"],
+            "next_page_token": results.get("nextPageToken", ""),
+            "prev_page_token": results.get("prevPageToken", "")}
 
 
 def get_playlist_videos(playlist_id=""):
@@ -173,10 +170,9 @@ def get_playlist_videos(playlist_id=""):
               "playlistId": playlist_id}
     results = get_data(method="playlistItems",
                        params=params)
-    if results:
-        return handle_videos(results["items"])
-    else:
+    if not results:
         return []
+    return handle_videos(results["items"])
 
 
 def get_user_playlists(username=""):
@@ -184,7 +180,6 @@ def get_user_playlists(username=""):
               "forUsername": username}
     results = get_data(method="channels",
                        params=params)
-    if results["items"]:
-        return results["items"][0]["contentDetails"]["relatedPlaylists"]
-    else:
+    if not results["items"]:
         return None
+    return results["items"][0]["contentDetails"]["relatedPlaylists"]
