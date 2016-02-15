@@ -28,8 +28,10 @@ class Main:
                 xbmcplugin.setContent(self.handle, 'episodes')
             elif info.endswith("movies"):
                 xbmcplugin.setContent(self.handle, 'movies')
-            else:
+            elif info.endswith("lists"):
                 xbmcplugin.setContent(self.handle, 'sets')
+            else:
+                xbmcplugin.setContent(self.handle, '')
             pass_list_to_skin(name=info,
                               data=listitems,
                               prefix=self.params.get("prefix", ""),
