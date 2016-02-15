@@ -187,14 +187,14 @@ def start_info_actions(info, params):
                 for item in movies:
                     del item["credit_id"]
                 return merge_dict_lists(movies, key="department")
-    elif info == 'similarmoviestrakt':
+    elif info == 'traktsimilarmovies':
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
                 movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
             else:
                 movie_id = params.get("id", "")
             return Trakt.get_similar("movie", movie_id)
-    elif info == 'similartvshowstrakt':
+    elif info == 'traktsimilartvshows':
         if (params.get("id", "") or params["dbid"]):
             if params.get("dbid"):
                 if params.get("type") == "episode":
@@ -205,9 +205,9 @@ def start_info_actions(info, params):
             else:
                 tvshow_id = params.get("id", "")
             return Trakt.get_similar("show", tvshow_id)
-    elif info == 'airingshows':
+    elif info == 'airingepisodes':
         return Trakt.get_calendar_shows("shows")
-    elif info == 'premiereshows':
+    elif info == 'premiereepisodes':
         return Trakt.get_calendar_shows("premieres")
     elif info == 'trendingshows':
         return Trakt.get_trending_shows()

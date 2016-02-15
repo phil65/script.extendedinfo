@@ -24,6 +24,8 @@ class Main:
             xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_DURATION)
             if info.endswith("shows"):
                 xbmcplugin.setContent(self.handle, 'tvshows')
+            elif info.endswith("episodes"):
+                xbmcplugin.setContent(self.handle, 'episodes')
             else:
                 xbmcplugin.setContent(self.handle, 'movies')
             pass_list_to_skin(name=info,
@@ -52,8 +54,8 @@ class Main:
                      "starredmovies": "%s [I](TheMovieDB)[/I]" % LANG(32134),
                      "ratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32135),
                      }
-            tvshow = {"airingshows": "%s [I](Trakt.tv)[/I]" % LANG(32028),
-                      "premiereshows": "%s [I](Trakt.tv)[/I]" % LANG(32029),
+            tvshow = {"airingepisodes": "%s [I](Trakt.tv)[/I]" % LANG(32028),
+                      "premiereepisodes": "%s [I](Trakt.tv)[/I]" % LANG(32029),
                       "trendingshows": "%s [I](Trakt.tv)[/I]" % LANG(32032),
                       "airingtodaytvshows": "%s [I](TheMovieDB)[/I]" % LANG(32038),
                       "onairtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32039),
