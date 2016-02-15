@@ -21,9 +21,8 @@ def get_xkcd_images():
     items = []
     for i in range(0, 10):
         try:
-            base_url = 'http://xkcd.com/'
-            url = '%i/info.0.json' % random.randrange(1, 1190)
-            results = get_JSON_response(base_url + url, 9999, folder="XKCD")
+            url = 'http://xkcd.com/%i/info.0.json' % random.randrange(1, 1640)
+            results = get_JSON_response(url, 9999, folder="XKCD")
             item = {'thumb': results["img"],
                     'path': "plugin://script.extendedinfo?info=setfocus",
                     'poster': results["img"],
