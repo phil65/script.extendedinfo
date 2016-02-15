@@ -413,6 +413,7 @@ def handle_misc(results):
     listitems = []
     for item in results:
         artwork = get_image_urls(poster=item.get("poster_path"))
+        description = clean_text(fetch(item, 'description'))
         listitem = {'title': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
@@ -425,8 +426,8 @@ def handle_misc(results):
                     'content': clean_text(fetch(item, 'content')),
                     'id': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
-                    'Description': clean_text(fetch(item, 'description')),
-                    'Plot': clean_text(fetch(item, 'description'))}
+                    'Description': description,
+                    'Plot': description}
         listitem.update(artwork)
         listitems.append(listitem)
     return listitems
