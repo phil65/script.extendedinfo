@@ -173,8 +173,8 @@ def set_rating(media_type, media_id, rating):
 
 def send_request(url, params, values, delete=False):
     params["api_key"] = TMDB_KEY
-    for k, v in params.iteritems():
-        params[k] = unicode(v).encode('utf-8')
+    params = dict((k, v) for (k, v) in params.iteritems() if v)
+    params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     log(url)
     request = urllib2.Request(url=url,
@@ -603,8 +603,8 @@ def get_set_id(set_name):
 
 def get_data(url="", params={}, cache_days=14):
     params["api_key"] = TMDB_KEY
-    for k, v in params.iteritems():
-        params[k] = unicode(v).encode('utf-8')
+    params = dict((k, v) for (k, v) in params.iteritems() if v)
+    params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     return get_JSON_response(url, cache_days, "TheMovieDB")
 
