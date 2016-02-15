@@ -61,26 +61,26 @@ def start_info_actions(info, params):
         method = '"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}'
         return LocalDB.local_db.get_movies(method, params.get("limit", 10))
 #  RottenTomatoesMovies
-    elif info == 'intheaters':
+    elif info == 'intheatermovies':
         return RottenTomatoes.get_movies("movies/in_theaters")
-    elif info == 'boxoffice':
+    elif info == 'boxofficemovies':
         return RottenTomatoes.get_movies("movies/box_office")
-    elif info == 'opening':
+    elif info == 'openingmovies':
         return RottenTomatoes.get_movies("movies/opening")
-    elif info == 'comingsoon':
+    elif info == 'comingsoonmovies':
         return RottenTomatoes.get_movies("movies/upcoming")
-    elif info == 'toprentals':
+    elif info == 'toprentalmovies':
         return RottenTomatoes.get_movies("dvds/top_rentals")
-    elif info == 'currentdvdreleases':
+    elif info == 'currentdvdmovies':
         return RottenTomatoes.get_movies("dvds/current_releases")
-    elif info == 'newdvdreleases':
+    elif info == 'newdvdmovies':
         return RottenTomatoes.get_movies("dvds/new_releases")
-    elif info == 'upcomingdvds':
+    elif info == 'upcomingdvdmovies':
         return RottenTomatoes.get_movies("dvds/upcoming")
     #  The MovieDB
-    elif info == 'incinemas':
+    elif info == 'incinemamovies':
         return tmdb.get_tmdb_movies("now_playing")
-    elif info == 'upcoming':
+    elif info == 'upcomingmovies':
         return tmdb.get_tmdb_movies("upcoming")
     elif info == 'topratedmovies':
         return tmdb.get_tmdb_movies("top_rated")
@@ -147,7 +147,7 @@ def start_info_actions(info, params):
             if company_data:
                 return tmdb.get_company_data(company_data[0]["id"])
     elif info == 'set':
-        if params.get("dbid") and "show" not in str(params.get("type", "")):
+        if params.get("dbid") and "show" not in params.get("type", ""):
             name = LocalDB.local_db.get_set_name(params["dbid"])
             if name:
                 params["setid"] = tmdb.get_set_id(name)

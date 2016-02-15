@@ -425,7 +425,8 @@ def handle_misc(results):
                     'content': clean_text(fetch(item, 'content')),
                     'id': fetch(item, 'id'),
                     'url': fetch(item, 'url'),
-                    'Description': clean_text(fetch(item, 'description'))}
+                    'Description': clean_text(fetch(item, 'description')),
+                    'Plot': clean_text(fetch(item, 'description'))}
         listitem.update(artwork)
         listitems.append(listitem)
     return listitems

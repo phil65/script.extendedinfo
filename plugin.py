@@ -26,25 +26,27 @@ class Main:
                 xbmcplugin.setContent(self.handle, 'tvshows')
             elif info.endswith("episodes"):
                 xbmcplugin.setContent(self.handle, 'episodes')
-            else:
+            elif info.endswith("movies"):
                 xbmcplugin.setContent(self.handle, 'movies')
+            else:
+                xbmcplugin.setContent(self.handle, 'sets')
             pass_list_to_skin(name=info,
                               data=listitems,
                               prefix=self.params.get("prefix", ""),
                               handle=self.handle,
                               limit=self.params.get("limit", 20))
         else:
-            movie = {"intheaters": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
-                     "boxoffice": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
-                     "opening": "%s [I](RottenTomatoes)[/I]" % LANG(32048),
-                     "comingsoon": "%s [I](RottenTomatoes)[/I]" % LANG(32043),
-                     "toprentals": "%s [I](RottenTomatoes)[/I]" % LANG(32056),
-                     "currentdvdreleases": "%s [I](RottenTomatoes)[/I]" % LANG(32049),
-                     "newdvdreleases": "%s [I](RottenTomatoes)[/I]" % LANG(32053),
-                     "upcomingdvds": "%s [I](RottenTomatoes)[/I]" % LANG(32054),
+            movie = {"intheatermovies": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
+                     "boxofficemovies": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
+                     "openingmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32048),
+                     "comingsoonmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32043),
+                     "toprentalmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32056),
+                     "currentdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32049),
+                     "newdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32053),
+                     "upcomingdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32054),
                      # tmdb
-                     "incinemas": "%s [I](TheMovieDB)[/I]" % LANG(32042),
-                     "upcoming": "%s [I](TheMovieDB)[/I]" % LANG(32043),
+                     "incinemamovies": "%s [I](TheMovieDB)[/I]" % LANG(32042),
+                     "upcomingmovies": "%s [I](TheMovieDB)[/I]" % LANG(32043),
                      "topratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32046),
                      "popularmovies": "%s [I](TheMovieDB)[/I]" % LANG(32044),
                      "accountlists": "%s [I](TheMovieDB)[/I]" % LANG(32045),
