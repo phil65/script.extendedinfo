@@ -26,11 +26,7 @@ def start_info_actions(info, params):
     prettyprint(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
-    if info == 'xkcd':
-        return MiscScraper.get_xkcd_images()
-    elif info == 'cyanide':
-        return MiscScraper.get_cyanide_images()
-    elif info == 'dailybabes':
+    if info == 'dailybabes':
         return MiscScraper.get_babe_images()
     elif info == 'dailybabe':
         return MiscScraper.get_babe_images(single=True)
