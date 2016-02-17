@@ -104,9 +104,15 @@ class DialogBaseList(object):
 
     @ch.click(C_BUTTON_SEARCH)
     def open_search(self):
-        T9Search(call=self.search,
-                 start_value="",
-                 history=self.__class__.__name__ + ".search")
+        if SETTING("classic_search") == "true":
+            result = xbmcgui.Dialog().input(heading=LANG(16017),
+                                            type=xbmcgui.INPUT_ALPHANUM)
+            if result and result > -1:
+                self.search(result)
+        else:
+            T9Search(call=self.search,
+                     start_value="",
+                     history=self.__class__.__name__ + ".search")
         if self.total_items > 0:
             self.setFocusId(C_LIST_MAIN)
 
