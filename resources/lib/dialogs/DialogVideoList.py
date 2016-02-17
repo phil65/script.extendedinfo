@@ -146,7 +146,7 @@ def get_window(window_type):
             self.update()
 
         def add_filter(self, **kwargs):
-            super(DialogVideoList, self).add_filter(force_overwrite=".gte" in kwargs["key"] or ".lte" in kwargs["key"],
+            super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
                                                     **kwargs)
 
         @ch.click(5004)
