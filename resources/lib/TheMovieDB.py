@@ -621,7 +621,6 @@ def get_company_data(company_id):
     if not company_id:
         return []
     response = get_data(url="company/%s/movies" % (company_id),
-                        params=params,
                         cache_days=30)
     if response and "results" in response:
         return handle_movies(response["results"])
