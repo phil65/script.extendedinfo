@@ -16,6 +16,7 @@ C_BUTTON_SEARCH = 6000
 C_BUTTON_RESET_FILTERS = 5005
 C_LIST_MAIN = 500
 
+
 class DialogBaseList(object):
 
     def __init__(self, *args, **kwargs):
