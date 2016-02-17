@@ -15,7 +15,6 @@ import RottenTomatoes
 import KodiJson
 from WindowManager import wm
 import VideoPlayer
-import MiscScraper
 
 
 def start_info_actions(info, params):
@@ -26,12 +25,9 @@ def start_info_actions(info, params):
     prettyprint(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
-    if info == 'dailybabes':
-        return MiscScraper.get_babe_images()
-    elif info == 'dailybabe':
-        return MiscScraper.get_babe_images(single=True)
+
     # Audio
-    elif info == 'discography':
+    if info == 'discography':
         discography = AudioDB.get_artist_discography(params["artistname"])
         if not discography:
             discography = LastFM.get_artist_albums(params.get("artist_mbid"))
@@ -253,7 +249,7 @@ def start_info_actions(info, params):
             return YouTube.get_playlist_videos(playlists["uploads"])
     elif info == 'favourites':
         if params.get("id"):
-            favs = get_favs_by_type(params.get("id", ""))
+            favs = get_favs_by_type(params["id"])
         else:
             favs = get_favs()
             HOME.setProperty('favourite.count', str(len(favs)))
@@ -423,7 +419,7 @@ def start_info_actions(info, params):
             movie_id = LocalDB.local_db.get_imdb_id(media_type="movie",
                                                     dbid=params["dbid"])
         elif params.get("imdb_id"):
-            movie_id = tmdb.get_movie_tmdb_id(params.get("imdb_id", ""))
+            movie_id = tmdb.get_movie_tmdb_id(params["imdb_id"])
         else:
             movie_id = ""
         if movie_id:
