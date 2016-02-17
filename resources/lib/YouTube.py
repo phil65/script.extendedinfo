@@ -5,6 +5,7 @@
 
 from Utils import *
 import urllib
+import itertools
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
