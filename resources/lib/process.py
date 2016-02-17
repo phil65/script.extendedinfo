@@ -171,8 +171,9 @@ def start_info_actions(info, params):
                 del item["credit_id"]
             return merge_dict_lists(movies, key="department")
     elif info == 'writermovies':
-        if params.get("writer") and not params["writer"].split(" / ")[0] == params.get("director", "").split(" / ")[0]:
-            writer_info = tmdb.get_person_info(person_label=params["writer"],
+        writer = params.get("writer")
+        if writer and not writer.split(" / ")[0] == params.get("director", "").split(" / ")[0]:
+            writer_info = tmdb.get_person_info(person_label=writer,
                                                skip_dialog=True)
             if writer_info and writer_info.get("id"):
                 movies = tmdb.get_person_movies(writer_info["id"])
@@ -184,10 +185,10 @@ def start_info_actions(info, params):
             if params.get("dbid"):
                 movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
             else:
-                movie_id = params.get("id", "")
+                movie_id = params["id"]
             return Trakt.get_similar("movie", movie_id)
     elif info == 'traktsimilartvshows':
-        if (params.get("id", "") or params["dbid"]):
+        if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
                 if params.get("type") == "episode":
                     tvshow_id = LocalDB.local_db.get_tvshow_id_by_episode(params["dbid"])
@@ -195,7 +196,7 @@ def start_info_actions(info, params):
                     tvshow_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
                                                              dbid=params["dbid"])
             else:
-                tvshow_id = params.get("id", "")
+                tvshow_id = params["id"]
             return Trakt.get_similar("show", tvshow_id)
     elif info == 'airingepisodes':
         return Trakt.get_calendar_shows("shows")
@@ -210,12 +211,12 @@ def start_info_actions(info, params):
     elif info == 'artistevents':
         return LastFM.get_events(params.get("artist_mbid"))
     elif info == 'nearevents':
-        return LastFM.get_near_events(tag=params.get("tag", ""),
-                                      festivals_only=params.get("festivalsonly", ""),
-                                      lat=params.get("lat", ""),
-                                      lon=params.get("lon", ""),
-                                      location=params.get("location", ""),
-                                      distance=params.get("distance", ""))
+        return LastFM.get_near_events(tag=params.get("tag"),
+                                      festivals_only=params.get("festivalsonly"),
+                                      lat=params.get("lat"),
+                                      lon=params.get("lon"),
+                                      location=params.get("location"),
+                                      distance=params.get("distance"))
     elif info == 'trackinfo':
         HOME.clearProperty('%sSummary' % params.get("prefix", ""))
         if params["artistname"] and params["trackname"]:
@@ -226,7 +227,7 @@ def start_info_actions(info, params):
         if params["location"]:
             params["id"] = LastFM.get_venue_id(params["location"])
         if params.get("id"):
-            return LastFM.get_venue_events(params.get("id", ""))
+            return LastFM.get_venue_events(params.get("id"))
         else:
             notify("Error", "Could not find venue")
     elif info == 'topartistsnearevents':
@@ -243,7 +244,7 @@ def start_info_actions(info, params):
     elif info == 'youtubeplaylist':
         return YouTube.get_playlist_videos(params.get("id", ""))
     elif info == 'youtubeusersearch':
-        user_name = params.get("id", "")
+        user_name = params.get("id")
         if user_name:
             playlists = YouTube.get_user_playlists(user_name)
             return YouTube.get_playlist_videos(playlists["uploads"])
@@ -336,23 +337,23 @@ def start_info_actions(info, params):
                            mode="search")
     elif info == 'extendedinfo':
         HOME.setProperty('infodialogs.active', "true")
-        wm.open_movie_info(movie_id=params.get("id", ""),
+        wm.open_movie_info(movie_id=params.get("id"),
                            dbid=params.get("dbid"),
-                           imdb_id=params.get("imdb_id", ""),
-                           name=params.get("name", ""))
+                           imdb_id=params.get("imdb_id"),
+                           name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedactorinfo':
         HOME.setProperty('infodialogs.active', "true")
-        wm.open_actor_info(actor_id=params.get("id", ""),
-                           name=params.get("name", ""))
+        wm.open_actor_info(actor_id=params.get("id"),
+                           name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedtvinfo':
         HOME.setProperty('infodialogs.active', "true")
-        wm.open_tvshow_info(tmdb_id=params.get("id", ""),
-                            tvdb_id=params.get("tvdb_id", ""),
+        wm.open_tvshow_info(tmdb_id=params.get("id"),
+                            tvdb_id=params.get("tvdb_id"),
                             dbid=params.get("dbid"),
-                            imdb_id=params.get("imdb_id", ""),
-                            name=params.get("name", ""))
+                            imdb_id=params.get("imdb_id"),
+                            name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'seasoninfo':
         HOME.setProperty('infodialogs.active', "true")
@@ -370,7 +371,7 @@ def start_info_actions(info, params):
         HOME.clearProperty('infodialogs.active')
     elif info == 'albuminfo':
         if params.get("id"):
-            album_details = AudioDB.get_album_details(params.get("id", ""))
+            album_details = AudioDB.get_album_details(params.get("id"))
             pass_dict_to_skin(album_details, params.get("prefix", ""))
     elif info == 'artistdetails':
         artist_details = AudioDB.get_artist_details(params["artistname"])
@@ -381,10 +382,10 @@ def start_info_actions(info, params):
             if params.get("id"):
                 tmdb_id = params["id"]
             elif media_type == "movie":
-                tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id", ""),
-                                                 dbid=params.get("dbid", ""),
-                                                 name=params.get("name", ""))
-            elif media_type == "tv" and params["dbid"]:
+                tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                                 dbid=params.get("dbid"),
+                                                 name=params.get("name"))
+            elif media_type == "tv" and params.get("dbid"):
                 tvdb_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
                                                        dbid=params["dbid"])
                 tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
@@ -404,17 +405,13 @@ def start_info_actions(info, params):
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)
-    elif info == 'bounce':
-        HOME.setProperty(params.get("name", ""), "True")
-        time.sleep(0.2)
-        HOME.clearProperty(params.get("name", ""))
     elif info == "youtubevideo":
         xbmc.executebuiltin("Dialog.Close(all,true)")
         VideoPlayer.PLAYER.play_youtube_video(params.get("id", ""))
     elif info == 'playtrailer':
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if params.get("id"):
-            movie_id = params.get("id", "")
+            movie_id = params["id"]
         elif int(params.get("dbid", -1)) > 0:
             movie_id = LocalDB.local_db.get_imdb_id(media_type="movie",
                                                     dbid=params["dbid"])
@@ -429,7 +426,7 @@ def start_info_actions(info, params):
             if trailer:
                 VideoPlayer.PLAYER.play_youtube_video(trailer)
             elif params.get("title"):
-                wm.open_youtube_list(search_str=params.get("title", ""))
+                wm.open_youtube_list(search_str=params["title"])
             else:
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
     elif info == 'deletecache':
