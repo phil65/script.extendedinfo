@@ -110,7 +110,7 @@ def handle_artists(results):
             continue
         artist = {'title': artist['name'],
                   'name': artist['name'],
-                  'mbid': artist['mbid'],
+                  'mbid': artist.get('mbid'),
                   'thumb': artist['image'][-1]['#text'],
                   'Listeners': format(int(artist.get('listeners', 0)), ",d")}
         artists.append(artist)
