@@ -89,18 +89,6 @@ def handle_albums(results):
     return albums
 
 
-def handle_shouts(results):
-    shouts = []
-    if not results:
-        return []
-    for item in results['shouts']['shout']:
-        shout = {'comment': item['body'],
-                 'author': item['author'],
-                 'date': item['date'][4:]}
-        shouts.append(shout)
-    return shouts
-
-
 def handle_artists(results):
     artists = []
     if not results:
@@ -126,40 +114,10 @@ def get_events(mbid, past_events=False):
     return handle_events(results)
 
 
-def get_artist_podcast(artist):  # todo
-    results = get_data(method="Artist.getPodcast",
-                       params={"limit": "100"})
-    return handle_artists(results['artists'])
-
-
-def get_hyped_artists():
-    results = get_data(method="Chart.getHypedArtists",
-                       params={"limit": "100"})
-    return handle_artists(results['artists'])
-
-
 def get_top_artists():
     results = get_data(method="Chart.getTopArtists",
                        params={"limit": "100"})
     return handle_artists(results['artists'])
-
-
-def get_album_shouts(artist_name, album_title):
-    if not artist_name or not album_title:
-        return []
-    params = {"artist": artist_name,
-              "album": album_title}
-    results = get_data(method="Album.getShouts",
-                       params=params)
-    return handle_shouts(results)
-
-
-def get_artist_shouts(artist_name):
-    if not artist_name:
-        return []
-    results = get_data(method="Artist.GetShouts",
-                       params={"artist": artist_name})
-    return handle_shouts(results)
 
 
 def get_artist_images(artist_mbid):
@@ -169,24 +127,6 @@ def get_artist_images(artist_mbid):
                        params={"mbid": artist_mbid},
                        cache_days=5)
     return handle_events(results)
-
-
-def get_track_shouts(artist_name, track_title):
-    if not artist_name or not track_title:
-        return []
-    params = {"artist": artist_name,
-              "track": track_title}
-    results = get_data(method="Track.getShouts",
-                       params=params)
-    return handle_shouts(results)
-
-
-def get_event_shouts(event_id):
-    if not event_id:
-        return []
-    results = get_data(method="event.GetShouts",
-                       params={"event": event_id})
-    return handle_shouts(results)
 
 
 def get_venue_id(venue_name=""):

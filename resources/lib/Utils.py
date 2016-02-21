@@ -174,7 +174,6 @@ def widget_selectdialog(filter=None, prefix="widget"):
              }
 # popularpeople
     artist = {"topartists": "LastFM: Top artists",
-              "hypedartists": "LastFM: Hyped artists"
               }
     event = {}
     if True:

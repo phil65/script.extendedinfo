@@ -270,28 +270,11 @@ RunScript(script.extendedinfo,info=artistdetails) ???
 
 
 ### LastFM
-```
-RunScript(script.extendedinfo,info=albumshouts)
-```
-- fetches twitter shouts for given album
-  - required additional parameters: artistname=, albumname=
-```
-RunScript(script.extendedinfo,info=artistshouts)
-```
-- fetches twitter shouts for given artist
-  - required additional parameters: artistname=
-
-- 'comment':  Tweet Content
-- 'author':   Tweet Author
-- 'date':     Tweet Date
 
 ```
 RunScript(script.extendedinfo,info=topartists)
 ```
 - fetches a lists of the most popular artists
-```
-RunScript(script.extendedinfo,info=hypedartists)
-```
 
 Available Properties:
 

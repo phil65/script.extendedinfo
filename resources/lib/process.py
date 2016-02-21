@@ -36,14 +36,8 @@ def start_info_actions(info, params):
         return AudioDB.get_most_loved_tracks(params["artistname"])
     elif info == 'trackdetails':
         return AudioDB.get_track_details(params.get("id", ""))
-    elif info == 'albumshouts':
-        return LastFM.get_album_shouts(params["artistname"], params["albumname"])
-    elif info == 'artistshouts':
-        return LastFM.get_artist_shouts(params["artistname"])
     elif info == 'topartists':
         return LastFM.get_top_artists()
-    elif info == 'hypedartists':
-        return LastFM.get_hyped_artists()
     elif info == 'latestdbmovies':
         return LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}',
                                            params.get("limit", 10))
