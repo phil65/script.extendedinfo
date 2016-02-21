@@ -3,7 +3,8 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
+import urllib
+import Utils
 
 LAST_FM_API_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -46,21 +47,6 @@ def get_top_artists():
     return handle_artists(results['artists'])
 
 
-def get_venue_id(venue_name=""):
-    if not venue_name:
-        return []
-    results = get_data(method="Venue.search",
-                       params={"venue": venue_name})
-    if "results" in results:
-        matches = results["results"]["matches"]
-        if "venue" in matches and matches["venue"]:
-            if isinstance(matches["venue"], list):
-                return matches["venue"][0]["id"]
-            else:
-                return matches["venue"]["id"]
-    return []
-
-
 def get_artist_albums(artist_mbid):
     if not artist_mbid:
         return []
@@ -84,7 +70,7 @@ def get_track_info(artist_name="", track=""):
     if not artist_name or not track:
         return []
     params = {"artist": artist_name,
-              "track": track_title}
+              "track": track}
     results = get_data(method="track.getInfo",
                        params=params)
     if not results:
@@ -92,7 +78,7 @@ def get_track_info(artist_name="", track=""):
     summary = results['track']['wiki']['summary'] if "wiki" in results['track'] else ""
     return {'playcount': str(results['track']['playcount']),
             'thumb': str(results['track']['playcount']),
-            'summary': clean_text(summary)}
+            'summary': Utils.clean_text(summary)}
 
 
 def get_data(method, params={}, cache_days=0.5):
@@ -102,6 +88,6 @@ def get_data(method, params={}, cache_days=0.5):
     params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "{base_url}{params}".format(base_url=BASE_URL,
                                       params=urllib.urlencode(params))
-    return get_JSON_response(url=url,
-                             cache_days=cache_days,
-                             folder="LastFM")
+    return Utils.get_JSON_response(url=url,
+                                   cache_days=cache_days,
+                                   folder="LastFM")
