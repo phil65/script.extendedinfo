@@ -490,7 +490,7 @@ def handle_people(results):
                   'character': fetch(item, 'character'),
                   'department': fetch(item, 'department'),
                   'job': fetch(item, 'job'),
-                  'media_type': "item",
+                  'media_type': "person",
                   'id': str(item['id']),
                   'cast_id': str(fetch(item, 'cast_id')),
                   'credit_id': str(fetch(item, 'credit_id')),
