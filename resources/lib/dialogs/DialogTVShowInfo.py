@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 from ..Utils import *
 from .. import ImageTools
-from .. import TheMovieDB
+from .. import TheMovieDB as tmdb
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
@@ -23,8 +23,8 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
             self.type = "TVShow"
-            data = TheMovieDB.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
-                                                   dbid=self.dbid)
+            data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
+                                             dbid=self.dbid)
             if not data:
                 return None
             self.info, self.data, self.account_states = data
@@ -36,7 +36,7 @@ def get_window(window_type):
                               (250, self.data["seasons"]),
                               (1450, self.data["networks"]),
                               (550, self.data["studios"]),
-                              (650, TheMovieDB.merge_with_cert_desc(self.data["certifications"], "tv")),
+                              (650, tmdb.merge_with_cert_desc(self.data["certifications"], "tv")),
                               (750, self.data["crew"]),
                               (850, self.data["genres"]),
                               (950, self.data["keywords"]),
@@ -148,8 +148,8 @@ def get_window(window_type):
 
         @ch.click(6001)
         def set_rating(self):
-            if TheMovieDB.set_rating_prompt(media_type="tv",
-                                            media_id=self.info["id"]):
+            if tmdb.set_rating_prompt(media_type="tv",
+                                      media_id=self.info["id"]):
                 self.update_states()
 
         @ch.click(6002)
@@ -167,9 +167,9 @@ def get_window(window_type):
 
         @ch.click(6003)
         def toggle_fav_status(self):
-            TheMovieDB.change_fav_status(media_id=self.info["id"],
-                                         media_type="tv",
-                                         status=str(not bool(self.account_states["favorite"])).lower())
+            tmdb.change_fav_status(media_id=self.info["id"],
+                                   media_type="tv",
+                                   status=str(not bool(self.account_states["favorite"])).lower())
             self.update_states()
 
         @ch.click(6006)
@@ -191,9 +191,9 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = TheMovieDB.extended_tvshow_info(tvshow_id=self.info["id"],
-                                                                         cache_time=0,
-                                                                         dbid=self.dbid)
+            _, __, self.account_states = tmdb.extended_tvshow_info(tvshow_id=self.info["id"],
+                                                                   cache_time=0,
+                                                                   dbid=self.dbid)
             super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo
