@@ -129,15 +129,13 @@ def get_window(window_type):
             manage_list = []
             title = self.info.get("TVShowTitle", "")
             if self.dbid:
-                artwork_call = "RunScript(script.artwork.downloader,%s)"
-                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=tv,dbid=" + self.dbid)],
-                                [LANG(14061), artwork_call % ("mediatype=tv, dbid=" + self.dbid)],
-                                [LANG(32101), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid + ",extrathumbs")],
-                                [LANG(32100), artwork_call % ("mode=custom,mediatype=tv,dbid=" + self.dbid)]]
+                artwork_call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
+                manage_list += [[LANG(413), artwork_call % ("mode=gui,dbid=" + self.dbid)],
+                                [LANG(14061), artwork_call % ("dbid=" + self.dbid)],
+                                [LANG(32101), artwork_call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
+                                [LANG(32100), artwork_call % ("mode=custom,dbid=" + self.dbid)]]
             else:
                 manage_list += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
-            # if xbmc.getCondVisibility("system.hasaddon(script.tvtunes)") and self.dbid:
-            #     manage_list.append([LANG(32102), "RunScript(script.tvtunes,mode=solo&amp;tvpath=$ESCINFO[Window.Property(FilenameAndPath)]&amp;tvname=$INFO[Window.Property(TVShowTitle)])"])
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
                 manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
             manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])

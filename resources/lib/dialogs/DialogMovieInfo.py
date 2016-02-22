@@ -99,7 +99,8 @@ def get_window(window_type):
 
         @ch.click(10)
         def play_trailer(self):
-            PLAYER.play_youtube_video(youtube_id=self.getControl(1150).getListItem(0).getProperty("youtube_id"),
+            youtube_id = self.getControl(1150).getListItem(0).getProperty("youtube_id")
+            PLAYER.play_youtube_video(youtube_id=youtube_id,
                                       window=self)
 
         @ch.click(350)
@@ -257,11 +258,11 @@ def get_window(window_type):
             movie_id = str(self.info.get("dbid", ""))
             imdb_id = str(self.info.get("imdb_id", ""))
             if movie_id:
-                artwork_call = "RunScript(script.artwork.downloader,%s)"
-                manage_list += [[LANG(413), artwork_call % ("mode=gui,mediatype=movie,dbid=" + movie_id + ")")],
-                                [LANG(14061), artwork_call % ("mediatype=movie, dbid=" + movie_id + ")")],
-                                [LANG(32101), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ",extrathumbs)")],
-                                [LANG(32100), artwork_call % ("mode=custom,mediatype=movie,dbid=" + movie_id + ")")]]
+                artwork_call = "RunScript(script.artwork.downloader,mediatype=movie,%s)"
+                manage_list += [[LANG(413), artwork_call % ("mode=gui,dbid=" + movie_id)],
+                                [LANG(14061), artwork_call % ("dbid=" + movie_id)],
+                                [LANG(32101), artwork_call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
+                                [LANG(32100), artwork_call % ("mode=custom,dbid=" + movie_id)]]
             else:
                 manage_list += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
