@@ -445,7 +445,7 @@ def get_window(window_type):
                           "language": SETTING("LanguageID"),
                           "page": self.page,
                           "include_adult": include_adult}
-                filters = {item["type"]: item["id"] for item in self.filters}
+                filters = dict((item["type"], item["id"]) for item in self.filters)
                 params = merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
             if force:
