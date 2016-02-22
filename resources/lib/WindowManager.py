@@ -204,6 +204,8 @@ class WindowManager(object):
             actor_info = TheMovieDB.get_person_info(name)
             if actor_info:
                 actor_id = actor_info["id"]
+            else:
+                return None
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         actor_class = DialogActorInfo.get_window(self.window_type)
