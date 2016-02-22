@@ -20,10 +20,10 @@ ch = ActionHandler()
 
 def get_window(window_type):
 
-    class DialogVideoInfo(DialogBaseInfo, window_type):
+    class DialogMovieInfo(DialogBaseInfo, window_type):
 
         def __init__(self, *args, **kwargs):
-            super(DialogVideoInfo, self).__init__(*args, **kwargs)
+            super(DialogMovieInfo, self).__init__(*args, **kwargs)
             self.type = "Movie"
             data = TheMovieDB.extended_movie_info(movie_id=kwargs.get('id'),
                                                   dbid=self.dbid)
@@ -59,10 +59,10 @@ def get_window(window_type):
                               (1350, self.data["backdrops"])]
 
         def onInit(self):
-            super(DialogVideoInfo, self).onInit()
+            super(DialogMovieInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               window_id=self.window_id)
-            super(DialogVideoInfo, self).update_states()
+            super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info["Label"], self.info["year"]))
             self.fill_lists()
             pass_dict_to_skin(data=self.setinfo,
@@ -71,11 +71,11 @@ def get_window(window_type):
             self.join_omdb_async()
 
         def onClick(self, control_id):
-            super(DialogVideoInfo, self).onClick(control_id)
+            super(DialogMovieInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
         def onAction(self, action):
-            super(DialogVideoInfo, self).onAction(action)
+            super(DialogMovieInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
         @ch.action("contextmenu", 150)
@@ -286,7 +286,7 @@ def get_window(window_type):
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = TheMovieDB.extended_movie_info(self.info["id"], self.dbid, 0)
-            super(DialogVideoInfo, self).update_states()
+            super(DialogMovieInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
             listitems = ["%s (%i)" % (d["name"], d["item_count"]) for d in account_lists]
@@ -317,4 +317,4 @@ def get_window(window_type):
                 self.listitems = []
                 self.setinfo = {}
 
-    return DialogVideoInfo
+    return DialogMovieInfo

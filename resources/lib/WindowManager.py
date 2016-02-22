@@ -82,12 +82,12 @@ class WindowManager(object):
         open movie info, deal with window stack
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
-        from dialogs import DialogVideoInfo
+        from dialogs import DialogMovieInfo
         if not movie_id:
             movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
                                                     dbid=dbid,
                                                     name=name)
-        movie_class = DialogVideoInfo.get_window(self.window_type)
+        movie_class = DialogMovieInfo.get_window(self.window_type)
         dialog = movie_class(INFO_DIALOG_FILE,
                              ADDON_PATH,
                              id=movie_id,
