@@ -1,3 +1,9 @@
+v4.5.2
+- fix filter stuff for python 2.6
+- fix some artwork downloader calls
+- skin cosmetics
+- removed depracated API calls to LastFMs
+
 v4.5.1
 - fix tmdb company info call
 - fix LastFM error for artists without mbid
