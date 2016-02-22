@@ -131,10 +131,7 @@ def get_window(window_type):
 
         @ch.click(C_BUTTON_SORT)
         def get_sort_type(self):
-            if self.mode in ["favorites", "rating", "list"]:
-                sort_key = self.mode
-            else:
-                sort_key = self.type
+            sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
             listitems = [k for k in self.SORTS[sort_key].values()]
             sort_strings = [v for v in self.SORTS[sort_key].keys()]
             index = xbmcgui.Dialog().select(heading=LANG(32104),
@@ -241,16 +238,10 @@ def get_window(window_type):
             result = xbmcgui.Dialog().input(heading=LANG(32111),
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
-                if ret:
-                    self.add_filter(key="vote_count.%s" % "lte",
-                                    value=result,
-                                    typelabel=LANG(32111),
-                                    label=" < " + result)
-                else:
-                    self.add_filter(key="vote_count.%s" % "gte",
-                                    value=result,
-                                    typelabel=LANG(32111),
-                                    label=" > " + result)
+                self.add_filter(key="vote_count.lte" if ret else "vote_count.gte",
+                                value=result,
+                                typelabel=LANG(32111),
+                                label=" < " + result if ret else " > " + result)
                 self.mode = "filter"
                 self.page = 1
                 self.update()
@@ -448,14 +439,9 @@ def get_window(window_type):
                 filters = dict((item["type"], item["id"]) for item in self.filters)
                 params = merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
-            if force:
-                response = tmdb.get_data(url=url,
-                                         params=params,
-                                         cache_days=0)
-            else:
-                response = tmdb.get_data(url=url,
-                                         params=params,
-                                         cache_days=2)
+            response = tmdb.get_data(url=url,
+                                     params=params,
+                                     cache_days=0 if force else 2)
             if not response:
                 return None
             if self.mode == "list":
