@@ -60,7 +60,7 @@ def get_window(window_type):
         @ch.click(120)
         def browse_tvshow(self):
             self.close()
-            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % (self.dbid))
+            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
         @ch.click(750)
         @ch.click(1000)
@@ -126,24 +126,24 @@ def get_window(window_type):
 
         @ch.click(445)
         def show_manage_dialog(self):
-            manage_list = []
+            options = []
             title = self.info.get("TVShowTitle", "")
             if self.dbid:
-                artwork_call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
-                manage_list += [[LANG(413), artwork_call % ("mode=gui,dbid=" + self.dbid)],
-                                [LANG(14061), artwork_call % ("dbid=" + self.dbid)],
-                                [LANG(32101), artwork_call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
-                                [LANG(32100), artwork_call % ("mode=custom,dbid=" + self.dbid)]]
+                call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
+                options += [[LANG(413), call % ("mode=gui,dbid=" + self.dbid)],
+                            [LANG(14061), call % ("dbid=" + self.dbid)],
+                            [LANG(32101), call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
+                            [LANG(32100), call % ("mode=custom,dbid=" + self.dbid)]]
             else:
-                manage_list += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
+                options += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
-                manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
-            manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+                options.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
+            options.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             selection = xbmcgui.Dialog().select(heading=LANG(32133),
-                                                list=[item[0] for item in manage_list])
+                                                list=[item[0] for item in options])
             if selection == -1:
                 return None
-            for item in manage_list[selection][1].split("||"):
+            for item in options[selection][1].split("||"):
                 xbmc.executebuiltin(item)
 
         @ch.click(6001)

@@ -254,24 +254,24 @@ def get_window(window_type):
 
         @ch.click(445)
         def show_manage_dialog(self):
-            manage_list = []
+            options = []
             movie_id = str(self.info.get("dbid", ""))
             imdb_id = str(self.info.get("imdb_id", ""))
             if movie_id:
-                artwork_call = "RunScript(script.artwork.downloader,mediatype=movie,%s)"
-                manage_list += [[LANG(413), artwork_call % ("mode=gui,dbid=" + movie_id)],
-                                [LANG(14061), artwork_call % ("dbid=" + movie_id)],
-                                [LANG(32101), artwork_call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
-                                [LANG(32100), artwork_call % ("mode=custom,dbid=" + movie_id)]]
+                call = "RunScript(script.artwork.downloader,mediatype=movie,%s)"
+                options += [[LANG(413), call % ("mode=gui,dbid=" + movie_id)],
+                            [LANG(14061), call % ("dbid=" + movie_id)],
+                            [LANG(32101), call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
+                            [LANG(32100), call % ("mode=custom,dbid=" + movie_id)]]
             else:
-                manage_list += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
+                options += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
-                manage_list.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
-            manage_list.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+                options.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
+            options.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             selection = xbmcgui.Dialog().select(heading=LANG(32133),
-                                                list=[i[0] for i in manage_list])
+                                                list=[i[0] for i in options])
             if selection > -1:
-                for item in manage_list[selection][1].split("||"):
+                for item in options[selection][1].split("||"):
                     xbmc.executebuiltin(item)
 
         def sort_lists(self, lists):
