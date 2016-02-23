@@ -96,7 +96,7 @@ def get_colors(img):
     g = 0
     b = 0
     counter = 0
-    for x in range(len(data)):
+    for x in data:
         brightness = data[x][0] + data[x][1] + data[x][2]
         if brightness > 150 and brightness < 720:
             r += data[x][0]
