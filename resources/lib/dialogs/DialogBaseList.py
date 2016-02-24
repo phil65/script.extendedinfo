@@ -220,14 +220,13 @@ class DialogBaseList(object):
             self.filters[index]["id"] = urllib.quote_plus(str(value))
             self.filters[index]["label"] = str(label)
             return None
-        dialog = xbmcgui.Dialog()
-        ret = dialog.yesno(heading=LANG(587),
-                           line1=LANG(32106),
-                           nolabel="OR",
-                           yeslabel="AND")
+        ret = xbmcgui.Dialog().yesno(heading=LANG(587),
+                                     line1=LANG(32106),
+                                     nolabel="OR",
+                                     yeslabel="AND")
         if ret:
-            self.filters[index]["id"] = self.filters[index]["id"] + "," + urllib.quote_plus(str(value))
-            self.filters[index]["label"] = self.filters[index]["label"] + "," + label
+            self.filters[index]["id"] += ",%s" % urllib.quote_plus(str(value))
+            self.filters[index]["label"] += ",%s" % label
         else:
-            self.filters[index]["id"] = self.filters[index]["id"] + "|" + urllib.quote_plus(str(value))
-            self.filters[index]["label"] = self.filters[index]["label"] + "|" + label
+            self.filters[index]["id"] += "|%s" % urllib.quote_plus(str(value))
+            self.filters[index]["label"] += "|%s" % label
