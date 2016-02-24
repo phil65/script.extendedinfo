@@ -108,7 +108,7 @@ class DialogBaseList(object):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
-                self.search(result)
+                self.search(result.decode("utf-8"))
         else:
             T9Search(call=self.search,
                      start_value="",
