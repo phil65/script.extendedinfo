@@ -40,7 +40,8 @@ def get_window(window_type):
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
-            self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in sets_thread.ids]
+            set_ids = [item["id"] for item in sets_thread.listitems]
+            self.data["similar"] = [i for i in self.data["similar"] if i["id"] not in set_ids]
             filter_thread.join()
             self.info['ImageFilter'] = filter_thread.image
             self.info['ImageColor'] = filter_thread.imagecolor
@@ -312,9 +313,7 @@ def get_window(window_type):
         def run(self):
             if self.set_id:
                 self.listitems, self.setinfo = tmdb.get_set_movies(self.set_id)
-                self.ids = [item["id"] for item in self.listitems]
             else:
-                self.ids = []
                 self.listitems = []
                 self.setinfo = {}
 
