@@ -4,6 +4,8 @@ v4.5.2
 - skin cosmetics
 - removed depracated API calls to LastFMs
 - fix error message when cancelling actor selection
+- fix some bugs for data with non-ascii characters
+- fix bug when using filters
 
 v4.5.1
 - fix tmdb company info call
