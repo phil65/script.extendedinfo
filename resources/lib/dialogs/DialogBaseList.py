@@ -217,7 +217,7 @@ class DialogBaseList(object):
             self.filters.append(new_filter)
             return None
         if force_overwrite:
-            self.filters[index]["id"] = urllib.quote_plus(str(value))
+            self.filters[index]["id"] = str(value)
             self.filters[index]["label"] = str(label)
             return None
         ret = xbmcgui.Dialog().yesno(heading=LANG(587),
@@ -225,8 +225,8 @@ class DialogBaseList(object):
                                      nolabel="OR",
                                      yeslabel="AND")
         if ret:
-            self.filters[index]["id"] += ",%s" % urllib.quote_plus(str(value))
+            self.filters[index]["id"] += ",%s" % str(value)
             self.filters[index]["label"] += ",%s" % label
         else:
-            self.filters[index]["id"] += "|%s" % urllib.quote_plus(str(value))
+            self.filters[index]["id"] += "|%s" % str(value)
             self.filters[index]["label"] += "|%s" % label
