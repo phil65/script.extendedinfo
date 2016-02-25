@@ -89,9 +89,7 @@ def get_colors(img):
         return "FFF0F0F0"
     data = []
     for x in range(width/2):
-        for y in range(height/2):
-            cpixel = pixels[x*2, y*2]
-            data.append(cpixel)
+        data += [pixels[x*2, y*2] for y in range(height/2)]
     r = 0
     g = 0
     b = 0
