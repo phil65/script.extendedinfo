@@ -202,13 +202,13 @@ class DialogBaseList(object):
     def add_filter(self, key, value, typelabel, label, force_overwrite=False):
         if not value:
             return False
-        index = -1
         new_filter = {"id": value,
                       "type": key,
                       "typelabel": typelabel,
                       "label": label}
         if new_filter in self.filters:
             return False
+        index = -1
         for i, item in enumerate(self.filters):
             if item["type"] == key:
                 index = i
@@ -225,8 +225,8 @@ class DialogBaseList(object):
                                      nolabel="OR",
                                      yeslabel="AND")
         if ret:
-            self.filters[index]["id"] += ",%s" % str(value)
+            self.filters[index]["id"] += ",%s" % value
             self.filters[index]["label"] += ",%s" % label
         else:
-            self.filters[index]["id"] += "|%s" % str(value)
+            self.filters[index]["id"] += "|%s" % value
             self.filters[index]["label"] += "|%s" % label
