@@ -16,7 +16,7 @@
             <animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
         </control>
         <control type="image">
-            <texture background="true">$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
+            <texture background="true">$INFO[ListItem.Property(Fanart_small)]</texture>
             <width>1920</width>
             <height>1080</height>
             <fadetime>400</fadetime>
@@ -42,7 +42,7 @@
                 <effect type="fade" start="100" end="0" time="240" />
             </animation>
             <control type="group">
-                <visible>IntegerGreaterThan(Container(500).NumItems,0)</visible>
+                <visible>IntegerGreaterThan(Container.NumItems,0)</visible>
                 <animation effect="fade" time="320" delay="300">Visible</animation>
                 <control type="image">
                     <posx>465</posx>
@@ -97,7 +97,7 @@
                 </animation>
             </control>
             <control type="image">
-                <texture>$INFO[Container(500).ListItem.Property(Fanart_small)]</texture>
+                <texture>$INFO[ListItem.Property(Fanart_small)]</texture>
                 <posx>40</posx>
                 <posy>180</posy>
                 <width>396</width>
@@ -122,7 +122,7 @@
                     <posx>40</posx>
                     <width>395</width>
                     <height>300</height>
-                    <label>[B]$INFO[Container(500).ListItem.Year][CR][CR][CR]$INFO[Container(500).ListItem.Genre][/B]</label>
+                    <label>[B]$INFO[ListItem.Year][CR][CR][CR]$INFO[ListItem.Genre][/B]</label>
                     <font>font12</font>
                     <textcolor>FF999999</textcolor>
                 </control>
@@ -131,8 +131,8 @@
                     <posy>320</posy>
                     <width>135</width>
                     <height>26</height>
-                    <animation effect="fade" start="100" end="60" time="0" condition="IsEmpty(Container(500).ListItem.Rating)">Conditional</animation>
-                    <texture fallback="flags/stars/0.0.png">$INFO[Container(500).ListItem.Rating,flags/stars/,.png]</texture>
+                    <animation effect="fade" start="100" end="60" time="0" condition="IsEmpty(ListItem.Rating)">Conditional</animation>
+                    <texture fallback="flags/stars/0.0.png">$INFO[ListItem.Rating,flags/stars/,.png]</texture>
                 </control>
                 <control type="textbox">
                     <posy>450</posy>
@@ -140,7 +140,7 @@
                     <width>395</width>
                     <height>500</height>
                     <align>justify</align>
-                    <label fallback="416">$INFO[Container(500).ListItem.Plot,,[CR][CR]  ]</label>
+                    <label fallback="416">$INFO[ListItem.Plot,,[CR][CR]  ]</label>
                     <autoscroll delay="10000" time="1600" repeat="10000">true</autoscroll>
                     <font>font12</font>
                     <textcolor>FF999999</textcolor>
@@ -153,7 +153,7 @@
                     <fadetime>200</fadetime>
                             <bordertexture border="3">common/black.png</bordertexture>
                             <bordersize>3</bordersize>
-                    <texture>$INFO[Container(500).ListItem.Thumb]</texture>
+                    <texture>$INFO[ListItem.Thumb]</texture>
                     <visible>!IsEmpty(Window.Property(alt_layout))</visible>
                 </control>
             </control>
