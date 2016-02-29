@@ -50,10 +50,7 @@ class WindowManager(object):
         self.reopen_window = False
         self.last_control = None
         self.active_dialog = None
-        if SETTING("window_mode") == "true":
-            self.window_type = BaseClasses.WindowXML
-        else:
-            self.window_type = BaseClasses.DialogXML
+        self.window_type = BaseClasses.WindowXML if SETTING("window_mode") == "true" else BaseClasses.DialogXML
 
     def add_to_stack(self, window):
         """

@@ -13,7 +13,7 @@ import urllib2
 import os
 import time
 import hashlib
-import simplejson as json
+import json
 import re
 import threading
 import datetime

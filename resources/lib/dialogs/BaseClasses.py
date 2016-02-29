@@ -14,10 +14,6 @@ class WindowXML(xbmcgui.WindowXML):
 
     def onInit(self):
         self.window_id = xbmcgui.getCurrentWindowId()
-        self.window = xbmcgui.Window(self.window_id)
-
-    def setProperty(self, key, value):
-        self.window.setProperty(key, value)
 
 
 class DialogXML(xbmcgui.WindowXMLDialog):
@@ -28,7 +24,3 @@ class DialogXML(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self.window_id = xbmcgui.getCurrentWindowDialogId()
-        self.window = xbmcgui.Window(self.window_id)
-
-    def setProperty(self, key, value):
-        self.window.setProperty(key, value)
