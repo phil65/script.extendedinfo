@@ -30,7 +30,6 @@ class DialogBaseInfo(object):
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
         HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
-        self.window = xbmcgui.Window(self.window_id)
         self.setProperty("type", self.type)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
         HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
