@@ -297,7 +297,7 @@ class WindowManager(object):
             self.active_dialog = dialog
             if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
                 self.reopen_window = True
-                self.last_control = xbmc.getInfoLabel("System.CurrentControlId")
+                self.last_control = get_infolabel("System.CurrentControlId")
                 xbmc.executebuiltin("Dialog.Close(movieinformation)")
             check_version()
             if prev_window:
