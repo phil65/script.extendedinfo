@@ -75,6 +75,10 @@ def dictfind(lst, key, value):
     return ""
 
 
+def get_infolabel(name):
+    return xbmc.getInfoLabel(name).decode("utf-8")
+
+
 def format_time(time, format=None):
     """
     get formatted time
@@ -356,7 +360,7 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
                                 cache_days=30,
                                 folder="MusicBrainz")
     if results and len(results["artists"]) > 0:
-        log("found artist id for %s: %s" % (artist.decode("utf-8"), results["artists"][0]["id"]))
+        log("found artist id for %s: %s" % (artist, results["artists"][0]["id"]))
         return results["artists"][0]["id"]
     else:
         return None
@@ -540,7 +544,7 @@ def get_icon_panel(number):
     for i in range(1, 6):
         infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
         items.append({'Label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
-                      'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path.decode("utf-8"),
+                      'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
                       'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
                       'id': "IconPanelitem%i" % (i + offset),
                       'Type': get_skin_string("IconPanelItem%i.Type" % (i + offset))})
@@ -558,11 +562,11 @@ def set_skin_string(name, value):
 def get_weather_images():
     items = []
     for i in range(1, 6):
-        items.append({'Label': "bla",
+        items.append({'Label': str(i),
                       'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
-                      'thumb': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Area)" % i),
-                      'Layer': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Layer)" % i),
-                      'Legend': xbmc.getInfoLabel("Window(weather).Property(Map.%i.Legend)" % i)})
+                      'thumb': get_infolabel("Window(weather).Property(Map.%i.Area)" % i),
+                      'Layer': get_infolabel("Window(weather).Property(Map.%i.Layer)" % i),
+                      'Legend': get_infolabel("Window(weather).Property(Map.%i.Legend)" % i)})
     return items
 
 

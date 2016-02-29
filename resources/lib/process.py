@@ -256,48 +256,48 @@ def start_info_actions(info, params):
                             dbid=params.get("dbid"),
                             resume=params.get("resume", "true"))
     elif info == "openinfodialog":
-        dbid = xbmc.getInfoLabel("ListItem.DBID")
+        dbid = get_infolabel("ListItem.DBID")
         if not dbid:
-            dbid = xbmc.getInfoLabel("ListItem.Property(dbid)")
+            dbid = get_infolabel("ListItem.Property(dbid)")
         if xbmc.getCondVisibility("Container.Content(movies)"):
             params = {"dbid": dbid,
-                      "id": xbmc.getInfoLabel("ListItem.Property(id)"),
-                      "name": xbmc.getInfoLabel("ListItem.Title")}
+                      "id": get_infolabel("ListItem.Property(id)"),
+                      "name": get_infolabel("ListItem.Title")}
             start_info_actions("extendedinfo", params)
         elif xbmc.getCondVisibility("Container.Content(tvshows)"):
             params = {"dbid": dbid,
-                      "tvdb_id": xbmc.getInfoLabel("ListItem.Property(tvdb_id)"),
-                      "id": xbmc.getInfoLabel("ListItem.Property(id)"),
-                      "name": xbmc.getInfoLabel("ListItem.Title")}
+                      "tvdb_id": get_infolabel("ListItem.Property(tvdb_id)"),
+                      "id": get_infolabel("ListItem.Property(id)"),
+                      "name": get_infolabel("ListItem.Title")}
             start_info_actions("extendedtvinfo", params)
         elif xbmc.getCondVisibility("Container.Content(seasons)"):
-            params = {"tvshow": xbmc.getInfoLabel("ListItem.TVShowTitle"),
-                      "season": xbmc.getInfoLabel("ListItem.Season")}
+            params = {"tvshow": get_infolabel("ListItem.TVShowTitle"),
+                      "season": get_infolabel("ListItem.Season")}
             start_info_actions("seasoninfo", params)
         elif xbmc.getCondVisibility("Container.Content(episodes)"):
-            params = {"tvshow": xbmc.getInfoLabel("ListItem.TVShowTitle"),
-                      "season": xbmc.getInfoLabel("ListItem.Season"),
-                      "episode": xbmc.getInfoLabel("ListItem.Episode")}
+            params = {"tvshow": get_infolabel("ListItem.TVShowTitle"),
+                      "season": get_infolabel("ListItem.Season"),
+                      "episode": get_infolabel("ListItem.Episode")}
             start_info_actions("extendedepisodeinfo", params)
         elif xbmc.getCondVisibility("Container.Content(actors) | Container.Content(directors)"):
-            params = {"name": xbmc.getInfoLabel("ListItem.Label")}
+            params = {"name": get_infolabel("ListItem.Label")}
             start_info_actions("extendedactorinfo", params)
         else:
             notify("Error", "Could not find valid content type")
     elif info == "ratedialog":
         if xbmc.getCondVisibility("Container.Content(movies)"):
-            params = {"dbid": xbmc.getInfoLabel("ListItem.DBID"),
-                      "id": xbmc.getInfoLabel("ListItem.Property(id)"),
+            params = {"dbid": get_infolabel("ListItem.DBID"),
+                      "id": get_infolabel("ListItem.Property(id)"),
                       "type": "movie"}
             start_info_actions("ratemedia", params)
         elif xbmc.getCondVisibility("Container.Content(tvshows)"):
-            params = {"dbid": xbmc.getInfoLabel("ListItem.DBID"),
-                      "id": xbmc.getInfoLabel("ListItem.Property(id)"),
+            params = {"dbid": get_infolabel("ListItem.DBID"),
+                      "id": get_infolabel("ListItem.Property(id)"),
                       "type": "tv"}
             start_info_actions("ratemedia", params)
         elif xbmc.getCondVisibility("Container.Content(episodes)"):
-            params = {"tvshow": xbmc.getInfoLabel("ListItem.TVShowTitle"),
-                      "season": xbmc.getInfoLabel("ListItem.Season"),
+            params = {"tvshow": get_infolabel("ListItem.TVShowTitle"),
+                      "season": get_infolabel("ListItem.Season"),
                       "type": "episode"}
             start_info_actions("ratemedia", params)
     elif info == 'youtubebrowser':
