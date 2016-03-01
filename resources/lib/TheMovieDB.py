@@ -559,13 +559,14 @@ def get_person_info(person_label, skip_dialog=False):
                         cache_days=30)
     if not response or "results" not in response:
         return False
-    if len(response["results"]) > 1 and not skip_dialog:
+    people = [i for i in response["results"] if i["name"] == person_label]
+    if len(people) > 1 and not skip_dialog:
         xbmc.executebuiltin("Dialog.Close(busydialog)")
-        listitem, index = wm.open_selectdialog(listitems=handle_people(response["results"]))
+        listitem, index = wm.open_selectdialog(listitems=handle_people(people))
         if index >= 0:
-            return response["results"][index]
-    elif response["results"]:
-        return response["results"][0]
+            return people[index]
+    elif people:
+        return people[0]
     return False
 
 
