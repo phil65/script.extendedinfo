@@ -597,10 +597,9 @@ def get_set_id(set_name):
     response = get_data(url="search/collection",
                         params=params,
                         cache_days=14)
-    if "results" in response and response["results"]:
-        return response["results"][0]["id"]
-    else:
+    if not response or not response.get("results"):
         return ""
+    return response["results"][0]["id"]
 
 
 def get_data(url="", params={}, cache_days=14):
@@ -684,7 +683,7 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
                   "language": SETTING("LanguageID")}
         response = get_data(url="find/tt%s" % (imdb_id.replace("tt", "")),
                             params=params)
-        if response["movie_results"]:
+        if response and response["movie_results"]:
             return response["movie_results"][0]["id"]
     if name:
         return search_media(name)
