@@ -567,6 +567,8 @@ def get_person_info(person_label, skip_dialog=False):
             return people[index]
     elif people:
         return people[0]
+    elif response["results"]:
+        return response["results"][0]
     return False
 
 
