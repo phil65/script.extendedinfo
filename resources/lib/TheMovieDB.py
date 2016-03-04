@@ -292,9 +292,9 @@ def merge_with_cert_desc(input_list, media_type):
 def handle_multi_search(results):
     listitems = []
     for item in results:
-        if item["media_type"] == "movie":
+        if item["mediatype"] == "movie":
             listitems.append(handle_movies([item])[0])
-        elif item["media_type"] == "tv":
+        elif item["mediatype"] == "tvshow":
             listitems.append(handle_tvshows([item])[0])
         else:
             listitems.append(handle_people([item])[0])
@@ -320,7 +320,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                     'OriginalTitle': fetch(movie, 'original_title'),
                     'id': tmdb_id,
                     'path': PLUGIN_BASE + path % tmdb_id,
-                    'media_type': "movie",
+                    'mediatype': "movie",
                     'country': fetch(movie, 'original_language'),
                     'plot': fetch(movie, 'overview'),
                     'Trailer': trailer,
@@ -371,7 +371,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'credit_id': fetch(tv, 'credit_id'),
                  'Plot': fetch(tv, "overview"),
                  'year': get_year(fetch(tv, 'first_air_date')),
-                 'media_type': "tv",
+                 'mediatype': "tvshow",
                  'character': fetch(tv, 'character'),
                  'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': fetch(tv, 'vote_average'),
@@ -394,7 +394,7 @@ def handle_episodes(results):
         if not title:
             title = "%s %s" % (LANG(20359), fetch(item, 'episode_number'))
         artwork = get_image_urls(still=item.get("still_path"))
-        listitem = {'media_type': "episode",
+        listitem = {'mediatype': "episode",
                     'title': title,
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
@@ -439,7 +439,7 @@ def handle_seasons(results):
         season_number = str(fetch(season, 'season_number'))
         artwork = get_image_urls(poster=season.get("poster_path"))
         title = LANG(20381) if season_number == "0" else "%s %s" % (LANG(20373), season_number)
-        listitem = {'media_type': "season",
+        listitem = {'mediatype': "season",
                     'title': title,
                     'season': season_number,
                     'air_date': fetch(season, 'air_date'),
@@ -481,7 +481,7 @@ def handle_people(results):
                   'character': fetch(item, 'character'),
                   'department': fetch(item, 'department'),
                   'job': fetch(item, 'job'),
-                  'media_type': "person",
+                  'mediatype': "actor",
                   'id': str(item['id']),
                   'cast_id': str(fetch(item, 'cast_id')),
                   'credit_id': str(fetch(item, 'credit_id')),
@@ -842,7 +842,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'credit_id': fetch(response, 'credit_id'),
               'Plot': clean_text(fetch(response, "overview")),
               'year': get_year(fetch(response, 'first_air_date')),
-              'media_type': "tv",
+              'mediatype': "tvshow",
               'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
               'Popularity': fetch(response, 'popularity'),
               'Rating': fetch(response, 'vote_average'),

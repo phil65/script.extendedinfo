@@ -741,7 +741,7 @@ def create_listitems(data=None, preload_images=0):
     FLOAT_INFOLABELS = ["rating"]
     STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle",
                          "sorttitle", "duration", "studio", "tagline", "writer", "tvshowtitle", "premiered",
-                         "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded"]
+                         "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded", "mediatype"]
     if not data:
         return []
     itemlist = []
