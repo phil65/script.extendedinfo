@@ -18,10 +18,6 @@ class Main:
         HOME.setProperty("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
-            listitems = start_info_actions(info, self.params)
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_DURATION)
             if info.endswith("shows"):
                 xbmcplugin.setContent(self.handle, 'tvshows')
             elif info.endswith("episodes"):
@@ -32,11 +28,15 @@ class Main:
                 xbmcplugin.setContent(self.handle, 'sets')
             else:
                 xbmcplugin.setContent(self.handle, '')
+            listitems = start_info_actions(info, self.params)
             pass_list_to_skin(name=info,
                               data=listitems,
                               prefix=self.params.get("prefix", ""),
                               handle=self.handle,
                               limit=self.params.get("limit", 20))
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_DURATION)
         else:
             movie = {"intheatermovies": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
                      "boxofficemovies": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
