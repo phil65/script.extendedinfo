@@ -82,7 +82,6 @@ class Main:
     def _parse_argv(self):
         args = sys.argv[2][1:]
         self.handle = int(sys.argv[1])
-        self.control = "plugin"
         self.infos = []
         self.params = {"handle": self.handle}
         if args.startswith("---"):
