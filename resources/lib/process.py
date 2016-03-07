@@ -383,7 +383,8 @@ def start_info_actions(info, params):
             else:
                 return False
             tmdb.set_rating_prompt(media_type=media_type,
-                                   media_id=tmdb_id)
+                                   media_id=tmdb_id,
+                                   dbid=params.get("dbid"))
     elif info == 'playliststats':
         get_playlist_stats(params.get("id", ""))
     elif info == 'slideshow':

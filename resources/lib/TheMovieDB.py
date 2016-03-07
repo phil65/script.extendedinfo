@@ -140,12 +140,19 @@ class LoginProvider(object):
             return response["request_token"]
 
 
-def set_rating_prompt(media_type, media_id):
+def set_rating_prompt(media_type, media_id, dbid=None):
     if not media_type or not media_id:
         return False
     rating = xbmcgui.Dialog().select(LANG(32129), [str(float(i * 0.5)) for i in range(1, 21)])
     if rating == -1:
         return False
+    if dbid:
+        if media_type == "movie":
+            get_kodi_json(method="VideoLibrary.SetMovieDetails",
+                          params='{"movieid":%s,"userrating":%d}' % (dbid, round(rating)))
+        elif media_type == "tv":
+            get_kodi_json(method="VideoLibrary.SetTVShowDetails",
+                          params='{"tvshowid":%s,"userrating":%d}' % (dbid, round(rating)))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
