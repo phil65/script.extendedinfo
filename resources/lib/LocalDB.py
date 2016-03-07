@@ -416,9 +416,8 @@ class LocalDB(object):
         data = get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
                              params='{"properties": ["tvshowid"], "episodeid":%s }' % dbid)
         if "episodedetails" in data["result"]:
-            tvshow_dbid = str(data['result']['episodedetails']['tvshowid'])
             return self.get_imdb_id(media_type="tvshow",
-                                    dbid=tvshow_dbid)
+                                    dbid=str(data['result']['episodedetails']['tvshowid']))
         else:
             return None
 

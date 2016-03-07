@@ -153,6 +153,9 @@ def set_rating_prompt(media_type, media_id, dbid=None):
         elif media_type == "tv":
             get_kodi_json(method="VideoLibrary.SetTVShowDetails",
                           params='{"tvshowid":%s,"userrating":%d}' % (dbid, round(rating)))
+        elif media_type == "episode":
+            get_kodi_json(method="VideoLibrary.SetEpisodeDetails",
+                          params='{"episodeid":%s,"userrating":%d}' % (dbid, round(rating)))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
@@ -1191,7 +1194,7 @@ def get_person_movies(person_id):
         return []
 
 
-def search_media(media_name=None, year='', media_type="movie"):
+def search_media(media_name=None, year='', media_type="movie", cache_days=1):
     '''
     return list of items with type *media_type for search with *media_name
     '''
@@ -1202,7 +1205,7 @@ def search_media(media_name=None, year='', media_type="movie"):
               "include_adult": include_adult}
     response = get_data(url="search/%s" % (media_type),
                         params=params,
-                        cache_days=1)
+                        cache_days=cache_days)
     if not response == "Empty":
         for item in response['results']:
             if item['id']:
