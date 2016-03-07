@@ -1,5 +1,6 @@
 v4.5.3
 - properly set mediatype for listitems
+- fix character encoding issues
 
 v4.5.2
 - fix filter stuff for python 2.6
