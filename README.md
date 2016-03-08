@@ -315,12 +315,7 @@ RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
 RunScript(script.extendedinfo,info=cyanide)       --> CyanideHappiness.%d
 ```
 - fetches a daily random list of Cyanide & Happiness webcomics
-```
-RunScript(script.extendedinfo,info=dailybabe)     --> DailyBabe.%d
-```
-```
-RunScript(script.extendedinfo,info=dailybabes)    --> DailyBabes.%d
-```
+
 
 Available Properties:
 
