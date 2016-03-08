@@ -13,28 +13,28 @@ Example:
 ### Rotten Tomatoes
 
 ```
-RunScript(script.extendedinfo,info=intheatermovies)          --> InTheatersMovies.%d.xxx
+RunScript(script.extendedinfo,info=intheatermovies)
 ```
 ```
-RunScript(script.extendedinfo,info=comingsoonmovies)          --> ComingSoonMovies.%d.xxx
+RunScript(script.extendedinfo,info=comingsoonmovies)
 ```
 ```
-RunScript(script.extendedinfo,info=openingmovies)             --> Opening.%d.xxx
+RunScript(script.extendedinfo,info=openingmovies)
 ```
 ```
-RunScript(script.extendedinfo,info=boxofficemovies)           --> BoxOffice.%d.xxx
+RunScript(script.extendedinfo,info=boxofficemovies)
 ```
 ```
-RunScript(script.extendedinfo,info=toprentalmovies)          --> TopRentals.%d.xxx
+RunScript(script.extendedinfo,info=toprentalmovies)
 ```
 ```
-RunScript(script.extendedinfo,info=currentdvdmovies)  --> CurrentDVDs.%d.xxx
+RunScript(script.extendedinfo,info=currentdvdmovies)
 ```
 ```
-RunScript(script.extendedinfo,info=newdvdmovies)      --> NewDVDs.%d.xxx
+RunScript(script.extendedinfo,info=newdvdmovies)
 ```
 ```
-RunScript(script.extendedinfo,info=upcomingdvdmovies)        --> UpcomingDVDs.%d.xxx
+RunScript(script.extendedinfo,info=upcomingdvdmovies)
 ```
 
 Available Properties:
@@ -325,8 +325,7 @@ Available Properties:
 
 
 
-info=similarlocal
-    Property Prefix: SimilarLocalMovies
+info=similarlocalmovies
     needed parameters:
     -dbid: DBID of any movie in your library
 
