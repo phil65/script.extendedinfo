@@ -87,7 +87,9 @@ def get_window(window_type):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=listitems)
             if selection == 0:
-                if tmdb.set_rating_prompt(self.type, item_id):
+                if tmdb.set_rating_prompt(media_type=self.type,
+                                          media_id=item_id,
+                                          dbid=self.listitem.getProperty("dbid")):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
                     self.setCurrentListPosition(self.position)
