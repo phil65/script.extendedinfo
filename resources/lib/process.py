@@ -235,7 +235,7 @@ def start_info_actions(info, params):
             if favs:
                 HOME.setProperty('favourite.1.name', favs[-1]["Label"])
         return favs
-    elif info == 'similarlocal' and "dbid" in params:
+    elif info == 'similarlocalmovies' and "dbid" in params:
         return LocalDB.local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
         return get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
