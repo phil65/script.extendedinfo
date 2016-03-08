@@ -73,6 +73,7 @@ class LocalDB(object):
             return []
         quotalist = []
         for item in data['result']['movies']:
+            item["mediatype"] = "movie"
             diff = abs(int(item['year']) - int(comp_movie['year']))
             hit = 0.0
             miss = 0.00001
