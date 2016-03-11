@@ -54,9 +54,10 @@ class SettingsMonitor(xbmc.Monitor):
         global Login
         Login = LoginProvider(username=xbmcaddon.Addon().getSetting("tmdb_username"),
                               password=xbmcaddon.Addon().getSetting("tmdb_password"))
-        wm.active_dialog.close()
-        wm.active_dialog.logged_in = Login.check_login(cache_days=0)
-        wm.active_dialog.doModal()
+        if wm.active_dialog:
+            wm.active_dialog.close()
+            wm.active_dialog.logged_in = Login.check_login(cache_days=0)
+            wm.active_dialog.doModal()
 
 
 class LoginProvider(object):
