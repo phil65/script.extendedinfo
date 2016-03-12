@@ -43,7 +43,8 @@ class LocalDB(object):
                 data = get_kodi_json(method="AudioLibrary.GetArtistDetails",
                                      params='{"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(kodi_artist['artistid']))
                 item = data["result"]["artistdetails"]
-                artists.append({"title": item['label'],
+                artists.append({"label": item['label'],
+                                "title": item['label'],
                                 "Genre": " / ".join(item['genre']),
                                 "thumb": item['thumbnail'],
                                 "Fanart": item['fanart'],
@@ -183,7 +184,8 @@ class LocalDB(object):
             path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
-        db_tvshow = {'title': tvshow.get('label'),
+        db_tvshow = {'label': tvshow.get('label'),
+                     'title': tvshow.get('label'),
                      'genre': " / ".join(tvshow.get('genre')),
                      'File': tvshow.get('file'),
                      'year': str(tvshow.get('year')),
