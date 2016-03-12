@@ -82,7 +82,7 @@
 					<posy>-15</posy>
 					<height>60</height>
 					<width>1050</width>
-					<label>$INFO[Window.Property(title)]</label>
+					<label>$INFO[Window.Property(label)]</label>
 					<font>font30_title</font>
 					<scroll>true</scroll>
 				</control>
