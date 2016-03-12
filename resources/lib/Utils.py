@@ -732,7 +732,7 @@ def set_window_props(name, data, prefix="", debug=False):
                                "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 HOME.setProperty('%s%s.%i.Art(%s)' % (prefix, name, count + 1, str(key)), value)
             if debug:
-                log('%s%s.%i.%s --> ' % (prefix, name, count + 1, str(key)) + value)
+                log('%s%s.%i.%s --> %s' % (prefix, name, count + 1, key, value))
     HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
 
 
@@ -746,19 +746,17 @@ def create_listitems(data=None, preload_images=0):
         return []
     itemlist = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem(result.get("label", ""))
+        listitem = xbmcgui.ListItem(label=result.get("label", ""),
+                                    label2=result.get("label2", ""),
+                                    path=result.get("path", ""))
         for (key, value) in result.iteritems():
             if not value:
                 continue
             value = unicode(value)
             key = key.lower()
-            if key in ["label2"]:
-                listitem.setLabel2(value)
-            elif key in ["path"]:
-                listitem.setPath(path=value)
-            elif key in ["thumb", "icon", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
-                         "discart", "characterart", "tvshow.fanart", "tvshow.poster",
-                         "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+            if key in ["thumb", "icon", "poster", "banner", "fanart", "clearart", "clearlogo",
+                       "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster",
+                       "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key: value})
             elif key in INT_INFOLABELS:
                 try:

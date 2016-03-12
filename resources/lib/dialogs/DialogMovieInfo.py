@@ -64,7 +64,7 @@ def get_window(window_type):
             pass_dict_to_skin(data=self.info,
                               window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
-            self.get_youtube_vids("%s %s, movie" % (self.info["Label"], self.info["year"]))
+            self.get_youtube_vids("%s %s, movie" % (self.info["label"], self.info["year"]))
             self.fill_lists()
             pass_dict_to_skin(data=self.setinfo,
                               prefix="set.",
