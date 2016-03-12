@@ -746,11 +746,11 @@ def create_listitems(data=None, preload_images=0):
         return []
     itemlist = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem(label=result.get("label", ""),
-                                    label2=result.get("label2", ""),
-                                    iconImage=result.get("icon", ""),
-                                    thumbnailImage=result.get("thumb", ""),
-                                    path=result.get("path", ""))
+        listitem = xbmcgui.ListItem(label=result.get("label"),
+                                    label2=result.get("label2"),
+                                    iconImage=result.get("icon"),
+                                    thumbnailImage=result.get("thumb"),
+                                    path=result.get("path"))
         for (key, value) in result.iteritems():
             if not value:
                 continue

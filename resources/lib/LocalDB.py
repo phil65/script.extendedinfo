@@ -141,20 +141,15 @@ class LocalDB(object):
             resume = "false"
             played = '0'
         stream_info = media_streamdetails(movie['file'].encode('utf-8').lower(), movie['streamdetails'])
-        db_movie = {'fanart': movie["art"].get('fanart', ""),
-                    'poster': movie["art"].get('poster', ""),
-                    'Banner': movie["art"].get('banner', ""),
-                    'clearart': movie["art"].get('clearart', ""),
-                    'DiscArt': movie["art"].get('discart', ""),
-                    'title': movie.get('label', ""),
-                    'File': movie.get('file', ""),
-                    'year': str(movie.get('year', "")),
+        db_movie = {'title': movie.get('label'),
+                    'label': movie.get('label'),
+                    'File': movie.get('file'),
+                    'year': str(movie.get('year')),
                     'writer': " / ".join(movie['writer']),
-                    'Logo': movie['art'].get("clearlogo", ""),
-                    'OriginalTitle': movie.get('originaltitle', ""),
-                    'imdb_id': movie.get('imdbnumber', ""),
+                    'OriginalTitle': movie.get('originaltitle'),
+                    'imdb_id': movie.get('imdbnumber'),
                     'path': path,
-                    'plot': movie.get('plot', ""),
+                    'plot': movie.get('plot'),
                     'director': " / ".join(movie.get('director')),
                     'writer': " / ".join(movie.get('writer')),
                     'PercentPlayed': played,
@@ -165,6 +160,7 @@ class LocalDB(object):
                     'trailer': trailer,
                     'dbid': str(movie['movieid']),
                     'Rating': str(round(float(movie['rating']), 1))}
+        db_movie.update(movie['art'])
         streams = []
         for i, item in enumerate(movie['streamdetails']['audio']):
             language = item['language']
@@ -187,21 +183,17 @@ class LocalDB(object):
             path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
-        db_tvshow = {'fanart': tvshow["art"].get('fanart', ""),
-                     'poster': tvshow["art"].get('poster', ""),
-                     'Banner': tvshow["art"].get('banner', ""),
-                     'DiscArt': tvshow["art"].get('discart', ""),
-                     'title': tvshow.get('label', ""),
-                     'genre': " / ".join(tvshow.get('genre', "")),
-                     'File': tvshow.get('file', ""),
-                     'year': str(tvshow.get('year', "")),
-                     'Logo': tvshow['art'].get("clearlogo", ""),
-                     'OriginalTitle': tvshow.get('originaltitle', ""),
-                     'imdb_id': tvshow.get('imdbnumber', ""),
+        db_tvshow = {'title': tvshow.get('label'),
+                     'genre': " / ".join(tvshow.get('genre')),
+                     'File': tvshow.get('file'),
+                     'year': str(tvshow.get('year')),
+                     'OriginalTitle': tvshow.get('originaltitle'),
+                     'imdb_id': tvshow.get('imdbnumber'),
                      'path': path,
                      'Play': "",
                      'dbid': str(tvshow['tvshowid']),
                      'Rating': str(round(float(tvshow['rating']), 1))}
+        db_tvshow.update(tvshow['art'])
         return dict((k, v) for k, v in db_tvshow.iteritems() if v)
 
     def get_movie(self, movie_id):
@@ -388,13 +380,13 @@ class LocalDB(object):
     def get_set_name(self, dbid):
         data = get_kodi_json(method="VideoLibrary.GetMovieDetails",
                              params='{"properties": ["setid"], "movieid":%s }' % dbid)
-        if "result" in data and "moviedetails" in data["result"]:
-            set_dbid = data['result']['moviedetails'].get('setid', "")
-            if set_dbid:
-                data = get_kodi_json(method="VideoLibrary.GetMovieSetDetails",
-                                     params='{"setid":%s }' % set_dbid)
-                return data['result']['setdetails'].get('label', "")
-        return ""
+        if "result" not in data or "moviedetails" not in data["result"]:
+            return None
+        set_dbid = data['result']['moviedetails'].get('setid')
+        if set_dbid:
+            data = get_kodi_json(method="VideoLibrary.GetMovieSetDetails",
+                                 params='{"setid":%s }' % set_dbid)
+            return data['result']['setdetails'].get('label')
 
     def get_imdb_id(self, media_type, dbid):
         if not dbid:

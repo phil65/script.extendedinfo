@@ -2827,7 +2827,7 @@
 						<width>830</width>
 						<height>190</height>
 						<aspectratio align="right">keep</aspectratio>
-						<texture background="true" fallback="moviedb.png">$INFO[Window.Property(Logo)]</texture>
+						<texture background="true" fallback="moviedb.png">$INFO[Window.Property(clearlogo)]</texture>
 					</control>
 				</control>
 				<control type="group">

@@ -112,7 +112,7 @@ def extended_artist_info(results):
                   'mbid': fetch(artist, 'strMusicBrainzID'),
                   'Banner': banner,
                   'mediatype': "artist",
-                  'Logo': fetch(artist, 'strArtistLogo'),
+                  'clearlogo': fetch(artist, 'strArtistLogo'),
                   'fanart': fetch(artist, 'strArtistFanart'),
                   'fanart2': fetch(artist, 'strArtistFanart2'),
                   'fanart3': fetch(artist, 'strArtistFanart3'),
