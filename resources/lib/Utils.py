@@ -765,7 +765,6 @@ def create_listitems(data=None, preload_images=0):
             elif key.lower() in ["label2"]:
                 listitem.setLabel2(value)
             elif key.lower() in ["thumb"]:
-                listitem.setThumbnailImage(value)
                 listitem.setArt({key.lower(): value})
             elif key.lower() in ["icon"]:
                 listitem.setIconImage(value)

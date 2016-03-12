@@ -27,7 +27,8 @@ def get_movies(movie_type):
         else:
             search_string = "%s %s trailer" % (item["title"], item["year"])
             path = PLUGIN_BASE + "playtrailer&&title=%s&&imdb_id=%s" % (search_string, imdb_id)
-        movies.append({'title': item["title"],
+        movies.append({'label': item["title"],
+                       'title': item["title"],
                        'imdb_id': imdb_id,
                        'thumb': poster,
                        'mediatype': "movie",
