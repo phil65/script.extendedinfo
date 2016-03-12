@@ -27,7 +27,7 @@ def handle_videos(results, extended=False):
                  'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'Description': item["snippet"]["description"],
-                 'title': item["snippet"]["title"],
+                 'label': item["snippet"]["title"],
                  'channel_title': item["snippet"]["channelTitle"],
                  'channel_id': item["snippet"]["channelId"],
                  'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
@@ -75,7 +75,7 @@ def handle_playlists(results):
                     'youtube_id': playlist_id,
                     'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
                     'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                    'title': item["snippet"]["title"],
+                    'label': item["snippet"]["title"],
                     'description': item["snippet"]["description"],
                     'channel_title': item["snippet"]["channelTitle"],
                     'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
@@ -106,7 +106,7 @@ def handle_channels(results):
                    'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'Description': item["snippet"]["description"],
-                   'title': item["snippet"]["title"],
+                   'label': item["snippet"]["title"],
                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
         channels.append(channel)
     channel_ids = [item["youtube_id"] for item in channels]

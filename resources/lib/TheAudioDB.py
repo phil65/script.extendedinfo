@@ -50,7 +50,6 @@ def handle_albums(results):
                  'amazon_id': album['strAmazonID'],
                  'year': album['intYearReleased'],
                  'Sales': album['intSales'],
-                 'name': album['strAlbum'],
                  'Label': album['strAlbum']}
         albums.append(album)
     return local_db.compare_album_with_library(albums)

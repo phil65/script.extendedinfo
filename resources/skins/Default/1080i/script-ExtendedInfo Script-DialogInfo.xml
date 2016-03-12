@@ -1256,7 +1256,7 @@
 										<posy>350</posy>
 										<height>60</height>
 										<width>505</width>
-										<label>$INFO[ListItem.Title]</label>
+										<label>$INFO[ListItem.Label]</label>
 										<font>font12_title</font>
 										<align>center</align>
 										<aligny>center</aligny>
@@ -1295,7 +1295,7 @@
 										<posy>350</posy>
 										<height>60</height>
 										<width>505</width>
-										<label>$INFO[ListItem.Title]</label>
+										<label>$INFO[ListItem.Label]</label>
 										<font>font12_title</font>
 										<align>center</align>
 										<aligny>center</aligny>

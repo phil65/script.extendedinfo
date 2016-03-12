@@ -33,6 +33,7 @@ def get_calendar_shows(content):
     for day in results.iteritems():
         for episode in day[1]:
             show = {'title': episode["episode"]["title"],
+                    'label': "%s - %s" % (episode["show"]["title"], episode["episode"]["title"]),
                     'season': episode["episode"]["season"],
                     'episode': episode["episode"]["number"],
                     'TVShowTitle': episode["show"]["title"],
@@ -65,7 +66,8 @@ def handle_movies(results):
     movies = []
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
     for movie in results:
-        movie = {'title': movie["movie"]["title"],
+        movie = {'label': movie["movie"]["title"],
+                 'title': movie["movie"]["title"],
                  'Runtime': movie["movie"]["runtime"],
                  'duration': movie["movie"]["runtime"],
                  'duration(h)': format_time(movie["movie"]["runtime"], "h"),

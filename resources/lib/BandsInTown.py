@@ -25,7 +25,7 @@ def handle_events(results):
                        'lon': venue['longitude'],
                        'id': venue['id'],
                        'url': venue['url'],
-                       'name': venue['name'],
+                       'label': venue['name'],
                        'region': venue['region'],
                        'country': venue['country'],
                        'artists': artists})

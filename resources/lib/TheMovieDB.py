@@ -372,7 +372,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
         newtv = {'title': fetch(tv, 'name'),
-                 'TVShowTitle': fetch(tv, 'name'),
+                 'Label': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
                  'id': tmdb_id,
@@ -407,6 +407,7 @@ def handle_episodes(results):
         artwork = get_image_urls(still=item.get("still_path"))
         listitem = {'mediatype': "episode",
                     'title': title,
+                    'label': title,
                     'release_date': fetch(item, 'air_date'),
                     'episode': fetch(item, 'episode_number'),
                     'production_code': fetch(item, 'production_code'),
@@ -425,7 +426,7 @@ def handle_misc(results):
     for item in results:
         artwork = get_image_urls(poster=item.get("poster_path"))
         description = clean_text(fetch(item, 'description'))
-        listitem = {'title': clean_text(fetch(item, 'name')),
+        listitem = {'label': clean_text(fetch(item, 'name')),
                     'certification': fetch(item, 'certification') + fetch(item, 'rating'),
                     'item_count': fetch(item, 'item_count'),
                     'favorite_count': fetch(item, 'favorite_count'),
@@ -451,7 +452,7 @@ def handle_seasons(results):
         artwork = get_image_urls(poster=season.get("poster_path"))
         title = LANG(20381) if season_number == "0" else "%s %s" % (LANG(20373), season_number)
         listitem = {'mediatype': "season",
-                    'title': title,
+                    'Label': title,
                     'season': season_number,
                     'air_date': fetch(season, 'air_date'),
                     'year': get_year(fetch(season, 'air_date')),
@@ -466,7 +467,7 @@ def handle_videos(results):
     for item in results:
         image = "http://i.ytimg.com/vi/%s/0.jpg" % fetch(item, 'key')
         listitem = {'thumb': image,
-                    'title': fetch(item, 'name'),
+                    'label': fetch(item, 'name'),
                     'iso_639_1': fetch(item, 'iso_639_1'),
                     'type': fetch(item, 'type'),
                     'key': fetch(item, 'key'),
@@ -483,8 +484,7 @@ def handle_people(results):
     for item in results:
         artwork = get_image_urls(profile=item.get("profile_path"))
         person = {'adult': str(fetch(item, 'adult')),
-                  'name': item['name'],
-                  'title': item['name'],
+                  'label': item['name'],
                   'alsoknownas': " / ".join(fetch(item, 'also_known_as')),
                   'biography': clean_text(fetch(item, 'biography')),
                   'birthday': fetch(item, 'birthday'),
@@ -524,7 +524,7 @@ def handle_companies(results):
     companies = []
     for item in results:
         company = {'parent_company': item['parent_company'],
-                   'name': item['name'],
+                   'label': item['name'],
                    'description': item['description'],
                    'headquarters': item['headquarters'],
                    'homepage': item['homepage'],
@@ -1098,7 +1098,7 @@ def get_keywords(movie_id):
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
             keywords.append({'id': fetch(keyword, 'id'),
-                            'name': keyword['name']})
+                            'label': keyword['name']})
     return keywords
 
 

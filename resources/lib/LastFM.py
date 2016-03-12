@@ -17,11 +17,12 @@ def handle_albums(results):
         return []
     if 'topalbums' in results and "album" in results['topalbums']:
         for album in results['topalbums']['album']:
-            album = {'artist': album['artist']['name'],
-                     'mbid': album.get('mbid', ""),
-                     'mediatype': "album",
-                     'thumb': album['image'][-1]['#text'],
-                     'name': album['name']}
+            albums.append({'artist': album['artist']['name'],
+                           'mbid': album.get('mbid', ""),
+                           'mediatype': "album",
+                           'thumb': album['image'][-1]['#text'],
+                           'label': "%s - %s" % (album['artist']['name'], album['name']),
+                           'title': album['name']})
             albums.append(album)
     return albums
 
@@ -34,7 +35,7 @@ def handle_artists(results):
         if 'name' not in artist:
             continue
         artist = {'title': artist['name'],
-                  'name': artist['name'],
+                  'label': artist['name'],
                   'mediatype': "artist",
                   'mbid': artist.get('mbid'),
                   'thumb': artist['image'][-1]['#text'],

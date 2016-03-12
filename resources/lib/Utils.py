@@ -764,9 +764,6 @@ def create_listitems(data=None, preload_images=0):
                 listitem.setLabel(value)
             elif key.lower() in ["label2"]:
                 listitem.setLabel2(value)
-            elif key.lower() in ["title"]:
-                listitem.setLabel(value)
-                listitem.setInfo('video', {key.lower(): value})
             elif key.lower() in ["thumb"]:
                 listitem.setThumbnailImage(value)
                 listitem.setArt({key.lower(): value})
