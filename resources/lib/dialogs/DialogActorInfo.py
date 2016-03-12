@@ -38,7 +38,7 @@ def get_window(window_type):
                               (750, self.data["tagged_images"])]
 
         def onInit(self):
-            self.get_youtube_vids(self.info["name"])
+            self.get_youtube_vids(self.info["label"])
             super(DialogActorInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               window_id=self.window_id)
