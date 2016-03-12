@@ -327,7 +327,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                                  fanart=movie.get("backdrop_path"))
         trailer = PLUGIN_BASE + "playtrailer&&id=" + tmdb_id
         listitem = {'title': fetch(movie, 'title'),
-                    'Label': fetch(movie, 'title'),
+                    'label': fetch(movie, 'title'),
                     'OriginalTitle': fetch(movie, 'original_title'),
                     'id': tmdb_id,
                     'path': PLUGIN_BASE + path % tmdb_id,
@@ -372,7 +372,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
         newtv = {'title': fetch(tv, 'name'),
-                 'Label': fetch(tv, 'name'),
+                 'label': fetch(tv, 'name'),
                  'OriginalTitle': fetch(tv, 'original_name'),
                  'duration': duration,
                  'id': tmdb_id,
@@ -452,7 +452,7 @@ def handle_seasons(results):
         artwork = get_image_urls(poster=season.get("poster_path"))
         title = LANG(20381) if season_number == "0" else "%s %s" % (LANG(20373), season_number)
         listitem = {'mediatype': "season",
-                    'Label': title,
+                    'label': title,
                     'season': season_number,
                     'air_date': fetch(season, 'air_date'),
                     'year': get_year(fetch(season, 'air_date')),
@@ -756,7 +756,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                              fanart=response.get("backdrop_path"))
     path = PLUGIN_BASE + 'youtubevideo&&id=%s' % fetch(response, "id")
     movie = {'title': fetch(response, 'title'),
-             'Label': fetch(response, 'title'),
+             'label': fetch(response, 'title'),
              'Tagline': fetch(response, 'tagline'),
              'duration': fetch(response, 'runtime'),
              'duration(h)': format_time(fetch(response, 'runtime'), "h"),

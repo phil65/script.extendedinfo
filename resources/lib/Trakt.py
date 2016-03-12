@@ -101,7 +101,7 @@ def handle_tvshows(results):
         airs = fetch(tvshow['show'], "airs")
         path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % tvshow['show']['ids']["tvdb"]
         show = {'title': tvshow['show']["title"],
-                'Label': tvshow['show']["title"],
+                'label': tvshow['show']["title"],
                 'TVShowTitle': tvshow['show']["title"],
                 'Runtime': tvshow['show']["runtime"],
                 'duration': tvshow['show']["runtime"],

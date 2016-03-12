@@ -527,7 +527,7 @@ def get_favs():
         return []
     for fav in data["result"]["favourites"]:
         path = get_fav_path(fav)
-        items.append({'Label': fav["title"],
+        items.append({'label': fav["title"],
                       'thumb': fav["thumbnail"],
                       'Type': fav["type"],
                       'Builtin': path,
@@ -543,7 +543,7 @@ def get_icon_panel(number):
     offset = number * 5 - 5
     for i in range(1, 6):
         infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
-        items.append({'Label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
+        items.append({'label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
                       'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
                       'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
                       'id': "IconPanelitem%i" % (i + offset),
@@ -562,7 +562,7 @@ def set_skin_string(name, value):
 def get_weather_images():
     items = []
     for i in range(1, 6):
-        items.append({'Label': str(i),
+        items.append({'label': str(i),
                       'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
                       'thumb': get_infolabel("Window(weather).Property(Map.%i.Area)" % i),
                       'Layer': get_infolabel("Window(weather).Property(Map.%i.Layer)" % i),
@@ -745,58 +745,37 @@ def create_listitems(data=None, preload_images=0):
     if not data:
         return []
     itemlist = []
-    threads = []
-    image_requests = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem('%s' % (str(count)))
+        listitem = xbmcgui.ListItem(result.get("label", ""))
         for (key, value) in result.iteritems():
             if not value:
                 continue
             value = unicode(value)
-            if count < preload_images:
-                if value.startswith("http://") and value.endswith((".jpg", ".png")):
-                    if value not in image_requests:
-                        thread = GetFileThread(value)
-                        threads += [thread]
-                        thread.start()
-                        image_requests.append(value)
-            if key.lower() in ["name", "label"]:
-                listitem.setLabel(value)
-            elif key.lower() in ["label2"]:
+            key = key.lower()
+            if key in ["label2"]:
                 listitem.setLabel2(value)
-            elif key.lower() in ["thumb"]:
-                listitem.setArt({key.lower(): value})
-            elif key.lower() in ["icon"]:
-                listitem.setIconImage(value)
-                listitem.setArt({key.lower(): value})
-            elif key.lower() in ["path"]:
+            elif key in ["path"]:
                 listitem.setPath(path=value)
-                # listitem.setProperty('%s' % (key), value)
-            # elif key.lower() in ["season", "episode"]:
-            #     listitem.setInfo('video', {key.lower(): int(value)})
-            #     listitem.setProperty('%s' % (key), value)
-            elif key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
-                                 "discart", "characterart", "tvshow.fanart", "tvshow.poster",
-                                 "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                listitem.setArt({key.lower(): value})
-            elif key.lower() in INT_INFOLABELS:
+            elif key in ["thumb", "icon", "poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
+                         "discart", "characterart", "tvshow.fanart", "tvshow.poster",
+                         "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
+                listitem.setArt({key: value})
+            elif key in INT_INFOLABELS:
                 try:
-                    listitem.setInfo('video', {key.lower(): int(value)})
+                    listitem.setInfo('video', {key: int(value)})
                 except:
                     pass
-            elif key.lower() in STRING_INFOLABELS:
-                listitem.setInfo('video', {key.lower(): value})
-            elif key.lower() in FLOAT_INFOLABELS:
+            elif key in STRING_INFOLABELS:
+                listitem.setInfo('video', {key: value})
+            elif key in FLOAT_INFOLABELS:
                 try:
-                    listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
+                    listitem.setInfo('video', {key: "%1.1f" % float(value)})
                 except:
                     pass
             # else:
             listitem.setProperty('%s' % (key), value)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
-    for x in threads:
-        x.join()
     return itemlist
 
 

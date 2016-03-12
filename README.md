@@ -231,7 +231,7 @@ RunScript(script.extendedinfo,info=discography)         --> Discography.%d
 
 Available Properties:
 
-- 'Label':           Album Title
+- 'label':           Album Title
 - 'artist':          Album Artist
 - 'mbid':            Album MBID
 - 'id':              Album AudioDB ID
@@ -257,7 +257,7 @@ RunScript(script.extendedinfo,info=albuminfo)               --> TrackInfo.%d
 
 Available Properties:
 
-- 'Label':       Track Name
+- 'label':       Track Name
 - 'Artist':      Artist Name
 - 'mbid':        Track MBID
 - 'Album':       Album Title

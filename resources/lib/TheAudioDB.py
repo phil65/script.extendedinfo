@@ -50,7 +50,7 @@ def handle_albums(results):
                  'amazon_id': album['strAmazonID'],
                  'year': album['intYearReleased'],
                  'Sales': album['intSales'],
-                 'Label': album['strAlbum']}
+                 'label': album['strAlbum']}
         albums.append(album)
     return local_db.compare_album_with_library(albums)
 
@@ -68,7 +68,7 @@ def handle_tracks(results):
                  'Album': item['strAlbum'],
                  'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
                  'path': convert_youtube_url(item['strMusicVid']),
-                 'Label': item['strTrack']}
+                 'label': item['strTrack']}
         tracks.append(track)
     return tracks
 
@@ -85,7 +85,7 @@ def handle_musicvideos(results):
                 'mediatype': "musicvideo",
                 'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
                 'path': convert_youtube_url(item['strMusicVid']),
-                'Label': item['strTrack']}
+                'label': item['strTrack']}
         mvids.append(mvid)
     return mvids
 
