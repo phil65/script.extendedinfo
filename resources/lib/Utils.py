@@ -748,13 +748,15 @@ def create_listitems(data=None, preload_images=0):
     for (count, result) in enumerate(data):
         listitem = xbmcgui.ListItem(label=result.get("label", ""),
                                     label2=result.get("label2", ""),
+                                    iconImage=result.get("icon", ""),
+                                    thumbImage=result.get("thumb", ""),
                                     path=result.get("path", ""))
         for (key, value) in result.iteritems():
             if not value:
                 continue
             value = unicode(value)
             key = key.lower()
-            if key in ["thumb", "icon", "poster", "banner", "fanart", "clearart", "clearlogo",
+            if key in ["poster", "banner", "fanart", "clearart", "clearlogo",
                        "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster",
                        "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
                 listitem.setArt({key: value})
