@@ -14,7 +14,6 @@
 	<extension point="xbmc.python.script" library="default.py">
 		<provides>executable</provides>
 	</extension>
-	<extension point="xbmc.python.library" library="default.py" />
 	<extension point="xbmc.python.pluginsource" library="plugin.py">
 		<provides>video</provides>
 	</extension>
