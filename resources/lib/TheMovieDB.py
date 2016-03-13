@@ -366,6 +366,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
         artwork = get_image_urls(poster=tv.get("poster_path"),
                                  fanart=tv.get("backdrop_path"))
         genres = [labels[ids.index(id_)] for id_ in tv.get("genre_ids", []) if id_ in ids]
+        genres = [i for i in genres if i]
         duration = ""
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
