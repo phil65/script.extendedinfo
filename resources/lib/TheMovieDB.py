@@ -391,8 +391,8 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'TotalSeasons': fetch(tv, 'number_of_seasons'),
                  'Release_Date': fetch(tv, 'first_air_date'),
                  'Premiered': fetch(tv, 'first_air_date')}
-        listitem["artwork"] = get_image_urls(poster=tv.get("poster_path"),
-                                             fanart=tv.get("backdrop_path"))
+        newtv["artwork"] = get_image_urls(poster=tv.get("poster_path"),
+                                          fanart=tv.get("backdrop_path"))
         tvshows.append(newtv)
     tvshows = local_db.merge_with_local_tvshow_info(tvshows, local_first, sortkey)
     return tvshows
