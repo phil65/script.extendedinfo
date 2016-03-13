@@ -602,10 +602,6 @@ def set_window_props(name, data, prefix="", debug=False):
         for (key, value) in result.iteritems():
             value = unicode(value)
             HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
-            if key.lower() in ["poster", "banner", "fanart", "clearart", "clearlogo", "landscape",
-                               "discart", "characterart", "tvshow.fanart", "tvshow.poster",
-                               "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                HOME.setProperty('%s%s.%i.Art(%s)' % (prefix, name, count + 1, str(key)), value)
             if debug:
                 log('%s%s.%i.%s --> %s' % (prefix, name, count + 1, key, value))
     HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
