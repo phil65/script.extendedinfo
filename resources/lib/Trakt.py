@@ -32,8 +32,12 @@ def get_calendar_shows(content):
         return None
     for day in results.iteritems():
         for episode in day[1]:
-            show = {'title': episode["episode"]["title"],
-                    'label': "%s - %s" % (episode["show"]["title"], episode["episode"]["title"]),
+            title = episode["episode"]["title"] if episode["episode"]["title"] else ""
+            show = {'title': title,
+                    'label': "{0} - {1}x{2}. {3}".format(episode["show"]["title"],
+                                                         episode["episode"]["season"],
+                                                         episode["episode"]["number"],
+                                                         title),
                     'season': episode["episode"]["season"],
                     'episode': episode["episode"]["number"],
                     'TVShowTitle': episode["show"]["title"],
