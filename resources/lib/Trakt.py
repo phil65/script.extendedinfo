@@ -54,11 +54,11 @@ def get_calendar_shows(content):
                     'Certification': episode["show"]["certification"],
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
-                    'genre': " / ".join(episode["show"]["genres"]),
-                    'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                    'poster': episode["show"]["images"]["poster"]["full"],
-                    'Banner': episode["show"]["images"]["banner"]["full"],
-                    'fanart': episode["show"]["images"]["fanart"]["full"]}
+                    'genre': " / ".join(episode["show"]["genres"])}
+            show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
+                               'poster': episode["show"]["images"]["poster"]["full"],
+                               'Banner': episode["show"]["images"]["banner"]["full"],
+                               'fanart': episode["show"]["images"]["fanart"]["full"]}
             shows.append(show)
             count += 1
             if count > 20:

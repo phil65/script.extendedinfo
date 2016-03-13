@@ -16,7 +16,7 @@
 			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 		</control>
 		<control type="image">
-			<texture background="true">$INFO[ListItem.Property(Fanart_small)]</texture>
+			<texture background="true">$INFO[ListItem.Art(fanart_small)]</texture>
 			<width>1920</width>
 			<height>1080</height>
 			<fadetime>400</fadetime>
@@ -97,7 +97,7 @@
 				</animation>
 			</control>
 			<control type="image">
-				<texture>$INFO[ListItem.Property(Fanart_small)]</texture>
+				<texture>$INFO[ListItem.Art(fanart_small)]</texture>
 				<posx>40</posx>
 				<posy>180</posy>
 				<width>396</width>

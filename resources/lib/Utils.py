@@ -629,26 +629,23 @@ def create_listitems(data=None, preload_images=0):
         for (key, value) in result.iteritems():
             if not value:
                 continue
-            value = unicode(value)
             key = key.lower()
-            if key in ["poster", "banner", "fanart", "clearart", "clearlogo",
-                       "landscape", "discart", "characterart", "tvshow.fanart", "tvshow.poster",
-                       "tvshow.banner", "tvshow.clearart", "tvshow.characterart"]:
-                listitem.setArt({key: value})
+            if key == "artwork":
+                listitem.setArt(value)
             elif key in INT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key: int(value)})
                 except:
                     pass
             elif key in STRING_INFOLABELS:
-                listitem.setInfo('video', {key: value})
+                listitem.setInfo('video', {key: unicode(value)})
             elif key in FLOAT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key: "%1.1f" % float(value)})
                 except:
                     pass
             # else:
-            listitem.setProperty('%s' % (key), value)
+            listitem.setProperty(key, unicode(value))
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist
