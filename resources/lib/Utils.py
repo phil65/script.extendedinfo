@@ -126,61 +126,6 @@ def check_version():
                             line2=LANG(32141))
 
 
-def widget_selectdialog(filter=None, prefix="widget"):
-    """
-    show dialog including all video media lists (for widget selection)
-    and set strings PREFIX.path and PREFIX.label with chosen values
-    """
-    movie = {"intheatermovies": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
-             "boxofficemovies": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
-             "openingmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32048),
-             "comingsoonmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32043),
-             "toprentalmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32056),
-             "currentdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32049),
-             "newdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32053),
-             "upcomingdvdmovies": "%s [I](RottenTomatoes)[/I]" % LANG(32054),
-             # tmdb
-             "incinemamovies": "%s [I](TheMovieDB)[/I]" % LANG(32042),
-             "upcomingmovies": "%s [I](TheMovieDB)[/I]" % LANG(32043),
-             "topratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32046),
-             "popularmovies": "%s [I](TheMovieDB)[/I]" % LANG(32044),
-             "accountlists": "%s [I](TheMovieDB)[/I]" % LANG(32045),
-             # trakt
-             "trendingmovies": "%s [I](Trakt.tv)[/I]" % LANG(32047),
-             # tmdb
-             "starredmovies": "%s [I](TheMovieDB)[/I]" % LANG(32134),
-             "ratedmovies": "%s [I](TheMovieDB)[/I]" % LANG(32135),
-             }
-    tvshow = {"airingshows": "%s [I](Trakt.tv)[/I]" % LANG(32028),
-              "premiereshows": "%s [I](Trakt.tv)[/I]" % LANG(32029),
-              "trendingshows": "%s [I](Trakt.tv)[/I]" % LANG(32032),
-              "airingtodaytvshows": "%s [I](TheMovieDB)[/I]" % LANG(32038),
-              "onairtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32039),
-              "topratedtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32040),
-              "populartvshows": "%s [I](TheMovieDB)[/I]" % LANG(32041),
-              "starredtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32144),
-              "ratedtvshows": "%s [I](TheMovieDB)[/I]" % LANG(32145),
-              }
-    image = {"xkcd": "XKCD webcomics",
-             "cyanide": "Cyanide & Happiness webcomics",
-             "dailybabe": "%s" % LANG(32057),
-             "dailybabes": "%s" % LANG(32058),
-             }
-# popularpeople
-    artist = {"topartists": "LastFM: Top artists",
-              }
-    event = {}
-    if True:
-        listitems = merge_dicts(movie, tvshow, image, artist, event)
-    keywords = [key for key in listitems.keys()]
-    labels = [label for label in listitems.values()]
-    ret = xbmcgui.Dialog().select(LANG(32151), labels)
-    if ret > -1:
-        notify(keywords[ret])
-        set_skin_string("%s.path" % prefix, "plugin://script.extendedinfo?info=%s" % keywords[ret])
-        set_skin_string("%s.label" % prefix, labels[ret])
-
-
 def calculate_age(born, died=False):
     """
     calculate age based on born / died
@@ -204,76 +149,6 @@ def calculate_age(born, died=False):
         elif diff_months == 0 and diff_days == 0 and not died:
             notify("%s (%i)" % (LANG(32158), base_age))
     return base_age
-
-
-def get_playlist_stats(path):
-    start_index = -1
-    end_index = -1
-    if (".xsp" in path) and ("special://" in path):
-        start_index = path.find("special://")
-        end_index = path.find(".xsp") + 4
-    elif ("library://" in path):
-        start_index = path.find("library://")
-        end_index = path.rfind("/") + 1
-    elif ("videodb://" in path):
-        start_index = path.find("videodb://")
-        end_index = path.rfind("/") + 1
-    if (start_index > 0) and (end_index > 0):
-        playlist_path = path[start_index:end_index]
-        data = get_kodi_json(method="Files.GetDirectory",
-                             params='{"directory": "%s", "media": "video", "properties": ["playcount", "resume"]}' % playlist_path)
-        if "result" in data:
-            played = 0
-            in_progress = 0
-            numitems = data["result"]["limits"]["total"]
-            for item in data["result"]["files"]:
-                if "playcount" in item:
-                    if item["playcount"] > 0:
-                        played += 1
-                    if item["resume"]["position"] > 0:
-                        in_progress += 1
-            HOME.setProperty('PlaylistWatched', str(played))
-            HOME.setProperty('PlaylistUnWatched', str(numitems - played))
-            HOME.setProperty('PlaylistInProgress', str(in_progress))
-            HOME.setProperty('PlaylistCount', str(numitems))
-
-
-def get_sort_letters(path, focused_letter):
-    """
-    create string including all sortletters
-    and put it into home window property "LetterList"
-    """
-    listitems = []
-    letters = []
-    HOME.clearProperty("LetterList")
-    if SETTING("FolderPath") == path:
-        letters = SETTING("LetterList").split()
-    elif path:
-        data = get_kodi_json(method="Files.GetDirectory",
-                             params='{"directory": "%s", "media": "files"}' % path)
-        if "result" in data and "files" in data["result"]:
-            for movie in data["result"]["files"]:
-                cleaned_label = movie["label"].replace("The ", "")
-                if cleaned_label:
-                    sortletter = cleaned_label[0]
-                    if sortletter not in letters:
-                        letters.append(sortletter)
-        ADDON.setSetting("LetterList", " ".join(letters))
-        ADDON.setSetting("FolderPath", path)
-    HOME.setProperty("LetterList", "".join(letters))
-    if not letters or not focused_letter:
-        return None
-    start_ord = ord("A")
-    for i in range(0, 26):
-        letter = chr(start_ord + i)
-        if letter == focused_letter:
-            label = "[B][COLOR FFFF3333]%s[/COLOR][/B]" % letter
-        elif letter in letters:
-            label = letter
-        else:
-            label = "[COLOR 55FFFFFF]%s[/COLOR]" % letter
-        listitems.append({"label": label})
-    return listitems
 
 
 def millify(n):

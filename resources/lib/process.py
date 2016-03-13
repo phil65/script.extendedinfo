@@ -241,9 +241,6 @@ def start_info_actions(info, params):
         return get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
     elif info == 'weather':
         return get_weather_images()
-    elif info == "sortletters":
-        return get_sort_letters(params["path"], params.get("id", ""))
-
     # ACTIONS
     resolve_url(params.get("handle"))
     if info == 't9input':
@@ -385,8 +382,6 @@ def start_info_actions(info, params):
             tmdb.set_rating_prompt(media_type=media_type,
                                    media_id=tmdb_id,
                                    dbid=params.get("dbid"))
-    elif info == 'playliststats':
-        get_playlist_stats(params.get("id", ""))
     elif info == 'slideshow':
         window_id = xbmcgui.getCurrentwindow_id()
         window = xbmcgui.Window(window_id)
@@ -434,8 +429,6 @@ def start_info_actions(info, params):
         notify("Cache deleted")
     elif info == 'syncwatchlist':
         pass
-    elif info == "widgetdialog":
-        widget_selectdialog()
 
 
 def resolve_url(handle):
