@@ -13,6 +13,27 @@ from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from ..VideoPlayer import PLAYER
 
+ID_LIST_SIMILAR = 150
+ID_LIST_SEASONS = 250
+ID_LIST_NETWORKS = 1450
+ID_LIST_STUDIOS = 550
+ID_LIST_CERTS = 650
+ID_LIST_CREW = 750
+ID_LIST_GENRES = 850
+ID_LIST_KEYWORDS = 950
+ID_LIST_ACTORS = 1000
+ID_LIST_VIDEOS = 1150
+ID_LIST_IMAGES = 1250
+ID_LIST_BACKDROPS = 1350
+
+ID_BUTTON_BROWSE = 120
+ID_BUTTON_PLOT = 132
+ID_BUTTON_MANAGE = 445
+ID_BUTTON_SETRATING = 6001
+ID_BUTTON_OPENLIST = 6002
+ID_BUTTON_FAV = 6003
+ID_BUTTON_RATED = 6006
+
 ch = ActionHandler()
 
 
@@ -32,18 +53,18 @@ def get_window(window_type):
                 self.info['poster'] = get_file(self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("poster", ""),
                                                                                         radius=25)
-            self.listitems = [(150, self.data["similar"]),
-                              (250, self.data["seasons"]),
-                              (1450, self.data["networks"]),
-                              (550, self.data["studios"]),
-                              (650, tmdb.merge_with_cert_desc(self.data["certifications"], "tv")),
-                              (750, self.data["crew"]),
-                              (850, self.data["genres"]),
-                              (950, self.data["keywords"]),
-                              (1000, self.data["actors"]),
-                              (1150, self.data["videos"]),
-                              (1250, self.data["images"]),
-                              (1350, self.data["backdrops"])]
+            self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
+                              (ID_LIST_SEASONS, self.data["seasons"]),
+                              (ID_LIST_NETWORKS, self.data["networks"]),
+                              (ID_LIST_STUDIOS, self.data["studios"]),
+                              (ID_LIST_CERTS, tmdb.merge_with_cert_desc(self.data["certifications"], "tv")),
+                              (ID_LIST_CREW, self.data["crew"]),
+                              (ID_LIST_GENRES, self.data["genres"]),
+                              (ID_LIST_KEYWORDS, self.data["keywords"]),
+                              (ID_LIST_ACTORS, self.data["actors"]),
+                              (ID_LIST_VIDEOS, self.data["videos"]),
+                              (ID_LIST_IMAGES, self.data["images"]),
+                              (ID_LIST_BACKDROPS, self.data["backdrops"])]
 
         def onInit(self):
             self.get_youtube_vids("%s tv" % (self.info['title']))
@@ -57,13 +78,13 @@ def get_window(window_type):
             super(DialogTVShowInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        @ch.click(120)
+        @ch.click(ID_BUTTON_BROWSE)
         def browse_tvshow(self):
             self.close()
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
-        @ch.click(750)
-        @ch.click(1000)
+        @ch.click(ID_LIST_CREW)
+        @ch.click(ID_LIST_ACTORS)
         def credit_dialog(self):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32009), LANG(32147)])
@@ -73,20 +94,20 @@ def get_window(window_type):
             if selection == 1:
                 self.open_credit_dialog(self.listitem.getProperty("credit_id"))
 
-        @ch.click(150)
+        @ch.click(ID_LIST_SIMILAR)
         def open_tvshow_dialog(self):
             wm.open_tvshow_info(prev_window=self,
                                 tmdb_id=self.listitem.getProperty("id"),
                                 dbid=self.listitem.getProperty("dbid"))
 
-        @ch.click(250)
+        @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self):
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.info["id"],
                                 season=self.listitem.getProperty("season"),
                                 tvshow=self.info['title'])
 
-        @ch.click(550)
+        @ch.click(ID_LIST_STUDIOS)
         def open_company_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
@@ -95,7 +116,7 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
-        @ch.click(950)
+        @ch.click(ID_LIST_KEYWORDS)
         def open_keyword_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
@@ -104,7 +125,7 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
-        @ch.click(850)
+        @ch.click(ID_LIST_GENRES)
         def open_genre_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
@@ -114,7 +135,7 @@ def get_window(window_type):
                                filters=filters,
                                media_type="tv")
 
-        @ch.click(1450)
+        @ch.click(ID_LIST_NETWORKS)
         def open_network_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_networks",
@@ -124,7 +145,7 @@ def get_window(window_type):
                                filters=filters,
                                media_type="tv")
 
-        @ch.click(445)
+        @ch.click(ID_BUTTON_MANAGE)
         def show_manage_dialog(self):
             options = []
             title = self.info.get("TVShowTitle", "")
@@ -146,14 +167,14 @@ def get_window(window_type):
             for item in options[selection][1].split("||"):
                 xbmc.executebuiltin(item)
 
-        @ch.click(6001)
+        @ch.click(ID_BUTTON_SETRATING)
         def set_rating(self):
             if tmdb.set_rating_prompt(media_type="tv",
                                       media_id=self.info["id"],
                                       dbid=self.info.get("dbid")):
                 self.update_states()
 
-        @ch.click(6002)
+        @ch.click(ID_BUTTON_OPENLIST)
         def open_list(self):
             index = xbmcgui.Dialog().select(heading=LANG(32136),
                                             list=[LANG(32144), LANG(32145)])
@@ -166,25 +187,25 @@ def get_window(window_type):
                                    mode="rating",
                                    media_type="tv")
 
-        @ch.click(6003)
+        @ch.click(ID_BUTTON_FAV)
         def toggle_fav_status(self):
             tmdb.change_fav_status(media_id=self.info["id"],
                                    media_type="tv",
                                    status=str(not bool(self.account_states["favorite"])).lower())
             self.update_states()
 
-        @ch.click(6006)
+        @ch.click(ID_BUTTON_RATED)
         def open_rated_items(self):
             wm.open_video_list(prev_window=self,
                                mode="rating",
                                media_type="tv")
 
-        @ch.click(132)
+        @ch.click(ID_BUTTON_PLOT)
         def open_text(self):
             xbmcgui.Dialog().textviewer(heading=LANG(32037),
                                         text=self.info["Plot"])
 
-        @ch.click(1150)
+        @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
