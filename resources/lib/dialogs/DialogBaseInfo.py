@@ -32,11 +32,7 @@ class DialogBaseInfo(object):
         HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
         self.window = xbmcgui.Window(self.window_id)
         self.setProperty("type", self.type)
-        if self.logged_in:
-            self.setProperty("tmdb_logged_in", "true")
-        else:
-            self.clearProperty("tmdb_logged_in")
-        # present for jurialmunkey
+        self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
         HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
     def onAction(self, action):

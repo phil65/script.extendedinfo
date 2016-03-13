@@ -161,18 +161,9 @@ class DialogBaseList(object):
         self.setProperty("CurrentPage", str(self.page))
         self.setProperty("Filter_Label", self.filter_label)
         self.setProperty("Sort_Label", self.sort_label)
-        if self.page == self.total_pages:
-            self.clearProperty("ArrowDown")
-        else:
-            self.setProperty("ArrowDown", "True")
-        if self.page > 1:
-            self.setProperty("ArrowUp", "True")
-        else:
-            self.clearProperty("ArrowUp")
-        if self.order == "asc":
-            self.setProperty("Order_Label", LANG(584))
-        else:
-            self.setProperty("Order_Label", LANG(585))
+        self.setProperty("ArrowDown", "True" if self.page != self.total_pages else "")
+        self.setProperty("ArrowUp", "True" if self.page > 1 else "")
+        self.setProperty("Order_Label", LANG(584) if self.order == "asc" else LANG(585))
 
     def go_to_next_page(self):
         self.get_column()
