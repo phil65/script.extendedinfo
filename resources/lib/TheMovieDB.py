@@ -420,18 +420,18 @@ def handle_misc(results):
     listitems = []
     for item in results:
         listitem = {'label': clean_text(item.get('name')),
+                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
+                    'year': get_year(item.get('release_date')),
+                    'Premiered': item.get('release_date'),
+                    'Plot': clean_text(item.get('description')),
                     'certification': item.get('certification', "") + item.get('rating', ""),
                     'item_count': item.get('item_count'),
                     'favorite_count': item.get('favorite_count'),
-                    'Premiered': item.get('release_date'),
-                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
-                    'year': get_year(item.get('release_date')),
                     'iso_3166_1': item.get('iso_3166_1', "").lower(),
                     'author': item.get('author'),
                     'content': clean_text(item.get('content')),
                     'id': item.get('id'),
-                    'url': item.get('url'),
-                    'Plot': clean_text(item.get('description'))}
+                    'url': item.get('url')}
         listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
         listitems.append(listitem)
     return listitems
@@ -446,8 +446,8 @@ def handle_seasons(results):
                     'label': title,
                     'season': season_number,
                     'Premiered': season.get('air_date'),
-                    'year': get_year(season.get('air_date')),
-                    'id': season.get('id')}
+                    'year': get_year(season.get('air_date'))}
+        listitem["properties"] = {'id': season.get('id')}
         listitem["artwork"] = get_image_urls(poster=season.get("poster_path"))
         listitems.append(listitem)
     return listitems
@@ -459,13 +459,13 @@ def handle_videos(results):
         image = "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')
         listitem = {'thumb': image,
                     'label': item.get('name'),
-                    'iso_639_1': item.get('iso_639_1'),
-                    'type': item.get('type'),
-                    'key': item.get('key'),
-                    'youtube_id': item.get('key'),
-                    'site': item.get('site'),
-                    'id': item.get('id'),
                     'size': item.get('size')}
+        listitem["properties"] = {'iso_639_1': item.get('iso_639_1'),
+                                  'type': item.get('type'),
+                                  'key': item.get('key'),
+                                  'youtube_id': item.get('key'),
+                                  'site': item.get('site'),
+                                  'id': item.get('id')}
         listitems.append(listitem)
     return listitems
 
@@ -513,13 +513,13 @@ def handle_images(results):
 def handle_companies(results):
     companies = []
     for item in results:
-        company = {'parent_company': item['parent_company'],
-                   'label': item['name'],
-                   'Plot': item['description'],
-                   'headquarters': item['headquarters'],
-                   'homepage': item['homepage'],
-                   'id': item['id'],
-                   'logo_path': item['logo_path']}
+        company = {'label': item['name'],
+                   'Plot': item['description']}
+        company["properties"] = {'parent_company': item['parent_company'],
+                                 'headquarters': item['headquarters'],
+                                 'homepage': item['homepage'],
+                                 'id': item['id'],
+                                 'logo_path': item['logo_path']}
         companies.append(company)
     return companies
 
