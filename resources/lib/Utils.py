@@ -553,11 +553,11 @@ def merge_dict_lists(items, key="job"):
     crew_ids = []
     crews = []
     for item in items:
-        if item["id"] not in crew_ids:
-            crew_ids.append(item["id"])
+        if item["properties"]["id"] not in crew_ids:
+            crew_ids.append(item["properties"]["id"])
             crews.append(item)
         else:
-            index = crew_ids.index(item["id"])
+            index = crew_ids.index(item["properties"]["id"])
             if key in crews[index]:
                 crews[index][key] = crews[index][key] + " / " + item[key]
     return crews
@@ -586,13 +586,15 @@ def set_window_props(name, data, prefix="", debug=False):
         log("%s%s.Count = None" % (prefix, name))
         return None
     for (count, result) in enumerate(data):
-        if debug:
-            log("%s%s.%i = %s" % (prefix, name, count + 1, str(result)))
         for (key, value) in result.iteritems():
             value = unicode(value)
-            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, str(key)), value)
+            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
             if debug:
                 log('%s%s.%i.%s --> %s' % (prefix, name, count + 1, key, value))
+        for key, value in result.get("properties", {}).iteritems():
+            if not value:
+                continue
+            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
     HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
 
 
@@ -631,6 +633,10 @@ def create_listitems(data=None, preload_images=0):
                     pass
             else:
                 listitem.setProperty(key, unicode(value))
+        for key, value in result.get("properties", {}).iteritems():
+            if not value:
+                continue
+            listitem.setProperty(key, unicode(value))
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist
