@@ -303,9 +303,9 @@ def merge_with_cert_desc(input_list, media_type):
 def handle_multi_search(results):
     listitems = []
     for item in results:
-        if item["mediatype"] == "movie":
+        if item["media_type"] == "movie":
             listitems.append(handle_movies([item])[0])
-        elif item["mediatype"] == "tvshow":
+        elif item["media_type"] == "tvshow":
             listitems.append(handle_tvshows([item])[0])
         else:
             listitems.append(handle_people([item])[0])
