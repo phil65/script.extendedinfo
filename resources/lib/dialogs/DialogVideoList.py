@@ -306,13 +306,13 @@ def get_window(window_type):
                 wm.open_tvshow_info(prev_window=self,
                                     tmdb_id=self.listitem.getProperty("id"),
                                     dbid=self.listitem.getProperty("dbid"))
-            elif media_type == "actor":
-                wm.open_actor_info(prev_window=self,
-                                   actor_id=self.listitem.getProperty("id"))
             elif media_type == "movie":
                 wm.open_movie_info(prev_window=self,
                                    movie_id=self.listitem.getProperty("id"),
                                    dbid=self.listitem.getProperty("dbid"))
+            else:
+                wm.open_actor_info(prev_window=self,
+                                   actor_id=self.listitem.getProperty("id"))
 
         @ch.click(5010)
         def set_company_filter(self):
