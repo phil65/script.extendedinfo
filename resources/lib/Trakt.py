@@ -47,13 +47,13 @@ def get_calendar_shows(content):
                     'duration': episode["show"]["runtime"],
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
-                    'genre': " / ".join(episode["show"]["genres"])}
+                    'genre': " / ".join(episode["show"]["genres"]),
+                    'mpaa': episode["show"]["certification"]}
             show["properties"] = {'tvdb_id': episode["show"]["ids"]["tvdb"],
                                   'id': episode["show"]["ids"]["tvdb"],
                                   'imdb_id': episode["show"]["ids"]["imdb"],
                                   'duration(h)': format_time(episode["show"]["runtime"], "h"),
-                                  'duration(m)': format_time(episode["show"]["runtime"], "m"),
-                                  'Certification': episode["show"]["certification"]}
+                                  'duration(m)': format_time(episode["show"]["runtime"], "m")}
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                                'poster': episode["show"]["images"]["poster"]["full"],
                                'Banner': episode["show"]["images"]["banner"]["full"],
@@ -82,12 +82,12 @@ def handle_movies(results):
                  'Premiered': item["movie"]["released"],
                  'Rating': round(item["movie"]["rating"], 1),
                  'Votes': item["movie"]["votes"],
-                 'genre': " / ".join(item["movie"]["genres"]),
-                 'duration(h)': format_time(item["movie"]["runtime"], "h"),
-                 'duration(m)': format_time(item["movie"]["runtime"], "m")}
+                 'genre': " / ".join(item["movie"]["genres"])}
         movie["properties"] = {'id': item["movie"]["ids"]["tmdb"],
                                'imdb_id': item["movie"]["ids"]["imdb"],
-                               'Watchers': item["watchers"]}
+                               'Watchers': item["watchers"],
+                               'duration(h)': format_time(item["movie"]["runtime"], "h"),
+                               'duration(m)': format_time(item["movie"]["runtime"], "m")}
         movie["artwork"] = {'poster': item["movie"]["images"]["poster"]["full"],
                             'fanart': item["movie"]["images"]["fanart"]["full"],
                             'thumb': item["movie"]["images"]["poster"]["thumb"]}
