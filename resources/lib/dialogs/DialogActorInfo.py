@@ -12,6 +12,15 @@ from ..WindowManager import wm
 from ..VideoPlayer import PLAYER
 from ActionHandler import ActionHandler
 
+ID_LIST_MOVIE_ROLES = 150
+ID_LIST_TV_ROLES = 250
+ID_LIST_YOUTUBE = 350
+ID_LIST_IMAGES = 450
+ID_LIST_MOVIE_CREW = 550
+ID_LIST_TV_CREW = 650
+ID_LIST_TAGGED_IMAGES = 750
+ID_LIST_BACKDROPS = 1350
+ID_CONTROL_PLOT = 132
 
 ch = ActionHandler()
 
@@ -29,12 +38,12 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("thumb"))
-            self.listitems = [(150, self.data["movie_roles"]),
-                              (250, self.data["tvshow_roles"]),
-                              (450, self.data["images"]),
-                              (550, merge_dict_lists(self.data["movie_crew_roles"])),
-                              (650, merge_dict_lists(self.data["tvshow_crew_roles"])),
-                              (750, self.data["tagged_images"])]
+            self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
+                              (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
+                              (ID_LIST_IMAGES, self.data["images"]),
+                              (ID_LIST_MOVIE_CREW, merge_dict_lists(self.data["movie_crew_roles"])),
+                              (ID_LIST_TV_CREW, merge_dict_lists(self.data["tvshow_crew_roles"])),
+                              (ID_LIST_TAGGED_IMAGES, self.data["tagged_images"])]
 
         def onInit(self):
             self.get_youtube_vids(self.info["label"])
@@ -51,15 +60,15 @@ def get_window(window_type):
             super(DialogActorInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.click(150)
-        @ch.click(550)
+        @ch.click(ID_LIST_MOVIE_ROLES)
+        @ch.click(ID_LIST_MOVIE_CREW)
         def open_movie_info(self):
             wm.open_movie_info(prev_window=self,
                                movie_id=self.listitem.getProperty("id"),
                                dbid=self.listitem.getProperty("dbid"))
 
-        @ch.click(250)
-        @ch.click(650)
+        @ch.click(ID_LIST_TV_ROLES)
+        @ch.click(ID_LIST_TV_CREW)
         def open_tvshow_dialog(self):
             selection = xbmcgui.Dialog().select(heading=LANG(32151),
                                                 list=[LANG(32148), LANG(32147)])
@@ -70,27 +79,27 @@ def get_window(window_type):
             if selection == 1:
                 self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))
 
-        @ch.click(450)
-        @ch.click(750)
+        @ch.click(ID_LIST_IMAGES)
+        @ch.click(ID_LIST_TAGGED_IMAGES)
         def open_image(self):
             listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
             pos = wm.open_slideshow(listitems=listitems,
                                     index=self.control.getSelectedPosition())
             self.control.selectItem(pos)
 
-        @ch.click(350)
+        @ch.click(ID_LIST_YOUTUBE)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 
-        @ch.click(132)
+        @ch.click(ID_CONTROL_PLOT)
         def show_plot(self):
             xbmcgui.Dialog().textviewer(heading=LANG(32037),
                                         text=self.info["biography"])
 
-        @ch.action("contextmenu", 150)
-        @ch.action("contextmenu", 550)
+        @ch.action("contextmenu", ID_LIST_MOVIE_ROLES)
+        @ch.action("contextmenu", ID_LIST_MOVIE_CREW)
         def add_movie_to_account(self):
             tmdb.add_movie_to_list(self.listitem.getProperty("id"))
 

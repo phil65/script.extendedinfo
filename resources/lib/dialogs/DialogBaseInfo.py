@@ -12,6 +12,10 @@ from ActionHandler import ActionHandler
 from .. import YouTube
 ch = ActionHandler()
 
+ID_LIST_YOUTUBE = 350
+ID_LIST_VIDEOS = 1150
+ID_LIST_IMAGES = 1250
+ID_LIST_BACKDROPS = 1350
 
 class DialogBaseInfo(object):
     ACTION_PREVIOUS_MENU = [92, 9]
@@ -67,14 +71,14 @@ class DialogBaseInfo(object):
             except:
                 log("Notice: No container with id %i available" % container_id)
 
-    @ch.click(1250)
-    @ch.click(1350)
+    @ch.click(ID_LIST_IMAGES)
+    @ch.click(ID_LIST_BACKDROPS)
     def open_image(self):
         pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id)),
                                 index=self.control.getSelectedPosition())
         self.control.selectItem(pos)
 
-    @ch.action("contextmenu", 1250)
+    @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self):
         if not self.info.get("dbid"):
             return None
@@ -86,7 +90,7 @@ class DialogBaseInfo(object):
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
-    @ch.action("contextmenu", 1350)
+    @ch.action("contextmenu", ID_LIST_BACKDROPS)
     def fanart_options(self):
         if not self.info.get("dbid"):
             return None
@@ -98,8 +102,8 @@ class DialogBaseInfo(object):
             get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
                           params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
-    @ch.action("contextmenu", 1150)
-    @ch.action("contextmenu", 350)
+    @ch.action("contextmenu", ID_LIST_VIDEOS)
+    @ch.action("contextmenu", ID_LIST_YOUTUBE)
     def download_video(self):
         selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                             list=[LANG(33003)])
@@ -126,7 +130,7 @@ class DialogBaseInfo(object):
     @run_async
     def get_youtube_vids(self, search_str):
         try:
-            youtube_list = self.getControl(350)
+            youtube_list = self.getControl(ID_LIST_YOUTUBE)
         except:
             return None
         result = YouTube.search(search_str, limit=15)
