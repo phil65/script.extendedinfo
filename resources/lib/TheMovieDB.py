@@ -85,6 +85,8 @@ class LoginProvider(object):
         response = get_data(url="account",
                             params={"session_id": self.session_id},
                             cache_days=999999)
+        if not response:
+            return None
         self.account_id = response.get("id")
         return self.account_id
 
@@ -95,10 +97,9 @@ class LoginProvider(object):
         '''
         response = get_data(url="authentication/guest_session/new",
                             cache_days=999999)
-        if "guest_session_id" in response:
-            return str(response["guest_session_id"])
-        else:
+        if not response or "guest_session_id" not in response:
             return None
+        return str(response["guest_session_id"])
 
     def get_session_id(self, cache_days=9999):
         '''
