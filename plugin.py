@@ -23,10 +23,12 @@ class Main:
                 xbmcplugin.setContent(self.handle, 'tvshows')
                 xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
             elif info.endswith("episodes"):
                 xbmcplugin.setContent(self.handle, 'episodes')
                 xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
 
             elif info.endswith("movies"):
                 xbmcplugin.setContent(self.handle, 'movies')
