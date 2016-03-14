@@ -109,7 +109,7 @@ def handle_tvshows(results):
                 'mediatype': "tvshow",
                 'path': path,
                 'TVShowTitle': tvshow['show']["title"],
-                'duration': tvshow['show']["runtime"],
+                'duration': tvshow['show']["runtime"] * 60,
                 'year': tvshow['show']["year"],
                 'Premiered': tvshow['show']["first_aired"][:10],
                 'Country': tvshow['show']["country"],
