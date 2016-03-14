@@ -68,29 +68,29 @@ def get_calendar_shows(content):
 def handle_movies(results):
     movies = []
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
-    for movie in results:
-        movie = {'label': movie["movie"]["title"],
-                 'path': PLUGIN_BASE + path % fetch(movie["movie"]["ids"], 'tmdb'),
-                 'title': movie["movie"]["title"],
-                 'duration': movie["movie"]["runtime"],
-                 'Tagline': movie["movie"]["tagline"],
+    for item in results:
+        movie = {'label': item["movie"]["title"],
+                 'path': PLUGIN_BASE + path % fetch(item["movie"]["ids"], 'tmdb'),
+                 'title': item["movie"]["title"],
+                 'duration': item["movie"]["runtime"],
+                 'Tagline': item["movie"]["tagline"],
                  'mediatype': "movie",
-                 'Trailer': convert_youtube_url(movie["movie"]["trailer"]),
-                 'year': movie["movie"]["year"],
-                 'mpaa': movie["movie"]["certification"],
-                 'Plot': movie["movie"]["overview"],
-                 'Premiered': movie["movie"]["released"],
-                 'Rating': round(movie["movie"]["rating"], 1),
-                 'Votes': movie["movie"]["votes"],
-                 'genre': " / ".join(movie["movie"]["genres"]),
-                 'duration(h)': format_time(movie["movie"]["runtime"], "h"),
-                 'duration(m)': format_time(movie["movie"]["runtime"], "m")}
-        movie["properties"] = {'id': movie["movie"]["ids"]["tmdb"],
-                               'imdb_id': movie["movie"]["ids"]["imdb"],
-                               'Watchers': movie["watchers"]}
-        movie["artwork"] = {'poster': movie["movie"]["images"]["poster"]["full"],
-                            'fanart': movie["movie"]["images"]["fanart"]["full"],
-                            'thumb': movie['movie']["images"]["poster"]["thumb"]}
+                 'Trailer': convert_youtube_url(item["movie"]["trailer"]),
+                 'year': item["movie"]["year"],
+                 'mpaa': item["movie"]["certification"],
+                 'Plot': item["movie"]["overview"],
+                 'Premiered': item["movie"]["released"],
+                 'Rating': round(item["movie"]["rating"], 1),
+                 'Votes': item["movie"]["votes"],
+                 'genre': " / ".join(item["movie"]["genres"]),
+                 'duration(h)': format_time(item["movie"]["runtime"], "h"),
+                 'duration(m)': format_time(item["movie"]["runtime"], "m")}
+        movie["properties"] = {'id': item["movie"]["ids"]["tmdb"],
+                               'imdb_id': item["movie"]["ids"]["imdb"],
+                               'Watchers': item["watchers"]}
+        movie["artwork"] = {'poster': item["movie"]["images"]["poster"]["full"],
+                            'fanart': item["movie"]["images"]["fanart"]["full"],
+                            'thumb': item["movie"]["images"]["poster"]["thumb"]}
         movies.append(movie)
     movies = local_db.merge_with_local_movie_info(online_list=movies,
                                                   library_first=False)
