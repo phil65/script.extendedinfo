@@ -10,6 +10,10 @@ from ..Utils import *
 # TODO: extend and use this for ContextMenu to get proper closing behaviour
 class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
+    C_LIST_SIMPLE = 3
+    C_LIST_DETAIL = 6
+    C_BUTTON_GET_MORE = 5
+    C_LABEL_HEADER = 1
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
@@ -20,10 +24,10 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.index = -1
 
     def onInit(self):
-        self.list = self.getControl(6)
-        self.getControl(3).setVisible(False)
-        self.getControl(5).setVisible(False)
-        self.getControl(1).setLabel(LANG(32151))
+        self.list = self.getControl(C_LIST_DETAIL)
+        self.getControl(C_LIST_SIMPLE).setVisible(False)
+        self.getControl(C_BUTTON_GET_MORE).setVisible(False)
+        self.getControl(C_LABEL_HEADER).setLabel(LANG(32151))
         self.list.addItems(self.listitems)
         self.setFocus(self.list)
 
@@ -32,7 +36,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
             self.close()
 
     def onClick(self, control_id):
-        if control_id in [3, 6]:
+        if control_id in [C_LIST_SIMPLE, C_LIST_DETAIL]:
             self.index = int(self.list.getSelectedPosition())
             self.listitem = self.items[self.index]
             self.close()
