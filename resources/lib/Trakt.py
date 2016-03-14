@@ -44,9 +44,11 @@ def get_calendar_shows(content):
                     'TVShowTitle': episode["show"]["title"],
                     'mediatype': "episode",
                     'year': fetch(episode["show"], "year"),
-                    'duration': episode["show"]["runtime"],
+                    'duration': episode["show"]["runtime"] * 60,
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
+                    'status': episode["show"]["status"],
+                    'rating': episode["show"]["rating"],
                     'genre': " / ".join(episode["show"]["genres"]),
                     'mpaa': episode["show"]["certification"]}
             show["properties"] = {'tvdb_id': episode["show"]["ids"]["tvdb"],
