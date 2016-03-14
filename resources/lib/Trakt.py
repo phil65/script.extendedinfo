@@ -72,7 +72,7 @@ def handle_movies(results):
         movie = {'label': item["movie"]["title"],
                  'path': PLUGIN_BASE + path % fetch(item["movie"]["ids"], 'tmdb'),
                  'title': item["movie"]["title"],
-                 'duration': item["movie"]["runtime"],
+                 'duration': item["movie"]["runtime"] * 60,
                  'Tagline': item["movie"]["tagline"],
                  'mediatype': "movie",
                  'Trailer': convert_youtube_url(item["movie"]["trailer"]),
