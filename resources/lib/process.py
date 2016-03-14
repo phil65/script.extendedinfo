@@ -313,6 +313,10 @@ def start_info_actions(info, params):
     elif info == 'youtubebrowser':
         wm.open_youtube_list(search_str=params.get("id", ""))
     elif info == 'moviedbbrowser':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
+        HOME.setProperty('infodialogs.active', "true")
         search_str = params.get("id", "")
         if not search_str and params.get("search"):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
@@ -323,7 +327,11 @@ def start_info_actions(info, params):
                 return None
         wm.open_video_list(search_str=search_str,
                            mode="search")
+        HOME.clearProperty('infodialogs.active')
     elif info == 'extendedinfo':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
         HOME.setProperty('infodialogs.active', "true")
         wm.open_movie_info(movie_id=params.get("id"),
                            dbid=params.get("dbid"),
@@ -331,11 +339,17 @@ def start_info_actions(info, params):
                            name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedactorinfo':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
         HOME.setProperty('infodialogs.active', "true")
         wm.open_actor_info(actor_id=params.get("id"),
                            name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedtvinfo':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
         HOME.setProperty('infodialogs.active', "true")
         wm.open_tvshow_info(tmdb_id=params.get("id"),
                             tvdb_id=params.get("tvdb_id"),
@@ -344,12 +358,18 @@ def start_info_actions(info, params):
                             name=params.get("name"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'seasoninfo':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
         HOME.setProperty('infodialogs.active', "true")
         wm.open_season_info(tvshow=params.get("tvshow"),
                             dbid=params.get("dbid"),
                             season=params.get("season"))
         HOME.clearProperty('infodialogs.active')
     elif info == 'extendedepisodeinfo':
+        active = HOME.getProperty('infodialogs.active')
+        if active:
+            return None
         HOME.setProperty('infodialogs.active', "true")
         wm.open_episode_info(tvshow=params.get("tvshow"),
                              tvshow_id=params.get("tvshow_id"),
