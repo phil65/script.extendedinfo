@@ -30,10 +30,8 @@ def handle_albums(results):
                  'mbid': album['strMusicBrainzID'],
                  'id': album['idAlbum'],
                  'audiodb_id': album['idAlbum'],
-                 'Description': desc,
-                 'path': "",
+                 'Album_Description': desc,
                  'mediatype': "album",
-                 'Plot': desc,
                  'genre': album['strGenre'],
                  'Mood': album['strMood'],
                  'Style': album['strStyle'],
@@ -61,14 +59,13 @@ def handle_tracks(results):
         return None
     for item in results['track']:
         youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
-        track = {'Track': item['strTrack'],
+        track = {'label': item['strTrack'],
                  'Artist': item['strArtist'],
                  'mediatype': "song",
                  'mbid': item['strMusicBrainzID'],
                  'Album': item['strAlbum'],
                  'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
-                 'path': convert_youtube_url(item['strMusicVid']),
-                 'label': item['strTrack']}
+                 'path': convert_youtube_url(item['strMusicVid'])}
         tracks.append(track)
     return tracks
 
@@ -79,13 +76,13 @@ def handle_musicvideos(results):
     mvids = []
     for item in results['mvids']:
         youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
-        mvid = {'Track': item['strTrack'],
-                'Description': item['strDescriptionEN'],
-                'id': item['idTrack'],
-                'mediatype': "musicvideo",
-                'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
+        mvid = {'label': item['strTrack'],
                 'path': convert_youtube_url(item['strMusicVid']),
-                'label': item['strTrack']}
+                'Plot': item['strDescriptionEN'],
+                'mediatype': "musicvideo",
+                'id': item['idTrack'],
+                'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
+                'Title': item['strTrack']}
         mvids.append(mvid)
     return mvids
 

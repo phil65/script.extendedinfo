@@ -399,7 +399,7 @@ def handle_episodes(results):
     for item in results:
         title = clean_text(item.get("name"))
         if not title:
-            title = "%s %s" % (LANG(20359), item.get('episode_number'))
+            title = u"%s %s" % (LANG(20359), item.get('episode_number'))
         listitem = {'mediatype': "episode",
                     'title': title,
                     'label': title,
@@ -441,7 +441,7 @@ def handle_seasons(results):
     listitems = []
     for season in results:
         season_number = season.get('season_number')
-        title = LANG(20381) if season_number == 0 else "%s %s" % (LANG(20373), season_number)
+        title = LANG(20381) if season_number == 0 else u"%s %s" % (LANG(20373), season_number)
         listitem = {'mediatype': "season",
                     'label': title,
                     'season': season_number,
@@ -747,31 +747,31 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     path = PLUGIN_BASE + 'youtubevideo&&id=%s' % fetch(response, "id")
     movie = {'title': fetch(response, 'title'),
              'label': fetch(response, 'title'),
+             'path': path,
              'Tagline': fetch(response, 'tagline'),
              'duration': fetch(response, 'runtime'),
-             'duration(h)': format_time(fetch(response, 'runtime'), "h"),
-             'duration(m)': format_time(fetch(response, 'runtime'), "m"),
              'mpaa': mpaa,
              'Director': " / ".join(directors),
              'writer': " / ".join(authors),
-             'Budget': millify(fetch(response, 'budget')),
-             'Revenue': millify(fetch(response, 'revenue')),
-             'Homepage': fetch(response, 'homepage'),
-             'Set': set_name,
-             'SetId': set_id,
-             'id': fetch(response, 'id'),
-             'imdb_id': fetch(response, 'imdb_id'),
              'Plot': clean_text(fetch(response, 'overview')),
              'OriginalTitle': fetch(response, 'original_title'),
              'Country': fetch(response, 'original_language'),
              'genre': " / ".join(genres),
              'Rating': fetch(response, 'vote_average'),
+             'Premiered': fetch(response, 'release_date'),
              'Votes': fetch(response, 'vote_count'),
              'Adult': str(fetch(response, 'adult')),
              'Popularity': fetch(response, 'popularity'),
              'Status': translate_status(fetch(response, 'status')),
-             'path': path,
-             'Premiered': fetch(response, 'release_date'),
+             'Set': set_name,
+             'SetId': set_id,
+             'id': fetch(response, 'id'),
+             'imdb_id': fetch(response, 'imdb_id'),
+             'duration(h)': format_time(fetch(response, 'runtime'), "h"),
+             'duration(m)': format_time(fetch(response, 'runtime'), "m"),
+             'Budget': millify(fetch(response, 'budget')),
+             'Revenue': millify(fetch(response, 'revenue')),
+             'Homepage': fetch(response, 'homepage'),
              'Studio': " / ".join(Studio),
              'year': get_year(fetch(response, 'release_date'))}
     movie.update(artwork)

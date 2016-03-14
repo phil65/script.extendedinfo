@@ -36,10 +36,10 @@ def get_movies(movie_type):
                  'Premiered': item["release_dates"].get("theater", ""),
                  'Rating': item["ratings"]["audience_score"] / 10.0,
                  'Plot': item["synopsis"],
-                 'mpaa': item["mpaa_rating"],
-                 'imdb_id': imdb_id,
-                 'duration(h)': format_time(item["runtime"], "h"),
-                 'duration(m)': format_time(item["runtime"], "m")}
+                 'mpaa': item["mpaa_rating"]}
+        movie["properties"] = {'imdb_id': imdb_id,
+                               'duration(h)': format_time(item["runtime"], "h"),
+                               'duration(m)': format_time(item["runtime"], "m")}
         movie["artwork"] = {'thumb': poster,
                             'poster': poster}
         movies.append(movie)
