@@ -33,10 +33,10 @@ def get_calendar_shows(content):
     for day in results.iteritems():
         for episode in day[1]:
             title = episode["episode"]["title"] if episode["episode"]["title"] else ""
-            show = {'label': "{0} - {1}x{2}. {3}".format(episode["show"]["title"],
-                                                         episode["episode"]["season"],
-                                                         episode["episode"]["number"],
-                                                         title),
+            show = {'label': u"{0} - {1}x{2}. {3}".format(episode["show"]["title"],
+                                                          episode["episode"]["season"],
+                                                          episode["episode"]["number"],
+                                                          title),
                     'path': PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"],
                     'title': title,
                     'season': episode["episode"]["season"],
