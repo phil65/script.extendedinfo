@@ -334,7 +334,8 @@ def handle_movies(results, local_first=True, sortkey="year"):
                 'genre': " / ".join([i for i in genres if i]),
                 'Votes': movie.get('vote_count'),
                 'year': get_year(movie.get('release_date')),
-                'Rating': movie.get('vote_average')}
+                'Rating': movie.get('vote_average'),
+                'Premiered': movie.get('release_date')}
         item["properties"] = {'id': movie.get("id"),
                               'Popularity': movie.get('popularity'),
                               'credit_id': movie.get('credit_id'),
@@ -342,8 +343,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                               'job': movie.get('job'),
                               'department': movie.get('department'),
                               'User_Rating': movie.get('rating'),
-                              'time_comparer': movie['release_date'].replace("-", "") if movie.get('release_date') else "",
-                              'Premiered': movie.get('release_date')}
+                              'time_comparer': movie['release_date'].replace("-", "") if movie.get('release_date') else ""}
         item["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                          fanart=movie.get("backdrop_path"))
         movies.append(item)
