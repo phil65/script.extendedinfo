@@ -21,10 +21,18 @@ class Main:
             listitems = start_info_actions(info, self.params)
             if info.endswith("shows"):
                 xbmcplugin.setContent(self.handle, 'tvshows')
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
             elif info.endswith("episodes"):
                 xbmcplugin.setContent(self.handle, 'episodes')
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+
             elif info.endswith("movies"):
                 xbmcplugin.setContent(self.handle, 'movies')
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
+                xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
             elif info.endswith("lists"):
                 xbmcplugin.setContent(self.handle, 'sets')
             else:
@@ -34,9 +42,6 @@ class Main:
                               prefix=self.params.get("prefix", ""),
                               handle=self.handle,
                               limit=self.params.get("limit", 20))
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_TITLE)
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-            xbmcplugin.addSortMethod(self.handle, xbmcplugin.SORT_METHOD_DURATION)
         else:
             movie = {"intheatermovies": "%s [I](RottenTomatoes)[/I]" % LANG(32042),
                      "boxofficemovies": "%s [I](RottenTomatoes)[/I]" % LANG(32055),
