@@ -342,7 +342,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                     'job': movie.get('job'),
                     'department': movie.get('department'),
                     'User_Rating': movie.get('rating'),
-                    'time_comparer': movie.get('release_date').replace("-", ""),
+                    'time_comparer': movie['release_date'].replace("-", "") if movie.get('release_date') else "",
                     'Premiered': movie.get('release_date')}
         listitem["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                              fanart=movie.get("backdrop_path"))
@@ -967,7 +967,25 @@ def extended_actor_info(actor_id):
                  "tvshow_crew_roles": handle_tvshows(response["tv_credits"]["crew"]),
                  "tagged_images": tagged_images,
                  "images": handle_images(response["images"]["profiles"])}
-    info = handle_people([response])[0]
+    info = {'adult': response.get('adult'),
+            'label': response['name'],
+            'alsoknownas': " / ".join(response.get('also_known_as', [])),
+            'biography': clean_text(response.get('biography')),
+            'birthday': response.get('birthday'),
+            'age': calculate_age(response.get('birthday'), response.get('deathday')),
+            'character': response.get('character'),
+            'department': response.get('department'),
+            'job': response.get('job'),
+            'mediatype': "actor",
+            'id': response['id'],
+            'cast_id': response.get('cast_id'),
+            'credit_id': response.get('credit_id'),
+            'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']),
+            'deathday': response.get('deathday'),
+            'placeofbirth': response.get('place_of_birth'),
+            'homepage': response.get('homepage')}
+    artwork = get_image_urls(profile=response.get("profile_path"))
+    info.update(artwork)
     info["DBMovies"] = str(len([d for d in listitems["movie_roles"] if "dbid" in d]))
     return (info, listitems)
 
