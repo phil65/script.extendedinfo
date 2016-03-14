@@ -137,7 +137,7 @@ class DialogBaseInfo(object):
         if not self.yt_listitems:
             self.yt_listitems = result.get("listitems", [])
             if "videos" in self.data:
-                vid_ids = [item["key"] for item in self.data["videos"]]
+                vid_ids = [item["properties"]["key"] for item in self.data["videos"]]
                 self.yt_listitems = [i for i in self.yt_listitems if i["youtube_id"] not in vid_ids]
         youtube_list.reset()
         youtube_list.addItems(create_listitems(self.yt_listitems))
