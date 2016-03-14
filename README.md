@@ -208,7 +208,7 @@ Available Properties:
 - 'TVShowTitle':   TVShow Title
 - 'Plot':          Episode Plot
 - 'Genre':         TVShow Genre
-- 'Runtime':       Episode Duration
+- 'Duration':       Episode Duration
 - 'Year':          Episode Release Year
 - 'Certification': TVShow Mpaa Rating
 - 'Studio':        TVShow Studio

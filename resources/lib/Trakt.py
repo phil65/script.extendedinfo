@@ -47,13 +47,13 @@ def get_calendar_shows(content):
                     'duration': episode["show"]["runtime"],
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
-                    'genre': " / ".join(episode["show"]["genres"]),
-                    'tvdb_id': episode["show"]["ids"]["tvdb"],
-                    'id': episode["show"]["ids"]["tvdb"],
-                    'imdb_id': episode["show"]["ids"]["imdb"],
-                    'duration(h)': format_time(episode["show"]["runtime"], "h"),
-                    'duration(m)': format_time(episode["show"]["runtime"], "m"),
-                    'Certification': episode["show"]["certification"]}
+                    'genre': " / ".join(episode["show"]["genres"])}
+            show["properties"] = {'tvdb_id': episode["show"]["ids"]["tvdb"],
+                                  'id': episode["show"]["ids"]["tvdb"],
+                                  'imdb_id': episode["show"]["ids"]["imdb"],
+                                  'duration(h)': format_time(episode["show"]["runtime"], "h"),
+                                  'duration(m)': format_time(episode["show"]["runtime"], "m"),
+                                  'Certification': episode["show"]["certification"]}
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                                'poster': episode["show"]["images"]["poster"]["full"],
                                'Banner': episode["show"]["images"]["banner"]["full"],
@@ -73,8 +73,6 @@ def handle_movies(results):
                  'path': PLUGIN_BASE + path % fetch(movie["movie"]["ids"], 'tmdb'),
                  'title': movie["movie"]["title"],
                  'duration': movie["movie"]["runtime"],
-                 'duration(h)': format_time(movie["movie"]["runtime"], "h"),
-                 'duration(m)': format_time(movie["movie"]["runtime"], "m"),
                  'Tagline': movie["movie"]["tagline"],
                  'mediatype': "movie",
                  'Trailer': convert_youtube_url(movie["movie"]["trailer"]),
@@ -84,7 +82,9 @@ def handle_movies(results):
                  'Premiered': movie["movie"]["released"],
                  'Rating': round(movie["movie"]["rating"], 1),
                  'Votes': movie["movie"]["votes"],
-                 'genre': " / ".join(movie["movie"]["genres"])}
+                 'genre': " / ".join(movie["movie"]["genres"]),
+                 'duration(h)': format_time(movie["movie"]["runtime"], "h"),
+                 'duration(m)': format_time(movie["movie"]["runtime"], "m")}
         movie["properties"] = {'id': movie["movie"]["ids"]["tmdb"],
                                'imdb_id': movie["movie"]["ids"]["imdb"],
                                'Watchers': movie["watchers"]}
@@ -107,7 +107,6 @@ def handle_tvshows(results):
                 'mediatype': "tvshow",
                 'path': path,
                 'TVShowTitle': tvshow['show']["title"],
-                'Runtime': tvshow['show']["runtime"],
                 'duration': tvshow['show']["runtime"],
                 'year': tvshow['show']["year"],
                 'Premiered': tvshow['show']["first_aired"][:10],
