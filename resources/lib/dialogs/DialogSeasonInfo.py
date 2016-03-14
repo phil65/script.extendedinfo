@@ -11,6 +11,14 @@ from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from ..VideoPlayer import PLAYER
 
+ID_LIST_ACTORS = 1000
+ID_LIST_CREW = 750
+ID_LIST_EPISODES = 2000
+ID_LIST_VIDEOS = 1150
+ID_LIST_IMAGES = 1250
+ID_LIST_BACKDROPS = 1350
+ID_CONTROL_PLOT = 132
+
 ch = ActionHandler()
 
 
@@ -31,12 +39,12 @@ def get_window(window_type):
                 self.info['poster'] = get_file(url=self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("poster", ""),
                                                                                         radius=25)
-            self.listitems = [(1000, self.data["actors"]),
-                              (750, self.data["crew"]),
-                              (2000, self.data["episodes"]),
-                              (1150, self.data["videos"]),
-                              (1250, self.data["images"]),
-                              (1350, self.data["backdrops"])]
+            self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
+                              (ID_LIST_CREW, self.data["crew"]),
+                              (ID_LIST_EPISODES, self.data["episodes"]),
+                              (ID_LIST_VIDEOS, self.data["videos"]),
+                              (ID_LIST_IMAGES, self.data["images"]),
+                              (ID_LIST_BACKDROPS, self.data["backdrops"])]
 
         def onInit(self):
             self.get_youtube_vids("%s %s tv" % (self.info["TVShowTitle"], self.info['title']))
@@ -49,13 +57,13 @@ def get_window(window_type):
             super(DialogSeasonInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        @ch.click(750)
-        @ch.click(1000)
+        @ch.click(ID_LIST_CREW)
+        @ch.click(ID_LIST_ACTORS)
         def open_actor_info(self):
             wm.open_actor_info(prev_window=self,
                                actor_id=self.listitem.getProperty("id"))
 
-        @ch.click(2000)
+        @ch.click(ID_LIST_EPISODES)
         def open_episode_info(self):
             info = self.listitem.getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
@@ -64,12 +72,12 @@ def get_window(window_type):
                                  season=info.getSeason(),
                                  episode=info.getEpisode())
 
-        @ch.click(132)
+        @ch.click(ID_CONTROL_PLOT)
         def open_text(self):
             xbmcgui.Dialog().textviewer(heading=LANG(32037),
                                         text=self.info["Plot"])
 
-        @ch.click(1150)
+        @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
