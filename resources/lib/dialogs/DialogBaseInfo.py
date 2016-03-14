@@ -148,12 +148,12 @@ class DialogBaseInfo(object):
         if not listitems:
             listitems += [{"label": LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)
-        if listitem["media_type"] == "episode":
+        if listitem["mediatype"] == "episode":
             wm.open_episode_info(prev_window=self,
                                  season=listitems[index]["season"],
                                  episode=listitems[index]["episode"],
                                  tvshow_id=info["media"]["id"])
-        elif listitem["media_type"] == "season":
+        elif listitem["mediatype"] == "season":
             wm.open_season_info(prev_window=self,
                                 season=listitems[index]["season"],
                                 tvshow_id=info["media"]["id"])

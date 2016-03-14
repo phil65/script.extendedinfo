@@ -5,15 +5,14 @@
 
 import xbmcgui
 from ..Utils import *
+C_LIST_SIMPLE = 3
+C_LIST_DETAIL = 6
+C_BUTTON_GET_MORE = 5
+C_LABEL_HEADER = 1
 
 
-# TODO: extend and use this for ContextMenu to get proper closing behaviour
 class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_LIST_SIMPLE = 3
-    C_LIST_DETAIL = 6
-    C_BUTTON_GET_MORE = 5
-    C_LABEL_HEADER = 1
 
     @busy_dialog
     def __init__(self, *args, **kwargs):
@@ -33,6 +32,8 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
+            self.close()
+        elif action == xbmcgui.ACTION_CONTEXT_MENU:
             self.close()
 
     def onClick(self, control_id):
