@@ -57,11 +57,12 @@ def get_window(window_type):
 
         @ch.click(2000)
         def open_episode_info(self):
+            info = self.listitem.getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
                                  tvshow=self.info["TVShowTitle"],
                                  tvshow_id=self.tvshow_id,
-                                 season=self.listitem.getProperty("season"),
-                                 episode=self.listitem.getProperty("episode"))
+                                 season=info.getSeason(),
+                                 episode=info.getEpisode())
 
         @ch.click(132)
         def open_text(self):
