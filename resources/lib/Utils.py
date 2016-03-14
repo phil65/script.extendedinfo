@@ -540,24 +540,13 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
     window = xbmcgui.Window(window_id)
     if not data:
         return None
-    threads = []
-    image_requests = []
     for (key, value) in data.iteritems():
         if not value:
             continue
         value = unicode(value)
-        if precache:
-            if value.startswith("http") and value.endswith((".jpg", ".png")):
-                if value not in image_requests and value:
-                    thread = GetFileThread(value)
-                    threads += [thread]
-                    thread.start()
-                    image_requests.append(value)
         window.setProperty('%s%s' % (prefix, key), value)
         if debug:
             log('%s%s' % (prefix, key) + value)
-    for x in threads:
-        x.join()
 
 
 def merge_dict_lists(items, key="job"):
@@ -640,8 +629,8 @@ def create_listitems(data=None, preload_images=0):
                     listitem.setInfo('video', {key: "%1.1f" % float(value)})
                 except:
                     pass
-            # else:
-            listitem.setProperty(key, unicode(value))
+            else:
+                listitem.setProperty(key, unicode(value))
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist

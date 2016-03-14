@@ -300,7 +300,8 @@ def get_window(window_type):
         @ch.click(C_MAIN_LIST)
         def open_media(self):
             self.last_position = self.control.getSelectedPosition()
-            media_type = self.listitem.getProperty("mediatype")
+            info = self.listitem.getVideoInfoTag()
+            media_type = info.getMediaType()
             if media_type == "tvshow":
                 wm.open_tvshow_info(prev_window=self,
                                     tmdb_id=self.listitem.getProperty("id"),
