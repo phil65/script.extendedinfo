@@ -51,8 +51,7 @@ def get_window(window_type):
             self.info, self.data, self.account_states = data
             if "dbid" not in self.info:
                 self.info['poster'] = get_file(self.info.get("poster", ""))
-            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("poster", ""),
-                                                                                        radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("poster"))
             self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, self.data["seasons"]),
                               (ID_LIST_NETWORKS, self.data["networks"]),

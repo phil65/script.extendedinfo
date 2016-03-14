@@ -28,8 +28,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("thumb", ""),
-                                                                                        radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("thumb"))
             self.listitems = [(150, self.data["movie_roles"]),
                               (250, self.data["tvshow_roles"]),
                               (450, self.data["images"]),

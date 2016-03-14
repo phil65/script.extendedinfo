@@ -37,8 +37,7 @@ def get_window(window_type):
             self.info, self.data = data
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['poster'] = get_file(url=self.info.get("poster", ""))
-            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("poster", ""),
-                                                                                        radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("poster"))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_CREW, self.data["crew"]),
                               (ID_LIST_EPISODES, self.data["episodes"]),

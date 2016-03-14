@@ -58,7 +58,7 @@ def get_window(window_type):
             self.info, self.data, self.account_states = data
             sets_thread = SetItemsThread(self.info["SetId"])
             self.omdb_thread = FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
-            filter_thread = ImageTools.FilterImageThread(self.info.get("thumb", ""), 25)
+            filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:

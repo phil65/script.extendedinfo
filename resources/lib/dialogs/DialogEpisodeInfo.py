@@ -39,8 +39,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
-            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(input_img=self.info.get("thumb", ""),
-                                                                                        radius=25)
+            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("thumb"))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"] + self.data["guest_stars"]),
                               (ID_LIST_CREW, self.data["crew"]),
                               (ID_LIST_VIDEOS, self.data["videos"]),

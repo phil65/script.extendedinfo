@@ -15,7 +15,9 @@ THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 ADDON_DATA_PATH_IMAGES = os.path.join(ADDON_DATA_PATH, "images")
 
 
-def filter_image(input_img, radius):
+def filter_image(input_img, radius=25):
+    if not input_img:
+        return "", ""
     if not xbmcvfs.exists(ADDON_DATA_PATH_IMAGES):
         xbmcvfs.mkdir(ADDON_DATA_PATH_IMAGES)
     input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).replace("image://", "")
@@ -26,8 +28,6 @@ def filter_image(input_img, radius):
     targetfile = os.path.join(ADDON_DATA_PATH_IMAGES, filename)
     xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
     xbmc_cache_file = os.path.join("special://profile/Thumbnails", cachedthumb[0], cachedthumb[:-4] + ".jpg")
-    if input_img == "":
-        return "", ""
     if not xbmcvfs.exists(targetfile):
         img = None
         for i in range(1, 4):
