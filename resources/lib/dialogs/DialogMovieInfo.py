@@ -156,10 +156,10 @@ def get_window(window_type):
                         "type": "certification",
                         "typelabel": LANG(32127),
                         "label": self.listitem.getProperty("certification")},
-                       {"id": info.getYear(),
+                       {"id": str(info.getYear()),
                         "type": "year",
                         "typelabel": LANG(345),
-                        "label": info.getYear()}]
+                        "label": str(info.getYear())}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
