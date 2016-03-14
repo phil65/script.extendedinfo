@@ -147,6 +147,7 @@ def get_window(window_type):
 
         @ch.click(650)
         def open_cert_list(self):
+            info = self.listitem.getVideoInfoTag()
             filters = [{"id": self.listitem.getProperty("iso_3166_1"),
                         "type": "certification_country",
                         "typelabel": LANG(32153),
@@ -155,10 +156,10 @@ def get_window(window_type):
                         "type": "certification",
                         "typelabel": LANG(32127),
                         "label": self.listitem.getProperty("certification")},
-                       {"id": self.listitem.getProperty("year"),
+                       {"id": info.getYear(),
                         "type": "year",
                         "typelabel": LANG(345),
-                        "label": self.listitem.getProperty("year")}]
+                        "label": info.getYear()}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 

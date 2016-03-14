@@ -102,9 +102,10 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self):
+            info = self.listitem.getVideoInfoTag()
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.info["id"],
-                                season=self.listitem.getProperty("season"),
+                                season=info.getSeason(),
                                 tvshow=self.info['title'])
 
         @ch.click(ID_LIST_STUDIOS)
