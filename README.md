@@ -433,9 +433,9 @@ Labels of Known Movies list
 - Container(150).Listitem.Icon ----------------------> icon of movie
 - Container(150).ListItem.Property(role) ------------> role in currently slected movie
 - Container(150).ListItem.Property(job) -------------> job in currently slected movie (director / writer / etc)
-- Container(150).ListItem.Property(release_date) -----> release date of movie
-- Container(150).ListItem.Property(year) ------------> same as year, but not return empty
-- Container(150).ListItem.Property(DBID)             -> return 1 or empty, if movie exists in library
+- Container(150).ListItem.Premiered -----------------> release date of movie
+- Container(150).ListItem.Year ----------------------> same as year, but not return empty
+- Container(150).ListItem.Property(DBID) ------------> return 1 or empty, if movie exists in library
 - Container(150).ListItem.Property(Playcount) -------> Playcount of movie (default is 0)
 - Container(150).ListItem.Property(file) ------------> media to play
 

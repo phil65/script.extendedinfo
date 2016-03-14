@@ -386,7 +386,6 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'Votes': tv.get('vote_count'),
                  'TotalEpisodes': tv.get('number_of_episodes'),
                  'TotalSeasons': tv.get('number_of_seasons'),
-                 'Release_Date': tv.get('first_air_date'),
                  'Premiered': tv.get('first_air_date')}
         newtv["artwork"] = get_image_urls(poster=tv.get("poster_path"),
                                           fanart=tv.get("backdrop_path"))
@@ -404,7 +403,7 @@ def handle_episodes(results):
         listitem = {'mediatype': "episode",
                     'title': title,
                     'label': title,
-                    'release_date': item.get('air_date'),
+                    'Premiered': item.get('air_date'),
                     'episode': item.get('episode_number'),
                     'production_code': item.get('production_code'),
                     'season': item.get('season_number'),
@@ -425,7 +424,7 @@ def handle_misc(results):
                     'certification': item.get('certification', "") + item.get('rating', ""),
                     'item_count': item.get('item_count'),
                     'favorite_count': item.get('favorite_count'),
-                    'release_date': item.get('release_date'),
+                    'Premiered': item.get('release_date'),
                     'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                     'year': get_year(item.get('release_date')),
                     'iso_3166_1': item.get('iso_3166_1', "").lower(),
@@ -773,7 +772,6 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Popularity': fetch(response, 'popularity'),
              'Status': translate_status(fetch(response, 'status')),
              'path': path,
-             'release_date': fetch(response, 'release_date'),
              'Premiered': fetch(response, 'release_date'),
              'Studio': " / ".join(Studio),
              'year': get_year(fetch(response, 'release_date'))}
@@ -860,7 +858,6 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'TotalEpisodes': fetch(response, 'number_of_episodes'),
               'TotalSeasons': fetch(response, 'number_of_seasons'),
               'in_production': fetch(response, 'in_production'),
-              'Release_Date': fetch(response, 'first_air_date'),
               'Premiered': fetch(response, 'first_air_date')}
     tvshow.update(artwork)
     if dbid:
@@ -914,8 +911,7 @@ def extended_season_info(tvshow_id, season_number):
               'Plot': clean_text(response["overview"]),
               'TVShowTitle': fetch(tvshow, 'name'),
               'title': title,
-              'release_date': response["air_date"],
-              'AirDate': response["air_date"]}
+              'Premiered': response["air_date"]}
     artwork = get_image_urls(poster=response.get("poster_path"))
     season.update(artwork)
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []

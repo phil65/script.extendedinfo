@@ -2029,7 +2029,7 @@
 										<height>69</height>
 										<align>center</align>
 										<font>font12</font>
-										<label>$INFO[ListItem.Property(release_date)][CR][B]$INFO[ListItem.Property(certification)][/B]</label>
+										<label>$INFO[ListItem.Premiered][CR][B]$INFO[ListItem.Property(certification)][/B]</label>
 									</control>
 								</control>
 							</itemlayout>
@@ -2065,7 +2065,7 @@
 										<height>69</height>
 										<align>center</align>
 										<font>font12</font>
-										<label>$INFO[ListItem.Property(release_date)][CR][B]$INFO[ListItem.Property(certification)][/B]</label>
+										<label>$INFO[ListItem.Premiered][CR][B]$INFO[ListItem.Property(certification)][/B]</label>
 										<autoscroll delay="5000" time="2000" repeat="8001">true</autoscroll>
 									</control>
 								</control>
@@ -2768,7 +2768,7 @@
 										<posy>227</posy>
 										<align>center</align>
 										<font>font12</font>
-										<label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Property(release_date),[CR][COLOR FFAAAAAA],[/COLOR]]</label>
+										<label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Premiered,[CR][COLOR FFAAAAAA],[/COLOR]]</label>
 									</control>
 								</control>
 							</itemlayout>
@@ -2808,7 +2808,7 @@
 										<textcolor>FFFAFAFA</textcolor>
 										<align>center</align>
 										<font>font12</font>
-										<label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Property(release_date),[CR][COLOR FFAAAAAA],[/COLOR]]</label>
+										<label>$INFO[ListItem.Episode,[B],[/B]]$INFO[ListItem.Label,[B]:[/B] ]$INFO[ListItem.Premiered,[CR][COLOR FFAAAAAA],[/COLOR]]</label>
 									</control>
 								</control>
 							</focusedlayout>
@@ -2978,14 +2978,14 @@
 							</control>
 							<control type="group">
 								<width>220</width>
-								<visible>!IsEmpty(Window.Property(release_date))</visible>
+								<visible>!IsEmpty(Window.Property(Premiered))</visible>
 								<control type="label">
 									<posx>0</posx>
 									<posy>8</posy>
 									<width>220</width>
 									<height>38</height>
 									<align>center</align>
-									<label fallback="?">[B]$INFO[Window.Property(release_date)][/B]</label>
+									<label fallback="?">[B]$INFO[Window.Property(Premiered)][/B]</label>
 									<font>font13</font>
 								</control>
 								<control type="label">
