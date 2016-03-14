@@ -498,13 +498,14 @@ def handle_people(results):
 def handle_images(results):
     images = []
     for item in results:
-        image = {'aspectratio': item['aspect_ratio'],
-                 'vote_average': item.get("vote_average"),
-                 'iso_639_1': item.get("iso_639_1")}
+        image = {}
+        image["properties"] = {'aspectratio': item['aspect_ratio'],
+                               'vote_average': item.get("vote_average"),
+                               'iso_639_1': item.get("iso_639_1")}
+        image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
             image['title'] = fetch(item["media"], "title")
-            image['mediaposter'] = base_url + POSTER_SIZE + fetch(item["media"], "poster_path")
-        image["artwork"] = get_image_urls(poster=item.get("file_path"))
+            image["artwork"]['mediaposter'] = base_url + POSTER_SIZE + fetch(item["media"], "poster_path")
         images.append(image)
     return images
 
