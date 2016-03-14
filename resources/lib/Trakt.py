@@ -39,6 +39,7 @@ def get_calendar_shows(content):
                                                           title),
                     'path': PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"],
                     'title': title,
+                    'Premiered': episode["airs_at"],
                     'season': episode["episode"]["season"],
                     'episode': episode["episode"]["number"],
                     'TVShowTitle': episode["show"]["title"],
