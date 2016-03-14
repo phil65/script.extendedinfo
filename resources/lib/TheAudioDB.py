@@ -208,6 +208,8 @@ def get_track_details(audiodb_id):
 
 
 def get_data(url, params):
+    params = {k: v for k, v in params.items() if v}
+    params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "%s%s.php?%s" % (BASE_URL, url, urllib.urlencode(params))
     return get_JSON_response(url=url,
                              folder="TheAudioDB")
