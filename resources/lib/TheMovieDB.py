@@ -322,30 +322,28 @@ def handle_movies(results, local_first=True, sortkey="year"):
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
     for movie in results:
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
-        genres = [i for i in genres if i]
-        tmdb_id = str(fetch(movie, 'id'))
-        trailer = PLUGIN_BASE + "playtrailer&&id=" + tmdb_id
-        listitem = {'title': fetch(movie, 'title'),
-                    'label': fetch(movie, 'title'),
-                    'OriginalTitle': fetch(movie, 'original_title'),
-                    'id': tmdb_id,
-                    'path': PLUGIN_BASE + path % tmdb_id,
+        trailer = "%splaytrailer&&id=%s" % (PLUGIN_BASE, item.get("id"))
+        listitem = {'label': movie.get('title'),
+                    'path': PLUGIN_BASE + path % item.get("id"),
+                    'title': movie.get('title'),
+                    'OriginalTitle': movie.get('original_title', ""),
                     'mediatype': "movie",
-                    'country': fetch(movie, 'original_language'),
-                    'plot': fetch(movie, 'overview'),
+                    'country': movie.get('original_language'),
+                    'plot': movie.get('overview'),
                     'Trailer': trailer,
-                    'Popularity': fetch(movie, 'popularity'),
-                    'Rating': fetch(movie, 'vote_average'),
-                    'credit_id': fetch(movie, 'credit_id'),
-                    'character': fetch(movie, 'character'),
-                    'job': fetch(movie, 'job'),
-                    'department': fetch(movie, 'department'),
-                    'Votes': fetch(movie, 'vote_count'),
-                    'User_Rating': fetch(movie, 'rating'),
-                    'year': get_year(fetch(movie, 'release_date')),
-                    'genre': " / ".join(genres),
-                    'time_comparer': fetch(movie, 'release_date').replace("-", ""),
-                    'Premiered': fetch(movie, 'release_date')}
+                    'genre': " / ".join([i for i in genres if i]),
+                    'Votes': movie.get('vote_count'),
+                    'year': get_year(movie.get('release_date')),
+                    'Rating': movie.get('vote_average'),
+                    'id': item.get("id"),
+                    'Popularity': movie.get('popularity'),
+                    'credit_id': movie.get('credit_id'),
+                    'character': movie.get('character'),
+                    'job': movie.get('job'),
+                    'department': movie.get('department'),
+                    'User_Rating': movie.get('rating'),
+                    'time_comparer': movie.get('release_date').replace("-", ""),
+                    'Premiered': movie.get('release_date')}
         listitem["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                              fanart=movie.get("backdrop_path"))
         movies.append(listitem)
@@ -363,34 +361,33 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
     for tv in results:
         tmdb_id = fetch(tv, 'id')
         genres = [labels[ids.index(id_)] for id_ in tv.get("genre_ids", []) if id_ in ids]
-        genres = [i for i in genres if i]
         duration = ""
         if "episode_run_time" in tv:
             if len(tv["episode_run_time"]) > 1:
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
-        newtv = {'title': fetch(tv, 'name'),
-                 'label': fetch(tv, 'name'),
-                 'OriginalTitle': fetch(tv, 'original_name'),
+        newtv = {'title': tv.get('name'),
+                 'label': tv.get('name'),
+                 'OriginalTitle': tv.get('original_name', ""),
                  'duration': duration,
                  'id': tmdb_id,
-                 'genre': " / ".join(genres),
-                 'country': fetch(tv, 'original_language'),
-                 'Popularity': fetch(tv, 'popularity'),
-                 'credit_id': fetch(tv, 'credit_id'),
-                 'Plot': fetch(tv, "overview"),
-                 'year': get_year(fetch(tv, 'first_air_date')),
+                 'genre': " / ".join([i for i in genres if i]),
+                 'country': tv.get('original_language'),
+                 'Popularity': tv.get('popularity'),
+                 'credit_id': tv.get('credit_id'),
+                 'Plot': tv.get("overview"),
+                 'year': get_year(tv.get('first_air_date')),
                  'mediatype': "tvshow",
-                 'character': fetch(tv, 'character'),
+                 'character': tv.get('character'),
                  'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
-                 'Rating': fetch(tv, 'vote_average'),
-                 'User_Rating': str(fetch(tv, 'rating')),
-                 'Votes': fetch(tv, 'vote_count'),
-                 'TotalEpisodes': fetch(tv, 'number_of_episodes'),
-                 'TotalSeasons': fetch(tv, 'number_of_seasons'),
-                 'Release_Date': fetch(tv, 'first_air_date'),
-                 'Premiered': fetch(tv, 'first_air_date')}
+                 'Rating': tv.get('vote_average'),
+                 'User_Rating': tv.get('rating'),
+                 'Votes': tv.get('vote_count'),
+                 'TotalEpisodes': tv.get('number_of_episodes'),
+                 'TotalSeasons': tv.get('number_of_seasons'),
+                 'Release_Date': tv.get('first_air_date'),
+                 'Premiered': tv.get('first_air_date')}
         newtv["artwork"] = get_image_urls(poster=tv.get("poster_path"),
                                           fanart=tv.get("backdrop_path"))
         tvshows.append(newtv)
@@ -401,20 +398,20 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
 def handle_episodes(results):
     listitems = []
     for item in results:
-        title = clean_text(fetch(item, 'name'))
+        title = clean_text(item.get("name"))
         if not title:
-            title = "%s %s" % (LANG(20359), fetch(item, 'episode_number'))
+            title = "%s %s" % (LANG(20359), item.get('episode_number'))
         listitem = {'mediatype': "episode",
                     'title': title,
                     'label': title,
-                    'release_date': fetch(item, 'air_date'),
-                    'episode': fetch(item, 'episode_number'),
-                    'production_code': fetch(item, 'production_code'),
-                    'season': fetch(item, 'season_number'),
-                    'Rating': fetch(item, 'vote_average'),
-                    'Votes': fetch(item, 'vote_count'),
-                    'id': fetch(item, 'id'),
-                    'Description': clean_text(fetch(item, 'overview'))}
+                    'release_date': item.get('air_date'),
+                    'episode': item.get('episode_number'),
+                    'production_code': item.get('production_code'),
+                    'season': item.get('season_number'),
+                    'Rating': item.get('vote_average'),
+                    'Votes': item.get('vote_count'),
+                    'id': item.get('id'),
+                    'Description': clean_text(item.get('overview'))}
         listitem["artwork"] = get_image_urls(still=item.get("still_path"))
         listitems.append(listitem)
     return listitems
@@ -423,19 +420,19 @@ def handle_episodes(results):
 def handle_misc(results):
     listitems = []
     for item in results:
-        description = clean_text(fetch(item, 'description'))
-        listitem = {'label': clean_text(fetch(item, 'name')),
-                    'certification': fetch(item, 'certification') + fetch(item, 'rating'),
-                    'item_count': fetch(item, 'item_count'),
-                    'favorite_count': fetch(item, 'favorite_count'),
-                    'release_date': fetch(item, 'release_date'),
-                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % fetch(item, 'id'),
-                    'year': get_year(fetch(item, 'release_date')),
-                    'iso_3166_1': fetch(item, 'iso_3166_1').lower(),
-                    'author': fetch(item, 'author'),
-                    'content': clean_text(fetch(item, 'content')),
-                    'id': fetch(item, 'id'),
-                    'url': fetch(item, 'url'),
+        description = clean_text(item.get('description'))
+        listitem = {'label': clean_text(item.get('name')),
+                    'certification': item.get('certification', "") + item.get('rating', ""),
+                    'item_count': item.get('item_count'),
+                    'favorite_count': item.get('favorite_count'),
+                    'release_date': item.get('release_date'),
+                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
+                    'year': get_year(item.get('release_date')),
+                    'iso_3166_1': item.get('iso_3166_1', "").lower(),
+                    'author': item.get('author'),
+                    'content': clean_text(item.get('content')),
+                    'id': item.get('id'),
+                    'url': item.get('url'),
                     'Description': description,
                     'Plot': description}
         listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
@@ -446,14 +443,14 @@ def handle_misc(results):
 def handle_seasons(results):
     listitems = []
     for season in results:
-        season_number = str(fetch(season, 'season_number'))
-        title = LANG(20381) if season_number == "0" else "%s %s" % (LANG(20373), season_number)
+        season_number = season.get('season_number')
+        title = LANG(20381) if season_number == 0 else "%s %s" % (LANG(20373), season_number)
         listitem = {'mediatype': "season",
                     'label': title,
                     'season': season_number,
-                    'air_date': fetch(season, 'air_date'),
-                    'year': get_year(fetch(season, 'air_date')),
-                    'id': fetch(season, 'id')}
+                    'air_date': season.get('air_date'),
+                    'year': get_year(season.get('air_date')),
+                    'id': season.get('id')}
         listitem["artwork"] = get_image_urls(poster=season.get("poster_path"))
         listitems.append(listitem)
     return listitems
@@ -462,16 +459,16 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        image = "http://i.ytimg.com/vi/%s/0.jpg" % fetch(item, 'key')
+        image = "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')
         listitem = {'thumb': image,
-                    'label': fetch(item, 'name'),
-                    'iso_639_1': fetch(item, 'iso_639_1'),
-                    'type': fetch(item, 'type'),
-                    'key': fetch(item, 'key'),
-                    'youtube_id': fetch(item, 'key'),
-                    'site': fetch(item, 'site'),
-                    'id': fetch(item, 'id'),
-                    'size': fetch(item, 'size')}
+                    'label': item.get('name'),
+                    'iso_639_1': item.get('iso_639_1'),
+                    'type': item.get('type'),
+                    'key': item.get('key'),
+                    'youtube_id': item.get('key'),
+                    'site': item.get('site'),
+                    'id': item.get('id'),
+                    'size': item.get('size')}
         listitems.append(listitem)
     return listitems
 
@@ -479,23 +476,23 @@ def handle_videos(results):
 def handle_people(results):
     people = []
     for item in results:
-        person = {'adult': str(fetch(item, 'adult')),
+        person = {'adult': item.get('adult'),
                   'label': item['name'],
-                  'alsoknownas': " / ".join(fetch(item, 'also_known_as')),
-                  'biography': clean_text(fetch(item, 'biography')),
-                  'birthday': fetch(item, 'birthday'),
-                  'age': calculate_age(fetch(item, 'birthday'), fetch(item, 'deathday')),
-                  'character': fetch(item, 'character'),
-                  'department': fetch(item, 'department'),
-                  'job': fetch(item, 'job'),
+                  'alsoknownas': " / ".join(item.get('also_known_as', [])),
+                  'biography': clean_text(item.get('biography')),
+                  'birthday': item.get('birthday'),
+                  'age': calculate_age(item.get('birthday'), item.get('deathday')),
+                  'character': item.get('character'),
+                  'department': item.get('department'),
+                  'job': item.get('job'),
                   'mediatype': "actor",
-                  'id': str(item['id']),
-                  'cast_id': str(fetch(item, 'cast_id')),
-                  'credit_id': str(fetch(item, 'credit_id')),
-                  'path': PLUGIN_BASE + "extendedactorinfo&&id=" + str(item['id']),
-                  'deathday': fetch(item, 'deathday'),
-                  'placeofbirth': fetch(item, 'place_of_birth'),
-                  'homepage': fetch(item, 'homepage')}
+                  'id': item['id'],
+                  'cast_id': item.get('cast_id'),
+                  'credit_id': item.get('credit_id'),
+                  'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']),
+                  'deathday': item.get('deathday'),
+                  'placeofbirth': item.get('place_of_birth'),
+                  'homepage': item.get('homepage')}
         person["artwork"] = get_image_urls(profile=item.get("profile_path"))
         people.append(person)
     return people
@@ -505,8 +502,8 @@ def handle_images(results):
     images = []
     for item in results:
         image = {'aspectratio': item['aspect_ratio'],
-                 'vote_average': fetch(item, "vote_average"),
-                 'iso_639_1': fetch(item, "iso_639_1")}
+                 'vote_average': item.get("vote_average"),
+                 'iso_639_1': item.get("iso_639_1")}
         if item.get("media"):
             image['title'] = fetch(item["media"], "title")
             image['mediaposter'] = base_url + POSTER_SIZE + fetch(item["media"], "poster_path")
@@ -838,7 +835,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     genres = [item["name"] for item in response["genres"]]
     tvshow = {'title': fetch(response, 'name'),
               'TVShowTitle': fetch(response, 'name'),
-              'OriginalTitle': fetch(response, 'original_name'),
+              'OriginalTitle': response.get('original_name', ""),
               'duration': duration,
               'duration(h)': format_time(duration, "h"),
               'duration(m)': format_time(duration, "m"),
