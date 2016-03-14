@@ -322,9 +322,9 @@ def handle_movies(results, local_first=True, sortkey="year"):
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
     for movie in results:
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
-        trailer = "%splaytrailer&&id=%s" % (PLUGIN_BASE, item.get("id"))
+        trailer = "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id"))
         listitem = {'label': movie.get('title'),
-                    'path': PLUGIN_BASE + path % item.get("id"),
+                    'path': PLUGIN_BASE + path % movie.get("id"),
                     'title': movie.get('title'),
                     'OriginalTitle': movie.get('original_title', ""),
                     'mediatype': "movie",
@@ -335,7 +335,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                     'Votes': movie.get('vote_count'),
                     'year': get_year(movie.get('release_date')),
                     'Rating': movie.get('vote_average'),
-                    'id': item.get("id"),
+                    'id': movie.get("id"),
                     'Popularity': movie.get('popularity'),
                     'credit_id': movie.get('credit_id'),
                     'character': movie.get('character'),
