@@ -291,13 +291,14 @@ def add_movie_to_list(movie_id):
 def merge_with_cert_desc(input_list, media_type):
     cert_list = get_certification_list(media_type)
     for item in input_list:
-        if item["iso_3166_1"].upper() not in cert_list:
+        iso = item["properties"]["iso_3166_1"].upper()
+        if iso not in cert_list:
             continue
-        hit = dictfind(lst=cert_list[item["iso_3166_1"].upper()],
+        hit = dictfind(lst=cert_list[iso],
                        key="certification",
-                       value=item["certification"])
+                       value=item["properties"]["certification"])
         if hit:
-            item["meaning"] = hit["meaning"]
+            item["properties"]["meaning"] = hit["meaning"]
     return input_list
 
 
@@ -424,15 +425,15 @@ def handle_misc(results):
                     'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                     'year': get_year(item.get('release_date')),
                     'Premiered': item.get('release_date'),
-                    'Plot': clean_text(item.get('description')),
-                    'certification': item.get('certification', "") + item.get('rating', ""),
-                    'item_count': item.get('item_count'),
-                    'favorite_count': item.get('favorite_count'),
-                    'iso_3166_1': item.get('iso_3166_1', "").lower(),
-                    'author': item.get('author'),
-                    'content': clean_text(item.get('content')),
-                    'id': item.get('id'),
-                    'url': item.get('url')}
+                    'Plot': clean_text(item.get('description'))}
+        listitem["properties"] = {'certification': item.get('certification', "") + item.get('rating', ""),
+                                  'item_count': item.get('item_count'),
+                                  'favorite_count': item.get('favorite_count'),
+                                  'iso_3166_1': item.get('iso_3166_1', "").lower(),
+                                  'author': item.get('author'),
+                                  'content': clean_text(item.get('content')),
+                                  'id': item.get('id'),
+                                  'url': item.get('url')}
         listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
         listitems.append(listitem)
     return listitems
