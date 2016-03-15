@@ -337,6 +337,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                 'Votes': movie.get('vote_count'),
                 'year': get_year(movie.get('release_date')),
                 'Rating': movie.get('vote_average'),
+                'userrating': movie.get('rating'),
                 'Premiered': movie.get('release_date')}
         item["properties"] = {'id': movie.get("id"),
                               'Popularity': movie.get('popularity'),
@@ -344,7 +345,6 @@ def handle_movies(results, local_first=True, sortkey="year"):
                               'character': movie.get('character'),
                               'job': movie.get('job'),
                               'department': movie.get('department'),
-                              'User_Rating': movie.get('rating'),
                               'time_comparer': movie['release_date'].replace("-", "") if movie.get('release_date') else ""}
         item["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                          fanart=movie.get("backdrop_path"))
@@ -358,6 +358,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
     response = get_data(url="genre/tv/list",
                         params={"language": SETTING("LanguageID")},
                         cache_days=30)
+    prettyprint(results)
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     for tv in results:
@@ -380,10 +381,10 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                  'mediatype': "tvshow",
                  'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
                  'Rating': tv.get('vote_average'),
+                 'userrating': tv.get('rating'),
                  'Votes': tv.get('vote_count'),
                  'Premiered': tv.get('first_air_date')}
         newtv["properties"] = {'id': tmdb_id,
-                               'User_Rating': tv.get('rating'),
                                'character': tv.get('character'),
                                'Popularity': tv.get('popularity'),
                                'credit_id': tv.get('credit_id'),
@@ -847,7 +848,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               'Popularity': response.get('popularity'),
               'Rating': response.get('vote_average'),
               'country': response.get('original_language'),
-              'User_Rating': response.get('rating'),
+              'userrating': response.get('rating'),
               'Votes': response.get('vote_count'),
               'Status': translate_status(response.get('status')),
               'ShowType': response.get('type'),

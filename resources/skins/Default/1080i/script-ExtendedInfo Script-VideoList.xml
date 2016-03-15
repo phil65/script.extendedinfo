@@ -222,7 +222,7 @@
 							<top>2</top>
 							<left>-10</left>
 							<texture>circle.png</texture>
-							<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
 						</control>
 						<control type="label">
 							<width>52</width>
@@ -233,8 +233,8 @@
 							<left>-9</left>
 							<font>font10</font>
 							<textcolor>FF000000</textcolor>
-							<label>$INFO[ListItem.Property(User_Rating)]</label>
-							<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+							<label>$INFO[ListItem.UserRating]</label>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
 						</control>
 					</control>
 				</itemlayout>
@@ -278,7 +278,7 @@
 							<top>2</top>
 							<left>-10</left>
 							<texture>circle.png</texture>
-							<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
 						</control>
 						<control type="label">
 							<width>52</width>
@@ -289,8 +289,8 @@
 							<left>-9</left>
 							<font>font10</font>
 							<textcolor>FF000000</textcolor>
-							<label>$INFO[ListItem.Property(User_Rating)]</label>
-							<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+							<label>$INFO[ListItem.UserRating]</label>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
 						</control>
 					</control>
 					<control type="textbox">
@@ -352,8 +352,8 @@
 						<left>750</left>
 						<font>font10</font>
 						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.Property(User_Rating),[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+						<visible>!IsEmpty(ListItem.UserRating)</visible>
 					</control>
 				</itemlayout>
 				<focusedlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
@@ -402,8 +402,8 @@
 						<left>750</left>
 						<font>font10</font>
 						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.Property(User_Rating),[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.Property(User_Rating))</visible>
+						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+						<visible>!IsEmpty(ListItem.UserRating)</visible>
 					</control>
 				</focusedlayout>
 			</control>

@@ -599,7 +599,7 @@ def set_window_props(name, data, prefix="", debug=False):
 
 
 def create_listitems(data=None, preload_images=0):
-    INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay"]
+    INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay", "userrating"]
     FLOAT_INFOLABELS = ["rating"]
     STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle",
                          "sorttitle", "duration", "studio", "tagline", "writer", "tvshowtitle", "premiered",
