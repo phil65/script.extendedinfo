@@ -269,9 +269,6 @@
 							<ondown>250</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -455,9 +452,6 @@
 							<ondown>550</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -641,9 +635,6 @@
 							<ondown>650</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -827,9 +818,6 @@
 							<ondown>350</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -1131,9 +1119,6 @@
 							<ondown>750</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -1231,9 +1216,6 @@
 							<ondown>SetFocus(20001)</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,1080" end="0,0" delay="0" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="665">
 								<control type="group">
 									<control type="image">

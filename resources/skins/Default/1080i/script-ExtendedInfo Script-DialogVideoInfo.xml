@@ -397,10 +397,6 @@
 						</control>
 					</control>
 					<control type="group">
-						<animation type="WindowOpen" reversible="false">
-							<effect type="fade" start="0" end="100" delay="460" time="960" tween="cubic" />
-							<effect type="zoom" start="100,0" end="100,100" delay="460" time="960" center="0,872" tween="cubic" />
-						</animation>
 						<posy>60</posy>
 						<visible>!IsEmpty(Window.Property(DBID))</visible>
 						<visible>StringCompare(Window.Property(type),movie) | StringCompare(Window.Property(type),episode)</visible>
@@ -740,9 +736,6 @@
 							<ondown>750</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="0" tween="sine" time="1800" />
-							</animation>
 							<itemlayout height="500" width="270">
 								<control type="group">
 									<control type="image">
@@ -874,9 +867,6 @@
 							<ondown>150</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="0" tween="sine" time="1800" />
-							</animation>
 							<itemlayout height="500" width="270">
 								<control type="group">
 									<control type="image">
@@ -1067,9 +1057,6 @@
 							<ondown>250</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="500" width="270">
 								<control type="group">
 									<control type="image">
@@ -1308,9 +1295,6 @@
 							<ondown>1150</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="500" width="270">
 								<control type="group">
 									<control type="image">
@@ -1484,9 +1468,6 @@
 							<visible>Container(1150).HasNext + Control.HasFocus(1150)</visible>
 						</control>
 						<control type="panel" id="1150">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -1617,9 +1598,6 @@
 							<visible>Container(350).HasNext + Control.HasFocus(350)</visible>
 						</control>
 						<control type="panel" id="350">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -1747,9 +1725,6 @@
 							<visible>Container(550).HasNext + Control.HasFocus(550)</visible>
 						</control>
 						<control type="panel" id="550">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -1864,9 +1839,6 @@
 							<visible>Container(1450).HasNext + Control.HasFocus(1450)</visible>
 						</control>
 						<control type="panel" id="1450">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -1990,9 +1962,6 @@
 							<label>$INFO[Container(650).ListItem.Property(meaning)]</label>
 						</control>
 						<control type="panel" id="650">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -2085,9 +2054,6 @@
 							<label>$LOCALIZE[135]$INFO[Container(850).NumItems, (,)]</label>
 						</control>
 						<control type="panel" id="850">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -2169,9 +2135,6 @@
 							<label>$ADDON[script.extendedinfo 32167]$INFO[Container(1050).NumItems, (,)]</label>
 						</control>
 						<control type="panel" id="1050">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -2252,9 +2215,6 @@
 							<label>$LOCALIZE[21861]$INFO[Container(950).NumItems, (,)]</label>
 						</control>
 						<control type="panel" id="950">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -2579,9 +2539,6 @@
 							<ondown>2000</ondown>
 							<scrolltime>200</scrolltime>
 							<orientation>horizontal</orientation>
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<itemlayout height="400" width="270">
 								<control type="group">
 									<control type="image">
@@ -2717,9 +2674,6 @@
 							<label>$ADDON[script.extendedinfo 32025] $INFO[Container(2000).NumItems,(,)]</label>
 						</control>
 						<control type="panel" id="2000">
-							<animation type="WindowOpen" reversible="false">
-								<effect type="slide" start="0,2080" end="0,0" delay="1000" tween="sine" time="1300" />
-							</animation>
 							<posx>-45</posx>
 							<posy>30</posy>
 							<width>1940</width>
@@ -2835,10 +2789,6 @@
 					<posy>68</posy>
 					<animation effect="fade" time="250">VisibleChange</animation>
 					<control type="group">
-						<animation type="WindowOpen" reversible="false">
-							<effect type="fade" start="0" end="100" delay="0" time="0" tween="cubic" />
-							<effect type="slide" start="0,80" end="0,0" delay="460" time="960" tween="cubic" />
-						</animation>
 						<control type="group">
 							<visible>!IsEmpty(Window.Property(Top250))</visible>
 							<posy>-30</posy>
@@ -2874,10 +2824,6 @@
 					<!-- First Row -->
 					<control type="group">
 						<posy>-54</posy>
-						<animation type="WindowOpen" reversible="false">
-							<effect type="fade" start="0" end="100" delay="460" time="960" tween="cubic" />
-							<effect type="zoom" start="100,0" end="100,100" delay="460" time="960" center="0,170" tween="cubic" />
-						</animation>
 						<control type="image">
 							<posx>0</posx>
 							<posy>90</posy>
