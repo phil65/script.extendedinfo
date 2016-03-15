@@ -476,7 +476,7 @@ def handle_people(results):
     people = []
     for item in results:
         person = {'label': item['name'],
-                  'mediatype': "actor",
+                  # 'mediatype': "actor",
                   'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id'])}
         person["properties"] = {'adult': item.get('adult'),
                                 'alsoknownas': " / ".join(item.get('also_known_as', [])),
