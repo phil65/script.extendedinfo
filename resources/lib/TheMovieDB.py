@@ -441,16 +441,15 @@ def handle_misc(results):
 
 def handle_seasons(results):
     listitems = []
-    for season in results:
-        season_number = season.get('season_number')
-        title = LANG(20381) if season_number == 0 else u"%s %s" % (LANG(20373), season_number)
+    for item in results:
+        season = item.get('season_number')
         listitem = {'mediatype': "season",
-                    'label': title,
-                    'season': season_number,
-                    'Premiered': season.get('air_date'),
-                    'year': get_year(season.get('air_date'))}
-        listitem["properties"] = {'id': season.get('id')}
-        listitem["artwork"] = get_image_urls(poster=season.get("poster_path"))
+                    'label': LANG(20381) if season == 0 else u"%s %s" % (LANG(20373), season),
+                    'season': season,
+                    'Premiered': item.get('air_date'),
+                    'year': get_year(item.get('air_date'))}
+        listitem["properties"] = {'id': item.get('id')}
+        listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
         listitems.append(listitem)
     return listitems
 
@@ -458,8 +457,7 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        image = "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')
-        listitem = {'thumb': image,
+        listitem = {'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key'),
                     'label': item.get('name'),
                     'size': item.get('size')}
         listitem["properties"] = {'iso_639_1': item.get('iso_639_1'),
@@ -732,7 +730,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     set_name = ""
     set_id = ""
     genres = [i["name"] for i in response["genres"]]
-    Studio = [i["name"] for i in response["production_companies"]]
+    studio = [i["name"] for i in response["production_companies"]]
     authors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Writing"]
     directors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Directing"]
     us_cert = dictfind(response['releases']['countries'], "iso_3166_1", "US")
@@ -774,7 +772,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Budget': millify(fetch(response, 'budget')),
              'Revenue': millify(fetch(response, 'revenue')),
              'Homepage': fetch(response, 'homepage'),
-             'Studio': " / ".join(Studio),
+             'studio': " / ".join(studio),
              'year': get_year(fetch(response, 'release_date'))}
     movie.update(artwork)
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
@@ -1052,15 +1050,14 @@ def get_fav_items(media_type):
     response = get_data(url="account/%s/favorite/%s" % (account_id, media_type),
                         params=params,
                         cache_days=0)
-    if "results" in response:
-        if media_type == "tv":
-            return handle_tvshows(response["results"], False, None)
-        elif media_type == "tv/episodes":
-            return handle_episodes(response["results"])
-        else:
-            return handle_movies(response["results"], False, None)
-    else:
+    if "results" not in response:
         return []
+    if media_type == "tv":
+        return handle_tvshows(response["results"], False, None)
+    elif media_type == "tv/episodes":
+        return handle_episodes(response["results"])
+    else:
+        return handle_movies(response["results"], False, None)
 
 
 def get_movies_from_list(list_id, cache_time=5):
@@ -1070,6 +1067,8 @@ def get_movies_from_list(list_id, cache_time=5):
     response = get_data(url="list/%s" % (list_id),
                         params={"language": SETTING("LanguageID")},
                         cache_days=cache_time)
+    if not response:
+        return []
     return handle_movies(response["items"], False, None)
 
 
@@ -1183,16 +1182,15 @@ def get_set_movies(set_id):
     response = get_data(url="collection/%s" % (set_id),
                         params=params,
                         cache_days=14)
-    if response:
-        artwork = get_image_urls(poster=response.get("poster_path"),
-                                 fanart=response.get("backdrop_path"))
-        info = {"label": response["name"],
-                "overview": response["overview"],
-                "id": response["id"]}
-        info.update(artwork)
-        return handle_movies(response.get("parts", [])), info
-    else:
+    if not response:
         return [], {}
+    artwork = get_image_urls(poster=response.get("poster_path"),
+                             fanart=response.get("backdrop_path"))
+    info = {"label": response["name"],
+            "overview": response["overview"],
+            "id": response["id"]}
+    info.update(artwork)
+    return handle_movies(response.get("parts", [])), info
 
 
 def get_person_movies(person_id):
@@ -1201,10 +1199,9 @@ def get_person_movies(person_id):
                         params=params,
                         cache_days=14)
     # return handle_movies(response["crew"]) + handle_movies(response["cast"])
-    if "crew" in response:
-        return handle_movies(response["crew"])
-    else:
+    if "crew" not in response:
         return []
+    return handle_movies(response["crew"])
 
 
 def search_media(media_name=None, year='', media_type="movie", cache_days=1):
@@ -1219,11 +1216,11 @@ def search_media(media_name=None, year='', media_type="movie", cache_days=1):
     response = get_data(url="search/%s" % (media_type),
                         params=params,
                         cache_days=cache_days)
-    if not response == "Empty":
-        for item in response['results']:
-            if item['id']:
-                return item['id']
-    return None
+    if response == "Empty":
+        return None
+    for item in response['results']:
+        if item['id']:
+            return item['id']
 
 Login = LoginProvider(username=SETTING("tmdb_username"),
                       password=SETTING("tmdb_password"))
