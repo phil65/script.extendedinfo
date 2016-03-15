@@ -144,6 +144,8 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
     params = merge_dicts(params, filters)
     results = get_data(method="search",
                        params=params)
+    if not results:
+      return {}
     if media_type == "video":
         listitems = handle_videos(results["items"], extended=extended)
     elif media_type == "playlist":
