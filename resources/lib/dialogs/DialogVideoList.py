@@ -310,7 +310,7 @@ def get_window(window_type):
                 wm.open_movie_info(prev_window=self,
                                    movie_id=self.listitem.getProperty("id"),
                                    dbid=self.listitem.getProperty("dbid"))
-            else:
+            elif media_type == "artist":
                 wm.open_actor_info(prev_window=self,
                                    actor_id=self.listitem.getProperty("id"))
 

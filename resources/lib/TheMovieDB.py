@@ -309,7 +309,7 @@ def handle_multi_search(results):
             listitems.append(handle_movies([item])[0])
         elif item["media_type"] == "tvshow":
             listitems.append(handle_tvshows([item])[0])
-        else:
+        elif item["media_type"] == "person":
             listitems.append(handle_people([item])[0])
     return listitems
 
@@ -476,7 +476,7 @@ def handle_people(results):
     people = []
     for item in results:
         person = {'label': item['name'],
-                  # 'mediatype': "actor",
+                  'mediatype': "artist",
                   'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id'])}
         person["properties"] = {'adult': item.get('adult'),
                                 'alsoknownas': " / ".join(item.get('also_known_as', [])),
@@ -937,6 +937,9 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     response = get_data(url="tv/%s/season/%s/episode/%s" % (tvshow_id, season, episode),
                         params=params,
                         cache_days=cache_time)
+    if not response:
+        notify("Could not find episode info")
+        return None
     videos = []
     if "videos" in response:
         videos = handle_videos(response["videos"]["results"])
@@ -954,6 +957,9 @@ def extended_actor_info(actor_id):
     response = get_data(url="person/%s" % (actor_id),
                         params={"append_to_response": ALL_ACTOR_PROPS},
                         cache_days=1)
+    if not response:
+        notify("Could not find actor info")
+        return None
     tagged_images = []
     if "tagged_images" in response:
         tagged_images = handle_images(response["tagged_images"]["results"])
@@ -972,7 +978,7 @@ def extended_actor_info(actor_id):
             'character': response.get('character'),
             'department': response.get('department'),
             'job': response.get('job'),
-            'mediatype': "actor",
+            'mediatype': "artist",
             'id': response['id'],
             'cast_id': response.get('cast_id'),
             'credit_id': response.get('credit_id'),
@@ -1207,7 +1213,7 @@ def search_media(media_name=None, year='', media_type="movie", cache_days=1):
     '''
     if not media_name:
         return None
-    params = {"query": "%s %s" % (media_name, year),
+    params = {"query": "%s %s".format(media_name, year) if year else media_name,
               "language": SETTING("language"),
               "include_adult": include_adult}
     response = get_data(url="search/%s" % (media_type),
