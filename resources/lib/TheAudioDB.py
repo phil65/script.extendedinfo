@@ -82,7 +82,7 @@ def handle_musicvideos(results):
                 'mediatype': "musicvideo",
                 'id': item['idTrack'],
                 'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
-                'Title': item['strTrack']}
+                'title': item['strTrack']}
         mvids.append(mvid)
     return mvids
 

@@ -148,7 +148,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_MANAGE)
         def show_manage_dialog(self):
             options = []
-            title = self.info.get("TVShowTitle", "")
+            title = self.info.get("tvshowtitle", "")
             if self.dbid:
                 call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
                 options += [[LANG(413), call % ("mode=gui,dbid=" + self.dbid)],

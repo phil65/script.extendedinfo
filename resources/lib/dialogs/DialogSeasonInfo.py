@@ -46,7 +46,7 @@ def get_window(window_type):
                               (ID_LIST_BACKDROPS, self.data["backdrops"])]
 
         def onInit(self):
-            self.get_youtube_vids("%s %s tv" % (self.info["TVShowTitle"], self.info['title']))
+            self.get_youtube_vids("%s %s tv" % (self.info["tvshowtitle"], self.info['title']))
             super(DialogSeasonInfo, self).onInit()
             pass_dict_to_skin(data=self.info,
                               window_id=self.window_id)
@@ -66,7 +66,7 @@ def get_window(window_type):
         def open_episode_info(self):
             info = self.listitem.getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
-                                 tvshow=self.info["TVShowTitle"],
+                                 tvshow=self.info["tvshowtitle"],
                                  tvshow_id=self.tvshow_id,
                                  season=info.getSeason(),
                                  episode=info.getEpisode())

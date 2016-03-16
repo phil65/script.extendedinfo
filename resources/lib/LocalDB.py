@@ -48,7 +48,8 @@ class LocalDB(object):
                                 "Genre": " / ".join(item['genre']),
                                 "thumb": item['thumbnail'],
                                 "Fanart": item['fanart'],
-                                "Description": item['description'],
+                                "Artist_Description": item['description'],
+                                "userrating": item['userrating'],
                                 "Born": item['born'],
                                 "Died": item['died'],
                                 "Formed": item['formed'],
@@ -147,8 +148,9 @@ class LocalDB(object):
                     'File': movie.get('file'),
                     'year': str(movie.get('year')),
                     'writer': " / ".join(movie['writer']),
-                    'OriginalTitle': movie.get('originaltitle'),
+                    'originaltitle': movie.get('originaltitle'),
                     'imdb_id': movie.get('imdbnumber'),
+                    'userrating': movie.get('userrating'),
                     'path': path,
                     'plot': movie.get('plot'),
                     'director': " / ".join(movie.get('director')),
@@ -189,7 +191,7 @@ class LocalDB(object):
                      'genre': " / ".join(tvshow.get('genre')),
                      'File': tvshow.get('file'),
                      'year': str(tvshow.get('year')),
-                     'OriginalTitle': tvshow.get('originaltitle'),
+                     'originaltitle': tvshow.get('originaltitle'),
                      'imdb_id': tvshow.get('imdbnumber'),
                      'path': path,
                      'Play': "",
@@ -260,12 +262,12 @@ class LocalDB(object):
         remote_items = []
         for online_item in online_list:
             index = False
-            if "imdb_id" in online_item and online_item["imdb_id"] in self.movie_imdbs:
-                index = self.movie_imdbs.index(online_item["imdb_id"])
+            if "imdb_id" in online_item.get("properties", {}) and online_item["properties"]["imdb_id"] in self.movie_imdbs:
+                index = self.movie_imdbs.index(online_item["properties"]["imdb_id"])
             elif online_item['title'].lower() in self.movie_titles:
                 index = self.movie_titles.index(online_item['title'].lower())
-            elif "OriginalTitle" in online_item and online_item["OriginalTitle"].lower() in self.movie_otitles:
-                index = self.movie_otitles.index(online_item["OriginalTitle"].lower())
+            elif "originaltitle" in online_item and online_item["originaltitle"].lower() in self.movie_otitles:
+                index = self.movie_otitles.index(online_item["originaltitle"].lower())
             if index:
                 local_item = self.get_movie(self.movie_ids[index])
                 if local_item:
@@ -329,8 +331,8 @@ class LocalDB(object):
             elif online_item['title'].lower() in self.tvshow_titles:
                 index = self.tvshow_titles.index(online_item['title'].lower())
                 found = True
-            elif "OriginalTitle" in online_item and online_item["OriginalTitle"].lower() in self.tvshow_originaltitles:
-                index = self.tvshow_originaltitles.index(online_item["OriginalTitle"].lower())
+            elif "originaltitle" in online_item and online_item["originaltitle"].lower() in self.tvshow_originaltitles:
+                index = self.tvshow_originaltitles.index(online_item["originaltitle"].lower())
                 found = True
             if found:
                 local_item = self.get_tvshow(self.tvshow_ids[index])

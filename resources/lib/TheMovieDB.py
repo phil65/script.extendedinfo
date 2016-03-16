@@ -328,7 +328,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
         item = {'label': movie.get('title'),
                 'path': PLUGIN_BASE + path % movie.get("id"),
                 'title': movie.get('title'),
-                'OriginalTitle': movie.get('original_title', ""),
+                'originaltitle': movie.get('original_title', ""),
                 'mediatype': "movie",
                 'country': movie.get('original_language'),
                 'plot': movie.get('overview'),
@@ -349,8 +349,9 @@ def handle_movies(results, local_first=True, sortkey="year"):
         item["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                          fanart=movie.get("backdrop_path"))
         movies.append(item)
-    movies = local_db.merge_with_local_movie_info(movies, local_first, sortkey)
-    return movies
+    prettyprint("here")
+    prettyprint(movies)
+    return local_db.merge_with_local_movie_info(movies, local_first, sortkey)
 
 
 def handle_tvshows(results, local_first=True, sortkey="year"):
@@ -372,7 +373,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i" % (tv["episode_run_time"][0])
         newtv = {'title': tv.get('name'),
                  'label': tv.get('name'),
-                 'OriginalTitle': tv.get('original_name', ""),
+                 'originaltitle': tv.get('original_name', ""),
                  'duration': duration,
                  'genre': " / ".join([i for i in genres if i]),
                  'country': tv.get('original_language'),
@@ -755,7 +756,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'Director': " / ".join(directors),
              'writer': " / ".join(authors),
              'Plot': clean_text(fetch(response, 'overview')),
-             'OriginalTitle': fetch(response, 'original_title'),
+             'originaltitle': fetch(response, 'original_title'),
              'Country': fetch(response, 'original_language'),
              'genre': " / ".join(genres),
              'Rating': fetch(response, 'vote_average'),
@@ -832,8 +833,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         mpaa = ""
     genres = [item["name"] for item in response["genres"]]
     tvshow = {'title': response.get('name'),
-              'TVShowTitle': response.get('name'),
-              'OriginalTitle': response.get('original_name', ""),
+              'tvshowtitle': response.get('name'),
+              'originaltitle': response.get('original_name', ""),
               'duration': duration,
               'duration(h)': format_time(duration, "h"),
               'duration(m)': format_time(duration, "m"),
@@ -908,7 +909,7 @@ def extended_season_info(tvshow_id, season_number):
         title = "%s %s" % (LANG(20373), season_number)
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
-              'TVShowTitle': fetch(tvshow, 'name'),
+              'tvshowtitle': fetch(tvshow, 'name'),
               'title': title,
               'Premiered': response["air_date"]}
     artwork = get_image_urls(poster=response.get("poster_path"))

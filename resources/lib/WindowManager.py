@@ -50,7 +50,6 @@ class WindowManager(object):
         self.reopen_window = False
         self.last_control = None
         self.active_dialog = None
-        self.window_type = BaseClasses.WindowXML if SETTING("window_mode") == "true" else BaseClasses.DialogXML
 
     def add_to_stack(self, window):
         """
@@ -84,7 +83,7 @@ class WindowManager(object):
             movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
                                                     dbid=dbid,
                                                     name=name)
-        movie_class = DialogMovieInfo.get_window(self.window_type)
+        movie_class = DialogMovieInfo.get_window(BaseClasses.DialogXML)
         dialog = movie_class(INFO_DIALOG_FILE,
                              ADDON_PATH,
                              id=movie_id,
@@ -115,7 +114,7 @@ class WindowManager(object):
             tmdb_id = TheMovieDB.search_media(media_name=name,
                                               year="",
                                               media_type="tv")
-        tvshow_class = DialogTVShowInfo.get_window(self.window_type)
+        tvshow_class = DialogTVShowInfo.get_window(BaseClasses.DialogXML)
         dialog = tvshow_class(INFO_DIALOG_FILE,
                               ADDON_PATH,
                               tmdb_id=tmdb_id,
@@ -148,7 +147,7 @@ class WindowManager(object):
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
-        season_class = DialogSeasonInfo.get_window(self.window_type)
+        season_class = DialogSeasonInfo.get_window(BaseClasses.DialogXML)
         dialog = season_class(INFO_DIALOG_FILE,
                               ADDON_PATH,
                               id=tvshow_id,
@@ -164,7 +163,7 @@ class WindowManager(object):
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
-        ep_class = DialogEpisodeInfo.get_window(self.window_type)
+        ep_class = DialogEpisodeInfo.get_window(BaseClasses.DialogXML)
         if not tvshow_id and tvshow:
             tvshow_id = TheMovieDB.search_media(media_name=tvshow,
                                                 media_type="tv",
@@ -201,7 +200,7 @@ class WindowManager(object):
                 return None
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        actor_class = DialogActorInfo.get_window(self.window_type)
+        actor_class = DialogActorInfo.get_window(BaseClasses.DialogXML)
         dialog = actor_class(ACTOR_DIALOG_FILE,
                              ADDON_PATH,
                              id=actor_id)
@@ -222,7 +221,7 @@ class WindowManager(object):
         else:
             color = "FFFFFFFF"
         check_version()
-        browser_class = DialogVideoList.get_window(self.window_type)
+        browser_class = DialogVideoList.get_window(BaseClasses.DialogXML)
         dialog = browser_class(LIST_DIALOG_FILE,
                                ADDON_PATH,
                                listitems=listitems,
