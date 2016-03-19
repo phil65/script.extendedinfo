@@ -893,7 +893,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture>$INFO[ListItem.Thumb]</texture>
+											<texture background="true">$INFO[ListItem.Thumb]</texture>
 											<aspectratio aligny="center">scale</aspectratio>
 										</control>
 										<control type="image">
@@ -953,7 +953,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture>$INFO[ListItem.Thumb]</texture>
+											<texture background="true">$INFO[ListItem.Thumb]</texture>
 											<aspectratio aligny="center">scale</aspectratio>
 										</control>
 										<control type="textbox">
