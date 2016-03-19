@@ -581,17 +581,16 @@ def get_keyword_id(keyword):
     response = get_data(url="search/keyword",
                         params=params,
                         cache_days=30)
-    if response and "results" in response and response["results"]:
-        if len(response["results"]) > 1:
-            names = [item["name"] for item in response["results"]]
-            selection = xbmcgui.Dialog().select(LANG(32114), names)
-            if selection > -1:
-                return response["results"][selection]
-        elif response["results"]:
-            return response["results"][0]
-    else:
+    if not response or not response.get("results"):
         log("could not find Keyword ID")
         return False
+    if len(response["results"]) > 1:
+        names = [item["name"] for item in response["results"]]
+        selection = xbmcgui.Dialog().select(LANG(32114), names)
+        if selection > -1:
+            return response["results"][selection]
+    elif response["results"]:
+        return response["results"][0]
 
 
 def get_set_id(set_name):
@@ -618,10 +617,9 @@ def get_company_data(company_id):
         return []
     response = get_data(url="company/%s/movies" % (company_id),
                         cache_days=30)
-    if response and "results" in response:
-        return handle_movies(response["results"])
-    else:
+    if not response or not response.get("results"):
         return []
+    return handle_movies(response["results"])
 
 
 def get_credit_info(credit_id):
@@ -688,10 +686,9 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
                             params=params)
         if response and response["movie_results"]:
             return response["movie_results"][0]["id"]
-    if name:
-        return search_media(name)
-    else:
+    if not name:
         return None
+    return search_media(name)
 
 
 def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
@@ -740,40 +737,40 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         mpaa = us_cert["certification"]
     elif response['releases']['countries']:
         mpaa = response['releases']['countries'][0]['certification']
-    movie_set = fetch(response, "belongs_to_collection")
+    movie_set = response.get("belongs_to_collection")
     if movie_set:
-        set_name = fetch(movie_set, "name")
-        set_id = fetch(movie_set, "id")
+        set_name = movie_set.get("name")
+        set_id = movie_set.get("id")
     artwork = get_image_urls(poster=response.get("poster_path"),
                              fanart=response.get("backdrop_path"))
-    path = PLUGIN_BASE + 'youtubevideo&&id=%s' % fetch(response, "id")
-    movie = {'title': fetch(response, 'title'),
-             'label': fetch(response, 'title'),
+    path = PLUGIN_BASE + 'youtubevideo&&id=%s' % response.get("id", "")
+    movie = {'title': response.get('title'),
+             'label': response.get('title'),
              'path': path,
-             'Tagline': fetch(response, 'tagline'),
-             'duration': fetch(response, 'runtime'),
+             'Tagline': response.get('tagline'),
+             'duration': response.get('runtime'),
              'mpaa': mpaa,
              'Director': " / ".join(directors),
              'writer': " / ".join(authors),
-             'Plot': clean_text(fetch(response, 'overview')),
-             'originaltitle': fetch(response, 'original_title'),
-             'Country': fetch(response, 'original_language'),
+             'Plot': clean_text(response.get('overview')),
+             'originaltitle': response.get('original_title'),
+             'Country': response.get('original_language'),
              'genre': " / ".join(genres),
-             'Rating': fetch(response, 'vote_average'),
-             'Premiered': fetch(response, 'release_date'),
-             'Votes': fetch(response, 'vote_count'),
-             'Adult': str(fetch(response, 'adult')),
-             'Popularity': fetch(response, 'popularity'),
-             'Status': translate_status(fetch(response, 'status')),
+             'Rating': response.get('vote_average'),
+             'Premiered': response.get('release_date'),
+             'Votes': response.get('vote_count'),
+             'Adult': str(response.get('adult')),
+             'Popularity': response.get('popularity'),
+             'Status': translate_status(response.get('status')),
              'Set': set_name,
              'SetId': set_id,
-             'id': fetch(response, 'id'),
-             'imdb_id': fetch(response, 'imdb_id'),
+             'id': response.get('id'),
+             'imdb_id': response.get('imdb_id'),
              'duration(h)': format_time(fetch(response, 'runtime'), "h"),
              'duration(m)': format_time(fetch(response, 'runtime'), "m"),
              'Budget': millify(fetch(response, 'budget')),
              'Revenue': millify(fetch(response, 'revenue')),
-             'Homepage': fetch(response, 'homepage'),
+             'Homepage': response.get('homepage'),
              'studio': " / ".join(studio),
              'year': get_year(fetch(response, 'release_date'))}
     movie.update(artwork)
@@ -815,7 +812,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         return False
     account_states = response.get("account_states")
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
-    tmdb_id = fetch(response, 'id')
+    tmdb_id = response.get("id", "")
     artwork = get_image_urls(poster=response.get("poster_path"),
                              fanart=response.get("backdrop_path"))
     if len(response.get("episode_run_time", -1)) > 1:
@@ -909,7 +906,7 @@ def extended_season_info(tvshow_id, season_number):
         title = "%s %s" % (LANG(20373), season_number)
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
-              'tvshowtitle': fetch(tvshow, 'name'),
+              'tvshowtitle': tvshow.get('name'),
               'title': title,
               'Premiered': response["air_date"]}
     artwork = get_image_urls(poster=response.get("poster_path"))
@@ -992,17 +989,15 @@ def extended_actor_info(actor_id):
     return (info, listitems)
 
 
-def translate_status(status_string):
+def translate_status(status):
     translations = {"released": LANG(32071),
                     "post production": LANG(32072),
                     "in production": LANG(32073),
                     "ended": LANG(32074),
                     "returning series": LANG(32075),
                     "planned": LANG(32076)}
-    if status_string.lower() in translations:
-        return translations[status_string.lower()]
-    else:
-        return status_string
+    if status:
+        return translations.get(status.lower(), status)
 
 
 def get_movie_lists(movie_id):
@@ -1110,7 +1105,7 @@ def get_keywords(movie_id):
     keywords = []
     if "keywords" in response:
         for keyword in response["keywords"]["keywords"]:
-            keywords.append({'id': fetch(keyword, 'id'),
+            keywords.append({'id': keyword.get('id'),
                             'label': keyword['name']})
     return keywords
 
@@ -1120,10 +1115,9 @@ def get_similar_movies(movie_id):
     get dict list containing movies similar to *movie_id
     '''
     response = get_full_movie(movie_id)
-    if "similar" in response:
-        return handle_movies(response["similar"]["results"])
-    else:
+    if not response.get("similar"):
         return []
+    return handle_movies(response["similar"]["results"])
 
 
 def get_similar_tvshows(tvshow_id):
@@ -1138,10 +1132,9 @@ def get_similar_tvshows(tvshow_id):
     response = get_data(url="tv/%s" % (tvshow_id),
                         params=params,
                         cache_days=10)
-    if "similar" in response:
-        return handle_tvshows(response["similar"]["results"])
-    else:
+    if not response.get("similar"):
         return []
+    return handle_tvshows(response["similar"]["results"])
 
 
 def get_tmdb_shows(tvshow_type):
@@ -1153,10 +1146,9 @@ def get_tmdb_shows(tvshow_type):
     response = get_data(url="tv/%s" % (tvshow_type),
                         params=params,
                         cache_days=0.3)
-    if "results" in response:
-        return handle_tvshows(response["results"], False, None)
-    else:
+    if not response.get("results"):
         return []
+    return handle_tvshows(response["results"], False, None)
 
 
 def get_tmdb_movies(movie_type):
@@ -1168,10 +1160,9 @@ def get_tmdb_movies(movie_type):
     response = get_data(url="movie/%s" % (movie_type),
                         params=params,
                         cache_days=0.3)
-    if "results" in response:
-        return handle_movies(response["results"], False, None)
-    else:
+    if not response.get("results"):
         return []
+    return handle_movies(response["results"], False, None)
 
 
 def get_set_movies(set_id):
