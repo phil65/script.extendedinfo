@@ -44,7 +44,7 @@ def get_calendar_shows(content):
                     'episode': episode["episode"]["number"],
                     'tvshowtitle': episode["show"]["title"],
                     'mediatype': "episode",
-                    'year': fetch(episode["show"], "year"),
+                    'year': episode["show"].get("year"),
                     'duration': episode["show"]["runtime"] * 60,
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
@@ -103,7 +103,7 @@ def handle_movies(results):
 def handle_tvshows(results):
     shows = []
     for tvshow in results:
-        airs = fetch(tvshow['show'], "airs")
+        airs = tvshow['show'].get("airs", {})
         path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % tvshow['show']['ids']["tvdb"]
         show = {'title': tvshow['show']["title"],
                 'label': tvshow['show']["title"],
@@ -125,10 +125,10 @@ def handle_tvshows(results):
                               'imdb_id': tvshow['show']['ids']["imdb"],
                               'duration(h)': format_time(tvshow['show']["runtime"], "h"),
                               'duration(m)': format_time(tvshow['show']["runtime"], "m"),
-                              'Status': fetch(tvshow['show'], "status"),
-                              'AirDay': fetch(airs, "day"),
-                              'AirShortTime': fetch(airs, "time"),
-                              'Watchers': fetch(tvshow, "watchers")}
+                              'Status': tvshow['show'].get("status"),
+                              'AirDay': airs.get("day"),
+                              'AirShortTime': airs.get("time"),
+                              'Watchers': tvshow.get("watchers")}
         show["artwork"] = {'poster': tvshow['show']["images"]["poster"]["full"],
                            'Banner': tvshow['show']["images"]["banner"]["full"],
                            'fanart': tvshow['show']["images"]["fanart"]["full"],
