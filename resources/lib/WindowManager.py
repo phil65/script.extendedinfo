@@ -186,7 +186,7 @@ class WindowManager(object):
         """
         from dialogs import DialogActorInfo
         if not actor_id:
-            name = name.decode("utf-8").split(" " + LANG(20347) + " ")
+            name = name.split(" " + LANG(20347) + " ")
             names = name[0].strip().split(" / ")
             if len(names) > 1:
                 ret = xbmcgui.Dialog().select(heading=LANG(32027),
