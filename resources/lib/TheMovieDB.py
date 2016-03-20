@@ -605,10 +605,11 @@ def get_set_id(set_name):
 
 
 def get_data(url="", params=None, cache_days=14):
+    params = params if params else {}
     params["api_key"] = TMDB_KEY
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
-    url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params) if params else "")
+    url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     return get_JSON_response(url, cache_days, "TheMovieDB")
 
 
