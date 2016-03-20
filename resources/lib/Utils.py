@@ -563,7 +563,7 @@ def merge_dict_lists(items, key="job"):
     return crews
 
 
-def pass_list_to_skin(name="", data=[], prefix="", handle=None, limit=False):
+def pass_list_to_skin(name, data, prefix="", handle=None, limit=False):
     if data and limit and int(limit) < len(data):
         data = data[:int(limit)]
     if not handle:
