@@ -207,11 +207,12 @@ class WindowManager(object):
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
 
-    def open_video_list(self, prev_window=None, listitems=None, filters=[], mode="filter", list_id=False,
+    def open_video_list(self, prev_window=None, listitems=None, filters=None, mode="filter", list_id=False,
                         filter_label="", force=False, media_type="movie", search_str=""):
         """
         open video list, deal with window stack and color
         """
+        filters = [] if not filters else filters
         from dialogs import DialogVideoList
         if prev_window:
             try:  # TODO rework
@@ -238,11 +239,12 @@ class WindowManager(object):
             prev_window.close()
         dialog.doModal()
 
-    def open_youtube_list(self, prev_window=None, search_str="", filters=[], sort="relevance",
+    def open_youtube_list(self, prev_window=None, search_str="", filters=None, sort="relevance",
                           filter_label="", media_type="video"):
         """
         open video list, deal with window stack and color
         """
+        filters = [] if not filters else filters
         from dialogs import DialogYoutubeList
         if prev_window:
             try:  # TODO rework
