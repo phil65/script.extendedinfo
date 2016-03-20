@@ -176,8 +176,8 @@ def get_similar(media_type, imdb_id):
         return handle_movies(results)
 
 
-def get_data(url, params={}, cache_days=10):
-    url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
+def get_data(url, params=None, cache_days=10):
+    url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params) if params else {})
     return get_JSON_response(url=url,
                              folder="Trakt",
                              headers=HEADERS,
