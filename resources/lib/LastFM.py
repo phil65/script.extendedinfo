@@ -8,7 +8,7 @@ import Utils
 
 LAST_FM_API_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
-BASE_URL = 'http://ws.audioscrobbler.com/2.0/?api_key=%s&format=json&' % (LAST_FM_API_KEY)
+BASE_URL = 'http://ws.audioscrobbler.com/2.0/?'
 
 
 def handle_albums(results):
@@ -87,6 +87,8 @@ def get_track_info(artist_name="", track=""):
 def get_data(method, params=None, cache_days=0.5):
     params = params if params else {}
     params["method"] = method
+    params["api_key"] = LAST_FM_API_KEY
+    params["format"] = "json"
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "{base_url}{params}".format(base_url=BASE_URL,
