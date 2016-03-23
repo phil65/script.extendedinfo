@@ -145,7 +145,7 @@ class LoginProvider(object):
 def set_rating_prompt(media_type, media_id, dbid=None):
     if not media_type or not media_id:
         return False
-    rating = xbmcgui.Dialog().select(LANG(32129), [str(float(i * 0.5)) for i in range(1, 21)])
+    rating = xbmcgui.Dialog().select(LANG(32129), [str(float(i * 0.5)) for i in xrange(1, 21)])
     if rating == -1:
         return False
     if dbid:

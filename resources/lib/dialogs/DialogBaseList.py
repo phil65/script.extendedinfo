@@ -181,7 +181,7 @@ class DialogBaseList(object):
             self.page_token = self.prev_page_token
 
     def get_column(self):
-        for i in range(0, 10):
+        for i in xrange(0, 10):
             if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
                 self.column = i
                 break

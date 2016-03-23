@@ -133,7 +133,7 @@ def start_info_actions(info, params):
             if company_data:
                 return tmdb.get_company_data(company_data[0]["id"])
     elif info == 'set':
-        if params.get("dbid") and "show" not in params.get("type", ""):
+        if params.get("dbid"):
             name = LocalDB.local_db.get_set_name(params["dbid"])
             if name:
                 params["setid"] = tmdb.get_set_id(name)
@@ -243,12 +243,7 @@ def start_info_actions(info, params):
         return get_weather_images()
     # ACTIONS
     resolve_url(params.get("handle"))
-    if info == 't9input':
-        import T9Search
-        dialog = T9Search.T9Search(call=None,
-                                   start_value="")
-        KodiJson.send_text(text=dialog.search_str)
-    elif info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
+    if info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
         KodiJson.play_media(media_type=info.replace("play", ""),
                             dbid=params.get("dbid"),
                             resume=params.get("resume", "true"))
@@ -407,7 +402,7 @@ def start_info_actions(info, params):
         window = xbmcgui.Window(window_id)
         # focusid = Window.getFocusId()
         num_items = window.getFocus().getSelectedPosition()
-        for i in range(0, num_items):
+        for i in xrange(0, num_items):
             notify(item.getProperty("Image"))
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):

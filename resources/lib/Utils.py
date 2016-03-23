@@ -416,7 +416,7 @@ def get_icon_panel(number):
     """
     items = []
     offset = number * 5 - 5
-    for i in range(1, 6):
+    for i in xrange(1, 6):
         infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
         items.append({'label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
                       'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
@@ -436,7 +436,7 @@ def set_skin_string(name, value):
 
 def get_weather_images():
     items = []
-    for i in range(1, 6):
+    for i in xrange(1, 6):
         items.append({'label': str(i),
                       'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
                       'thumb': get_infolabel("Window(weather).Property(Map.%i.Area)" % i),

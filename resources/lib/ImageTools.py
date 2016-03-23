@@ -30,7 +30,7 @@ def filter_image(input_img, radius=25):
     xbmc_cache_file = os.path.join("special://profile/Thumbnails", cachedthumb[0], cachedthumb[:-4] + ".jpg")
     if not xbmcvfs.exists(targetfile):
         img = None
-        for i in range(1, 4):
+        for i in xrange(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
                     log("image already in xbmc cache: " + xbmc_cache_file)
@@ -88,13 +88,13 @@ def get_colors(img):
     except:
         return "FFF0F0F0"
     data = []
-    for x in range(width/2):
-        data += [pixels[x*2, y*2] for y in range(height/2)]
+    for x in xrange(width/2):
+        data += [pixels[x*2, y*2] for y in xrange(height/2)]
     r = 0
     g = 0
     b = 0
     counter = 0
-    for x in range(len(data)):
+    for x in xrange(len(data)):
         brightness = data[x][0] + data[x][1] + data[x][2]
         if 150 < brightness < 720:
             r += data[x][0]
