@@ -100,7 +100,7 @@ def get_window(window_type):
 
         @ch.action("contextmenu", ID_LIST_MOVIE_ROLES)
         @ch.action("contextmenu", ID_LIST_MOVIE_CREW)
-        def add_movie_to_account(self):
+        def movie_context_menu(self):
             tmdb.add_movie_to_list(self.listitem.getProperty("id"))
 
     return DialogActorInfo
