@@ -21,7 +21,7 @@ HEADERS = {
     'Content-Type': 'application/json',
     'User-agent': 'XBMC/16.0 ( phil65@kodi.tv )'
 }
-base_url = "http://image.tmdb.org/t/p/"
+IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
 POSTER_SIZE = "w500"
 include_adult = SETTING("include_adults").lower()
 if SETTING("use_https"):
@@ -349,8 +349,6 @@ def handle_movies(results, local_first=True, sortkey="year"):
         item["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                          fanart=movie.get("backdrop_path"))
         movies.append(item)
-    prettyprint("here")
-    prettyprint(movies)
     return local_db.merge_with_local_movie_info(movies, local_first, sortkey)
 
 
@@ -359,7 +357,6 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
     response = get_data(url="genre/tv/list",
                         params={"language": SETTING("LanguageID")},
                         cache_days=30)
-    prettyprint(results)
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     for tv in results:
@@ -507,7 +504,7 @@ def handle_images(results):
         image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
             image['title'] = item["media"].get("title")
-            image["artwork"]['mediaposter'] = base_url + POSTER_SIZE + item["media"].get("poster_path")
+            image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
         images.append(image)
     return images
 
@@ -652,26 +649,26 @@ def get_account_props(account_states):
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
     images = {}
     if poster:
-        images["poster"] = base_url + "w500" + poster
-        images["poster_original"] = base_url + "original" + poster
-        images["original"] = base_url + "original" + poster
-        images["poster_small"] = base_url + "w342" + poster
-        images["thumb"] = base_url + "w342" + poster
+        images["poster"] = IMAGE_BASE_URL + "w500" + poster
+        images["poster_original"] = IMAGE_BASE_URL + "original" + poster
+        images["original"] = IMAGE_BASE_URL + "original" + poster
+        images["poster_small"] = IMAGE_BASE_URL + "w342" + poster
+        images["thumb"] = IMAGE_BASE_URL + "w342" + poster
     if still:
-        images["thumb"] = base_url + "w300" + still
-        images["still"] = base_url + "w300" + still
-        images["still_original"] = base_url + "original" + still
-        images["still_small"] = base_url + "w185" + still
+        images["thumb"] = IMAGE_BASE_URL + "w300" + still
+        images["still"] = IMAGE_BASE_URL + "w300" + still
+        images["still_original"] = IMAGE_BASE_URL + "original" + still
+        images["still_small"] = IMAGE_BASE_URL + "w185" + still
     if fanart:
-        images["fanart"] = base_url + "w1280" + fanart
-        images["fanart_original"] = base_url + "original" + fanart
-        images["original"] = base_url + "original" + fanart
-        images["fanart_small"] = base_url + "w780" + fanart
+        images["fanart"] = IMAGE_BASE_URL + "w1280" + fanart
+        images["fanart_original"] = IMAGE_BASE_URL + "original" + fanart
+        images["original"] = IMAGE_BASE_URL + "original" + fanart
+        images["fanart_small"] = IMAGE_BASE_URL + "w780" + fanart
     if profile:
-        images["poster"] = base_url + "w500" + profile
-        images["poster_original"] = base_url + "original" + profile
-        images["poster_small"] = base_url + "w342" + profile
-        images["thumb"] = base_url + "w342" + profile
+        images["poster"] = IMAGE_BASE_URL + "w500" + profile
+        images["poster_original"] = IMAGE_BASE_URL + "original" + profile
+        images["poster_small"] = IMAGE_BASE_URL + "w342" + profile
+        images["thumb"] = IMAGE_BASE_URL + "w342" + profile
     return images
 
 
