@@ -363,7 +363,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
     for tv in results:
-        tmdb_id = fetch(tv, 'id')
+        tmdb_id = tv.get("id")
         genres = [labels[ids.index(id_)] for id_ in tv.get("genre_ids", []) if id_ in ids]
         duration = ""
         if "episode_run_time" in tv:
@@ -506,8 +506,8 @@ def handle_images(results):
                                'iso_639_1': item.get("iso_639_1")}
         image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
-            image['title'] = fetch(item["media"], "title")
-            image["artwork"]['mediaposter'] = base_url + POSTER_SIZE + fetch(item["media"], "poster_path")
+            image['title'] = item["media"].get("title")
+            image["artwork"]['mediaposter'] = base_url + POSTER_SIZE + item["media"].get("poster_path")
         images.append(image)
     return images
 
@@ -767,13 +767,13 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
              'SetId': set_id,
              'id': response.get('id'),
              'imdb_id': response.get('imdb_id'),
-             'duration(h)': format_time(fetch(response, 'runtime'), "h"),
-             'duration(m)': format_time(fetch(response, 'runtime'), "m"),
-             'Budget': millify(fetch(response, 'budget')),
-             'Revenue': millify(fetch(response, 'revenue')),
+             'duration(h)': format_time(response.get("runtime"), "h"),
+             'duration(m)': format_time(response.get("runtime"), "m"),
+             'Budget': millify(response.get("budget")),
+             'Revenue': millify(response.get("revenue")),
              'Homepage': response.get('homepage'),
              'studio': " / ".join(studio),
-             'year': get_year(fetch(response, 'release_date'))}
+             'year': get_year(response.get("release_date"))}
     movie.update(artwork)
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
     account_states = response.get("account_states")
@@ -782,7 +782,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie.update(local_item)
     else:
         movie = local_db.merge_with_local_movie_info([movie])[0]
-    movie['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
+    movie['Rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_movies(response["similar"]["results"]),
                  "lists": handle_misc(response["lists"]["results"]),
@@ -863,7 +863,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow.update(local_item)
     else:
         tvshow = local_db.merge_with_local_tvshow_info([tvshow])[0]
-    tvshow['Rating'] = fetch(response, 'vote_average')  # hack to get tmdb rating instead of local one
+    tvshow['Rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_tvshows(response["similar"]["results"]),
                  "studios": handle_misc(response["production_companies"]),
