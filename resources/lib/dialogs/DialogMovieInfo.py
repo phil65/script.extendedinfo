@@ -107,7 +107,7 @@ def get_window(window_type):
 
         @ch.action("contextmenu", ID_LIST_SIMILAR)
         @ch.action("contextmenu", ID_LIST_SEASONS)
-        def add_movie_to_account(self):
+        def movie_context_menu(self):
             movie_id = self.listitem.getProperty("id")
             tmdb.add_movie_to_list(movie_id)
 

@@ -276,7 +276,7 @@ def get_certification_list(media_type):
     return response.get("certifications")
 
 
-def movie_context_menu(movie_id):
+def add_movie_to_list(movie_id):
     selection = xbmcgui.Dialog().select(heading=LANG(22080),
                                         list=[LANG(32083)])
     if selection == 0:
