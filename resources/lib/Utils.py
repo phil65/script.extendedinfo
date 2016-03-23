@@ -321,16 +321,6 @@ class FunctionThread(threading.Thread):
         return True
 
 
-class GetFileThread(threading.Thread):
-
-    def __init__(self, url):
-        threading.Thread.__init__(self)
-        self.url = url
-
-    def run(self):
-        self.file = get_file(self.url)
-
-
 def get_file(url):
     clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
     if clean_url.endswith("/"):
@@ -360,10 +350,7 @@ def get_file(url):
         return ""
     if not data:
         return ""
-    if url.endswith(".png"):
-        image = cache_file_png
-    else:
-        image = cache_file_jpg
+    image = cache_file_png if url.endswith(".png") else cache_file_jpg
     try:
         with open(xbmc.translatePath(image), "wb") as f:
             f.write(data)
