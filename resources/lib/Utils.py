@@ -295,10 +295,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         except:
             log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
             log(response)
-            if xbmcvfs.exists(path):
-                results = read_from_file(path)
-            else:
-                results = []
+            results = read_from_file(path) if xbmcvfs.exists(path) else []
     if results:
         HOME.setProperty(hashed_url + "_timestamp", str(now))
         HOME.setProperty(hashed_url, json.dumps(results))
