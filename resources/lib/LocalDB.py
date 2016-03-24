@@ -324,17 +324,14 @@ class LocalDB(object):
         local_items = []
         remote_items = []
         for online_item in online_list:
-            found = False
+            index = None
             if "imdb_id" in online_item and online_item["imdb_id"] in self.tvshow_imdbs:
                 index = self.tvshow_imdbs.index(online_item["imdb_id"])
-                found = True
             elif online_item['title'].lower() in self.tvshow_titles:
                 index = self.tvshow_titles.index(online_item['title'].lower())
-                found = True
             elif "originaltitle" in online_item and online_item["originaltitle"].lower() in self.tvshow_originaltitles:
                 index = self.tvshow_originaltitles.index(online_item["originaltitle"].lower())
-                found = True
-            if found:
+            if index:
                 local_item = self.get_tvshow(self.tvshow_ids[index])
                 if local_item:
                     try:

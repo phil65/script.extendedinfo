@@ -21,8 +21,7 @@ def filter_image(input_img, radius=25):
     if not xbmcvfs.exists(ADDON_DATA_PATH_IMAGES):
         xbmcvfs.mkdir(ADDON_DATA_PATH_IMAGES)
     input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).replace("image://", "")
-    if input_img.endswith("/"):
-        input_img = input_img[:-1]
+    input_img.rstrip("/")
     cachedthumb = xbmc.getCacheThumbName(input_img)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
     targetfile = os.path.join(ADDON_DATA_PATH_IMAGES, filename)
