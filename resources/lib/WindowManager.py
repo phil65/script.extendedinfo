@@ -79,6 +79,7 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogMovieInfo
+        dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not movie_id:
             movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
                                                     dbid=dbid,
@@ -97,6 +98,7 @@ class WindowManager(object):
         open tvshow info, deal with window stack
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
+        dbid = int(dbid) if dbid and int(dbid) > 0 else None
         from dialogs import DialogTVShowInfo
         if tmdb_id:
             pass
@@ -105,7 +107,7 @@ class WindowManager(object):
         elif imdb_id:
             tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=imdb_id,
                                                   source="imdb_id")
-        elif dbid and (int(dbid) > 0):
+        elif dbid:
             tvdb_id = local_db.get_imdb_id(media_type="tvshow",
                                            dbid=dbid)
             if tvdb_id:
@@ -130,6 +132,7 @@ class WindowManager(object):
         """
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         from dialogs import DialogSeasonInfo
+        dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not tvshow_id:
             params = {"query": tvshow,
                       "language": SETTING("language")}
@@ -163,6 +166,7 @@ class WindowManager(object):
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
         """
         from dialogs import DialogEpisodeInfo
+        dbid = int(dbid) if dbid and int(dbid) > 0 else None
         ep_class = DialogEpisodeInfo.get_window(BaseClasses.DialogXML)
         if not tvshow_id and tvshow:
             tvshow_id = TheMovieDB.search_media(media_name=tvshow,
