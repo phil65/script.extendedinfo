@@ -92,6 +92,7 @@ def rotten_tomatoes():
 
 @plugin.route('/tmdb')
 def tmdb():
+    xbmcplugin.setPluginCategory(plugin.handle, "TheMovieDB")
     items = {"incinemamovies": LANG(32042),
              "upcomingmovies": LANG(32043),
              "topratedmovies": LANG(32046),
@@ -115,6 +116,7 @@ def tmdb():
 
 @plugin.route('/trakt')
 def trakt():
+    xbmcplugin.setPluginCategory(plugin.handle, "Trakt")
     items = {"trendingmovies": LANG(32047),
              "airingepisodes": LANG(32028),
              "premiereepisodes": LANG(32029),

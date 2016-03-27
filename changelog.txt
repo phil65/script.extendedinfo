@@ -7,6 +7,9 @@ v5.0.0
 - fix for wrong genre API data
 - WindowManager fix
 - prevent JSON calls with invalid dbids
+- improved listitem creation
+- better label naming for episodes
+- set plugincategory infolabel
 
 v4.5.3
 - properly set mediatype for listitems
