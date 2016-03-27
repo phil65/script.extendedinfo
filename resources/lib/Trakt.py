@@ -72,28 +72,31 @@ def handle_movies(results):
     movies = []
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
     for item in results:
-        movie = {'label': item["movie"]["title"],
-                 'path': PLUGIN_BASE + path % fetch(item["movie"]["ids"], 'tmdb'),
-                 'title': item["movie"]["title"],
-                 'duration': item["movie"]["runtime"] * 60,
-                 'Tagline': item["movie"]["tagline"],
+        prettyprint(item)
+        if "movie" in item:
+            item = item["movie"]
+        movie = {'label': item["title"],
+                 'path': PLUGIN_BASE + path % fetch(item["ids"], 'tmdb'),
+                 'title': item["title"],
+                 'duration': item["runtime"] * 60,
+                 'Tagline': item["tagline"],
                  'mediatype': "movie",
-                 'Trailer': convert_youtube_url(item["movie"]["trailer"]),
-                 'year': item["movie"]["year"],
-                 'mpaa': item["movie"]["certification"],
-                 'Plot': item["movie"]["overview"],
-                 'Premiered': item["movie"]["released"],
-                 'Rating': round(item["movie"]["rating"], 1),
-                 'Votes': item["movie"]["votes"],
-                 'genre': " / ".join(item["movie"]["genres"])}
-        movie["properties"] = {'id': item["movie"]["ids"]["tmdb"],
-                               'imdb_id': item["movie"]["ids"]["imdb"],
-                               'Watchers': item["watchers"],
-                               'duration(h)': format_time(item["movie"]["runtime"], "h"),
-                               'duration(m)': format_time(item["movie"]["runtime"], "m")}
-        movie["artwork"] = {'poster': item["movie"]["images"]["poster"]["full"],
-                            'fanart': item["movie"]["images"]["fanart"]["full"],
-                            'thumb': item["movie"]["images"]["poster"]["thumb"]}
+                 'Trailer': convert_youtube_url(item["trailer"]),
+                 'year': item["year"],
+                 'mpaa': item["certification"],
+                 'Plot': item["overview"],
+                 'Premiered': item["released"],
+                 'Rating': round(item["rating"], 1),
+                 'Votes': item["votes"],
+                 'genre': " / ".join(item["genres"])}
+        movie["properties"] = {'id': item["ids"]["tmdb"],
+                               'imdb_id': item["ids"]["imdb"],
+                               'Watchers': item.get("watchers"),
+                               'duration(h)': format_time(item["runtime"], "h"),
+                               'duration(m)': format_time(item["runtime"], "m")}
+        movie["artwork"] = {'poster': item["images"]["poster"]["full"],
+                            'fanart': item["images"]["fanart"]["full"],
+                            'thumb': item["images"]["poster"]["thumb"]}
         movies.append(movie)
     movies = local_db.merge_with_local_movie_info(online_list=movies,
                                                   library_first=False)
@@ -155,8 +158,16 @@ def get_tshow_info(imdb_id):
     return handle_tvshows([results])
 
 
-def get_trending_movies():
-    results = get_data(url='movies/trending',
+def get_movies(movie_type):
+    results = get_data(url='movies/%s' % movie_type,
+                       params={"extended": "full,images"})
+    if not results:
+        return []
+    return handle_movies(results)
+
+
+def get_movies_from_time(movie_type, period="weekly"):
+    results = get_data(url='movies/%s/%s' % (movie_type, period),
                        params={"extended": "full,images"})
     if not results:
         return []

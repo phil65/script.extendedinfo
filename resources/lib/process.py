@@ -199,7 +199,19 @@ def start_info_actions(info, params):
     elif info == 'trendingshows':
         return Trakt.get_trending_shows()
     elif info == 'trendingmovies':
-        return Trakt.get_trending_movies()
+        return Trakt.get_movies("trending")
+    elif info == 'traktpopularmovies':
+        return Trakt.get_movies("popular")
+    elif info == 'mostplayedmovies':
+        return Trakt.get_movies_from_time("played")
+    elif info == 'mostwatchedmovies':
+        return Trakt.get_movies_from_time("watched")
+    elif info == 'mostcollectedmovies':
+        return Trakt.get_movies_from_time("collected")
+    elif info == 'mostanticipatedmovies':
+        return Trakt.get_movies("anticipated")
+    elif info == 'traktboxofficemovies':
+        return Trakt.get_movies("boxoffice")
     elif info == 'similarartistsinlibrary':
         return LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
     elif info == 'trackinfo':

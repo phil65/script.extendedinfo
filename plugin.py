@@ -8,8 +8,17 @@ import xbmc
 import xbmcplugin
 import xbmcgui
 import routing
+import os
 from resources.lib.process import start_info_actions
 from resources.lib.Utils import *
+
+ADDON = xbmcaddon.Addon()
+ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
+MEDIA_PATH = os.path.join(ADDON_PATH, "resources", "skins", "Default", "media")
+MOVIEDB_IMAGE = os.path.join(MEDIA_PATH, "moviedb.png")
+RT_IMAGE = os.path.join(MEDIA_PATH, "rottentomatoes.png")
+TRAKT_IMAGE = os.path.join(MEDIA_PATH, "trakt.png")
+
 plugin = routing.Plugin()
 
 
@@ -83,7 +92,7 @@ def rotten_tomatoes():
              "newdvdmovies": "%s" % LANG(32053),
              "upcomingdvdmovies": "%s" % LANG(32054)}
     for key, value in items.iteritems():
-        li = xbmcgui.ListItem(value, iconImage='DefaultFolder.png')
+        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
         xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
                                     listitem=li, isFolder=True)
@@ -107,7 +116,7 @@ def tmdb():
              "starredtvshows": LANG(32144),
              "ratedtvshows": LANG(32145)}
     for key, value in items.iteritems():
-        li = xbmcgui.ListItem(value, iconImage='DefaultFolder.png')
+        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
         xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
                                     listitem=li, isFolder=True)
@@ -118,11 +127,17 @@ def tmdb():
 def trakt():
     xbmcplugin.setPluginCategory(plugin.handle, "Trakt")
     items = {"trendingmovies": LANG(32047),
+             "traktpopularmovies": "Most popular movies",
+             "mostplayedmovies": "Most played movies",
+             "mostwatchedmovies": "Most watched movies",
+             "mostcollectedmovies": "Most collected movies",
+             "mostanticipatedmovies": "Most anticipated movies",
+             "traktboxofficemovies": "Box office movies",
              "airingepisodes": LANG(32028),
              "premiereepisodes": LANG(32029),
              "trendingshows": LANG(32032)}
     for key, value in items.iteritems():
-        li = xbmcgui.ListItem(value, iconImage='DefaultFolder.png')
+        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
         xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
                                     listitem=li, isFolder=True)
@@ -131,10 +146,11 @@ def trakt():
 
 @plugin.route('/')
 def root():
+    # xbmcplugin.setContent(plugin.handle, 'files')
     items = [
-        (plugin.url_for(trakt), xbmcgui.ListItem("Trakt"), True),
-        (plugin.url_for(rotten_tomatoes), xbmcgui.ListItem("Rotten Tomatoes"), True),
-        (plugin.url_for(tmdb), xbmcgui.ListItem("TheMovieDB"), True),
+        (plugin.url_for(trakt), xbmcgui.ListItem("Trakt", thumbnailImage=TRAKT_IMAGE), True),
+        (plugin.url_for(rotten_tomatoes), xbmcgui.ListItem("Rotten Tomatoes", thumbnailImage=RT_IMAGE), True),
+        (plugin.url_for(tmdb), xbmcgui.ListItem("TheMovieDB", thumbnailImage=MOVIEDB_IMAGE), True),
     ]
     xbmcplugin.addDirectoryItems(plugin.handle, items)
     xbmcplugin.endOfDirectory(plugin.handle)
