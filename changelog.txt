@@ -1,6 +1,12 @@
 v5.0.0
 - Krypton-only
 - code cleanup
+- fix character encoding issues for actor names
+- tmdb multisearch fix
+- show correct duration values
+- fix for wrong genre API data
+- WindowManager fix
+- prevent JSON calls with invalid dbids
 
 v4.5.3
 - properly set mediatype for listitems
