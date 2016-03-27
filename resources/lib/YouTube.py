@@ -121,20 +121,20 @@ def handle_channels(results):
     return channels
 
 
-def get_data(method, params={}, cache_days=0.5):
+def get_data(method, params=None, cache_days=0.5):
     params["key"] = YT_KEY
     # params = {k: v for k, v in params.items() if v}
     params = dict((k, v) for (k, v) in params.iteritems() if v)
     params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                method=method,
-                                               params=urllib.urlencode(params))
+                                               params=urllib.urlencode(params) if params else "")
     return get_JSON_response(url=url,
                              cache_days=cache_days,
                              folder="YouTube")
 
 
-def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filters={}, media_type="video"):
+def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filters=None, media_type="video"):
     params = {"part": "id,snippet",
               "maxResults": int(limit),
               "type": media_type,
@@ -142,7 +142,7 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
               "pageToken": page,
               "hd": str(hd and not hd == "false"),
               "q": search_str.replace('"', '')}
-    params = merge_dicts(params, filters)
+    params = merge_dicts(params, filters if filters else {})
     results = get_data(method="search",
                        params=params)
     if media_type == "video":
