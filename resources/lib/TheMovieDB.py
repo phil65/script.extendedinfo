@@ -616,6 +616,7 @@ def get_set_id(set_name):
 
 
 def get_data(url="", params=None, cache_days=14):
+    params = params if params else {}
     params["api_key"] = TMDB_KEY
     params = dict((k, v) for (k, v) in params.iteritems() if v)
     params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())

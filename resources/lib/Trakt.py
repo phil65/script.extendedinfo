@@ -171,7 +171,8 @@ def get_similar(media_type, imdb_id):
 
 
 def get_data(url, params=None, cache_days=10):
-    url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params) if params else {})
+    params = params if params else {}
+    url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
     return get_JSON_response(url=url,
                              folder="Trakt",
                              headers=HEADERS,

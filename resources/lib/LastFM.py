@@ -84,12 +84,13 @@ def get_track_info(artist_name="", track=""):
 
 
 def get_data(method, params=None, cache_days=0.5):
+    params = params if params else {}
     params["method"] = method
     # params = {k: v for k, v in params.items() if v}
     params = dict((k, v) for (k, v) in params.iteritems() if v)
     params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "{base_url}{params}".format(base_url=BASE_URL,
-                                      params=urllib.urlencode(params) if params else "")
+                                      params=urllib.urlencode(params))
     return Utils.get_JSON_response(url=url,
                                    cache_days=cache_days,
                                    folder="LastFM")

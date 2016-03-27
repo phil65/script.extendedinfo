@@ -122,13 +122,14 @@ def handle_channels(results):
 
 
 def get_data(method, params=None, cache_days=0.5):
+    params = params if params else {}
     params["key"] = YT_KEY
     # params = {k: v for k, v in params.items() if v}
     params = dict((k, v) for (k, v) in params.iteritems() if v)
     params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                method=method,
-                                               params=urllib.urlencode(params) if params else "")
+                                               params=urllib.urlencode(params))
     return get_JSON_response(url=url,
                              cache_days=cache_days,
                              folder="YouTube")
