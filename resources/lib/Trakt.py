@@ -66,8 +66,8 @@ def handle_movies(results):
     path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
     for movie in results:
         movie = {'title': movie["movie"]["title"],
-                 'Runtime': movie["movie"]["runtime"],
-                 'duration': movie["movie"]["runtime"],
+                 'Runtime': movie["movie"]["runtime"] * 60,
+                 'duration': movie["movie"]["runtime"] * 60,
                  'duration(h)': format_time(movie["movie"]["runtime"], "h"),
                  'duration(m)': format_time(movie["movie"]["runtime"], "m"),
                  'Tagline': movie["movie"]["tagline"],
