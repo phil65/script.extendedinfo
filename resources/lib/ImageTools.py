@@ -94,12 +94,12 @@ def get_colors(img):
     g = 0
     b = 0
     counter = 0
-    for x in xrange(len(data)):
-        brightness = data[x][0] + data[x][1] + data[x][2]
+    for x in data:
+        brightness = x[0] + x[1] + x[2]
         if 150 < brightness < 720:
-            r += data[x][0]
-            g += data[x][1]
-            b += data[x][2]
+            r += x[0]
+            g += x[1]
+            b += x[2]
             counter += 1
     if counter == 0:
         return "FFF0F0F0"
@@ -121,16 +121,15 @@ class FilterImageThread(threading.Thread):
 
     def __init__(self, image="", radius=25):
         threading.Thread.__init__(self)
-        self.filterimage = image
+        self.image = image
         self.radius = radius
 
     def run(self):
         try:
-            self.image, self.imagecolor = filter_image(self.filterimage, self.radius)
+            self.image, self.imagecolor = filter_image(self.image, self.radius)
         except:
             self.image = ""
             self.imagecolor = ""
-            log("exception. probably android PIL issue.")
 
 
 class MyGaussianBlur(PIL.ImageFilter.Filter):
