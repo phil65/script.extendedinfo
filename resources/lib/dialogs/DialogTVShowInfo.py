@@ -5,7 +5,8 @@
 
 import xbmc
 import xbmcgui
-from ..Utils import *
+from .. import Utils
+from .. import addon
 from .. import ImageTools
 from .. import TheMovieDB as tmdb
 from DialogBaseInfo import DialogBaseInfo
@@ -50,7 +51,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.account_states = data
             if "dbid" not in self.info:
-                self.info['poster'] = get_file(self.info.get("poster", ""))
+                self.info['poster'] = Utils.get_file(self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("poster"))
             self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, self.data["seasons"]),
@@ -68,8 +69,8 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids("%s tv" % (self.info['title']))
             super(DialogTVShowInfo, self).onInit()
-            pass_dict_to_skin(data=self.info,
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.info,
+                                    window_id=self.window_id)
             super(DialogTVShowInfo, self).update_states()
             self.fill_lists()
 

@@ -7,7 +7,7 @@ import sys
 import xbmc
 from resources.lib.process import start_info_actions
 from resources.lib import addon
-from resources.lib.Utils import *
+import Utils
 
 
 class Main:
@@ -18,10 +18,10 @@ class Main:
         self._parse_argv()
         for info in self.infos:
             listitems = start_info_actions(info, self.params)
-            pass_list_to_skin(name=info,
-                              data=listitems,
-                              prefix=self.params.get("prefix", ""),
-                              limit=self.params.get("limit", 20))
+            Utils.pass_list_to_skin(name=info,
+                                    data=listitems,
+                                    prefix=self.params.get("prefix", ""),
+                                    limit=self.params.get("limit", 20))
         if not self.infos:
             addon.set_global('infodialogs.active', "true")
             from resources.lib.WindowManager import wm

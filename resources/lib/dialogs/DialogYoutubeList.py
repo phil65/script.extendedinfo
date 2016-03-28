@@ -2,9 +2,10 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+import datetime
 
 import xbmcgui
-from ..Utils import *
+from .. import Utils
 from .. import YouTube
 from .. import addon
 from DialogBaseList import DialogBaseList
@@ -40,7 +41,7 @@ def get_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
 
-        @busy_dialog
+        @Utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")

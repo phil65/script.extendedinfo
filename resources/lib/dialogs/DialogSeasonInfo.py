@@ -2,8 +2,10 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+import xbmcgui
 
-from ..Utils import *
+from .. import Utils
+from .. import addon
 from .. import TheMovieDB as tmdb
 from .. import ImageTools
 from DialogBaseInfo import DialogBaseInfo
@@ -36,7 +38,7 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             if "dbid" not in self.info:  # need to add comparing for seasons
-                self.info['poster'] = get_file(url=self.info.get("poster", ""))
+                self.info['poster'] = Utils.get_file(url=self.info.get("poster", ""))
             self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("poster"))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_CREW, self.data["crew"]),
@@ -48,8 +50,8 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids("%s %s tv" % (self.info["tvshowtitle"], self.info['title']))
             super(DialogSeasonInfo, self).onInit()
-            pass_dict_to_skin(data=self.info,
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.info,
+                                    window_id=self.window_id)
             self.fill_lists()
 
         def onClick(self, control_id):
@@ -73,7 +75,7 @@ def get_window(window_type):
 
         @ch.click(ID_CONTROL_PLOT)
         def open_text(self):
-            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["Plot"])
 
         @ch.click(ID_LIST_VIDEOS)

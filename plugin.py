@@ -11,7 +11,7 @@ import routing
 import os
 from resources.lib import process
 from resources.lib import addon
-from resources.lib.Utils import *
+from resources.lib import Utils
 
 MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
 RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")
@@ -48,11 +48,11 @@ class Main:
                 xbmcplugin.setContent(plugin.handle, 'sets')
             else:
                 xbmcplugin.setContent(plugin.handle, '')
-            pass_list_to_skin(name=info,
-                              data=listitems,
-                              prefix=self.params.get("prefix", ""),
-                              handle=plugin.handle,
-                              limit=self.params.get("limit", 20))
+            Utils.pass_list_to_skin(name=info,
+                                    data=listitems,
+                                    prefix=self.params.get("prefix", ""),
+                                    handle=plugin.handle,
+                                    limit=self.params.get("limit", 20))
             break
         else:
             plugin.run()

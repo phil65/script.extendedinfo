@@ -5,7 +5,7 @@
 
 import xbmc
 import xbmcgui
-from ..Utils import *
+import Utils
 from ..WindowManager import wm
 from T9Search import T9Search
 from .. import addon
@@ -147,7 +147,7 @@ class DialogBaseList(object):
         self.total_items = data.get("total_results", "")
         self.next_page_token = data.get("next_page_token", "")
         self.prev_page_token = data.get("prev_page_token", "")
-        self.listitems = create_listitems(self.listitems)
+        self.listitems = Utils.create_listitems(self.listitems)
 
     def update_ui(self):
         if not self.listitems and self.getFocusId() == C_LIST_MAIN:
@@ -187,7 +187,7 @@ class DialogBaseList(object):
                 self.column = i
                 break
 
-    @busy_dialog
+    @Utils.busy_dialog
     def update(self, force_update=False):
         self.update_content(force_update=force_update)
         self.update_ui()

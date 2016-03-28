@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-from ..Utils import *
+from .. import Utils
 from .. import ImageTools
 from .. import addon
 from .. import TheMovieDB as tmdb
@@ -42,15 +42,15 @@ def get_window(window_type):
             self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
                               (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
                               (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_MOVIE_CREW, merge_dict_lists(self.data["movie_crew_roles"])),
-                              (ID_LIST_TV_CREW, merge_dict_lists(self.data["tvshow_crew_roles"])),
+                              (ID_LIST_MOVIE_CREW, Utils.merge_dict_lists(self.data["movie_crew_roles"])),
+                              (ID_LIST_TV_CREW, Utils.merge_dict_lists(self.data["tvshow_crew_roles"])),
                               (ID_LIST_TAGGED_IMAGES, self.data["tagged_images"])]
 
         def onInit(self):
             self.get_youtube_vids(self.info["label"])
             super(DialogActorInfo, self).onInit()
-            pass_dict_to_skin(data=self.info,
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.info,
+                                    window_id=self.window_id)
             self.fill_lists()
 
         def onClick(self, control_id):

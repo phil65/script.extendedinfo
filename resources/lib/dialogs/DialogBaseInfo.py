@@ -5,7 +5,7 @@
 
 import xbmc
 import xbmcgui
-from ..Utils import *
+from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import addon
 from ..WindowManager import wm
@@ -57,7 +57,7 @@ class DialogBaseInfo(object):
             self.setFocusId(self.last_focus)
         self.last_focus = control_id
 
-    @run_async
+    @Utils.run_async
     def bounce(self, identifier):
         self.bouncing = True
         self.setProperty("Bounce.%s" % identifier, "true")
@@ -69,9 +69,9 @@ class DialogBaseInfo(object):
         for container_id, listitems in self.listitems:
             try:
                 self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(create_listitems(listitems))
+                self.getControl(container_id).addItems(Utils.create_listitems(listitems))
             except:
-                log("Notice: No container with id %i available" % container_id)
+                Utils.log("Notice: No container with id %i available" % container_id)
 
     @ch.click(ID_LIST_IMAGES)
     @ch.click(ID_LIST_BACKDROPS)
@@ -89,8 +89,8 @@ class DialogBaseInfo(object):
         if selection == 0:
             media_type = self.getProperty("type")
             params = '"art": {"poster": "%s"}' % self.listitem.getProperty("original")
-            get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                          params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
+            Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
+                                params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
     def fanart_options(self):
@@ -101,8 +101,8 @@ class DialogBaseInfo(object):
         if selection == 0:
             media_type = self.getProperty("type")
             params = '"art": {"fanart": "%s"}' % self.listitem.getProperty("original")
-            get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                          params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
+            Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
+                                params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)
@@ -129,7 +129,7 @@ class DialogBaseInfo(object):
     def exit_script(self):
         wm.cancel(self)
 
-    @run_async
+    @Utils.run_async
     def get_youtube_vids(self, search_str):
         try:
             youtube_list = self.getControl(ID_LIST_YOUTUBE)
@@ -142,7 +142,7 @@ class DialogBaseInfo(object):
                 vid_ids = [item["properties"]["key"] for item in self.data["videos"]]
                 self.yt_listitems = [i for i in self.yt_listitems if i["youtube_id"] not in vid_ids]
         youtube_list.reset()
-        youtube_list.addItems(create_listitems(self.yt_listitems))
+        youtube_list.addItems(Utils.create_listitems(self.yt_listitems))
 
     def open_credit_dialog(self, credit_id):
         info = tmdb.get_credit_info(credit_id)
@@ -167,5 +167,5 @@ class DialogBaseInfo(object):
     def update_states(self):
         if not self.account_states:
             return None
-        pass_dict_to_skin(data=tmdb.get_account_props(self.account_states),
-                          window_id=self.window_id)
+        Utils.pass_dict_to_skin(data=tmdb.get_account_props(self.account_states),
+                                window_id=self.window_id)

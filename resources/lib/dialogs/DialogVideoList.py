@@ -6,7 +6,7 @@
 import xbmc
 import xbmcgui
 from .. import addon
-from ..Utils import *
+from .. import Utils
 from .. import TheMovieDB as tmdb
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
@@ -44,7 +44,7 @@ def get_window(window_type):
 
     class DialogVideoList(DialogBaseList, window_type):
 
-        @busy_dialog
+        @Utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogVideoList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "movie")
@@ -54,7 +54,7 @@ def get_window(window_type):
             self.order = kwargs.get('order', "desc")
             self.logged_in = tmdb.Login.check_login()
             if self.listitem_list:
-                self.listitems = create_listitems(self.listitem_list)
+                self.listitems = Utils.create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
             else:
                 self.update_content(force_update=kwargs.get('force', False))
@@ -330,7 +330,7 @@ def get_window(window_type):
             elif response:
                 response = response[0]
             else:
-                notify("No company found")
+                Utils.notify("No company found")
             self.add_filter(key="with_companies",
                             value=str(response["id"]),
                             typelabel=addon.LANG(20388),
@@ -415,7 +415,7 @@ def get_window(window_type):
                 if self.logged_in:
                     session_id = tmdb.Login.get_session_id()
                     if not session_id:
-                        notify("Could not get session id")
+                        Utils.notify("Could not get session id")
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
@@ -427,7 +427,7 @@ def get_window(window_type):
                 else:
                     session_id = tmdb.Login.get_guest_session_id()
                     if not session_id:
-                        notify("Could not get session id")
+                        Utils.notify("Could not get session id")
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
@@ -441,7 +441,7 @@ def get_window(window_type):
                           "page": self.page,
                           "include_adult": include_adult}
                 filters = dict((item["type"], item["id"]) for item in self.filters)
-                params = merge_dicts(params, filters)
+                params = Utils.merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
             response = tmdb.get_data(url=url,
                                      params=params,
@@ -461,7 +461,7 @@ def get_window(window_type):
                         "results_per_page": 0,
                         "total_results": 0}
             if not response["results"]:
-                notify(addon.LANG(284))
+                Utils.notify(addon.LANG(284))
             if self.mode == "search":
                 listitems = tmdb.handle_multi_search(response["results"])
             elif self.type == "movie":

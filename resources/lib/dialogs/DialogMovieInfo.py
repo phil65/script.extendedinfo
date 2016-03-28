@@ -5,7 +5,7 @@
 
 import xbmc
 import xbmcgui
-from ..Utils import *
+from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import omdb
 from .. import ImageTools
@@ -58,12 +58,12 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.account_states = data
             sets_thread = SetItemsThread(self.info["SetId"])
-            self.omdb_thread = FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
+            self.omdb_thread = Utils.FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:
-                self.info['poster'] = get_file(self.info.get("poster", ""))
+                self.info['poster'] = Utils.get_file(self.info.get("poster", ""))
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
@@ -78,7 +78,7 @@ def get_window(window_type):
                               (ID_LIST_LISTS, lists),
                               (ID_LIST_STUDIOS, self.data["studios"]),
                               (ID_LIST_CERTS, tmdb.merge_with_cert_desc(self.data["releases"], "movie")),
-                              (ID_LIST_CREW, merge_dict_lists(self.data["crew"])),
+                              (ID_LIST_CREW, Utils.merge_dict_lists(self.data["crew"])),
                               (ID_LIST_GENRES, self.data["genres"]),
                               (ID_LIST_KEYWORDS, self.data["keywords"]),
                               (ID_LIST_REVIEWS, self.data["reviews"]),
@@ -88,14 +88,14 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
-            pass_dict_to_skin(data=self.info,
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.info,
+                                    window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info["label"], self.info["year"]))
             self.fill_lists()
-            pass_dict_to_skin(data=self.setinfo,
-                              prefix="set.",
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.setinfo,
+                                    prefix="set.",
+                                    window_id=self.window_id)
             self.join_omdb_async()
 
         def onClick(self, control_id):
@@ -150,7 +150,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_REVIEWS)
         def show_review(self):
             author = self.listitem.getProperty("author")
-            text = "[B]%s[/B][CR]%s" % (author, clean_text(self.listitem.getProperty("content")))
+            text = "[B]%s[/B][CR]%s" % (author, Utils.clean_text(self.listitem.getProperty("content")))
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
@@ -274,14 +274,14 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_PLAY_RESUME)
         def play_movie_resume(self):
             self.close()
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "true"))
+            Utils.get_kodi_json(method="Player.Open",
+                                params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "true"))
 
         @ch.click(ID_BUTTON_PLAY_NORESUME)
         def play_movie_no_resume(self):
             self.close()
-            get_kodi_json(method="Player.Open",
-                          params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "false"))
+            Utils.get_kodi_json(method="Player.Open",
+                                params='{"item": {"movieid": %s}, "options":{"resume": %s}}' % (self.info['dbid'], "false"))
 
         @ch.click(ID_BUTTON_MANAGE)
         def show_manage_dialog(self):
