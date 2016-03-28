@@ -1214,5 +1214,5 @@ def search_media(media_name=None, year='', media_type="movie", cache_days=1):
         if item['id']:
             return item['id']
 
-Login = LoginProvider(username=SETTING("tmdb_username"),
-                      password=SETTING("tmdb_password"))
+Login = LoginProvider(username=addon.setting("tmdb_username"),
+                      password=addon.setting("tmdb_password"))
