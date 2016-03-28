@@ -4,7 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
-from Utils import *
+import Utils
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
 API_KEY = 'xbmc_open_source_media_center'
@@ -41,7 +41,7 @@ def get_near_events(artists):  # not possible with api 2.0
             arts.append(urllib.quote(art['artist'].encode("utf-8")))
     artist_str = 'artists[]=' + '&artists[]='.join(arts)
     url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%s' % (artist_str)
-    results = get_JSON_response(url, folder="BandsInTown")
+    results = Utils.get_JSON_response(url, folder="BandsInTown")
     if results:
         return handle_events(results)
     return []

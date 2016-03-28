@@ -4,9 +4,10 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmc
-from Utils import *
+import Utils
 import addon
 from LocalDB import local_db
+import urllib
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
@@ -59,14 +60,14 @@ def handle_tracks(results):
     if not results.get('track'):
         return None
     for item in results['track']:
-        youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
+        youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
         track = {'label': item['strTrack'],
                  'Artist': item['strArtist'],
                  'mediatype': "song",
                  'mbid': item['strMusicBrainzID'],
                  'Album': item['strAlbum'],
                  'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
-                 'path': convert_youtube_url(item['strMusicVid'])}
+                 'path': Utils.convert_youtube_url(item['strMusicVid'])}
         tracks.append(track)
     return tracks
 
@@ -76,9 +77,9 @@ def handle_musicvideos(results):
         return []
     mvids = []
     for item in results['mvids']:
-        youtube_id = extract_youtube_id(item.get('strMusicVid', ''))
+        youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
         mvid = {'label': item['strTrack'],
-                'path': convert_youtube_url(item['strMusicVid']),
+                'path': Utils.convert_youtube_url(item['strMusicVid']),
                 'Plot': item['strDescriptionEN'],
                 'mediatype': "musicvideo",
                 'id': item['idTrack'],
@@ -96,43 +97,43 @@ def extended_artist_info(results):
     for artist in results['artists']:
         description = ""
         if local_bio in artist and artist[local_bio]:
-            description = fetch(artist, local_bio)
+            description = artist.get(local_bio)
         elif artist.get('strBiographyEN'):
-            description = fetch(artist, 'strBiographyEN')
+            description = artist.get('strBiographyEN')
         elif artist.get('strBiography'):
-            description = fetch(artist, 'strBiography')
+            description = artist.get('strBiography')
         banner = artist.get('strArtistBanner')
         if not banner:
             banner = ""
         if 'strReview' in artist and artist['strReview']:
-            description += "[CR]" + fetch(artist, 'strReview')
-        artist = {'artist': fetch(artist, 'strArtist'),
-                  'thumb': fetch(artist, 'strArtistThumb'),
-                  'mbid': fetch(artist, 'strMusicBrainzID'),
+            description += "[CR]" + artist.get('strReview')
+        artist = {'artist': artist.get('strArtist'),
+                  'thumb': artist.get('strArtistThumb'),
+                  'mbid': artist.get('strMusicBrainzID'),
                   'Banner': banner,
                   'mediatype': "artist",
-                  'clearlogo': fetch(artist, 'strArtistLogo'),
-                  'fanart': fetch(artist, 'strArtistFanart'),
-                  'fanart2': fetch(artist, 'strArtistFanart2'),
-                  'fanart3': fetch(artist, 'strArtistFanart3'),
-                  'Artist_Mood': fetch(artist, 'strMood'),
-                  'Artist_Born': fetch(artist, 'intBornYear'),
-                  'Artist_Formed': fetch(artist, 'intFormedYear'),
-                  'Artist_Died': fetch(artist, 'intDiedYear'),
-                  'Artist_Disbanded': fetch(artist, 'strDisbanded'),
-                  'Artist_Mood': fetch(artist, 'strMood'),
-                  'CountryCode': fetch(artist, 'strCountryCode'),
-                  'Country': fetch(artist, 'strCountry'),
-                  'Website': fetch(artist, 'strWebsite'),
-                  'Twitter': fetch(artist, 'strTwitter'),
-                  'Facebook': fetch(artist, 'strFacebook'),
-                  'LastFMChart': fetch(artist, 'strLastFMChart'),
-                  'Gender': fetch(artist, 'strGender'),
-                  'audiodb_id': fetch(artist, 'idArtist'),
+                  'clearlogo': artist.get('strArtistLogo'),
+                  'fanart': artist.get('strArtistFanart'),
+                  'fanart2': artist.get('strArtistFanart2'),
+                  'fanart3': artist.get('strArtistFanart3'),
+                  'Artist_Mood': artist.get('strMood'),
+                  'Artist_Born': artist.get('intBornYear'),
+                  'Artist_Formed': artist.get('intFormedYear'),
+                  'Artist_Died': artist.get('intDiedYear'),
+                  'Artist_Disbanded': artist.get('strDisbanded'),
+                  'Artist_Mood': artist.get('strMood'),
+                  'CountryCode': artist.get('strCountryCode'),
+                  'Country': artist.get('strCountry'),
+                  'Website': artist.get('strWebsite'),
+                  'Twitter': artist.get('strTwitter'),
+                  'Facebook': artist.get('strFacebook'),
+                  'LastFMChart': artist.get('strLastFMChart'),
+                  'Gender': artist.get('strGender'),
+                  'audiodb_id': artist.get('idArtist'),
                   'Artist_Description': description,
-                  'Artist_Genre': fetch(artist, 'strGenre'),
-                  'Artist_Style': fetch(artist, 'strStyle'),
-                  'Members': fetch(artist, 'intMembers')}
+                  'Artist_Genre': artist.get('strGenre'),
+                  'Artist_Style': artist.get('strStyle'),
+                  'Members': artist.get('intMembers')}
         artists.append(artist)
     if artists:
         return artists[0]
@@ -202,5 +203,5 @@ def get_data(url, params):
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "%s%s.php?%s" % (BASE_URL, url, urllib.urlencode(params))
-    return get_JSON_response(url=url,
-                             folder="TheAudioDB")
+    return Utils.get_JSON_response(url=url,
+                                   folder="TheAudioDB")

@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
+import Utils
 
 BASE_URL = "http://www.omdbapi.com/?tomatoes=true&plot=full&r=json&"
 
@@ -11,8 +11,8 @@ BASE_URL = "http://www.omdbapi.com/?tomatoes=true&plot=full&r=json&"
 def get_movie_info(imdb_id):
     try:
         url = 'i=%s' % (imdb_id)
-        results = get_JSON_response(BASE_URL + url, 20, "OMDB")
+        results = Utils.get_JSON_response(BASE_URL + url, 20, "OMDB")
         return dict((k, v) for (k, v) in results.iteritems() if v != "N/A")
     except:
-        log("Exception: Error when fetching Omdb data from net")
+        Utils.log("Exception: Error when fetching Omdb data from net")
         return {}

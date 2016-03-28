@@ -192,13 +192,6 @@ def media_streamdetails(filename, streamdetails):
     return info
 
 
-def fetch(dictionary, key):
-    if key in dictionary:
-        if dictionary[key] is not None:
-            return dictionary[key]
-    return ""
-
-
 def get_year(year_string):
     """
     return last 4 chars of string

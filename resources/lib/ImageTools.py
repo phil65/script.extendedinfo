@@ -7,10 +7,11 @@ import urllib
 import xbmc
 import xbmcvfs
 import os
-from Utils import *
+import Utils
 import addon
 import PIL.Image
 import PIL.ImageFilter
+import threading
 
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")
@@ -33,11 +34,11 @@ def filter_image(input_img, radius=25):
         for i in xrange(1, 4):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
-                    log("image already in xbmc cache: " + xbmc_cache_file)
+                    Utils.log("image already in xbmc cache: " + xbmc_cache_file)
                     img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    log("image already in xbmc video cache: " + xbmc_vid_cache_file)
+                    Utils.log("image already in xbmc video cache: " + xbmc_vid_cache_file)
                     img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file))
                     break
                 else:
@@ -45,7 +46,7 @@ def filter_image(input_img, radius=25):
                     img = PIL.Image.open(targetfile)
                     break
             except:
-                log("Could not get image for %s (try %i)" % (input_img, i))
+                Utils.log("Could not get image for %s (try %i)" % (input_img, i))
                 xbmc.sleep(500)
         if not img:
             return "", ""
@@ -56,10 +57,10 @@ def filter_image(input_img, radius=25):
             img = img.filter(imgfilter)
             img.save(targetfile)
         except:
-            log("PIL problem probably....")
+            Utils.log("PIL problem probably....")
             return "", ""
     else:
-        log("blurred img already created: " + targetfile)
+        Utils.log("blurred img already created: " + targetfile)
         img = PIL.Image.open(targetfile)
     imagecolor = get_colors(img)
     return targetfile, imagecolor
@@ -67,7 +68,7 @@ def filter_image(input_img, radius=25):
 
 def get_cached_thumb(filename):
     if filename.startswith("stack://"):
-        filename = strPath[8:].split(" , ")[0]
+        filename = filename[8:].split(" , ")[0]
     if filename.endswith("folder.jpg"):
         cachedthumb = xbmc.getCacheThumbName(filename)
         thumbpath = os.path.join(THUMBS_CACHE_PATH, cachedthumb[0], cachedthumb).replace("/Video", "")
@@ -113,7 +114,7 @@ def get_colors(img):
         for color in [r_avg, g_avg, b_avg]:
             color = color + diff if color <= (255 - diff) else 255
     imagecolor = "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
-    log("Average Color: " + imagecolor)
+    Utils.log("Average Color: " + imagecolor)
     return imagecolor
 
 

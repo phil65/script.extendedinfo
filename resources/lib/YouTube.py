@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
+import Utils
 import urllib
 import itertools
 
@@ -48,11 +48,11 @@ def handle_videos(results, extended=False):
             item["dimension"] = ext_item['contentDetails']['dimension']
             item["definition"] = ext_item['contentDetails']['definition']
             item["caption"] = ext_item['contentDetails']['caption']
-            item["viewcount"] = millify(ext_item['statistics']['viewCount'])
+            item["viewcount"] = Utils.millify(ext_item['statistics']['viewCount'])
             item["likes"] = ext_item['statistics'].get('likeCount')
             item["dislikes"] = ext_item['statistics'].get('dislikeCount')
             if item["likes"] and item["dislikes"]:
-                vote_count = float(int(item["likes"]) + int(item["dislikes"]))
+                vote_count = int(item["likes"]) + int(item["dislikes"])
                 if vote_count > 0:
                     item["rating"] = format(float(item["likes"]) / vote_count * 10, '.2f')
             break
@@ -129,20 +129,20 @@ def get_data(method, params=None, cache_days=0.5):
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                method=method,
                                                params=urllib.urlencode(params))
-    return get_JSON_response(url=url,
-                             cache_days=cache_days,
-                             folder="YouTube")
+    return Utils.get_JSON_response(url=url,
+                                   cache_days=cache_days,
+                                   folder="YouTube")
 
 
 def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, page="", filters=None, media_type="video"):
     params = {"part": "id,snippet",
-              "maxResults": int(limit),
+              "maxResults": limit,
               "type": media_type,
               "order": orderby,
               "pageToken": page,
               "hd": str(hd and not hd == "false"),
               "q": search_str.replace('"', '')}
-    params = merge_dicts(params, filters if filters else {})
+    params = Utils.merge_dicts(params, filters if filters else {})
     results = get_data(method="search",
                        params=params)
     if not results:

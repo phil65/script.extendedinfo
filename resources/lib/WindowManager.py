@@ -8,6 +8,7 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 import os
+import re
 
 from dialogs import BaseClasses
 from LocalDB import local_db

@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
+import Utils
 import addon
 from LocalDB import local_db
 
@@ -15,7 +15,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 def get_movies(movie_type):
     movies = []
     url = '%s.json?apikey=%s' % (movie_type, RT_KEY)
-    results = get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
+    results = Utils.get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if not results or "movies" not in results:
         return []
     for item in results["movies"]:
@@ -39,8 +39,8 @@ def get_movies(movie_type):
                  'Plot': item["synopsis"],
                  'mpaa': item["mpaa_rating"]}
         movie["properties"] = {'imdb_id': imdb_id,
-                               'duration(h)': format_time(item["runtime"], "h"),
-                               'duration(m)': format_time(item["runtime"], "m")}
+                               'duration(h)': Utils.format_time(item["runtime"], "h"),
+                               'duration(m)': Utils.format_time(item["runtime"], "m")}
         movie["artwork"] = {'thumb': poster,
                             'poster': poster}
         movies.append(movie)

@@ -4,8 +4,10 @@
 # This program is Free Software see LICENSE file for details
 
 import datetime
-from Utils import *
+import Utils
+import addon
 from LocalDB import local_db
+import urllib
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -55,8 +57,8 @@ def get_calendar_shows(content):
             show["properties"] = {'tvdb_id': episode["show"]["ids"]["tvdb"],
                                   'id': episode["show"]["ids"]["tvdb"],
                                   'imdb_id': episode["show"]["ids"]["imdb"],
-                                  'duration(h)': format_time(episode["show"]["runtime"], "h"),
-                                  'duration(m)': format_time(episode["show"]["runtime"], "m")}
+                                  'duration(h)': Utils.format_time(episode["show"]["runtime"], "h"),
+                                  'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")}
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                                'poster': episode["show"]["images"]["poster"]["full"],
                                'Banner': episode["show"]["images"]["banner"]["full"],
@@ -72,16 +74,15 @@ def handle_movies(results):
     movies = []
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for item in results:
-        prettyprint(item)
         if "movie" in item:
             item = item["movie"]
         movie = {'label': item["title"],
-                 'path': PLUGIN_BASE + path % fetch(item["ids"], 'tmdb'),
+                 'path': PLUGIN_BASE + path % item["ids"]["tmdb"],
                  'title': item["title"],
                  'duration': item["runtime"] * 60,
                  'Tagline': item["tagline"],
                  'mediatype': "movie",
-                 'Trailer': convert_youtube_url(item["trailer"]),
+                 'Trailer': Utils.convert_youtube_url(item["trailer"]),
                  'year': item["year"],
                  'mpaa': item["certification"],
                  'Plot': item["overview"],
@@ -92,8 +93,8 @@ def handle_movies(results):
         movie["properties"] = {'id': item["ids"]["tmdb"],
                                'imdb_id': item["ids"]["imdb"],
                                'Watchers': item.get("watchers"),
-                               'duration(h)': format_time(item["runtime"], "h"),
-                               'duration(m)': format_time(item["runtime"], "m")}
+                               'duration(h)': Utils.format_time(item["runtime"], "h"),
+                               'duration(m)': Utils.format_time(item["runtime"], "m")}
         movie["artwork"] = {'poster': item["images"]["poster"]["full"],
                             'fanart': item["images"]["fanart"]["full"],
                             'thumb': item["images"]["poster"]["thumb"]}
@@ -126,8 +127,8 @@ def handle_tvshows(results):
         show["properties"] = {'id': tvshow['show']['ids']["tmdb"],
                               'tvdb_id': tvshow['show']['ids']["tvdb"],
                               'imdb_id': tvshow['show']['ids']["imdb"],
-                              'duration(h)': format_time(tvshow['show']["runtime"], "h"),
-                              'duration(m)': format_time(tvshow['show']["runtime"], "m"),
+                              'duration(h)': Utils.format_time(tvshow['show']["runtime"], "h"),
+                              'duration(m)': Utils.format_time(tvshow['show']["runtime"], "m"),
                               'Status': tvshow['show'].get("status"),
                               'AirDay': airs.get("day"),
                               'AirShortTime': airs.get("time"),
@@ -190,7 +191,7 @@ def get_similar(media_type, imdb_id):
 def get_data(url, params=None, cache_days=10):
     params = params if params else {}
     url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
-    return get_JSON_response(url=url,
-                             folder="Trakt",
-                             headers=HEADERS,
-                             cache_days=cache_days)
+    return Utils.get_JSON_response(url=url,
+                                   folder="Trakt",
+                                   headers=HEADERS,
+                                   cache_days=cache_days)
