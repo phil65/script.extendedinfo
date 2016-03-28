@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
+import addon
 from LocalDB import local_db
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
@@ -22,7 +23,7 @@ def get_movies(movie_type):
             continue
         imdb_id = str(item["alternate_ids"]["imdb"])
         poster = "http://content6.flixster.com/" + item["posters"]["original"][93:]
-        if SETTING("infodialog_onclick") != "false":
+        if addon.bool_setting("infodialog_onclick"):
             path = PLUGIN_BASE + 'extendedinfo&&imdb_id=%s' % imdb_id
         else:
             search_string = "%s %s trailer" % (item["title"], item["year"])

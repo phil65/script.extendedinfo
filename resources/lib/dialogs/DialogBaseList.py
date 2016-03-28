@@ -8,6 +8,7 @@ import xbmcgui
 from ..Utils import *
 from ..WindowManager import wm
 from T9Search import T9Search
+import addon
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -41,7 +42,7 @@ class DialogBaseList(object):
         super(DialogBaseList, self).onInit()
         HOME.setProperty("WindowColor", self.color)
         self.setProperty("WindowColor", self.color)
-        if SETTING("alt_browser_layout") == "true":
+        if addon.bool_setting("alt_browser_layout"):
             self.setProperty("alt_layout", "true")
         self.update_ui()
         xbmc.sleep(200)
@@ -105,7 +106,7 @@ class DialogBaseList(object):
 
     @ch.click(C_BUTTON_SEARCH)
     def open_search(self):
-        if SETTING("classic_search") == "true":
+        if addon.bool_setting("classic_search"):
             result = xbmcgui.Dialog().input(heading=LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:

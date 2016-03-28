@@ -37,7 +37,7 @@ TRANSLATIONS = {"movie": LANG(20338),
                 "tv": LANG(20364),
                 "person": LANG(32156)}
 
-include_adult = SETTING("include_adults").lower()
+include_adult = addon.setting("include_adults").lower()
 
 
 def get_window(window_type):
@@ -212,7 +212,7 @@ def get_window(window_type):
 
         @ch.click(5002)
         def set_genre_filter(self):
-            params = {"language": SETTING("LanguageID")}
+            params = {"language": addon.setting("LanguageID")}
             response = tmdb.get_data(url="genre/%s/list" % (self.type),
                                      params=params,
                                      cache_days=10)
@@ -400,12 +400,12 @@ def get_window(window_type):
                 url = "search/multi"
                 self.filter_label = LANG(32146) % self.search_str if self.search_str else ""
             elif self.mode == "list":
-                params = {"language": SETTING("LanguageID")}
+                params = {"language": addon.setting("LanguageID")}
                 url = "list/%s" % (self.list_id)
                 # self.filter_label = LANG(32036)
             elif self.mode == "favorites":
                 params = {"sort_by": sort_by,
-                          "language": SETTING("LanguageID"),
+                          "language": addon.setting("LanguageID"),
                           "page": self.page,
                           "session_id": tmdb.Login.get_session_id()}
                 url = "account/%s/favorite/%s" % (tmdb.Login.get_account_id(), temp)
@@ -420,7 +420,7 @@ def get_window(window_type):
                                 "results_per_page": 0,
                                 "total_results": 0}
                     params = {"sort_by": sort_by,
-                              "language": SETTING("LanguageID"),
+                              "language": addon.setting("LanguageID"),
                               "page": self.page,
                               "session_id": session_id}
                     url = "account/%s/rated/%s" % (tmdb.Login.get_account_id(), temp)
@@ -431,13 +431,13 @@ def get_window(window_type):
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
-                    params = {"language": SETTING("LanguageID")}
+                    params = {"language": addon.setting("LanguageID")}
                     url = "guest_session/%s/rated_movies" % (session_id)
                 self.filter_label = rated
             else:
                 self.set_filter_label()
                 params = {"sort_by": sort_by,
-                          "language": SETTING("LanguageID"),
+                          "language": addon.setting("LanguageID"),
                           "page": self.page,
                           "include_adult": include_adult}
                 filters = dict((item["type"], item["id"]) for item in self.filters)

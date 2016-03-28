@@ -70,7 +70,7 @@ def get_calendar_shows(content):
 
 def handle_movies(results):
     movies = []
-    path = 'extendedinfo&&id=%s' if SETTING("infodialog_onclick") != "false" else "playtrailer&&id=%s"
+    path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for item in results:
         prettyprint(item)
         if "movie" in item:

@@ -5,6 +5,7 @@
 
 import xbmc
 from Utils import *
+import addon
 from LocalDB import local_db
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
@@ -91,7 +92,7 @@ def extended_artist_info(results):
     artists = []
     if not results.get('artists'):
         return None
-    local_bio = 'strBiography' + SETTING("LanguageID").upper()
+    local_bio = 'strBiography' + addon.setting("LanguageID").upper()
     for artist in results['artists']:
         description = ""
         if local_bio in artist and artist[local_bio]:

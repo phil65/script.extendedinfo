@@ -7,6 +7,7 @@ import json
 import itertools
 import KodiJson
 from Utils import *
+import addon
 
 
 class LocalDB(object):
@@ -132,7 +133,7 @@ class LocalDB(object):
 
     def handle_movies(self, movie):
         trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
-        if SETTING("infodialog_onclick") != "false":
+        if addon.setting("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=extendedinfo&&dbid=%s' % str(movie['movieid'])
         else:
             path = 'plugin://script.extendedinfo/?info=playmovie&&dbid=%i' % movie['movieid']
@@ -182,7 +183,7 @@ class LocalDB(object):
         return dict((k, v) for k, v in db_movie.iteritems() if v)
 
     def handle_tvshows(self, tvshow):
-        if SETTING("infodialog_onclick") != "false":
+        if addon.setting("infodialog_onclick") != "false":
             path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']

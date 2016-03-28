@@ -20,7 +20,6 @@ from functools import wraps
 import addon
 
 HOME = xbmcgui.Window(10000)
-SETTING = addon.ADDON.getSetting
 
 
 def LANG(label_id):
@@ -108,12 +107,12 @@ def check_version():
     """
     check version, open TextViewer if update detected
     """
-    if not SETTING("changelog_version") == addon.VERSION:
+    if not addon.setting("changelog_version") == addon.VERSION:
         xbmcgui.Dialog().textviewer(heading=LANG(24036),
                                     text=read_from_file(os.path.join(addon.PATH, "changelog.txt"), True))
-        addon.ADDON.setSetting("changelog_version", addon.VERSION)
-    if not SETTING("first_start_infodialog"):
-        addon.ADDON.setSetting("first_start_infodialog", "True")
+        addon.set_setting("changelog_version", addon.VERSION)
+    if not addon.setting("first_start_infodialog"):
+        addon.set_setting("first_start_infodialog", "True")
         xbmcgui.Dialog().ok(heading=addon.NAME,
                             line1=LANG(32140),
                             line2=LANG(32141))

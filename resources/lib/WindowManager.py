@@ -18,7 +18,7 @@ import addon
 INFO_DIALOG_FILE_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_DIALOG_FILE_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
 ACTOR_DIALOG_FILE_CLASSIC = u'script-%s-DialogInfo.xml' % (addon.NAME)
-if SETTING("force_native_layout") == "true":
+if addon.bool_setting("force_native_layout"):
     INFO_DIALOG_FILE = u'script-%s-DialogVideoInfo-classic.xml' % (addon.NAME)
     LIST_DIALOG_FILE = u'script-%s-VideoList-classic.xml' % (addon.NAME)
     ACTOR_DIALOG_FILE = u'script-%s-DialogInfo-classic.xml' % (addon.NAME)
@@ -129,7 +129,7 @@ class WindowManager(object):
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not tvshow_id:
             params = {"query": tvshow,
-                      "language": SETTING("language")}
+                      "language": addon.setting("language")}
             response = TheMovieDB.get_data(url="search/tv",
                                            params=params,
                                            cache_days=30)
@@ -137,7 +137,7 @@ class WindowManager(object):
                 tvshow_id = str(response['results'][0]['id'])
             else:
                 params = {"query": re.sub('\(.*?\)', '', tvshow),
-                          "language": SETTING("language")}
+                          "language": addon.setting("language")}
                 response = TheMovieDB.get_data(url="search/tv",
                                                params=params,
                                                cache_days=30)
