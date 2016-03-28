@@ -4,7 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-from ..Utils import *
+import Utils
+import addon
+
 C_LIST_SIMPLE = 3
 C_LIST_DETAIL = 6
 C_BUTTON_GET_MORE = 5
@@ -14,11 +16,11 @@ C_LABEL_HEADER = 1
 class SelectDialog(xbmcgui.WindowXMLDialog):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
 
-    @busy_dialog
+    @Utils.busy_dialog
     def __init__(self, *args, **kwargs):
         xbmcgui.WindowXMLDialog.__init__(self)
         self.items = kwargs.get('listing')
-        self.listitems = create_listitems(self.items)
+        self.listitems = Utils.create_listitems(self.items)
         self.listitem = None
         self.index = -1
 
@@ -26,7 +28,7 @@ class SelectDialog(xbmcgui.WindowXMLDialog):
         self.list = self.getControl(C_LIST_DETAIL)
         self.getControl(C_LIST_SIMPLE).setVisible(False)
         self.getControl(C_BUTTON_GET_MORE).setVisible(False)
-        self.getControl(C_LABEL_HEADER).setLabel(LANG(32151))
+        self.getControl(C_LABEL_HEADER).setLabel(addon.LANG(32151))
         self.list.addItems(self.listitems)
         self.setFocus(self.list)
 

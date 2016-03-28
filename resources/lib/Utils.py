@@ -22,13 +22,6 @@ import addon
 HOME = xbmcgui.Window(10000)
 
 
-def LANG(label_id):
-    if 31000 <= label_id <= 33000:
-        return addon.ADDON.getLocalizedString(label_id)
-    else:
-        return xbmc.getLocalizedString(label_id)
-
-
 def run_async(func):
     """
     Decorator to run a function in a separate thread
@@ -108,14 +101,14 @@ def check_version():
     check version, open TextViewer if update detected
     """
     if not addon.setting("changelog_version") == addon.VERSION:
-        xbmcgui.Dialog().textviewer(heading=LANG(24036),
+        xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
                                     text=read_from_file(os.path.join(addon.PATH, "changelog.txt"), True))
         addon.set_setting("changelog_version", addon.VERSION)
     if not addon.setting("first_start_infodialog"):
         addon.set_setting("first_start_infodialog", "True")
         xbmcgui.Dialog().ok(heading=addon.NAME,
-                            line1=LANG(32140),
-                            line2=LANG(32141))
+                            line1=addon.LANG(32140),
+                            line2=addon.LANG(32141))
 
 
 def calculate_age(born, died=False):
@@ -139,7 +132,7 @@ def calculate_age(born, died=False):
         if diff_months < 0 or (diff_months == 0 and diff_days < 0):
             base_age -= 1
         elif diff_months == 0 and diff_days == 0 and not died:
-            notify("%s (%i)" % (LANG(32158), base_age))
+            notify("%s (%i)" % (addon.LANG(32158), base_age))
     return base_age
 
 
@@ -147,7 +140,7 @@ def millify(n):
     """
     make large numbers human-readable, return string
     """
-    millnames = [' ', '.000', ' ' + LANG(32000), ' ' + LANG(32001), ' ' + LANG(32002)]
+    millnames = [' ', '.000', ' ' + addon.LANG(32000), ' ' + addon.LANG(32001), ' ' + addon.LANG(32002)]
     if not n or n <= 100:
         return ""
     n = float(n)
@@ -429,7 +422,7 @@ def log(txt):
              level=xbmc.LOGDEBUG)
 
 
-def get_browse_dialog(default="", heading=LANG(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
+def get_browse_dialog(default="", heading=addon.LANG(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
     return xbmcgui.Dialog().browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
 
 

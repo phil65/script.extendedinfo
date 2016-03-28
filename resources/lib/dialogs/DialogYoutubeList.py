@@ -6,6 +6,7 @@
 import xbmcgui
 from ..Utils import *
 from .. import YouTube
+from .. import addon
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from ..VideoPlayer import PLAYER
@@ -13,26 +14,26 @@ from ActionHandler import ActionHandler
 
 ch = ActionHandler()
 
-TRANSLATIONS = {"video": LANG(157),
-                "playlist": LANG(559),
-                "channel": LANG(19029)}
-SORTS = {"video": {"date": LANG(552),
-                   "rating": LANG(563),
-                   "relevance": LANG(32060),
-                   "title": LANG(369),
-                   "viewCount": LANG(567)},
-         "playlist": {"date": LANG(552),
-                      "rating": LANG(563),
-                      "relevance": LANG(32060),
-                      "title": LANG(369),
-                      "videoCount": LANG(32068),
-                      "viewCount": LANG(567)},
-         "channel": {"date": LANG(552),
-                     "rating": LANG(563),
-                     "relevance": LANG(32060),
-                     "title": LANG(369),
-                     "videoCount": LANG(32068),
-                     "viewCount": LANG(567)}}
+TRANSLATIONS = {"video": addon.LANG(157),
+                "playlist": addon.LANG(559),
+                "channel": addon.LANG(19029)}
+SORTS = {"video": {"date": addon.LANG(552),
+                   "rating": addon.LANG(563),
+                   "relevance": addon.LANG(32060),
+                   "title": addon.LANG(369),
+                   "viewCount": addon.LANG(567)},
+         "playlist": {"date": addon.LANG(552),
+                      "rating": addon.LANG(563),
+                      "relevance": addon.LANG(32060),
+                      "title": addon.LANG(369),
+                      "videoCount": addon.LANG(32068),
+                      "viewCount": addon.LANG(567)},
+         "channel": {"date": addon.LANG(552),
+                     "rating": addon.LANG(563),
+                     "relevance": addon.LANG(32060),
+                     "title": addon.LANG(369),
+                     "videoCount": addon.LANG(32068),
+                     "viewCount": addon.LANG(567)}}
 
 
 def get_window(window_type):
@@ -44,7 +45,7 @@ def get_window(window_type):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")
             self.sort = kwargs.get('sort', "relevance")
-            self.sort_label = kwargs.get('sort_label', LANG(32060))
+            self.sort_label = kwargs.get('sort_label', addon.LANG(32060))
             self.order = kwargs.get('order', "desc")
             force = kwargs.get('force', False)
             self.update_content(force_update=force)
@@ -64,7 +65,7 @@ def get_window(window_type):
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
-                                   "typelabel": LANG(19029),
+                                   "typelabel": addon.LANG(19029),
                                    "label": youtube_id}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
@@ -74,43 +75,43 @@ def get_window(window_type):
 
         @ch.click(5002)
         def set_published_filter(self):
-            labels = [LANG(32062), LANG(32063), LANG(32064), LANG(32065), LANG(636)]
+            labels = [addon.LANG(32062), addon.LANG(32063), addon.LANG(32064), addon.LANG(32065), addon.LANG(636)]
             deltas = [1, 7, 31, 365, "custom"]
-            index = xbmcgui.Dialog().select(heading=LANG(32151),
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
             if index == -1:
                 return None
             delta = deltas[index]
             if delta == "custom":
-                delta = xbmcgui.Dialog().input(heading=LANG(32067),
+                delta = xbmcgui.Dialog().input(heading=addon.LANG(32067),
                                                type=xbmcgui.INPUT_NUMERIC)
             if not delta:
                 return None
             d = datetime.datetime.now() - datetime.timedelta(int(delta))
             self.add_filter(key="publishedAfter",
                             value=d.isoformat('T')[:-7] + "Z",
-                            typelabel=LANG(172),
+                            typelabel=addon.LANG(172),
                             label=str(labels[index]))
             self.update()
 
         @ch.click(5003)
         def set_language_filter(self):
             labels = ["en", "de", "fr"]
-            index = xbmcgui.Dialog().select(heading=LANG(32151),
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
             if index == -1:
                 return None
             self.add_filter(key="regionCode",
                             value=labels[index],
-                            typelabel=LANG(248),
+                            typelabel=addon.LANG(248),
                             label=str(labels[index]))
             self.update()
 
         @ch.click(5006)
         def set_dimension_filter(self):
             values = ["2d", "3d", "any"]
-            labels = ["2D", "3D", LANG(593)]
-            index = xbmcgui.Dialog().select(heading=LANG(32151),
+            labels = ["2D", "3D", addon.LANG(593)]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
             if index > -1:
                 self.add_filter(key="videoDimension",
@@ -122,39 +123,39 @@ def get_window(window_type):
         @ch.click(5008)
         def set_duration_filter(self):
             values = ["long", "medium", "short", "any"]
-            labels = [LANG(33013), LANG(601), LANG(33012), LANG(593)]
-            index = xbmcgui.Dialog().select(heading=LANG(32151),
+            labels = [addon.LANG(33013), addon.LANG(601), addon.LANG(33012), addon.LANG(593)]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
             if index > -1:
                 self.add_filter(key="videoDuration",
                                 value=values[index],
-                                typelabel=LANG(180),
+                                typelabel=addon.LANG(180),
                                 label=str(labels[index]))
                 self.update()
 
         @ch.click(5009)
         def set_caption_filter(self):
             values = ["closedCaption", "none", "any"]
-            labels = [LANG(107), LANG(106), LANG(593)]
-            index = xbmcgui.Dialog().select(heading=LANG(287),
+            labels = [addon.LANG(107), addon.LANG(106), addon.LANG(593)]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(287),
                                             list=labels)
             if index > -1:
                 self.add_filter(key="videoCaption",
                                 value=values[index],
-                                typelabel=LANG(287),
+                                typelabel=addon.LANG(287),
                                 label=str(labels[index]))
                 self.update()
 
         @ch.click(5012)
         def set_definition_filter(self):
             values = ["high", "standard", "any"]
-            labels = [LANG(419), LANG(602), LANG(593)]
-            index = xbmcgui.Dialog().select(heading=LANG(169),
+            labels = [addon.LANG(419), addon.LANG(602), addon.LANG(593)]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(169),
                                             list=labels)
             if index > -1:
                 self.add_filter(key="videoDefinition",
                                 value=values[index],
-                                typelabel=LANG(169),
+                                typelabel=addon.LANG(169),
                                 label=str(labels[index]))
                 self.update()
 
@@ -170,7 +171,7 @@ def get_window(window_type):
                 self.type = types[self.type]
             if self.sort not in SORTS[self.type].keys():
                 self.sort = "relevance"
-                self.sort_label = LANG(32060)
+                self.sort_label = addon.LANG(32060)
             self.update()
 
         def update_ui(self):
@@ -185,7 +186,7 @@ def get_window(window_type):
         def get_sort_type(self):
             listitems = [key for key in SORTS[self.type].values()]
             sort_strings = [value for value in SORTS[self.type].keys()]
-            index = xbmcgui.Dialog().select(heading=LANG(32104),
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
                                             list=listitems)
             if index == -1:
                 return None
@@ -196,9 +197,9 @@ def get_window(window_type):
         @ch.action("contextmenu", 500)
         def context_menu(self):
             if self.type == "video":
-                more_vids = "%s [B]%s[/B]" % (LANG(32081), self.listitem.getProperty("channel_title"))
-                selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                    list=[LANG(32069), more_vids])
+                more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.listitem.getProperty("channel_title"))
+                selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+                                                    list=[addon.LANG(32069), more_vids])
                 if selection < 0:
                     return None
                 elif selection == 0:
@@ -223,7 +224,7 @@ def get_window(window_type):
         def fetch_data(self, force=False):
             self.set_filter_label()
             if self.search_str:
-                self.filter_label = LANG(32146) % (self.search_str) + "  " + self.filter_label
+                self.filter_label = addon.LANG(32146) % (self.search_str) + "  " + self.filter_label
             else:
                 self.filter_label = self.filter_label
             return YouTube.search(self.search_str,

@@ -180,10 +180,10 @@ class WindowManager(object):
         """
         from dialogs import DialogActorInfo
         if not actor_id:
-            name = name.split(" " + LANG(20347) + " ")
+            name = name.split(" " + addon.LANG(20347) + " ")
             names = name[0].strip().split(" / ")
             if len(names) > 1:
-                ret = xbmcgui.Dialog().select(heading=LANG(32027),
+                ret = xbmcgui.Dialog().select(heading=addon.LANG(32027),
                                               list=names)
                 if ret == -1:
                     return None
@@ -294,6 +294,6 @@ class WindowManager(object):
             dialog.doModal()
         else:
             self.active_dialog = None
-            notify(LANG(32143))
+            notify(addon.LANG(32143))
 
 wm = WindowManager()

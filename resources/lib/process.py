@@ -327,7 +327,7 @@ def start_info_actions(info, params):
         HOME.setProperty('infodialogs.active', "true")
         search_str = params.get("id", "")
         if not search_str and params.get("search"):
-            result = xbmcgui.Dialog().input(heading=LANG(16017),
+            result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
                 search_str = result

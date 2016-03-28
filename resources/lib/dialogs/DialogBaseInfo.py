@@ -7,6 +7,7 @@ import xbmc
 import xbmcgui
 from ..Utils import *
 from .. import TheMovieDB as tmdb
+from .. import addon
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from .. import YouTube
@@ -83,8 +84,8 @@ class DialogBaseInfo(object):
     def thumbnail_options(self):
         if not self.info.get("dbid"):
             return None
-        selection = xbmcgui.Dialog().select(heading=LANG(22080),
-                                            list=[LANG(32006)])
+        selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
+                                            list=[addon.LANG(32006)])
         if selection == 0:
             media_type = self.getProperty("type")
             params = '"art": {"poster": "%s"}' % self.listitem.getProperty("original")
@@ -95,8 +96,8 @@ class DialogBaseInfo(object):
     def fanart_options(self):
         if not self.info.get("dbid"):
             return None
-        selection = xbmcgui.Dialog().select(heading=LANG(22080),
-                                            list=[LANG(32007)])
+        selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
+                                            list=[addon.LANG(32007)])
         if selection == 0:
             media_type = self.getProperty("type")
             params = '"art": {"fanart": "%s"}' % self.listitem.getProperty("original")
@@ -106,8 +107,8 @@ class DialogBaseInfo(object):
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)
     def download_video(self):
-        selection = xbmcgui.Dialog().select(heading=LANG(22080),
-                                            list=[LANG(33003)])
+        selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
+                                            list=[addon.LANG(33003)])
         if selection == 0:
             import YDStreamExtractor
             vid = YDStreamExtractor.getVideoInfo(self.listitem.getProperty("youtube_id"),
@@ -151,7 +152,7 @@ class DialogBaseInfo(object):
         if "episodes" in info["media"]:
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
-            listitems += [{"label": LANG(19055)}]
+            listitems += [{"label": addon.LANG(19055)}]
         listitem, index = wm.open_selectdialog(listitems=listitems)
         if listitem["mediatype"] == "episode":
             wm.open_episode_info(prev_window=self,

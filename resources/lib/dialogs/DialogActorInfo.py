@@ -6,6 +6,7 @@
 import xbmcgui
 from ..Utils import *
 from .. import ImageTools
+from .. import addon
 from .. import TheMovieDB as tmdb
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
@@ -70,8 +71,8 @@ def get_window(window_type):
         @ch.click(ID_LIST_TV_ROLES)
         @ch.click(ID_LIST_TV_CREW)
         def open_tvshow_dialog(self):
-            selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=[LANG(32148), LANG(32147)])
+            selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+                                                list=[addon.LANG(32148), addon.LANG(32147)])
             if selection == 0:
                 wm.open_tvshow_info(prev_window=self,
                                     tmdb_id=self.listitem.getProperty("id"),
@@ -95,7 +96,7 @@ def get_window(window_type):
 
         @ch.click(ID_CONTROL_PLOT)
         def show_plot(self):
-            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["biography"])
 
         @ch.action("contextmenu", ID_LIST_MOVIE_ROLES)

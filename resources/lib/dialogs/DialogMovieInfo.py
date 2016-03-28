@@ -9,6 +9,7 @@ from ..Utils import *
 from .. import TheMovieDB as tmdb
 from .. import omdb
 from .. import ImageTools
+from .. import addon
 import threading
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
@@ -141,7 +142,7 @@ def get_window(window_type):
         def open_company_list(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
-                        "typelabel": LANG(20388),
+                        "typelabel": addon.LANG(20388),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -150,14 +151,14 @@ def get_window(window_type):
         def show_review(self):
             author = self.listitem.getProperty("author")
             text = "[B]%s[/B][CR]%s" % (author, clean_text(self.listitem.getProperty("content")))
-            xbmcgui.Dialog().textviewer(heading=LANG(207),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
         @ch.click(ID_LIST_KEYWORDS)
         def open_keyword_list(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
-                        "typelabel": LANG(32114),
+                        "typelabel": addon.LANG(32114),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -166,7 +167,7 @@ def get_window(window_type):
         def open_genre_list(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
-                        "typelabel": LANG(135),
+                        "typelabel": addon.LANG(135),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -176,15 +177,15 @@ def get_window(window_type):
             info = self.listitem.getVideoInfoTag()
             filters = [{"id": self.listitem.getProperty("iso_3166_1"),
                         "type": "certification_country",
-                        "typelabel": LANG(32153),
+                        "typelabel": addon.LANG(32153),
                         "label": self.listitem.getProperty("iso_3166_1")},
                        {"id": self.listitem.getProperty("certification"),
                         "type": "certification",
-                        "typelabel": LANG(32127),
+                        "typelabel": addon.LANG(32127),
                         "label": self.listitem.getProperty("certification")},
                        {"id": str(info.getYear()),
                         "type": "year",
-                        "typelabel": LANG(345),
+                        "typelabel": addon.LANG(345),
                         "label": str(info.getYear())}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -198,13 +199,13 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_OPENLIST)
         def show_list_dialog(self):
-            listitems = [LANG(32134), LANG(32135)]
+            listitems = [addon.LANG(32134), addon.LANG(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = tmdb.get_account_lists()
             for item in account_lists:
                 listitems.append("%s (%i)" % (item["name"], item["item_count"]))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(LANG(32136), listitems)
+            index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
             if index == -1:
                 pass
             elif index == 0:
@@ -222,7 +223,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_PLOT)
         def show_plot(self):
-            xbmcgui.Dialog().textviewer(heading=LANG(207),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=self.info["Plot"])
 
         @ch.click(ID_BUTTON_SETRATING)
@@ -237,13 +238,13 @@ def get_window(window_type):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-            listitems.insert(0, LANG(32139))
-            listitems.append(LANG(32138))
+            listitems.insert(0, addon.LANG(32139))
+            listitems.append(addon.LANG(32138))
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-            index = xbmcgui.Dialog().select(heading=LANG(32136),
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == 0:
-                listname = xbmcgui.Dialog().input(heading=LANG(32137),
+                listname = xbmcgui.Dialog().input(heading=addon.LANG(32137),
                                                   type=xbmcgui.INPUT_ALPHANUM)
                 if not listname:
                     return None
@@ -289,16 +290,16 @@ def get_window(window_type):
             imdb_id = str(self.info.get("imdb_id", ""))
             if movie_id:
                 call = "RunScript(script.artwork.downloader,mediatype=movie,%s)"
-                options += [[LANG(413), call % ("mode=gui,dbid=" + movie_id)],
-                            [LANG(14061), call % ("dbid=" + movie_id)],
-                            [LANG(32101), call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
-                            [LANG(32100), call % ("mode=custom,dbid=" + movie_id)]]
+                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + movie_id)],
+                            [addon.LANG(14061), call % ("dbid=" + movie_id)],
+                            [addon.LANG(32101), call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
+                            [addon.LANG(32100), call % ("mode=custom,dbid=" + movie_id)]]
             else:
-                options += [[LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % LANG(32059)]]
+                options += [[addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % addon.LANG(32059)]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
-                options.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
-            options.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-            selection = xbmcgui.Dialog().select(heading=LANG(32133),
+                options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
+            options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+            selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
                                                 list=[i[0] for i in options])
             if selection > -1:
                 for item in options[selection][1].split("||"):
@@ -321,7 +322,7 @@ def get_window(window_type):
 
         def remove_list_dialog(self, account_lists):
             listitems = ["%s (%i)" % (d["name"], d["item_count"]) for d in account_lists]
-            index = xbmcgui.Dialog().select(LANG(32138), listitems)
+            index = xbmcgui.Dialog().select(addon.LANG(32138), listitems)
             if index >= 0:
                 tmdb.remove_list(account_lists[index]["id"])
                 self.update_states()

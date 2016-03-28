@@ -6,8 +6,9 @@
 import xbmc
 import xbmcgui
 from WindowManager import wm
-from Utils import *
+import Utils
 import YDStreamExtractor
+import addon
 
 
 class VideoPlayer(xbmc.Player):
@@ -49,10 +50,10 @@ class VideoPlayer(xbmc.Player):
                       listitem=listitem,
                       window=window)
         else:
-            notify(header=LANG(257),
-                   message="no youtube id found")
+            Utils.notify(header=addon.LANG(257),
+                         message="no youtube id found")
 
-    @busy_dialog
+    @Utils.busy_dialog
     def youtube_info_by_id(self, youtube_id):
         vid = YDStreamExtractor.getVideoInfo(youtube_id,
                                              quality=1)

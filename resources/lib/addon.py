@@ -32,3 +32,10 @@ def bool_setting(setting_name):
 def reload_addon():
     global ADDON
     ADDON = xbmcaddon.Addon()
+
+
+def LANG(label_id):
+    if 31000 <= label_id <= 33000:
+        return ADDON.getLocalizedString(label_id)
+    else:
+        return xbmc.getLocalizedString(label_id)

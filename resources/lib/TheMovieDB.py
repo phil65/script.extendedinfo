@@ -150,7 +150,7 @@ class LoginProvider(object):
 def set_rating_prompt(media_type, media_id, dbid=None):
     if not media_type or not media_id:
         return False
-    rating = xbmcgui.Dialog().select(LANG(32129), [str(float(i * 0.5)) for i in xrange(1, 21)])
+    rating = xbmcgui.Dialog().select(addon.LANG(32129), [str(float(i * 0.5)) for i in xrange(1, 21)])
     if rating == -1:
         return False
     if dbid:
@@ -282,12 +282,12 @@ def get_certification_list(media_type):
 
 
 def add_movie_to_list(movie_id):
-    selection = xbmcgui.Dialog().select(heading=LANG(22080),
-                                        list=[LANG(32083)])
+    selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
+                                        list=[addon.LANG(32083)])
     if selection == 0:
         account_lists = get_account_lists()
         listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-        index = xbmcgui.Dialog().select(LANG(32136), listitems)
+        index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
         change_list_status(list_id=account_lists[index]["id"],
                            movie_id=movie_id,
                            status=True)
@@ -405,7 +405,7 @@ def handle_episodes(results):
     for item in results:
         title = clean_text(item.get("name"))
         if not title:
-            title = u"%s %s" % (LANG(20359), item.get('episode_number'))
+            title = u"%s %s" % (addon.LANG(20359), item.get('episode_number'))
         listitem = {'mediatype': "episode",
                     'title': title,
                     'label': title,
@@ -448,7 +448,7 @@ def handle_seasons(results):
     for item in results:
         season = item.get('season_number')
         listitem = {'mediatype': "season",
-                    'label': LANG(20381) if season == 0 else u"%s %s" % (LANG(20373), season),
+                    'label': addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
                     'season': season,
                     'Premiered': item.get('air_date'),
                     'year': get_year(item.get('air_date'))}
@@ -588,7 +588,7 @@ def get_keyword_id(keyword):
         return False
     if len(response["results"]) > 1:
         names = [item["name"] for item in response["results"]]
-        selection = xbmcgui.Dialog().select(LANG(32114), names)
+        selection = xbmcgui.Dialog().select(addon.LANG(32114), names)
         if selection > -1:
             return response["results"][selection]
     elif response["results"]:
@@ -637,10 +637,10 @@ def get_credit_info(credit_id):
 def get_account_props(account_states):
     props = {}
     if account_states.get("favorite"):
-        props["FavButton_Label"] = LANG(32155)
+        props["FavButton_Label"] = addon.LANG(32155)
         props["favorite"] = "True"
     else:
-        props["FavButton_Label"] = LANG(32154)
+        props["FavButton_Label"] = addon.LANG(32154)
         props["favorite"] = ""
     if account_states["rated"]:
         props["rated"] = str(account_states["rated"]["value"])
@@ -904,9 +904,9 @@ def extended_season_info(tvshow_id, season_number):
     if response.get("name", False):
         title = response["name"]
     elif season_number == "0":
-        title = LANG(20381)
+        title = addon.LANG(20381)
     else:
-        title = "%s %s" % (LANG(20373), season_number)
+        title = "%s %s" % (addon.LANG(20373), season_number)
     season = {'SeasonDescription': clean_text(response["overview"]),
               'Plot': clean_text(response["overview"]),
               'tvshowtitle': tvshow.get('name'),
@@ -993,12 +993,12 @@ def extended_actor_info(actor_id):
 
 
 def translate_status(status):
-    translations = {"released": LANG(32071),
-                    "post production": LANG(32072),
-                    "in production": LANG(32073),
-                    "ended": LANG(32074),
-                    "returning series": LANG(32075),
-                    "planned": LANG(32076)}
+    translations = {"released": addon.LANG(32071),
+                    "post production": addon.LANG(32072),
+                    "in production": addon.LANG(32073),
+                    "ended": addon.LANG(32074),
+                    "returning series": addon.LANG(32075),
+                    "planned": addon.LANG(32076)}
     if status:
         return translations.get(status.lower(), status)
 

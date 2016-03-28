@@ -89,8 +89,8 @@ class DialogBaseList(object):
     def reset_filters(self):
         if len(self.filters) > 1:
             listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
-            listitems.append(LANG(32078))
-            index = xbmcgui.Dialog().select(heading=LANG(32077),
+            listitems.append(addon.LANG(32078))
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32077),
                                             list=listitems)
             if index == -1:
                 return None
@@ -107,7 +107,7 @@ class DialogBaseList(object):
     @ch.click(C_BUTTON_SEARCH)
     def open_search(self):
         if addon.bool_setting("classic_search"):
-            result = xbmcgui.Dialog().input(heading=LANG(16017),
+            result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if result and result > -1:
                 self.search(result.decode("utf-8"))
@@ -165,7 +165,7 @@ class DialogBaseList(object):
         self.setProperty("Sort_Label", self.sort_label)
         self.setProperty("ArrowDown", "True" if self.page != self.total_pages else "")
         self.setProperty("ArrowUp", "True" if self.page > 1 else "")
-        self.setProperty("Order_Label", LANG(584) if self.order == "asc" else LANG(585))
+        self.setProperty("Order_Label", addon.LANG(584) if self.order == "asc" else addon.LANG(585))
 
     def go_to_next_page(self):
         self.get_column()
@@ -213,8 +213,8 @@ class DialogBaseList(object):
             self.filters[index]["id"] = str(value)
             self.filters[index]["label"] = str(label)
             return None
-        ret = xbmcgui.Dialog().yesno(heading=LANG(587),
-                                     line1=LANG(32106),
+        ret = xbmcgui.Dialog().yesno(heading=addon.LANG(587),
+                                     line1=addon.LANG(32106),
                                      nolabel="OR",
                                      yeslabel="AND")
         if ret:

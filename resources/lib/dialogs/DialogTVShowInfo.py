@@ -85,8 +85,8 @@ def get_window(window_type):
         @ch.click(ID_LIST_CREW)
         @ch.click(ID_LIST_ACTORS)
         def credit_dialog(self):
-            selection = xbmcgui.Dialog().select(heading=LANG(32151),
-                                                list=[LANG(32009), LANG(32147)])
+            selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+                                                list=[addon.LANG(32009), addon.LANG(32147)])
             if selection == 0:
                 wm.open_actor_info(prev_window=self,
                                    actor_id=self.listitem.getProperty("id"))
@@ -111,7 +111,7 @@ def get_window(window_type):
         def open_company_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
-                        "typelabel": LANG(20388),
+                        "typelabel": addon.LANG(20388),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -120,7 +120,7 @@ def get_window(window_type):
         def open_keyword_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
-                        "typelabel": LANG(32114),
+                        "typelabel": addon.LANG(32114),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
@@ -129,7 +129,7 @@ def get_window(window_type):
         def open_genre_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
-                        "typelabel": LANG(135),
+                        "typelabel": addon.LANG(135),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
@@ -139,7 +139,7 @@ def get_window(window_type):
         def open_network_info(self):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_networks",
-                        "typelabel": LANG(32152),
+                        "typelabel": addon.LANG(32152),
                         "label": self.listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
@@ -151,16 +151,16 @@ def get_window(window_type):
             title = self.info.get("tvshowtitle", "")
             if self.dbid:
                 call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
-                options += [[LANG(413), call % ("mode=gui,dbid=" + self.dbid)],
-                            [LANG(14061), call % ("dbid=" + self.dbid)],
-                            [LANG(32101), call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
-                            [LANG(32100), call % ("mode=custom,dbid=" + self.dbid)]]
+                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + self.dbid)],
+                            [addon.LANG(14061), call % ("dbid=" + self.dbid)],
+                            [addon.LANG(32101), call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
+                            [addon.LANG(32100), call % ("mode=custom,dbid=" + self.dbid)]]
             else:
-                options += [[LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
+                options += [[addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
-                options.append([LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
-            options.append([LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-            selection = xbmcgui.Dialog().select(heading=LANG(32133),
+                options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
+            options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+            selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
                                                 list=[item[0] for item in options])
             if selection == -1:
                 return None
@@ -176,8 +176,8 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_OPENLIST)
         def open_list(self):
-            index = xbmcgui.Dialog().select(heading=LANG(32136),
-                                            list=[LANG(32144), LANG(32145)])
+            index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
+                                            list=[addon.LANG(32144), addon.LANG(32145)])
             if index == 0:
                 wm.open_video_list(prev_window=self,
                                    media_type="tv",
@@ -202,7 +202,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_PLOT)
         def open_text(self):
-            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["Plot"])
 
         @ch.click(ID_LIST_VIDEOS)

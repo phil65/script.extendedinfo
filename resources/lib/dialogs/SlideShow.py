@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from ..Utils import *
+import Utils
 from .BaseClasses import DialogXML
 
 
@@ -12,15 +12,15 @@ class SlideShow(DialogXML):
     C_LIST_PICTURES = 5000
 
     def __init__(self, *args, **kwargs):
-        self.imagelist = kwargs.get('listitems')
+        self.images = kwargs.get('listitems')
         self.index = kwargs.get('index')
         self.image = kwargs.get('image')
         self.action = None
 
     def onInit(self):
         super(SlideShow, self).onInit()
-        if self.imagelist:
-            self.getControl(self.C_LIST_PICTURES).addItems(create_listitems(self.imagelist))
+        if self.images:
+            self.getControl(self.C_LIST_PICTURES).addItems(Utils.create_listitems(self.images))
             self.getControl(self.C_LIST_PICTURES).selectItem(self.index)
             self.setFocusId(self.C_LIST_PICTURES)
 

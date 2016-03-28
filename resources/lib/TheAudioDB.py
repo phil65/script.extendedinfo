@@ -26,7 +26,7 @@ def handle_albums(results):
         elif album.get('strDescription'):
             desc = album['strDescription']
         if album.get('strReview'):
-            desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (LANG(185), album['strReview'])
+            desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (addon.LANG(185), album['strReview'])
         album = {'artist': album['strArtist'],
                  'mbid': album['strMusicBrainzID'],
                  'id': album['idAlbum'],

@@ -5,9 +5,10 @@
 
 import xbmc
 import xbmcgui
-from ..Utils import *
+import Utils
 from .. import TheMovieDB as tmdb
 from .. import ImageTools
+from .. import addon
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
@@ -28,7 +29,7 @@ def get_window(window_type):
 
     class DialogEpisodeInfo(DialogBaseInfo, window_type):
 
-        @busy_dialog
+        @Utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
             self.type = "Episode"
@@ -47,10 +48,10 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()
-            pass_dict_to_skin(data=self.info,
-                              debug=False,
-                              precache=False,
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.info,
+                                    debug=False,
+                                    precache=False,
+                                    window_id=self.window_id)
             super(DialogEpisodeInfo, self).update_states()
             self.get_youtube_vids("%s tv" % (self.info['title']))
             self.fill_lists()
@@ -67,7 +68,7 @@ def get_window(window_type):
 
         @ch.click(ID_CONTROL_PLOT)
         def open_text(self):
-            xbmcgui.Dialog().textviewer(heading=LANG(32037),
+            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["Plot"])
 
         @ch.click(ID_CONTROL_SETRATING)

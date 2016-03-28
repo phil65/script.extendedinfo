@@ -81,14 +81,14 @@ class Main:
 @plugin.route('/rotten_tomatoes')
 def rotten_tomatoes():
     xbmcplugin.setPluginCategory(plugin.handle, "Rotten Tomatoes")
-    items = {"intheatermovies": "%s" % LANG(32042),
-             "boxofficemovies": "%s" % LANG(32055),
-             "openingmovies": "%s" % LANG(32048),
-             "comingsoonmovies": "%s" % LANG(32043),
-             "toprentalmovies": "%s" % LANG(32056),
-             "currentdvdmovies": "%s" % LANG(32049),
-             "newdvdmovies": "%s" % LANG(32053),
-             "upcomingdvdmovies": "%s" % LANG(32054)}
+    items = {"intheatermovies": "%s" % addon.LANG(32042),
+             "boxofficemovies": "%s" % addon.LANG(32055),
+             "openingmovies": "%s" % addon.LANG(32048),
+             "comingsoonmovies": "%s" % addon.LANG(32043),
+             "toprentalmovies": "%s" % addon.LANG(32056),
+             "currentdvdmovies": "%s" % addon.LANG(32049),
+             "newdvdmovies": "%s" % addon.LANG(32053),
+             "upcomingdvdmovies": "%s" % addon.LANG(32054)}
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
@@ -100,19 +100,19 @@ def rotten_tomatoes():
 @plugin.route('/tmdb')
 def tmdb():
     xbmcplugin.setPluginCategory(plugin.handle, "TheMovieDB")
-    items = {"incinemamovies": LANG(32042),
-             "upcomingmovies": LANG(32043),
-             "topratedmovies": LANG(32046),
-             "popularmovies": LANG(32044),
-             "accountlists": LANG(32045),
-             "starredmovies": LANG(32134),
-             "ratedmovies": LANG(32135),
-             "airingtodaytvshows": LANG(32038),
-             "onairtvshows": LANG(32039),
-             "topratedtvshows": LANG(32040),
-             "populartvshows": LANG(32041),
-             "starredtvshows": LANG(32144),
-             "ratedtvshows": LANG(32145)}
+    items = {"incinemamovies": addon.LANG(32042),
+             "upcomingmovies": addon.LANG(32043),
+             "topratedmovies": addon.LANG(32046),
+             "popularmovies": addon.LANG(32044),
+             "accountlists": addon.LANG(32045),
+             "starredmovies": addon.LANG(32134),
+             "ratedmovies": addon.LANG(32135),
+             "airingtodaytvshows": addon.LANG(32038),
+             "onairtvshows": addon.LANG(32039),
+             "topratedtvshows": addon.LANG(32040),
+             "populartvshows": addon.LANG(32041),
+             "starredtvshows": addon.LANG(32144),
+             "ratedtvshows": addon.LANG(32145)}
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
@@ -124,16 +124,16 @@ def tmdb():
 @plugin.route('/trakt')
 def trakt():
     xbmcplugin.setPluginCategory(plugin.handle, "Trakt")
-    items = {"trendingmovies": LANG(32047),
+    items = {"trendingmovies": addon.LANG(32047),
              "traktpopularmovies": "Most popular movies",
              "mostplayedmovies": "Most played movies",
              "mostwatchedmovies": "Most watched movies",
              "mostcollectedmovies": "Most collected movies",
              "mostanticipatedmovies": "Most anticipated movies",
              "traktboxofficemovies": "Box office movies",
-             "airingepisodes": LANG(32028),
-             "premiereepisodes": LANG(32029),
-             "trendingshows": LANG(32032)}
+             "airingepisodes": addon.LANG(32028),
+             "premiereepisodes": addon.LANG(32029),
+             "trendingshows": addon.LANG(32032)}
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
