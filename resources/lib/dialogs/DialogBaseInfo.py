@@ -35,8 +35,8 @@ class DialogBaseInfo(object):
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
-        HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
-        HOME.setProperty("infobackground", self.info.get('fanart', ""))
+        addon.set_global("ImageColor", self.info.get('ImageColor', ""))
+        addon.set_global("infobackground", self.info.get('fanart', ""))
         self.setProperty("type", self.type)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 

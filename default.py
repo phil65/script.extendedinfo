@@ -14,7 +14,7 @@ class Main:
 
     def __init__(self):
         xbmc.log("version %s started" % addon.VERSION)
-        HOME.setProperty("extendedinfo_running", "true")
+        addon.set_global("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
             listitems = start_info_actions(info, self.params)
@@ -23,11 +23,11 @@ class Main:
                               prefix=self.params.get("prefix", ""),
                               limit=self.params.get("limit", 20))
         if not self.infos:
-            HOME.setProperty('infodialogs.active', "true")
+            addon.set_global('infodialogs.active', "true")
             from resources.lib.WindowManager import wm
             wm.open_video_list()
-            HOME.clearProperty('infodialogs.active')
-        HOME.clearProperty("extendedinfo_running")
+            addon.clear_global('infodialogs.active')
+        addon.clear_global("extendedinfo_running")
 
     def _parse_argv(self):
         self.infos = []

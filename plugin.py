@@ -24,7 +24,7 @@ class Main:
 
     def __init__(self):
         xbmc.log("version %s started" % addon.VERSION)
-        HOME.setProperty("extendedinfo_running", "true")
+        addon.set_global("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
             listitems = process.start_info_actions(info, self.params)
@@ -56,7 +56,7 @@ class Main:
             break
         else:
             plugin.run()
-        HOME.clearProperty("extendedinfo_running")
+        addon.clear_global("extendedinfo_running")
 
     def _parse_argv(self):
         args = sys.argv[2][1:]

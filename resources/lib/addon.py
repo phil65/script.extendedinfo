@@ -6,6 +6,7 @@
 import xbmcaddon
 import xbmc
 import os
+import xbmcgui
 
 ADDON = xbmcaddon.Addon()
 ID = ADDON.getAddonInfo('id')
@@ -15,6 +16,7 @@ PATH = ADDON.getAddonInfo('path').decode("utf-8")
 MEDIA_PATH = os.path.join(PATH, "resources", "skins", "Default", "media")
 VERSION = ADDON.getAddonInfo('version')
 DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % ID).decode("utf-8")
+HOME = xbmcgui.Window(10000)
 
 
 def setting(setting_name):
@@ -39,3 +41,19 @@ def LANG(label_id):
         return ADDON.getLocalizedString(label_id)
     else:
         return xbmc.getLocalizedString(label_id)
+
+
+def set_global(setting_name, setting_value):
+    HOME.setProperty(setting_name, setting_value)
+
+
+def get_global(setting_name):
+    HOME.getProperty(setting_name)
+
+
+def clear_global(setting_name):
+    HOME.clearProperty(setting_name)
+
+
+def clear_globals():
+    HOME.clearProperties()

@@ -19,8 +19,6 @@ import datetime
 from functools import wraps
 import addon
 
-HOME = xbmcgui.Window(10000)
-
 
 def run_async(func):
     """
@@ -252,10 +250,10 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
         cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH))
     path = os.path.join(cache_path, hashed_url + ".txt")
     cache_seconds = int(cache_days * 86400.0)
-    prop_time = HOME.getProperty(hashed_url + "_timestamp")
+    prop_time = addon.get_global(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
         try:
-            prop = json.loads(HOME.getProperty(hashed_url))
+            prop = json.loads(addon.get_global(hashed_url))
             log("prop load for %s. time: %f" % (url, time.time() - now))
             if prop:
                 return prop
@@ -275,8 +273,8 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log(response)
             results = read_from_file(path) if xbmcvfs.exists(path) else []
     if results:
-        HOME.setProperty(hashed_url + "_timestamp", str(now))
-        HOME.setProperty(hashed_url, json.dumps(results))
+        addon.set_global(hashed_url + "_timestamp", str(now))
+        addon.set_global(hashed_url, json.dumps(results))
         return results
     else:
         return []
@@ -531,9 +529,9 @@ def pass_list_to_skin(name, data, prefix="", handle=None, limit=False):
     if not handle:
         set_window_props(name, data, prefix)
         return None
-    HOME.clearProperty(name)
+    addon.clear_global(name)
     if data:
-        HOME.setProperty(name + ".Count", str(len(data)))
+        addon.set_global(name + ".Count", str(len(data)))
         items = create_listitems(data)
         items = [(i.getProperty("path"), i, bool(i.getProperty("directory"))) for i in items]
         xbmcplugin.addDirectoryItems(handle=handle,
@@ -544,20 +542,20 @@ def pass_list_to_skin(name, data, prefix="", handle=None, limit=False):
 
 def set_window_props(name, data, prefix="", debug=False):
     if not data:
-        HOME.setProperty('%s%s.Count' % (prefix, name), '0')
+        addon.set_global('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
         return None
     for (count, result) in enumerate(data):
         for (key, value) in result.iteritems():
             value = unicode(value)
-            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
             if debug:
                 log('%s%s.%i.%s --> %s' % (prefix, name, count + 1, key, value))
         for key, value in result.get("properties", {}).iteritems():
             if not value:
                 continue
-            HOME.setProperty('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
-    HOME.setProperty('%s%s.Count' % (prefix, name), str(len(data)))
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+    addon.set_global('%s%s.Count' % (prefix, name), str(len(data)))
 
 
 def create_listitems(data=None, preload_images=0):

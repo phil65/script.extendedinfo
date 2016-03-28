@@ -3,7 +3,7 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-from Utils import *
+import Utils
 import xbmc
 import xbmcgui
 import xbmcvfs
@@ -44,7 +44,7 @@ class WindowManager(object):
 
     def __init__(self):
         self.active_dialog = None
-        self.saved_background = HOME.getProperty("infobackground")
+        self.saved_background = addon.get_global("infobackground")
 
     def add_to_stack(self, window):
         """
@@ -61,10 +61,10 @@ class WindowManager(object):
             xbmc.sleep(300)
             self.active_dialog.doModal()
         else:
-            HOME.setProperty("infobackground", self.saved_background)
+            addon.set_global("infobackground", self.saved_background)
 
     def cancel(self, window):
-        HOME.setProperty("infobackground", self.saved_background)
+        addon.set_global("infobackground", self.saved_background)
         window.close()
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None,
@@ -220,7 +220,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        check_version()
+        Utils.check_version()
         browser_class = DialogVideoList.get_window(BaseClasses.DialogXML)
         dialog = browser_class(LIST_DIALOG_FILE,
                                addon.PATH,
@@ -288,13 +288,13 @@ class WindowManager(object):
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             self.active_dialog = dialog
-            check_version()
+            Utils.check_version()
             if prev_window:
                 self.add_to_stack(prev_window)
                 prev_window.close()
             dialog.doModal()
         else:
             self.active_dialog = None
-            notify(addon.LANG(32143))
+            Utils.notify(addon.LANG(32143))
 
 wm = WindowManager()
