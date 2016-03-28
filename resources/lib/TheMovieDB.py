@@ -515,7 +515,8 @@ def handle_images(results):
         image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
             image['title'] = item["media"].get("title")
-            image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
+            if item["media"].get("poster_path"):
+                image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
         images.append(image)
     return images
 
