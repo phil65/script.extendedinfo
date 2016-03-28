@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from Utils import *
+import addon
 from LocalDB import local_db
 import re
 import urllib2
@@ -186,7 +187,7 @@ def set_rating(media_type, media_id, rating):
                            params=params,
                            values='{"value": %.1f}' % rating)
     if results:
-        notify(ADDON_NAME, results["status_message"])
+        notify(addon.NAME, results["status_message"])
 
 
 def send_request(url, params, values, delete=False):
@@ -219,7 +220,7 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
                            params=params,
                            values=values)
     if results:
-        notify(ADDON_NAME, results["status_message"])
+        notify(addon.NAME, results["status_message"])
 
 
 def create_list(list_name):
@@ -232,7 +233,7 @@ def create_list(list_name):
                            params={"session_id": Login.get_session_id()},
                            values=values)
     if results:
-        notify(ADDON_NAME, results["status_message"])
+        notify(addon.NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -242,7 +243,7 @@ def remove_list(list_id):
                            values={'media_id': list_id},
                            delete=True)
     if results:
-        notify(ADDON_NAME, results["status_message"])
+        notify(addon.NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -252,7 +253,7 @@ def change_list_status(list_id, movie_id, status):
                            params={"session_id": Login.get_session_id()},
                            values={'media_id': movie_id})
     if results:
-        notify(ADDON_NAME, results["status_message"])
+        notify(addon.NAME, results["status_message"])
 
 
 def get_account_lists(cache_time=0):

@@ -9,6 +9,7 @@ import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 from Utils import *
 import LocalDB
+import addon
 import YouTube
 import Trakt
 import RottenTomatoes
@@ -446,8 +447,8 @@ def start_info_actions(info, params):
     elif info == 'deletecache':
         HOME.clearProperties()
         import shutil
-        for rel_path in os.listdir(ADDON_DATA_PATH):
-            path = os.path.join(ADDON_DATA_PATH, rel_path)
+        for rel_path in os.listdir(addon.DATA_PATH):
+            path = os.path.join(addon.DATA_PATH, rel_path)
             try:
                 if os.path.isdir(path):
                     shutil.rmtree(path)

@@ -5,7 +5,6 @@
 
 from Utils import *
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcvfs
 import os
@@ -14,20 +13,16 @@ from dialogs import BaseClasses
 from LocalDB import local_db
 
 import TheMovieDB
+import addon
 
-ADDON = xbmcaddon.Addon()
-ADDON_ID = ADDON.getAddonInfo('id')
-ADDON_ICON = ADDON.getAddonInfo('icon')
-ADDON_NAME = ADDON.getAddonInfo('name')
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-INFO_DIALOG_FILE_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (ADDON_NAME)
-LIST_DIALOG_FILE_CLASSIC = u'script-%s-VideoList.xml' % (ADDON_NAME)
-ACTOR_DIALOG_FILE_CLASSIC = u'script-%s-DialogInfo.xml' % (ADDON_NAME)
+INFO_DIALOG_FILE_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
+LIST_DIALOG_FILE_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
+ACTOR_DIALOG_FILE_CLASSIC = u'script-%s-DialogInfo.xml' % (addon.NAME)
 if SETTING("force_native_layout") == "true":
-    INFO_DIALOG_FILE = u'script-%s-DialogVideoInfo-classic.xml' % (ADDON_NAME)
-    LIST_DIALOG_FILE = u'script-%s-VideoList-classic.xml' % (ADDON_NAME)
-    ACTOR_DIALOG_FILE = u'script-%s-DialogInfo-classic.xml' % (ADDON_NAME)
-    path = os.path.join(ADDON_PATH, "resources", "skins", "Default", "1080i")
+    INFO_DIALOG_FILE = u'script-%s-DialogVideoInfo-classic.xml' % (addon.NAME)
+    LIST_DIALOG_FILE = u'script-%s-VideoList-classic.xml' % (addon.NAME)
+    ACTOR_DIALOG_FILE = u'script-%s-DialogInfo-classic.xml' % (addon.NAME)
+    path = os.path.join(addon.PATH, "resources", "skins", "Default", "1080i")
     if not xbmcvfs.exists(os.path.join(path, INFO_DIALOG_FILE)):
         xbmcvfs.copy(strSource=os.path.join(path, INFO_DIALOG_FILE_CLASSIC),
                      strDestnation=os.path.join(path, INFO_DIALOG_FILE))
@@ -47,9 +42,8 @@ class WindowManager(object):
     window_stack = []
 
     def __init__(self):
-        self.reopen_window = False
-        self.last_control = None
         self.active_dialog = None
+        self.saved_background = HOME.getProperty("infobackground")
 
     def add_to_stack(self, window):
         """
@@ -65,12 +59,12 @@ class WindowManager(object):
             self.active_dialog = self.window_stack.pop()
             xbmc.sleep(300)
             self.active_dialog.doModal()
-        elif self.reopen_window:
-            xbmc.sleep(600)
-            xbmc.executebuiltin("Action(Info)")
-            if self.last_control:
-                xbmc.sleep(50)
-                xbmc.executebuiltin("SetFocus(%s)" % self.last_control)
+        else:
+            HOME.setProperty("infobackground", self.saved_background)
+
+    def cancel(self, window):
+        HOME.setProperty("infobackground", self.saved_background)
+        window.close()
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None,
                         name=None, imdb_id=None):
@@ -86,7 +80,7 @@ class WindowManager(object):
                                                     name=name)
         movie_class = DialogMovieInfo.get_window(BaseClasses.DialogXML)
         dialog = movie_class(INFO_DIALOG_FILE,
-                             ADDON_PATH,
+                             addon.PATH,
                              id=movie_id,
                              dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -118,7 +112,7 @@ class WindowManager(object):
                                               media_type="tv")
         tvshow_class = DialogTVShowInfo.get_window(BaseClasses.DialogXML)
         dialog = tvshow_class(INFO_DIALOG_FILE,
-                              ADDON_PATH,
+                              addon.PATH,
                               tmdb_id=tmdb_id,
                               dbid=dbid)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -152,7 +146,7 @@ class WindowManager(object):
 
         season_class = DialogSeasonInfo.get_window(BaseClasses.DialogXML)
         dialog = season_class(INFO_DIALOG_FILE,
-                              ADDON_PATH,
+                              addon.PATH,
                               id=tvshow_id,
                               season=season,
                               dbid=dbid)
@@ -173,7 +167,7 @@ class WindowManager(object):
                                                 media_type="tv",
                                                 cache_days=7)
         dialog = ep_class(INFO_DIALOG_FILE,
-                          ADDON_PATH,
+                          addon.PATH,
                           show_id=tvshow_id,
                           season=season,
                           episode=episode,
@@ -206,7 +200,7 @@ class WindowManager(object):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
         actor_class = DialogActorInfo.get_window(BaseClasses.DialogXML)
         dialog = actor_class(ACTOR_DIALOG_FILE,
-                             ADDON_PATH,
+                             addon.PATH,
                              id=actor_id)
         xbmc.executebuiltin("Dialog.Close(busydialog)")
         self.open_dialog(dialog, prev_window)
@@ -228,7 +222,7 @@ class WindowManager(object):
         check_version()
         browser_class = DialogVideoList.get_window(BaseClasses.DialogXML)
         dialog = browser_class(LIST_DIALOG_FILE,
-                               ADDON_PATH,
+                               addon.PATH,
                                listitems=listitems,
                                color=color,
                                filters=filters,
@@ -258,7 +252,7 @@ class WindowManager(object):
         else:
             color = "FFFFFFFF"
         youtube_class = DialogYoutubeList.get_window(BaseClasses.WindowXML)
-        dialog = youtube_class(u'script-%s-YoutubeList.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = youtube_class(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
                                search_str=search_str,
                                color=color,
                                filters=filters,
@@ -274,7 +268,7 @@ class WindowManager(object):
         open slideshow dialog for single image
         """
         from dialogs import SlideShow
-        dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % ADDON_NAME, ADDON_PATH,
+        dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % addon.NAME, addon.PATH,
                                      listitems=listitems,
                                      index=index)
         dialog.doModal()
@@ -285,7 +279,7 @@ class WindowManager(object):
         open selectdialog, return listitem dict and index
         """
         from dialogs.SelectDialog import SelectDialog
-        w = SelectDialog('DialogSelect.xml', ADDON_PATH,
+        w = SelectDialog('DialogSelect.xml', addon.PATH,
                          listing=listitems)
         w.doModal()
         return w.listitem, w.index
@@ -293,10 +287,6 @@ class WindowManager(object):
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             self.active_dialog = dialog
-            if xbmc.getCondVisibility("Window.IsVisible(movieinformation)"):
-                self.reopen_window = True
-                self.last_control = get_infolabel("System.CurrentControlId")
-                xbmc.executebuiltin("Dialog.Close(movieinformation)")
             check_version()
             if prev_window:
                 self.add_to_stack(prev_window)

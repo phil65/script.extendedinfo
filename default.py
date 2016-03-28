@@ -6,13 +6,14 @@
 import sys
 import xbmc
 from resources.lib.process import start_info_actions
+from resources.lib import addon
 from resources.lib.Utils import *
 
 
 class Main:
 
     def __init__(self):
-        xbmc.log("version %s started" % ADDON_VERSION)
+        xbmc.log("version %s started" % addon.VERSION)
         HOME.setProperty("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:

@@ -17,6 +17,7 @@ ID_LIST_VIDEOS = 1150
 ID_LIST_IMAGES = 1250
 ID_LIST_BACKDROPS = 1350
 
+
 class DialogBaseInfo(object):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
@@ -34,9 +35,9 @@ class DialogBaseInfo(object):
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
         HOME.setProperty("ImageColor", self.info.get('ImageColor', ""))
+        HOME.setProperty("infobackground", self.info.get('fanart', ""))
         self.setProperty("type", self.type)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
-        HOME.setProperty("ExtendedInfo_fanart", self.info.get("fanart", ""))
 
     def onAction(self, action):
         ch.serve_action(action, self.getFocusId(), self)
@@ -125,7 +126,7 @@ class DialogBaseInfo(object):
 
     @ch.action("previousmenu", "*")
     def exit_script(self):
-        self.close()
+        wm.cancel(self)
 
     @run_async
     def get_youtube_vids(self, search_str):

@@ -5,7 +5,6 @@
 
 import urllib
 import xbmc
-import xbmcaddon
 import xbmcgui
 import xbmcvfs
 import xbmcplugin
@@ -18,21 +17,15 @@ import re
 import threading
 import datetime
 from functools import wraps
+import addon
 
-ADDON = xbmcaddon.Addon()
-ADDON_ID = ADDON.getAddonInfo('id')
-ADDON_ICON = ADDON.getAddonInfo('icon')
-ADDON_NAME = ADDON.getAddonInfo('name')
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-ADDON_VERSION = ADDON.getAddonInfo('version')
-ADDON_DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % ADDON_ID).decode("utf-8")
 HOME = xbmcgui.Window(10000)
-SETTING = ADDON.getSetting
+SETTING = addon.ADDON.getSetting
 
 
 def LANG(label_id):
     if 31000 <= label_id <= 33000:
-        return ADDON.getLocalizedString(label_id)
+        return addon.ADDON.getLocalizedString(label_id)
     else:
         return xbmc.getLocalizedString(label_id)
 
@@ -115,13 +108,13 @@ def check_version():
     """
     check version, open TextViewer if update detected
     """
-    if not SETTING("changelog_version") == ADDON_VERSION:
+    if not SETTING("changelog_version") == addon.VERSION:
         xbmcgui.Dialog().textviewer(heading=LANG(24036),
-                                    text=read_from_file(os.path.join(ADDON_PATH, "changelog.txt"), True))
-        ADDON.setSetting("changelog_version", ADDON_VERSION)
+                                    text=read_from_file(os.path.join(addon.PATH, "changelog.txt"), True))
+        addon.ADDON.setSetting("changelog_version", addon.VERSION)
     if not SETTING("first_start_infodialog"):
-        ADDON.setSetting("first_start_infodialog", "True")
-        xbmcgui.Dialog().ok(heading=ADDON_NAME,
+        addon.ADDON.setSetting("first_start_infodialog", "True")
+        xbmcgui.Dialog().ok(heading=addon.NAME,
                             line1=LANG(32140),
                             line2=LANG(32141))
 
@@ -269,9 +262,9 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, folder))
+        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH, folder))
     else:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH))
+        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH))
     path = os.path.join(cache_path, hashed_url + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     prop_time = HOME.getProperty(hashed_url + "_timestamp")
@@ -432,7 +425,7 @@ def get_weather_images():
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8", 'ignore')
-    message = u'%s: %s' % (ADDON_ID, txt)
+    message = u'%s: %s' % (addon.ID, txt)
     xbmc.log(msg=message.encode("utf-8", 'ignore'),
              level=xbmc.LOGDEBUG)
 
@@ -499,7 +492,7 @@ def extract_youtube_id(raw_string):
         return ""
 
 
-def notify(header="", message="", icon=ADDON_ICON, time=5000, sound=True):
+def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
     xbmcgui.Dialog().notification(heading=header,
                                   message=message,
                                   icon=icon,

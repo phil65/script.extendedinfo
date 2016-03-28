@@ -5,6 +5,7 @@
 
 import xbmc
 import xbmcgui
+from .. import addon
 from ..Utils import *
 from .. import TheMovieDB as tmdb
 from DialogBaseList import DialogBaseList
@@ -201,7 +202,7 @@ def get_window(window_type):
                 self.update()
             else:
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % ADDON_NAME, ADDON_PATH,
+                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon.NAME, addon.PATH,
                                          color=self.color,
                                          filters=[],
                                          mode="list",

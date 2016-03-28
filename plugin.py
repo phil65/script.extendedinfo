@@ -9,15 +9,13 @@ import xbmcplugin
 import xbmcgui
 import routing
 import os
-from resources.lib.process import start_info_actions
+from resources.lib import process
+from resources.lib import addon
 from resources.lib.Utils import *
 
-ADDON = xbmcaddon.Addon()
-ADDON_PATH = ADDON.getAddonInfo('path').decode("utf-8")
-MEDIA_PATH = os.path.join(ADDON_PATH, "resources", "skins", "Default", "media")
-MOVIEDB_IMAGE = os.path.join(MEDIA_PATH, "moviedb.png")
-RT_IMAGE = os.path.join(MEDIA_PATH, "rottentomatoes.png")
-TRAKT_IMAGE = os.path.join(MEDIA_PATH, "trakt.png")
+MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
+RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")
+TRAKT_IMAGE = os.path.join(addon.MEDIA_PATH, "trakt.png")
 
 plugin = routing.Plugin()
 
@@ -25,11 +23,11 @@ plugin = routing.Plugin()
 class Main:
 
     def __init__(self):
-        xbmc.log("version %s started" % ADDON_VERSION)
+        xbmc.log("version %s started" % addon.VERSION)
         HOME.setProperty("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
-            listitems = start_info_actions(info, self.params)
+            listitems = process.start_info_actions(info, self.params)
             if info.endswith("shows"):
                 xbmcplugin.setContent(plugin.handle, 'tvshows')
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
