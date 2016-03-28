@@ -5,10 +5,10 @@
 
 import xbmc
 import xbmcgui
-import Utils
+from .. import Utils
+from .. import addon
 from ..WindowManager import wm
 from T9Search import T9Search
-from .. import addon
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
