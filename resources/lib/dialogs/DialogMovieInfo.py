@@ -327,12 +327,12 @@ def get_window(window_type):
                 tmdb.remove_list(account_lists[index]["id"])
                 self.update_states()
 
-        @run_async
+        @Utils.run_async
         def join_omdb_async(self):
             self.omdb_thread.join()
-            pass_dict_to_skin(data=self.omdb_thread.listitems,
-                              prefix="omdb.",
-                              window_id=self.window_id)
+            Utils.pass_dict_to_skin(data=self.omdb_thread.listitems,
+                                    prefix="omdb.",
+                                    window_id=self.window_id)
 
     class SetItemsThread(threading.Thread):
 
