@@ -5,6 +5,7 @@
 
 import xbmc
 import xbmcgui
+
 from .. import Utils
 from .. import addon
 from ..WindowManager import wm

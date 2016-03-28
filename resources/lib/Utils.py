@@ -4,10 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
-import xbmc
-import xbmcgui
-import xbmcvfs
-import xbmcplugin
 import urllib2
 import os
 import time
@@ -17,6 +13,12 @@ import re
 import threading
 import datetime
 from functools import wraps
+
+import xbmc
+import xbmcgui
+import xbmcvfs
+import xbmcplugin
+
 import addon
 
 

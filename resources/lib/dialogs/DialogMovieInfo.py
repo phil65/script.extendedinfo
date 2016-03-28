@@ -3,14 +3,16 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+import threading
+
 import xbmc
 import xbmcgui
+
 from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import omdb
 from .. import ImageTools
 from .. import addon
-import threading
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
