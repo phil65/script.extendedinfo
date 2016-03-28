@@ -8,7 +8,7 @@ import xbmcgui
 from ..Utils import *
 from ..WindowManager import wm
 from T9Search import T9Search
-import addon
+from .. import addon
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()

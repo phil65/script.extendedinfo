@@ -16,7 +16,9 @@ MEDIA_PATH = os.path.join(PATH, "resources", "skins", "Default", "media")
 VERSION = ADDON.getAddonInfo('version')
 DATA_PATH = xbmc.translatePath("special://profile/addon_data/%s" % ID).decode("utf-8")
 
-setting = ADDON.getSetting
+
+def setting(setting_name):
+    return ADDON.getSetting(setting_name)
 
 
 def set_setting(setting_name, string):
@@ -25,3 +27,8 @@ def set_setting(setting_name, string):
 
 def bool_setting(setting_name):
     return ADDON.getSetting(setting_name) == "true"
+
+
+def reload_addon():
+    global ADDON
+    ADDON = xbmcaddon.Addon()
