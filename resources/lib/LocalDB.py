@@ -60,7 +60,7 @@ class LocalDB(object):
                                 "Style": " / ".join(item['style']),
                                 "Mood": " / ".join(item['mood']),
                                 "Instrument": " / ".join(item['instrument']),
-                                "LibraryPath": 'musicdb://artists/' + str(item['artistid']) + '/'})
+                                "LibraryPath": 'musicdb://artists/%s/' % item['artistid']})
         Utils.log('%i of %i artists found in last.FM are in Kodi database' % (len(artists), len(simi_artists)))
         return artists
 
@@ -182,7 +182,7 @@ class LocalDB(object):
                 subs.append(language)
                 db_movie['SubtitleLanguage.%d' % (i + 1)] = language
         db_movie.update(stream_info)
-        return dict((k, v) for k, v in db_movie.iteritems() if v)
+        return {k: v for k, v in db_movie.items() if v}
 
     def handle_tvshows(self, tvshow):
         if addon.setting("infodialog_onclick") != "false":
@@ -201,7 +201,7 @@ class LocalDB(object):
                      'dbid': str(tvshow['tvshowid']),
                      'Rating': str(round(float(tvshow['rating']), 1))}
         db_tvshow.update(tvshow['art'])
-        return dict((k, v) for k, v in db_tvshow.iteritems() if v)
+        return {k: v for k, v in db_tvshow.items() if v}
 
     def get_movie(self, movie_id):
         response = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
@@ -220,18 +220,9 @@ class LocalDB(object):
     def get_albums(self):
         data = Utils.get_kodi_json(method="AudioLibrary.GetAlbums",
                                    params='{"properties": ["title"]}')
-        if "result" in data and "albums" in data['result']:
-            return data['result']['albums']
-        else:
+        if "result" not in data or "albums" not in data['result']:
             return []
-
-    def create_channel_list(self):
-        data = Utils.get_kodi_json(method="PVR.GetChannels",
-                                   params='{"channelgroupid":"alltv", "properties": [ "thumbnail", "locked", "hidden", "channel", "lastplayed" ]}')
-        if 'result' in data and "movies" in data["result"]:
-            return data
-        else:
-            return False
+        return data['result']['albums']
 
     def merge_with_local_movie_info(self, online_list, library_first=True, sortkey=False):
         if not self.movie_titles:
