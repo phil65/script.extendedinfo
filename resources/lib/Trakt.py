@@ -143,8 +143,8 @@ def handle_tvshows(results):
     return shows
 
 
-def get_trending_shows():
-    results = get_data(url='shows/trending',
+def get_shows(show_type):
+    results = get_data(url='shows/%s',
                        params={"extended": "full,images"})
     if not results:
         return []

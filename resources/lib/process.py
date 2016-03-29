@@ -202,7 +202,7 @@ def start_info_actions(info, params):
     elif info == 'premiereepisodes':
         return Trakt.get_calendar_shows("premieres")
     elif info == 'trendingshows':
-        return Trakt.get_trending_shows()
+        return Trakt.get_shows("trending")
     elif info == 'trendingmovies':
         return Trakt.get_movies("trending")
     elif info == 'traktpopularmovies':
@@ -328,8 +328,7 @@ def start_info_actions(info, params):
     elif info == 'youtubebrowser':
         wm.open_youtube_list(search_str=params.get("id", ""))
     elif info == 'moviedbbrowser':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         search_str = params.get("id", "")
@@ -344,8 +343,7 @@ def start_info_actions(info, params):
                            mode="search")
         addon.clear_global('infodialogs.active')
     elif info == 'extendedinfo':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         wm.open_movie_info(movie_id=params.get("id"),
@@ -354,16 +352,14 @@ def start_info_actions(info, params):
                            name=params.get("name"))
         addon.clear_global('infodialogs.active')
     elif info == 'extendedactorinfo':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         wm.open_actor_info(actor_id=params.get("id"),
                            name=params.get("name"))
         addon.clear_global('infodialogs.active')
     elif info == 'extendedtvinfo':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         wm.open_tvshow_info(tmdb_id=params.get("id"),
@@ -373,8 +369,7 @@ def start_info_actions(info, params):
                             name=params.get("name"))
         addon.clear_global('infodialogs.active')
     elif info == 'seasoninfo':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         wm.open_season_info(tvshow=params.get("tvshow"),
@@ -382,8 +377,7 @@ def start_info_actions(info, params):
                             season=params.get("season"))
         addon.clear_global('infodialogs.active')
     elif info == 'extendedepisodeinfo':
-        active = addon.get_global('infodialogs.active')
-        if active:
+        if addon.get_global('infodialogs.active'):
             return None
         addon.set_global('infodialogs.active', "true")
         wm.open_episode_info(tvshow=params.get("tvshow"),
@@ -417,13 +411,6 @@ def start_info_actions(info, params):
             tmdb.set_rating_prompt(media_type=media_type,
                                    media_id=tmdb_id,
                                    dbid=params.get("dbid"))
-    elif info == 'slideshow':
-        window_id = xbmcgui.getCurrentwindow_id()
-        window = xbmcgui.Window(window_id)
-        # focusid = Window.getFocusId()
-        num_items = window.getFocus().getSelectedPosition()
-        for i in xrange(0, num_items):
-            Utils.notify(item.getProperty("Image"))
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)
