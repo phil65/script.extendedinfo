@@ -6,8 +6,8 @@
 import sys
 import xbmc
 from resources.lib.process import start_info_actions
+from resources.lib import Utils
 from resources.lib import addon
-import Utils
 
 
 class Main:
