@@ -2,8 +2,16 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+
 from __future__ import unicode_literals
+
 import time
+import os
+
+import xbmc
+import xbmcgui
+import xbmcplugin
+
 import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
@@ -16,10 +24,6 @@ import RottenTomatoes
 import KodiJson
 from WindowManager import wm
 import VideoPlayer
-import xbmc
-import xbmcgui
-import xbmcplugin
-import os
 
 
 def start_info_actions(info, params):
@@ -256,8 +260,6 @@ def start_info_actions(info, params):
         return LocalDB.local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
         return Utils.get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
-    elif info == 'weather':
-        return Utils.get_weather_images()
     # ACTIONS
     if params.get("handle"):
         xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),

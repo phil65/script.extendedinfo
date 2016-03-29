@@ -225,7 +225,7 @@ def get_http(url=None, headers=False):
     """
     succeed = 0
     if not headers:
-        headers = {'User-agent': 'XBMC/16.0 ( phil65@kodi.tv )'}
+        headers = {'User-agent': 'XBMC/17.0 ( phil65@kodi.tv )'}
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)
@@ -274,12 +274,11 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
             log(response)
             results = read_from_file(path) if xbmcvfs.exists(path) else []
-    if results:
-        addon.set_global(hashed_url + "_timestamp", str(now))
-        addon.set_global(hashed_url, json.dumps(results))
-        return results
-    else:
+    if not results:
         return []
+    addon.set_global(hashed_url + "_timestamp", str(now))
+    addon.set_global(hashed_url, json.dumps(results))
+    return results
 
 
 class FunctionThread(threading.Thread):
@@ -396,17 +395,6 @@ def set_skin_string(name, value):
     xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
 
 
-def get_weather_images():
-    items = []
-    for i in xrange(1, 6):
-        items.append({'label': str(i),
-                      'path': "plugin://script.extendedinfo/?info=action&&id=SetFocus(22222)",
-                      'thumb': get_infolabel("Window(weather).Property(Map.%i.Area)" % i),
-                      'Layer': get_infolabel("Window(weather).Property(Map.%i.Layer)" % i),
-                      'Legend': get_infolabel("Window(weather).Property(Map.%i.Legend)" % i)})
-    return items
-
-
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8", 'ignore')
@@ -498,7 +486,7 @@ def prettyprint(string):
                    separators=(',', ': ')))
 
 
-def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_id=10000):
+def pass_dict_to_skin(data=None, prefix="", window_id=10000):
     window = xbmcgui.Window(window_id)
     if not data:
         return None
@@ -507,8 +495,6 @@ def pass_dict_to_skin(data=None, prefix="", debug=False, precache=False, window_
             continue
         value = unicode(value)
         window.setProperty('%s%s' % (prefix, key), value)
-        if debug:
-            log('%s%s' % (prefix, key) + value)
 
 
 def merge_dict_lists(items, key="job"):
@@ -542,7 +528,7 @@ def pass_list_to_skin(name, data, prefix="", handle=None, limit=False):
     xbmcplugin.endOfDirectory(handle)
 
 
-def set_window_props(name, data, prefix="", debug=False):
+def set_window_props(name, data, prefix=""):
     if not data:
         addon.set_global('%s%s.Count' % (prefix, name), '0')
         log("%s%s.Count = None" % (prefix, name))
@@ -551,8 +537,6 @@ def set_window_props(name, data, prefix="", debug=False):
         for (key, value) in result.iteritems():
             value = unicode(value)
             addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
-            if debug:
-                log('%s%s.%i.%s --> %s' % (prefix, name, count + 1, key, value))
         for key, value in result.get("properties", {}).iteritems():
             if not value:
                 continue
