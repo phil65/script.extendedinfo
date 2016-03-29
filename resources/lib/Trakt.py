@@ -167,7 +167,7 @@ def get_movies(movie_type):
     return handle_movies(results)
 
 
-def get_movies_from_time(movie_type, period="weekly"):
+def get_movies_from_time(movie_type, period="monthly"):
     results = get_data(url='movies/%s/%s' % (movie_type, period),
                        params={"extended": "full,images"})
     if not results:
@@ -189,6 +189,7 @@ def get_similar(media_type, imdb_id):
 
 
 def get_data(url, params=None, cache_days=10):
+    params["limit"] = 20
     params = params if params else {}
     url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
     return Utils.get_JSON_response(url=url,
