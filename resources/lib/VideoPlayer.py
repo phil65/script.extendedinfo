@@ -30,6 +30,7 @@ class VideoPlayer(xbmc.Player):
         if window and window.window_type == "dialog":
             wm.add_to_stack(window)
             window.close()
+        xbmc.executebuiltin("Dialog.Close(movieinformation)")
         super(VideoPlayer, self).play(item=url,
                                       listitem=listitem,
                                       windowed=False,
@@ -69,7 +70,7 @@ class VideoPlayer(xbmc.Player):
     def wait_for_video_end(self):
         xbmc.sleep(500)
         while not self.stopped:
-            xbmc.sleep(200)
+            xbmc.sleep(100)
         self.stopped = False
 
 PLAYER = VideoPlayer()
