@@ -4,8 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-import Utils
-import addon
+
+from .. import Utils
+from .. import addon
 
 C_LIST_SIMPLE = 3
 C_LIST_DETAIL = 6
