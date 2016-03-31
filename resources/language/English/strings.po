@@ -22,10 +22,7 @@ msgid "ExtendedInfo Script"
 msgstr ""
 
 msgctxt "Addon Description"
-msgid ""
-"This script offers various possibilities to display online content inside skins. Used services are themoviedb.org, "
-"theaudiodb.org, rottentomatoes.com, Trakt.TV and a lot more. Can also be used for importing / exporting skin settings,"
-" adding additional fanart stuff to library and cooking eggs. Needs skin support for most functions."
+msgid "This script offers various possibilities to display online content inside skins. Used services are themoviedb.org, theaudiodb.org, rottentomatoes.com, Trakt.TV and a lot more. Can also be used for importing / exporting skin settings, adding additional fanart stuff to library and cooking eggs. Needs skin support for most functions."
 msgstr ""
 
 msgctxt "#32000"
@@ -200,7 +197,7 @@ msgctxt "#32040"
 msgid "Top rated TV shows"
 msgstr ""
 
-#: /plugin.py:62
+#: /plugin.py:62 /plugin.py:137
 msgctxt "#32041"
 msgid "Popular TV shows"
 msgstr ""
@@ -215,7 +212,7 @@ msgctxt "#32043"
 msgid "Upcoming movies"
 msgstr ""
 
-#: /plugin.py:48
+#: /plugin.py:48 /plugin.py:128
 msgctxt "#32044"
 msgid "Popular movies"
 msgstr ""
@@ -267,7 +264,7 @@ msgctxt "#32054"
 msgid "Upcoming DVDs"
 msgstr ""
 
-#: /plugin.py:37
+#: /plugin.py:37 /plugin.py:133
 msgctxt "#32055"
 msgid "Box office"
 msgstr ""
@@ -415,6 +412,46 @@ msgstr ""
 #: /resources/settings.xml:7
 msgctxt "#32084"
 msgid "Use classic keyboard for search"
+msgstr ""
+
+#: /plugin.py:138
+msgctxt "#32085"
+msgid "Anticipated TV shows"
+msgstr ""
+
+#: /plugin.py:139
+msgctxt "#32086"
+msgid "Most played TV shows"
+msgstr ""
+
+#: /plugin.py:140
+msgctxt "#32087"
+msgid "Most collected TV shows"
+msgstr ""
+
+#: /plugin.py:141
+msgctxt "#32088"
+msgid "Most watched TV shows"
+msgstr ""
+
+#: /plugin.py:129
+msgctxt "#32089"
+msgid "Most played movies"
+msgstr ""
+
+#: /plugin.py:130
+msgctxt "#32090"
+msgid "Most watched movies"
+msgstr ""
+
+#: /plugin.py:131
+msgctxt "#32091"
+msgid "Most collected movies"
+msgstr ""
+
+#: /plugin.py:132
+msgctxt "#32092"
+msgid "Anticipated movies"
 msgstr ""
 
 msgctxt "#32099"

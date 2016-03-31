@@ -125,15 +125,20 @@ def tmdb():
 def trakt():
     xbmcplugin.setPluginCategory(plugin.handle, "Trakt")
     items = {"trendingmovies": addon.LANG(32047),
-             "traktpopularmovies": "Most popular movies",
-             "mostplayedmovies": "Most played movies",
-             "mostwatchedmovies": "Most watched movies",
-             "mostcollectedmovies": "Most collected movies",
-             "mostanticipatedmovies": "Most anticipated movies",
-             "traktboxofficemovies": "Box office movies",
+             "traktpopularmovies": addon.LANG(32044),
+             "mostplayedmovies": addon.LANG(32089),
+             "mostwatchedmovies": addon.LANG(32090),
+             "mostcollectedmovies": addon.LANG(32091),
+             "mostanticipatedmovies": addon.LANG(32092),
+             "traktboxofficemovies": addon.LANG(32055),
              "airingepisodes": addon.LANG(32028),
              "premiereepisodes": addon.LANG(32029),
-             "trendingshows": addon.LANG(32032)}
+             "trendingshows": addon.LANG(32032),
+             "popularshows": addon.LANG(32041),
+             "anticipatedshows": addon.LANG(32085),
+             "mostplayedshows": addon.LANG(32086),
+             "mostcollectedshows": addon.LANG(32087),
+             "mostwatchedshows": addon.LANG(32088)}
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key

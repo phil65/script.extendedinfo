@@ -207,6 +207,16 @@ def start_info_actions(info, params):
         return Trakt.get_calendar_shows("premieres")
     elif info == 'trendingshows':
         return Trakt.get_shows("trending")
+    elif info == 'popularshows':
+        return Trakt.get_shows("popular")
+    elif info == 'anticipatedshows':
+        return Trakt.get_shows("anticipated")
+    elif info == 'mostcollectedshows':
+        return Trakt.get_shows_from_time("collected")
+    elif info == 'mostplayedshows':
+        return Trakt.get_shows_from_time("played")
+    elif info == 'mostwatchedshows':
+        return Trakt.get_shows_from_time("watched")
     elif info == 'trendingmovies':
         return Trakt.get_movies("trending")
     elif info == 'traktpopularmovies':

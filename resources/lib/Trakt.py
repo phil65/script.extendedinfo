@@ -144,7 +144,15 @@ def handle_tvshows(results):
 
 
 def get_shows(show_type):
-    results = get_data(url='shows/%s',
+    results = get_data(url='shows/%s' % show_type,
+                       params={"extended": "full,images"})
+    if not results:
+        return []
+    return handle_tvshows(results)
+
+
+def get_shows_from_time(show_type, period="monthly"):
+    results = get_data(url='shows/%s/%s' % (show_type, period),
                        params={"extended": "full,images"})
     if not results:
         return []
