@@ -10,6 +10,7 @@ v5.0.0
 - improved listitem creation
 - better label naming for episodes
 - set plugincategory infolabel
+- some new listings for Trakt
 
 v4.5.3
 - properly set mediatype for listitems
