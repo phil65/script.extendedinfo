@@ -61,7 +61,7 @@ def get_calendar_shows(content):
                                   'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")}
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                                'poster': episode["show"]["images"]["poster"]["full"],
-                               'Banner': episode["show"]["images"]["banner"]["full"],
+                               'banner': episode["show"]["images"]["banner"]["full"],
                                'fanart': episode["show"]["images"]["fanart"]["full"]}
             shows.append(show)
             count += 1
