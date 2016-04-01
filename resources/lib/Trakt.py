@@ -97,6 +97,9 @@ def handle_movies(results):
                                'duration(m)': Utils.format_time(item["runtime"], "m")}
         movie["artwork"] = {'poster': item["images"]["poster"]["full"],
                             'fanart': item["images"]["fanart"]["full"],
+                            'clearlogo': item["images"]["logo"]["full"],
+                            'clearart': item["images"]["clearart"]["full"],
+                            'banner': item["images"]["banner"]["full"],
                             'thumb': item["images"]["poster"]["thumb"]}
         movies.append(movie)
     movies = local_db.merge_with_local_movie_info(online_list=movies,
