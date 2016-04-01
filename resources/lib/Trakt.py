@@ -29,6 +29,7 @@ def get_calendar_shows(content):
     results = get_data(url=url,
                        params={"extended": "full,images"},
                        cache_days=0.3)
+    Utils.prettyprint(results)
     count = 1
     if not results:
         return None
@@ -62,6 +63,8 @@ def get_calendar_shows(content):
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                                'poster': episode["show"]["images"]["poster"]["full"],
                                'banner': episode["show"]["images"]["banner"]["full"],
+                               'clearart': episode["show"]["images"]["clearart"]["full"],
+                               'clearlogo': episode["show"]["images"]["logo"]["full"],
                                'fanart': episode["show"]["images"]["fanart"]["full"]}
             shows.append(show)
             count += 1
@@ -137,7 +140,9 @@ def handle_tvshows(results):
                               'AirShortTime': airs.get("time"),
                               'Watchers': tvshow.get("watchers")}
         show["artwork"] = {'poster': tvshow['show']["images"]["poster"]["full"],
-                           'Banner': tvshow['show']["images"]["banner"]["full"],
+                           'banner': tvshow['show']["images"]["banner"]["full"],
+                           'clearart': tvshow['show']["images"]["clearart"]["full"],
+                           'clearlogo': tvshow['show']["images"]["logo"]["full"],
                            'fanart': tvshow['show']["images"]["fanart"]["full"],
                            'thumb': tvshow['show']["images"]["poster"]["thumb"]}
         shows.append(show)
