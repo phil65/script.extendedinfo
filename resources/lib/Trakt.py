@@ -42,7 +42,7 @@ def get_calendar_shows(content):
                                                           title),
                     'path': PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"],
                     'title': title,
-                    'Premiered': episode["airs_at"],
+                    'Premiered': episode["episode"]["first_aired"],
                     'season': episode["episode"]["season"],
                     'episode': episode["episode"]["number"],
                     'tvshowtitle': episode["show"]["title"],
@@ -51,13 +51,16 @@ def get_calendar_shows(content):
                     'duration': episode["show"]["runtime"] * 60,
                     'Studio': episode["show"]["network"],
                     'Plot': episode["show"]["overview"],
+                    'country': episode["show"]["country"],
                     'status': episode["show"]["status"],
+                    'trailer': episode["show"]["trailer"],
                     'rating': episode["show"]["rating"],
                     'genre': " / ".join(episode["show"]["genres"]),
                     'mpaa': episode["show"]["certification"]}
-            show["properties"] = {'tvdb_id': episode["show"]["ids"]["tvdb"],
-                                  'id': episode["show"]["ids"]["tvdb"],
-                                  'imdb_id': episode["show"]["ids"]["imdb"],
+            show["properties"] = {'tvdb_id': episode["episode"]["ids"]["tvdb"],
+                                  'id': episode["episode"]["ids"]["tvdb"],
+                                  'imdb_id': episode["episode"]["ids"]["imdb"],
+                                  'homepage': episode["show"]["homepage"],
                                   'duration(h)': Utils.format_time(episode["show"]["runtime"], "h"),
                                   'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")}
             show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
@@ -112,39 +115,41 @@ def handle_movies(results):
 
 def handle_tvshows(results):
     shows = []
-    for tvshow in results:
-        airs = tvshow['show'].get("airs", {})
-        path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % tvshow['show']['ids']["tvdb"]
-        show = {'title': tvshow['show']["title"],
-                'label': tvshow['show']["title"],
+    for item in results:
+        airs = item['show'].get("airs", {})
+        path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % item['show']['ids']["tvdb"]
+        show = {'title': item['show']["title"],
+                'label': item['show']["title"],
                 'mediatype': "tvshow",
                 'path': path,
-                'tvshowtitle': tvshow['show']["title"],
-                'duration': tvshow['show']["runtime"] * 60,
-                'year': tvshow['show']["year"],
-                'Premiered': tvshow['show']["first_aired"][:10],
-                'Country': tvshow['show']["country"],
-                'Rating': round(tvshow['show']["rating"], 1),
-                'Votes': tvshow['show']["votes"],
-                'mpaa': tvshow['show']["certification"],
-                'Studio': tvshow['show']["network"],
-                'genre': " / ".join(tvshow['show']["genres"]),
-                'Plot': tvshow['show']["overview"]}
-        show["properties"] = {'id': tvshow['show']['ids']["tmdb"],
-                              'tvdb_id': tvshow['show']['ids']["tvdb"],
-                              'imdb_id': tvshow['show']['ids']["imdb"],
-                              'duration(h)': Utils.format_time(tvshow['show']["runtime"], "h"),
-                              'duration(m)': Utils.format_time(tvshow['show']["runtime"], "m"),
-                              'Status': tvshow['show'].get("status"),
+                'tvshowtitle': item['show']["title"],
+                'duration': item['show']["runtime"] * 60,
+                'year': item['show']["year"],
+                'Premiered': item['show']["first_aired"][:10],
+                'Country': item['show']["country"],
+                'Rating': round(item['show']["rating"], 1),
+                'Votes': item['show']["votes"],
+                'mpaa': item['show']["certification"],
+                'trailer': item["show"]["trailer"],
+                'Status': item['show'].get("status"),
+                'Studio': item['show']["network"],
+                'genre': " / ".join(item['show']["genres"]),
+                'Plot': item['show']["overview"]}
+        show["properties"] = {'id': item['show']['ids']["tmdb"],
+                              'tvdb_id': item['show']['ids']["tvdb"],
+                              'imdb_id': item['show']['ids']["imdb"],
+                              'duration(h)': Utils.format_time(item['show']["runtime"], "h"),
+                              'duration(m)': Utils.format_time(item['show']["runtime"], "m"),
+                              'homepage': item["show"]["homepage"],
                               'AirDay': airs.get("day"),
                               'AirShortTime': airs.get("time"),
-                              'Watchers': tvshow.get("watchers")}
-        show["artwork"] = {'poster': tvshow['show']["images"]["poster"]["full"],
-                           'banner': tvshow['show']["images"]["banner"]["full"],
-                           'clearart': tvshow['show']["images"]["clearart"]["full"],
-                           'clearlogo': tvshow['show']["images"]["logo"]["full"],
-                           'fanart': tvshow['show']["images"]["fanart"]["full"],
-                           'thumb': tvshow['show']["images"]["poster"]["thumb"]}
+                              'Watchers': item.get("watchers")}
+        show["artwork"] = {'poster': item['show']["images"]["poster"]["full"],
+                           'banner': item['show']["images"]["banner"]["full"],
+                           'clearart': item['show']["images"]["clearart"]["full"],
+                           'clearlogo': item['show']["images"]["logo"]["full"],
+                           'fanart': item['show']["images"]["fanart"]["full"],
+                           'thumb': item['show']["images"]["poster"]["thumb"]}
         shows.append(show)
     shows = local_db.merge_with_local_tvshow_info(online_list=shows,
                                                   library_first=False)
