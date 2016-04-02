@@ -19,7 +19,7 @@ HEADERS = {
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
-def get_calendar_shows(content):
+def get_episodes(content):
     shows = []
     url = ""
     if content == "shows":
