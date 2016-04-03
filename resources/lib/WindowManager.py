@@ -63,6 +63,7 @@ class WindowManager(object):
 
     def cancel(self, window):
         addon.set_global("infobackground", self.saved_background)
+        self.window_stack = []
         window.close()
 
     def open_movie_info(self, prev_window=None, movie_id=None, dbid=None,

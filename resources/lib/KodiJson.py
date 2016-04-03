@@ -9,7 +9,7 @@ import Utils
 def play_media(media_type, dbid, resume=True):
     if media_type in ['movie', 'episode']:
         Utils.get_kodi_json(method="Player.Open",
-                            params='{"item": {"%sid": %s},"options":{"resume": %s}}' % (media_type, dbid, resume))
+                            params='{"item": {"%sid": %s}, "options":{"resume": %s}}' % (media_type, dbid, str(resume).lower()))
     elif media_type in ['musicvideo', 'album', 'song']:
         Utils.get_kodi_json(method="Player.Open",
                             params='{"item": {"%sid": %s}}' % (media_type, dbid))
