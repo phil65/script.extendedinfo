@@ -29,7 +29,6 @@ def get_episodes(content):
     results = get_data(url=url,
                        params={"extended": "full,images"},
                        cache_days=0.3)
-    Utils.prettyprint(results)
     count = 1
     if not results:
         return None
