@@ -1625,7 +1625,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 										<aspectratio aligny="center">scale</aspectratio>
 										<fadetime>0</fadetime>
 									</control>
@@ -1674,7 +1674,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 										<aspectratio aligny="center">scale</aspectratio>
 										<fadetime>0</fadetime>
 									</control>
