@@ -45,11 +45,12 @@ class LocalDB(object):
                 data = Utils.get_kodi_json(method="AudioLibrary.GetArtistDetails",
                                            params='{"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": %s}' % str(kodi_artist['artistid']))
                 item = data["result"]["artistdetails"]
+                artwork = {"thumb": item['thumbnail'],
+                           "fanart": item['fanart']}
                 artists.append({"label": item['label'],
+                                "artwork": artwork,
                                 "title": item['label'],
                                 "Genre": " / ".join(item['genre']),
-                                "thumb": item['thumbnail'],
-                                "Fanart": item['fanart'],
                                 "Artist_Description": item['description'],
                                 "userrating": item['userrating'],
                                 "Born": item['born'],
@@ -362,13 +363,12 @@ class LocalDB(object):
                 if not online_item["name"] == local_item["title"]:
                     continue
                 data = Utils.get_kodi_json(method="AudioLibrary.getAlbumDetails",
-                                           params='{"properties": ["thumbnail"], "albumid":%s }' % str(local_item["albumid"]))
+                                           params='{"properties": ["thumbnail"], "albumid":%s }' % local_item["albumid"])
                 album = data["result"]["albumdetails"]
                 online_item["dbid"] = album["albumid"]
                 online_item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
                 if album["thumbnail"]:
                     online_item.update({"thumb": album["thumbnail"]})
-                    online_item.update({"Icon": album["thumbnail"]})
                 break
         return online_list
 
