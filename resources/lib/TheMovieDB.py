@@ -467,8 +467,7 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        listitem = {'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key'),
-                    'label': item.get('name'),
+        listitem = {'label': item.get('name'),
                     'size': item.get('size')}
         listitem["properties"] = {'iso_639_1': item.get('iso_639_1'),
                                   'type': item.get('type'),
@@ -476,6 +475,7 @@ def handle_videos(results):
                                   'youtube_id': item.get('key'),
                                   'site': item.get('site'),
                                   'id': item.get('id')}
+        listitem["artwork"] = {'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')}
         listitems.append(listitem)
     return listitems
 

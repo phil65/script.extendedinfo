@@ -760,7 +760,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture fallback="DefaultVideo.png">common/black.png</texture>
+											<texture>common/black.png</texture>
 											<animation effect="fade" start="100" end="0" time="0" condition="!Control.HasFocus(1000)">Conditional</animation>
 											<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 											<aspectratio aligny="center">scale</aspectratio>
@@ -900,7 +900,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture fallback="DefaultVideo.png">common/black.png</texture>
+											<texture>common/black.png</texture>
 											<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(750)">Conditional</animation>
 											<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 											<aspectratio aligny="center">scale</aspectratio>
@@ -1108,7 +1108,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture fallback="DefaultVideo.png">common/black.png</texture>
+											<texture>common/black.png</texture>
 											<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(150)">Conditional</animation>
 											<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 											<aspectratio aligny="center">scale</aspectratio>
@@ -1345,7 +1345,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture fallback="DefaultVideo.png">common/black.png</texture>
+											<texture>common/black.png</texture>
 											<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(250)">Conditional</animation>
 											<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 											<aspectratio aligny="center">scale</aspectratio>
@@ -1496,7 +1496,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 										<aspectratio aligny="center">scale</aspectratio>
 										<fadetime>0</fadetime>
 									</control>
@@ -1505,7 +1505,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture fallback="DefaultVideo.png">common/black.png</texture>
+										<texture>common/black.png</texture>
 										<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1150)">Conditional</animation>
 										<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 										<aspectratio aligny="center">scale</aspectratio>
@@ -1547,7 +1547,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+										<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Art(thumb)]</texture>
 										<aspectratio aligny="center">scale</aspectratio>
 										<fadetime>0</fadetime>
 									</control>
@@ -1633,7 +1633,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture fallback="DefaultVideo.png">common/black.png</texture>
+										<texture>common/black.png</texture>
 										<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(350)">Conditional</animation>
 										<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 										<aspectratio aligny="center">scale</aspectratio>
@@ -2351,7 +2351,7 @@
 										<posy>28</posy>
 										<width>224</width>
 										<height>325</height>
-										<texture fallback="DefaultVideo.png">common/black.png</texture>
+										<texture>common/black.png</texture>
 										<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1250)">Conditional</animation>
 										<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 										<aspectratio aligny="center">scale</aspectratio>
@@ -2458,7 +2458,7 @@
 										<posy>28</posy>
 										<width>505</width>
 										<height>325</height>
-										<texture fallback="DefaultVideo.png">common/black.png</texture>
+										<texture>common/black.png</texture>
 										<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(1350)">Conditional</animation>
 										<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 										<aspectratio aligny="center">scale</aspectratio>
@@ -2571,7 +2571,7 @@
 											<posy>10</posy>
 											<width>224</width>
 											<height>325</height>
-											<texture fallback="DefaultVideo.png">common/black.png</texture>
+											<texture>common/black.png</texture>
 											<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(450)">Conditional</animation>
 											<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 											<aspectratio aligny="center">scale</aspectratio>
@@ -2709,7 +2709,7 @@
 										<posy>10</posy>
 										<width>320</width>
 										<height>200</height>
-										<texture fallback="DefaultVideo.png">common/black.png</texture>
+										<texture>common/black.png</texture>
 										<animation effect="fade" start="100" end="0" time="200" condition="!Control.HasFocus(2000)">Conditional</animation>
 										<animation effect="fade" end="30" time="0" condition="true">Conditional</animation>
 										<aspectratio aligny="center">scale</aspectratio>
