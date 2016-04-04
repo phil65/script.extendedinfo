@@ -22,27 +22,27 @@ def handle_videos(results, extended=False):
             video_id = item["id"]["videoId"]
         except:
             video_id = item["snippet"]["resourceId"]["videoId"]
-        video = {'youtube_id': video_id,
-                 'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
-                 'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
+        video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'Plot': item["snippet"]["description"],
                  'label': item["snippet"]["title"],
-                 'channel_title': item["snippet"]["channelTitle"],
-                 'channel_id': item["snippet"]["channelId"],
-                 'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+                 'Date': item["snippet"]["publishedAt"][:10]}
         video["artwork"] = {'thumb': thumb}
+        video["properties"] = {'channel_title': item["snippet"]["channelTitle"],
+                               'channel_id': item["snippet"]["channelId"],
+                               'youtube_id': video_id,
+                               'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id}
         videos.append(video)
     if not extended:
         return videos
     params = {"part": "contentDetails,statistics",
-              "id": ",".join([i["youtube_id"] for i in videos])}
+              "id": ",".join([i["properties"]["youtube_id"] for i in videos])}
     ext_results = get_data(method="videos",
                            params=params)
     if not ext_results:
         return videos
     for item in videos:
         for ext_item in ext_results["items"]:
-            if not item["youtube_id"] == ext_item['id']:
+            if not item["properties"]["youtube_id"] == ext_item['id']:
                 continue
             item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
             item["dimension"] = ext_item['contentDetails']['dimension']
@@ -78,16 +78,16 @@ def handle_playlists(results):
                     'Plot': item["snippet"]["description"],
                     'channel_title': item["snippet"]["channelTitle"],
                     'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
-                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
+                    'Date': item["snippet"]["publishedAt"][10:]}
         playlist["artwork"] = {'thumb': thumb}
         playlists.append(playlist)
-    params = {"id": ",".join([i["youtube_id"] for i in playlists]),
+    params = {"id": ",".join([i["properties"]["youtube_id"] for i in playlists]),
               "part": "contentDetails"}
     ext_results = get_data(method="playlists",
                            params=params)
     for item, ext_item in itertools.product(playlists, ext_results["items"]):
-        if item["youtube_id"] == ext_item['id']:
-            item["itemcount"] = ext_item['contentDetails']['itemCount']
+        if item["properties"]["youtube_id"] == ext_item['id']:
+            item["properties"]["itemcount"] = ext_item['contentDetails']['itemCount']
     return playlists
 
 
@@ -101,13 +101,13 @@ def handle_channels(results):
             channel_id = item["id"]["channelId"]
         except:
             channel_id = item["snippet"]["resourceId"]["channelId"]
-        channel = {'youtube_id': channel_id,
-                   'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
-                   'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
+        channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'Plot': item["snippet"]["description"],
                    'label': item["snippet"]["title"],
                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
         channel["artwork"] = {'thumb': thumb}
+        channel["properties"] = {'youtube_id': channel_id,
+                                 'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}
         channels.append(channel)
     channel_ids = [item["youtube_id"] for item in channels]
     params = {"id": ",".join(channel_ids),
@@ -115,9 +115,9 @@ def handle_channels(results):
     ext_results = get_data(method="channels",
                            params=params)
     for item, ext_item in itertools.product(channels, ext_results["items"]):
-        if item["youtube_id"] == ext_item['id']:
-            item["itemcount"] = ext_item['statistics']['videoCount']
-            item["fanart"] = ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
+        if item["properties"]["youtube_id"] == ext_item['id']:
+            item["properties"]["itemcount"] = ext_item['statistics']['videoCount']
+            item["artwork"]["fanart"] = ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
     return channels
 
 

@@ -62,11 +62,12 @@ def handle_tracks(results):
     for item in results['track']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
         track = {'label': item['strTrack'],
+                 'title': item['strTrack'],
                  'Artist': item['strArtist'],
                  'mediatype': "song",
                  'mbid': item['strMusicBrainzID'],
                  'Album': item['strAlbum'],
-                 'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
+                 "artwork": {'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg"},
                  'path': Utils.convert_youtube_url(item['strMusicVid'])}
         tracks.append(track)
     return tracks
@@ -79,11 +80,12 @@ def handle_musicvideos(results):
     for item in results['mvids']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
         mvid = {'label': item['strTrack'],
+                'title': item['strTrack'],
                 'path': Utils.convert_youtube_url(item['strMusicVid']),
                 'Plot': item['strDescriptionEN'],
                 'mediatype': "musicvideo",
                 'id': item['idTrack'],
-                'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg",
+                "artwork": {'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg"},
                 'title': item['strTrack']}
         mvids.append(mvid)
     return mvids

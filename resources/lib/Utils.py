@@ -549,21 +549,21 @@ def create_listitems(data=None, preload_images=0):
         return []
     itemlist = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem(label=result.pop("label", ""),
-                                    label2=result.pop("label2", ""),
-                                    path=result.pop("path", ""))
+        listitem = xbmcgui.ListItem(label=result.get("label", ""),
+                                    label2=result.get("label2", ""),
+                                    path=result.get("path", ""))
         if "properties" in result:
             props = {k: unicode(v) for k, v in result["properties"].items() if v}
             for key, value in props.iteritems():
                 listitem.setProperty(key, unicode(value))
-            del result["properties"]
+        if "artwork" in result:
+            artwork = {k: v.replace("https://", "http://") for k, v in result["artwork"].items() if v}
+            listitem.setArt(artwork)
         result = {k.lower(): v for k, v in result.items() if v}
         for (key, value) in result.iteritems():
-            if key == "artwork":
-                artwork = {k: v.replace("https://", "http://") for k, v in value.items() if v}
-                listitem.setArt(artwork)
-            else:
-                listitem.setInfo('video', {key: value})
+            if key in ["properties", "artwork"]:
+                continue
+            listitem.setInfo('video', {key: value})
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist
