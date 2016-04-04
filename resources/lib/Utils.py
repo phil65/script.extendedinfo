@@ -17,7 +17,6 @@ from functools import wraps
 import xbmc
 import xbmcgui
 import xbmcvfs
-import xbmcplugin
 
 import addon
 
@@ -510,23 +509,6 @@ def merge_dict_lists(items, key="job"):
             if key in crews[index]:
                 crews[index][key] = crews[index][key] + " / " + item[key]
     return crews
-
-
-def pass_list_to_skin(name, data, prefix="", handle=None, limit=False):
-    if data and limit and int(limit) < len(data):
-        data = data[:int(limit)]
-    if not handle:
-        set_window_props(name, data, prefix)
-        return None
-    addon.clear_global(name)
-    if data:
-        addon.set_global(name + ".Count", str(len(data)))
-        items = create_listitems(data)
-        items = [(i.getProperty("path"), i, bool(i.getProperty("directory"))) for i in items]
-        xbmcplugin.addDirectoryItems(handle=handle,
-                                     items=items,
-                                     totalItems=len(items))
-    xbmcplugin.endOfDirectory(handle)
 
 
 def set_window_props(name, data, prefix=""):

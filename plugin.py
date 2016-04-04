@@ -20,6 +20,20 @@ TRAKT_IMAGE = os.path.join(addon.MEDIA_PATH, "trakt.png")
 plugin = routing.Plugin()
 
 
+def pass_list_to_skin(name, data, handle=None, limit=False):
+    if data and limit and int(limit) < len(data):
+        data = data[:int(limit)]
+    addon.clear_global(name)
+    if data:
+        addon.set_global(name + ".Count", str(len(data)))
+        items = Utils.create_listitems(data)
+        items = [(i.getProperty("path"), i, bool(i.getProperty("directory"))) for i in items]
+        xbmcplugin.addDirectoryItems(handle=handle,
+                                     items=items,
+                                     totalItems=len(items))
+    xbmcplugin.endOfDirectory(handle)
+
+
 class Main:
 
     def __init__(self):
@@ -48,11 +62,10 @@ class Main:
                 xbmcplugin.setContent(plugin.handle, 'sets')
             else:
                 xbmcplugin.setContent(plugin.handle, '')
-            Utils.pass_list_to_skin(name=info,
-                                    data=listitems,
-                                    prefix=self.params.get("prefix", ""),
-                                    handle=plugin.handle,
-                                    limit=self.params.get("limit", 20))
+            pass_list_to_skin(name=info,
+                              data=listitems,
+                              handle=plugin.handle,
+                              limit=self.params.get("limit", 20))
             break
         else:
             plugin.run()
