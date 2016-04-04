@@ -29,15 +29,15 @@ def get_movies(movie_type):
             search_string = "%s %s trailer" % (item["title"], item["year"])
             path = PLUGIN_BASE + "playtrailer&&title=%s&&imdb_id=%s" % (search_string, imdb_id)
         movie = {'label': item["title"],
-                 'path': path,
-                 'title': item["title"],
-                 'mediatype': "movie",
-                 'duration': item["runtime"]*60,
-                 'year': item["year"],
-                 'Premiered': item["release_dates"].get("theater", ""),
-                 'Rating': item["ratings"]["audience_score"] / 10.0,
-                 'Plot': item["synopsis"],
-                 'mpaa': item["mpaa_rating"]}
+                 'path': path}
+        movie["infos"] = {'title': item["title"],
+                          'mediatype': "movie",
+                          'duration': item["runtime"]*60,
+                          'year': item["year"],
+                          'Premiered': item["release_dates"].get("theater", ""),
+                          'Rating': item["ratings"]["audience_score"] / 10.0,
+                          'Plot': item["synopsis"],
+                          'mpaa': item["mpaa_rating"]}
         movie["properties"] = {'imdb_id': imdb_id,
                                'duration(h)': Utils.format_time(item["runtime"], "h"),
                                'duration(m)': Utils.format_time(item["runtime"], "m")}
