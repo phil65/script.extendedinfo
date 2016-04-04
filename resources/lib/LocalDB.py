@@ -227,7 +227,7 @@ class LocalDB(object):
 
     def merge_with_local_movie_info(self, online_list, library_first=True, sortkey=False):
         if not self.movie_titles:
-            now = time.time()
+            # now = time.time()
             self.movie_ids = addon.get_global("movie_ids.JSON")
             if self.movie_ids and self.movie_ids != "[]":
                 self.movie_ids = json.loads(self.movie_ids)
@@ -251,8 +251,8 @@ class LocalDB(object):
                 addon.set_global("movie_otitles.JSON", json.dumps(self.movie_otitles))
                 addon.set_global("movie_titles.JSON", json.dumps(self.movie_titles))
                 addon.set_global("movie_imdbs.JSON", json.dumps(self.movie_imdbs))
-            Utils.log("create_light_movielist: " + str(now - time.time()))
-        now = time.time()
+            # Utils.log("create_light_movielist: " + str(now - time.time()))
+        # now = time.time()
         local_items = []
         remote_items = []
         for online_item in online_list:
@@ -282,7 +282,7 @@ class LocalDB(object):
                     remote_items.append(online_item)
             else:
                 remote_items.append(online_item)
-        Utils.log("compare time: " + str(now - time.time()))
+        # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
             remote_items = sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
@@ -290,7 +290,7 @@ class LocalDB(object):
 
     def merge_with_local_tvshow_info(self, online_list, library_first=True, sortkey=False):
         if not self.tvshow_titles:
-            now = time.time()
+            # now = time.time()
             self.tvshow_ids = addon.get_global("tvshow_ids.JSON")
             if self.tvshow_ids and self.tvshow_ids != "[]":
                 self.tvshow_ids = json.loads(self.tvshow_ids)
@@ -314,8 +314,8 @@ class LocalDB(object):
                 addon.set_global("tvshow_originaltitles.JSON", json.dumps(self.tvshow_originaltitles))
                 addon.set_global("tvshow_titles.JSON", json.dumps(self.tvshow_titles))
                 addon.set_global("tvshow_imdbs.JSON", json.dumps(self.tvshow_imdbs))
-            Utils.log("create_light_tvshowlist: " + str(now - time.time()))
-        now = time.time()
+            # Utils.log("create_light_tvshowlist: " + str(now - time.time()))
+        # now = time.time()
         local_items = []
         remote_items = []
         for online_item in online_list:
@@ -345,7 +345,7 @@ class LocalDB(object):
                     remote_items.append(online_item)
             else:
                 remote_items.append(online_item)
-        Utils.log("compare time: " + str(now - time.time()))
+        # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items,
                                  key=lambda k: k[sortkey],
