@@ -61,11 +61,12 @@
 						<height>220</height>
 						<visible>!IsEmpty(Window.Property(Plot))</visible>
 						<control type="radiobutton" id="132">
+							<top>0</top>
 							<left>0</left>
 							<width>1085</width>
 							<height>255</height>
 							<radioposx>30</radioposx>
-							<top>0</top>
+							<radioposy>20</radioposy>
 							<radiowidth>46</radiowidth>
 							<radioheight>46</radioheight>
 							<ondown>5000</ondown>
