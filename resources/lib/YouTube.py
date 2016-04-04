@@ -30,7 +30,7 @@ def handle_videos(results, extended=False):
                  'channel_title': item["snippet"]["channelTitle"],
                  'channel_id': item["snippet"]["channelId"],
                  'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-        video["artwork"] = {'thumb': thumb}
+        video["artwork"] = {'thumb': thumb.replace("https://", "http://")}
         videos.append(video)
     if not extended:
         return videos
@@ -79,7 +79,7 @@ def handle_playlists(results):
                     'channel_title': item["snippet"]["channelTitle"],
                     'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
                     'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-        playlist["artwork"] = {'thumb': thumb}
+        playlist["artwork"] = {'thumb': thumb.replace("https://", "http://")}
         playlists.append(playlist)
     params = {"id": ",".join([i["youtube_id"] for i in playlists]),
               "part": "contentDetails"}
@@ -107,7 +107,7 @@ def handle_channels(results):
                    'Plot': item["snippet"]["description"],
                    'label': item["snippet"]["title"],
                    'Date': item["snippet"]["publishedAt"].replace("T", " ").replace(".000Z", "")[:-3]}
-        channel["artwork"] = {'thumb': thumb}
+        channel["artwork"] = {'thumb': thumb.replace("https://", "http://")}
         channels.append(channel)
     channel_ids = [item["youtube_id"] for item in channels]
     params = {"id": ",".join(channel_ids),
