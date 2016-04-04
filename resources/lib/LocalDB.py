@@ -252,33 +252,35 @@ class LocalDB(object):
         # now = time.time()
         local_items = []
         remote_items = []
-        for online_item in online_list:
+        for item in online_list:
             index = False
-            if "imdb_id" in online_item.get("properties", {}) and online_item["properties"]["imdb_id"] in self.movie_imdbs:
-                index = self.movie_imdbs.index(online_item["properties"]["imdb_id"])
-            elif online_item['title'].lower() in self.movie_titles:
-                index = self.movie_titles.index(online_item['title'].lower())
-            elif "originaltitle" in online_item and online_item["originaltitle"].lower() in self.movie_otitles:
-                index = self.movie_otitles.index(online_item["originaltitle"].lower())
+            if "imdb_id" in item.get("properties", {}) and item["properties"]["imdb_id"] in self.movie_imdbs:
+                index = self.movie_imdbs.index(item["properties"]["imdb_id"])
+            elif item['title'].lower() in self.movie_titles:
+                index = self.movie_titles.index(item['title'].lower())
+            elif "originaltitle" in item and item["originaltitle"].lower() in self.movie_otitles:
+                index = self.movie_otitles.index(item["originaltitle"].lower())
             if index:
                 local_item = self.get_movie(self.movie_ids[index])
                 if local_item:
                     try:
-                        diff = abs(int(local_item["year"]) - int(online_item["year"]))
+                        diff = abs(int(local_item["year"]) - int(item["year"]))
                         if diff > 1:
-                            remote_items.append(online_item)
+                            remote_items.append(item)
                             continue
                     except Exception:
                         pass
-                    online_item.update(local_item)
+                    item.update(local_item)
+                    if "properties" in item:
+                        item["properties"]["dbid"] = local_item["dbid"]
                     if library_first:
-                        local_items.append(online_item)
+                        local_items.append(item)
                     else:
-                        remote_items.append(online_item)
+                        remote_items.append(item)
                 else:
-                    remote_items.append(online_item)
+                    remote_items.append(item)
             else:
-                remote_items.append(online_item)
+                remote_items.append(item)
         # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
@@ -312,33 +314,35 @@ class LocalDB(object):
         # now = time.time()
         local_items = []
         remote_items = []
-        for online_item in online_list:
+        for item in online_list:
             index = None
-            if "imdb_id" in online_item and online_item["imdb_id"] in self.tvshow_imdbs:
-                index = self.tvshow_imdbs.index(online_item["imdb_id"])
-            elif online_item['title'].lower() in self.tvshow_titles:
-                index = self.tvshow_titles.index(online_item['title'].lower())
-            elif "originaltitle" in online_item and online_item["originaltitle"].lower() in self.tvshow_originaltitles:
-                index = self.tvshow_originaltitles.index(online_item["originaltitle"].lower())
+            if "imdb_id" in item and item["imdb_id"] in self.tvshow_imdbs:
+                index = self.tvshow_imdbs.index(item["imdb_id"])
+            elif item['title'].lower() in self.tvshow_titles:
+                index = self.tvshow_titles.index(item['title'].lower())
+            elif "originaltitle" in item and item["originaltitle"].lower() in self.tvshow_originaltitles:
+                index = self.tvshow_originaltitles.index(item["originaltitle"].lower())
             if index:
                 local_item = self.get_tvshow(self.tvshow_ids[index])
                 if local_item:
                     try:
-                        diff = abs(int(local_item["year"]) - int(online_item["year"]))
+                        diff = abs(int(local_item["year"]) - int(item["year"]))
                         if diff > 1:
-                            remote_items.append(online_item)
+                            remote_items.append(item)
                             continue
                     except Exception:
                         pass
-                    online_item.update(local_item)
+                    item.update(local_item)
+                    if "properties" in item:
+                        item["properties"]["dbid"] = local_item["dbid"]
                     if library_first:
-                        local_items.append(online_item)
+                        local_items.append(item)
                     else:
-                        remote_items.append(online_item)
+                        remote_items.append(item)
                 else:
-                    remote_items.append(online_item)
+                    remote_items.append(item)
             else:
-                remote_items.append(online_item)
+                remote_items.append(item)
         # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items,
@@ -352,17 +356,17 @@ class LocalDB(object):
     def compare_album_with_library(self, online_list):
         if not self.albums:
             self.albums = self.get_albums()
-        for online_item in online_list:
+        for item in online_list:
             for local_item in self.albums:
-                if not online_item["name"] == local_item["title"]:
+                if not item["name"] == local_item["title"]:
                     continue
                 data = Utils.get_kodi_json(method="AudioLibrary.getAlbumDetails",
                                            params='{"properties": ["thumbnail"], "albumid":%s }' % local_item["albumid"])
                 album = data["result"]["albumdetails"]
-                online_item["dbid"] = album["albumid"]
-                online_item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
+                item["dbid"] = album["albumid"]
+                item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
                 if album["thumbnail"]:
-                    online_item.update({"thumb": album["thumbnail"]})
+                    item.update({"thumb": album["thumbnail"]})
                 break
         return online_list
 
