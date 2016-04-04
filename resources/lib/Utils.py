@@ -562,7 +562,8 @@ def create_listitems(data=None, preload_images=0):
                 continue
             key = key.lower()
             if key == "artwork":
-                listitem.setArt(value)
+                artwork = {k: v.replace("https://", "http://") for k, v in value.items() if v}
+                listitem.setArt(artwork)
             elif key in INT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key: int(value)})

@@ -202,8 +202,8 @@ def set_rating(media_type, media_id, rating):
 
 def send_request(url, params, values, delete=False):
     params["api_key"] = TMDB_KEY
-    params = dict((k, v) for (k, v) in params.iteritems() if v)
-    params = dict((k, unicode(v).encode('utf-8')) for (k, v) in params.iteritems())
+    params = {k: v for k, v in params.items() if v}
+    params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems()}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     Utils.log(url)
     request = urllib2.Request(url=url,
