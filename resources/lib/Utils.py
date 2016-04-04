@@ -549,9 +549,9 @@ def create_listitems(data=None, preload_images=0):
         return []
     itemlist = []
     for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem(label=result.get("label"),
-                                    label2=result.get("label2"),
-                                    path=result.get("path"))
+        listitem = xbmcgui.ListItem(label=result.pop("label", ""),
+                                    label2=result.pop("label2", ""),
+                                    path=result.pop("path", ""))
         if "properties" in result:
             props = {k: v for k, v in result["properties"].items() if v}
             for key, value in props.iteritems():
