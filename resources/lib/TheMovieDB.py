@@ -514,7 +514,7 @@ def handle_images(results):
                                'iso_639_1': item.get("iso_639_1")}
         image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
-            image['infos']['title'] = item["media"].get("title")
+            image['infos'] = {'title': item["media"].get("title")}
             if item["media"].get("poster_path"):
                 image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
         images.append(image)
