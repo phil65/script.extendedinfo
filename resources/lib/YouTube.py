@@ -108,7 +108,7 @@ def handle_channels(results):
         channel["properties"] = {'youtube_id': channel_id,
                                  'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}
         channels.append(channel)
-    channel_ids = [item["youtube_id"] for item in channels]
+    channel_ids = [item["properties"]["youtube_id"] for item in channels]
     params = {"id": ",".join(channel_ids),
               "part": "contentDetails,statistics,brandingSettings"}
     ext_results = get_data(method="channels",
