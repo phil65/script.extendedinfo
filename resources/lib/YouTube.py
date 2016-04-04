@@ -20,7 +20,7 @@ def handle_videos(results, extended=False):
             thumb = item["snippet"]["thumbnails"]["high"]["url"]
         try:
             video_id = item["id"]["videoId"]
-        except:
+        except Exception:
             video_id = item["snippet"]["resourceId"]["videoId"]
         video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'Plot': item["snippet"]["description"],
@@ -69,7 +69,7 @@ def handle_playlists(results):
             thumb = item["snippet"]["thumbnails"]["high"]["url"]
         try:
             playlist_id = item["id"]["playlistId"]
-        except:
+        except Exception:
             playlist_id = item["snippet"]["resourceId"]["playlistId"]
         playlist = {'youtube_id': playlist_id,
                     'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
@@ -99,7 +99,7 @@ def handle_channels(results):
             thumb = item["snippet"]["thumbnails"]["high"]["url"]
         try:
             channel_id = item["id"]["channelId"]
-        except:
+        except Exception:
             channel_id = item["snippet"]["resourceId"]["channelId"]
         channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'Plot': item["snippet"]["description"],

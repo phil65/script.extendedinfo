@@ -74,7 +74,7 @@ class Main:
             else:
                 try:
                     self.params[param.split("=")[0].lower()] = "=".join(param.split("=")[1:]).strip().decode('utf-8')
-                except:
+                except Exception:
                     pass
 
 

@@ -215,7 +215,7 @@ class WindowManager(object):
         if prev_window:
             try:  # TODO rework
                 color = prev_window.data["general"]['ImageColor']
-            except:
+            except Exception:
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
@@ -247,7 +247,7 @@ class WindowManager(object):
         if prev_window:
             try:  # TODO rework
                 color = prev_window.data["general"]['ImageColor']
-            except:
+            except Exception:
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"

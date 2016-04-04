@@ -271,7 +271,7 @@ class LocalDB(object):
                         if diff > 1:
                             remote_items.append(online_item)
                             continue
-                    except:
+                    except Exception:
                         pass
                     online_item.update(local_item)
                     if library_first:
@@ -334,7 +334,7 @@ class LocalDB(object):
                         if diff > 1:
                             remote_items.append(online_item)
                             continue
-                    except:
+                    except Exception:
                         pass
                     online_item.update(local_item)
                     if library_first:

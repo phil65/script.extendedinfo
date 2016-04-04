@@ -45,7 +45,7 @@ def filter_image(input_img, radius=25):
                     xbmcvfs.copy(unicode(input_img, 'utf-8', errors='ignore'), targetfile)
                     img = PIL.Image.open(targetfile)
                     break
-            except:
+            except Exception:
                 Utils.log("Could not get image for %s (try %i)" % (input_img, i))
                 xbmc.sleep(500)
         if not img:
@@ -56,7 +56,7 @@ def filter_image(input_img, radius=25):
             imgfilter = MyGaussianBlur(radius=radius)
             img = img.filter(imgfilter)
             img.save(targetfile)
-        except:
+        except Exception:
             Utils.log("PIL problem probably....")
             return "", ""
     else:
@@ -86,7 +86,7 @@ def get_colors(img):
     width, height = img.size
     try:
         pixels = img.load()
-    except:
+    except Exception:
         return "FFF0F0F0"
     data = []
     for x in xrange(width/2):
@@ -128,7 +128,7 @@ class FilterImageThread(threading.Thread):
     def run(self):
         try:
             self.image, self.imagecolor = filter_image(self.image, self.radius)
-        except:
+        except Exception:
             self.image = ""
             self.imagecolor = ""
 

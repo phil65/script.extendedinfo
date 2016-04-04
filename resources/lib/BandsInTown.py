@@ -37,7 +37,7 @@ def get_near_events(artists):  # not possible with api 2.0
     for art in artists[:50]:
         try:
             arts.append(urllib.quote(art['artist']))
-        except:
+        except Exception:
             arts.append(urllib.quote(art['artist'].encode("utf-8")))
     artist_str = 'artists[]=' + '&artists[]='.join(arts)
     url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%s' % (artist_str)

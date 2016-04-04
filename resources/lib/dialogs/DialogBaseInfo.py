@@ -70,7 +70,7 @@ class DialogBaseInfo(object):
             try:
                 self.getControl(container_id).reset()
                 self.getControl(container_id).addItems(Utils.create_listitems(listitems))
-            except:
+            except Exception:
                 Utils.log("Notice: No container with id %i available" % container_id)
 
     @ch.click(ID_LIST_IMAGES)
@@ -133,7 +133,7 @@ class DialogBaseInfo(object):
     def get_youtube_vids(self, search_str):
         try:
             youtube_list = self.getControl(ID_LIST_YOUTUBE)
-        except:
+        except Exception:
             return None
         result = YouTube.search(search_str, limit=15)
         if not self.yt_listitems:
