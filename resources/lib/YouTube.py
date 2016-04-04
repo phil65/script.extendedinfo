@@ -22,9 +22,9 @@ def handle_videos(results, extended=False):
         except Exception:
             video_id = snippet["resourceId"]["videoId"]
         video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
-                 'Plot': snippet["description"],
-                 'label': snippet["title"],
-                 'Premiered': snippet["publishedAt"][:10]}
+                 'label': snippet["title"]}
+        video["infos"] = {'Plot': snippet["description"],
+                          'Premiered': snippet["publishedAt"][:10]}
         video["artwork"] = {'thumb': thumb}
         video["properties"] = {'channel_title': snippet["channelTitle"],
                                'channel_id': snippet["channelId"],
@@ -72,9 +72,9 @@ def handle_playlists(results):
         except Exception:
             playlist_id = snippet["resourceId"]["playlistId"]
         playlist = {'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                    'label': snippet["title"],
-                    'Plot': snippet["description"],
-                    'Premiered': snippet["publishedAt"][:10]}
+                    'label': snippet["title"]}
+        playlist["infos"] = {'Plot': snippet["description"],
+                             'Premiered': snippet["publishedAt"][:10]}
         playlist["artwork"] = {'thumb': thumb}
         playlist["properties"] = {'youtube_id': playlist_id,
                                   'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
@@ -101,9 +101,9 @@ def handle_channels(results):
         except Exception:
             channel_id = snippet["resourceId"]["channelId"]
         channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
-                   'Plot': snippet["description"],
-                   'label': snippet["title"],
-                   'Premiered': snippet["publishedAt"][:10]}
+                   'label': snippet["title"]}
+        channel["infos"] = {'Plot': snippet["description"],
+                            'Premiered': snippet["publishedAt"][:10]}
         channel["artwork"] = {'thumb': thumb}
         channel["properties"] = {'youtube_id': channel_id,
                                  'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}

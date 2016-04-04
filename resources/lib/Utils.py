@@ -560,11 +560,9 @@ def create_listitems(data=None, preload_images=0):
         if "artwork" in result:
             artwork = {k: v.replace("https://", "http://") for k, v in result["artwork"].items() if v}
             listitem.setArt(artwork)
-        result = {k.lower(): v for k, v in result.items() if v}
-        for (key, value) in result.iteritems():
-            if key in ["properties", "artwork"]:
-                continue
-            listitem.setInfo('video', {key: value})
+        if "infos" in result:
+            infos = {k.lower(): v for k, v in result["infos"].items() if v}
+            listitem.setInfo("video", infos)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist

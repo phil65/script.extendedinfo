@@ -147,27 +147,24 @@ class LocalDB(object):
             played = '0'
         stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
                                                 movie['streamdetails'])
-        db_movie = {'title': movie.get('label'),
-                    'label': movie.get('label'),
-                    'File': movie.get('file'),
-                    'year': str(movie.get('year')),
-                    'writer': " / ".join(movie['writer']),
-                    'originaltitle': movie.get('originaltitle'),
-                    'imdb_id': movie.get('imdbnumber'),
-                    'userrating': movie.get('userrating'),
-                    'path': path,
-                    'plot': movie.get('plot'),
-                    'director': " / ".join(movie.get('director')),
-                    'writer': " / ".join(movie.get('writer')),
-                    'PercentPlayed': played,
-                    'Resume': resume,
-                    # 'SubtitleLanguage': " / ".join(subs),
-                    # 'AudioLanguage': " / ".join(streams),
-                    'Play': "",
-                    'trailer': trailer,
-                    'dbid': str(movie['movieid']),
-                    'Rating': str(round(float(movie['rating']), 1))}
-        db_movie.update(movie['art'])
+        db_movie = {'label': movie.get('label'),
+                    'path': path}
+        db_movie["infos"] = {'title': movie.get('label'),
+                             'File': movie.get('file'),
+                             'year': str(movie.get('year')),
+                             'writer': " / ".join(movie['writer']),
+                             'userrating': movie.get('userrating'),
+                             'trailer': trailer,
+                             'Rating': str(round(float(movie['rating']), 1)),
+                             'director': " / ".join(movie.get('director')),
+                             'writer': " / ".join(movie.get('writer')),
+                             'plot': movie.get('plot'),
+                             'originaltitle': movie.get('originaltitle')}
+        db_movie["properties"] = {'imdb_id': movie.get('imdbnumber'),
+                                  'PercentPlayed': played,
+                                  'Resume': resume,
+                                  'dbid': str(movie['movieid'])}
+        db_movie["artwork"] = movie['art']
         streams = []
         for i, item in enumerate(movie['streamdetails']['audio']):
             language = item['language']
@@ -256,23 +253,23 @@ class LocalDB(object):
             index = False
             if "imdb_id" in item.get("properties", {}) and item["properties"]["imdb_id"] in self.movie_imdbs:
                 index = self.movie_imdbs.index(item["properties"]["imdb_id"])
-            elif item['title'].lower() in self.movie_titles:
-                index = self.movie_titles.index(item['title'].lower())
-            elif "originaltitle" in item and item["originaltitle"].lower() in self.movie_otitles:
-                index = self.movie_otitles.index(item["originaltitle"].lower())
+            elif "title" in item.get("infos", {}) and item["infos"]['title'].lower() in self.movie_titles:
+                index = self.movie_titles.index(item["infos"]['title'].lower())
+            elif "originaltitle" in item.get("infos", {}) and item["infos"]["originaltitle"].lower() in self.movie_otitles:
+                index = self.movie_otitles.index(item["infos"]["originaltitle"].lower())
             if index:
                 local_item = self.get_movie(self.movie_ids[index])
                 if local_item:
                     try:
-                        diff = abs(int(local_item["year"]) - int(item["year"]))
+                        diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
                         if diff > 1:
                             remote_items.append(item)
                             continue
                     except Exception:
                         pass
-                    item.update(local_item)
-                    if "properties" in item:
-                        item["properties"]["dbid"] = local_item["dbid"]
+                    item["properties"].update(local_item["properties"])
+                    item["infos"].update(local_item["infos"])
+                    item["artwork"].update(local_item["artwork"])
                     if library_first:
                         local_items.append(item)
                     else:
@@ -283,8 +280,8 @@ class LocalDB(object):
                 remote_items.append(item)
         # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
-            local_items = sorted(local_items, key=lambda k: k[sortkey], reverse=True)
-            remote_items = sorted(remote_items, key=lambda k: k[sortkey], reverse=True)
+            local_items = sorted(local_items, key=lambda k: k["infos"][sortkey], reverse=True)
+            remote_items = sorted(remote_items, key=lambda k: k["infos"][sortkey], reverse=True)
         return local_items + remote_items
 
     def merge_with_local_tvshow_info(self, online_list, library_first=True, sortkey=False):
@@ -318,23 +315,23 @@ class LocalDB(object):
             index = None
             if "imdb_id" in item and item["imdb_id"] in self.tvshow_imdbs:
                 index = self.tvshow_imdbs.index(item["imdb_id"])
-            elif item['title'].lower() in self.tvshow_titles:
-                index = self.tvshow_titles.index(item['title'].lower())
-            elif "originaltitle" in item and item["originaltitle"].lower() in self.tvshow_originaltitles:
-                index = self.tvshow_originaltitles.index(item["originaltitle"].lower())
+            elif "title" in item.get("infos", {}) and item["infos"]['title'].lower() in self.tvshow_titles:
+                index = self.tvshow_titles.index(item["infos"]['title'].lower())
+            elif "originaltitle" in item.get("infos", {}) and item["infos"]["originaltitle"].lower() in self.tvshow_originaltitles:
+                index = self.tvshow_originaltitles.index(item["infos"]["originaltitle"].lower())
             if index:
                 local_item = self.get_tvshow(self.tvshow_ids[index])
                 if local_item:
                     try:
-                        diff = abs(int(local_item["year"]) - int(item["year"]))
+                        diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
                         if diff > 1:
                             remote_items.append(item)
                             continue
                     except Exception:
                         pass
-                    item.update(local_item)
-                    if "properties" in item:
-                        item["properties"]["dbid"] = local_item["dbid"]
+                    item["properties"].update(local_item["properties"])
+                    item["infos"].update(local_item["infos"])
+                    item["artwork"].update(local_item["artwork"])
                     if library_first:
                         local_items.append(item)
                     else:
@@ -346,10 +343,10 @@ class LocalDB(object):
         # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items,
-                                 key=lambda k: k[sortkey],
+                                 key=lambda k: k["infos"][sortkey],
                                  reverse=True)
             remote_items = sorted(remote_items,
-                                  key=lambda k: k[sortkey],
+                                  key=lambda k: k["infos"][sortkey],
                                   reverse=True)
         return local_items + remote_items
 

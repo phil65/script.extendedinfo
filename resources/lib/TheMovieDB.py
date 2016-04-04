@@ -337,19 +337,19 @@ def handle_movies(results, local_first=True, sortkey="year"):
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
         trailer = "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id"))
         item = {'label': movie.get('title'),
-                'path': PLUGIN_BASE + path % movie.get("id"),
-                'title': movie.get('title'),
-                'originaltitle': movie.get('original_title', ""),
-                'mediatype': "movie",
-                'country': movie.get('original_language'),
-                'plot': movie.get('overview'),
-                'Trailer': trailer,
-                'genre': " / ".join([i for i in genres if i]),
-                'Votes': movie.get('vote_count'),
-                'year': Utils.get_year(movie.get('release_date')),
-                'Rating': movie.get('vote_average'),
-                'userrating': movie.get('rating'),
-                'Premiered': movie.get('release_date')}
+                'path': PLUGIN_BASE + path % movie.get("id")}
+        item["infos"] = {'title': movie.get('title'),
+                         'originaltitle': movie.get('original_title', ""),
+                         'mediatype': "movie",
+                         'country': movie.get('original_language'),
+                         'plot': movie.get('overview'),
+                         'Trailer': trailer,
+                         'genre': " / ".join([i for i in genres if i]),
+                         'Votes': movie.get('vote_count'),
+                         'year': Utils.get_year(movie.get('release_date')),
+                         'Rating': movie.get('vote_average'),
+                         'userrating': movie.get('rating'),
+                         'Premiered': movie.get('release_date')}
         item["properties"] = {'id': movie.get("id"),
                               'Popularity': movie.get('popularity'),
                               'credit_id': movie.get('credit_id'),
@@ -379,20 +379,20 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
-        newtv = {'title': tv.get('name'),
-                 'label': tv.get('name'),
-                 'originaltitle': tv.get('original_name', ""),
-                 'duration': duration,
-                 'genre': " / ".join([i for i in genres if i]),
-                 'country': tv.get('original_language'),
-                 'Plot': tv.get("overview"),
-                 'year': Utils.get_year(tv.get('first_air_date')),
-                 'mediatype': "tvshow",
-                 'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id,
-                 'Rating': tv.get('vote_average'),
-                 'userrating': tv.get('rating'),
-                 'Votes': tv.get('vote_count'),
-                 'Premiered': tv.get('first_air_date')}
+        newtv = {'label': tv.get('name'),
+                 'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id}
+        newtv["infos"] = {'originaltitle': tv.get('original_name', ""),
+                          'title': tv.get('name'),
+                          'duration': duration,
+                          'genre': " / ".join([i for i in genres if i]),
+                          'country': tv.get('original_language'),
+                          'Plot': tv.get("overview"),
+                          'year': Utils.get_year(tv.get('first_air_date')),
+                          'mediatype': "tvshow",
+                          'Rating': tv.get('vote_average'),
+                          'userrating': tv.get('rating'),
+                          'Votes': tv.get('vote_count'),
+                          'Premiered': tv.get('first_air_date')}
         newtv["properties"] = {'id': tmdb_id,
                                'character': tv.get('character'),
                                'Popularity': tv.get('popularity'),
@@ -412,14 +412,14 @@ def handle_episodes(results):
         title = Utils.clean_text(item.get("name"))
         if not title:
             title = u"%s %s" % (addon.LANG(20359), item.get('episode_number'))
-        listitem = {'mediatype': "episode",
-                    'title': title,
-                    'label': title,
-                    'Premiered': item.get('air_date'),
-                    'episode': item.get('episode_number'),
-                    'season': item.get('season_number'),
-                    'Rating': item.get('vote_average'),
-                    'Votes': item.get('vote_count')}
+        listitem = {'label': title}
+        listitem["infos"] = {'mediatype': "episode",
+                             'title': title,
+                             'Premiered': item.get('air_date'),
+                             'episode': item.get('episode_number'),
+                             'season': item.get('season_number'),
+                             'Rating': item.get('vote_average'),
+                             'Votes': item.get('vote_count')}
         listitem["properties"] = {'id': item.get('id'),
                                   'production_code': item.get('production_code'),
                                   'Plot': Utils.clean_text(item.get('overview'))}
@@ -432,10 +432,10 @@ def handle_misc(results):
     listitems = []
     for item in results:
         listitem = {'label': Utils.clean_text(item.get('name')),
-                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
-                    'year': Utils.get_year(item.get('release_date')),
-                    'Premiered': item.get('release_date'),
-                    'Plot': Utils.clean_text(item.get('description'))}
+                    'path': "plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id')}
+        listitem["infos"] = {'year': Utils.get_year(item.get('release_date')),
+                             'Premiered': item.get('release_date'),
+                             'Plot': Utils.clean_text(item.get('description'))}
         listitem["properties"] = {'certification': item.get('certification', "") + item.get('rating', ""),
                                   'item_count': item.get('item_count'),
                                   'favorite_count': item.get('favorite_count'),
@@ -453,11 +453,11 @@ def handle_seasons(results):
     listitems = []
     for item in results:
         season = item.get('season_number')
-        listitem = {'mediatype': "season",
-                    'label': addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
-                    'season': season,
-                    'Premiered': item.get('air_date'),
-                    'year': Utils.get_year(item.get('air_date'))}
+        listitem = {'label': addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season)}
+        listitem["infos"] = {'mediatype': "season",
+                             'season': season,
+                             'Premiered': item.get('air_date'),
+                             'year': Utils.get_year(item.get('air_date'))}
         listitem["properties"] = {'id': item.get('id')}
         listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
         listitems.append(listitem)
@@ -484,8 +484,8 @@ def handle_people(results):
     people = []
     for item in results:
         person = {'label': item['name'],
-                  'mediatype': "artist",
                   'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id'])}
+        person["infos"] = {'mediatype': "artist"}
         person["properties"] = {'adult': item.get('adult'),
                                 'alsoknownas': " / ".join(item.get('also_known_as', [])),
                                 'biography': Utils.clean_text(item.get('biography')),
@@ -514,7 +514,7 @@ def handle_images(results):
                                'iso_639_1': item.get("iso_639_1")}
         image["artwork"] = get_image_urls(poster=item.get("file_path"))
         if item.get("media"):
-            image['title'] = item["media"].get("title")
+            image['infos']['title'] = item["media"].get("title")
             if item["media"].get("poster_path"):
                 image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
         images.append(image)
@@ -524,8 +524,8 @@ def handle_images(results):
 def handle_companies(results):
     companies = []
     for item in results:
-        company = {'label': item['name'],
-                   'Plot': item['description']}
+        company = {'label': item['name']}
+        company["infos"] = {'Plot': item['description']}
         company["properties"] = {'parent_company': item['parent_company'],
                                  'headquarters': item['headquarters'],
                                  'homepage': item['homepage'],
