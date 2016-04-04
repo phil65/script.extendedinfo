@@ -24,7 +24,7 @@ def handle_videos(results, extended=False):
         video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
                  'Plot': snippet["description"],
                  'label': snippet["title"],
-                 'Date': snippet["publishedAt"][:10]}
+                 'Premiered': snippet["publishedAt"][:10]}
         video["artwork"] = {'thumb': thumb}
         video["properties"] = {'channel_title': snippet["channelTitle"],
                                'channel_id': snippet["channelId"],
@@ -43,17 +43,19 @@ def handle_videos(results, extended=False):
         for ext_item in ext_results["items"]:
             if not item["properties"]["youtube_id"] == ext_item['id']:
                 continue
-            item["duration"] = ext_item['contentDetails']['duration'][2:].lower()
-            item["dimension"] = ext_item['contentDetails']['dimension']
-            item["definition"] = ext_item['contentDetails']['definition']
-            item["caption"] = ext_item['contentDetails']['caption']
-            item["viewcount"] = Utils.millify(ext_item['statistics']['viewCount'])
-            item["likes"] = ext_item['statistics'].get('likeCount')
-            item["dislikes"] = ext_item['statistics'].get('dislikeCount')
-            if item["likes"] and item["dislikes"]:
-                vote_count = int(item["likes"]) + int(item["dislikes"])
+            duration = ext_item['contentDetails']['duration'][2:-1].split("M")
+            item["duration"] = int(duration[0]) * 60 + int(duration[1])
+            item["properties"]["duration"] = ext_item['contentDetails']['duration'][2:].lower()
+            item["properties"]["dimension"] = ext_item['contentDetails']['dimension']
+            item["properties"]["definition"] = ext_item['contentDetails']['definition']
+            item["properties"]["caption"] = ext_item['contentDetails']['caption']
+            item["properties"]["viewcount"] = Utils.millify(ext_item['statistics']['viewCount'])
+            item["properties"]["likes"] = ext_item['statistics'].get('likeCount')
+            item["properties"]["dislikes"] = ext_item['statistics'].get('dislikeCount')
+            if item["properties"]["likes"] and item["properties"]["dislikes"]:
+                vote_count = int(item["properties"]["likes"]) + int(item["properties"]["dislikes"])
                 if vote_count > 0:
-                    item["rating"] = format(float(item["likes"]) / vote_count * 10, '.2f')
+                    item["rating"] = format(float(item["properties"]["likes"]) / vote_count * 10, '.2f')
             break
         else:
             item["duration"] = ""
@@ -72,7 +74,7 @@ def handle_playlists(results):
         playlist = {'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
                     'label': snippet["title"],
                     'Plot': snippet["description"],
-                    'Date': snippet["publishedAt"][:10]}
+                    'Premiered': snippet["publishedAt"][:10]}
         playlist["artwork"] = {'thumb': thumb}
         playlist["properties"] = {'youtube_id': playlist_id,
                                   'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
@@ -101,7 +103,7 @@ def handle_channels(results):
         channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
                    'Plot': snippet["description"],
                    'label': snippet["title"],
-                   'Date': snippet["publishedAt"][:10]}
+                   'Premiered': snippet["publishedAt"][:10]}
         channel["artwork"] = {'thumb': thumb}
         channel["properties"] = {'youtube_id': channel_id,
                                  'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}

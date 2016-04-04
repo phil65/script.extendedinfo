@@ -114,7 +114,7 @@
 							<top>218</top>
 							<width>130</width>
 							<height>30</height>
-							<texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/rating/,.png]</texture>
+							<texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/stars/,.png]</texture>
 							<animation effect="fade" delay="800" time="400">WindowOpen</animation>
 							<animation effect="fade" time="160">WindowClose</animation>
 							<animation effect="fade" time="240">VisibleChange</animation>
@@ -147,7 +147,7 @@
 							<height>5</height>
 							<align>right</align>
 							<aligny>center</aligny>
-							<label>$INFO[ListItem.Property(date)]</label>
+							<label>$INFO[ListItem.Premiered]</label>
 							<font>font10</font>
 <!--                             <shadowcolor>FF222222</shadowcolor>
  -->                            <textcolor>FFBBBBBB</textcolor>
@@ -202,7 +202,7 @@
 							<top>218</top>
 							<width>130</width>
 							<height>30</height>
-							<texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/rating/,.png]</texture>
+							<texture colordiffuse="AAFFFFFF">$INFO[ListItem.Rating,flags/stars/,.png]</texture>
 							<animation effect="fade" delay="800" time="400">WindowOpen</animation>
 							<animation effect="fade" time="160">WindowClose</animation>
 							<animation effect="fade" time="240">VisibleChange</animation>
@@ -235,7 +235,7 @@
 							<height>5</height>
 							<align>right</align>
 							<aligny>center</aligny>
-							<label>$INFO[ListItem.Property(date)]</label>
+							<label>$INFO[ListItem.Premiered]</label>
 							<font>font10</font>
 <!--                             <shadowcolor>FF222222</shadowcolor>
  -->                            <textcolor>FFBBBBBB</textcolor>
