@@ -553,7 +553,7 @@ def create_listitems(data=None, preload_images=0):
                                     label2=result.pop("label2", ""),
                                     path=result.pop("path", ""))
         if "properties" in result:
-            props = {k: v for k, v in result["properties"].items() if v}
+            props = {k: unicode(v) for k, v in result["properties"].items() if v}
             for key, value in props.iteritems():
                 listitem.setProperty(key, unicode(value))
             del result["properties"]
