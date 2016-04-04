@@ -13,8 +13,9 @@ from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from ..VideoPlayer import PLAYER
 
-ID_LIST_ACTORS = 1000
+ID_LIST_YOUTUBE = 350
 ID_LIST_CREW = 750
+ID_LIST_ACTORS = 1000
 ID_LIST_EPISODES = 2000
 ID_LIST_VIDEOS = 1150
 ID_LIST_IMAGES = 1250
@@ -78,6 +79,7 @@ def get_window(window_type):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["Plot"])
 
+        @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),

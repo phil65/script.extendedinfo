@@ -21,7 +21,7 @@ from ..VideoPlayer import PLAYER
 
 ID_LIST_SIMILAR = 150
 ID_LIST_SEASONS = 250
-ID_LIST_TRAILERS = 350
+ID_LIST_YOUTUBE = 350
 ID_LIST_LISTS = 450
 ID_LIST_STUDIOS = 550
 ID_LIST_CERTS = 650
@@ -134,7 +134,7 @@ def get_window(window_type):
             PLAYER.play_youtube_video(youtube_id=youtube_id,
                                       window=self)
 
-        @ch.click(ID_LIST_TRAILERS)
+        @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
