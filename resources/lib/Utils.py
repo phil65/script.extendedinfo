@@ -545,8 +545,6 @@ def set_window_props(name, data, prefix=""):
 
 
 def create_listitems(data=None, preload_images=0):
-    INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay", "userrating"]
-    FLOAT_INFOLABELS = ["rating"]
     if not data:
         return []
     itemlist = []
@@ -554,6 +552,11 @@ def create_listitems(data=None, preload_images=0):
         listitem = xbmcgui.ListItem(label=result.get("label"),
                                     label2=result.get("label2"),
                                     path=result.get("path"))
+        if "properties" in result:
+            props = {k: v for k, v in result["properties"].items() if v}
+            for key, value in props.iteritems():
+                listitem.setProperty(key, unicode(value))
+            del result["properties"]
         for (key, value) in result.iteritems():
             if not value:
                 continue
@@ -561,20 +564,8 @@ def create_listitems(data=None, preload_images=0):
             if key == "artwork":
                 artwork = {k: v.replace("https://", "http://") for k, v in value.items() if v}
                 listitem.setArt(artwork)
-            elif key in INT_INFOLABELS:
-                if value.isdigit():
-                    listitem.setInfo('video', {key: int(value)})
-            elif key in FLOAT_INFOLABELS:
-                try:
-                    listitem.setInfo('video', {key: "%1.1f" % float(value)})
-                except:
-                    pass
             else:
-                listitem.setInfo('video', {key: unicode(value)})
-        for key, value in result.get("properties", {}).iteritems():
-            if not value:
-                continue
-            listitem.setProperty(key, unicode(value))
+                listitem.setInfo('video', {key: value})
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist
