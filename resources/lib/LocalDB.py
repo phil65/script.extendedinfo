@@ -235,18 +235,15 @@ class LocalDB(object):
                 self.movie_titles = json.loads(addon.get_global("movie_titles.JSON"))
                 self.movie_imdbs = json.loads(addon.get_global("movie_imdbs.JSON"))
             else:
-                data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
-                                           params='{"properties": ["originaltitle", "imdbnumber"], "sort": {"method": "none"}}')
                 self.movie_ids = []
                 self.movie_imdbs = []
                 self.movie_otitles = []
                 self.movie_titles = []
-                if "result" in data and "movies" in data["result"]:
-                    for item in data["result"]["movies"]:
-                        self.movie_ids.append(item["movieid"])
-                        self.movie_imdbs.append(item["imdbnumber"])
-                        self.movie_otitles.append(item["originaltitle"].lower())
-                        self.movie_titles.append(item["label"].lower())
+                for item in KodiJson.get_movies(["originaltitle", "imdbnumber"]):
+                    self.movie_ids.append(item["movieid"])
+                    self.movie_imdbs.append(item["imdbnumber"])
+                    self.movie_otitles.append(item["originaltitle"].lower())
+                    self.movie_titles.append(item["label"].lower())
                 addon.set_global("movie_ids.JSON", json.dumps(self.movie_ids))
                 addon.set_global("movie_otitles.JSON", json.dumps(self.movie_otitles))
                 addon.set_global("movie_titles.JSON", json.dumps(self.movie_titles))
@@ -298,18 +295,15 @@ class LocalDB(object):
                 self.tvshow_titles = json.loads(addon.get_global("tvshow_titles.JSON"))
                 self.tvshow_imdbs = json.loads(addon.get_global("tvshow_imdbs.JSON"))
             else:
-                data = Utils.get_kodi_json(method="VideoLibrary.GetTVShows",
-                                           params='{"properties": ["originaltitle", "imdbnumber"], "sort": { "method": "none" } }')
                 self.tvshow_ids = []
                 self.tvshow_imdbs = []
                 self.tvshow_originaltitles = []
                 self.tvshow_titles = []
-                if "result" in data and "tvshows" in data["result"]:
-                    for item in data["result"]["tvshows"]:
-                        self.tvshow_ids.append(item["tvshowid"])
-                        self.tvshow_imdbs.append(item["imdbnumber"])
-                        self.tvshow_originaltitles.append(item["originaltitle"].lower())
-                        self.tvshow_titles.append(item["label"].lower())
+                for item in KodiJson.get_tvshows(["originaltitle", "imdbnumber"]):
+                    self.tvshow_ids.append(item["tvshowid"])
+                    self.tvshow_imdbs.append(item["imdbnumber"])
+                    self.tvshow_originaltitles.append(item["originaltitle"].lower())
+                    self.tvshow_titles.append(item["label"].lower())
                 addon.set_global("tvshow_ids.JSON", json.dumps(self.tvshow_ids))
                 addon.set_global("tvshow_originaltitles.JSON", json.dumps(self.tvshow_originaltitles))
                 addon.set_global("tvshow_titles.JSON", json.dumps(self.tvshow_titles))

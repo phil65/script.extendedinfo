@@ -24,4 +24,24 @@ def get_artists(properties=None):
     properties = [] if not properties else properties
     data = Utils.get_kodi_json(method="AudioLibrary.GetArtists",
                                params='{"properties": ["%s"]}' % '","'.join(properties))
-    return data["result"]["artists"]
+    if "result" in data and "artists" in data["result"]:
+        return data["result"]["artists"]
+    return []
+
+
+def get_movies(properties=None):
+    properties = [] if not properties else properties
+    data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
+                               params='{"properties": ["%s"]}' % '","'.join(properties))
+    if "result" in data and "movies" in data["result"]:
+        return data["result"]["movies"]
+    return []
+
+
+def get_tvshows(properties=None):
+    properties = [] if not properties else properties
+    data = Utils.get_kodi_json(method="VideoLibrary.GetTVShows",
+                               params='{"properties": ["%s"]}' % '","'.join(properties))
+    if "result" in data and "tvshows" in data["result"]:
+        return data["result"]["tvshows"]
+    return []
