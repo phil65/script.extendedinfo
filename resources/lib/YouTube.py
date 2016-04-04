@@ -15,20 +15,19 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 def handle_videos(results, extended=False):
     videos = []
     for item in results:
-        thumb = ""
-        if "thumbnails" in item["snippet"]:
-            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        snippet = item["snippet"]
+        thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
         try:
             video_id = item["id"]["videoId"]
         except Exception:
-            video_id = item["snippet"]["resourceId"]["videoId"]
+            video_id = snippet["resourceId"]["videoId"]
         video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
-                 'Plot': item["snippet"]["description"],
-                 'label': item["snippet"]["title"],
-                 'Date': item["snippet"]["publishedAt"][:10]}
+                 'Plot': snippet["description"],
+                 'label': snippet["title"],
+                 'Date': snippet["publishedAt"][:10]}
         video["artwork"] = {'thumb': thumb}
-        video["properties"] = {'channel_title': item["snippet"]["channelTitle"],
-                               'channel_id': item["snippet"]["channelId"],
+        video["properties"] = {'channel_title': snippet["channelTitle"],
+                               'channel_id': snippet["channelId"],
                                'youtube_id': video_id,
                                'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id}
         videos.append(video)
@@ -64,22 +63,21 @@ def handle_videos(results, extended=False):
 def handle_playlists(results):
     playlists = []
     for item in results:
-        thumb = ""
-        if "thumbnails" in item["snippet"]:
-            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        snippet = item["snippet"]
+        thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
         try:
             playlist_id = item["id"]["playlistId"]
         except Exception:
-            playlist_id = item["snippet"]["resourceId"]["playlistId"]
-        playlist = {'youtube_id': playlist_id,
-                    'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                    'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                    'label': item["snippet"]["title"],
-                    'Plot': item["snippet"]["description"],
-                    'channel_title': item["snippet"]["channelTitle"],
-                    'live': item["snippet"]["liveBroadcastContent"].replace("none", ""),
-                    'Date': item["snippet"]["publishedAt"][:10]}
+            playlist_id = snippet["resourceId"]["playlistId"]
+        playlist = {'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
+                    'label': snippet["title"],
+                    'Plot': snippet["description"],
+                    'Date': snippet["publishedAt"][:10]}
         playlist["artwork"] = {'thumb': thumb}
+        playlist["properties"] = {'youtube_id': playlist_id,
+                                  'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
+                                  'channel_title': snippet["channelTitle"],
+                                  'live': snippet["liveBroadcastContent"].replace("none", "")}
         playlists.append(playlist)
     params = {"id": ",".join([i["properties"]["youtube_id"] for i in playlists]),
               "part": "contentDetails"}
@@ -94,17 +92,16 @@ def handle_playlists(results):
 def handle_channels(results):
     channels = []
     for item in results:
-        thumb = ""
-        if "thumbnails" in item["snippet"]:
-            thumb = item["snippet"]["thumbnails"]["high"]["url"]
+        snippet = item["snippet"]
+        thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
         try:
             channel_id = item["id"]["channelId"]
         except Exception:
-            channel_id = item["snippet"]["resourceId"]["channelId"]
+            channel_id = snippet["resourceId"]["channelId"]
         channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
-                   'Plot': item["snippet"]["description"],
-                   'label': item["snippet"]["title"],
-                   'Date': item["snippet"]["publishedAt"][:10]}
+                   'Plot': snippet["description"],
+                   'label': snippet["title"],
+                   'Date': snippet["publishedAt"][:10]}
         channel["artwork"] = {'thumb': thumb}
         channel["properties"] = {'youtube_id': channel_id,
                                  'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}
