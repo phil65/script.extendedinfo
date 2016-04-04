@@ -547,9 +547,6 @@ def set_window_props(name, data, prefix=""):
 def create_listitems(data=None, preload_images=0):
     INT_INFOLABELS = ["year", "episode", "season", "top250", "tracknumber", "playcount", "overlay", "userrating"]
     FLOAT_INFOLABELS = ["rating"]
-    STRING_INFOLABELS = ["genre", "director", "mpaa", "plot", "plotoutline", "title", "originaltitle",
-                         "sorttitle", "duration", "studio", "tagline", "writer", "tvshowtitle", "premiered",
-                         "status", "code", "aired", "credits", "lastplayed", "album", "votes", "trailer", "dateadded", "mediatype"]
     if not data:
         return []
     itemlist = []
@@ -565,19 +562,15 @@ def create_listitems(data=None, preload_images=0):
                 artwork = {k: v.replace("https://", "http://") for k, v in value.items() if v}
                 listitem.setArt(artwork)
             elif key in INT_INFOLABELS:
-                try:
+                if value.isdigit():
                     listitem.setInfo('video', {key: int(value)})
-                except:
-                    pass
-            elif key in STRING_INFOLABELS:
-                listitem.setInfo('video', {key: unicode(value)})
             elif key in FLOAT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key: "%1.1f" % float(value)})
                 except:
                     pass
             else:
-                listitem.setProperty(key, unicode(value))
+                listitem.setInfo('video', {key: unicode(value)})
         for key, value in result.get("properties", {}).iteritems():
             if not value:
                 continue
