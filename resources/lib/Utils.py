@@ -557,10 +557,8 @@ def create_listitems(data=None, preload_images=0):
             for key, value in props.iteritems():
                 listitem.setProperty(key, unicode(value))
             del result["properties"]
+        result = {k.lower(): v for k, v in result.items() if v}
         for (key, value) in result.iteritems():
-            if not value:
-                continue
-            key = key.lower()
             if key == "artwork":
                 artwork = {k: v.replace("https://", "http://") for k, v in value.items() if v}
                 listitem.setArt(artwork)
