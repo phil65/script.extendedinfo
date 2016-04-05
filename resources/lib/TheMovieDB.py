@@ -347,7 +347,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                          'genre': " / ".join([i for i in genres if i]),
                          'Votes': movie.get('vote_count'),
                          'year': Utils.get_year(movie.get('release_date')),
-                         'rating': round(movie.get('vote_average'), 1),
+                         'rating': round(movie['vote_average'], 1) if movie.get('vote_average') else "",
                          'userrating': movie.get('rating'),
                          'Premiered': movie.get('release_date')}
         item["properties"] = {'id': movie.get("id"),
@@ -389,7 +389,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                           'Plot': tv.get("overview"),
                           'year': Utils.get_year(tv.get('first_air_date')),
                           'mediatype': "tvshow",
-                          'rating': round(tv.get('vote_average'), 1),
+                          'rating': round(tv['vote_average'], 1) if tv.get("vote_average") else "",
                           'userrating': tv.get('rating'),
                           'Votes': tv.get('vote_count'),
                           'Premiered': tv.get('first_air_date')}
@@ -418,7 +418,7 @@ def handle_episodes(results):
                              'Premiered': item.get('air_date'),
                              'episode': item.get('episode_number'),
                              'season': item.get('season_number'),
-                             'rating': round(item.get('vote_average'), 1),
+                             'rating': round(item['vote_average'], 1) if item.get('vote_average') else "",
                              'Votes': item.get('vote_count')}
         listitem["properties"] = {'id': item.get('id'),
                                   'production_code': item.get('production_code'),
@@ -721,60 +721,60 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data(url="movie/%s" % (movie_id),
+    info = get_data(url="movie/%s" % (movie_id),
                         params=params,
                         cache_days=cache_time)
-    if not response:
+    if not info:
         Utils.notify("Could not get movie information")
         return {}
     mpaa = ""
     set_name = ""
     set_id = ""
-    studio = [i["name"] for i in response["production_companies"]]
-    authors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Writing"]
-    directors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Directing"]
-    us_cert = Utils.dictfind(response['releases']['countries'], "iso_3166_1", "US")
+    studio = [i["name"] for i in info["production_companies"]]
+    authors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Writing"]
+    directors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Directing"]
+    us_cert = Utils.dictfind(info['releases']['countries'], "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["certification"]
-    elif response['releases']['countries']:
-        mpaa = response['releases']['countries'][0]['certification']
-    movie_set = response.get("belongs_to_collection")
+    elif info['releases']['countries']:
+        mpaa = info['releases']['countries'][0]['certification']
+    movie_set = info.get("belongs_to_collection")
     if movie_set:
         set_name = movie_set.get("name")
         set_id = movie_set.get("id")
-    movie = {'label': response.get('title'),
-             'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % response.get("id", "")}
-    movie["infos"] = {'title': response.get('title'),
-                      'Tagline': response.get('tagline'),
-                      'duration': response.get('runtime'),
+    movie = {'label': info.get('title'),
+             'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", "")}
+    movie["infos"] = {'title': info.get('title'),
+                      'Tagline': info.get('tagline'),
+                      'duration': info.get('runtime'),
                       'mpaa': mpaa,
                       'Director': " / ".join(directors),
                       'writer': " / ".join(authors),
-                      'Plot': Utils.clean_text(response.get('overview')),
-                      'originaltitle': response.get('original_title'),
-                      'Country': response.get('original_language'),
-                      'genre': " / ".join([i["name"] for i in response["genres"]]),
-                      'year': Utils.get_year(response.get("release_date")),
-                      'rating': round(response.get('vote_average'), 1),
-                      'Premiered': response.get('release_date'),
-                      'Votes': response.get('vote_count'),
-                      'Status': translate_status(response.get('status'))}
-    movie["properties"] = {'adult': str(response.get('adult')),
-                           'popularity': response.get('popularity'),
+                      'Plot': Utils.clean_text(info.get('overview')),
+                      'originaltitle': info.get('original_title'),
+                      'Country': info.get('original_language'),
+                      'genre': " / ".join([i["name"] for i in info["genres"]]),
+                      'year': Utils.get_year(info.get("release_date")),
+                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
+                      'Premiered': info.get('release_date'),
+                      'Votes': info.get('vote_count'),
+                      'Status': translate_status(info.get('status'))}
+    movie["properties"] = {'adult': str(info.get('adult')),
+                           'popularity': info.get('popularity'),
                            'set': set_name,
                            'set_id': set_id,
-                           'id': response.get('id'),
-                           'imdb_id': response.get('imdb_id'),
-                           'duration(h)': Utils.format_time(response.get("runtime"), "h"),
-                           'duration(m)': Utils.format_time(response.get("runtime"), "m"),
-                           'budget': Utils.millify(response.get("budget")),
-                           'revenue': Utils.millify(response.get("revenue")),
-                           'homepage': response.get('homepage'),
+                           'id': info.get('id'),
+                           'imdb_id': info.get('imdb_id'),
+                           'duration(h)': Utils.format_time(info.get("runtime"), "h"),
+                           'duration(m)': Utils.format_time(info.get("runtime"), "m"),
+                           'budget': Utils.millify(info.get("budget")),
+                           'revenue': Utils.millify(info.get("revenue")),
+                           'homepage': info.get('homepage'),
                            'studio': " / ".join(studio)}
-    movie["artwork"] = get_image_urls(poster=response.get("poster_path"),
-                                      fanart=response.get("backdrop_path"))
-    videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
-    account_states = response.get("account_states")
+    movie["artwork"] = get_image_urls(poster=info.get("poster_path"),
+                                      fanart=info.get("backdrop_path"))
+    videos = handle_videos(info["videos"]["results"]) if "videos" in info else []
+    account_states = info.get("account_states")
     if dbid:
         local_item = local_db.get_movie(dbid)
         movie["properties"].update(local_item["properties"])
@@ -782,19 +782,20 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie["artwork"].update(local_item["artwork"])
     else:
         movie = local_db.merge_with_local("movie", [movie])[0]
-    movie["infos"]['rating'] = round(response.get('vote_average'), 1)  # hack to get tmdb rating instead of local one
-    listitems = {"actors": handle_people(response["credits"]["cast"]),
-                 "similar": handle_movies(response["similar"]["results"]),
-                 "lists": handle_misc(response["lists"]["results"]),
-                 "studios": handle_misc(response["production_companies"]),
-                 "releases": handle_misc(response["releases"]["countries"]),
-                 "crew": handle_people(response["credits"]["crew"]),
-                 "genres": handle_misc(response["genres"]),
-                 "keywords": handle_misc(response["keywords"]["keywords"]),
-                 "reviews": handle_misc(response["reviews"]["results"]),
+    # hack to get tmdb rating instead of local one
+    movie["infos"]['rating'] = round(info['vote_average'], 1) if info.get('vote_average') else ""
+    listitems = {"actors": handle_people(info["credits"]["cast"]),
+                 "similar": handle_movies(info["similar"]["results"]),
+                 "lists": handle_misc(info["lists"]["results"]),
+                 "studios": handle_misc(info["production_companies"]),
+                 "releases": handle_misc(info["releases"]["countries"]),
+                 "crew": handle_people(info["credits"]["crew"]),
+                 "genres": handle_misc(info["genres"]),
+                 "keywords": handle_misc(info["keywords"]["keywords"]),
+                 "reviews": handle_misc(info["reviews"]["results"]),
                  "videos": videos,
-                 "images": handle_images(response["images"]["posters"]),
-                 "backdrops": handle_images(response["images"]["backdrops"])}
+                 "images": handle_images(info["images"]["posters"]),
+                 "backdrops": handle_images(info["images"]["backdrops"])}
     return (movie, listitems, account_states)
 
 
@@ -806,57 +807,57 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data(url="tv/%s" % (tvshow_id),
-                        params=params,
-                        cache_days=cache_time)
-    if not response:
+    info = get_data(url="tv/%s" % (tvshow_id),
+                    params=params,
+                    cache_days=cache_time)
+    if not info:
         return False
-    account_states = response.get("account_states")
-    videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
-    tmdb_id = response.get("id", "")
-    if len(response.get("episode_run_time", -1)) > 1:
-        duration = "%i - %i" % (min(response["episode_run_time"]), max(response["episode_run_time"]))
-    elif len(response.get("episode_run_time", -1)) == 1:
-        duration = "%i" % (response["episode_run_time"][0])
+    account_states = info.get("account_states")
+    videos = handle_videos(info["videos"]["results"]) if "videos" in info else []
+    tmdb_id = info.get("id", "")
+    if len(info.get("episode_run_time", -1)) > 1:
+        duration = "%i - %i" % (min(info["episode_run_time"]), max(info["episode_run_time"]))
+    elif len(info.get("episode_run_time", -1)) == 1:
+        duration = "%i" % (info["episode_run_time"][0])
     else:
         duration = ""
-    us_cert = Utils.dictfind(response['content_ratings']['results'], "iso_3166_1", "US")
+    us_cert = Utils.dictfind(info['content_ratings']['results'], "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["rating"]
-    elif response['content_ratings']['results']:
-        mpaa = response['content_ratings']['results'][0]['rating']
+    elif info['content_ratings']['results']:
+        mpaa = info['content_ratings']['results'][0]['rating']
     else:
         mpaa = ""
-    tvshow = {'label': response.get('name'),
+    tvshow = {'label': info.get('name'),
               'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id}
-    tvshow["infos"] = {'title': response.get('name'),
-                       'tvshowtitle': response.get('name'),
-                       'originaltitle': response.get('original_name', ""),
+    tvshow["infos"] = {'title': info.get('name'),
+                       'tvshowtitle': info.get('name'),
+                       'originaltitle': info.get('original_name', ""),
                        'duration': duration,
                        'mpaa': mpaa,
-                       'genre': " / ".join([item["name"] for item in response["genres"]]),
-                       'Plot': Utils.clean_text(response.get("overview")),
-                       'year': Utils.get_year(response.get('first_air_date')),
+                       'genre': " / ".join([i["name"] for i in info["genres"]]),
+                       'Plot': Utils.clean_text(info.get("overview")),
+                       'year': Utils.get_year(info.get('first_air_date')),
                        'mediatype': "tvshow",
-                       'rating': round(response.get('vote_average'), 1),
-                       'country': response.get('original_language'),
-                       'userrating': response.get('rating'),
-                       'Votes': response.get('vote_count'),
-                       'Premiered': response.get('first_air_date'),
-                       'Status': translate_status(response.get('status'))}
-    tvshow["properties"] = {'credit_id': response.get('credit_id'),
+                       'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
+                       'country': info.get('original_language'),
+                       'userrating': info.get('rating'),
+                       'Votes': info.get('vote_count'),
+                       'Premiered': info.get('first_air_date'),
+                       'Status': translate_status(info.get('status'))}
+    tvshow["properties"] = {'credit_id': info.get('credit_id'),
                             'duration(h)': Utils.format_time(duration, "h"),
                             'duration(m)': Utils.format_time(duration, "m"),
                             'id': tmdb_id,
-                            'Popularity': response.get('popularity'),
-                            'ShowType': response.get('type'),
-                            'homepage': response.get('homepage'),
-                            'last_air_date': response.get('last_air_date'),
-                            'TotalEpisodes': response.get('number_of_episodes'),
-                            'TotalSeasons': response.get('number_of_seasons'),
-                            'in_production': response.get('in_production')}
-    tvshow["artwork"] = get_image_urls(poster=response.get("poster_path"),
-                                       fanart=response.get("backdrop_path"))
+                            'Popularity': info.get('popularity'),
+                            'ShowType': info.get('type'),
+                            'homepage': info.get('homepage'),
+                            'last_air_date': info.get('last_air_date'),
+                            'TotalEpisodes': info.get('number_of_episodes'),
+                            'TotalSeasons': info.get('number_of_seasons'),
+                            'in_production': info.get('in_production')}
+    tvshow["artwork"] = get_image_urls(poster=info.get("poster_path"),
+                                       fanart=info.get("backdrop_path"))
     if dbid:
         local_item = local_db.get_tvshow(dbid)
         tvshow["properties"].update(local_item["properties"])
@@ -864,19 +865,20 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow["artwork"].update(local_item["artwork"])
     else:
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
-    tvshow["infos"]['rating'] = round(response.get('vote_average'), 1)  # hack to get tmdb rating instead of local one
-    listitems = {"actors": handle_people(response["credits"]["cast"]),
-                 "similar": handle_tvshows(response["similar"]["results"]),
-                 "studios": handle_misc(response["production_companies"]),
-                 "networks": handle_misc(response["networks"]),
-                 "certifications": handle_misc(response["content_ratings"]["results"]),
-                 "crew": handle_people(response["credits"]["crew"]),
-                 "genres": handle_misc(response["genres"]),
-                 "keywords": handle_misc(response["keywords"]["results"]),
+    # hack to get tmdb rating instead of local one
+    tvshow["infos"]['rating'] = round(info['vote_average'], 1) if info.get('vote_average') else ""
+    listitems = {"actors": handle_people(info["credits"]["cast"]),
+                 "similar": handle_tvshows(info["similar"]["results"]),
+                 "studios": handle_misc(info["production_companies"]),
+                 "networks": handle_misc(info["networks"]),
+                 "certifications": handle_misc(info["content_ratings"]["results"]),
+                 "crew": handle_people(info["credits"]["crew"]),
+                 "genres": handle_misc(info["genres"]),
+                 "keywords": handle_misc(info["keywords"]["results"]),
                  "videos": videos,
-                 "seasons": handle_seasons(response["seasons"]),
-                 "images": handle_images(response["images"]["posters"]),
-                 "backdrops": handle_images(response["images"]["backdrops"])}
+                 "seasons": handle_seasons(info["seasons"]),
+                 "images": handle_images(info["images"]["posters"]),
+                 "backdrops": handle_images(info["images"]["backdrops"])}
     return (tvshow, listitems, account_states)
 
 
