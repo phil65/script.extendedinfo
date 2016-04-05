@@ -782,7 +782,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     else:
         movie = local_db.merge_with_local("movie", [movie])[0]
     # hack to get tmdb rating instead of local one
-    movie["infos"]['rating'] = round(info['vote_average'], 1) if info.get('vote_average') else ""
+    movie.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
                  "lists": handle_misc(info["lists"]["results"]),
@@ -866,7 +866,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     else:
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     # hack to get tmdb rating instead of local one
-    tvshow["infos"]['rating'] = round(info['vote_average'], 1) if info.get('vote_average') else ""
+    tvshow.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
                  "studios": handle_misc(info["production_companies"]),
