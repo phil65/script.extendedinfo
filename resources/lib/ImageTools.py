@@ -60,7 +60,7 @@ def blur(input_img, radius=25):
             Utils.log("PIL problem probably....")
             return {}
     else:
-        Utils.log("blurred img already created: " + targetfile)
+        # Utils.log("blurred img already created: " + targetfile)
         img = PIL.Image.open(targetfile)
     return {"ImageFilter": targetfile,
             "ImageColor": get_colors(img)}
@@ -114,7 +114,7 @@ def get_colors(img):
         for color in [r_avg, g_avg, b_avg]:
             color = color + diff if color <= (255 - diff) else 255
     imagecolor = "FF%s%s%s" % (format(r_avg, '02x'), format(g_avg, '02x'), format(b_avg, '02x'))
-    Utils.log("Average Color: " + imagecolor)
+    # Utils.log("Average Color: " + imagecolor)
     return imagecolor
 
 
