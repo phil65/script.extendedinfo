@@ -776,9 +776,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     account_states = info.get("account_states")
     if dbid:
         local_item = local_db.get_movie(dbid)
-        movie.update_properties(local_item["properties"])
-        movie.update_infos(local_item["infos"])
-        movie.update_artwork(local_item["artwork"])
+        movie.update_from_listitem(local_item)
     else:
         movie = local_db.merge_with_local("movie", [movie])[0]
     # hack to get tmdb rating instead of local one
@@ -860,9 +858,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                                       fanart=info.get("backdrop_path")))
     if dbid:
         local_item = local_db.get_tvshow(dbid)
-        tvshow.update_properties(local_item["properties"])
-        tvshow.update_infos(local_item["infos"])
-        tvshow.update_artwork(local_item["artwork"])
+        tvshow.update_from_listitem(local_item)
     else:
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     # hack to get tmdb rating instead of local one

@@ -279,9 +279,7 @@ class LocalDB(object):
                             continue
                     except Exception:
                         pass
-                    item.update_properties(local_item["properties"])
-                    item["infos"].update(local_item["infos"])
-                    item["artwork"].update(local_item["artwork"])
+                    item.update_from_listitem(local_item)
                     if library_first:
                         local_items.append(item)
                     else:

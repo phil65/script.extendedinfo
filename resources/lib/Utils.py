@@ -635,6 +635,11 @@ class ListItem(object):
                           indent=4,
                           separators=(',', ': '))
 
+    def update_from_listitem(self, listitem):
+        self.properties = listitem.get_properties()
+        self.artwork = listitem.get_artwork()
+        self.infos = listitem.get_infos()
+
     def set_properties(self, properties):
         self.properties = properties
 
@@ -650,6 +655,9 @@ class ListItem(object):
     def get_art(self, key):
         return self.artwork.get(key, "")
 
+    def get_artwork(self):
+        return {k: v for k, v in self.artwork.iteritems() if v}
+
     def update_artwork(self, artwork):
         self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
@@ -661,6 +669,12 @@ class ListItem(object):
 
     def set_infos(self, infos):
         self.infos = infos
+
+    def get_infos(self):
+        return {k: v for k, v in self.infos.iteritems() if v}
+
+    def get_info(self, key):
+        return self.infos.get(key)
 
     def set_label(self, label):
         self.label = label
@@ -678,7 +692,7 @@ class ListItem(object):
         return self.properties.get(key, "")
 
     def get_properties(self):
-        return self.properties
+        return {k: v for k, v in self.properties.iteritems() if v}
 
     def set_property(self, key, value):
         self.properties[key] = value
