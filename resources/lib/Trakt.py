@@ -118,39 +118,38 @@ def handle_tvshows(results):
     shows = []
     for item in results:
         airs = item['show'].get("airs", {})
-        path = PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % item['show']['ids']["tvdb"]
-        show = {'label': item['show']["title"],
-                'path': path}
-        show["infos"] = {'mediatype': "tvshow",
-                         'title': item['show']["title"],
-                         'tvshowtitle': item['show']["title"],
-                         'duration': item['show']["runtime"] * 60,
-                         'year': item['show']["year"],
-                         'Premiered': item['show']["first_aired"][:10],
-                         'Country': item['show']["country"],
-                         'Rating': round(item['show']["rating"], 1),
-                         'Votes': item['show']["votes"],
-                         'mpaa': item['show']["certification"],
-                         'trailer': item["show"]["trailer"],
-                         'Status': item['show'].get("status"),
-                         'Studio': item['show']["network"],
-                         'genre': " / ".join(item['show']["genres"]),
-                         'Plot': item['show']["overview"]}
-        show["properties"] = {'id': item['show']['ids']["tmdb"],
-                              'tvdb_id': item['show']['ids']["tvdb"],
-                              'imdb_id': item['show']['ids']["imdb"],
-                              'duration(h)': Utils.format_time(item['show']["runtime"], "h"),
-                              'duration(m)': Utils.format_time(item['show']["runtime"], "m"),
-                              'homepage': item["show"]["homepage"],
-                              'AirDay': airs.get("day"),
-                              'AirShortTime': airs.get("time"),
-                              'Watchers': item.get("watchers")}
-        show["artwork"] = {'poster': item['show']["images"]["poster"]["full"],
-                           'banner': item['show']["images"]["banner"]["full"],
-                           'clearart': item['show']["images"]["clearart"]["full"],
-                           'clearlogo': item['show']["images"]["logo"]["full"],
-                           'fanart': item['show']["images"]["fanart"]["full"],
-                           'thumb': item['show']["images"]["poster"]["thumb"]}
+        show = Utils.ListItem(label=item['show']["title"],
+                              path='%sextendedtvinfo&&tvdb_id=%s' % (PLUGIN_BASE, item['show']['ids']["tvdb"]))
+        show.set_infos({'mediatype': "tvshow",
+                        'title': item['show']["title"],
+                        'tvshowtitle': item['show']["title"],
+                        'duration': item['show']["runtime"] * 60,
+                        'year': item['show']["year"],
+                        'Premiered': item['show']["first_aired"][:10],
+                        'Country': item['show']["country"],
+                        'Rating': round(item['show']["rating"], 1),
+                        'Votes': item['show']["votes"],
+                        'mpaa': item['show']["certification"],
+                        'trailer': item["show"]["trailer"],
+                        'Status': item['show'].get("status"),
+                        'Studio': item['show']["network"],
+                        'genre': " / ".join(item['show']["genres"]),
+                        'Plot': item['show']["overview"]})
+        show.set_properties({'id': item['show']['ids']["tmdb"],
+                             'tvdb_id': item['show']['ids']["tvdb"],
+                             'imdb_id': item['show']['ids']["imdb"],
+                             'duration(h)': Utils.format_time(item['show']["runtime"], "h"),
+                             'duration(m)': Utils.format_time(item['show']["runtime"], "m"),
+                             'homepage': item["show"]["homepage"],
+                             'AirDay': airs.get("day"),
+                             'AirShortTime': airs.get("time"),
+                             'Watchers': item.get("watchers")})
+        show.set_artwork({'poster': item['show']["images"]["poster"]["full"],
+                          'banner': item['show']["images"]["banner"]["full"],
+                          'clearart': item['show']["images"]["clearart"]["full"],
+                          'clearlogo': item['show']["images"]["logo"]["full"],
+                          'fanart': item['show']["images"]["fanart"]["full"],
+                          'thumb': item['show']["images"]["poster"]["thumb"]})
         shows.append(show)
     shows = local_db.merge_with_local(media_type="tvshow",
                                       online_list=shows,
