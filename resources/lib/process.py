@@ -31,7 +31,7 @@ def start_info_actions(info, params):
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
         params["artist_mbid"] = Utils.fetch_musicbrainz_id(params["artistname"])
     Utils.log(info)
-    Utils.prettyprint(params)
+    Utils.pp(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
 

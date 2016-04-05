@@ -459,7 +459,7 @@ def get_kodi_json(method, params):
     return json.loads(json_query)
 
 
-def prettyprint(string):
+def pp(string):
     log(json.dumps(string,
                    sort_keys=True,
                    indent=4,
@@ -586,6 +586,47 @@ class ListItem(object):
         self.artwork = {}
         self.streamdetails = {}
         self.infos = {}
+
+    def __getitem__(self, key):
+        if key in self.properties:
+            return self.properties[key]
+        elif key in self.artwork:
+            return self.artwork[key]
+        elif key in self.infos:
+            return self.infos[key]
+        elif key == "properties":
+            return self.properties
+        elif key == "infos":
+            return self.infos
+        elif key == "artwork":
+            return self.artwork
+        elif key == "label":
+            return self.label
+        elif key == "label2":
+            return self.label2
+        elif key == "path":
+            return self.path
+        else:
+            raise KeyError
+
+    def get(self, key, fallback=None):
+        try:
+            return self.__getitem__(key)
+        except KeyError:
+            return fallback
+
+    def __str__(self):
+        return pp(self.infos) + pp(self.properties) + pp(self.artwork)
+
+    def __contains__(self, key):
+        if key in self.properties:
+            return True
+        elif key in self.artwork:
+            return True
+        elif key in self.infos:
+            return True
+        elif key in ["properties", "infos", "artwork", "label", "label2", "path"]:
+            return True
 
     def set_properties(self, properties):
         self.properties = properties

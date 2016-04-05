@@ -742,37 +742,37 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     if movie_set:
         set_name = movie_set.get("name")
         set_id = movie_set.get("id")
-    movie = {'label': info.get('title'),
-             'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", "")}
-    movie["infos"] = {'title': info.get('title'),
-                      'Tagline': info.get('tagline'),
-                      'duration': info.get('runtime'),
-                      'mpaa': mpaa,
-                      'Director': " / ".join(directors),
-                      'writer': " / ".join(authors),
-                      'Plot': Utils.clean_text(info.get('overview')),
-                      'originaltitle': info.get('original_title'),
-                      'Country': info.get('original_language'),
-                      'genre': " / ".join([i["name"] for i in info["genres"]]),
-                      'year': Utils.get_year(info.get("release_date")),
-                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
-                      'Premiered': info.get('release_date'),
-                      'Votes': info.get('vote_count'),
-                      'Status': translate_status(info.get('status'))}
-    movie["properties"] = {'adult': str(info.get('adult')),
-                           'popularity': info.get('popularity'),
-                           'set': set_name,
-                           'set_id': set_id,
-                           'id': info.get('id'),
-                           'imdb_id': info.get('imdb_id'),
-                           'duration(h)': Utils.format_time(info.get("runtime"), "h"),
-                           'duration(m)': Utils.format_time(info.get("runtime"), "m"),
-                           'budget': Utils.millify(info.get("budget")),
-                           'revenue': Utils.millify(info.get("revenue")),
-                           'homepage': info.get('homepage'),
-                           'studio': " / ".join(studio)}
-    movie["artwork"] = get_image_urls(poster=info.get("poster_path"),
-                                      fanart=info.get("backdrop_path"))
+    movie = Utils.ListItem(label=info.get('title'),
+                           path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
+    movie.set_infos({'title': info.get('title'),
+                     'Tagline': info.get('tagline'),
+                     'duration': info.get('runtime'),
+                     'mpaa': mpaa,
+                     'Director': " / ".join(directors),
+                     'writer': " / ".join(authors),
+                     'Plot': Utils.clean_text(info.get('overview')),
+                     'originaltitle': info.get('original_title'),
+                     'Country': info.get('original_language'),
+                     'genre': " / ".join([i["name"] for i in info["genres"]]),
+                     'year': Utils.get_year(info.get("release_date")),
+                     'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
+                     'Premiered': info.get('release_date'),
+                     'Votes': info.get('vote_count'),
+                     'Status': translate_status(info.get('status'))})
+    movie.set_properties({'adult': str(info.get('adult')),
+                          'popularity': info.get('popularity'),
+                          'set': set_name,
+                          'set_id': set_id,
+                          'id': info.get('id'),
+                          'imdb_id': info.get('imdb_id'),
+                          'duration(h)': Utils.format_time(info.get("runtime"), "h"),
+                          'duration(m)': Utils.format_time(info.get("runtime"), "m"),
+                          'budget': Utils.millify(info.get("budget")),
+                          'revenue': Utils.millify(info.get("revenue")),
+                          'homepage': info.get('homepage'),
+                          'studio': " / ".join(studio)})
+    movie.set_artwork(get_image_urls(poster=info.get("poster_path"),
+                                     fanart=info.get("backdrop_path")))
     videos = handle_videos(info["videos"]["results"]) if "videos" in info else []
     account_states = info.get("account_states")
     if dbid:
