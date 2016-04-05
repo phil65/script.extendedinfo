@@ -338,7 +338,6 @@ def handle_movies(results, local_first=True, sortkey="year"):
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for movie in results:
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
-        trailer = "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id"))
         item = Utils.ListItem(label=movie.get('title'),
                               path=PLUGIN_BASE + path % movie.get("id"))
         item.set_infos({'title': movie.get('title'),
@@ -346,7 +345,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         'mediatype': "movie",
                         'country': movie.get('original_language'),
                         'plot': movie.get('overview'),
-                        'Trailer': trailer,
+                        'Trailer': "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id")),
                         'genre': " / ".join([i for i in genres if i]),
                         'Votes': movie.get('vote_count'),
                         'year': Utils.get_year(movie.get('release_date')),
@@ -733,8 +732,6 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         Utils.notify("Could not get movie information")
         return {}
     mpaa = ""
-    set_name = ""
-    set_id = ""
     studio = [i["name"] for i in info["production_companies"]]
     authors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Writing"]
     directors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Directing"]
@@ -744,9 +741,6 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     elif info['releases']['countries']:
         mpaa = info['releases']['countries'][0]['certification']
     movie_set = info.get("belongs_to_collection")
-    if movie_set:
-        set_name = movie_set.get("name")
-        set_id = movie_set.get("id")
     movie = Utils.ListItem(label=info.get('title'),
                            path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
     movie.set_infos({'title': info.get('title'),
@@ -766,8 +760,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'Status': translate_status(info.get('status'))})
     movie.set_properties({'adult': str(info.get('adult')),
                           'popularity': info.get('popularity'),
-                          'set': set_name,
-                          'set_id': set_id,
+                          'set': movie_set.get("name") if movie_set else "",
+                          'set_id': movie_set.get("id") if movie_set else "",
                           'id': info.get('id'),
                           'imdb_id': info.get('imdb_id'),
                           'duration(h)': Utils.format_time(info.get("runtime"), "h"),
