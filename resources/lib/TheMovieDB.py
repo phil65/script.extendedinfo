@@ -738,7 +738,6 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     mpaa = ""
     set_name = ""
     set_id = ""
-    genres = [i["name"] for i in response["genres"]]
     studio = [i["name"] for i in response["production_companies"]]
     authors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Writing"]
     directors = [i["name"] for i in response['credits']['crew'] if i["department"] == "Directing"]
@@ -762,23 +761,23 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                       'Plot': Utils.clean_text(response.get('overview')),
                       'originaltitle': response.get('original_title'),
                       'Country': response.get('original_language'),
-                      'genre': " / ".join(genres),
+                      'genre': " / ".join([i["name"] for i in response["genres"]]),
                       'year': Utils.get_year(response.get("release_date")),
                       'rating': response.get('vote_average'),
                       'Premiered': response.get('release_date'),
                       'Votes': response.get('vote_count'),
                       'Status': translate_status(response.get('status'))}
-    movie["properties"] = {'Adult': str(response.get('adult')),
-                           'Popularity': response.get('popularity'),
-                           'Set': set_name,
-                           'SetId': set_id,
+    movie["properties"] = {'adult': str(response.get('adult')),
+                           'popularity': response.get('popularity'),
+                           'set': set_name,
+                           'set_id': set_id,
                            'id': response.get('id'),
                            'imdb_id': response.get('imdb_id'),
                            'duration(h)': Utils.format_time(response.get("runtime"), "h"),
                            'duration(m)': Utils.format_time(response.get("runtime"), "m"),
-                           'Budget': Utils.millify(response.get("budget")),
-                           'Revenue': Utils.millify(response.get("revenue")),
-                           'Homepage': response.get('homepage'),
+                           'budget': Utils.millify(response.get("budget")),
+                           'revenue': Utils.millify(response.get("revenue")),
+                           'homepage': response.get('homepage'),
                            'studio': " / ".join(studio)}
     movie["artwork"] = get_image_urls(poster=response.get("poster_path"),
                                       fanart=response.get("backdrop_path"))

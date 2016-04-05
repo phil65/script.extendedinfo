@@ -12,17 +12,11 @@ import time
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
+
 class LocalDB(object):
 
     def __init__(self, *args, **kwargs):
-        self.movie_imdbs = []
-        self.movie_ids = []
-        self.movie_titles = []
-        self.movie_otitles = []
-        self.tvshow_ids = []
-        self.tvshow_originaltitles = []
-        self.tvshow_titles = []
-        self.tvshow_imdbs = []
+        self.info = {}
         self.artists = []
         self.albums = []
 
@@ -223,43 +217,52 @@ class LocalDB(object):
             return []
         return data['result']['albums']
 
-    def merge_with_local_movie_info(self, online_list, library_first=True, sortkey=False):
-        if not self.movie_titles:
+    def get_compare_info(self, media_type="movie", items=None):
+        if not self.info.get(media_type):
+            self.info[media_type] = {}
+            dct = self.info[media_type]
             # now = time.time()
-            self.movie_ids = addon.get_global("movie_ids.JSON")
-            if self.movie_ids and self.movie_ids != "[]":
-                self.movie_ids = json.loads(self.movie_ids)
-                self.movie_otitles = json.loads(addon.get_global("movie_otitles.JSON"))
-                self.movie_titles = json.loads(addon.get_global("movie_titles.JSON"))
-                self.movie_imdbs = json.loads(addon.get_global("movie_imdbs.JSON"))
+            dct["ids"] = addon.get_global("%s_ids.JSON" % media_type)
+            if dct["ids"] and dct["ids"] != "[]":
+                dct["ids"] = json.loads(dct["ids"])
+                dct["otitles"] = json.loads(addon.get_global("%s_otitles.JSON" % media_type))
+                dct["titles"] = json.loads(addon.get_global("%s_titles.JSON" % media_type))
+                dct["imdbs"] = json.loads(addon.get_global("%s_imdbs.JSON" % media_type))
             else:
-                self.movie_ids = []
-                self.movie_imdbs = []
-                self.movie_otitles = []
-                self.movie_titles = []
-                for item in KodiJson.get_movies(["originaltitle", "imdbnumber"]):
-                    self.movie_ids.append(item["movieid"])
-                    self.movie_imdbs.append(item["imdbnumber"])
-                    self.movie_otitles.append(item["originaltitle"].lower())
-                    self.movie_titles.append(item["label"].lower())
-                addon.set_global("movie_ids.JSON", json.dumps(self.movie_ids))
-                addon.set_global("movie_otitles.JSON", json.dumps(self.movie_otitles))
-                addon.set_global("movie_titles.JSON", json.dumps(self.movie_titles))
-                addon.set_global("movie_imdbs.JSON", json.dumps(self.movie_imdbs))
-            # Utils.log("create_light_movielist: " + str(now - time.time()))
-        # now = time.time()
+                dct["ids"] = []
+                dct["imdbs"] = []
+                dct["otitles"] = []
+                dct["titles"] = []
+                for item in items:
+                    dct["ids"].append(item["%sid" % media_type])
+                    dct["imdbs"].append(item["imdbnumber"])
+                    dct["otitles"].append(item["originaltitle"].lower())
+                    dct["titles"].append(item["label"].lower())
+                addon.set_global("%s_ids.JSON" % media_type, json.dumps(dct["ids"]))
+                addon.set_global("%s_otitles.JSON" % media_type, json.dumps(dct["otitles"]))
+                addon.set_global("%s_titles.JSON" % media_type, json.dumps(dct["titles"]))
+                addon.set_global("%s_imdbs.JSON" % media_type, json.dumps(dct["imdbs"]))
+            self.info[media_type] = dct
+
+    def merge_with_local_movie_info(self, online_list, library_first=True, sortkey=False):
+        self.get_compare_info("movie",
+                              KodiJson.get_movies(["originaltitle", "imdbnumber"]))
         local_items = []
         remote_items = []
+        info = self.info["movie"]
         for item in online_list:
             index = False
-            if "imdb_id" in item.get("properties", {}) and item["properties"]["imdb_id"] in self.movie_imdbs:
-                index = self.movie_imdbs.index(item["properties"]["imdb_id"])
-            elif "title" in item.get("infos", {}) and item["infos"]['title'].lower() in self.movie_titles:
-                index = self.movie_titles.index(item["infos"]['title'].lower())
-            elif "originaltitle" in item.get("infos", {}) and item["infos"]["originaltitle"].lower() in self.movie_otitles:
-                index = self.movie_otitles.index(item["infos"]["originaltitle"].lower())
+            imdb_id = item["properties"].get("imdb_id")
+            title = item["infos"]['title'].lower()
+            otitle = item["infos"]["originaltitle"].lower()
+            if "imdb_id" in item.get("properties", {}) and imdb_id in info["imdbs"]:
+                index = info["imdbs"].index(imdb_id)
+            elif "title" in item.get("infos", {}) and title in info["titles"]:
+                index = info["titles"].index(title)
+            elif "originaltitle" in item.get("infos", {}) and otitle in info["otitles"]:
+                index = info["otitles"].index(otitle)
             if index:
-                local_item = self.get_movie(self.movie_ids[index])
+                local_item = self.get_movie(info["ids"][index])
                 if local_item:
                     try:
                         diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
@@ -279,43 +282,20 @@ class LocalDB(object):
                     remote_items.append(item)
             else:
                 remote_items.append(item)
-        # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items, key=lambda k: k["infos"][sortkey], reverse=True)
             remote_items = sorted(remote_items, key=lambda k: k["infos"][sortkey], reverse=True)
         return local_items + remote_items
 
     def merge_with_local_tvshow_info(self, online_list, library_first=True, sortkey=False):
-        if not self.tvshow_titles:
-            # now = time.time()
-            self.tvshow_ids = addon.get_global("tvshow_ids.JSON")
-            if self.tvshow_ids and self.tvshow_ids != "[]":
-                self.tvshow_ids = json.loads(self.tvshow_ids)
-                self.tvshow_originaltitles = json.loads(addon.get_global("tvshow_originaltitles.JSON"))
-                self.tvshow_titles = json.loads(addon.get_global("tvshow_titles.JSON"))
-                self.tvshow_imdbs = json.loads(addon.get_global("tvshow_imdbs.JSON"))
-            else:
-                self.tvshow_ids = []
-                self.tvshow_imdbs = []
-                self.tvshow_originaltitles = []
-                self.tvshow_titles = []
-                for item in KodiJson.get_tvshows(["originaltitle", "imdbnumber"]):
-                    self.tvshow_ids.append(item["tvshowid"])
-                    self.tvshow_imdbs.append(item["imdbnumber"])
-                    self.tvshow_originaltitles.append(item["originaltitle"].lower())
-                    self.tvshow_titles.append(item["label"].lower())
-                addon.set_global("tvshow_ids.JSON", json.dumps(self.tvshow_ids))
-                addon.set_global("tvshow_originaltitles.JSON", json.dumps(self.tvshow_originaltitles))
-                addon.set_global("tvshow_titles.JSON", json.dumps(self.tvshow_titles))
-                addon.set_global("tvshow_imdbs.JSON", json.dumps(self.tvshow_imdbs))
-            # Utils.log("create_light_tvshowlist: " + str(now - time.time()))
-        # now = time.time()
+        self.get_compare_info("tvshow",
+                              KodiJson.get_tvshows(["originaltitle", "imdbnumber"]))
         local_items = []
         remote_items = []
         for item in online_list:
             index = None
-            if "imdb_id" in item and item["imdb_id"] in self.tvshow_imdbs:
-                index = self.tvshow_imdbs.index(item["imdb_id"])
+            if "imdb_id" in item and item["imdb_id"] in self.info["tvshow"]["imdbs"]:
+                index = self.info["tvshow"]["imdbs"].index(item["imdb_id"])
             elif "title" in item.get("infos", {}) and item["infos"]['title'].lower() in self.tvshow_titles:
                 index = self.tvshow_titles.index(item["infos"]['title'].lower())
             elif "originaltitle" in item.get("infos", {}) and item["infos"]["originaltitle"].lower() in self.tvshow_originaltitles:
@@ -341,7 +321,6 @@ class LocalDB(object):
                     remote_items.append(item)
             else:
                 remote_items.append(item)
-        # Utils.log("compare time: " + str(now - time.time()))
         if sortkey:
             local_items = sorted(local_items,
                                  key=lambda k: k["infos"][sortkey],
@@ -399,10 +378,9 @@ class LocalDB(object):
             return None
         data = Utils.get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
                                    params='{"properties": ["tvshowid"], "episodeid":%s }' % dbid)
-        if "episodedetails" in data["result"]:
-            return self.get_imdb_id(media_type="tvshow",
-                                    dbid=str(data['result']['episodedetails']['tvshowid']))
-        else:
+        if "episodedetails" not in data["result"]:
             return None
+        return self.get_imdb_id(media_type="tvshow",
+                                dbid=str(data['result']['episodedetails']['tvshowid']))
 
 local_db = LocalDB()

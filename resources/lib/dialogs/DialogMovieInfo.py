@@ -61,7 +61,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.account_states = data
             self.info = Utils.merge_dicts(self.info, self.info["infos"], self.info["artwork"], self.info["properties"])
-            sets_thread = SetItemsThread(self.info["SetId"])
+            sets_thread = SetItemsThread(self.info["set_id"])
             self.omdb_thread = Utils.FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
