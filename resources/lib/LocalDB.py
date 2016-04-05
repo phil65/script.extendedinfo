@@ -10,6 +10,7 @@ import Utils
 import addon
 import time
 
+PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 class LocalDB(object):
 
@@ -134,11 +135,11 @@ class LocalDB(object):
             return []
 
     def handle_movies(self, movie):
-        trailer = "plugin://script.extendedinfo/?info=playtrailer&&dbid=%s" % str(movie['movieid'])
+        trailer = PLUGIN_BASE + "playtrailer&&dbid=%s" % str(movie['movieid'])
         if addon.setting("infodialog_onclick") != "false":
-            path = 'plugin://script.extendedinfo/?info=extendedinfo&&dbid=%s' % str(movie['movieid'])
+            path = PLUGIN_BASE + 'extendedinfo&&dbid=%s' % str(movie['movieid'])
         else:
-            path = 'plugin://script.extendedinfo/?info=playmovie&&dbid=%i' % movie['movieid']
+            path = PLUGIN_BASE + 'playmovie&&dbid=%i' % movie['movieid']
         if (movie['resume']['position'] and movie['resume']['total']) > 0:
             resume = "true"
             played = '%s' % int((float(movie['resume']['position']) / float(movie['resume']['total'])) * 100)
@@ -166,39 +167,39 @@ class LocalDB(object):
                                   'dbid': str(movie['movieid'])}
         db_movie["artwork"] = movie['art']
         streams = []
-        for i, item in enumerate(movie['streamdetails']['audio']):
+        for i, item in enumerate(movie['streamdetails']['audio'], start=1):
             language = item['language']
             if language not in streams and language != "und":
                 streams.append(language)
-                db_movie["properties"]['AudioLanguage.%d' % (i + 1)] = language
-                db_movie["properties"]['AudioCodec.%d' % (i + 1)] = item['codec']
-                db_movie["properties"]['AudioChannels.%d' % (i + 1)] = str(item['channels'])
+                db_movie["properties"]['AudioLanguage.%d' % i] = language
+                db_movie["properties"]['AudioCodec.%d' % i] = item['codec']
+                db_movie["properties"]['AudioChannels.%d' % i] = str(item['channels'])
         subs = []
-        for i, item in enumerate(movie['streamdetails']['subtitle']):
+        for i, item in enumerate(movie['streamdetails']['subtitle'], start=1):
             language = item['language']
             if language not in subs and language != "und":
                 subs.append(language)
-                db_movie["properties"]['SubtitleLanguage.%d' % (i + 1)] = language
+                db_movie["properties"]['SubtitleLanguage.%d' % i] = language
         db_movie["properties"].update(stream_info)
         return {k: v for k, v in db_movie.items() if v}
 
     def handle_tvshows(self, tvshow):
         if addon.setting("infodialog_onclick") != "false":
-            path = 'plugin://script.extendedinfo/?info=extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
+            path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
-            path = 'plugin://script.extendedinfo/?info=action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
+            path = PLUGIN_BASE + 'action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
         db_tvshow = {'label': tvshow.get('label'),
-                     'title': tvshow.get('label'),
-                     'genre': " / ".join(tvshow.get('genre')),
-                     'File': tvshow.get('file'),
-                     'year': str(tvshow.get('year')),
-                     'originaltitle': tvshow.get('originaltitle'),
-                     'imdb_id': tvshow.get('imdbnumber'),
-                     'path': path,
-                     'Play': "",
-                     'dbid': str(tvshow['tvshowid']),
-                     'Rating': str(round(float(tvshow['rating']), 1))}
-        db_tvshow.update(tvshow['art'])
+                     'path': path}
+        db_tvshow["infos"] = {'title': tvshow.get('label'),
+                              'genre': " / ".join(tvshow.get('genre')),
+                              'Rating': str(round(float(tvshow['rating']), 1)),
+                              'year': str(tvshow.get('year')),
+                              'originaltitle': tvshow.get('originaltitle')}
+        db_tvshow["properties"] = {'imdb_id': tvshow.get('imdbnumber'),
+                                   'Play': "",
+                                   'File': tvshow.get('file'),
+                                   'dbid': tvshow['tvshowid']}
+        db_tvshow["artwork"] = tvshow['art']
         return {k: v for k, v in db_tvshow.items() if v}
 
     def get_movie(self, movie_id):
@@ -361,7 +362,7 @@ class LocalDB(object):
                                            params='{"properties": ["thumbnail"], "albumid":%s }' % local_item["albumid"])
                 album = data["result"]["albumdetails"]
                 item["dbid"] = album["albumid"]
-                item["path"] = 'plugin://script.extendedinfo/?info=playalbum&&dbid=%i' % album['albumid']
+                item["path"] = PLUGIN_BASE + 'playalbum&&dbid=%i' % album['albumid']
                 if album["thumbnail"]:
                     item.update({"thumb": album["thumbnail"]})
                 break
