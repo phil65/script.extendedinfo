@@ -305,14 +305,14 @@ def add_movie_to_list(movie_id):
 def merge_with_cert_desc(input_list, media_type):
     cert_list = get_certification_list(media_type)
     for item in input_list:
-        iso = item["properties"]["iso_3166_1"].upper()
+        iso = item.get_property("iso_3166_1").upper()
         if iso not in cert_list:
             continue
         hit = Utils.dictfind(lst=cert_list[iso],
                              key="certification",
-                             value=item["properties"]["certification"])
+                             value=item.get_property("certification"))
         if hit:
-            item["properties"]["meaning"] = hit["meaning"]
+            item.set_property("meaning", hit["meaning"])
     return input_list
 
 
@@ -456,13 +456,13 @@ def handle_seasons(results):
     listitems = []
     for item in results:
         season = item.get('season_number')
-        listitem = {'label': addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season)}
-        listitem["infos"] = {'mediatype': "season",
-                             'season': season,
-                             'Premiered': item.get('air_date'),
-                             'year': Utils.get_year(item.get('air_date'))}
-        listitem["properties"] = {'id': item.get('id')}
-        listitem["artwork"] = get_image_urls(poster=item.get("poster_path"))
+        listitem = Utils.ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season))
+        listitem.set_infos({'mediatype': "season",
+                            'season': season,
+                            'Premiered': item.get('air_date'),
+                            'year': Utils.get_year(item.get('air_date'))})
+        listitem.set_properties({'id': item.get('id')})
+        listitem.set_artwork(get_image_urls(poster=item.get("poster_path")))
         listitems.append(listitem)
     return listitems
 
@@ -470,15 +470,15 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        listitem = {'label': item.get('name'),
-                    'size': item.get('size')}
-        listitem["properties"] = {'iso_639_1': item.get('iso_639_1'),
-                                  'type': item.get('type'),
-                                  'key': item.get('key'),
-                                  'youtube_id': item.get('key'),
-                                  'site': item.get('site'),
-                                  'id': item.get('id')}
-        listitem["artwork"] = {'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')}
+        listitem = Utils.ListItem(label=item.get('name'),
+                                  size=item.get('size'))
+        listitem.set_properties({'iso_639_1': item.get('iso_639_1'),
+                                 'type': item.get('type'),
+                                 'key': item.get('key'),
+                                 'youtube_id': item.get('key'),
+                                 'site': item.get('site'),
+                                 'id': item.get('id')})
+        listitem.set_artwork({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
         listitems.append(listitem)
     return listitems
 
@@ -486,24 +486,24 @@ def handle_videos(results):
 def handle_people(results):
     people = []
     for item in results:
-        person = {'label': item['name'],
-                  'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id'])}
-        person["infos"] = {'mediatype': "artist"}
-        person["properties"] = {'adult': item.get('adult'),
-                                'alsoknownas': " / ".join(item.get('also_known_as', [])),
-                                'biography': Utils.clean_text(item.get('biography')),
-                                'birthday': item.get('birthday'),
-                                'age': Utils.calculate_age(item.get('birthday'), item.get('deathday')),
-                                'character': item.get('character'),
-                                'department': item.get('department'),
-                                'job': item.get('job'),
-                                'id': item['id'],
-                                'cast_id': item.get('cast_id'),
-                                'credit_id': item.get('credit_id'),
-                                'deathday': item.get('deathday'),
-                                'placeofbirth': item.get('place_of_birth'),
-                                'homepage': item.get('homepage')}
-        person["artwork"] = get_image_urls(profile=item.get("profile_path"))
+        person = Utils.ListItem(label=item['name'],
+                                path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']))
+        person.set_infos({'mediatype': "artist"})
+        person.set_properties({'adult': item.get('adult'),
+                               'alsoknownas': " / ".join(item.get('also_known_as', [])),
+                               'biography': Utils.clean_text(item.get('biography')),
+                               'birthday': item.get('birthday'),
+                               'age': Utils.calculate_age(item.get('birthday'), item.get('deathday')),
+                               'character': item.get('character'),
+                               'department': item.get('department'),
+                               'job': item.get('job'),
+                               'id': item['id'],
+                               'cast_id': item.get('cast_id'),
+                               'credit_id': item.get('credit_id'),
+                               'deathday': item.get('deathday'),
+                               'placeofbirth': item.get('place_of_birth'),
+                               'homepage': item.get('homepage')})
+        person.get_artwork(get_image_urls(profile=item.get("profile_path")))
         people.append(person)
     return people
 
@@ -511,15 +511,15 @@ def handle_people(results):
 def handle_images(results):
     images = []
     for item in results:
-        image = {}
-        image["properties"] = {'aspectratio': item['aspect_ratio'],
-                               'vote_average': item.get("vote_average"),
-                               'iso_639_1': item.get("iso_639_1")}
-        image["artwork"] = get_image_urls(poster=item.get("file_path"))
+        image = Utils.ListItem()
+        image.set_properties({'aspectratio': item['aspect_ratio'],
+                              'vote_average': item.get("vote_average"),
+                              'iso_639_1': item.get("iso_639_1")})
+        image.set_artwork(get_image_urls(poster=item.get("file_path")))
         if item.get("media"):
-            image['infos'] = {'title': item["media"].get("title")}
+            image.set_infos({'title': item["media"].get("title")})
             if item["media"].get("poster_path"):
-                image["artwork"]['mediaposter'] = IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")
+                image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")})
         images.append(image)
     return images
 
@@ -527,13 +527,13 @@ def handle_images(results):
 def handle_companies(results):
     companies = []
     for item in results:
-        company = {'label': item['name']}
-        company["infos"] = {'Plot': item['description']}
-        company["properties"] = {'parent_company': item['parent_company'],
-                                 'headquarters': item['headquarters'],
-                                 'homepage': item['homepage'],
-                                 'id': item['id'],
-                                 'logo_path': item['logo_path']}
+        company = Utils.ListItem(label=item['name'])
+        company.set_infos({'Plot': item['description']})
+        company.set_properties({'parent_company': item['parent_company'],
+                                'headquarters': item['headquarters'],
+                                'homepage': item['homepage'],
+                                'id': item['id'],
+                                'logo_path': item['logo_path']})
         companies.append(company)
     return companies
 

@@ -142,32 +142,33 @@ class LocalDB(object):
             played = '0'
         stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
                                                 movie['streamdetails'])
-        db_movie = {'label': movie.get('label'),
-                    'path': path}
-        db_movie["infos"] = {'title': movie.get('label'),
-                             'File': movie.get('file'),
-                             'year': str(movie.get('year')),
-                             'writer': " / ".join(movie['writer']),
-                             'userrating': movie.get('userrating'),
-                             'trailer': trailer,
-                             'Rating': str(round(float(movie['rating']), 1)),
-                             'director': " / ".join(movie.get('director')),
-                             'writer': " / ".join(movie.get('writer')),
-                             'plot': movie.get('plot'),
-                             'originaltitle': movie.get('originaltitle')}
-        db_movie["properties"] = {'imdb_id': movie.get('imdbnumber'),
-                                  'PercentPlayed': played,
-                                  'Resume': resume,
-                                  'dbid': str(movie['movieid'])}
-        db_movie["artwork"] = movie['art']
+        db_movie = Utils.ListItem(label=movie.get('label'),
+                                  path=path)
+        db_movie.set_infos({'title': movie.get('label'),
+                            'File': movie.get('file'),
+                            'year': str(movie.get('year')),
+                            'writer': " / ".join(movie['writer']),
+                            'userrating': movie.get('userrating'),
+                            'trailer': trailer,
+                            'Rating': str(round(float(movie['rating']), 1)),
+                            'director': " / ".join(movie.get('director')),
+                            'writer': " / ".join(movie.get('writer')),
+                            'plot': movie.get('plot'),
+                            'originaltitle': movie.get('originaltitle')})
+        db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
+                                 'PercentPlayed': played,
+                                 'Resume': resume,
+                                 'dbid': str(movie['movieid'])})
+        db_movie.set_artwork(movie['art'])
         streams = []
         for i, item in enumerate(movie['streamdetails']['audio'], start=1):
             language = item['language']
             if language not in streams and language != "und":
                 streams.append(language)
-                db_movie["properties"]['AudioLanguage.%d' % i] = language
-                db_movie["properties"]['AudioCodec.%d' % i] = item['codec']
-                db_movie["properties"]['AudioChannels.%d' % i] = str(item['channels'])
+                streaminfo = {'AudioLanguage.%d' % i: language,
+                              'AudioCodec.%d' % i: item["codec"],
+                              'AudioChannels.%d' % i: str(item['channels'])}
+                db_movie.update_properties(streaminfo)
         subs = []
         for i, item in enumerate(movie['streamdetails']['subtitle'], start=1):
             language = item['language']
@@ -182,18 +183,18 @@ class LocalDB(object):
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = PLUGIN_BASE + 'action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
-        db_tvshow = {'label': tvshow.get('label'),
-                     'path': path}
-        db_tvshow["infos"] = {'title': tvshow.get('label'),
-                              'genre': " / ".join(tvshow.get('genre')),
-                              'Rating': str(round(float(tvshow['rating']), 1)),
-                              'year': str(tvshow.get('year')),
-                              'originaltitle': tvshow.get('originaltitle')}
-        db_tvshow["properties"] = {'imdb_id': tvshow.get('imdbnumber'),
-                                   'Play': "",
-                                   'File': tvshow.get('file'),
-                                   'dbid': tvshow['tvshowid']}
-        db_tvshow["artwork"] = tvshow['art']
+        db_tvshow = Utils.ListItem(label=tvshow.get("label"),
+                                   path=path)
+        db_tvshow.set_infos({'title': tvshow.get('label'),
+                             'genre': " / ".join(tvshow.get('genre')),
+                             'Rating': str(round(float(tvshow['rating']), 1)),
+                             'year': str(tvshow.get('year')),
+                             'originaltitle': tvshow.get('originaltitle')})
+        db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
+                                  'Play': "",
+                                  'File': tvshow.get('file'),
+                                  'dbid': tvshow['tvshowid']})
+        db_tvshow.set_artwork(tvshow['art'])
         return {k: v for k, v in db_tvshow.items() if v}
 
     def get_movie(self, movie_id):

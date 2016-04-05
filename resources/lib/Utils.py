@@ -578,10 +578,11 @@ def clean_text(text):
 
 class ListItem(object):
 
-    def __init__(self, label="", label2="", path="", infos={}, properties={}, artwork={}, streamdetails={}):
+    def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}, streamdetails={}):
         self.label = label
         self.label2 = label
         self.path = path
+        self.size = ""
         self.properties = properties
         self.artwork = artwork
         self.streamdetails = streamdetails
@@ -655,11 +656,23 @@ class ListItem(object):
     def set_infos(self, infos):
         self.infos = infos
 
+    def set_label(self, label):
+        self.label = label
+
+    def set_label2(self, label):
+        self.label2 = label
+
+    def set_size(self, size):
+        self.size = size
+
     def update_infos(self, infos):
         self.infos.update({k: v for k, v in infos.iteritems() if v})
 
     def get_property(self, key):
         return self.properties.get(key, "")
+
+    def set_property(self, key, value):
+        self.properties[key] = value
 
     def get_listitem(self):
         listitem = xbmcgui.ListItem(label=self.label,
