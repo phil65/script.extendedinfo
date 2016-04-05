@@ -38,7 +38,8 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info['ImageFilter'], self.info['ImageColor'] = ImageTools.filter_image(self.info.get("thumb"))
+            self.info = Utils.merge_dicts(self.info, self.info["infos"], self.info["artwork"], self.info["properties"])
+            self.info["properties"].update(ImageTools.blur(self.info.get("thumb")))
             self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
                               (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
                               (ID_LIST_IMAGES, self.data["images"]),
@@ -49,8 +50,8 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids(self.info["label"])
             super(DialogActorInfo, self).onInit()
-            Utils.pass_dict_to_skin(data=self.info,
-                                    window_id=self.window_id)
+            Utils.listitem_to_windowprops(data=self.info,
+                                          window_id=self.window_id)
             self.fill_lists()
 
         def onClick(self, control_id):

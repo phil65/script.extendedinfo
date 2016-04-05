@@ -17,7 +17,7 @@ THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
 IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")
 
 
-def filter_image(input_img, radius=25):
+def blur(input_img, radius=25):
     if not input_img:
         return "", ""
     if not xbmcvfs.exists(IMAGE_PATH):
@@ -62,8 +62,8 @@ def filter_image(input_img, radius=25):
     else:
         Utils.log("blurred img already created: " + targetfile)
         img = PIL.Image.open(targetfile)
-    imagecolor = get_colors(img)
-    return targetfile, imagecolor
+    return {"ImageFilter": targetfile,
+            "ImageColor": get_colors(img)}
 
 
 def get_cached_thumb(filename):
@@ -124,13 +124,13 @@ class FilterImageThread(threading.Thread):
         threading.Thread.__init__(self)
         self.image = image
         self.radius = radius
+        self.info = {}
 
     def run(self):
         try:
-            self.image, self.imagecolor = filter_image(self.image, self.radius)
+            self.info = blur(self.image, self.radius)
         except Exception:
-            self.image = ""
-            self.imagecolor = ""
+            pass
 
 
 class MyGaussianBlur(PIL.ImageFilter.Filter):

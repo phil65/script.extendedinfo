@@ -60,21 +60,21 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
+            self.info = Utils.merge_dicts(self.info, self.info["infos"], self.info["artwork"], self.info["properties"])
             sets_thread = SetItemsThread(self.info["SetId"])
             self.omdb_thread = Utils.FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:
-                self.info['poster'] = Utils.get_file(self.info.get("poster", ""))
+                self.info["artwork"]['poster'] = Utils.get_file(self.info.get("poster", ""))
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             set_ids = [item["properties"]["id"] for item in sets_thread.listitems]
             self.data["similar"] = [i for i in self.data["similar"] if i["properties"]["id"] not in set_ids]
             filter_thread.join()
-            self.info['ImageFilter'] = filter_thread.image
-            self.info['ImageColor'] = filter_thread.imagecolor
+            self.info["properties"].update(filter_thread.info)
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, sets_thread.listitems),
@@ -91,8 +91,8 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
-            Utils.pass_dict_to_skin(data=self.info,
-                                    window_id=self.window_id)
+            Utils.listitem_to_windowprops(data=self.info,
+                                          window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info["label"], self.info["year"]))
             self.fill_lists()

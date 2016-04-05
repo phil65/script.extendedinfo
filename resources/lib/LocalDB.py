@@ -170,16 +170,16 @@ class LocalDB(object):
             language = item['language']
             if language not in streams and language != "und":
                 streams.append(language)
-                db_movie['AudioLanguage.%d' % (i + 1)] = language
-                db_movie['AudioCodec.%d' % (i + 1)] = item['codec']
-                db_movie['AudioChannels.%d' % (i + 1)] = str(item['channels'])
+                db_movie["properties"]['AudioLanguage.%d' % (i + 1)] = language
+                db_movie["properties"]['AudioCodec.%d' % (i + 1)] = item['codec']
+                db_movie["properties"]['AudioChannels.%d' % (i + 1)] = str(item['channels'])
         subs = []
         for i, item in enumerate(movie['streamdetails']['subtitle']):
             language = item['language']
             if language not in subs and language != "und":
                 subs.append(language)
-                db_movie['SubtitleLanguage.%d' % (i + 1)] = language
-        db_movie.update(stream_info)
+                db_movie["properties"]['SubtitleLanguage.%d' % (i + 1)] = language
+        db_movie["properties"].update(stream_info)
         return {k: v for k, v in db_movie.items() if v}
 
     def handle_tvshows(self, tvshow):

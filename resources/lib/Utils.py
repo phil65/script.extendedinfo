@@ -497,6 +497,20 @@ def pass_dict_to_skin(data=None, prefix="", window_id=10000):
         window.setProperty('%s%s' % (prefix, key), value)
 
 
+def listitem_to_windowprops(data=None, prefix="", window_id=10000):
+    window = xbmcgui.Window(window_id)
+    if not data:
+        return None
+    keys = ["artwork", "infos", "properties"]
+    window.setProperty('%slabel' % (prefix), data.get("label"))
+    window.setProperty('%spath' % (prefix), data.get("path"))
+    for key in keys:
+        for (k, v) in data.get(key, {}).iteritems():
+            if not v:
+                continue
+            window.setProperty('%s%s' % (prefix, k), unicode(v))
+
+
 def merge_dict_lists(items, key="job"):
     crew_ids = []
     crews = []
@@ -545,6 +559,12 @@ def create_listitems(data=None, preload_images=0):
         if "infos" in result:
             infos = {k.lower(): v for k, v in result["infos"].items() if v}
             listitem.setInfo("video", infos)
+        if "videoinfo" in result:
+            infos = {k.lower(): v for k, v in result["videoinfo"].items() if v}
+            listitem.addStreamInfo("video", infos)
+        if "audioinfo" in result:
+            infos = {k.lower(): v for k, v in result["audioinfo"].items() if v}
+            listitem.addStreamInfo("audio", infos)
         listitem.setProperty("index", str(count))
         itemlist.append(listitem)
     return itemlist
