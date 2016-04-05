@@ -77,7 +77,7 @@ def get_window(window_type):
         @ch.click(ID_CONTROL_PLOT)
         def open_text(self):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info["Plot"])
+                                        text=self.info.get_info("plot"))
 
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)

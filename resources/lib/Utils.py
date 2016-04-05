@@ -347,8 +347,8 @@ def get_favs():
         path = get_fav_path(fav)
         items.append({'label': fav["title"],
                       'thumb': fav["thumbnail"],
-                      'Type': fav["type"],
-                      'Builtin': path,
+                      'type': fav["type"],
+                      'builtin': path,
                       'path': "plugin://script.extendedinfo/?info=action&&id=" + path})
     return items
 

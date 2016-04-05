@@ -45,18 +45,18 @@ class LocalDB(object):
                 artists.append({"label": item['label'],
                                 "artwork": artwork,
                                 "title": item['label'],
-                                "Genre": " / ".join(item['genre']),
-                                "Artist_Description": item['description'],
+                                "genre": " / ".join(item['genre']),
+                                "artist_description": item['description'],
                                 "userrating": item['userrating'],
-                                "Born": item['born'],
-                                "Died": item['died'],
-                                "Formed": item['formed'],
-                                "Disbanded": item['disbanded'],
-                                "YearsActive": " / ".join(item['yearsactive']),
-                                "Style": " / ".join(item['style']),
-                                "Mood": " / ".join(item['mood']),
-                                "Instrument": " / ".join(item['instrument']),
-                                "LibraryPath": 'musicdb://artists/%s/' % item['artistid']})
+                                "born": item['born'],
+                                "died": item['died'],
+                                "formed": item['formed'],
+                                "disbanded": item['disbanded'],
+                                "yearsactive": " / ".join(item['yearsactive']),
+                                "style": " / ".join(item['style']),
+                                "mood": " / ".join(item['mood']),
+                                "instrument": " / ".join(item['instrument']),
+                                "librarypath": 'musicdb://artists/%s/' % item['artistid']})
         Utils.log('%i of %i artists found in last.FM are in Kodi database' % (len(artists), len(simi_artists)))
         return artists
 
@@ -143,19 +143,19 @@ class LocalDB(object):
         db_movie = Utils.ListItem(label=movie.get('label'),
                                   path=path)
         db_movie.set_infos({'title': movie.get('label'),
-                            'File': movie.get('file'),
+                            'file': movie.get('file'),
                             'year': str(movie.get('year')),
                             'writer': " / ".join(movie['writer']),
                             'userrating': movie.get('userrating'),
                             'trailer': trailer,
-                            'Rating': str(round(float(movie['rating']), 1)),
+                            'rating': str(round(float(movie['rating']), 1)),
                             'director': " / ".join(movie.get('director')),
                             'writer': " / ".join(movie.get('writer')),
                             'plot': movie.get('plot'),
                             'originaltitle': movie.get('originaltitle')})
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
-                                 'PercentPlayed': played,
-                                 'Resume': resume,
+                                 'percentplayed': played,
+                                 'resume': resume,
                                  'dbid': str(movie['movieid'])})
         db_movie.set_artwork(movie['art'])
         streams = []
@@ -189,12 +189,11 @@ class LocalDB(object):
                                    path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
                              'genre': " / ".join(tvshow.get('genre')),
-                             'Rating': str(round(float(tvshow['rating']), 1)),
+                             'rating': str(round(float(tvshow['rating']), 1)),
                              'year': str(tvshow.get('year')),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
-                                  'Play': "",
-                                  'File': tvshow.get('file'),
+                                  'file': tvshow.get('file'),
                                   'dbid': tvshow['tvshowid']})
         db_tvshow.set_artwork(tvshow['art'])
         return db_tvshow

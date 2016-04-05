@@ -347,13 +347,13 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         'plot': movie.get('overview'),
                         'Trailer': "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id")),
                         'genre': " / ".join([i for i in genres if i]),
-                        'Votes': movie.get('vote_count'),
+                        'votes': movie.get('vote_count'),
                         'year': Utils.get_year(movie.get('release_date')),
                         'rating': round(movie['vote_average'], 1) if movie.get('vote_average') else "",
                         'userrating': movie.get('rating'),
-                        'Premiered': movie.get('release_date')})
+                        'premiered': movie.get('release_date')})
         item.set_properties({'id': movie.get("id"),
-                             'Popularity': movie.get('popularity'),
+                             'popularity': movie.get('popularity'),
                              'credit_id': movie.get('credit_id'),
                              'character': movie.get('character'),
                              'job': movie.get('job'),
@@ -388,19 +388,19 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                          'duration': duration,
                          'genre': " / ".join([i for i in genres if i]),
                          'country': tv.get('original_language'),
-                         'Plot': tv.get("overview"),
+                         'plot': tv.get("overview"),
                          'year': Utils.get_year(tv.get('first_air_date')),
                          'mediatype': "tvshow",
                          'rating': round(tv['vote_average'], 1) if tv.get("vote_average") else "",
                          'userrating': tv.get('rating'),
-                         'Votes': tv.get('vote_count'),
-                         'Premiered': tv.get('first_air_date')})
+                         'votes': tv.get('vote_count'),
+                         'premiered': tv.get('first_air_date')})
         newtv.set_properties({'id': tmdb_id,
                               'character': tv.get('character'),
-                              'Popularity': tv.get('popularity'),
+                              'popularity': tv.get('popularity'),
                               'credit_id': tv.get('credit_id'),
-                              'TotalEpisodes': tv.get('number_of_episodes'),
-                              'TotalSeasons': tv.get('number_of_seasons')})
+                              'totalepisodes': tv.get('number_of_episodes'),
+                              'totalseasons': tv.get('number_of_seasons')})
         newtv.set_artwork(get_image_urls(poster=tv.get("poster_path"),
                                          fanart=tv.get("backdrop_path")))
         tvshows.append(newtv)
@@ -418,14 +418,14 @@ def handle_episodes(results):
         listitem = Utils.ListItem(label=title)
         listitem.set_infos({'mediatype': "episode",
                             'title': title,
-                            'Premiered': item.get('air_date'),
+                            'premiered': item.get('air_date'),
                             'episode': item.get('episode_number'),
                             'season': item.get('season_number'),
+                            'plot': Utils.clean_text(item.get('overview')),
                             'rating': round(item['vote_average'], 1) if item.get('vote_average') else "",
-                            'Votes': item.get('vote_count')})
+                            'votes': item.get('vote_count')})
         listitem.set_properties({'id': item.get('id'),
-                                 'production_code': item.get('production_code'),
-                                 'Plot': Utils.clean_text(item.get('overview'))})
+                                 'production_code': item.get('production_code')})
         listitem.set_artwork(get_image_urls(still=item.get("still_path")))
         listitems.append(listitem)
     return listitems
@@ -437,8 +437,8 @@ def handle_misc(results):
         listitem = Utils.ListItem(label=Utils.clean_text(item.get('name')),
                                   path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'))
         listitem.set_infos({'year': Utils.get_year(item.get('release_date')),
-                            'Premiered': item.get('release_date'),
-                            'Plot': Utils.clean_text(item.get('description'))})
+                            'premiered': item.get('release_date'),
+                            'plot': Utils.clean_text(item.get('description'))})
         listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
                                  'item_count': item.get('item_count'),
                                  'favorite_count': item.get('favorite_count'),
@@ -459,7 +459,7 @@ def handle_seasons(results):
         listitem = Utils.ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season))
         listitem.set_infos({'mediatype': "season",
                             'season': season,
-                            'Premiered': item.get('air_date'),
+                            'premiered': item.get('air_date'),
                             'year': Utils.get_year(item.get('air_date'))})
         listitem.set_properties({'id': item.get('id')})
         listitem.set_artwork(get_image_urls(poster=item.get("poster_path")))
@@ -528,7 +528,7 @@ def handle_companies(results):
     companies = []
     for item in results:
         company = Utils.ListItem(label=item['name'])
-        company.set_infos({'Plot': item['description']})
+        company.set_infos({'plot': item['description']})
         company.set_properties({'parent_company': item['parent_company'],
                                 'headquarters': item['headquarters'],
                                 'homepage': item['homepage'],
@@ -749,14 +749,14 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'mpaa': mpaa,
                      'Director': " / ".join(directors),
                      'writer': " / ".join(authors),
-                     'Plot': Utils.clean_text(info.get('overview')),
+                     'plot': Utils.clean_text(info.get('overview')),
                      'originaltitle': info.get('original_title'),
                      'Country': info.get('original_language'),
                      'genre': " / ".join([i["name"] for i in info["genres"]]),
                      'year': Utils.get_year(info.get("release_date")),
                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
-                     'Premiered': info.get('release_date'),
-                     'Votes': info.get('vote_count'),
+                     'premiered': info.get('release_date'),
+                     'votes': info.get('vote_count'),
                      'Status': translate_status(info.get('status'))})
     movie.set_properties({'adult': str(info.get('adult')),
                           'popularity': info.get('popularity'),
@@ -834,20 +834,20 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                       'duration': duration,
                       'mpaa': mpaa,
                       'genre': " / ".join([i["name"] for i in info["genres"]]),
-                      'Plot': Utils.clean_text(info.get("overview")),
+                      'plot': Utils.clean_text(info.get("overview")),
                       'year': Utils.get_year(info.get('first_air_date')),
                       'mediatype': "tvshow",
                       'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
                       'country': info.get('original_language'),
                       'userrating': info.get('rating'),
-                      'Votes': info.get('vote_count'),
-                      'Premiered': info.get('first_air_date'),
+                      'votes': info.get('vote_count'),
+                      'premiered': info.get('first_air_date'),
                       'Status': translate_status(info.get('status'))})
     tvshow.set_properties({'credit_id': info.get('credit_id'),
                            'duration(h)': Utils.format_time(duration, "h"),
                            'duration(m)': Utils.format_time(duration, "m"),
                            'id': tmdb_id,
-                           'Popularity': info.get('popularity'),
+                           'popularity': info.get('popularity'),
                            'ShowType': info.get('type'),
                            'homepage': info.get('homepage'),
                            'last_air_date': info.get('last_air_date'),
@@ -905,10 +905,10 @@ def extended_season_info(tvshow_id, season_number):
     else:
         title = "%s %s" % (addon.LANG(20373), season_number)
     season = Utils.ListItem(label=title)
-    season.set_infos({'Plot': Utils.clean_text(response["overview"]),
+    season.set_infos({'plot': Utils.clean_text(response["overview"]),
                       'tvshowtitle': tvshow.get('name'),
                       'title': title,
-                      'Premiered': response["air_date"]})
+                      'premiered': response["air_date"]})
     season.set_artwork(get_image_urls(poster=response.get("poster_path")))
     season.set_properties({'id': response["id"]})
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []

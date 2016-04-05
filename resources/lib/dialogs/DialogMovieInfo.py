@@ -227,7 +227,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_PLOT)
         def show_plot(self):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
-                                        text=self.info["Plot"])
+                                        text=self.info.get_info("plot"))
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating_dialog(self):

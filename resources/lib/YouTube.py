@@ -23,8 +23,8 @@ def handle_videos(results, extended=False):
             video_id = snippet["resourceId"]["videoId"]
         video = Utils.ListItem(label=snippet["title"],
                                path=PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id)
-        video.set_infos({'Plot': snippet["description"],
-                         'Premiered': snippet["publishedAt"][:10]})
+        video.set_infos({'plot': snippet["description"],
+                         'premiered': snippet["publishedAt"][:10]})
         video.set_artwork({'thumb': thumb})
         video.set_properties({'channel_title': snippet["channelTitle"],
                               'channel_id': snippet["channelId"],
@@ -74,11 +74,10 @@ def handle_playlists(results):
             playlist_id = snippet["resourceId"]["playlistId"]
         playlist = Utils.ListItem(label=snippet["title"],
                                   path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
-        playlist.set_infos({'Plot': snippet["description"],
-                            'Premiered': snippet["publishedAt"][:10]})
+        playlist.set_infos({'plot': snippet["description"],
+                            'premiered': snippet["publishedAt"][:10]})
         playlist.set_artwork({'thumb': thumb})
         playlist.set_properties({'youtube_id': playlist_id,
-                                 'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
                                  'channel_title': snippet["channelTitle"],
                                  'live': snippet["liveBroadcastContent"].replace("none", "")})
         playlists.append(playlist)
@@ -103,8 +102,8 @@ def handle_channels(results):
             channel_id = snippet["resourceId"]["channelId"]
         channel = Utils.ListItem(label=snippet["title"],
                                  path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
-        channel.set_infos({'Plot': snippet["description"],
-                           'Premiered': snippet["publishedAt"][:10]})
+        channel.set_infos({'plot': snippet["description"],
+                           'premiered': snippet["publishedAt"][:10]})
         channel.set_artwork({'thumb': thumb})
         channel.set_properties({'youtube_id': channel_id,
                                 'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id})
