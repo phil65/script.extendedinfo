@@ -135,8 +135,8 @@ class DialogBaseInfo(object):
             youtube_list = self.getControl(ID_LIST_YOUTUBE)
         except Exception:
             return None
-        result = YouTube.search(search_str, limit=15)
         if not self.yt_listitems:
+            result = YouTube.search(search_str, limit=15)
             self.yt_listitems = result.get("listitems", [])
             if "videos" in self.data:
                 vid_ids = [item.get_property("key") for item in self.data["videos"]]
