@@ -679,9 +679,10 @@ def get_image_urls(poster=None, still=None, fanart=None, profile=None):
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = local_db.get_imdb_id("movie", dbid)
-        Utils.log("IMDB Id from local DB: %s" % (movie_id))
-        return movie_id
-    elif imdb_id:
+        if movie_id:
+            Utils.log("IMDB Id from local DB: %s" % (movie_id))
+            return movie_id
+    if imdb_id:
         params = {"external_source": "imdb_id",
                   "language": addon.setting("LanguageID")}
         response = get_data(url="find/tt%s" % (imdb_id.replace("tt", "")),
