@@ -72,23 +72,23 @@ def handle_playlists(results):
             playlist_id = item["id"]["playlistId"]
         except Exception:
             playlist_id = snippet["resourceId"]["playlistId"]
-        playlist = {'path': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                    'label': snippet["title"]}
-        playlist["infos"] = {'Plot': snippet["description"],
-                             'Premiered': snippet["publishedAt"][:10]}
-        playlist["artwork"] = {'thumb': thumb}
-        playlist["properties"] = {'youtube_id': playlist_id,
-                                  'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
-                                  'channel_title': snippet["channelTitle"],
-                                  'live': snippet["liveBroadcastContent"].replace("none", "")}
+        playlist = Utils.ListItem(label=snippet["title"],
+                                  path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
+        playlist.set_infos({'Plot': snippet["description"],
+                            'Premiered': snippet["publishedAt"][:10]})
+        playlist.set_artwork({'thumb': thumb})
+        playlist.set_properties({'youtube_id': playlist_id,
+                                 'Play': PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id,
+                                 'channel_title': snippet["channelTitle"],
+                                 'live': snippet["liveBroadcastContent"].replace("none", "")})
         playlists.append(playlist)
-    params = {"id": ",".join([i["properties"]["youtube_id"] for i in playlists]),
+    params = {"id": ",".join([i.get_property("youtube_id") for i in playlists]),
               "part": "contentDetails"}
     ext_results = get_data(method="playlists",
                            params=params)
     for item, ext_item in itertools.product(playlists, ext_results["items"]):
-        if item["properties"]["youtube_id"] == ext_item['id']:
-            item["properties"]["itemcount"] = ext_item['contentDetails']['itemCount']
+        if item.get_property("youtube_id") == ext_item['id']:
+            item.set_property("itemcount", ext_item['contentDetails']['itemCount'])
     return playlists
 
 
@@ -101,23 +101,23 @@ def handle_channels(results):
             channel_id = item["id"]["channelId"]
         except Exception:
             channel_id = snippet["resourceId"]["channelId"]
-        channel = {'path': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id,
-                   'label': snippet["title"]}
-        channel["infos"] = {'Plot': snippet["description"],
-                            'Premiered': snippet["publishedAt"][:10]}
-        channel["artwork"] = {'thumb': thumb}
-        channel["properties"] = {'youtube_id': channel_id,
-                                 'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id}
+        channel = Utils.ListItem(label=snippet["title"],
+                                 path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
+        channel.set_infos({'Plot': snippet["description"],
+                           'Premiered': snippet["publishedAt"][:10]})
+        channel.set_artwork({'thumb': thumb})
+        channel.set_properties({'youtube_id': channel_id,
+                                'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id})
         channels.append(channel)
-    channel_ids = [item["properties"]["youtube_id"] for item in channels]
+    channel_ids = [item.get_property("youtube_id") for item in channels]
     params = {"id": ",".join(channel_ids),
               "part": "contentDetails,statistics,brandingSettings"}
     ext_results = get_data(method="channels",
                            params=params)
     for item, ext_item in itertools.product(channels, ext_results["items"]):
-        if item["properties"]["youtube_id"] == ext_item['id']:
-            item["properties"]["itemcount"] = ext_item['statistics']['videoCount']
-            item["artwork"]["fanart"] = ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl", "")
+        if item.get_property("youtube_id") == ext_item['id']:
+            item.set_property("itemcount", ext_item['statistics']['videoCount'])
+            item.set_art("fanart", ext_item["brandingSettings"]["image"].get("bannerTvMediumImageUrl"))
     return channels
 
 

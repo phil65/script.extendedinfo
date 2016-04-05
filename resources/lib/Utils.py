@@ -644,6 +644,12 @@ class ListItem(object):
     def set_artwork(self, artwork):
         self.artwork = artwork
 
+    def set_art(self, key, value):
+        self.artwork[key] = value
+
+    def get_art(self, key):
+        return self.artwork.get(key, "")
+
     def update_artwork(self, artwork):
         self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
@@ -670,6 +676,9 @@ class ListItem(object):
 
     def get_property(self, key):
         return self.properties.get(key, "")
+
+    def get_properties(self):
+        return self.properties
 
     def set_property(self, key, value):
         self.properties[key] = value

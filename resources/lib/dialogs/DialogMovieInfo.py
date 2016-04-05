@@ -60,20 +60,21 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
-            sets_thread = SetItemsThread(self.info["set_id"])
-            self.omdb_thread = Utils.FunctionThread(omdb.get_movie_info, self.info["imdb_id"])
+            sets_thread = SetItemsThread(self.info.get_property("set_id"))
+            self.omdb_thread = Utils.FunctionThread(function=omdb.get_movie_info,
+                                                    param=self.info.get_property("imdb_id"))
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
             if "dbid" not in self.info:
-                self.info["artwork"]['poster'] = Utils.get_file(self.info.get("poster", ""))
+                self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
-            set_ids = [item["properties"]["id"] for item in sets_thread.listitems]
-            self.data["similar"] = [i for i in self.data["similar"] if i["properties"]["id"] not in set_ids]
+            set_ids = [item.get_property("id") for item in sets_thread.listitems]
+            self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
             filter_thread.join()
-            self.info["properties"].update(filter_thread.info)
+            self.info.update_properties(filter_thread.info)
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, sets_thread.listitems),
