@@ -218,6 +218,12 @@ class LocalDB(object):
         return data['result']['albums']
 
     def get_compare_info(self, media_type="movie", items=None):
+        """
+        fetches info needed for the locally-available check
+        Caches some info as window properties.
+        Hacky, but by far fastest way to cache between sessions
+        """
+        infos = ["ids", "imdbs", "otitles", "titles"]
         if not self.info.get(media_type):
             self.info[media_type] = {}
             dct = self.info[media_type]
@@ -229,19 +235,16 @@ class LocalDB(object):
                 dct["titles"] = json.loads(addon.get_global("%s_titles.JSON" % media_type))
                 dct["imdbs"] = json.loads(addon.get_global("%s_imdbs.JSON" % media_type))
             else:
-                dct["ids"] = []
-                dct["imdbs"] = []
-                dct["otitles"] = []
-                dct["titles"] = []
+                for info in infos:
+                    dct[info] = []
                 for item in items:
                     dct["ids"].append(item["%sid" % media_type])
                     dct["imdbs"].append(item["imdbnumber"])
                     dct["otitles"].append(item["originaltitle"].lower())
                     dct["titles"].append(item["label"].lower())
-                addon.set_global("%s_ids.JSON" % media_type, json.dumps(dct["ids"]))
-                addon.set_global("%s_otitles.JSON" % media_type, json.dumps(dct["otitles"]))
-                addon.set_global("%s_titles.JSON" % media_type, json.dumps(dct["titles"]))
-                addon.set_global("%s_imdbs.JSON" % media_type, json.dumps(dct["imdbs"]))
+                for info in infos:
+                    addon.set_global("%s_%s.JSON" % (media_type, info), json.dumps(dct[info]))
+
             self.info[media_type] = dct
 
     def merge_with_local(self, media_type, items, library_first=True, sortkey=False):
@@ -285,8 +288,12 @@ class LocalDB(object):
             else:
                 remote_items.append(item)
         if sortkey:
-            local_items = sorted(local_items, key=lambda k: k["infos"][sortkey], reverse=True)
-            remote_items = sorted(remote_items, key=lambda k: k["infos"][sortkey], reverse=True)
+            local_items = sorted(iterable=local_items,
+                                 key=lambda k: k["infos"][sortkey],
+                                 reverse=True)
+            remote_items = sorted(iterable=remote_items,
+                                  key=lambda k: k["infos"][sortkey],
+                                  reverse=True)
         return local_items + remote_items
 
     def compare_album_with_library(self, online_list):
