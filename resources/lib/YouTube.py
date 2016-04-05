@@ -44,7 +44,7 @@ def handle_videos(results, extended=False):
             if not item["properties"]["youtube_id"] == ext_item['id']:
                 continue
             duration = ext_item['contentDetails']['duration'][2:-1].split("M")
-            item["duration"] = int(duration[0]) * 60 + int(duration[1])
+            item["infos"]["duration"] = int(duration[0]) * 60 + int(duration[1])
             item["properties"]["duration"] = ext_item['contentDetails']['duration'][2:].lower()
             item["properties"]["dimension"] = ext_item['contentDetails']['dimension']
             item["properties"]["definition"] = ext_item['contentDetails']['definition']
