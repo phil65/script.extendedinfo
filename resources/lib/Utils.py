@@ -95,21 +95,6 @@ def merge_dicts(*dict_args):
     return result
 
 
-def check_version():
-    """
-    check version, open TextViewer if update detected
-    """
-    if not addon.setting("changelog_version") == addon.VERSION:
-        xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
-                                    text=read_from_file(os.path.join(addon.PATH, "changelog.txt"), True))
-        addon.set_setting("changelog_version", addon.VERSION)
-    if not addon.setting("first_start_infodialog"):
-        addon.set_setting("first_start_infodialog", "True")
-        xbmcgui.Dialog().ok(heading=addon.NAME,
-                            line1=addon.LANG(32140),
-                            line2=addon.LANG(32141))
-
-
 def calculate_age(born, died=False):
     """
     calculate age based on born / died
@@ -195,10 +180,7 @@ def get_year(year_string):
     """
     return last 4 chars of string
     """
-    if year_string and len(year_string) > 3:
-        return year_string[:4]
-    else:
-        return ""
+    return year_string[:4] if year_string else ""
 
 
 def fetch_musicbrainz_id(artist, artist_id=-1):
@@ -417,11 +399,9 @@ def save_to_file(content, filename, path=""):
         if not xbmcvfs.exists(path):
             xbmcvfs.mkdirs(path)
         text_file_path = os.path.join(path, filename + ".txt")
-    now = time.time()
     text_file = xbmcvfs.File(text_file_path, "w")
     json.dump(content, text_file)
     text_file.close()
-    # log("saved textfile %s. Time: %f" % (text_file_path, time.time() - now))
     return True
 
 
@@ -544,7 +524,7 @@ def set_window_props(name, data, prefix=""):
 def create_listitems(data=None, preload_images=0):
     if not data:
         return []
-    itemlist = []
+    items = []
     for (count, result) in enumerate(data):
         listitem = xbmcgui.ListItem(label=result.get("label", ""),
                                     label2=result.get("label2", ""),
@@ -554,8 +534,8 @@ def create_listitems(data=None, preload_images=0):
             for key, value in props.iteritems():
                 listitem.setProperty(key, unicode(value))
         if "artwork" in result:
-            artwork = {k: v.replace("https://", "http://") for k, v in result["artwork"].items() if v}
-            listitem.setArt(artwork)
+            art = {k: v.replace("https://", "http://") for k, v in result["artwork"].items() if v}
+            listitem.setArt(art)
         if "infos" in result:
             infos = {k.lower(): v for k, v in result["infos"].items() if v}
             listitem.setInfo("video", infos)
@@ -566,8 +546,8 @@ def create_listitems(data=None, preload_images=0):
             infos = {k.lower(): v for k, v in result["audioinfo"].items() if v}
             listitem.addStreamInfo("audio", infos)
         listitem.setProperty("index", str(count))
-        itemlist.append(listitem)
-    return itemlist
+        items.append(listitem)
+    return items
 
 
 def clean_text(text):

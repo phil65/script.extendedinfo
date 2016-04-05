@@ -219,7 +219,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        Utils.check_version()
+        check_version()
         browser_class = DialogVideoList.get_window(BaseClasses.DialogXML)
         dialog = browser_class(LIST_XML,
                                addon.PATH,
@@ -287,7 +287,7 @@ class WindowManager(object):
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             self.active_dialog = dialog
-            Utils.check_version()
+            check_version()
             if prev_window:
                 self.add_to_stack(prev_window)
                 prev_window.close()
@@ -295,5 +295,21 @@ class WindowManager(object):
         else:
             self.active_dialog = None
             Utils.notify(addon.LANG(32143))
+
+
+def check_version():
+    """
+    check version, open TextViewer if update detected
+    """
+    if not addon.setting("changelog_version") == addon.VERSION:
+        text = Utils.read_from_file(os.path.join(addon.PATH, "changelog.txt"), True)
+        xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
+                                    text=text)
+        addon.set_setting("changelog_version", addon.VERSION)
+    if not addon.setting("first_start_infodialog"):
+        addon.set_setting("first_start_infodialog", "True")
+        xbmcgui.Dialog().ok(heading=addon.NAME,
+                            line1=addon.LANG(32140),
+                            line2=addon.LANG(32141))
 
 wm = WindowManager()
