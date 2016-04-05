@@ -44,4 +44,4 @@ def get_movies(movie_type):
         movie["artwork"] = {'thumb': poster,
                             'poster': poster}
         movies.append(movie)
-    return local_db.merge_with_local_movie_info(movies, False)
+    return local_db.merge_with_local("movie", movies, False)

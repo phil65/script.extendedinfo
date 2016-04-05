@@ -244,13 +244,14 @@ class LocalDB(object):
                 addon.set_global("%s_imdbs.JSON" % media_type, json.dumps(dct["imdbs"]))
             self.info[media_type] = dct
 
-    def merge_with_local_movie_info(self, online_list, library_first=True, sortkey=False):
-        self.get_compare_info("movie",
-                              KodiJson.get_movies(["originaltitle", "imdbnumber"]))
+    def merge_with_local(self, media_type, items, library_first=True, sortkey=False):
+        get_list = KodiJson.get_movies if media_type == "movie" else KodiJson.get_tvshows
+        self.get_compare_info(media_type,
+                              get_list(["originaltitle", "imdbnumber"]))
         local_items = []
         remote_items = []
-        info = self.info["movie"]
-        for item in online_list:
+        info = self.info[media_type]
+        for item in items:
             index = False
             imdb_id = item["properties"].get("imdb_id")
             title = item["infos"]['title'].lower()
@@ -262,7 +263,8 @@ class LocalDB(object):
             elif "originaltitle" in item.get("infos", {}) and otitle in info["otitles"]:
                 index = info["otitles"].index(otitle)
             if index:
-                local_item = self.get_movie(info["ids"][index])
+                get_info = self.get_movie if media_type == "movie" else self.get_tvshow
+                local_item = get_info(info["ids"][index])
                 if local_item:
                     try:
                         diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
@@ -285,49 +287,6 @@ class LocalDB(object):
         if sortkey:
             local_items = sorted(local_items, key=lambda k: k["infos"][sortkey], reverse=True)
             remote_items = sorted(remote_items, key=lambda k: k["infos"][sortkey], reverse=True)
-        return local_items + remote_items
-
-    def merge_with_local_tvshow_info(self, online_list, library_first=True, sortkey=False):
-        self.get_compare_info("tvshow",
-                              KodiJson.get_tvshows(["originaltitle", "imdbnumber"]))
-        local_items = []
-        remote_items = []
-        for item in online_list:
-            index = None
-            if "imdb_id" in item and item["imdb_id"] in self.info["tvshow"]["imdbs"]:
-                index = self.info["tvshow"]["imdbs"].index(item["imdb_id"])
-            elif "title" in item.get("infos", {}) and item["infos"]['title'].lower() in self.tvshow_titles:
-                index = self.tvshow_titles.index(item["infos"]['title'].lower())
-            elif "originaltitle" in item.get("infos", {}) and item["infos"]["originaltitle"].lower() in self.tvshow_originaltitles:
-                index = self.tvshow_originaltitles.index(item["infos"]["originaltitle"].lower())
-            if index:
-                local_item = self.get_tvshow(self.tvshow_ids[index])
-                if local_item:
-                    try:
-                        diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
-                        if diff > 1:
-                            remote_items.append(item)
-                            continue
-                    except Exception:
-                        pass
-                    item["properties"].update(local_item["properties"])
-                    item["infos"].update(local_item["infos"])
-                    item["artwork"].update(local_item["artwork"])
-                    if library_first:
-                        local_items.append(item)
-                    else:
-                        remote_items.append(item)
-                else:
-                    remote_items.append(item)
-            else:
-                remote_items.append(item)
-        if sortkey:
-            local_items = sorted(local_items,
-                                 key=lambda k: k["infos"][sortkey],
-                                 reverse=True)
-            remote_items = sorted(remote_items,
-                                  key=lambda k: k["infos"][sortkey],
-                                  reverse=True)
         return local_items + remote_items
 
     def compare_album_with_library(self, online_list):

@@ -360,7 +360,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
         item["artwork"] = get_image_urls(poster=movie.get("poster_path"),
                                          fanart=movie.get("backdrop_path"))
         movies.append(item)
-    return local_db.merge_with_local_movie_info(movies, local_first, sortkey)
+    return local_db.merge_with_local("movie", movies, local_first, sortkey)
 
 
 def handle_tvshows(results, local_first=True, sortkey="year"):
@@ -402,7 +402,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
         newtv["artwork"] = get_image_urls(poster=tv.get("poster_path"),
                                           fanart=tv.get("backdrop_path"))
         tvshows.append(newtv)
-    tvshows = local_db.merge_with_local_tvshow_info(tvshows, local_first, sortkey)
+    tvshows = local_db.merge_with_local("tvshow", tvshows, local_first, sortkey)
     return tvshows
 
 
@@ -789,7 +789,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie["infos"].update(local_item["infos"])
         movie["artwork"].update(local_item["artwork"])
     else:
-        movie = local_db.merge_with_local_movie_info([movie])[0]
+        movie = local_db.merge_with_local("movie", [movie])[0]
     movie["infos"]['rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_movies(response["similar"]["results"]),
@@ -871,7 +871,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow["infos"].update(local_item["infos"])
         tvshow["artwork"].update(local_item["artwork"])
     else:
-        tvshow = local_db.merge_with_local_tvshow_info([tvshow])[0]
+        tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     tvshow["infos"]['rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_tvshows(response["similar"]["results"]),
