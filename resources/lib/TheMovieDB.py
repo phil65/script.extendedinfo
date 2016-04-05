@@ -195,7 +195,7 @@ def set_rating(media_type, media_id, rating):
     # request.get_method = lambda: 'DELETE'
     results = send_request(url=url,
                            params=params,
-                           values='{"value": %.1f}' % rating)
+                           values={"value": "%.1f" % rating})
     if results:
         Utils.notify(addon.NAME, results["status_message"])
 
@@ -207,7 +207,7 @@ def send_request(url, params, values, delete=False):
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     Utils.log(url)
     request = urllib2.Request(url=url,
-                              data=values,
+                              data=json.dumps(values),
                               headers=HEADERS)
     if delete:
         request.get_method = lambda: 'DELETE'
@@ -222,7 +222,9 @@ def send_request(url, params, values, delete=False):
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
     params = {"session_id": Login.get_session_id()}
-    values = '{"media_type": "%s", "media_id": %s, "favorite": %s}' % (media_type, media_id, status)
+    values = {"media_type": "%s" % media_type,
+              "media_id": media_id,
+              "favorite": status}
     if not params["session_id"]:
         Utils.notify("Could not get session id")
         return None
@@ -238,7 +240,8 @@ def create_list(list_name):
     creates new list on TMDB with name *list_name
     returns newly created list id
     '''
-    values = {'name': '%s' % list_name, 'description': 'List created by ExtendedInfo Script for Kodi.'}
+    values = {'name': '%s' % list_name,
+              'description': 'List created by ExtendedInfo Script for Kodi.'}
     results = send_request(url="list",
                            params={"session_id": Login.get_session_id()},
                            values=values)
