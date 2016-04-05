@@ -288,10 +288,10 @@ class LocalDB(object):
             else:
                 remote_items.append(item)
         if sortkey:
-            local_items = sorted(iterable=local_items,
+            local_items = sorted(local_items,
                                  key=lambda k: k["infos"][sortkey],
                                  reverse=True)
-            remote_items = sorted(iterable=remote_items,
+            remote_items = sorted(remote_items,
                                   key=lambda k: k["infos"][sortkey],
                                   reverse=True)
         return local_items + remote_items
