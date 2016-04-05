@@ -26,8 +26,9 @@ def pass_list_to_skin(name, data, handle=None, limit=False):
     addon.clear_global(name)
     if data:
         addon.set_global(name + ".Count", str(len(data)))
-        items = Utils.create_listitems(data)
-        items = [(i.getProperty("path"), i, bool(i.getProperty("directory"))) for i in items]
+        for i in data:
+            Utils.log(i)
+        items = [(i.get_property("path"), i.get_listitem(), bool(i.get_property("directory"))) for i in data]
         xbmcplugin.addDirectoryItems(handle=handle,
                                      items=items,
                                      totalItems=len(items))
@@ -60,8 +61,6 @@ class Main:
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
             elif info.endswith("lists"):
                 xbmcplugin.setContent(plugin.handle, 'sets')
-            else:
-                xbmcplugin.setContent(plugin.handle, '')
             pass_list_to_skin(name=info,
                               data=listitems,
                               handle=plugin.handle,

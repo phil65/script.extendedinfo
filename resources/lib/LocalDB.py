@@ -259,20 +259,20 @@ class LocalDB(object):
         for item in items:
             index = False
             imdb_id = item.get_property("imdb_id")
-            title = item["infos"]['title'].lower()
-            otitle = item["infos"]["originaltitle"].lower()
-            if "imdb_id" in item.get("properties", {}) and imdb_id in info["imdbs"]:
+            title = item.get_info("title").lower()
+            otitle = item.get_info("originaltitle").lower()
+            if "imdb_id" in item.get_properties() and imdb_id in info["imdbs"]:
                 index = info["imdbs"].index(imdb_id)
-            elif "title" in item.get("infos", {}) and title in info["titles"]:
+            elif "title" in item.get_infos() and title in info["titles"]:
                 index = info["titles"].index(title)
-            elif "originaltitle" in item.get("infos", {}) and otitle in info["otitles"]:
+            elif "originaltitle" in item.get_infos() and otitle in info["otitles"]:
                 index = info["otitles"].index(otitle)
             if index:
                 get_info = self.get_movie if media_type == "movie" else self.get_tvshow
                 local_item = get_info(info["ids"][index])
                 if local_item:
                     try:
-                        diff = abs(int(local_item["year"]) - int(item["infos"]["year"]))
+                        diff = abs(int(local_item.get_info("year")) - int(item.get_info("year")))
                         if diff > 1:
                             remote_items.append(item)
                             continue
@@ -289,10 +289,10 @@ class LocalDB(object):
                 remote_items.append(item)
         if sortkey:
             local_items = sorted(local_items,
-                                 key=lambda k: k["infos"][sortkey],
+                                 key=lambda k: k.get_info(sortkey),
                                  reverse=True)
             remote_items = sorted(remote_items,
-                                  key=lambda k: k["infos"][sortkey],
+                                  key=lambda k: k.get_info(sortkey),
                                   reverse=True)
         return local_items + remote_items
 

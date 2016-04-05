@@ -43,14 +43,15 @@ def handle_videos(results, extended=False):
         for ext_item in ext_results["items"]:
             if not item.get_property("youtube_id") == ext_item['id']:
                 continue
-            duration = ext_item['contentDetails']['duration'][2:-1].split("M")
+            details = ext_item['contentDetails']
+            duration = details['duration'][2:-1].split("M")
             likes = ext_item['statistics'].get('likeCount')
             dislikes = ext_item['statistics'].get('dislikeCount')
             item.set_info("duration", int(duration[0]) * 60 + int(duration[1]) if len(duration) > 1 else "")
-            props = {"duration": ext_item['contentDetails']['duration'][2:].lower(),
-                     "dimension": ext_item['contentDetails']['dimension'],
-                     "definition": ext_item['contentDetails']['definition'],
-                     "caption": ext_item['contentDetails']['caption'],
+            props = {"duration": details['duration'][2:].lower(),
+                     "dimension": details['dimension'],
+                     "definition": details['definition'],
+                     "caption": details['caption'],
                      "viewcount": Utils.millify(ext_item['statistics']['viewCount']),
                      "likes": likes,
                      "dislikes": dislikes}

@@ -588,6 +588,9 @@ class ListItem(object):
         self.streamdetails = streamdetails
         self.infos = infos
 
+    def __setitem__(self, key, value):
+        self.properties[key] = value
+
     def __getitem__(self, key):
         if key in self.properties:
             return self.properties[key]
@@ -636,9 +639,9 @@ class ListItem(object):
                           separators=(',', ': '))
 
     def update_from_listitem(self, listitem):
-        self.properties = listitem.get_properties()
-        self.artwork = listitem.get_artwork()
-        self.infos = listitem.get_infos()
+        self.properties.update(listitem.get_properties())
+        self.artwork.update(listitem.get_artwork())
+        self.infos.update(listitem.get_infos())
 
     def set_properties(self, properties):
         self.properties = properties
