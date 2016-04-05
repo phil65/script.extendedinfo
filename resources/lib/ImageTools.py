@@ -19,7 +19,7 @@ IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")
 
 def blur(input_img, radius=25):
     if not input_img:
-        return "", ""
+        return {}
     if not xbmcvfs.exists(IMAGE_PATH):
         xbmcvfs.mkdir(IMAGE_PATH)
     input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).replace("image://", "")
@@ -49,7 +49,7 @@ def blur(input_img, radius=25):
                 Utils.log("Could not get image for %s (try %i)" % (input_img, i))
                 xbmc.sleep(500)
         if not img:
-            return "", ""
+            return {}
         try:
             img.thumbnail((200, 200), PIL.Image.ANTIALIAS)
             img = img.convert('RGB')
@@ -58,7 +58,7 @@ def blur(input_img, radius=25):
             img.save(targetfile)
         except Exception:
             Utils.log("PIL problem probably....")
-            return "", ""
+            return {}
     else:
         Utils.log("blurred img already created: " + targetfile)
         img = PIL.Image.open(targetfile)
