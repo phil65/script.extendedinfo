@@ -38,7 +38,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info["properties"].update(ImageTools.blur(self.info.get("thumb")))
+            self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
             self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
                               (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
                               (ID_LIST_IMAGES, self.data["images"]),

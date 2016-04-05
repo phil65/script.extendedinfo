@@ -140,8 +140,6 @@ class LocalDB(object):
         else:
             resume = "false"
             played = '0'
-        stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
-                                                movie['streamdetails'])
         db_movie = Utils.ListItem(label=movie.get('label'),
                                   path=path)
         db_movie.set_infos({'title': movie.get('label'),
@@ -163,19 +161,23 @@ class LocalDB(object):
         streams = []
         for i, item in enumerate(movie['streamdetails']['audio'], start=1):
             language = item['language']
-            if language not in streams and language != "und":
-                streams.append(language)
-                streaminfo = {'AudioLanguage.%d' % i: language,
-                              'AudioCodec.%d' % i: item["codec"],
-                              'AudioChannels.%d' % i: str(item['channels'])}
-                db_movie.update_properties(streaminfo)
+            if language in streams and language == "und":
+                continue
+            streams.append(language)
+            streaminfo = {'AudioLanguage.%d' % i: language,
+                          'AudioCodec.%d' % i: item["codec"],
+                          'AudioChannels.%d' % i: str(item['channels'])}
+            db_movie.update_properties(streaminfo)
         subs = []
         for i, item in enumerate(movie['streamdetails']['subtitle'], start=1):
             language = item['language']
-            if language not in subs and language != "und":
-                subs.append(language)
-                db_movie["properties"]['SubtitleLanguage.%d' % i] = language
-        db_movie["properties"].update(stream_info)
+            if language in subs or language == "und":
+                continue
+            subs.append(language)
+            db_movie.update_properties({'SubtitleLanguage.%d' % i: language})
+        stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
+                                                movie['streamdetails'])
+        db_movie.update_properties(stream_info)
         return {k: v for k, v in db_movie.items() if v}
 
     def handle_tvshows(self, tvshow):
@@ -257,7 +259,7 @@ class LocalDB(object):
         info = self.info[media_type]
         for item in items:
             index = False
-            imdb_id = item["properties"].get("imdb_id")
+            imdb_id = item.get_property("imdb_id")
             title = item["infos"]['title'].lower()
             otitle = item["infos"]["originaltitle"].lower()
             if "imdb_id" in item.get("properties", {}) and imdb_id in info["imdbs"]:
@@ -277,7 +279,7 @@ class LocalDB(object):
                             continue
                     except Exception:
                         pass
-                    item["properties"].update(local_item["properties"])
+                    item.update_properties(local_item["properties"])
                     item["infos"].update(local_item["infos"])
                     item["artwork"].update(local_item["artwork"])
                     if library_first:

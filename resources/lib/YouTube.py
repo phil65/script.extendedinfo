@@ -21,44 +21,45 @@ def handle_videos(results, extended=False):
             video_id = item["id"]["videoId"]
         except Exception:
             video_id = snippet["resourceId"]["videoId"]
-        video = {'path': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id,
-                 'label': snippet["title"]}
-        video["infos"] = {'Plot': snippet["description"],
-                          'Premiered': snippet["publishedAt"][:10]}
-        video["artwork"] = {'thumb': thumb}
-        video["properties"] = {'channel_title': snippet["channelTitle"],
-                               'channel_id': snippet["channelId"],
-                               'youtube_id': video_id,
-                               'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id}
+        video = Utils.ListItem(label=snippet["title"],
+                               path=PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id)
+        video.set_infos({'Plot': snippet["description"],
+                         'Premiered': snippet["publishedAt"][:10]})
+        video.set_artwork({'thumb': thumb})
+        video.set_properties({'channel_title': snippet["channelTitle"],
+                              'channel_id': snippet["channelId"],
+                              'youtube_id': video_id,
+                              'Play': PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id})
         videos.append(video)
     if not extended:
         return videos
     params = {"part": "contentDetails,statistics",
-              "id": ",".join([i["properties"]["youtube_id"] for i in videos])}
+              "id": ",".join([i.get_property("youtube_id") for i in videos])}
     ext_results = get_data(method="videos",
                            params=params)
     if not ext_results:
         return videos
     for item in videos:
         for ext_item in ext_results["items"]:
-            if not item["properties"]["youtube_id"] == ext_item['id']:
+            if not item.get_property("youtube_id") == ext_item['id']:
                 continue
             duration = ext_item['contentDetails']['duration'][2:-1].split("M")
-            item["infos"]["duration"] = int(duration[0]) * 60 + int(duration[1]) if len(duration) > 1 else ""
-            item["properties"]["duration"] = ext_item['contentDetails']['duration'][2:].lower()
-            item["properties"]["dimension"] = ext_item['contentDetails']['dimension']
-            item["properties"]["definition"] = ext_item['contentDetails']['definition']
-            item["properties"]["caption"] = ext_item['contentDetails']['caption']
-            item["properties"]["viewcount"] = Utils.millify(ext_item['statistics']['viewCount'])
-            item["properties"]["likes"] = ext_item['statistics'].get('likeCount')
-            item["properties"]["dislikes"] = ext_item['statistics'].get('dislikeCount')
-            if item["properties"]["likes"] and item["properties"]["dislikes"]:
-                vote_count = int(item["properties"]["likes"]) + int(item["properties"]["dislikes"])
+            likes = ext_item['statistics'].get('likeCount')
+            dislikes = ext_item['statistics'].get('dislikeCount')
+            item.set_info("duration", int(duration[0]) * 60 + int(duration[1]) if len(duration) > 1 else "")
+            props = {"duration": ext_item['contentDetails']['duration'][2:].lower(),
+                     "dimension": ext_item['contentDetails']['dimension'],
+                     "definition": ext_item['contentDetails']['definition'],
+                     "caption": ext_item['contentDetails']['caption'],
+                     "viewcount": Utils.millify(ext_item['statistics']['viewCount']),
+                     "likes": likes,
+                     "dislikes": dislikes}
+            item.update_properties(props)
+            if likes and dislikes:
+                vote_count = int(likes) + int(dislikes)
                 if vote_count > 0:
-                    item["rating"] = format(float(item["properties"]["likes"]) / vote_count * 10, '.2f')
+                    item.set_info("rating", format(float(likes) / vote_count * 10, '.2f'))
             break
-        else:
-            item["duration"] = ""
     return videos
 
 

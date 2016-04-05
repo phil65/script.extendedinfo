@@ -495,11 +495,11 @@ def merge_dict_lists(items, key="job"):
     crew_ids = []
     crews = []
     for item in items:
-        if item["properties"]["id"] not in crew_ids:
-            crew_ids.append(item["properties"]["id"])
+        if item.get_property("id") not in crew_ids:
+            crew_ids.append(item.get_property("id"))
             crews.append(item)
         else:
-            index = crew_ids.index(item["properties"]["id"])
+            index = crew_ids.index(item.get_property("id"))
             if key in crews[index]:
                 crews[index][key] = crews[index][key] + " / " + item[key]
     return crews
@@ -673,6 +673,9 @@ class ListItem(object):
 
     def set_property(self, key, value):
         self.properties[key] = value
+
+    def set_info(self, key, value):
+        self.infos[key] = value
 
     def get_listitem(self):
         listitem = xbmcgui.ListItem(label=self.label,
