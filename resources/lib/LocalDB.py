@@ -146,6 +146,7 @@ class LocalDB(object):
                             'file': movie.get('file'),
                             'year': str(movie.get('year')),
                             'writer': " / ".join(movie['writer']),
+                            'mediatype': "movie",
                             'userrating': movie.get('userrating'),
                             'trailer': trailer,
                             'rating': str(round(float(movie['rating']), 1)),
@@ -190,6 +191,7 @@ class LocalDB(object):
         db_tvshow.set_infos({'title': tvshow.get('label'),
                              'genre': " / ".join(tvshow.get('genre')),
                              'rating': str(round(float(tvshow['rating']), 1)),
+                             'mediatype': "tvshow",
                              'year': str(tvshow.get('year')),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
