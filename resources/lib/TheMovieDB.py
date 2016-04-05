@@ -503,7 +503,7 @@ def handle_people(results):
                                'deathday': item.get('deathday'),
                                'placeofbirth': item.get('place_of_birth'),
                                'homepage': item.get('homepage')})
-        person.get_artwork(get_image_urls(profile=item.get("profile_path")))
+        person.set_artwork(get_image_urls(profile=item.get("profile_path")))
         people.append(person)
     return people
 
