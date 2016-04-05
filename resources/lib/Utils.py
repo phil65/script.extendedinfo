@@ -578,14 +578,14 @@ def clean_text(text):
 
 class ListItem(object):
 
-    def __init__(self, label="", label2="", path=""):
+    def __init__(self, label="", label2="", path="", infos={}, properties={}, artwork={}, streamdetails={}):
         self.label = label
         self.label2 = label
         self.path = path
-        self.properties = {}
-        self.artwork = {}
-        self.streamdetails = {}
-        self.infos = {}
+        self.properties = properties
+        self.artwork = artwork
+        self.streamdetails = streamdetails
+        self.infos = infos
 
     def __getitem__(self, key):
         if key in self.properties:
