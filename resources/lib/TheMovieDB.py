@@ -641,20 +641,12 @@ def get_credit_info(credit_id):
                     cache_days=30)
 
 
-def get_account_props(account_states):
+def get_account_props(states):
     props = {}
-    if account_states.get("favorite"):
-        props["FavButton_Label"] = addon.LANG(32155)
-        props["favorite"] = "True"
-    else:
-        props["FavButton_Label"] = addon.LANG(32154)
-        props["favorite"] = ""
-    if account_states["rated"]:
-        props["rated"] = str(account_states["rated"]["value"])
-    else:
-        props["rated"] = ""
-    if "watchlist" in account_states:
-        props["watchlist"] = str(account_states["watchlist"])
+    props["FavButton_Label"] = addon.LANG(32155) if states.get("favorite") else addon.LANG(32154)
+    props["favorite"] = "True" if states.get("favorite") else ""
+    props["rated"] = states["rated"]["value"] if states["rated"] else ""
+    props["watchlist"] = states["watchlist"] if "watchlist" in states else ""
     return props
 
 
