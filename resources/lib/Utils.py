@@ -594,3 +594,52 @@ def clean_text(text):
         else:
             break
     return text.strip()
+
+
+class ListItem(object):
+
+    def __init__(self, label="", label2="", path=""):
+        self.label = label
+        self.label2 = label
+        self.path = path
+        self.properties = {}
+        self.artwork = {}
+        self.streamdetails = {}
+        self.infos = {}
+
+    def set_properties(self, properties):
+        self.properties = properties
+
+    def update_properties(self, properties):
+        self.properties = {k: v for k, v in properties.items() if v}
+
+    def set_artwork(self, artwork):
+        self.artwork = artwork
+
+    def update_artwork(self, artwork):
+        self.artwork = {k: v for k, v in artwork.items() if v}
+
+    def set_streamdetails(self, streamdetails):
+        self.streamdetails = streamdetails
+
+    def update_streamdetails(self, streamdetails):
+        self.streamdetails = {k: v for k, v in streamdetails.items() if v}
+
+    def set_infos(self, infos):
+        self.infos = infos
+
+    def update_infos(self, infos):
+        self.infos = {k: v for k, v in infos.items() if v}
+
+    def create_listitem(self):
+        listitem = xbmcgui.ListItem(label=self.label,
+                                    label2=self.label2,
+                                    path=self.path)
+        props = {k: unicode(v) for k, v in self.properties.items() if v}
+        for key, value in props.iteritems():
+            listitem.setProperty(key, unicode(value))
+        artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.items() if v}
+        listitem.setArt(artwork)
+        infos = {k.lower(): v for k, v in self.infos.items() if v}
+        listitem.setInfo("video", infos)
+        return listitem
