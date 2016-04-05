@@ -2807,7 +2807,7 @@
 							<control type="label">
 								<width>1018</width>
 								<height>50</height>
-								<label>$INFO[Window.Property(Title)]</label>
+								<label>$INFO[Window.Property(season),,x]$INFO[Window.Property(episode),,: ]$INFO[Window.Property(Title)]</label>
 								<font>font30_title</font>
 								<scroll>true</scroll>
 							</control>
