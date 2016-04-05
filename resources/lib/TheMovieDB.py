@@ -777,9 +777,9 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     account_states = info.get("account_states")
     if dbid:
         local_item = local_db.get_movie(dbid)
-        movie["properties"].update(local_item["properties"])
-        movie["infos"].update(local_item["infos"])
-        movie["artwork"].update(local_item["artwork"])
+        movie.update_properties(local_item["properties"])
+        movie.update_infos(local_item["infos"])
+        movie.update_artwork(local_item["artwork"])
     else:
         movie = local_db.merge_with_local("movie", [movie])[0]
     # hack to get tmdb rating instead of local one
@@ -821,48 +821,49 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         duration = "%i" % (info["episode_run_time"][0])
     else:
         duration = ""
-    us_cert = Utils.dictfind(info['content_ratings']['results'], "iso_3166_1", "US")
+    mpaas = info['content_ratings']['results']
+    us_cert = Utils.dictfind(mpaas, "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["rating"]
-    elif info['content_ratings']['results']:
-        mpaa = info['content_ratings']['results'][0]['rating']
+    elif mpaas:
+        mpaa = mpaas[0]['rating']
     else:
         mpaa = ""
-    tvshow = {'label': info.get('name'),
-              'path': PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id}
-    tvshow["infos"] = {'title': info.get('name'),
-                       'tvshowtitle': info.get('name'),
-                       'originaltitle': info.get('original_name', ""),
-                       'duration': duration,
-                       'mpaa': mpaa,
-                       'genre': " / ".join([i["name"] for i in info["genres"]]),
-                       'Plot': Utils.clean_text(info.get("overview")),
-                       'year': Utils.get_year(info.get('first_air_date')),
-                       'mediatype': "tvshow",
-                       'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
-                       'country': info.get('original_language'),
-                       'userrating': info.get('rating'),
-                       'Votes': info.get('vote_count'),
-                       'Premiered': info.get('first_air_date'),
-                       'Status': translate_status(info.get('status'))}
-    tvshow["properties"] = {'credit_id': info.get('credit_id'),
-                            'duration(h)': Utils.format_time(duration, "h"),
-                            'duration(m)': Utils.format_time(duration, "m"),
-                            'id': tmdb_id,
-                            'Popularity': info.get('popularity'),
-                            'ShowType': info.get('type'),
-                            'homepage': info.get('homepage'),
-                            'last_air_date': info.get('last_air_date'),
-                            'TotalEpisodes': info.get('number_of_episodes'),
-                            'TotalSeasons': info.get('number_of_seasons'),
-                            'in_production': info.get('in_production')}
-    tvshow["artwork"] = get_image_urls(poster=info.get("poster_path"),
-                                       fanart=info.get("backdrop_path"))
+    tvshow = Utils.ListItem(label=info.get('name'),
+                            path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
+    tvshow.set_infos({'title': info.get('name'),
+                      'tvshowtitle': info.get('name'),
+                      'originaltitle': info.get('original_name', ""),
+                      'duration': duration,
+                      'mpaa': mpaa,
+                      'genre': " / ".join([i["name"] for i in info["genres"]]),
+                      'Plot': Utils.clean_text(info.get("overview")),
+                      'year': Utils.get_year(info.get('first_air_date')),
+                      'mediatype': "tvshow",
+                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
+                      'country': info.get('original_language'),
+                      'userrating': info.get('rating'),
+                      'Votes': info.get('vote_count'),
+                      'Premiered': info.get('first_air_date'),
+                      'Status': translate_status(info.get('status'))})
+    tvshow.set_properties({'credit_id': info.get('credit_id'),
+                           'duration(h)': Utils.format_time(duration, "h"),
+                           'duration(m)': Utils.format_time(duration, "m"),
+                           'id': tmdb_id,
+                           'Popularity': info.get('popularity'),
+                           'ShowType': info.get('type'),
+                           'homepage': info.get('homepage'),
+                           'last_air_date': info.get('last_air_date'),
+                           'TotalEpisodes': info.get('number_of_episodes'),
+                           'TotalSeasons': info.get('number_of_seasons'),
+                           'in_production': info.get('in_production')})
+    tvshow.set_artwork(get_image_urls(poster=info.get("poster_path"),
+                                      fanart=info.get("backdrop_path")))
     if dbid:
         local_item = local_db.get_tvshow(dbid)
-        tvshow["properties"].update(local_item["properties"])
-        tvshow["infos"].update(local_item["infos"])
-        tvshow["artwork"].update(local_item["artwork"])
+        tvshow.update_properties(local_item["properties"])
+        tvshow.update_infos(local_item["infos"])
+        tvshow.update_artwork(local_item["artwork"])
     else:
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     # hack to get tmdb rating instead of local one
@@ -908,13 +909,13 @@ def extended_season_info(tvshow_id, season_number):
         title = addon.LANG(20381)
     else:
         title = "%s %s" % (addon.LANG(20373), season_number)
-    season = {'label': title}
-    season["infos"] = {'Plot': Utils.clean_text(response["overview"]),
-                       'tvshowtitle': tvshow.get('name'),
-                       'title': title,
-                       'Premiered': response["air_date"]}
-    season["artwork"] = get_image_urls(poster=response.get("poster_path"))
-    season["properties"] = {'id': response["id"]}
+    season = Utils.ListItem(label=title)
+    season.set_infos({'Plot': Utils.clean_text(response["overview"]),
+                      'tvshowtitle': tvshow.get('name'),
+                      'title': title,
+                      'Premiered': response["air_date"]})
+    season.set_artwork(get_image_urls(poster=response.get("poster_path")))
+    season.set_properties({'id': response["id"]})
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "crew": handle_people(response["credits"]["crew"]),
@@ -970,25 +971,25 @@ def extended_actor_info(actor_id):
                  "tvshow_crew_roles": handle_tvshows(response["tv_credits"]["crew"]),
                  "tagged_images": tagged_images,
                  "images": handle_images(response["images"]["profiles"])}
-    info = {'label': response['name'],
-            'path': "%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id'])}
-    info["infos"] = {'mediatype': "artist"}
-    info["properties"] = {'adult': response.get('adult'),
-                          'alsoknownas': " / ".join(response.get('also_known_as', [])),
-                          'biography': Utils.clean_text(response.get('biography')),
-                          'birthday': response.get('birthday'),
-                          'age': Utils.calculate_age(response.get('birthday'), response.get('deathday')),
-                          'character': response.get('character'),
-                          'department': response.get('department'),
-                          'job': response.get('job'),
-                          'id': response['id'],
-                          'cast_id': response.get('cast_id'),
-                          'credit_id': response.get('credit_id'),
-                          'deathday': response.get('deathday'),
-                          'placeofbirth': response.get('place_of_birth'),
-                          'homepage': response.get('homepage'),
-                          "DBMovies": len([d for d in listitems["movie_roles"] if "dbid" in d])}
-    info["artwork"] = get_image_urls(profile=response.get("profile_path"))
+    info = Utils.ListItem(label=response['name'],
+                          path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']))
+    info.set_infos({'mediatype': "artist"})
+    info.set_properties({'adult': response.get('adult'),
+                         'alsoknownas': " / ".join(response.get('also_known_as', [])),
+                         'biography': Utils.clean_text(response.get('biography')),
+                         'birthday': response.get('birthday'),
+                         'age': Utils.calculate_age(response.get('birthday'), response.get('deathday')),
+                         'character': response.get('character'),
+                         'department': response.get('department'),
+                         'job': response.get('job'),
+                         'id': response['id'],
+                         'cast_id': response.get('cast_id'),
+                         'credit_id': response.get('credit_id'),
+                         'deathday': response.get('deathday'),
+                         'placeofbirth': response.get('place_of_birth'),
+                         'homepage': response.get('homepage'),
+                         "DBMovies": len([d for d in listitems["movie_roles"] if "dbid" in d])})
+    info.set_artwork(get_image_urls(profile=response.get("profile_path")))
     return (info, listitems)
 
 

@@ -38,7 +38,6 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info = Utils.merge_dicts(self.info, self.info["infos"], self.info["artwork"], self.info["properties"])
             if "dbid" not in self.info:  # need to add comparing for seasons
                 self.info['poster'] = Utils.get_file(url=self.info.get("poster", ""))
             self.info["properties"].update(ImageTools.blur(self.info.get("poster")))

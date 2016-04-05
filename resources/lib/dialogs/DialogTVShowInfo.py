@@ -50,7 +50,6 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
-            self.info = Utils.merge_dicts(self.info, self.info["infos"], self.info["artwork"], self.info["properties"])
             if "dbid" not in self.info:
                 self.info['poster'] = Utils.get_file(self.info.get("poster", ""))
             self.info["properties"].update(ImageTools.blur(self.info["artwork"].get("poster")))
