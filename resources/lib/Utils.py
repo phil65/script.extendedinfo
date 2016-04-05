@@ -616,7 +616,7 @@ class ListItem(object):
             return fallback
 
     def __str__(self):
-        return pp(self.infos) + pp(self.properties) + pp(self.artwork)
+        return self.dump_dict(self.infos) + self.dump_dict(self.properties) + self.dump_dict(self.artwork)
 
     def __contains__(self, key):
         if key in self.properties:
@@ -627,6 +627,12 @@ class ListItem(object):
             return True
         elif key in ["properties", "infos", "artwork", "label", "label2", "path"]:
             return True
+
+    def dump_dict(self, dct):
+        return json.dumps(dct,
+                          sort_keys=True,
+                          indent=4,
+                          separators=(',', ': '))
 
     def set_properties(self, properties):
         self.properties = properties
