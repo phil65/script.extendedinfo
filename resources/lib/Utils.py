@@ -522,32 +522,7 @@ def set_window_props(name, data, prefix=""):
 
 
 def create_listitems(data=None, preload_images=0):
-    if not data:
-        return []
-    items = []
-    for (count, result) in enumerate(data):
-        listitem = xbmcgui.ListItem(label=result.get("label", ""),
-                                    label2=result.get("label2", ""),
-                                    path=result.get("path", ""))
-        if "properties" in result:
-            props = {k: unicode(v) for k, v in result["properties"].items() if v}
-            for key, value in props.iteritems():
-                listitem.setProperty(key, unicode(value))
-        if "artwork" in result:
-            art = {k: v.replace("https://", "http://") for k, v in result["artwork"].items() if v}
-            listitem.setArt(art)
-        if "infos" in result:
-            infos = {k.lower(): v for k, v in result["infos"].items() if v}
-            listitem.setInfo("video", infos)
-        if "videoinfo" in result:
-            infos = {k.lower(): v for k, v in result["videoinfo"].items() if v}
-            listitem.addStreamInfo("video", infos)
-        if "audioinfo" in result:
-            infos = {k.lower(): v for k, v in result["audioinfo"].items() if v}
-            listitem.addStreamInfo("audio", infos)
-        listitem.setProperty("index", str(count))
-        items.append(listitem)
-    return items
+    return [item.get_listitem() for item in data] if data else []
 
 
 def clean_text(text):

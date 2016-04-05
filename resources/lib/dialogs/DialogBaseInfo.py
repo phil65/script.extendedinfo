@@ -69,7 +69,7 @@ class DialogBaseInfo(object):
         for container_id, listitems in self.listitems:
             try:
                 self.getControl(container_id).reset()
-                self.getControl(container_id).addItems(Utils.create_listitems(listitems))
+                self.getControl(container_id).addItems([i.get_listitem() for i in listitems])
             except Exception:
                 Utils.log("Notice: No container with id %i available" % container_id)
 
