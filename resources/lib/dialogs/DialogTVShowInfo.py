@@ -51,7 +51,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.account_states = data
             if "dbid" not in self.info:
-                self.info['poster'] = Utils.get_file(self.info.get("poster", ""))
+                self.info.set_art("poster", Utils.get_file(self.info.get("poster", "")))
             self.info["properties"].update(ImageTools.blur(self.info["artwork"].get("poster")))
             self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, self.data["seasons"]),
