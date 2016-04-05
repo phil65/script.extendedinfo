@@ -14,11 +14,12 @@ from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from ..VideoPlayer import PLAYER
 
-ID_LIST_ACTORS = 1000
+ID_CONTROL_PLOT = 132
+ID_LIST_YOUTUBE = 350
 ID_LIST_CREW = 750
+ID_LIST_ACTORS = 1000
 ID_LIST_VIDEOS = 1150
 ID_LIST_BACKDROPS = 1350
-ID_CONTROL_PLOT = 132
 ID_CONTROL_SETRATING = 6001
 ID_CONTROL_RATINGLISTS = 6006
 
@@ -87,6 +88,7 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
 
+        @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
