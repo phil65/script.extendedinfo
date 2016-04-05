@@ -908,12 +908,13 @@ def extended_season_info(tvshow_id, season_number):
         title = addon.LANG(20381)
     else:
         title = "%s %s" % (addon.LANG(20373), season_number)
-    season = {'Plot': Utils.clean_text(response["overview"]),
-              'tvshowtitle': tvshow.get('name'),
-              'title': title,
-              'Premiered': response["air_date"]}
-    artwork = get_image_urls(poster=response.get("poster_path"))
-    season.update(artwork)
+    season = {'label': title}
+    season["infos"] = {'Plot': Utils.clean_text(response["overview"]),
+                       'tvshowtitle': tvshow.get('name'),
+                       'title': title,
+                       'Premiered': response["air_date"]}
+    season["artwork"] = get_image_urls(poster=response.get("poster_path"))
+    season["properties"] = {'id': response["id"]}
     videos = handle_videos(response["videos"]["results"]) if "videos" in response else []
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "crew": handle_people(response["credits"]["crew"]),
