@@ -178,7 +178,7 @@ class LocalDB(object):
         stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
                                                 movie['streamdetails'])
         db_movie.update_properties(stream_info)
-        return {k: v for k, v in db_movie.items() if v}
+        return db_movie
 
     def handle_tvshows(self, tvshow):
         if addon.setting("infodialog_onclick") != "false":
@@ -197,7 +197,7 @@ class LocalDB(object):
                                   'File': tvshow.get('file'),
                                   'dbid': tvshow['tvshowid']})
         db_tvshow.set_artwork(tvshow['art'])
-        return {k: v for k, v in db_tvshow.items() if v}
+        return db_tvshow
 
     def get_movie(self, movie_id):
         response = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
