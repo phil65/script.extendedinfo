@@ -638,31 +638,34 @@ class ListItem(object):
         self.properties = properties
 
     def update_properties(self, properties):
-        self.properties.update({k: v for k, v in properties.items() if v})
+        self.properties.update({k: v for k, v in properties.iteritems() if v})
 
     def set_artwork(self, artwork):
         self.artwork = artwork
 
     def update_artwork(self, artwork):
-        self.artwork.update({k: v for k, v in artwork.items() if v})
+        self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
     def set_streamdetails(self, streamdetails):
         self.streamdetails = streamdetails
 
     def update_streamdetails(self, streamdetails):
-        self.streamdetails.update({k: v for k, v in streamdetails.items() if v})
+        self.streamdetails.update({k: v for k, v in streamdetails.iteritems() if v})
 
     def set_infos(self, infos):
         self.infos = infos
 
     def update_infos(self, infos):
-        self.infos.update({k: v for k, v in infos.items() if v})
+        self.infos.update({k: v for k, v in infos.iteritems() if v})
 
-    def create_listitem(self):
+    def get_property(self, key):
+        return self.properties.get(key, "")
+
+    def get_listitem(self):
         listitem = xbmcgui.ListItem(label=self.label,
                                     label2=self.label2,
                                     path=self.path)
-        props = {k: unicode(v) for k, v in self.properties.items() if v}
+        props = {k: unicode(v) for k, v in self.properties.iteritems() if v}
         for key, value in props.iteritems():
             listitem.setProperty(key, unicode(value))
         artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.items() if v}

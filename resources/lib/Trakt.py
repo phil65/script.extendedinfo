@@ -35,39 +35,40 @@ def get_episodes(content):
     for day in results.iteritems():
         for episode in day[1]:
             title = episode["episode"]["title"] if episode["episode"]["title"] else ""
-            show = {'label': u"{0} - {1}x{2}. {3}".format(episode["show"]["title"],
-                                                          episode["episode"]["season"],
-                                                          episode["episode"]["number"],
-                                                          title),
-                    'path': PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"]}
-            show["infos"] = {'title': title,
-                             'Premiered': episode["episode"]["first_aired"],
-                             'season': episode["episode"]["season"],
-                             'episode': episode["episode"]["number"],
-                             'tvshowtitle': episode["show"]["title"],
-                             'mediatype': "episode",
-                             'year': episode["show"].get("year"),
-                             'duration': episode["show"]["runtime"] * 60,
-                             'Studio': episode["show"]["network"],
-                             'Plot': episode["show"]["overview"],
-                             'country': episode["show"]["country"],
-                             'status': episode["show"]["status"],
-                             'trailer': episode["show"]["trailer"],
-                             'rating': episode["show"]["rating"],
-                             'genre': " / ".join(episode["show"]["genres"]),
-                             'mpaa': episode["show"]["certification"]}
-            show["properties"] = {'tvdb_id': episode["episode"]["ids"]["tvdb"],
-                                  'id': episode["episode"]["ids"]["tvdb"],
-                                  'imdb_id': episode["episode"]["ids"]["imdb"],
-                                  'homepage': episode["show"]["homepage"],
-                                  'duration(h)': Utils.format_time(episode["show"]["runtime"], "h"),
-                                  'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")}
-            show["artwork"] = {'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                               'poster': episode["show"]["images"]["poster"]["full"],
-                               'banner': episode["show"]["images"]["banner"]["full"],
-                               'clearart': episode["show"]["images"]["clearart"]["full"],
-                               'clearlogo': episode["show"]["images"]["logo"]["full"],
-                               'fanart': episode["show"]["images"]["fanart"]["full"]}
+            label = u"{0} - {1}x{2}. {3}".format(episode["show"]["title"],
+                                                 episode["episode"]["season"],
+                                                 episode["episode"]["number"],
+                                                 title)
+            show = Utils.ListItem(label=label,
+                                  path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"])
+            show.set_infos({'title': title,
+                            'Premiered': episode["episode"]["first_aired"],
+                            'season': episode["episode"]["season"],
+                            'episode': episode["episode"]["number"],
+                            'tvshowtitle': episode["show"]["title"],
+                            'mediatype': "episode",
+                            'year': episode["show"].get("year"),
+                            'duration': episode["show"]["runtime"] * 60,
+                            'Studio': episode["show"]["network"],
+                            'Plot': episode["show"]["overview"],
+                            'country': episode["show"]["country"],
+                            'status': episode["show"]["status"],
+                            'trailer': episode["show"]["trailer"],
+                            'rating': episode["show"]["rating"],
+                            'genre': " / ".join(episode["show"]["genres"]),
+                            'mpaa': episode["show"]["certification"]})
+            show.set_properties({'tvdb_id': episode["episode"]["ids"]["tvdb"],
+                                 'id': episode["episode"]["ids"]["tvdb"],
+                                 'imdb_id': episode["episode"]["ids"]["imdb"],
+                                 'homepage': episode["show"]["homepage"],
+                                 'duration(h)': Utils.format_time(episode["show"]["runtime"], "h"),
+                                 'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")})
+            show.set_artwork({'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
+                              'poster': episode["show"]["images"]["poster"]["full"],
+                              'banner': episode["show"]["images"]["banner"]["full"],
+                              'clearart': episode["show"]["images"]["clearart"]["full"],
+                              'clearlogo': episode["show"]["images"]["logo"]["full"],
+                              'fanart': episode["show"]["images"]["fanart"]["full"]})
             shows.append(show)
             count += 1
             if count > 20:
@@ -81,31 +82,31 @@ def handle_movies(results):
     for item in results:
         if "movie" in item:
             item = item["movie"]
-        movie = {'label': item["title"],
-                 'path': PLUGIN_BASE + path % item["ids"]["tmdb"]}
-        movie["infos"] = {'title': item["title"],
-                          'duration': item["runtime"] * 60,
-                          'Tagline': item["tagline"],
-                          'mediatype': "movie",
-                          'Trailer': Utils.convert_youtube_url(item["trailer"]),
-                          'year': item["year"],
-                          'mpaa': item["certification"],
-                          'Plot': item["overview"],
-                          'Premiered': item["released"],
-                          'Rating': round(item["rating"], 1),
-                          'Votes': item["votes"],
-                          'genre': " / ".join(item["genres"])}
-        movie["properties"] = {'id': item["ids"]["tmdb"],
-                               'imdb_id': item["ids"]["imdb"],
-                               'Watchers': item.get("watchers"),
-                               'duration(h)': Utils.format_time(item["runtime"], "h"),
-                               'duration(m)': Utils.format_time(item["runtime"], "m")}
-        movie["artwork"] = {'poster': item["images"]["poster"]["full"],
-                            'fanart': item["images"]["fanart"]["full"],
-                            'clearlogo': item["images"]["logo"]["full"],
-                            'clearart': item["images"]["clearart"]["full"],
-                            'banner': item["images"]["banner"]["full"],
-                            'thumb': item["images"]["poster"]["thumb"]}
+        movie = Utils.ListItem(label=item["title"],
+                               path=PLUGIN_BASE + path % item["ids"]["tmdb"])
+        movie.set_infos({'title': item["title"],
+                         'duration': item["runtime"] * 60,
+                         'Tagline': item["tagline"],
+                         'mediatype': "movie",
+                         'Trailer': Utils.convert_youtube_url(item["trailer"]),
+                         'year': item["year"],
+                         'mpaa': item["certification"],
+                         'Plot': item["overview"],
+                         'Premiered': item["released"],
+                         'Rating': round(item["rating"], 1),
+                         'Votes': item["votes"],
+                         'genre': " / ".join(item["genres"])})
+        movie.set_properties({'id': item["ids"]["tmdb"],
+                              'imdb_id': item["ids"]["imdb"],
+                              'Watchers': item.get("watchers"),
+                              'duration(h)': Utils.format_time(item["runtime"], "h"),
+                              'duration(m)': Utils.format_time(item["runtime"], "m")})
+        movie.set_artwork({'poster': item["images"]["poster"]["full"],
+                           'fanart': item["images"]["fanart"]["full"],
+                           'clearlogo': item["images"]["logo"]["full"],
+                           'clearart': item["images"]["clearart"]["full"],
+                           'banner': item["images"]["banner"]["full"],
+                           'thumb': item["images"]["poster"]["thumb"]})
         movies.append(movie)
     movies = local_db.merge_with_local(media_type="movie",
                                        online_list=movies,
