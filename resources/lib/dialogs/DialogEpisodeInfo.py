@@ -41,11 +41,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
-            self.info = Utils.merge_dicts(self.info,
-                                          self.info["infos"],
-                                          self.info["artwork"],
-                                          self.info["properties"])
-            self.info["properties"].update(ImageTools.blur(self.info.get("thumb")))
+            self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"] + self.data["guest_stars"]),
                               (ID_LIST_CREW, self.data["crew"]),
                               (ID_LIST_VIDEOS, self.data["videos"]),
