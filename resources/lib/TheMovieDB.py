@@ -347,7 +347,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                          'genre': " / ".join([i for i in genres if i]),
                          'Votes': movie.get('vote_count'),
                          'year': Utils.get_year(movie.get('release_date')),
-                         'rating': movie.get('vote_average'),
+                         'rating': round(movie.get('vote_average'), 1),
                          'userrating': movie.get('rating'),
                          'Premiered': movie.get('release_date')}
         item["properties"] = {'id': movie.get("id"),
@@ -389,7 +389,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                           'Plot': tv.get("overview"),
                           'year': Utils.get_year(tv.get('first_air_date')),
                           'mediatype': "tvshow",
-                          'rating': tv.get('vote_average'),
+                          'rating': round(tv.get('vote_average'), 1),
                           'userrating': tv.get('rating'),
                           'Votes': tv.get('vote_count'),
                           'Premiered': tv.get('first_air_date')}
@@ -418,7 +418,7 @@ def handle_episodes(results):
                              'Premiered': item.get('air_date'),
                              'episode': item.get('episode_number'),
                              'season': item.get('season_number'),
-                             'rating': item.get('vote_average'),
+                             'rating': round(item.get('vote_average'), 1),
                              'Votes': item.get('vote_count')}
         listitem["properties"] = {'id': item.get('id'),
                                   'production_code': item.get('production_code'),
@@ -755,7 +755,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                       'Country': response.get('original_language'),
                       'genre': " / ".join([i["name"] for i in response["genres"]]),
                       'year': Utils.get_year(response.get("release_date")),
-                      'rating': response.get('vote_average'),
+                      'rating': round(response.get('vote_average'), 1),
                       'Premiered': response.get('release_date'),
                       'Votes': response.get('vote_count'),
                       'Status': translate_status(response.get('status'))}
@@ -782,7 +782,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie["artwork"].update(local_item["artwork"])
     else:
         movie = local_db.merge_with_local("movie", [movie])[0]
-    movie["infos"]['rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
+    movie["infos"]['rating'] = round(response.get('vote_average'), 1)  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_movies(response["similar"]["results"]),
                  "lists": handle_misc(response["lists"]["results"]),
@@ -838,7 +838,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                        'Plot': Utils.clean_text(response.get("overview")),
                        'year': Utils.get_year(response.get('first_air_date')),
                        'mediatype': "tvshow",
-                       'rating': response.get('vote_average'),
+                       'rating': round(response.get('vote_average'), 1),
                        'country': response.get('original_language'),
                        'userrating': response.get('rating'),
                        'Votes': response.get('vote_count'),
@@ -864,7 +864,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow["artwork"].update(local_item["artwork"])
     else:
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
-    tvshow["infos"]['rating'] = response.get('vote_average')  # hack to get tmdb rating instead of local one
+    tvshow["infos"]['rating'] = round(response.get('vote_average'), 1)  # hack to get tmdb rating instead of local one
     listitems = {"actors": handle_people(response["credits"]["cast"]),
                  "similar": handle_tvshows(response["similar"]["results"]),
                  "studios": handle_misc(response["production_companies"]),
