@@ -561,9 +561,6 @@ def multi_search(search_str):
                         cache_days=1)
     if response and "results" in response:
         return response["results"]
-    else:
-        Utils.log("Error when searching for %s" % search_str)
-        return ""
 
 
 def get_person_info(person_label, skip_dialog=False):
@@ -937,13 +934,10 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if not response:
         Utils.notify("Could not find episode info")
         return None
-    videos = []
-    if "videos" in response:
-        videos = handle_videos(response["videos"]["results"])
     answer = {"actors": handle_people(response["credits"]["cast"]),
               "crew": handle_people(response["credits"]["crew"]),
               "guest_stars": handle_people(response["credits"]["guest_stars"]),
-              "videos": videos,
+              "videos": handle_videos(response["videos"]["results"]) if "videos" in response else [],
               "images": handle_images(response["images"]["stills"])}
     return (handle_episodes([response])[0], answer, response.get("account_states"))
 
@@ -957,14 +951,11 @@ def extended_actor_info(actor_id):
     if not response:
         Utils.notify("Could not find actor info")
         return None
-    tagged_images = []
-    if "tagged_images" in response:
-        tagged_images = handle_images(response["tagged_images"]["results"])
     listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
                  "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
                  "movie_crew_roles": handle_movies(response["movie_credits"]["crew"]),
                  "tvshow_crew_roles": handle_tvshows(response["tv_credits"]["crew"]),
-                 "tagged_images": tagged_images,
+                 "tagged_images": handle_images(response["tagged_images"]["results"]) if "tagged_images" in response else [],
                  "images": handle_images(response["images"]["profiles"])}
     info = Utils.ListItem(label=response['name'],
                           path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']))
