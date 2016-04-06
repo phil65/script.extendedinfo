@@ -66,8 +66,6 @@ def get_window(window_type):
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
-            if "dbid" not in self.info:
-                self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
@@ -91,6 +89,7 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
+            Utils.log(self.info)
             Utils.listitem_to_windowprops(data=self.info,
                                           window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()

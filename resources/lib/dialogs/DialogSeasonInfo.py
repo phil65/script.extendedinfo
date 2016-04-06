@@ -38,8 +38,6 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            if "dbid" not in self.info:  # need to add comparing for seasons
-                self.info['poster'] = Utils.get_file(url=self.info.get("poster", ""))
             self.info["properties"].update(ImageTools.blur(self.info.get("poster")))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_CREW, self.data["crew"]),
