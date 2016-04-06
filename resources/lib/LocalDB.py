@@ -178,23 +178,6 @@ class LocalDB(object):
                                  'resume': resume,
                                  'dbid': str(movie['movieid'])})
         db_movie.set_artwork(movie['art'])
-        streams = []
-        for i, item in enumerate(movie['streamdetails']['audio'], start=1):
-            language = item['language']
-            if language in streams and language == "und":
-                continue
-            streams.append(language)
-            streaminfo = {'AudioLanguage.%d' % i: language,
-                          'AudioCodec.%d' % i: item["codec"],
-                          'AudioChannels.%d' % i: str(item['channels'])}
-            db_movie.update_properties(streaminfo)
-        subs = []
-        for i, item in enumerate(movie['streamdetails']['subtitle'], start=1):
-            language = item['language']
-            if language in subs or language == "und":
-                continue
-            subs.append(language)
-            db_movie.update_properties({'SubtitleLanguage.%d' % i: language})
         stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
                                                 movie['streamdetails'])
         db_movie.update_properties(stream_info)

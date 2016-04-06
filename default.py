@@ -17,12 +17,11 @@ def pass_list_to_skin(name, data, prefix="", limit=False):
         return None
     for (count, result) in enumerate(data):
         for (key, value) in result.iteritems():
-            value = unicode(value)
-            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), unicode(value))
         for key, value in result.get("properties", {}).iteritems():
             if not value:
                 continue
-            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), unicode(value))
     addon.set_global('%s%s.Count' % (prefix, name), str(len(data)))
 
 

@@ -173,6 +173,23 @@ def media_streamdetails(filename, streamdetails):
     if audio:
         info['AudioCodec'] = audio[0]['codec']
         info['AudioChannels'] = audio[0]['channels']
+        streams = []
+        for i, item in enumerate(audio, start=1):
+            language = item['language']
+            if language in streams and language == "und":
+                continue
+            streams.append(language)
+            streaminfo = {'AudioLanguage.%d' % i: language,
+                          'AudioCodec.%d' % i: item["codec"],
+                          'AudioChannels.%d' % i: str(item['channels'])}
+            info.update(streaminfo)
+        subs = []
+        for i, item in enumerate(streamdetails['subtitle'], start=1):
+            language = item['language']
+            if language in subs or language == "und":
+                continue
+            subs.append(language)
+            info.update({'SubtitleLanguage.%d' % i: language})
     return info
 
 
