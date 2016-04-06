@@ -44,4 +44,6 @@ def get_movies(movie_type):
         movie.set_artwork({'thumb': item["posters"]["original"],
                            'poster': item["posters"]["original"]})
         movies.append(movie)
-    return local_db.merge_with_local("movie", movies, False)
+    return local_db.merge_with_local(media_type="movie",
+                                     items=movies,
+                                     library_first=False)

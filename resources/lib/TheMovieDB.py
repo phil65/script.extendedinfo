@@ -366,7 +366,10 @@ def handle_movies(results, local_first=True, sortkey="year"):
         item.set_artwork(get_image_urls(poster=movie.get("poster_path"),
                                         fanart=movie.get("backdrop_path")))
         movies.append(item)
-    return local_db.merge_with_local("movie", movies, local_first, sortkey)
+    return local_db.merge_with_local(media_type="movie",
+                                     items=movies,
+                                     library_first=local_first,
+                                     sortkey=sortkey)
 
 
 def handle_tvshows(results, local_first=True, sortkey="year"):
@@ -408,7 +411,10 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
         newtv.set_artwork(get_image_urls(poster=tv.get("poster_path"),
                                          fanart=tv.get("backdrop_path")))
         tvshows.append(newtv)
-    tvshows = local_db.merge_with_local("tvshow", tvshows, local_first, sortkey)
+    tvshows = local_db.merge_with_local(media_type="tvshow",
+                                        items=tvshows,
+                                        library_first=local_first,
+                                        sortkey=sortkey)
     return tvshows
 
 

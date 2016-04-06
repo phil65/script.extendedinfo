@@ -111,7 +111,7 @@ def handle_movies(results):
                            'thumb': item["images"]["poster"]["thumb"]})
         movies.append(movie)
     movies = local_db.merge_with_local(media_type="movie",
-                                       online_list=movies,
+                                       items=movies,
                                        library_first=False)
     return movies
 
@@ -154,7 +154,7 @@ def handle_tvshows(results):
                           'thumb': item['show']["images"]["poster"]["thumb"]})
         shows.append(show)
     shows = local_db.merge_with_local(media_type="tvshow",
-                                      online_list=shows,
+                                      items=shows,
                                       library_first=False)
     return shows
 
