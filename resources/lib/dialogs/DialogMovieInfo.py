@@ -66,7 +66,7 @@ def get_window(window_type):
             filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
             for thread in [self.omdb_thread, sets_thread, filter_thread]:
                 thread.start()
-            if "dbid" not in self.info:
+            if "dbid" not in self.info.get_infos():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()

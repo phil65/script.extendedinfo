@@ -632,7 +632,7 @@ class ListItem(object):
         self.artwork[key] = value
 
     def get_art(self, key):
-        value = self.infos.get(key)
+        value = self.artwork.get(key)
         return value if value else ""
 
     def get_artwork(self):
