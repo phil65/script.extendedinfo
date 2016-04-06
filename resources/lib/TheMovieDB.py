@@ -1022,7 +1022,7 @@ def get_rated_media_items(media_type):
             notify("Could not get session id")
             return []
         params = {"language": SETTING("LanguageID")}
-        response = get_data(url="guest_session/%s/rated_movies" % (session_id),
+        response = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
                             params=params,
                             cache_days=0)
     if media_type == "tv/episodes":
