@@ -214,7 +214,7 @@ def send_request(url, params, values, delete=False):
     if delete:
         request.get_method = lambda: 'DELETE'
     try:
-        response = urllib2.urlopen(request, timeout=3).read()
+        response = urllib2.urlopen(request, timeout=5).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
             Utils.notify("Error", "Not authorized.")
