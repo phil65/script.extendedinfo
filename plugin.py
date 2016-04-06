@@ -116,16 +116,18 @@ def tmdb():
              "upcomingmovies": addon.LANG(32043),
              "topratedmovies": addon.LANG(32046),
              "popularmovies": addon.LANG(32044),
-             "accountlists": addon.LANG(32045),
-             "starredmovies": addon.LANG(32134),
              "ratedmovies": addon.LANG(32135),
              "airingtodaytvshows": addon.LANG(32038),
              "onairtvshows": addon.LANG(32039),
              "topratedtvshows": addon.LANG(32040),
              "populartvshows": addon.LANG(32041),
-             "starredtvshows": addon.LANG(32144),
              "ratedtvshows": addon.LANG(32145),
              "ratedepisodes": addon.LANG(32093)}
+    login = {"starredmovies": addon.LANG(32134),
+             "starredtvshows": addon.LANG(32144),
+             "accountlists": addon.LANG(32045)}
+    if addon.setting("tmdb_username") and addon.setting("tmdb_password"):
+        items.update(login)
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
