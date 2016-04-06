@@ -89,7 +89,6 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
-            Utils.log(self.info)
             Utils.listitem_to_windowprops(data=self.info,
                                           window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()

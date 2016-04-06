@@ -31,12 +31,12 @@ class DialogBaseInfo(object):
         self.last_focus = None
         self.data = None
         self.yt_listitems = []
-        self.info = {}
+        self.info = Utils.ListItem()
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
-        addon.set_global("ImageColor", self.info.get('ImageColor', ""))
-        addon.set_global("infobackground", self.info.get('fanart', ""))
+        addon.set_global("ImageColor", self.info.get_property('ImageColor'))
+        addon.set_global("infobackground", self.info.get_art('fanart'))
         self.setProperty("type", self.type)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 
