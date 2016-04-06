@@ -420,7 +420,8 @@ def handle_episodes(results):
         if not title:
             title = u"%s %s" % (addon.LANG(20359), item.get('episode_number'))
         listitem = {'label': title}
-        listitem = Utils.ListItem(label=title)
+        listitem = Utils.ListItem(label=title,
+                                  artwork=get_image_urls(still=item.get("still_path")))
         listitem.set_infos({'mediatype': "episode",
                             'title': title,
                             'premiered': item.get('air_date'),
@@ -431,7 +432,6 @@ def handle_episodes(results):
                             'votes': item.get('vote_count')})
         listitem.set_properties({'id': item.get('id'),
                                  'production_code': item.get('production_code')})
-        listitem.set_artwork(get_image_urls(still=item.get("still_path")))
         listitems.append(listitem)
     return listitems
 
@@ -440,7 +440,8 @@ def handle_misc(results):
     listitems = []
     for item in results:
         listitem = Utils.ListItem(label=Utils.clean_text(item.get('name')),
-                                  path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'))
+                                  path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
+                                  artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'year': Utils.get_year(item.get('release_date')),
                             'premiered': item.get('release_date'),
                             'plot': Utils.clean_text(item.get('description'))})
@@ -452,7 +453,6 @@ def handle_misc(results):
                                  'content': Utils.clean_text(item.get('content')),
                                  'id': item.get('id'),
                                  'url': item.get('url')})
-        listitem.set_artwork(get_image_urls(poster=item.get("poster_path")))
         listitems.append(listitem)
     return listitems
 
@@ -461,13 +461,13 @@ def handle_seasons(results):
     listitems = []
     for item in results:
         season = item.get('season_number')
-        listitem = Utils.ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season))
+        listitem = Utils.ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
+                                  properties={'id': item.get('id')},
+                                  artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'mediatype': "season",
                             'season': season,
                             'premiered': item.get('air_date'),
                             'year': Utils.get_year(item.get('air_date'))})
-        listitem.set_properties({'id': item.get('id')})
-        listitem.set_artwork(get_image_urls(poster=item.get("poster_path")))
         listitems.append(listitem)
     return listitems
 
@@ -476,14 +476,14 @@ def handle_videos(results):
     listitems = []
     for item in results:
         listitem = Utils.ListItem(label=item.get('name'),
-                                  size=item.get('size'))
+                                  size=item.get('size'),
+                                  artwork={'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
         listitem.set_properties({'iso_639_1': item.get('iso_639_1'),
                                  'type': item.get('type'),
                                  'key': item.get('key'),
                                  'youtube_id': item.get('key'),
                                  'site': item.get('site'),
                                  'id': item.get('id')})
-        listitem.set_artwork({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
         listitems.append(listitem)
     return listitems
 
@@ -492,8 +492,9 @@ def handle_people(results):
     people = []
     for item in results:
         person = Utils.ListItem(label=item['name'],
-                                path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']))
-        person.set_infos({'mediatype': "artist"})
+                                path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']),
+                                infos={'mediatype': "artist"},
+                                artwork=get_image_urls(profile=item.get("profile_path")))
         person.set_properties({'adult': item.get('adult'),
                                'alsoknownas': " / ".join(item.get('also_known_as', [])),
                                'biography': Utils.clean_text(item.get('biography')),
@@ -508,7 +509,6 @@ def handle_people(results):
                                'deathday': item.get('deathday'),
                                'placeofbirth': item.get('place_of_birth'),
                                'homepage': item.get('homepage')})
-        person.set_artwork(get_image_urls(profile=item.get("profile_path")))
         people.append(person)
     return people
 
@@ -516,11 +516,10 @@ def handle_people(results):
 def handle_images(results):
     images = []
     for item in results:
-        image = Utils.ListItem()
+        image = Utils.ListItem(artwork=get_image_urls(poster=item.get("file_path")))
         image.set_properties({'aspectratio': item['aspect_ratio'],
                               'vote_average': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
-        image.set_artwork(get_image_urls(poster=item.get("file_path")))
         if item.get("media"):
             image.set_infos({'title': item["media"].get("title")})
             if item["media"].get("poster_path"):
@@ -532,8 +531,8 @@ def handle_images(results):
 def handle_companies(results):
     companies = []
     for item in results:
-        company = Utils.ListItem(label=item['name'])
-        company.set_infos({'plot': item['description']})
+        company = Utils.ListItem(label=item['name'],
+                                 infos={'plot': item['description']})
         company.set_properties({'parent_company': item['parent_company'],
                                 'headquarters': item['headquarters'],
                                 'homepage': item['homepage'],
@@ -961,8 +960,8 @@ def extended_actor_info(actor_id):
                  "tagged_images": handle_images(response["tagged_images"]["results"]) if "tagged_images" in response else [],
                  "images": handle_images(response["images"]["profiles"])}
     info = Utils.ListItem(label=response['name'],
-                          path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']))
-    info.set_infos({'mediatype': "artist"})
+                          path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']),
+                          infos={'mediatype': "artist"})
     info.set_properties({'adult': response.get('adult'),
                          'alsoknownas': " / ".join(response.get('also_known_as', [])),
                          'biography': Utils.clean_text(response.get('biography')),
