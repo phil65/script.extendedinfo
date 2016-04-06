@@ -11,6 +11,8 @@ import addon
 import time
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
+MOVIE_PROPS = ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]
+TV_PROPS = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]
 
 
 class LocalDB(object):
@@ -111,18 +113,16 @@ class LocalDB(object):
         return movies
 
     def get_movies(self, limit=10):
-        props = ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]
         data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
-                                   params={"properties": props, "limits": {"end": limit}})
+                                   params={"properties": MOVIE_PROPS, "limits": {"end": limit}})
         if "result" in data and "movies" in data["result"]:
             return [self.handle_movies(item) for item in data["result"]["movies"]]
         else:
             return []
 
     def get_tvshows(self, limit=10):
-        props = '"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]'
         data = Utils.get_kodi_json(method="VideoLibrary.GetTVShows",
-                                   params={"properties": props, "limits": {"end": limit}})
+                                   params={"properties": TV_PROPS, "limits": {"end": limit}})
         if "result" in data and "tvshows" in data["result"]:
             return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
         else:
@@ -202,14 +202,14 @@ class LocalDB(object):
 
     def get_movie(self, movie_id):
         response = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                       params={"properties": ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"], "movieid": movie_id})
+                                       params={"properties": MOVIE_PROPS, "movieid": movie_id})
         if "result" in response and "moviedetails" in response["result"]:
             return self.handle_movies(response["result"]["moviedetails"])
         return {}
 
     def get_tvshow(self, tvshow_id):
         response = Utils.get_kodi_json(method="VideoLibrary.GetTVShowDetails",
-                                       params={"properties": ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"], "tvshowid": tvshow_id})
+                                       params={"properties": TV_PROPS, "tvshowid": tvshow_id})
         if "result" in response and "tvshowdetails" in response["result"]:
             return self.handle_tvshows(response["result"]["tvshowdetails"])
         return {}
