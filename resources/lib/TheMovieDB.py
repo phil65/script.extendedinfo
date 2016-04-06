@@ -647,12 +647,10 @@ def get_credit_info(credit_id):
 
 
 def get_account_props(states):
-    props = {}
-    props["FavButton_Label"] = addon.LANG(32155) if states.get("favorite") else addon.LANG(32154)
-    props["favorite"] = "True" if states.get("favorite") else ""
-    props["rated"] = states["rated"]["value"] if states["rated"] else ""
-    props["watchlist"] = states["watchlist"] if "watchlist" in states else ""
-    return props
+    return {"FavButton_Label": addon.LANG(32155) if states.get("favorite") else addon.LANG(32154),
+            "favorite": "True" if states.get("favorite") else "",
+            "rated": states["rated"]["value"] if states["rated"] else "",
+            "watchlist": states["watchlist"] if "watchlist" in states else ""}
 
 
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
