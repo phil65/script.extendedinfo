@@ -564,6 +564,7 @@ class ListItem(object):
         self.infos = infos
         self.videoinfo = []
         self.audioinfo = []
+        self.subinfo = []
 
     def __setitem__(self, key, value):
         self.properties[key] = value
@@ -601,7 +602,8 @@ class ListItem(object):
                           "Properties:", self.dump_dict(self.properties),
                           "Artwork:", self.dump_dict(self.artwork),
                           "VideoStreams:", self.dump_dict(self.videoinfo),
-                          "AudioStreams:", self.dump_dict(self.audioinfo)])
+                          "AudioStreams:", self.dump_dict(self.audioinfo),
+                          "Subs:", self.dump_dict(self.subinfo)])
 
     def __contains__(self, key):
         if key in self.properties:
@@ -625,6 +627,7 @@ class ListItem(object):
         self.update_infos(listitem.get_infos())
         self.set_videoinfos(listitem.videoinfo)
         self.set_audioinfos(listitem.audioinfo)
+        self.set_subinfos(listitem.subinfo)
 
     def set_properties(self, properties):
         self.properties = properties
@@ -654,11 +657,17 @@ class ListItem(object):
     def add_audioinfo(self, info):
         self.audioinfo.append(info)
 
+    def add_subinfo(self, info):
+        self.subinfo.append(info)
+
     def set_videoinfos(self, infos):
         self.videoinfo = infos
 
     def set_audioinfos(self, infos):
         self.audioinfo = infos
+
+    def set_subinfos(self, infos):
+        self.subinfo = infos
 
     def set_infos(self, infos):
         self.infos = infos
@@ -710,4 +719,6 @@ class ListItem(object):
             listitem.addStreamInfo("video", item)
         for item in self.audioinfo:
             listitem.addStreamInfo("audio", item)
+        for item in self.subsinfo:
+            listitem.addStreamInfo("subtitle", item)
         return listitem
