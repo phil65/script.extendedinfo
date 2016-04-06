@@ -87,7 +87,7 @@ def handle_playlists(results):
                                   path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
         playlist.set_infos({'plot': snippet["description"],
                             'premiered': snippet["publishedAt"][:10]})
-        playlist.set_artwork({'thumb': thumb})
+        playlist.set_art("thumb", thumb)
         playlist.set_properties({'youtube_id': playlist_id,
                                  'channel_title': snippet["channelTitle"],
                                  'live': snippet["liveBroadcastContent"].replace("none", "")})
@@ -115,9 +115,8 @@ def handle_channels(results):
                                  path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
         channel.set_infos({'plot': snippet["description"],
                            'premiered': snippet["publishedAt"][:10]})
-        channel.set_artwork({'thumb': thumb})
-        channel.set_properties({'youtube_id': channel_id,
-                                'Play': PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id})
+        channel.set_art("thumb", thumb)
+        channel.set_property("youtube_id", channel_id)
         channels.append(channel)
     channel_ids = [item.get_property("youtube_id") for item in channels]
     params = {"id": ",".join(channel_ids),
