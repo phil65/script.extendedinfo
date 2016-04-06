@@ -11,7 +11,6 @@ import routing
 import os
 from resources.lib import process
 from resources.lib import addon
-from resources.lib import Utils
 
 MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
 RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")
@@ -26,8 +25,6 @@ def pass_list_to_skin(name, data, handle=None, limit=False):
     addon.clear_global(name)
     if data:
         addon.set_global(name + ".Count", str(len(data)))
-        for i in data:
-            Utils.log(i)
         items = [(i.get_property("path"), i.get_listitem(), bool(i.get_property("directory"))) for i in data]
         xbmcplugin.addDirectoryItems(handle=handle,
                                      items=items,
