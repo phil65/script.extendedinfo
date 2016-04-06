@@ -44,10 +44,10 @@ def handle_videos(results, extended=False):
             if not item.get_property("youtube_id") == ext_item['id']:
                 continue
             details = ext_item['contentDetails']
-            duration = details['duration'][2:-1].split("M")
+            duration = details['duration']
             likes = ext_item['statistics'].get('likeCount')
             dislikes = ext_item['statistics'].get('dislikeCount')
-            item.set_info("duration", int(duration[0]) * 60 + int(duration[1]) if len(duration) > 1 else "")
+            item.set_info("duration", duration)
             props = {"duration": details['duration'][2:].lower(),
                      "dimension": details['dimension'],
                      "definition": details['definition'],
@@ -62,6 +62,16 @@ def handle_videos(results, extended=False):
                     item.set_info("rating", format(float(likes) / vote_count * 10, '.2f'))
             break
     return videos
+
+
+def get_duration_in_seconds(duration):
+    duration = duration[2:-1].replace("H", "M").split("M")
+    if len(duration) == 3:
+        return int(duration[0]) * 3600 + int(duration[1]) * 60 + int(duration[0])
+    elif len(duration) == 2:
+        return int(duration[0]) * 60 + int(duration[1])
+    else:
+        return int(duration[0])
 
 
 def handle_playlists(results):
