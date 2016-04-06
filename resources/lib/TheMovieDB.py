@@ -183,7 +183,7 @@ def set_rating(media_type, media_id, rating):
     # request.get_method = lambda: 'DELETE'
     results = send_request(url=url,
                            params=params,
-                           values='{"value": %.1f}' % rating)
+                           values={"value": "%.1f" % rating})
     if results:
         notify(ADDON_NAME, results["status_message"])
 
@@ -195,7 +195,7 @@ def send_request(url, params, values, delete=False):
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     log(url)
     request = urllib2.Request(url=url,
-                              data=values,
+                              data=json.dumps(values),
                               headers=HEADERS)
     if delete:
         request.get_method = lambda: 'DELETE'
