@@ -5,15 +5,25 @@
 
 import sys
 import xbmc
-from resources.lib.process import start_info_actions
-from resources.lib import Utils
+from resources.lib import process
 from resources.lib import addon
 
 
 def pass_list_to_skin(name, data, prefix="", limit=False):
     if data and limit and int(limit) < len(data):
         data = data[:int(limit)]
-    Utils.set_window_props(name, data, prefix)
+    if not data:
+        addon.set_global('%s%s.Count' % (prefix, name), '0')
+        return None
+    for (count, result) in enumerate(data):
+        for (key, value) in result.iteritems():
+            value = unicode(value)
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+        for key, value in result.get("properties", {}).iteritems():
+            if not value:
+                continue
+            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
+    addon.set_global('%s%s.Count' % (prefix, name), str(len(data)))
 
 
 class Main:
@@ -23,7 +33,7 @@ class Main:
         addon.set_global("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
-            listitems = start_info_actions(info, self.params)
+            listitems = process.start_info_actions(info, self.params)
             pass_list_to_skin(name=info,
                               data=listitems,
                               prefix=self.params.get("prefix", ""),

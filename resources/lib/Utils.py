@@ -505,22 +505,6 @@ def merge_dict_lists(items, key="job"):
     return crews
 
 
-def set_window_props(name, data, prefix=""):
-    if not data:
-        addon.set_global('%s%s.Count' % (prefix, name), '0')
-        log("%s%s.Count = None" % (prefix, name))
-        return None
-    for (count, result) in enumerate(data):
-        for (key, value) in result.iteritems():
-            value = unicode(value)
-            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
-        for key, value in result.get("properties", {}).iteritems():
-            if not value:
-                continue
-            addon.set_global('%s%s.%i.%s' % (prefix, name, count + 1, key), value)
-    addon.set_global('%s%s.Count' % (prefix, name), str(len(data)))
-
-
 def create_listitems(data=None, preload_images=0):
     return [item.get_listitem() for item in data] if data else []
 
