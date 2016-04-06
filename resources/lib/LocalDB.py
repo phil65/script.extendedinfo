@@ -63,6 +63,9 @@ class LocalDB(object):
         return artists
 
     def get_similar_movies(self, dbid):
+        """
+        get list of movies from db which are similar to movie with *dbid
+        """
         movie = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                     params={"properties": ["genre", "director", "country", "year", "mpaa"], "movieid": dbid})
         if "moviedetails" not in movie['result']:
@@ -113,6 +116,9 @@ class LocalDB(object):
         return movies
 
     def get_movies(self, limit=10):
+        """
+        get list of movies with length *limit from db
+        """
         data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
                                    params={"properties": MOVIE_PROPS, "limits": {"end": limit}})
         if "result" in data and "movies" in data["result"]:
@@ -121,14 +127,19 @@ class LocalDB(object):
             return []
 
     def get_tvshows(self, limit=10):
+        """
+        get list of tvshows with length *limit from db
+        """
         data = Utils.get_kodi_json(method="VideoLibrary.GetTVShows",
                                    params={"properties": TV_PROPS, "limits": {"end": limit}})
-        if "result" in data and "tvshows" in data["result"]:
-            return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
-        else:
+        if "result" not in data or "tvshows" not in data["result"]:
             return []
+        return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
 
     def handle_movies(self, movie):
+        """
+        convert movie data to listitems
+        """
         trailer = PLUGIN_BASE + "playtrailer&&dbid=%s" % str(movie['movieid'])
         if addon.setting("infodialog_onclick") != "false":
             path = PLUGIN_BASE + 'extendedinfo&&dbid=%s' % str(movie['movieid'])
@@ -182,6 +193,9 @@ class LocalDB(object):
         return db_movie
 
     def handle_tvshows(self, tvshow):
+        """
+        convert tvshow data to listitems
+        """
         if addon.setting("infodialog_onclick") != "false":
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
@@ -201,6 +215,9 @@ class LocalDB(object):
         return db_tvshow
 
     def get_movie(self, movie_id):
+        """
+        get info from db for movie with *movie_id
+        """
         response = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                        params={"properties": MOVIE_PROPS, "movieid": movie_id})
         if "result" in response and "moviedetails" in response["result"]:
@@ -208,6 +225,9 @@ class LocalDB(object):
         return {}
 
     def get_tvshow(self, tvshow_id):
+        """
+        get info from db for tvshow with *tvshow_id
+        """
         response = Utils.get_kodi_json(method="VideoLibrary.GetTVShowDetails",
                                        params={"properties": TV_PROPS, "tvshowid": tvshow_id})
         if "result" in response and "tvshowdetails" in response["result"]:
@@ -215,6 +235,9 @@ class LocalDB(object):
         return {}
 
     def get_albums(self):
+        """
+        get a list of all albums from db
+        """
         data = Utils.get_kodi_json(method="AudioLibrary.GetAlbums",
                                    params={"properties": ["title"]})
         if "result" not in data or "albums" not in data['result']:
