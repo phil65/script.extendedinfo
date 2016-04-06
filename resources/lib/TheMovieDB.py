@@ -363,8 +363,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                              'credit_id': movie.get('credit_id'),
                              'character': movie.get('character'),
                              'job': movie.get('job'),
-                             'department': movie.get('department'),
-                             'time_comparer': release_date.replace("-", "") if release_date else ""})
+                             'department': movie.get('department')})
         item.set_artwork(get_image_urls(poster=movie.get("poster_path"),
                                         fanart=movie.get("backdrop_path")))
         movies.append(item)
