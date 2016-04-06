@@ -277,6 +277,45 @@ class FunctionThread(threading.Thread):
         return True
 
 
+def get_file(url):
+    clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
+    if clean_url.endswith("/"):
+        clean_url = clean_url[:-1]
+    cached_thumb = xbmc.getCacheThumbName(clean_url)
+    vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
+    cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
+    cache_file_png = cache_file_jpg[:-4] + ".png"
+    if xbmcvfs.exists(cache_file_jpg):
+        log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
+        return xbmc.translatePath(cache_file_jpg)
+    elif xbmcvfs.exists(cache_file_png):
+        log("cache_file_png Image: " + url + "-->" + cache_file_png)
+        return cache_file_png
+    elif xbmcvfs.exists(vid_cache_file):
+        log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
+        return vid_cache_file
+    try:
+        request = urllib2.Request(url)
+        request.add_header('Accept-encoding', 'gzip')
+        response = urllib2.urlopen(request, timeout=3)
+        data = response.read()
+        response.close()
+        log('image downloaded: ' + url)
+    except Exception:
+        log('image download failed: ' + url)
+        return ""
+    if not data:
+        return ""
+    image = cache_file_png if url.endswith(".png") else cache_file_jpg
+    try:
+        with open(xbmc.translatePath(image), "wb") as f:
+            f.write(data)
+        return xbmc.translatePath(image)
+    except Exception:
+        log('failed to save image ' + url)
+        return ""
+
+
 def get_favs_by_type(fav_type):
     """
     returns dict list containing favourites with type *fav_type
