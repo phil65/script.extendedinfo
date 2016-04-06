@@ -161,7 +161,7 @@ def set_rating_prompt(media_type, media_id, dbid=None):
     if rating == -1:
         return False
     if dbid:
-        db_rating = round(rating + 1 / 2)
+        db_rating = round((rating + 1) / 2)
         if media_type == "movie":
             Utils.get_kodi_json(method="VideoLibrary.SetMovieDetails",
                                 params='{"movieid":%s,"userrating":%d}' % (dbid, db_rating))
