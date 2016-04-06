@@ -719,6 +719,6 @@ class ListItem(object):
             listitem.addStreamInfo("video", item)
         for item in self.audioinfo:
             listitem.addStreamInfo("audio", item)
-        for item in self.subsinfo:
+        for item in self.subinfo:
             listitem.addStreamInfo("subtitle", item)
         return listitem
