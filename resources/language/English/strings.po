@@ -454,6 +454,11 @@ msgctxt "#32092"
 msgid "Anticipated movies"
 msgstr ""
 
+#: /plugin.py:128
+msgctxt "#32093"
+msgid "Rated episodes"
+msgstr ""
+
 msgctxt "#32099"
 msgid "Include porn stars"
 msgstr ""

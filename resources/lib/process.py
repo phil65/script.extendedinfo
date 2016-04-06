@@ -102,6 +102,8 @@ def start_info_actions(info, params):
         return tmdb.get_tmdb_shows("popular")
     elif info == 'ratedtvshows':
         return tmdb.get_rated_media_items("tv")
+    elif info == 'ratedepisodes':
+        return tmdb.get_rated_media_items("tv/episodes")
     elif info == 'starredtvshows':
         return tmdb.get_fav_items("tv")
     elif info == 'similarmovies':

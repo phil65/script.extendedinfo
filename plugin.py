@@ -124,7 +124,8 @@ def tmdb():
              "topratedtvshows": addon.LANG(32040),
              "populartvshows": addon.LANG(32041),
              "starredtvshows": addon.LANG(32144),
-             "ratedtvshows": addon.LANG(32145)}
+             "ratedtvshows": addon.LANG(32145),
+             "ratedepisodes": addon.LANG(32093)}
     for key, value in items.iteritems():
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
