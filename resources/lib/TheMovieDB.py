@@ -654,29 +654,27 @@ def get_account_props(states):
 
 
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
-    images = {}
     if poster:
-        images["poster"] = IMAGE_BASE_URL + "w500" + poster
-        images["poster_original"] = IMAGE_BASE_URL + "original" + poster
-        images["original"] = IMAGE_BASE_URL + "original" + poster
-        images["poster_small"] = IMAGE_BASE_URL + "w342" + poster
-        images["thumb"] = IMAGE_BASE_URL + "w342" + poster
+        return {"poster": IMAGE_BASE_URL + "w500" + poster,
+                "poster_original": IMAGE_BASE_URL + "original" + poster,
+                "original": IMAGE_BASE_URL + "original" + poster,
+                "poster_small": IMAGE_BASE_URL + "w342" + poster,
+                "thumb": IMAGE_BASE_URL + "w342" + poster}
     if still:
-        images["thumb"] = IMAGE_BASE_URL + "w300" + still
-        images["still"] = IMAGE_BASE_URL + "w300" + still
-        images["still_original"] = IMAGE_BASE_URL + "original" + still
-        images["still_small"] = IMAGE_BASE_URL + "w185" + still
+        return {"thumb": IMAGE_BASE_URL + "w300" + still,
+                "still": IMAGE_BASE_URL + "w300" + still,
+                "still_original": IMAGE_BASE_URL + "original" + still,
+                "still_small": IMAGE_BASE_URL + "w185" + still}
     if fanart:
-        images["fanart"] = IMAGE_BASE_URL + "w1280" + fanart
-        images["fanart_original"] = IMAGE_BASE_URL + "original" + fanart
-        images["original"] = IMAGE_BASE_URL + "original" + fanart
-        images["fanart_small"] = IMAGE_BASE_URL + "w780" + fanart
+        return {"fanart": IMAGE_BASE_URL + "w1280" + fanart,
+                "fanart_original": IMAGE_BASE_URL + "original" + fanart,
+                "original": IMAGE_BASE_URL + "original" + fanart,
+                "fanart_small": IMAGE_BASE_URL + "w780" + fanart}
     if profile:
-        images["poster"] = IMAGE_BASE_URL + "w500" + profile
-        images["poster_original"] = IMAGE_BASE_URL + "original" + profile
-        images["poster_small"] = IMAGE_BASE_URL + "w342" + profile
-        images["thumb"] = IMAGE_BASE_URL + "w342" + profile
-    return images
+        return {"poster": IMAGE_BASE_URL + "w500" + profile,
+                "poster_original": IMAGE_BASE_URL + "original" + profile,
+                "poster_small": IMAGE_BASE_URL + "w342" + profile,
+                "thumb": IMAGE_BASE_URL + "w342" + profile}
 
 
 def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
