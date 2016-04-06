@@ -160,41 +160,31 @@ def handle_tvshows(results):
 def get_shows(show_type):
     results = get_data(url='shows/%s' % show_type,
                        params={"extended": "full,images"})
-    if not results:
-        return []
-    return handle_tvshows(results)
+    return handle_tvshows(results) if results else []
 
 
 def get_shows_from_time(show_type, period="monthly"):
     results = get_data(url='shows/%s/%s' % (show_type, period),
                        params={"extended": "full,images"})
-    if not results:
-        return []
-    return handle_tvshows(results)
+    return handle_tvshows(results) if results else []
 
 
 def get_tshow_info(imdb_id):
     results = get_data(url='show/%s' % imdb_id,
                        params={"extended": "full,images"})
-    if not results:
-        return []
-    return handle_tvshows([results])
+    return handle_tvshows([results]) if results else []
 
 
 def get_movies(movie_type):
     results = get_data(url='movies/%s' % movie_type,
                        params={"extended": "full,images"})
-    if not results:
-        return []
-    return handle_movies(results)
+    return handle_movies(results) if results else []
 
 
 def get_movies_from_time(movie_type, period="monthly"):
     results = get_data(url='movies/%s/%s' % (movie_type, period),
                        params={"extended": "full,images"})
-    if not results:
-        return []
-    return handle_movies(results)
+    return handle_movies(results) if results else []
 
 
 def get_similar(media_type, imdb_id):
