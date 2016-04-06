@@ -313,9 +313,10 @@ def get_window(window_type):
                 return lists
             account_list = tmdb.get_account_lists(10)  # use caching here, forceupdate everywhere else
             ids = [item["id"] for item in account_list]
-            own_lists = [item for item in lists if item["properties"]["id"] in ids]
-            own_lists = [dict({"account": "True"}, **item) for item in own_lists]
-            misc_lists = [item for item in lists if item["properties"]["id"] not in ids]
+            own_lists = [item for item in lists if item.get_property("id") in ids]
+            for item in own_lists:
+                item.set_property("account", "True")
+            misc_lists = [item for item in lists if item.get_property("id") not in ids]
             return own_lists + misc_lists
 
         def update_states(self):
