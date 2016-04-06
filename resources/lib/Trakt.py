@@ -131,6 +131,7 @@ def handle_tvshows(results):
                         'country': item["country"],
                         'rating': round(item["rating"], 1),
                         'votes': item["votes"],
+                        'imdbnumber': item['ids']["imdb"],
                         'mpaa': item["certification"],
                         'trailer': item["trailer"],
                         'status': item.get("status"),
