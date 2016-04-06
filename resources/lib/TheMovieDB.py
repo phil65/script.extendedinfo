@@ -345,6 +345,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
         item = Utils.ListItem(label=movie.get('title'),
                               path=PLUGIN_BASE + path % movie.get("id"))
+        release_date = movie.get('release_date')
         item.set_infos({'title': movie.get('title'),
                         'originaltitle': movie.get('original_title', ""),
                         'mediatype': "movie",
@@ -353,17 +354,17 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         'Trailer': "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id")),
                         'genre': " / ".join([i for i in genres if i]),
                         'votes': movie.get('vote_count'),
-                        'year': Utils.get_year(movie.get('release_date')),
+                        'year': Utils.get_year(release_date),
                         'rating': round(movie['vote_average'], 1) if movie.get('vote_average') else "",
                         'userrating': movie.get('rating'),
-                        'premiered': movie.get('release_date')})
+                        'premiered': release_date})
         item.set_properties({'id': movie.get("id"),
                              'popularity': movie.get('popularity'),
                              'credit_id': movie.get('credit_id'),
                              'character': movie.get('character'),
                              'job': movie.get('job'),
                              'department': movie.get('department'),
-                             'time_comparer': movie['release_date'].replace("-", "") if movie.get('release_date') else ""})
+                             'time_comparer': release_date.replace("-", "") if release_date else ""})
         item.set_artwork(get_image_urls(poster=movie.get("poster_path"),
                                         fanart=movie.get("backdrop_path")))
         movies.append(item)
