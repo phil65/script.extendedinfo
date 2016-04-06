@@ -125,7 +125,6 @@ def handle_tvshows(results):
                               path='%sextendedtvinfo&&tvdb_id=%s' % (PLUGIN_BASE, item['ids']["tvdb"]))
         show.set_infos({'mediatype': "tvshow",
                         'title': item["title"],
-                        'tvshowtitle': item["title"],
                         'duration': item["runtime"] * 60,
                         'year': item["year"],
                         'premiered': item["first_aired"][:10],
