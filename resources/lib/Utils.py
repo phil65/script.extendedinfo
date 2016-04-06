@@ -301,7 +301,7 @@ def get_favs():
     """
     items = []
     data = get_kodi_json(method="Favourites.GetFavourites",
-                         params='{"type": null, "properties": ["path", "thumbnail", "window", "windowparameter"]}')
+                         params={"type": None, "properties": ["path", "thumbnail", "window", "windowparameter"]})
     if "result" not in data or data["result"]["limits"]["total"] == 0:
         return []
     for fav in data["result"]["favourites"]:
@@ -415,7 +415,7 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
 
 
 def get_kodi_json(method, params):
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, params))
+    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, json.dumps(params)))
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     return json.loads(json_query)
 

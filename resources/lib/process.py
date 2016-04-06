@@ -47,14 +47,6 @@ def start_info_actions(info, params):
         return AudioDB.get_track_details(params.get("id", ""))
     elif info == 'topartists':
         return LastFM.get_top_artists()
-    elif info == 'latestdbmovies':
-        return LocalDB.local_db.get_movies('"sort": {"order": "descending", "method": "dateadded"}',
-                                           params.get("limit", 10))
-    elif info == 'randomdbmovies':
-        return LocalDB.local_db.get_movies('"sort": {"method": "random"}', params.get("limit", 10))
-    elif info == 'inprogressdbmovies':
-        method = '"sort": {"order": "descending", "method": "lastplayed"}, "filter": {"field": "inprogress", "operator": "true", "value": ""}'
-        return LocalDB.local_db.get_movies(method, params.get("limit", 10))
 #  RottenTomatoesMovies
     elif info == 'intheatermovies':
         return RottenTomatoes.get_movies("movies/in_theaters")

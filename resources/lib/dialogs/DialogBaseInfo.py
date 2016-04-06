@@ -88,9 +88,9 @@ class DialogBaseInfo(object):
                                             list=[addon.LANG(32006)])
         if selection == 0:
             media_type = self.getProperty("type")
-            params = '"art": {"poster": "%s"}' % self.listitem.getProperty("original")
+            art = {"poster": self.listitem.getProperty("original")}
             Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
+                                params={"art": art, "%sid" % media_type.lower(): self.info['dbid']})
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
     def fanart_options(self):
@@ -100,9 +100,9 @@ class DialogBaseInfo(object):
                                             list=[addon.LANG(32007)])
         if selection == 0:
             media_type = self.getProperty("type")
-            params = '"art": {"fanart": "%s"}' % self.listitem.getProperty("original")
+            art = {"fanart": self.listitem.getProperty("original")}
             Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params='{ %s, "%sid":%s }' % (params, media_type.lower(), self.info['dbid']))
+                                params={"art": art, "%sid" % media_type.lower(): self.info['dbid']})
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)
