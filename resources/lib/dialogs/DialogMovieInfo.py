@@ -202,26 +202,22 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_OPENLIST)
         def show_list_dialog(self):
-            listitems = [addon.LANG(32134), addon.LANG(32135)]
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            account_lists = tmdb.get_account_lists()
-            for item in account_lists:
-                listitems.append("%s (%i)" % (item["name"], item["item_count"]))
+            movie_lists = tmdb.get_movie_lists()
+            listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
+            listitems = [addon.LANG(32134), addon.LANG(32135)] + listitems
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
             if index == -1:
                 pass
-            elif index == 0:
+            elif index < 2:
                 wm.open_video_list(prev_window=self,
-                                   mode="favorites")
-            elif index == 1:
-                wm.open_video_list(prev_window=self,
-                                   mode="rating")
+                                   mode="favorites" if index == 0 else "rating")
             else:
                 wm.open_video_list(prev_window=self,
                                    mode="list",
-                                   list_id=account_lists[index - 2]["id"],
-                                   filter_label=account_lists[index - 2]["name"],
+                                   list_id=movie_lists[index - 2]["id"],
+                                   filter_label=movie_lists[index - 2]["name"],
                                    force=True)
 
         @ch.click(ID_BUTTON_PLOT)
@@ -292,11 +288,11 @@ def get_window(window_type):
             movie_id = str(self.info.get("dbid", ""))
             imdb_id = str(self.info.get("imdb_id", ""))
             if movie_id:
-                call = "RunScript(script.artwork.downloader,mediatype=movie,%s)"
-                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + movie_id)],
-                            [addon.LANG(14061), call % ("dbid=" + movie_id)],
-                            [addon.LANG(32101), call % ("mode=custom,dbid=" + movie_id + ",extrathumbs")],
-                            [addon.LANG(32100), call % ("mode=custom,dbid=" + movie_id)]]
+                call = "RunScript(script.artwork.downloader,mediatype=movie,dbid={}%s)".format(movie_id)
+                options += [[addon.LANG(413), call % "mode=gui"],
+                            [addon.LANG(14061), call % ""],
+                            [addon.LANG(32101), call % "mode=custom,extrathumbs"],
+                            [addon.LANG(32100), call % "mode=custom"]]
             else:
                 options += [[addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % addon.LANG(32059)]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
@@ -304,19 +300,20 @@ def get_window(window_type):
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
                                                 list=[i[0] for i in options])
-            if selection > -1:
-                for item in options[selection][1].split("||"):
-                    xbmc.executebuiltin(item)
+            if selection == -1:
+                return None
+            for item in options[selection][1].split("||"):
+                xbmc.executebuiltin(item)
 
         def sort_lists(self, lists):
             if not self.logged_in:
                 return lists
             account_list = tmdb.get_account_lists(10)  # use caching here, forceupdate everywhere else
-            ids = [item["id"] for item in account_list]
-            own_lists = [item for item in lists if item.get_property("id") in ids]
+            ids = [i["id"] for i in account_list]
+            own_lists = [i for i in lists if i.get_property("id") in ids]
             for item in own_lists:
                 item.set_property("account", "True")
-            misc_lists = [item for item in lists if item.get_property("id") not in ids]
+            misc_lists = [i for i in lists if i.get_property("id") not in ids]
             return own_lists + misc_lists
 
         def update_states(self):
