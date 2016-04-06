@@ -330,6 +330,9 @@ class LocalDB(object):
         return local_items + remote_items
 
     def compare_album_with_library(self, online_list):
+        """
+        merge *albums from online sources with local db info
+        """
         if not self.albums:
             self.albums = self.get_albums()
         for item in online_list:
@@ -347,6 +350,9 @@ class LocalDB(object):
         return online_list
 
     def get_set_name(self, dbid):
+        """
+        get name of set for movie with *dbid
+        """
         data = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                    params={"properties": ["setid"], "movieid": dbid})
         if "result" not in data or "moviedetails" not in data["result"]:

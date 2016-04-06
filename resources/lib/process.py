@@ -7,6 +7,7 @@ from __future__ import unicode_literals
 
 import time
 import os
+import shutil
 
 import xbmc
 import xbmcgui
@@ -159,24 +160,14 @@ def start_info_actions(info, params):
             return tmdb.get_keywords(movie_id)
     elif info == 'popularpeople':
         return tmdb.get_popular_actors()
-    elif info == 'directormovies':
-        director_info = tmdb.get_person_info(person_label=params.get("director"),
-                                             skip_dialog=True)
-        if director_info and director_info.get("id"):
-            movies = tmdb.get_person_movies(director_info["id"])
+    elif info == 'personmovies':
+        person = tmdb.get_person_info(person_label=params.get("person"),
+                                      skip_dialog=True)
+        if person and person.get("id"):
+            movies = tmdb.get_person_movies(person["id"])
             for item in movies:
                 del item["credit_id"]
             return Utils.merge_dict_lists(movies, key="department")
-    elif info == 'writermovies':
-        writer = params.get("writer")
-        if writer and not writer.split(" / ")[0] == params.get("director", "").split(" / ")[0]:
-            writer_info = tmdb.get_person_info(person_label=writer,
-                                               skip_dialog=True)
-            if writer_info and writer_info.get("id"):
-                movies = tmdb.get_person_movies(writer_info["id"])
-                for item in movies:
-                    del item["credit_id"]
-                return Utils.merge_dict_lists(movies, key="department")
     elif info == 'traktsimilarmovies':
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
@@ -241,7 +232,7 @@ def start_info_actions(info, params):
         addon.set_global('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
         if params.get("id"):
             listitems = YouTube.search(search_str=params.get("id", ""),
-                                       hd=params.get("hd", ""),
+                                       hd=params.get("hd"),
                                        orderby=params.get("orderby", "relevance"))
             return listitems.get("listitems", [])
     elif info == 'youtubeplaylist':
@@ -401,22 +392,23 @@ def start_info_actions(info, params):
         Utils.pass_dict_to_skin(artist_details, params.get("prefix", ""))
     elif info == 'ratemedia':
         media_type = params.get("type")
-        if media_type:
-            if params.get("id"):
-                tmdb_id = params["id"]
-            elif media_type == "movie":
-                tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
-                                                 dbid=params.get("dbid"),
-                                                 name=params.get("name"))
-            elif media_type == "tv" and params.get("dbid"):
-                tvdb_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
-                                                       dbid=params["dbid"])
-                tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
-            else:
-                return False
-            tmdb.set_rating_prompt(media_type=media_type,
-                                   media_id=tmdb_id,
-                                   dbid=params.get("dbid"))
+        if not media_type:
+            return None
+        if params.get("id"):
+            tmdb_id = params["id"]
+        elif media_type == "movie":
+            tmdb_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                             dbid=params.get("dbid"),
+                                             name=params.get("name"))
+        elif media_type == "tv" and params.get("dbid"):
+            tvdb_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
+                                                   dbid=params["dbid"])
+            tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
+        else:
+            return False
+        tmdb.set_rating_prompt(media_type=media_type,
+                               media_id=tmdb_id,
+                               dbid=params.get("dbid"))
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)
@@ -446,7 +438,6 @@ def start_info_actions(info, params):
                 xbmc.executebuiltin("Dialog.Close(busydialog)")
     elif info == 'deletecache':
         addon.clear_globals()
-        import shutil
         for rel_path in os.listdir(addon.DATA_PATH):
             path = os.path.join(addon.DATA_PATH, rel_path)
             try:
