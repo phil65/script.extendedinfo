@@ -51,6 +51,9 @@ release_types = {1: "Premiere",
                  5: "Physical",
                  6: "TV"}
 
+genders = {1: addon.LANG(32095),
+           2: addon.LANG(32094)}
+
 
 class SettingsMonitor(xbmc.Monitor):
 
@@ -951,6 +954,7 @@ def extended_actor_info(actor_id):
     if not response:
         Utils.notify("Could not find actor info")
         return None
+    Utils.pp(response)
     listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
                  "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
                  "movie_crew_roles": handle_movies(response["movie_credits"]["crew"]),
@@ -969,6 +973,7 @@ def extended_actor_info(actor_id):
                          'department': response.get('department'),
                          'job': response.get('job'),
                          'id': response['id'],
+                         'gender': genders.get(response['gender']),
                          'cast_id': response.get('cast_id'),
                          'credit_id': response.get('credit_id'),
                          'deathday': response.get('deathday'),
