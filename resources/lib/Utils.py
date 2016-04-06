@@ -554,15 +554,16 @@ def clean_text(text):
 
 class ListItem(object):
 
-    def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}, streamdetails={}):
+    def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}):
         self.label = label
         self.label2 = label
         self.path = path
         self.size = ""
         self.properties = properties
         self.artwork = artwork
-        self.streamdetails = streamdetails
         self.infos = infos
+        self.videoinfo = []
+        self.audioinfo = []
 
     def __setitem__(self, key, value):
         self.properties[key] = value
@@ -596,7 +597,11 @@ class ListItem(object):
             return fallback
 
     def __str__(self):
-        return self.dump_dict(self.infos) + self.dump_dict(self.properties) + self.dump_dict(self.artwork)
+        return "\n".join(["InfoLabels:", self.dump_dict(self.infos),
+                          "Properties:", self.dump_dict(self.properties),
+                          "Artwork:", self.dump_dict(self.artwork),
+                          "VideoStreams:", self.dump_dict(self.videoinfo),
+                          "AudioStreams:", self.dump_dict(self.audioinfo)])
 
     def __contains__(self, key):
         if key in self.properties:
@@ -615,9 +620,11 @@ class ListItem(object):
                           separators=(',', ': '))
 
     def update_from_listitem(self, listitem):
-        self.properties.update(listitem.get_properties())
-        self.artwork.update(listitem.get_artwork())
-        self.infos.update(listitem.get_infos())
+        self.update_properties(listitem.get_properties())
+        self.update_artwork(listitem.get_artwork())
+        self.update_infos(listitem.get_infos())
+        self.set_videoinfos(listitem.videoinfo)
+        self.set_audioinfos(listitem.audioinfo)
 
     def set_properties(self, properties):
         self.properties = properties
@@ -641,11 +648,17 @@ class ListItem(object):
     def update_artwork(self, artwork):
         self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
-    def set_streamdetails(self, streamdetails):
-        self.streamdetails = streamdetails
+    def add_videoinfo(self, info):
+        self.videoinfo.append(info)
 
-    def update_streamdetails(self, streamdetails):
-        self.streamdetails.update({k: v for k, v in streamdetails.iteritems() if v})
+    def add_audioinfo(self, info):
+        self.audioinfo.append(info)
+
+    def set_videoinfos(self, infos):
+        self.videoinfo = infos
+
+    def set_audioinfos(self, infos):
+        self.audioinfo = infos
 
     def set_infos(self, infos):
         self.infos = infos
@@ -693,4 +706,8 @@ class ListItem(object):
         listitem.setArt(artwork)
         infos = {k.lower(): v for k, v in self.infos.items() if v}
         listitem.setInfo("video", infos)
+        for item in self.videoinfo:
+            listitem.addStreamInfo("video", item)
+        for item in self.audioinfo:
+            listitem.addStreamInfo("audio", item)
         return listitem
