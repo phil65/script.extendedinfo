@@ -280,13 +280,12 @@ def get_account_lists(cache_time=0):
     '''
     session_id = Login.get_session_id()
     account_id = Login.get_account_id()
-    if session_id and account_id:
-        response = get_data(url="account/%s/lists" % (account_id),
-                            params={"session_id": session_id},
-                            cache_days=cache_time)
-        return response["results"]
-    else:
+    if not session_id or not account_id:
         return []
+    response = get_data(url="account/%s/lists" % (account_id),
+                        params={"session_id": session_id},
+                        cache_days=cache_time)
+    return response["results"]
 
 
 def get_certification_list(media_type):
@@ -691,9 +690,7 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
                             params=params)
         if response and response["movie_results"]:
             return response["movie_results"][0]["id"]
-    if not name:
-        return None
-    return search_media(name)
+    return search_media(name) if name else None
 
 
 def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
@@ -1057,9 +1054,7 @@ def get_movies_from_list(list_id, cache_time=5):
     response = get_data(url="list/%s" % (list_id),
                         params={"language": addon.setting("LanguageID")},
                         cache_days=cache_time)
-    if not response:
-        return []
-    return handle_movies(response["items"], False, None)
+    return handle_movies(response["items"], False, None) if response else []
 
 
 def get_popular_actors():
