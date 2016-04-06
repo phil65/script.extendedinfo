@@ -954,7 +954,6 @@ def extended_actor_info(actor_id):
     if not response:
         Utils.notify("Could not find actor info")
         return None
-    Utils.pp(response)
     listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
                  "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
                  "movie_crew_roles": handle_movies(response["movie_credits"]["crew"]),
