@@ -148,15 +148,16 @@ def set_rating_prompt(media_type, media_id, dbid=None):
     if rating == -1:
         return False
     if dbid:
+        db_rating = round((rating + 1) / 2)
         if media_type == "movie":
             get_kodi_json(method="VideoLibrary.SetMovieDetails",
-                          params='{"movieid":%s,"userrating":%d}' % (dbid, round(rating)))
+                          params='{"movieid":%s,"userrating":%d}' % (dbid, db_rating))
         elif media_type == "tv":
             get_kodi_json(method="VideoLibrary.SetTVShowDetails",
-                          params='{"tvshowid":%s,"userrating":%d}' % (dbid, round(rating)))
+                          params='{"tvshowid":%s,"userrating":%d}' % (dbid, db_rating))
         elif media_type == "episode":
             get_kodi_json(method="VideoLibrary.SetEpisodeDetails",
-                          params='{"episodeid":%s,"userrating":%d}' % (dbid, round(rating)))
+                          params='{"episodeid":%s,"userrating":%d}' % (dbid, db_rating))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
