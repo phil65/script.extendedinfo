@@ -54,6 +54,7 @@ def get_episodes(content):
                             'country': episode["show"]["country"],
                             'status': episode["show"]["status"],
                             'trailer': episode["show"]["trailer"],
+                            'imdbnumber': episode["episode"]["ids"]["imdb"],
                             'rating': episode["show"]["rating"],
                             'genre': " / ".join(episode["show"]["genres"]),
                             'mpaa': episode["show"]["certification"]})
@@ -92,6 +93,7 @@ def handle_movies(results):
                          'year': item["year"],
                          'mpaa': item["certification"],
                          'plot': item["overview"],
+                         'imdbnumber': item["ids"]["imdb"],
                          'premiered': item["released"],
                          'rating': round(item["rating"], 1),
                          'votes': item["votes"],

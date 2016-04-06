@@ -36,6 +36,7 @@ def get_movies(movie_type):
                          'premiered': item["release_dates"].get("theater", ""),
                          'rating': item["ratings"]["audience_score"] / 10.0,
                          'plot': item["synopsis"],
+                         'imdbnumber': imdb_id,
                          'mpaa': item["mpaa_rating"]})
         movie.set_properties({'imdb_id': imdb_id,
                               'duration(h)': Utils.format_time(item["runtime"], "h"),

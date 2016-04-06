@@ -11,8 +11,15 @@ import addon
 import time
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
-MOVIE_PROPS = ["title", "originaltitle", "votes", "playcount", "year", "genre", "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline", "lastplayed", "trailer", "rating", "resume", "art", "streamdetails", "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber"]
-TV_PROPS = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast", "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed", "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide", "season", "watchedepisodes", "dateadded", "tag", "art"]
+MOVIE_PROPS = ["title", "originaltitle", "votes", "playcount", "year", "genre",
+               "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline",
+               "lastplayed", "trailer", "rating", "resume", "art", "streamdetails",
+               "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber",
+               "set", "showlink", "top250"]
+TV_PROPS = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast",
+            "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed",
+            "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide",
+            "season", "watchedepisodes", "dateadded", "tag", "art"]
 
 
 class LocalDB(object):
@@ -166,6 +173,9 @@ class LocalDB(object):
                             'year': str(movie.get('year')),
                             'writer': " / ".join(movie['writer']),
                             'mediatype': "movie",
+                            'set': movie.get("set"),
+                            'setid': movie.get("setid"),
+                            'imdbnumber': movie.get("imdbnumber"),
                             'userrating': movie.get('userrating'),
                             'trailer': trailer,
                             'rating': str(round(float(movie['rating']), 1)),
@@ -197,6 +207,7 @@ class LocalDB(object):
                              'genre': " / ".join(tvshow.get('genre')),
                              'rating': str(round(float(tvshow['rating']), 1)),
                              'mediatype': "tvshow",
+                             'imdbnumber': tvshow.get("imdbnumber"),
                              'year': str(tvshow.get('year')),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),

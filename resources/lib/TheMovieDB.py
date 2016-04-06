@@ -748,6 +748,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'plot': Utils.clean_text(info.get('overview')),
                      'originaltitle': info.get('original_title'),
                      'Country': info.get('original_language'),
+                     'imdbnumber': info.get('imdb_id'),
                      'genre': " / ".join([i["name"] for i in info["genres"]]),
                      'year': Utils.get_year(info.get("release_date")),
                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
