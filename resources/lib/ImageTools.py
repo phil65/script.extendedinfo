@@ -27,19 +27,19 @@ def blur(input_img, radius=25):
     cachedthumb = xbmc.getCacheThumbName(input_img)
     filename = "%s-radius_%i.png" % (cachedthumb, radius)
     targetfile = os.path.join(IMAGE_PATH, filename)
-    xbmc_vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
-    xbmc_cache_file = os.path.join("special://profile/Thumbnails", cachedthumb[0], cachedthumb[:-4] + ".jpg")
+    vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cachedthumb[0], cachedthumb)
+    cache_file = os.path.join("special://profile/Thumbnails", cachedthumb[0], cachedthumb[:-4] + ".jpg")
     if not xbmcvfs.exists(targetfile):
         img = None
         for i in xrange(1, 4):
             try:
-                if xbmcvfs.exists(xbmc_cache_file):
-                    Utils.log("image already in xbmc cache: " + xbmc_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file).decode("utf-8"))
+                if xbmcvfs.exists(cache_file):
+                    Utils.log("image already in xbmc cache: " + cache_file)
+                    img = PIL.Image.open(xbmc.translatePath(cache_file).decode("utf-8"))
                     break
-                elif xbmcvfs.exists(xbmc_vid_cache_file):
-                    Utils.log("image already in xbmc video cache: " + xbmc_vid_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file).decode("utf-8"))
+                elif xbmcvfs.exists(vid_cache_file):
+                    Utils.log("image already in xbmc video cache: " + vid_cache_file)
+                    img = PIL.Image.open(xbmc.translatePath(vid_cache_file).decode("utf-8"))
                     break
                 else:
                     xbmcvfs.copy(unicode(input_img, 'utf-8', errors='ignore'), targetfile)
@@ -94,19 +94,19 @@ def get_colors(img):
     r = 0
     g = 0
     b = 0
-    counter = 0
+    pixels = 0
     for x in data:
         brightness = x[0] + x[1] + x[2]
         if 150 < brightness < 720:
             r += x[0]
             g += x[1]
             b += x[2]
-            counter += 1
-    if counter == 0:
+            pixels += 1
+    if pixels == 0:
         return "FFF0F0F0"
-    r_avg = int(r/counter)
-    g_avg = int(g/counter)
-    b_avg = int(b/counter)
+    r_avg = int(r / pixels)
+    g_avg = int(g / pixels)
+    b_avg = int(b / pixels)
     avg = (r_avg + g_avg + b_avg) / 3
     min_brightness = 130
     if avg < min_brightness:
