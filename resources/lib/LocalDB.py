@@ -23,10 +23,17 @@ class LocalDB(object):
         self.albums = []
 
     def get_artists(self):
+        """
+        get list of artists from db (limited metadata)
+        """
         self.artists = KodiJson.get_artists(properties=["musicbrainzartistid", "thumbnail"])
         return self.artists
 
     def get_similar_artists(self, artist_id):
+        """
+        get list of artists from db which are similar to artist with *artist_id
+        based on LastFM online data
+        """
         import LastFM
         simi_artists = LastFM.get_similar_artists(artist_id)
         if simi_artists is None:
@@ -65,6 +72,7 @@ class LocalDB(object):
     def get_similar_movies(self, dbid):
         """
         get list of movies from db which are similar to movie with *dbid
+        based on metadata-centric ranking
         """
         movie = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
                                     params={"properties": ["genre", "director", "country", "year", "mpaa"], "movieid": dbid})
@@ -275,6 +283,10 @@ class LocalDB(object):
             self.info[media_type] = dct
 
     def merge_with_local(self, media_type, items, library_first=True, sortkey=False):
+        """
+        merge *items from online sources with local db info (and sort)
+        works for movies and tvshows
+        """
         get_list = KodiJson.get_movies if media_type == "movie" else KodiJson.get_tvshows
         self.get_compare_info(media_type,
                               get_list(["originaltitle", "imdbnumber"]))
