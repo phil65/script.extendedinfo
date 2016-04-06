@@ -283,12 +283,8 @@ class LocalDB(object):
                     item.update_from_listitem(local_item)
                     if library_first:
                         local_items.append(item)
-                    else:
-                        remote_items.append(item)
-                else:
-                    remote_items.append(item)
-            else:
-                remote_items.append(item)
+                        continue
+            remote_items.append(item)
         if sortkey:
             local_items = sorted(local_items,
                                  key=lambda k: k.get_info(sortkey),
