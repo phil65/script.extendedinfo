@@ -86,7 +86,7 @@ def format_time(time, time_format=None):
     """
     try:
         intTime = int(time)
-    except:
+    except Exception:
         return time
     hour = str(intTime / 60)
     minute = str(intTime % 60).zfill(2)
@@ -380,7 +380,7 @@ def get_http(url=None, headers=False):
         try:
             response = urllib2.urlopen(request, timeout=3)
             return response.read()
-        except:
+        except Exception:
             log("get_http: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
@@ -394,9 +394,9 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, folder))
+        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH, folder)).decode("utf-8")
     else:
-        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH))
+        cache_path = xbmc.translatePath(os.path.join(ADDON_DATA_PATH)).decode("utf-8")
     path = os.path.join(cache_path, hashed_url + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     prop_time = HOME.getProperty(hashed_url + "_timestamp")
@@ -406,7 +406,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             log("prop load for %s. time: %f" % (url, time.time() - now))
             if prop:
                 return prop
-        except:
+        except Exception:
             log("could not load prop data for %s" % url)
     if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = read_from_file(path)
@@ -417,7 +417,7 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
             results = json.loads(response)
             log("download %s. time: %f" % (url, time.time() - now))
             save_to_file(results, hashed_url, cache_path)
-        except:
+        except Exception:
             log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
             log(response)
             if xbmcvfs.exists(path):
@@ -457,7 +457,7 @@ class GetFileThread(threading.Thread):
 
 
 def get_file(url):
-    clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
+    clean_url = xbmc.translatePath(urllib.unquote(url)).decode("utf-8").replace("image://", "")
     if clean_url.endswith("/"):
         clean_url = clean_url[:-1]
     cached_thumb = xbmc.getCacheThumbName(clean_url)
@@ -466,7 +466,7 @@ def get_file(url):
     cache_file_png = cache_file_jpg[:-4] + ".png"
     if xbmcvfs.exists(cache_file_jpg):
         log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
-        return xbmc.translatePath(cache_file_jpg)
+        return xbmc.translatePath(cache_file_jpg).decode("utf-8")
     elif xbmcvfs.exists(cache_file_png):
         log("cache_file_png Image: " + url + "-->" + cache_file_png)
         return cache_file_png
@@ -480,20 +480,18 @@ def get_file(url):
         data = response.read()
         response.close()
         log('image downloaded: ' + url)
-    except:
+    except Exception:
         log('image download failed: ' + url)
         return ""
     if not data:
         return ""
-    if url.endswith(".png"):
-        image = cache_file_png
-    else:
-        image = cache_file_jpg
+    image = cache_file_png if url.endswith(".png") else cache_file_jpg
+    image = xbmc.translatePath(image).decode("utf-8")
     try:
-        with open(xbmc.translatePath(image), "wb") as f:
+        with open(image, "wb") as f:
             f.write(data)
-        return xbmc.translatePath(image)
-    except:
+        return image
+    except Exception:
         log('failed to save image ' + url)
         return ""
 
@@ -616,7 +614,7 @@ def read_from_file(path="", raw=False):
             else:
                 result = f.read()
         return result
-    except:
+    except Exception:
         log("failed to load textfile: " + path)
         return False
 
@@ -786,14 +784,14 @@ def create_listitems(data=None, preload_images=0):
             elif key.lower() in INT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key.lower(): int(value)})
-                except:
+                except Exception:
                     pass
             elif key.lower() in STRING_INFOLABELS:
                 listitem.setInfo('video', {key.lower(): value})
             elif key.lower() in FLOAT_INFOLABELS:
                 try:
                     listitem.setInfo('video', {key.lower(): "%1.1f" % float(value)})
-                except:
+                except Exception:
                     pass
             # else:
             listitem.setProperty('%s' % (key), value)

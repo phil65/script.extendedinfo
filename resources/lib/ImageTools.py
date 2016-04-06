@@ -11,14 +11,14 @@ from Utils import *
 import PIL.Image
 import PIL.ImageFilter
 
-THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
+THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video").decode("utf-8")
 ADDON_DATA_PATH_IMAGES = os.path.join(ADDON_DATA_PATH, "images")
 
 
 def filter_image(input_img, radius):
     if not xbmcvfs.exists(ADDON_DATA_PATH_IMAGES):
         xbmcvfs.mkdir(ADDON_DATA_PATH_IMAGES)
-    input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).replace("image://", "")
+    input_img = xbmc.translatePath(urllib.unquote(input_img.encode("utf-8"))).replace("image://", "").decode("utf-8")
     if input_img.endswith("/"):
         input_img = input_img[:-1]
     cachedthumb = xbmc.getCacheThumbName(input_img)
@@ -34,11 +34,11 @@ def filter_image(input_img, radius):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
                     log("image already in xbmc cache: " + xbmc_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file))
+                    img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file).decode("utf-8"))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
                     log("image already in xbmc video cache: " + xbmc_vid_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file).decode("utf-8"))
                     break
                 else:
                     xbmcvfs.copy(unicode(input_img, 'utf-8', errors='ignore'), targetfile)
