@@ -156,19 +156,20 @@ class LoginProvider(object):
 def set_rating_prompt(media_type, media_id, dbid=None):
     if not media_type or not media_id:
         return False
-    rating = xbmcgui.Dialog().select(addon.LANG(32129), [str(float(i * 0.5)) for i in xrange(1, 21)])
+    rating = xbmcgui.Dialog().select(heading=addon.LANG(32129),
+                                     list=[str(float(i * 0.5)) for i in xrange(1, 21)])
     if rating == -1:
         return False
     if dbid:
         if media_type == "movie":
             Utils.get_kodi_json(method="VideoLibrary.SetMovieDetails",
-                                params='{"movieid":%s,"userrating":%d}' % (dbid, round(rating)))
+                                params='{"movieid":%s,"userrating":%d}' % (dbid, round(rating / 2)))
         elif media_type == "tv":
             Utils.get_kodi_json(method="VideoLibrary.SetTVShowDetails",
-                                params='{"tvshowid":%s,"userrating":%d}' % (dbid, round(rating)))
+                                params='{"tvshowid":%s,"userrating":%d}' % (dbid, round(rating / 2)))
         elif media_type == "episode":
             Utils.get_kodi_json(method="VideoLibrary.SetEpisodeDetails",
-                                params='{"episodeid":%s,"userrating":%d}' % (dbid, round(rating)))
+                                params='{"episodeid":%s,"userrating":%d}' % (dbid, round(rating / 2)))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
