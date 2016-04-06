@@ -228,9 +228,9 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
-        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH, folder))
+        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH, folder)).decode("utf-8")
     else:
-        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH))
+        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH)).decode("utf-8")
     path = os.path.join(cache_path, hashed_url + ".txt")
     cache_seconds = int(cache_days * 86400.0)
     prop_time = addon.get_global(hashed_url + "_timestamp")

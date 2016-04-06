@@ -13,7 +13,7 @@ import PIL.Image
 import PIL.ImageFilter
 import threading
 
-THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video")
+THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video").decode("utf-8")
 IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")
 
 
@@ -35,11 +35,11 @@ def blur(input_img, radius=25):
             try:
                 if xbmcvfs.exists(xbmc_cache_file):
                     Utils.log("image already in xbmc cache: " + xbmc_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file))
+                    img = PIL.Image.open(xbmc.translatePath(xbmc_cache_file).decode("utf-8"))
                     break
                 elif xbmcvfs.exists(xbmc_vid_cache_file):
                     Utils.log("image already in xbmc video cache: " + xbmc_vid_cache_file)
-                    img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file))
+                    img = PIL.Image.open(xbmc.translatePath(xbmc_vid_cache_file).decode("utf-8"))
                     break
                 else:
                     xbmcvfs.copy(unicode(input_img, 'utf-8', errors='ignore'), targetfile)
