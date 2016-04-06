@@ -278,7 +278,7 @@ class FunctionThread(threading.Thread):
 
 
 def get_file(url):
-    clean_url = xbmc.translatePath(urllib.unquote(url)).replace("image://", "")
+    clean_url = xbmc.translatePath(urllib.unquote(url)).decode("utf-8").replace("image://", "")
     if clean_url.endswith("/"):
         clean_url = clean_url[:-1]
     cached_thumb = xbmc.getCacheThumbName(clean_url)
@@ -287,7 +287,7 @@ def get_file(url):
     cache_file_png = cache_file_jpg[:-4] + ".png"
     if xbmcvfs.exists(cache_file_jpg):
         log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
-        return xbmc.translatePath(cache_file_jpg)
+        return xbmc.translatePath(cache_file_jpg).decode("utf-8")
     elif xbmcvfs.exists(cache_file_png):
         log("cache_file_png Image: " + url + "-->" + cache_file_png)
         return cache_file_png
@@ -308,9 +308,9 @@ def get_file(url):
         return ""
     image = cache_file_png if url.endswith(".png") else cache_file_jpg
     try:
-        with open(xbmc.translatePath(image), "wb") as f:
+        with open(xbmc.translatePath(image).decode("utf-8"), "wb") as f:
             f.write(data)
-        return xbmc.translatePath(image)
+        return xbmc.translatePath(image).decode("utf-8")
     except Exception:
         log('failed to save image ' + url)
         return ""
@@ -632,9 +632,7 @@ class ListItem(object):
 
     def get_art(self, key):
         value = self.infos.get(key)
-        if value:
-            return value
-        return ""
+        return value if value else ""
 
     def get_artwork(self):
         return {k: v for k, v in self.artwork.iteritems() if v}
@@ -656,9 +654,7 @@ class ListItem(object):
 
     def get_info(self, key):
         value = self.infos.get(key)
-        if value:
-            return value
-        return ""
+        return value if value else ""
 
     def set_label(self, label):
         self.label = label
@@ -674,9 +670,7 @@ class ListItem(object):
 
     def get_property(self, key):
         value = self.properties.get(key)
-        if value:
-            return value
-        return ""
+        return value if value else ""
 
     def get_properties(self):
         return {k: v for k, v in self.properties.iteritems() if v}
