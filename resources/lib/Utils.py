@@ -631,7 +631,10 @@ class ListItem(object):
         self.artwork[key] = value
 
     def get_art(self, key):
-        return self.artwork.get(key, "")
+        value = self.infos.get(key)
+        if value:
+            return value
+        return ""
 
     def get_artwork(self):
         return {k: v for k, v in self.artwork.iteritems() if v}
@@ -652,7 +655,10 @@ class ListItem(object):
         return {k: v for k, v in self.infos.iteritems() if v}
 
     def get_info(self, key):
-        return self.infos.get(key)
+        value = self.infos.get(key)
+        if value:
+            return value
+        return ""
 
     def set_label(self, label):
         self.label = label
@@ -667,7 +673,10 @@ class ListItem(object):
         self.infos.update({k: v for k, v in infos.iteritems() if v})
 
     def get_property(self, key):
-        return self.properties.get(key, "")
+        value = self.properties.get(key)
+        if value:
+            return value
+        return ""
 
     def get_properties(self):
         return {k: v for k, v in self.properties.iteritems() if v}
