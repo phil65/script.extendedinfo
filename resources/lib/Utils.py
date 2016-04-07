@@ -599,7 +599,9 @@ class ListItem(object):
             return fallback
 
     def __str__(self):
-        return "\n".join(["InfoLabels:", self.dump_dict(self.infos),
+        return "\n".join(["Label:", self.label,
+                          "Label2:", self.label2,
+                          "InfoLabels:", self.dump_dict(self.infos),
                           "Properties:", self.dump_dict(self.properties),
                           "Artwork:", self.dump_dict(self.artwork),
                           "Cast:", self.dump_dict(self.cast),

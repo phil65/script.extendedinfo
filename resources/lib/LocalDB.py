@@ -11,15 +11,18 @@ import addon
 import time
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
-MOVIE_PROPS = ["title", "originaltitle", "votes", "playcount", "year", "genre",
-               "studio", "country", "tagline", "plot", "runtime", "file", "plotoutline",
-               "lastplayed", "trailer", "rating", "resume", "art", "streamdetails",
-               "mpaa", "director", "writer", "cast", "dateadded", "imdbnumber",
-               "set", "showlink", "top250"]
-TV_PROPS = ["title", "genre", "year", "rating", "plot", "studio", "mpaa", "cast",
-            "playcount", "episode", "imdbnumber", "premiered", "votes", "lastplayed",
-            "fanart", "thumbnail", "file", "originaltitle", "sorttitle", "episodeguide",
-            "season", "watchedepisodes", "dateadded", "tag", "art"]
+MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",
+               "tagline", "plot", "plotoutline", "originaltitle", "lastplayed",
+               "playcount", "writer", "studio", "mpaa", "cast", "country",
+               "imdbnumber", "runtime", "set", "showlink", "streamdetails",
+               "top250", "votes", "fanart", "file", "sorttitle",
+               "resume", "setid", "dateadded", "tag", "art", "userrating", "ratings"]
+TV_PROPS = ["title", "genre", "year", "rating", "plot",
+            "studio", "mpaa", "cast", "playcount", "episode",
+            "imdbnumber", "premiered", "votes", "lastplayed",
+            "fanart", "file", "originaltitle",
+            "sorttitle", "episodeguide", "season", "watchedepisodes",
+            "dateadded", "tag", "art", "userrating", "ratings", "runtime"]
 
 
 class LocalDB(object):
@@ -220,6 +223,7 @@ class LocalDB(object):
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
                                   'file': tvshow.get('file'),
                                   'watchedepisodes': tvshow.get('watchedepisodes'),
+                                  'totalepisodes': tvshow.get('episode'),
                                   'dbid': tvshow['tvshowid']})
         db_tvshow.set_artwork(tvshow['art'])
         db_tvshow.set_cast(tvshow.get("cast"))
