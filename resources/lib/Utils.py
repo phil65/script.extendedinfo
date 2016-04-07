@@ -594,12 +594,6 @@ class ListItem(object):
         else:
             raise KeyError
 
-    def get(self, key, fallback=None):
-        try:
-            return self.__getitem__(key)
-        except KeyError:
-            return fallback
-
     def __repr__(self):
         return "\n".join(["Label:", self.label,
                           "Label2:", self.label2,
@@ -622,6 +616,12 @@ class ListItem(object):
         elif key in ["properties", "infos", "artwork", "label", "label2", "path"]:
             return True
 
+    def get(self, key, fallback=None):
+        try:
+            return self.__getitem__(key)
+        except KeyError:
+            return fallback
+
     def dump_dict(self, dct):
         return json.dumps(dct,
                           sort_keys=True,
@@ -637,42 +637,26 @@ class ListItem(object):
         self.set_subinfos(listitem.subinfo)
         self.set_cast(listitem.cast)
 
-    def set_properties(self, properties):
-        self.properties = properties
+    def set_label(self, label):
+        self.label = label
 
-    def update_properties(self, properties):
-        self.properties.update({k: v for k, v in properties.iteritems() if v})
+    def set_label2(self, label):
+        self.label2 = label
+
+    def set_size(self, size):
+        self.size = size
+
+    def set_infos(self, infos):
+        self.infos = infos
 
     def set_artwork(self, artwork):
         self.artwork = artwork
 
-    def set_art(self, key, value):
-        self.artwork[key] = value
+    def set_properties(self, properties):
+        self.properties = properties
 
     def set_cast(self, value):
         self.cast = value
-
-    def add_cast(self, value):
-        self.cast.append(value)
-
-    def get_art(self, key):
-        value = self.artwork.get(key)
-        return value if value else ""
-
-    def get_artwork(self):
-        return {k: v for k, v in self.artwork.iteritems() if v}
-
-    def update_artwork(self, artwork):
-        self.artwork.update({k: v for k, v in artwork.iteritems() if v})
-
-    def add_videoinfo(self, info):
-        self.videoinfo.append(info)
-
-    def add_audioinfo(self, info):
-        self.audioinfo.append(info)
-
-    def add_subinfo(self, info):
-        self.subinfo.append(info)
 
     def set_videoinfos(self, infos):
         self.videoinfo = infos
@@ -683,40 +667,56 @@ class ListItem(object):
     def set_subinfos(self, infos):
         self.subinfo = infos
 
-    def set_infos(self, infos):
-        self.infos = infos
+    def update_properties(self, properties):
+        self.properties.update({k: v for k, v in properties.iteritems() if v})
 
-    def get_infos(self):
-        return {k: v for k, v in self.infos.iteritems() if v}
-
-    def get_info(self, key):
-        value = self.infos.get(key)
-        return value if value else ""
-
-    def set_label(self, label):
-        self.label = label
-
-    def set_label2(self, label):
-        self.label2 = label
-
-    def set_size(self, size):
-        self.size = size
+    def update_artwork(self, artwork):
+        self.artwork.update({k: v for k, v in artwork.iteritems() if v})
 
     def update_infos(self, infos):
         self.infos.update({k: v for k, v in infos.iteritems() if v})
 
-    def get_property(self, key):
-        value = self.properties.get(key)
-        return value if value else ""
-
-    def get_properties(self):
-        return {k: v for k, v in self.properties.iteritems() if v}
+    def set_art(self, key, value):
+        self.artwork[key] = value
 
     def set_property(self, key, value):
         self.properties[key] = value
 
     def set_info(self, key, value):
         self.infos[key] = value
+
+    def add_cast(self, value):
+        self.cast.append(value)
+
+    def get_art(self, key):
+        value = self.artwork.get(key)
+        return value if value else ""
+
+    def get_info(self, key):
+        value = self.infos.get(key)
+        return value if value else ""
+
+    def get_property(self, key):
+        value = self.properties.get(key)
+        return value if value else ""
+
+    def get_artwork(self):
+        return {k: v for k, v in self.artwork.iteritems() if v}
+
+    def get_infos(self):
+        return {k: v for k, v in self.infos.iteritems() if v}
+
+    def get_properties(self):
+        return {k: v for k, v in self.properties.iteritems() if v}
+
+    def add_videoinfo(self, info):
+        self.videoinfo.append(info)
+
+    def add_audioinfo(self, info):
+        self.audioinfo.append(info)
+
+    def add_subinfo(self, info):
+        self.subinfo.append(info)
 
     def get_listitem(self):
         listitem = xbmcgui.ListItem(label=self.label,

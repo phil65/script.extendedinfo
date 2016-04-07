@@ -1,6 +1,6 @@
 v5.1.0
 - code rework
-- added "Rated episodes" to plugin part
+- added several new plugin nodes
 - fixed several bugs
 
 v5.0.1
