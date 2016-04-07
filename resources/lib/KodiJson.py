@@ -9,10 +9,10 @@ import Utils
 def play_media(media_type, dbid, resume=True):
     if media_type in ['movie', 'episode']:
         Utils.get_kodi_json(method="Player.Open",
-                            params={"item": {"%sid" % media_type: dbid}, "options": {"resume": str(resume).lower()}})
+                            params={"item": {"%sid" % media_type: int(dbid)}, "options": {"resume": resume}})
     elif media_type in ['musicvideo', 'album', 'song']:
         Utils.get_kodi_json(method="Player.Open",
-                            params={"item": {"%sid" % media_type: dbid}})
+                            params={"item": {"%sid" % media_type: int(dbid)}})
 
 
 def send_text(text, close_keyboard=True):
