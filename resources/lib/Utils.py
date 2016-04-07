@@ -584,7 +584,7 @@ class ListItem(object):
         except KeyError:
             return fallback
 
-    def __str__(self):
+    def __repr__(self):
         return "\n".join(["Label:", self.label,
                           "Label2:", self.label2,
                           "InfoLabels:", self.dump_dict(self.infos),
@@ -593,7 +593,8 @@ class ListItem(object):
                           "Cast:", self.dump_dict(self.cast),
                           "VideoStreams:", self.dump_dict(self.videoinfo),
                           "AudioStreams:", self.dump_dict(self.audioinfo),
-                          "Subs:", self.dump_dict(self.subinfo)])
+                          "Subs:", self.dump_dict(self.subinfo),
+                          "", ""])
 
     def __contains__(self, key):
         if key in self.properties:
