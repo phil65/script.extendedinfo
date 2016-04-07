@@ -568,6 +568,7 @@ class ListItem(object):
         self.audioinfo = []
         self.subinfo = []
         self.cast = []
+        self.specials = {}
 
     def __setitem__(self, key, value):
         self.properties[key] = value
@@ -604,6 +605,7 @@ class ListItem(object):
                           "VideoStreams:", self.dump_dict(self.videoinfo),
                           "AudioStreams:", self.dump_dict(self.audioinfo),
                           "Subs:", self.dump_dict(self.subinfo),
+                          "Specials:", self.dump_dict(self.specials),
                           "", ""])
 
     def __contains__(self, key):
@@ -642,6 +644,24 @@ class ListItem(object):
 
     def set_label2(self, label):
         self.label2 = label
+
+    def set_mimetype(self, mimetype):
+        self.specials["mimetype"] = mimetype
+
+    def fix_at_top(self):
+        self.specials["specialsort"] = "top"
+
+    def fix_at_bottom(self):
+        self.specials["specialsort"] = "bottom"
+
+    def set_startoffset(self, value):
+        self.specials["startoffset"] = value
+
+    def set_totaltime(self, value):
+        self.specials["totaltime"] = value
+
+    def set_resumetime(self, value):
+        self.specials["resumetime"] = value
 
     def set_size(self, size):
         self.size = size
@@ -724,6 +744,8 @@ class ListItem(object):
                                     path=self.path)
         props = {k: unicode(v) for k, v in self.properties.iteritems() if v}
         for key, value in props.iteritems():
+            listitem.setProperty(key, unicode(value))
+        for key, value in self.specials.iteritems():
             listitem.setProperty(key, unicode(value))
         artwork = {k: v.replace("https://", "http://") for k, v in self.artwork.items() if v}
         listitem.setArt(artwork)
