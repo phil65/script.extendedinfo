@@ -294,18 +294,6 @@ def get_certification_list(media_type):
     return response.get("certifications")
 
 
-def add_movie_to_list(movie_id):
-    selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
-                                        list=[addon.LANG(32083)])
-    if selection == 0:
-        account_lists = get_account_lists()
-        listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-        index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
-        change_list_status(list_id=account_lists[index]["id"],
-                           movie_id=movie_id,
-                           status=True)
-
-
 def merge_with_cert_desc(input_list, media_type):
     cert_list = get_certification_list(media_type)
     for item in input_list:

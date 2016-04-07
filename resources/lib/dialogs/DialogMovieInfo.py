@@ -106,12 +106,6 @@ def get_window(window_type):
             super(DialogMovieInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.action("contextmenu", ID_LIST_SIMILAR)
-        @ch.action("contextmenu", ID_LIST_SEASONS)
-        def movie_context_menu(self):
-            movie_id = self.listitem.getProperty("id")
-            tmdb.add_movie_to_list(movie_id)
-
         @ch.click(ID_LIST_ACTORS)
         @ch.click(ID_LIST_CREW)
         def open_actor_info(self):

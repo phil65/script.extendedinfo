@@ -98,9 +98,4 @@ def get_window(window_type):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info["biography"])
 
-        @ch.action("contextmenu", ID_LIST_MOVIE_ROLES)
-        @ch.action("contextmenu", ID_LIST_MOVIE_CREW)
-        def movie_context_menu(self):
-            tmdb.add_movie_to_list(self.listitem.getProperty("id"))
-
     return DialogActorInfo

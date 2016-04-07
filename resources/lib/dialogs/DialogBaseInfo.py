@@ -169,3 +169,16 @@ class DialogBaseInfo(object):
             return None
         Utils.pass_dict_to_skin(data=tmdb.get_account_props(self.account_states),
                                 window_id=self.window_id)
+
+    @ch.action("contextmenu", "*")
+    def movie_context_menu(self):
+        if self.listitem.getVideoInfoTag().getMediaType() == "movie":
+            selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
+                                                list=[addon.LANG(32083)])
+            if selection == 0:
+                account_lists = get_account_lists()
+                listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
+                index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
+                change_list_status(list_id=account_lists[index]["id"],
+                                   movie_id=self.listitem.getProperty("id"),
+                                   status=True)
