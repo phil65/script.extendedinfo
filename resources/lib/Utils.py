@@ -444,6 +444,9 @@ def read_from_file(path="", raw=False):
 
 
 def convert_youtube_url(raw_string):
+    """
+    get plugin playback URL for URL *raw_string
+    """
     youtube_id = extract_youtube_id(raw_string)
     if youtube_id:
         return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % youtube_id
@@ -451,6 +454,9 @@ def convert_youtube_url(raw_string):
 
 
 def extract_youtube_id(raw_string):
+    """
+    get youtube video id if from youtube URL
+    """
     vid_ids = None
     if raw_string and 'youtube.com/v' in raw_string:
         vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
@@ -471,12 +477,18 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
 
 
 def get_kodi_json(method, params):
+    """
+    communicate with kodi JSON-RPC
+    """
     json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, json.dumps(params)))
     json_query = unicode(json_query, 'utf-8', errors='ignore')
     return json.loads(json_query)
 
 
 def pp(string):
+    """
+    prettyprint json
+    """
     log(json.dumps(string,
                    sort_keys=True,
                    indent=4,
@@ -495,14 +507,18 @@ def pass_dict_to_skin(data=None, prefix="", window_id=10000):
 
 
 def merge_dict_lists(items, key="job"):
+    """
+    TODO: refactor
+    """
     crew_ids = []
     crews = []
     for item in items:
-        if item.get_property("id") not in crew_ids:
-            crew_ids.append(item.get_property("id"))
+        id_ = item.get_property("id")
+        if id_ not in crew_ids:
+            crew_ids.append(id_)
             crews.append(item)
         else:
-            index = crew_ids.index(item.get_property("id"))
+            index = crew_ids.index(id_)
             if key in crews[index]:
                 crews[index][key] = crews[index][key] + " / " + item[key]
     return crews
