@@ -90,7 +90,8 @@ class DialogBaseInfo(object):
             media_type = self.getProperty("type")
             art = {"poster": self.listitem.getProperty("original")}
             Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params={"art": art, "%sid" % media_type.lower(): self.info['dbid']})
+                                params={"art": art,
+                                        "%sid" % media_type.lower(): self.info.get_property("dbid")})
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
     def fanart_options(self):
@@ -102,7 +103,8 @@ class DialogBaseInfo(object):
             media_type = self.getProperty("type")
             art = {"fanart": self.listitem.getProperty("original")}
             Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params={"art": art, "%sid" % media_type.lower(): self.info['dbid']})
+                                params={"art": art,
+                                        "%sid" % media_type.lower(): self.info.get_property("dbid")})
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)
@@ -176,9 +178,9 @@ class DialogBaseInfo(object):
             selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
                                                 list=[addon.LANG(32083)])
             if selection == 0:
-                account_lists = get_account_lists()
+                account_lists = tmdb.get_account_lists()
                 listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
                 index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
-                change_list_status(list_id=account_lists[index]["id"],
-                                   movie_id=self.listitem.getProperty("id"),
-                                   status=True)
+                tmdb.change_list_status(list_id=account_lists[index]["id"],
+                                        movie_id=self.listitem.getProperty("id"),
+                                        status=True)

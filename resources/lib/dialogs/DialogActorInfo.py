@@ -47,7 +47,7 @@ def get_window(window_type):
                               (ID_LIST_TAGGED_IMAGES, self.data["tagged_images"])]
 
         def onInit(self):
-            self.get_youtube_vids(self.info["label"])
+            self.get_youtube_vids(self.info.label)
             super(DialogActorInfo, self).onInit()
             self.info.to_windowprops(window_id=self.window_id)
             self.fill_lists()
@@ -96,6 +96,6 @@ def get_window(window_type):
         @ch.click(ID_CONTROL_PLOT)
         def show_plot(self):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info["biography"])
+                                        text=self.info.get_property("biography"))
 
     return DialogActorInfo
