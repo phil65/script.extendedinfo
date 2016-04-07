@@ -565,6 +565,7 @@ class ListItem(object):
         self.videoinfo = []
         self.audioinfo = []
         self.subinfo = []
+        self.cast = []
 
     def __setitem__(self, key, value):
         self.properties[key] = value
@@ -601,6 +602,7 @@ class ListItem(object):
         return "\n".join(["InfoLabels:", self.dump_dict(self.infos),
                           "Properties:", self.dump_dict(self.properties),
                           "Artwork:", self.dump_dict(self.artwork),
+                          "Cast:", self.dump_dict(self.cast),
                           "VideoStreams:", self.dump_dict(self.videoinfo),
                           "AudioStreams:", self.dump_dict(self.audioinfo),
                           "Subs:", self.dump_dict(self.subinfo)])
@@ -628,6 +630,7 @@ class ListItem(object):
         self.set_videoinfos(listitem.videoinfo)
         self.set_audioinfos(listitem.audioinfo)
         self.set_subinfos(listitem.subinfo)
+        self.set_cast(listitem.cast)
 
     def set_properties(self, properties):
         self.properties = properties
@@ -640,6 +643,12 @@ class ListItem(object):
 
     def set_art(self, key, value):
         self.artwork[key] = value
+
+    def set_cast(self, value):
+        self.cast = value
+
+    def add_cast(self, value):
+        self.cast.append(value)
 
     def get_art(self, key):
         value = self.artwork.get(key)
@@ -721,4 +730,5 @@ class ListItem(object):
             listitem.addStreamInfo("audio", item)
         for item in self.subinfo:
             listitem.addStreamInfo("subtitle", item)
+        listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
         return listitem

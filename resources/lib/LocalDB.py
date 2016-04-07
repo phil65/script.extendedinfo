@@ -193,6 +193,7 @@ class LocalDB(object):
         stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
                                                 movie['streamdetails'])
         db_movie.update_properties(stream_info)
+        db_movie.set_cast(movie.get("cast"))
         return db_movie
 
     def handle_tvshows(self, tvshow):
@@ -203,19 +204,25 @@ class LocalDB(object):
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = PLUGIN_BASE + 'action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
+        Utils.pp(tvshow)
         db_tvshow = Utils.ListItem(label=tvshow.get("label"),
                                    path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
                              'genre': " / ".join(tvshow.get('genre')),
                              'rating': str(round(float(tvshow['rating']), 1)),
                              'mediatype': "tvshow",
+                             'mpaa': tvshow.get("mpaa"),
+                             'votes': tvshow.get("votes"),
+                             'playcount': tvshow.get("playcount"),
                              'imdbnumber': tvshow.get("imdbnumber"),
                              'year': str(tvshow.get('year')),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
                                   'file': tvshow.get('file'),
+                                  'watchedepisodes': tvshow.get('watchedepisodes'),
                                   'dbid': tvshow['tvshowid']})
         db_tvshow.set_artwork(tvshow['art'])
+        db_tvshow.set_cast(tvshow.get("cast"))
         return db_tvshow
 
     def get_movie(self, movie_id):
