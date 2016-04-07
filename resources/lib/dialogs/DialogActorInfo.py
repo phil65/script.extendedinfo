@@ -39,8 +39,8 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
-            self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
-                              (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
+            self.listitems = [(ID_LIST_MOVIE_ROLES, Utils.merge_dict_lists(self.data["movie_roles"], "character")),
+                              (ID_LIST_TV_ROLES, Utils.merge_dict_lists(self.data["tvshow_roles"], "character")),
                               (ID_LIST_IMAGES, self.data["images"]),
                               (ID_LIST_MOVIE_CREW, Utils.merge_dict_lists(self.data["movie_crew_roles"])),
                               (ID_LIST_TV_CREW, Utils.merge_dict_lists(self.data["tvshow_crew_roles"])),
