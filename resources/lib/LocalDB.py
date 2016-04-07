@@ -209,7 +209,6 @@ class LocalDB(object):
             path = PLUGIN_BASE + 'extendedtvinfo&&dbid=%s' % tvshow['tvshowid']
         else:
             path = PLUGIN_BASE + 'action&&id=ActivateWindow(videos,videodb://tvshows/titles/%s/,return)' % tvshow['tvshowid']
-        Utils.pp(tvshow)
         db_tvshow = Utils.ListItem(label=tvshow.get("label"),
                                    path=path)
         db_tvshow.set_infos({'title': tvshow.get('label'),
