@@ -50,7 +50,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.account_states = data
-            if "dbid" not in self.info:
+            if "dbid" not in self.info.get_properties():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
             self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
@@ -69,8 +69,7 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids("%s tv" % (self.info.get_info("title")))
             super(DialogTVShowInfo, self).onInit()
-            Utils.listitem_to_windowprops(data=self.info,
-                                          window_id=self.window_id)
+            self.info.to_windowprops(window_id=self.window_id)
             super(DialogTVShowInfo, self).update_states()
             self.fill_lists()
 
@@ -81,6 +80,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_BROWSE)
         def browse_tvshow(self):
             self.close()
+            xbmc.executebuiltin("Dialog.Close(all)")
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
         @ch.click(ID_LIST_CREW)

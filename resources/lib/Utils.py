@@ -494,20 +494,6 @@ def pass_dict_to_skin(data=None, prefix="", window_id=10000):
         window.setProperty('%s%s' % (prefix, key), value)
 
 
-def listitem_to_windowprops(data=None, prefix="", window_id=10000):
-    window = xbmcgui.Window(window_id)
-    if not data:
-        return None
-    keys = ["artwork", "infos", "properties"]
-    window.setProperty('%slabel' % (prefix), data.get("label"))
-    window.setProperty('%spath' % (prefix), data.get("path"))
-    for key in keys:
-        for (k, v) in data.get(key, {}).iteritems():
-            if not v:
-                continue
-            window.setProperty('%s%s' % (prefix, k), unicode(v))
-
-
 def merge_dict_lists(items, key="job"):
     crew_ids = []
     crews = []
@@ -734,3 +720,14 @@ class ListItem(object):
             listitem.addStreamInfo("subtitle", item)
         listitem.setInfo("video", {"castandrole": [(i["name"], i["role"]) for i in self.cast]})
         return listitem
+
+    def to_windowprops(self, prefix="", window_id=10000):
+        window = xbmcgui.Window(window_id)
+        window.setProperty('%slabel' % (prefix), self.label)
+        window.setProperty('%slabel2' % (prefix), self.label2)
+        window.setProperty('%spath' % (prefix), self.path)
+        dct = merge_dicts(self.get_properties(),
+                          self.get_artwork(),
+                          self.get_infos())
+        for k, v in dct.iteritems():
+            window.setProperty('%s%s' % (prefix, k), unicode(v))

@@ -91,8 +91,7 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
-            Utils.listitem_to_windowprops(data=self.info,
-                                          window_id=self.window_id)
+            self.info.to_windowprops(window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info["label"], self.info["year"]))
             self.fill_lists()

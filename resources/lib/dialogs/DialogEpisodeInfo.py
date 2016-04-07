@@ -49,8 +49,7 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()
-            Utils.listitem_to_windowprops(data=self.info,
-                                          window_id=self.window_id)
+            self.info.to_windowprops(window_id=self.window_id)
             super(DialogEpisodeInfo, self).update_states()
             self.get_youtube_vids("%s tv" % (self.info['title']))
             self.fill_lists()
