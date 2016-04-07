@@ -15,12 +15,12 @@ MOVIE_PROPS = ["title", "genre", "year", "rating", "director", "trailer",
                "tagline", "plot", "plotoutline", "originaltitle", "lastplayed",
                "playcount", "writer", "studio", "mpaa", "cast", "country",
                "imdbnumber", "runtime", "set", "showlink", "streamdetails",
-               "top250", "votes", "fanart", "file", "sorttitle",
+               "top250", "votes", "file", "sorttitle",
                "resume", "setid", "dateadded", "tag", "art", "userrating", "ratings"]
 TV_PROPS = ["title", "genre", "year", "rating", "plot",
             "studio", "mpaa", "cast", "playcount", "episode",
             "imdbnumber", "premiered", "votes", "lastplayed",
-            "fanart", "file", "originaltitle",
+            "file", "originaltitle",
             "sorttitle", "episodeguide", "season", "watchedepisodes",
             "dateadded", "tag", "art", "userrating", "ratings", "runtime"]
 
@@ -184,6 +184,8 @@ class LocalDB(object):
                             'rating': str(round(float(movie['rating']), 1)),
                             'director': " / ".join(movie.get('director')),
                             'writer': " / ".join(movie.get('writer')),
+                            # "tag": " / ".join(movie['tag']),
+                            "genre": " / ".join(movie['genre']),
                             'plot': movie.get('plot'),
                             'originaltitle': movie.get('originaltitle')})
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
@@ -218,6 +220,7 @@ class LocalDB(object):
                              'votes': tvshow.get("votes"),
                              'playcount': tvshow.get("playcount"),
                              'imdbnumber': tvshow.get("imdbnumber"),
+                             # "tag": " / ".join(movie['tag']),
                              'year': str(tvshow.get('year')),
                              'originaltitle': tvshow.get('originaltitle')})
         db_tvshow.set_properties({'imdb_id': tvshow.get('imdbnumber'),
