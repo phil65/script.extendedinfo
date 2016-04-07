@@ -141,12 +141,12 @@ msgstr ""
 
 #: /plugin.py:56
 msgctxt "#32028"
-msgid "Airing TV shows"
+msgid "Airing episodes"
 msgstr ""
 
 #: /plugin.py:57
 msgctxt "#32029"
-msgid "Premiere TV shows"
+msgid "Season premiere episodes"
 msgstr ""
 
 msgctxt "#32030"
