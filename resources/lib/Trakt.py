@@ -80,9 +80,8 @@ def get_episodes(content):
 def handle_movies(results):
     movies = []
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
-    for item in results:
-        if "movie" in item:
-            item = item["movie"]
+    for i in results:
+        item = i["movie"] if "movie" in i else i
         movie = Utils.ListItem(label=item["title"],
                                path=PLUGIN_BASE + path % item["ids"]["tmdb"])
         movie.set_infos({'title': item["title"],
@@ -100,7 +99,10 @@ def handle_movies(results):
                          'genre': " / ".join(item["genres"])})
         movie.set_properties({'id': item["ids"]["tmdb"],
                               'imdb_id': item["ids"]["imdb"],
+                              'trakt_id': item["ids"]["trakt_id"],
                               'watchers': item.get("watchers"),
+                              'language': item.get("language"),
+                              'homepage': item.get("homepage"),
                               'duration(h)': Utils.format_time(item["runtime"], "h"),
                               'duration(m)': Utils.format_time(item["runtime"], "m")})
         movie.set_artwork({'poster': item["images"]["poster"]["full"],
