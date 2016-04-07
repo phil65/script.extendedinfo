@@ -99,7 +99,7 @@ def handle_movies(results):
                          'genre': " / ".join(item["genres"])})
         movie.set_properties({'id': item["ids"]["tmdb"],
                               'imdb_id': item["ids"]["imdb"],
-                              'trakt_id': item["ids"]["trakt_id"],
+                              'trakt_id': item["ids"]["trakt"],
                               'watchers': item.get("watchers"),
                               'language': item.get("language"),
                               'homepage': item.get("homepage"),
