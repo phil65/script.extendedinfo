@@ -432,6 +432,7 @@ def handle_episodes(results):
                             'premiered': item.get('air_date'),
                             'episode': item.get('episode_number'),
                             'season': item.get('season_number'),
+                            'userrating': item.get('rating'),
                             'plot': Utils.clean_text(item.get('overview')),
                             'rating': round(item['vote_average'], 1) if item.get('vote_average') else "",
                             'votes': item.get('vote_count')})
