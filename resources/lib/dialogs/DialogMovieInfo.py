@@ -63,9 +63,9 @@ def get_window(window_type):
             sets_thread = SetItemsThread(self.info.get_property("set_id"))
             self.omdb_thread = Utils.FunctionThread(function=omdb.get_movie_info,
                                                     param=self.info.get_property("imdb_id"))
-            filter_thread = ImageTools.FilterImageThread(self.info.get("thumb"))
-            for thread in [self.omdb_thread, sets_thread, filter_thread]:
+            for thread in [self.omdb_thread, sets_thread]:
                 thread.start()
+            self.info.update_properties(ImageTools.blur(self.info.get_art("thumb")))
             if "dbid" not in self.info.get_infos():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             lists = self.sort_lists(self.data["lists"])
@@ -73,8 +73,6 @@ def get_window(window_type):
             self.setinfo = sets_thread.setinfo
             set_ids = [item.get_property("id") for item in sets_thread.listitems]
             self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
-            filter_thread.join()
-            self.info.update_properties(filter_thread.info)
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, sets_thread.listitems),

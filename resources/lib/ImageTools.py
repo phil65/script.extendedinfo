@@ -42,7 +42,7 @@ def blur(input_img, radius=25):
                     img = PIL.Image.open(xbmc.translatePath(vid_cache_file).decode("utf-8"))
                     break
                 else:
-                    xbmcvfs.copy(unicode(input_img, 'utf-8', errors='ignore'), targetfile)
+                    xbmcvfs.copy(input_img, targetfile)
                     img = PIL.Image.open(targetfile)
                     break
             except Exception:
