@@ -19,6 +19,7 @@ import xbmcgui
 import xbmcvfs
 
 import addon
+import KodiJson
 
 
 def run_async(func):
@@ -134,63 +135,6 @@ def millify(n):
         return '%.2f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
     else:
         return '%.0f%s' % (n / 10 ** (3 * millidx), millnames[millidx])
-
-
-def media_streamdetails(filename, streamdetails):
-    info = {}
-    video = streamdetails['video']
-    audio = streamdetails['audio']
-    if video:
-        if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
-            info['VideoResolution'] = "480"
-        elif (video[0]['width'] <= 768 and video[0]['height'] <= 576):
-            info['VideoResolution'] = "576"
-        elif (video[0]['width'] <= 960 and video[0]['height'] <= 544):
-            info['VideoResolution'] = "540"
-        elif (video[0]['width'] <= 1280 and video[0]['height'] <= 720):
-            info['VideoResolution'] = "720"
-        elif (video[0]['width'] >= 1281 or video[0]['height'] >= 721):
-            info['VideoResolution'] = "1080"
-        else:
-            info['videoresolution'] = ""
-        info['VideoCodec'] = str(video[0]['codec'])
-        if (video[0]['aspect'] < 1.4859):
-            info['VideoAspect'] = "1.33"
-        elif (video[0]['aspect'] < 1.7190):
-            info['VideoAspect'] = "1.66"
-        elif (video[0]['aspect'] < 1.8147):
-            info['VideoAspect'] = "1.78"
-        elif (video[0]['aspect'] < 2.0174):
-            info['VideoAspect'] = "1.85"
-        elif (video[0]['aspect'] < 2.2738):
-            info['VideoAspect'] = "2.20"
-        else:
-            info['VideoAspect'] = "2.35"
-    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
-        info['VideoResolution'] = '1080'
-    elif ('dvd' in filename) or (filename.endswith('.vob' or '.ifo')):
-        info['VideoResolution'] = '576'
-    if audio:
-        info['AudioCodec'] = audio[0]['codec']
-        info['AudioChannels'] = audio[0]['channels']
-        streams = []
-        for i, item in enumerate(audio, start=1):
-            language = item['language']
-            if language in streams and language == "und":
-                continue
-            streams.append(language)
-            streaminfo = {'AudioLanguage.%d' % i: language,
-                          'AudioCodec.%d' % i: item["codec"],
-                          'AudioChannels.%d' % i: str(item['channels'])}
-            info.update(streaminfo)
-        subs = []
-        for i, item in enumerate(streamdetails['subtitle'], start=1):
-            language = item['language']
-            if language in subs or language == "und":
-                continue
-            subs.append(language)
-            info.update({'SubtitleLanguage.%d' % i: language})
-    return info
 
 
 def get_year(year_string):
@@ -356,8 +300,8 @@ def get_favs():
     returns dict list containing favourites
     """
     items = []
-    data = get_kodi_json(method="Favourites.GetFavourites",
-                         params={"type": None, "properties": ["path", "thumbnail", "window", "windowparameter"]})
+    data = KodiJson.get_json(method="Favourites.GetFavourites",
+                             params={"type": None, "properties": ["path", "thumbnail", "window", "windowparameter"]})
     if "result" not in data or data["result"]["limits"]["total"] == 0:
         return []
     for fav in data["result"]["favourites"]:
@@ -402,32 +346,23 @@ def log(txt):
              level=xbmc.LOGDEBUG)
 
 
-def get_browse_dialog(default="", heading=addon.LANG(1024), dlg_type=3, shares="files", mask="", use_thumbs=False, treat_as_folder=False):
-    return xbmcgui.Dialog().browse(dlg_type, heading, shares, mask, use_thumbs, treat_as_folder, default)
-
-
-def save_to_file(content, filename, path=""):
+def save_to_file(content, filename, path):
     """
     dump json and save to *filename in *path
     """
-    if path == "":
-        text_file_path = get_browse_dialog() + filename + ".txt"
-    else:
-        if not xbmcvfs.exists(path):
-            xbmcvfs.mkdirs(path)
-        text_file_path = os.path.join(path, filename + ".txt")
+    if not xbmcvfs.exists(path):
+        xbmcvfs.mkdirs(path)
+    text_file_path = os.path.join(path, filename + ".txt")
     text_file = xbmcvfs.File(text_file_path, "w")
     json.dump(content, text_file)
     text_file.close()
     return True
 
 
-def read_from_file(path="", raw=False):
+def read_from_file(path, raw=False):
     """
     return data from file with *path
     """
-    if path == "":
-        path = get_browse_dialog(dlg_type=1)
     if not xbmcvfs.exists(path):
         return False
     try:
@@ -474,15 +409,6 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   icon=icon,
                                   time=time,
                                   sound=sound)
-
-
-def get_kodi_json(method, params):
-    """
-    communicate with kodi JSON-RPC
-    """
-    json_query = xbmc.executeJSONRPC('{"jsonrpc": "2.0", "method": "%s", "params": %s, "id": 1}' % (method, json.dumps(params)))
-    json_query = unicode(json_query, 'utf-8', errors='ignore')
-    return json.loads(json_query)
 
 
 def pp(string):

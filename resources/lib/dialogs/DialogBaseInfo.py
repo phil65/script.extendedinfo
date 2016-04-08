@@ -8,6 +8,7 @@ import xbmcgui
 from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import addon
+from .. import KodiJson
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from .. import YouTube
@@ -87,11 +88,9 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
                                             list=[addon.LANG(32006)])
         if selection == 0:
-            media_type = self.getProperty("type")
-            art = {"poster": self.listitem.getProperty("original")}
-            Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params={"art": art,
-                                        "%sid" % media_type.lower(): self.info.get_property("dbid")})
+            KodiJson.set_art(media_type=self.getProperty("type"),
+                             art={"poster": self.listitem.getProperty("original")},
+                             dbid=self.info.get_property("dbid"))
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
     def fanart_options(self):
@@ -100,11 +99,9 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
                                             list=[addon.LANG(32007)])
         if selection == 0:
-            media_type = self.getProperty("type")
-            art = {"fanart": self.listitem.getProperty("original")}
-            Utils.get_kodi_json(method="VideoLibrary.Set%sDetails" % media_type,
-                                params={"art": art,
-                                        "%sid" % media_type.lower(): self.info.get_property("dbid")})
+            KodiJson.set_art(media_type=self.getProperty("type"),
+                             art={"fanart": self.listitem.getProperty("original")},
+                             dbid=self.info.get_property("dbid"))
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)

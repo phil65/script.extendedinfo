@@ -56,8 +56,8 @@ class LocalDB(object):
             if kodi_artist['musicbrainzartistid'] and kodi_artist['musicbrainzartistid'] == simi_artist['mbid']:
                 artists.append(kodi_artist)
             elif kodi_artist['artist'] == simi_artist['name']:
-                data = Utils.get_kodi_json(method="AudioLibrary.GetArtistDetails",
-                                           params={"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": kodi_artist['artistid']})
+                data = KodiJson.get_json(method="AudioLibrary.GetArtistDetails",
+                                         params={"properties": ["genre", "description", "mood", "style", "born", "died", "formed", "disbanded", "yearsactive", "instrument", "fanart", "thumbnail"], "artistid": kodi_artist['artistid']})
                 item = data["result"]["artistdetails"]
                 artwork = {"thumb": item['thumbnail'],
                            "fanart": item['fanart']}
@@ -84,14 +84,14 @@ class LocalDB(object):
         get list of movies from db which are similar to movie with *dbid
         based on metadata-centric ranking
         """
-        movie = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                    params={"properties": ["genre", "director", "country", "year", "mpaa"], "movieid": dbid})
+        movie = KodiJson.get_json(method="VideoLibrary.GetMovieDetails",
+                                  params={"properties": ["genre", "director", "country", "year", "mpaa"], "movieid": dbid})
         if "moviedetails" not in movie['result']:
             return []
         comp_movie = movie['result']['moviedetails']
         genres = comp_movie['genre']
-        data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
-                                   params={"properties": ["genre", "director", "mpaa", "country", "year"], "sort": {"method": "random"}})
+        data = KodiJson.get_json(method="VideoLibrary.GetMovies",
+                                 params={"properties": ["genre", "director", "mpaa", "country", "year"], "sort": {"method": "random"}})
         if "movies" not in data['result']:
             return []
         quotalist = []
@@ -137,8 +137,8 @@ class LocalDB(object):
         """
         get list of movies with length *limit from db
         """
-        data = Utils.get_kodi_json(method="VideoLibrary.GetMovies",
-                                   params={"properties": MOVIE_PROPS, "limits": {"end": limit}})
+        data = KodiJson.get_json(method="VideoLibrary.GetMovies",
+                                 params={"properties": MOVIE_PROPS, "limits": {"end": limit}})
         if "result" in data and "movies" in data["result"]:
             return [self.handle_movies(item) for item in data["result"]["movies"]]
         else:
@@ -148,8 +148,8 @@ class LocalDB(object):
         """
         get list of tvshows with length *limit from db
         """
-        data = Utils.get_kodi_json(method="VideoLibrary.GetTVShows",
-                                   params={"properties": TV_PROPS, "limits": {"end": limit}})
+        data = KodiJson.get_json(method="VideoLibrary.GetTVShows",
+                                 params={"properties": TV_PROPS, "limits": {"end": limit}})
         if "result" not in data or "tvshows" not in data["result"]:
             return []
         return [self.handle_tvshows(item) for item in data["result"]["tvshows"]]
@@ -163,9 +163,10 @@ class LocalDB(object):
             path = PLUGIN_BASE + 'extendedinfo&&dbid=%s' % str(movie['movieid'])
         else:
             path = PLUGIN_BASE + 'playmovie&&dbid=%i' % movie['movieid']
-        if (movie['resume']['position'] and movie['resume']['total']) > 0:
+        resume = movie['resume']
+        if (resume['position'] and resume['total']) > 0:
             resume = "true"
-            played = '%s' % int((float(movie['resume']['position']) / float(movie['resume']['total'])) * 100)
+            played = '%s' % int((float(resume['position']) / float(resume['total'])) * 100)
         else:
             resume = "false"
             played = '0'
@@ -198,8 +199,8 @@ class LocalDB(object):
         db_movie.set_artwork(movie['art'])
         db_movie.set_videoinfos(movie['streamdetails']["video"])
         db_movie.set_audioinfos(movie['streamdetails']["audio"])
-        stream_info = Utils.media_streamdetails(movie['file'].encode('utf-8').lower(),
-                                                movie['streamdetails'])
+        stream_info = media_streamdetails(movie['file'].encode('utf-8').lower(),
+                                          movie['streamdetails'])
         db_movie.update_properties(stream_info)
         db_movie.set_cast(movie.get("cast"))
         return db_movie
@@ -238,8 +239,8 @@ class LocalDB(object):
         """
         get info from db for movie with *movie_id
         """
-        response = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                       params={"properties": MOVIE_PROPS, "movieid": movie_id})
+        response = KodiJson.get_json(method="VideoLibrary.GetMovieDetails",
+                                     params={"properties": MOVIE_PROPS, "movieid": movie_id})
         if "result" in response and "moviedetails" in response["result"]:
             return self.handle_movies(response["result"]["moviedetails"])
         return {}
@@ -248,8 +249,8 @@ class LocalDB(object):
         """
         get info from db for tvshow with *tvshow_id
         """
-        response = Utils.get_kodi_json(method="VideoLibrary.GetTVShowDetails",
-                                       params={"properties": TV_PROPS, "tvshowid": tvshow_id})
+        response = KodiJson.get_json(method="VideoLibrary.GetTVShowDetails",
+                                     params={"properties": TV_PROPS, "tvshowid": tvshow_id})
         if "result" in response and "tvshowdetails" in response["result"]:
             return self.handle_tvshows(response["result"]["tvshowdetails"])
         return {}
@@ -258,8 +259,8 @@ class LocalDB(object):
         """
         get a list of all albums from db
         """
-        data = Utils.get_kodi_json(method="AudioLibrary.GetAlbums",
-                                   params={"properties": ["title"]})
+        data = KodiJson.get_json(method="AudioLibrary.GetAlbums",
+                                 params={"properties": ["title"]})
         if "result" not in data or "albums" not in data['result']:
             return []
         return data['result']['albums']
@@ -351,8 +352,8 @@ class LocalDB(object):
             for local_item in self.albums:
                 if not item["name"] == local_item["title"]:
                     continue
-                data = Utils.get_kodi_json(method="AudioLibrary.getAlbumDetails",
-                                           params={"properties": ["thumbnail"], "albumid": local_item["albumid"]})
+                data = KodiJson.get_json(method="AudioLibrary.getAlbumDetails",
+                                         params={"properties": ["thumbnail"], "albumid": local_item["albumid"]})
                 album = data["result"]["albumdetails"]
                 item["dbid"] = album["albumid"]
                 item["path"] = PLUGIN_BASE + 'playalbum&&dbid=%i' % album['albumid']
@@ -365,27 +366,27 @@ class LocalDB(object):
         """
         get name of set for movie with *dbid
         """
-        data = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                   params={"properties": ["setid"], "movieid": dbid})
+        data = KodiJson.get_json(method="VideoLibrary.GetMovieDetails",
+                                 params={"properties": ["setid"], "movieid": dbid})
         if "result" not in data or "moviedetails" not in data["result"]:
             return None
         set_dbid = data['result']['moviedetails'].get('setid')
         if set_dbid:
-            data = Utils.get_kodi_json(method="VideoLibrary.GetMovieSetDetails",
-                                       params={"setid": set_dbid})
+            data = KodiJson.get_json(method="VideoLibrary.GetMovieSetDetails",
+                                     params={"setid": set_dbid})
             return data['result']['setdetails'].get('label')
 
     def get_imdb_id(self, media_type, dbid):
         if not dbid:
             return None
         if media_type == "movie":
-            data = Utils.get_kodi_json(method="VideoLibrary.GetMovieDetails",
-                                       params={"properties": ["imdbnumber", "title", "year"], "movieid": dbid})
+            data = KodiJson.get_json(method="VideoLibrary.GetMovieDetails",
+                                     params={"properties": ["imdbnumber", "title", "year"], "movieid": dbid})
             if "result" in data and "moviedetails" in data["result"]:
                 return data['result']['moviedetails']['imdbnumber']
         elif media_type == "tvshow":
-            data = Utils.get_kodi_json(method="VideoLibrary.GetTVShowDetails",
-                                       params={"properties": ["imdbnumber", "title", "year"], "tvshowid": dbid})
+            data = KodiJson.get_json(method="VideoLibrary.GetTVShowDetails",
+                                     params={"properties": ["imdbnumber", "title", "year"], "tvshowid": dbid})
             if "result" in data and "tvshowdetails" in data["result"]:
                 return data['result']['tvshowdetails']['imdbnumber']
         return None
@@ -393,11 +394,68 @@ class LocalDB(object):
     def get_tvshow_id_by_episode(self, dbid):
         if not dbid:
             return None
-        data = Utils.get_kodi_json(method="VideoLibrary.GetEpisodeDetails",
-                                   params={"properties": ["tvshowid"], "episodeid": dbid})
+        data = KodiJson.get_json(method="VideoLibrary.GetEpisodeDetails",
+                                 params={"properties": ["tvshowid"], "episodeid": dbid})
         if "episodedetails" not in data["result"]:
             return None
         return self.get_imdb_id(media_type="tvshow",
                                 dbid=str(data['result']['episodedetails']['tvshowid']))
+
+
+def media_streamdetails(filename, streamdetails):
+    info = {}
+    video = streamdetails['video']
+    audio = streamdetails['audio']
+    if video:
+        if (video[0]['width'] <= 720 and video[0]['height'] <= 480):
+            info['VideoResolution'] = "480"
+        elif (video[0]['width'] <= 768 and video[0]['height'] <= 576):
+            info['VideoResolution'] = "576"
+        elif (video[0]['width'] <= 960 and video[0]['height'] <= 544):
+            info['VideoResolution'] = "540"
+        elif (video[0]['width'] <= 1280 and video[0]['height'] <= 720):
+            info['VideoResolution'] = "720"
+        elif (video[0]['width'] >= 1281 or video[0]['height'] >= 721):
+            info['VideoResolution'] = "1080"
+        else:
+            info['videoresolution'] = ""
+        info['VideoCodec'] = str(video[0]['codec'])
+        if (video[0]['aspect'] < 1.4859):
+            info['VideoAspect'] = "1.33"
+        elif (video[0]['aspect'] < 1.7190):
+            info['VideoAspect'] = "1.66"
+        elif (video[0]['aspect'] < 1.8147):
+            info['VideoAspect'] = "1.78"
+        elif (video[0]['aspect'] < 2.0174):
+            info['VideoAspect'] = "1.85"
+        elif (video[0]['aspect'] < 2.2738):
+            info['VideoAspect'] = "2.20"
+        else:
+            info['VideoAspect'] = "2.35"
+    elif (('bluray' or 'blu-ray' or 'brrip' or 'bdrip' or 'hddvd' or 'hd-dvd') in filename):
+        info['VideoResolution'] = '1080'
+    elif ('dvd' in filename) or (filename.endswith('.vob' or '.ifo')):
+        info['VideoResolution'] = '576'
+    if audio:
+        info['AudioCodec'] = audio[0]['codec']
+        info['AudioChannels'] = audio[0]['channels']
+        streams = []
+        for i, item in enumerate(audio, start=1):
+            language = item['language']
+            if language in streams and language == "und":
+                continue
+            streams.append(language)
+            streaminfo = {'AudioLanguage.%d' % i: language,
+                          'AudioCodec.%d' % i: item["codec"],
+                          'AudioChannels.%d' % i: str(item['channels'])}
+            info.update(streaminfo)
+        subs = []
+        for i, item in enumerate(streamdetails['subtitle'], start=1):
+            language = item['language']
+            if language in subs or language == "und":
+                continue
+            subs.append(language)
+            info.update({'SubtitleLanguage.%d' % i: language})
+    return info
 
 local_db = LocalDB()

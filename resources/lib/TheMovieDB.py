@@ -12,6 +12,7 @@ from functools32 import lru_cache
 import xbmc
 import xbmcgui
 
+import KodiJson
 import Utils
 import addon
 from LocalDB import local_db
@@ -164,16 +165,7 @@ def set_rating_prompt(media_type, media_id, dbid=None):
     if rating == -1:
         return False
     if dbid:
-        db_rating = round((rating + 1) / 2)
-        if media_type == "movie":
-            Utils.get_kodi_json(method="VideoLibrary.SetMovieDetails",
-                                params={"movieid": dbid, "userrating": db_rating})
-        elif media_type == "tv":
-            Utils.get_kodi_json(method="VideoLibrary.SetTVShowDetails",
-                                params={"tvshowid": dbid, "userrating": db_rating})
-        elif media_type == "episode":
-            Utils.get_kodi_json(method="VideoLibrary.SetEpisodeDetails",
-                                params={"episodeid": dbid, "userrating": db_rating})
+        KodiJson.set_userrating(media_type, dbid, round((rating + 1) / 2))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
@@ -510,10 +502,12 @@ def handle_people(results):
 def handle_images(results):
     images = []
     for item in results:
-        image = Utils.ListItem(artwork=get_image_urls(poster=item.get("file_path")))
+        artwork = get_image_urls(poster=item.get("file_path"))
+        image = Utils.ListItem(artwork=artwork)
         image.set_properties({'aspectratio': item['aspect_ratio'],
-                              'vote_average': item.get("vote_average"),
+                              'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
+        image.update_properties(artwork)
         if item.get("media"):
             image.set_infos({'title': item["media"].get("title")})
             if item["media"].get("poster_path"):
