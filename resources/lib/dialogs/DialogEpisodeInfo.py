@@ -51,7 +51,7 @@ def get_window(window_type):
             super(DialogEpisodeInfo, self).onInit()
             self.info.to_windowprops(window_id=self.window_id)
             super(DialogEpisodeInfo, self).update_states()
-            self.get_youtube_vids("%s tv" % (self.info['title']))
+            self.get_youtube_vids("%s tv" % (self.info.get_info('title')))
             self.fill_lists()
 
         def onClick(self, control_id):
@@ -72,7 +72,9 @@ def get_window(window_type):
         @ch.click(ID_CONTROL_SETRATING)
         def set_rating_dialog(self):
             if tmdb.set_rating_prompt(media_type="episode",
-                                      media_id=[self.tvshow_id, self.info["season"], self.info["episode"]]):
+                                      media_id=[self.tvshow_id,
+                                                self.info.get_info("season"),
+                                                self.info.get_info("episode")]):
                 self.update_states()
 
         @ch.click(ID_CONTROL_RATINGLISTS)
@@ -93,8 +95,8 @@ def get_window(window_type):
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.account_states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
-                                                                    season=self.info["season"],
-                                                                    episode=self.info["episode"],
+                                                                    season=self.info.get_info("season"),
+                                                                    episode=self.info.get_info("episode"),
                                                                     cache_time=0)
             super(DialogEpisodeInfo, self).update_states()
 

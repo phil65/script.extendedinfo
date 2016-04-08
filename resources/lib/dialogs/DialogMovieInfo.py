@@ -91,7 +91,8 @@ def get_window(window_type):
             super(DialogMovieInfo, self).onInit()
             self.info.to_windowprops(window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
-            self.get_youtube_vids("%s %s, movie" % (self.info["label"], self.info["year"]))
+            self.get_youtube_vids("%s %s, movie" % (self.info.label,
+                                                    self.info.get_info("year")))
             self.fill_lists()
             Utils.pass_dict_to_skin(data=self.setinfo,
                                     prefix="set.",
@@ -219,7 +220,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating_dialog(self):
             if tmdb.set_rating_prompt(media_type="movie",
-                                      media_id=self.info["id"],
+                                      media_id=self.info.get_property("id"),
                                       dbid=self.info.get("dbid")):
                 self.update_states()
 
@@ -241,17 +242,17 @@ def get_window(window_type):
                 list_id = tmdb.create_list(listname)
                 xbmc.sleep(1000)
                 tmdb.change_list_status(list_id=list_id,
-                                        movie_id=self.info["id"],
+                                        movie_id=self.info.get_property("id"),
                                         status=True)
             elif index == len(listitems) - 1:
                 self.remove_list_dialog(account_lists)
             elif index > 0:
-                tmdb.change_list_status(account_lists[index - 1]["id"], self.info["id"], True)
+                tmdb.change_list_status(account_lists[index - 1]["id"], self.info.get_property("id"), True)
                 self.update_states()
 
         @ch.click(ID_BUTTON_FAV)
         def change_list_status(self):
-            tmdb.change_fav_status(media_id=self.info["id"],
+            tmdb.change_fav_status(media_id=self.info.get_property("id"),
                                    media_type="movie",
                                    status=str(not bool(self.account_states["favorite"])).lower())
             self.update_states()
@@ -309,7 +310,7 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = tmdb.extended_movie_info(self.info["id"], self.dbid, 0)
+            _, __, self.account_states = tmdb.extended_movie_info(self.info.get_property("id"), self.dbid, 0)
             super(DialogMovieInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
