@@ -622,6 +622,9 @@ def get_account_props(states):
 
 
 def get_image_urls(poster=None, still=None, fanart=None, profile=None):
+    '''
+    get a dict with all available images for given image types
+    '''
     images = {}
     if poster:
         images["poster"] = IMAGE_BASE_URL + "w500" + poster
@@ -684,6 +687,10 @@ def get_trailer(movie_id):
 
 
 def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
+    '''
+    get listitem with extended info for movie with *movie_id
+    merge in info from *dbid if available
+    '''
     if not movie_id:
         return None
     params = {"append_to_response": ALL_MOVIE_PROPS,
@@ -764,6 +771,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
 
 
 def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
+    '''
+    get listitem with extended info for tvshow with *tvshow_id
+    merge in info from *dbid if available
+    '''
     if not tvshow_id:
         return None
     params = {"append_to_response": ALL_TV_PROPS,
@@ -846,6 +857,9 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
 
 
 def extended_season_info(tvshow_id, season_number):
+    '''
+    get listitem with extended info for season (*tvshow_id, *season_number)
+    '''
     if not tvshow_id or not season_number:
         return None
     params = {"append_to_response": ALL_TV_PROPS,
@@ -889,6 +903,9 @@ def extended_season_info(tvshow_id, season_number):
 
 
 def extended_episode_info(tvshow_id, season, episode, cache_time=7):
+    '''
+    get listitem with extended info for episode (*tvshow_id, *season, *episode)
+    '''
     if not tvshow_id or not episode:
         return None
     if not season:
@@ -913,6 +930,9 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
 
 
 def extended_actor_info(actor_id):
+    '''
+    get listitem with extended info for actor with *actor_id
+    '''
     if not actor_id:
         return None
     response = get_data(url="person/%s" % (actor_id),
@@ -951,6 +971,9 @@ def extended_actor_info(actor_id):
 
 
 def translate_status(status):
+    '''
+    get movies from person with *person_id
+    '''
     translations = {"released": addon.LANG(32071),
                     "post production": addon.LANG(32072),
                     "in production": addon.LANG(32073),
@@ -1146,6 +1169,9 @@ def get_set_movies(set_id):
 
 
 def get_person_movies(person_id):
+    '''
+    get movies from person with *person_id
+    '''
     params = {"language": addon.setting("LanguageID")}
     response = get_data(url="person/%s/credits" % (person_id),
                         params=params,
