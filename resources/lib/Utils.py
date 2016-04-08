@@ -555,6 +555,13 @@ def clean_text(text):
 
 
 class ListItem(object):
+    ICON_OVERLAY_NONE = 0       # No overlay icon
+    ICON_OVERLAY_RAR = 1        # Compressed *.rar files
+    ICON_OVERLAY_ZIP = 2        # Compressed *.zip files
+    ICON_OVERLAY_LOCKED = 3     # Locked files
+    ICON_OVERLAY_UNWATCHED = 4  # For not watched files
+    ICON_OVERLAY_WATCHED = 5    # For seen files
+    ICON_OVERLAY_HD = 6         # Is on hard disk stored
 
     def __init__(self, label="", label2="", path="", infos={}, properties={}, size="", artwork={}):
         self.label = label
