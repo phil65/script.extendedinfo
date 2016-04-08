@@ -631,6 +631,9 @@ class ListItem(object):
                           separators=(',', ': '))
 
     def update_from_listitem(self, listitem):
+        self.set_label(listitem.label)
+        self.set_label2(listitem.label2)
+        self.set_size(listitem.size)
         self.update_properties(listitem.get_properties())
         self.update_artwork(listitem.get_artwork())
         self.update_infos(listitem.get_infos())
@@ -663,8 +666,16 @@ class ListItem(object):
     def set_resumetime(self, value):
         self.specials["resumetime"] = value
 
+# playlist_starting_track isspecial item_start
+
     def set_size(self, size):
         self.size = size
+
+    def set_visible(self, condition):
+        self.specials["node.visible"] = condition
+
+    def set_target(self, target):
+        self.specials["node.target"] = target
 
     def set_infos(self, infos):
         self.infos = infos
@@ -770,3 +781,86 @@ class ListItem(object):
                           self.get_infos())
         for k, v in dct.iteritems():
             window.setProperty('%s%s' % (prefix, k), unicode(v))
+
+    def from_listitem(self, listitem):
+        info = listitem.getVideoInfoTag()
+        self.label = listitem.getLabel()
+        self.path = info.getPath()
+        self.infos = {"dbid": info.getDbId(),
+                      "mediatype": info.getMediaType(),
+                      "plot": info.getPlot(),
+                      "plotoutline": info.getPlotOutline(),
+                      "tvshowtitle": info.getTVShowTitle(),
+                      "title": info.getTitle(),
+                      "votes": info.getVotes(),
+                      "season": info.getSeason(),
+                      "episode": info.getEpisode(),
+                      "rating": info.getRating(),
+                      "pictureurl": info.getPictureURL(),
+                      "cast": info.getCast(),
+                      "file": info.getFile(),
+                      "originaltitle": info.getOriginalTitle(),
+                      "tagline": info.getTagLine(),
+                      "genre": info.getGenre(),
+                      "director": info.getDirector(),
+                      "writer": info.getWritingCredits(),
+                      "lastplayed": info.getLastPlayed(),
+                      "premiered": info.getPremiered(),
+                      "firstaired": info.getFirstAired(),
+                      "playcount": info.getPlayCount(),
+                      "imdbnumber": info.getIMDBNumber(),
+                      "mediatype": info.getMediaType(),
+                      "year": info.getYear()}
+        self.properties = {"id": listitem.getProperty("id"),
+                           "artist_instrument": listitem.getProperty("artist_instrument"),
+                           "artist_style": listitem.getProperty("artist_style"),
+                           "artist_mood": listitem.getProperty("artist_mood"),
+                           "artist_born": listitem.getProperty("artist_born"),
+                           "artist_formed": listitem.getProperty("artist_formed"),
+                           "artist_description": listitem.getProperty("artist_description"),
+                           "artist_genre": listitem.getProperty("artist_genre"),
+                           "artist_died": listitem.getProperty("artist_died"),
+                           "artist_disbanded": listitem.getProperty("artist_disbanded"),
+                           "artist_yearsactive": listitem.getProperty("artist_yearsactive"),
+                           "artist_born": listitem.getProperty("artist_born"),
+                           "artist_died": listitem.getProperty("artist_died"),
+                           "album_description": listitem.getProperty("album_description"),
+                           "album_theme": listitem.getProperty("album_theme"),
+                           "album_mood": listitem.getProperty("album_mood"),
+                           "album_style": listitem.getProperty("album_style"),
+                           "album_type": listitem.getProperty("album_type"),
+                           "album_label": listitem.getProperty("album_label"),
+                           "album_artist": listitem.getProperty("album_artist"),
+                           "album_genre": listitem.getProperty("album_genre"),
+                           "album_title": listitem.getProperty("album_title"),
+                           "album_rating": listitem.getProperty("album_rating"),
+                           "album_userrating": listitem.getProperty("album_userrating"),
+                           "album_votes": listitem.getProperty("album_votes"),
+                           "album_releasetype": listitem.getProperty("album_releasetype")}
+
+    def movie_from_dbid(self, dbid):
+        from LocalDB import local_db
+        self.update_from_listitem(local_db.get_movie(dbid))
+
+
+class ItemList(object):
+
+    def __init__(self, items, content_type="", name=""):
+        self.items = items
+        self.name = name
+        self.content_type = content_type
+
+    def __len__(self):
+        return len(self.items)
+
+    def add(self, item):
+        self.items.append(item)
+
+    def remove(self, index):
+        self.items.remove(index)
+
+    def set_name(self, name):
+        self.name = name
+
+    def set_content(self, content_type):
+        self.content_type = content_type
