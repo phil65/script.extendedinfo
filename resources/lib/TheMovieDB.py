@@ -507,6 +507,7 @@ def handle_images(results):
         image.set_properties({'aspectratio': item['aspect_ratio'],
                               'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
+        # HACK: can go when xbmcgui.ListItem.getArt() is available
         image.update_properties(artwork)
         if item.get("media"):
             image.set_infos({'title': item["media"].get("title")})
