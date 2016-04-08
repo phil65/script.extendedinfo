@@ -7,7 +7,7 @@ import datetime
 import xbmcgui
 from .. import Utils
 from .. import YouTube
-from .. import addon
+from kodi65 import addon
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
 from ..VideoPlayer import PLAYER

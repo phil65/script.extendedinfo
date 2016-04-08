@@ -12,8 +12,8 @@ from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import omdb
 from .. import ImageTools
-from .. import addon
-from .. import KodiJson
+from kodi65 import addon
+from kodi65 import kodijson
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
@@ -266,13 +266,13 @@ def get_window(window_type):
         def play_movie_resume(self):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
-            KodiJson.play_media("movie", self.info["dbid"], True)
+            kodijson.play_media("movie", self.info["dbid"], True)
 
         @ch.click(ID_BUTTON_PLAY_NORESUME)
         def play_movie_no_resume(self):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
-            KodiJson.play_media("movie", self.info["dbid"], False)
+            kodijson.play_media("movie", self.info["dbid"], False)
 
         @ch.click(ID_BUTTON_MANAGE)
         def show_manage_dialog(self):

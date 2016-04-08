@@ -7,8 +7,10 @@ import xbmc
 import xbmcgui
 from .. import Utils
 from .. import TheMovieDB as tmdb
-from .. import addon
-from .. import KodiJson
+from kodi65 import addon
+from kodi65 import kodijson
+from kodi65 import selectdialog
+from kodi65.listitem import ListItem
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
 from .. import YouTube
@@ -32,7 +34,7 @@ class DialogBaseInfo(object):
         self.last_focus = None
         self.data = None
         self.yt_listitems = []
-        self.info = Utils.ListItem()
+        self.info = ListItem()
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
@@ -88,7 +90,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
                                             list=[addon.LANG(32006)])
         if selection == 0:
-            KodiJson.set_art(media_type=self.getProperty("type"),
+            kodijson.set_art(media_type=self.getProperty("type"),
                              art={"poster": self.listitem.getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
@@ -99,7 +101,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().select(heading=addon.LANG(22080),
                                             list=[addon.LANG(32007)])
         if selection == 0:
-            KodiJson.set_art(media_type=self.getProperty("type"),
+            kodijson.set_art(media_type=self.getProperty("type"),
                              art={"fanart": self.listitem.getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
@@ -152,7 +154,7 @@ class DialogBaseInfo(object):
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": addon.LANG(19055)}]
-        listitem, index = wm.open_selectdialog(listitems=listitems)
+        listitem, index = selectdialog.open(listitems=listitems)
         if listitem["mediatype"] == "episode":
             wm.open_episode_info(prev_window=self,
                                  season=listitems[index]["season"],

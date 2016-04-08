@@ -8,7 +8,7 @@ import xbmcgui
 from WindowManager import wm
 import Utils
 import YDStreamExtractor
-import addon
+from kodi65 import addon
 
 
 class VideoPlayer(xbmc.Player):

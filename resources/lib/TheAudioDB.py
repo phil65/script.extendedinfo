@@ -5,8 +5,8 @@
 
 import xbmc
 import Utils
-import addon
-from LocalDB import local_db
+from kodi65 import addon
+from kodi65.localdb import local_db
 import urllib
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'

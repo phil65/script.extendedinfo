@@ -19,10 +19,11 @@ class SlideShow(DialogXML):
 
     def onInit(self):
         super(SlideShow, self).onInit()
-        if self.images:
-            self.getControl(self.C_LIST_PICTURES).addItems(Utils.create_listitems(self.images))
-            self.getControl(self.C_LIST_PICTURES).selectItem(self.index)
-            self.setFocusId(self.C_LIST_PICTURES)
+        if not self.images:
+            return None
+        self.getControl(self.C_LIST_PICTURES).addItems(Utils.create_listitems(self.images))
+        self.getControl(self.C_LIST_PICTURES).selectItem(self.index)
+        self.setFocusId(self.C_LIST_PICTURES)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:

@@ -5,10 +5,11 @@
 
 import xbmc
 import xbmcgui
+
 from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import ImageTools
-from .. import addon
+from kodi65 import addon
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler

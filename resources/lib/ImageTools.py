@@ -8,7 +8,7 @@ import xbmc
 import xbmcvfs
 import os
 import Utils
-import addon
+from kodi65 import addon
 import PIL.Image
 import PIL.ImageFilter
 import threading

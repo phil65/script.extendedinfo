@@ -4,8 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 import Utils
-import addon
-from LocalDB import local_db
+from kodi65 import addon
+from kodi65.localdb import local_db
+from kodi65.listitem import ListItem
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
@@ -27,8 +28,8 @@ def get_movies(movie_type):
         else:
             search_string = "%s %s trailer" % (item["title"], item["year"])
             path = PLUGIN_BASE + "playtrailer&&title=%s&&imdb_id=%s" % (search_string, imdb_id)
-        movie = Utils.ListItem(label=item.get('title'),
-                               path=path)
+        movie = ListItem(label=item.get('title'),
+                         path=path)
         movie.set_infos({'title': item["title"],
                          'mediatype': "movie",
                          'duration': item["runtime"]*60,

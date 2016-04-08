@@ -6,7 +6,7 @@
 import sys
 import xbmc
 from resources.lib import process
-from resources.lib import addon
+from kodi65 import addon
 
 
 def pass_list_to_skin(name, data, prefix="", limit=False):

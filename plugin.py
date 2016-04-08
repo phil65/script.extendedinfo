@@ -10,7 +10,7 @@ import xbmcgui
 import routing
 import os
 from resources.lib import process
-from resources.lib import addon
+from kodi65 import addon
 
 MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
 RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")

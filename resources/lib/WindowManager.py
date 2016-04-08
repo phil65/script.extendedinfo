@@ -11,10 +11,10 @@ import os
 import re
 
 from dialogs import BaseClasses
-from LocalDB import local_db
+from kodi65.localdb import local_db
 
 import TheMovieDB
-import addon
+from kodi65 import addon
 
 INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
@@ -43,6 +43,7 @@ class WindowManager(object):
     def __init__(self):
         self.active_dialog = None
         self.saved_background = addon.get_global("infobackground")
+        self.monitor = SettingsMonitor()
 
     def add_to_stack(self, window):
         """
@@ -274,16 +275,6 @@ class WindowManager(object):
         dialog.doModal()
         return dialog.position
 
-    def open_selectdialog(self, listitems):
-        """
-        open selectdialog, return listitem dict and index
-        """
-        from dialogs.SelectDialog import SelectDialog
-        w = SelectDialog('DialogSelect.xml', addon.PATH,
-                         listing=listitems)
-        w.doModal()
-        return w.listitem, w.index
-
     def open_dialog(self, dialog, prev_window):
         if dialog.data:
             self.active_dialog = dialog
@@ -311,5 +302,24 @@ def check_version():
         xbmcgui.Dialog().ok(heading=addon.NAME,
                             line1=addon.LANG(32140),
                             line2=addon.LANG(32141))
+
+
+class SettingsMonitor(xbmc.Monitor):
+
+    def __init__(self):
+        xbmc.Monitor.__init__(self)
+
+    def onSettingsChanged(self):
+        addon.reload_addon()
+        username = addon.setting("tmdb_username")
+        password = addon.setting("tmdb_password")
+        if username and password:
+            TheMovieDB.Login = TheMovieDB.LoginProvider(username=username,
+                                                        password=password)
+        if wm.active_dialog:
+            wm.active_dialog.close()
+            wm.active_dialog.logged_in = TheMovieDB.Login.check_login(cache_days=0)
+            wm.active_dialog.doModal()
+
 
 wm = WindowManager()

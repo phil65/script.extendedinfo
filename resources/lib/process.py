@@ -17,12 +17,12 @@ import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 import Utils
-import LocalDB
-import addon
+from kodi65.localdb import local_db
+from kodi65 import addon
+from kodi65 import kodijson
 import YouTube
 import Trakt
 import RottenTomatoes
-import KodiJson
 from WindowManager import wm
 import VideoPlayer
 
@@ -116,7 +116,7 @@ def start_info_actions(info, params):
         if tmdb_id:
             tvshow_id = tmdb_id
         elif dbid and int(dbid) > 0:
-            tvdb_id = LocalDB.local_db.get_imdb_id("tvshow", dbid)
+            tvdb_id = local_db.get_imdb_id("tvshow", dbid)
             if tvdb_id:
                 tvshow_id = tmdb.get_show_tmdb_id(tvdb_id)
         elif tvdb_id:
@@ -138,7 +138,7 @@ def start_info_actions(info, params):
                 return tmdb.get_company_data(company_data[0]["id"])
     elif info == 'set':
         if params.get("dbid"):
-            name = LocalDB.local_db.get_set_name(params["dbid"])
+            name = local_db.get_set_name(params["dbid"])
             if name:
                 params["setid"] = tmdb.get_set_id(name)
         if params.get("setid"):
@@ -171,7 +171,7 @@ def start_info_actions(info, params):
     elif info == 'traktsimilarmovies':
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
-                movie_id = LocalDB.local_db.get_imdb_id("movie", params["dbid"])
+                movie_id = local_db.get_imdb_id("movie", params["dbid"])
             else:
                 movie_id = params["id"]
             return Trakt.get_similar("movie", movie_id)
@@ -179,10 +179,10 @@ def start_info_actions(info, params):
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):
                 if params.get("type") == "episode":
-                    tvshow_id = LocalDB.local_db.get_tvshow_id_by_episode(params["dbid"])
+                    tvshow_id = local_db.get_tvshow_id_by_episode(params["dbid"])
                 else:
-                    tvshow_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
-                                                             dbid=params["dbid"])
+                    tvshow_id = local_db.get_imdb_id(media_type="tvshow",
+                                                     dbid=params["dbid"])
             else:
                 tvshow_id = params["id"]
             return Trakt.get_similar("show", tvshow_id)
@@ -217,7 +217,7 @@ def start_info_actions(info, params):
     elif info == 'traktboxofficemovies':
         return Trakt.get_movies("boxoffice")
     elif info == 'similarartistsinlibrary':
-        return LocalDB.local_db.get_similar_artists(params.get("artist_mbid"))
+        return local_db.get_similar_artists(params.get("artist_mbid"))
     elif info == 'trackinfo':
         addon.clear_global('%sSummary' % params.get("prefix", ""))
         if params["artistname"] and params["trackname"]:
@@ -225,7 +225,7 @@ def start_info_actions(info, params):
                                                track=params["trackname"])
             addon.set_global('%sSummary' % params.get("prefix", ""), track_info["summary"])
     elif info == 'topartistsnearevents':
-        artists = LocalDB.local_db.get_artists()
+        artists = local_db.get_artists()
         import BandsInTown
         return BandsInTown.get_near_events(artists[0:49])
     elif info == 'youtubesearch':
@@ -252,7 +252,7 @@ def start_info_actions(info, params):
                 addon.set_global('favourite.1.name', favs[-1]["Label"])
         return favs
     elif info == 'similarlocalmovies' and "dbid" in params:
-        return LocalDB.local_db.get_similar_movies(params["dbid"])
+        return local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
         return Utils.get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
     # ACTIONS
@@ -261,7 +261,7 @@ def start_info_actions(info, params):
                                   succeeded=False,
                                   listitem=xbmcgui.ListItem())
     if info in ['playmovie', 'playepisode', 'playmusicvideo', 'playalbum', 'playsong']:
-        KodiJson.play_media(media_type=info.replace("play", ""),
+        kodijson.play_media(media_type=info.replace("play", ""),
                             dbid=params.get("dbid"),
                             resume=params.get("resume", "true"))
     elif info == "openinfodialog":
@@ -401,8 +401,8 @@ def start_info_actions(info, params):
                                              dbid=params.get("dbid"),
                                              name=params.get("name"))
         elif media_type == "tv" and params.get("dbid"):
-            tvdb_id = LocalDB.local_db.get_imdb_id(media_type="tvshow",
-                                                   dbid=params["dbid"])
+            tvdb_id = local_db.get_imdb_id(media_type="tvshow",
+                                           dbid=params["dbid"])
             tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
         else:
             return False
@@ -420,8 +420,8 @@ def start_info_actions(info, params):
         if params.get("id"):
             movie_id = params["id"]
         elif int(params.get("dbid", -1)) > 0:
-            movie_id = LocalDB.local_db.get_imdb_id(media_type="movie",
-                                                    dbid=params["dbid"])
+            movie_id = local_db.get_imdb_id(media_type="movie",
+                                            dbid=params["dbid"])
         elif params.get("imdb_id"):
             movie_id = tmdb.get_movie_tmdb_id(params["imdb_id"])
         else:

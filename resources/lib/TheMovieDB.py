@@ -9,14 +9,15 @@ import urllib
 import json
 from functools32 import lru_cache
 
-import xbmc
 import xbmcgui
 
-import KodiJson
+from kodi65 import kodijson
+from kodi65 import addon
+from kodi65 import selectdialog
+from kodi65.listitem import ListItem
+from kodi65.localdb import local_db
+
 import Utils
-import addon
-from LocalDB import local_db
-from WindowManager import wm
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
 POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]
@@ -56,32 +57,12 @@ genders = {1: addon.LANG(32095),
            2: addon.LANG(32094)}
 
 
-class SettingsMonitor(xbmc.Monitor):
-
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
-
-    def onSettingsChanged(self):
-        addon.reload_addon()
-        username = addon.setting("tmdb_username")
-        password = addon.setting("tmdb_password")
-        if username and password:
-            global Login
-            Login = LoginProvider(username=username,
-                                  password=password)
-        if wm.active_dialog:
-            wm.active_dialog.close()
-            wm.active_dialog.logged_in = Login.check_login(cache_days=0)
-            wm.active_dialog.doModal()
-
-
 class LoginProvider(object):
 
     def __init__(self, *args, **kwargs):
         self.session_id = None
         self.request_token = None
         self.account_id = None
-        self.monitor = SettingsMonitor()
         self.username = kwargs.get("username")
         self.password = kwargs.get("password")
 
@@ -165,7 +146,7 @@ def set_rating_prompt(media_type, media_id, dbid=None):
     if rating == -1:
         return False
     if dbid:
-        KodiJson.set_userrating(media_type, dbid, round((rating + 1) / 2))
+        kodijson.set_userrating(media_type, dbid, round((rating + 1) / 2))
     set_rating(media_type=media_type,
                media_id=media_id,
                rating=(float(rating) * 0.5) + 0.5)
@@ -322,8 +303,8 @@ def handle_movies(results, local_first=True, sortkey="year"):
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for movie in results:
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
-        item = Utils.ListItem(label=movie.get('title'),
-                              path=PLUGIN_BASE + path % movie.get("id"))
+        item = ListItem(label=movie.get('title'),
+                        path=PLUGIN_BASE + path % movie.get("id"))
         release_date = movie.get('release_date')
         item.set_infos({'title': movie.get('title'),
                         'originaltitle': movie.get('original_title', ""),
@@ -368,8 +349,8 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                 duration = "%i - %i" % (min(tv["episode_run_time"]), max(tv["episode_run_time"]))
             elif len(tv["episode_run_time"]) == 1:
                 duration = "%i" % (tv["episode_run_time"][0])
-        newtv = Utils.ListItem(label=tv.get('name'),
-                               path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
+        newtv = ListItem(label=tv.get('name'),
+                         path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
         newtv.set_infos({'originaltitle': tv.get('original_name', ""),
                          'title': tv.get('name'),
                          'duration': duration,
@@ -405,8 +386,8 @@ def handle_episodes(results):
         if not title:
             title = u"%s %s" % (addon.LANG(20359), item.get('episode_number'))
         listitem = {'label': title}
-        listitem = Utils.ListItem(label=title,
-                                  artwork=get_image_urls(still=item.get("still_path")))
+        listitem = ListItem(label=title,
+                            artwork=get_image_urls(still=item.get("still_path")))
         listitem.set_infos({'mediatype': "episode",
                             'title': title,
                             'aired': item.get('air_date'),
@@ -425,9 +406,9 @@ def handle_episodes(results):
 def handle_misc(results):
     listitems = []
     for item in results:
-        listitem = Utils.ListItem(label=Utils.clean_text(item.get('name')),
-                                  path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
-                                  artwork=get_image_urls(poster=item.get("poster_path")))
+        listitem = ListItem(label=Utils.clean_text(item.get('name')),
+                            path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
+                            artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'year': Utils.get_year(item.get('release_date')),
                             'premiered': item.get('release_date'),
                             'plot': Utils.clean_text(item.get('description'))})
@@ -447,9 +428,9 @@ def handle_seasons(results):
     listitems = []
     for item in results:
         season = item.get('season_number')
-        listitem = Utils.ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
-                                  properties={'id': item.get('id')},
-                                  artwork=get_image_urls(poster=item.get("poster_path")))
+        listitem = ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
+                            properties={'id': item.get('id')},
+                            artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'mediatype': "season",
                             'season': season,
                             'premiered': item.get('air_date'),
@@ -461,9 +442,9 @@ def handle_seasons(results):
 def handle_videos(results):
     listitems = []
     for item in results:
-        listitem = Utils.ListItem(label=item.get('name'),
-                                  size=item.get('size'),
-                                  artwork={'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
+        listitem = ListItem(label=item.get('name'),
+                            size=item.get('size'),
+                            artwork={'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
         listitem.set_properties({'iso_639_1': item.get('iso_639_1'),
                                  'type': item.get('type'),
                                  'key': item.get('key'),
@@ -477,10 +458,10 @@ def handle_videos(results):
 def handle_people(results):
     people = []
     for item in results:
-        person = Utils.ListItem(label=item['name'],
-                                path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']),
-                                infos={'mediatype': "artist"},
-                                artwork=get_image_urls(profile=item.get("profile_path")))
+        person = ListItem(label=item['name'],
+                          path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']),
+                          infos={'mediatype': "artist"},
+                          artwork=get_image_urls(profile=item.get("profile_path")))
         person.set_properties({'adult': item.get('adult'),
                                'alsoknownas': " / ".join(item.get('also_known_as', [])),
                                'biography': Utils.clean_text(item.get('biography')),
@@ -503,7 +484,7 @@ def handle_images(results):
     images = []
     for item in results:
         artwork = get_image_urls(poster=item.get("file_path"))
-        image = Utils.ListItem(artwork=artwork)
+        image = ListItem(artwork=artwork)
         image.set_properties({'aspectratio': item['aspect_ratio'],
                               'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
@@ -520,8 +501,8 @@ def handle_images(results):
 def handle_companies(results):
     companies = []
     for item in results:
-        company = Utils.ListItem(label=item['name'],
-                                 infos={'plot': item['description']})
+        company = ListItem(label=item['name'],
+                           infos={'plot': item['description']})
         company.set_properties({'parent_company': item['parent_company'],
                                 'headquarters': item['headquarters'],
                                 'homepage': item['homepage'],
@@ -566,8 +547,7 @@ def get_person_info(person_label, skip_dialog=False):
         return False
     people = [i for i in response["results"] if i["name"] == person_label]
     if len(people) > 1 and not skip_dialog:
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
-        listitem, index = wm.open_selectdialog(listitems=handle_people(people))
+        listitem, index = selectdialog.open(listitems=handle_people(people))
         if index >= 0:
             return people[index]
     elif people:
@@ -727,8 +707,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     elif info['releases']['countries']:
         mpaa = info['releases']['countries'][0]['certification']
     movie_set = info.get("belongs_to_collection")
-    movie = Utils.ListItem(label=info.get('title'),
-                           path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
+    movie = ListItem(label=info.get('title'),
+                     path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
     movie.set_infos({'title': info.get('title'),
                      'Tagline': info.get('tagline'),
                      'duration': info.get('runtime'),
@@ -813,8 +793,8 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         mpaa = mpaas[0]['rating']
     else:
         mpaa = ""
-    tvshow = Utils.ListItem(label=info.get('name'),
-                            path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
+    tvshow = ListItem(label=info.get('name'),
+                      path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
     tvshow.set_infos({'title': info.get('name'),
                       'tvshowtitle': info.get('name'),
                       'originaltitle': info.get('original_name', ""),
@@ -891,7 +871,7 @@ def extended_season_info(tvshow_id, season_number):
         title = addon.LANG(20381)
     else:
         title = "%s %s" % (addon.LANG(20373), season_number)
-    season = Utils.ListItem(label=title)
+    season = ListItem(label=title)
     season.set_infos({'plot': Utils.clean_text(response["overview"]),
                       'tvshowtitle': tvshow.get('name'),
                       'title': title,
@@ -947,9 +927,9 @@ def extended_actor_info(actor_id):
                  "tvshow_crew_roles": handle_tvshows(response["tv_credits"]["crew"]),
                  "tagged_images": handle_images(response["tagged_images"]["results"]) if "tagged_images" in response else [],
                  "images": handle_images(response["images"]["profiles"])}
-    info = Utils.ListItem(label=response['name'],
-                          path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']),
-                          infos={'mediatype': "artist"})
+    info = ListItem(label=response['name'],
+                    path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']),
+                    infos={'mediatype': "artist"})
     info.set_properties({'adult': response.get('adult'),
                          'alsoknownas': " / ".join(response.get('also_known_as', [])),
                          'biography': Utils.clean_text(response.get('biography')),
