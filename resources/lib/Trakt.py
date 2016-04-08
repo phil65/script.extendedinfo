@@ -42,7 +42,7 @@ def get_episodes(content):
             show = Utils.ListItem(label=label,
                                   path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"])
             show.set_infos({'title': title,
-                            'premiered': episode["episode"]["first_aired"],
+                            'aired': episode["episode"]["first_aired"],
                             'season': episode["episode"]["season"],
                             'episode': episode["episode"]["number"],
                             'tvshowtitle': episode["show"]["title"],

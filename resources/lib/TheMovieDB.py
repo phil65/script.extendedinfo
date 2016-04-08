@@ -417,7 +417,7 @@ def handle_episodes(results):
                                   artwork=get_image_urls(still=item.get("still_path")))
         listitem.set_infos({'mediatype': "episode",
                             'title': title,
-                            'premiered': item.get('air_date'),
+                            'aired': item.get('air_date'),
                             'episode': item.get('episode_number'),
                             'season': item.get('season_number'),
                             'userrating': item.get('rating'),
