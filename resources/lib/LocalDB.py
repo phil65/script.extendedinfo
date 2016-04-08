@@ -177,7 +177,9 @@ class LocalDB(object):
                             'writer': " / ".join(movie['writer']),
                             'mediatype': "movie",
                             'set': movie.get("set"),
+                            'playcount': movie.get("playcount"),
                             'setid': movie.get("setid"),
+                            'top250': movie.get("top250"),
                             'imdbnumber': movie.get("imdbnumber"),
                             'userrating': movie.get('userrating'),
                             'trailer': trailer,
@@ -189,6 +191,7 @@ class LocalDB(object):
                             'plot': movie.get('plot'),
                             'originaltitle': movie.get('originaltitle')})
         db_movie.set_properties({'imdb_id': movie.get('imdbnumber'),
+                                 'showlink': " / ".join(movie['showlink']),
                                  'percentplayed': played,
                                  'resume': resume,
                                  'dbid': str(movie['movieid'])})
