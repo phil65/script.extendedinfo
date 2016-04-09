@@ -170,9 +170,11 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating(self):
-            if tmdb.set_rating_prompt(media_type="tv",
-                                      media_id=self.info.get_property("id"),
-                                      dbid=self.info.get_property("dbid")):
+            rating = Utils.get_rating_from_selectdialog()
+            if tmdb.set_rating(media_type="tv",
+                               media_id=self.info.get_property("id"),
+                               rating=rating,
+                               dbid=self.info.get_property("dbid")):
                 self.update_states()
 
         @ch.click(ID_BUTTON_OPENLIST)

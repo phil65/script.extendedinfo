@@ -406,9 +406,11 @@ def start_info_actions(info, params):
             tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
         else:
             return False
-        tmdb.set_rating_prompt(media_type=media_type,
-                               media_id=tmdb_id,
-                               dbid=params.get("dbid"))
+        rating = Utils.get_rating_from_selectdialog()
+        tmdb.set_rating(media_type=media_type,
+                        media_id=tmdb_id,
+                        rating=rating,
+                        dbid=params.get("dbid"))
     elif info == 'action':
         for builtin in params.get("id", "").split("$$"):
             xbmc.executebuiltin(builtin)

@@ -72,10 +72,12 @@ def get_window(window_type):
 
         @ch.click(ID_CONTROL_SETRATING)
         def set_rating_dialog(self):
-            if tmdb.set_rating_prompt(media_type="episode",
-                                      media_id=[self.tvshow_id,
-                                                self.info.get_info("season"),
-                                                self.info.get_info("episode")]):
+            rating = Utils.get_rating_from_selectdialog()
+            if tmdb.set_rating(media_type="episode",
+                               media_id=[self.tvshow_id,
+                                         self.info.get_info("season"),
+                                         self.info.get_info("episode")],
+                               rating=rating):
                 self.update_states()
 
         @ch.click(ID_CONTROL_RATINGLISTS)

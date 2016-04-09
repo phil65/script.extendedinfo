@@ -138,27 +138,20 @@ class LoginProvider(object):
             return response["request_token"]
 
 
-def set_rating_prompt(media_type, media_id, dbid=None):
-    if not media_type or not media_id:
-        return False
-    rating = xbmcgui.Dialog().select(heading=addon.LANG(32129),
-                                     list=[str(float(i * 0.5)) for i in xrange(1, 21)])
-    if rating == -1:
-        return False
-    if dbid:
-        kodijson.set_userrating(media_type, dbid, round((rating + 1) / 2))
-    set_rating(media_type=media_type,
-               media_id=media_id,
-               rating=(float(rating) * 0.5) + 0.5)
-    return True
-
-
-def set_rating(media_type, media_id, rating):
+def set_rating(media_type, media_id, rating, dbid=None):
     '''
     media_type: movie, tv or episode
     media_id: tmdb_id / episode ident array
     rating: ratung value (0.5-10.0, 0.5 steps)
+    dbid: dbid for syncing userrating of db item
     '''
+    if not media_type or not media_id:
+        return False
+    if rating == -1:
+        return False
+    if dbid:
+        kodijson.set_userrating(media_type, dbid, round((rating + 1) / 2))
+    rating = float(rating) * 0.5 + 0.5
     params = {}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
@@ -176,6 +169,7 @@ def set_rating(media_type, media_id, rating):
                            values={"value": "%.1f" % rating})
     if results:
         Utils.notify(addon.NAME, results["status_message"])
+        return True
 
 
 def send_request(url, params, values, delete=False):
