@@ -20,6 +20,7 @@ import Utils
 from kodi65.localdb import local_db
 from kodi65 import addon
 from kodi65 import kodijson
+from kodi65 import favs
 import YouTube
 import Trakt
 import RottenTomatoes
@@ -244,13 +245,13 @@ def start_info_actions(info, params):
             return YouTube.get_playlist_videos(playlists["uploads"])
     elif info == 'favourites':
         if params.get("id"):
-            favs = Utils.get_favs_by_type(params["id"])
+            items = favs.get_favs_by_type(params["id"])
         else:
-            favs = Utils.get_favs()
-            addon.set_global('favourite.count', str(len(favs)))
-            if favs:
-                addon.set_global('favourite.1.name', favs[-1]["Label"])
-        return favs
+            items = favs.get_favs()
+            addon.set_global('favourite.count', str(len(items)))
+            if items:
+                addon.set_global('favourite.1.name', items[-1]["label"])
+        return items
     elif info == 'similarlocalmovies' and "dbid" in params:
         return local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':

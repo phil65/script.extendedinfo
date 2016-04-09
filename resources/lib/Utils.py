@@ -281,67 +281,6 @@ def get_file(url):
         return ""
 
 
-def get_favs_by_type(fav_type):
-    """
-    returns dict list containing favourites with type *fav_type
-    """
-    return [fav for fav in get_favs() if fav["Type"] == fav_type]
-
-
-def get_fav_path(fav):
-    if fav["type"] == "media":
-        return "PlayMedia(%s)" % (fav["path"])
-    elif fav["type"] == "script":
-        return "RunScript(%s)" % (fav["path"])
-    elif "window" in fav and "windowparameter" in fav:
-        return "ActivateWindow(%s,%s)" % (fav["window"], fav["windowparameter"])
-    else:
-        log("error parsing favs")
-
-
-def get_favs():
-    """
-    returns dict list containing favourites
-    """
-    items = []
-    data = kodijson.get_json(method="Favourites.GetFavourites",
-                             params={"type": None, "properties": ["path", "thumbnail", "window", "windowparameter"]})
-    if "result" not in data or data["result"]["limits"]["total"] == 0:
-        return []
-    for fav in data["result"]["favourites"]:
-        path = get_fav_path(fav)
-        items.append({'label': fav["title"],
-                      'thumb': fav["thumbnail"],
-                      'type': fav["type"],
-                      'builtin': path,
-                      'path': "plugin://script.extendedinfo/?info=action&&id=" + path})
-    return items
-
-
-def get_icon_panel(number):
-    """
-    get icon panel with index *number, returns dict list based on skin strings
-    """
-    items = []
-    offset = number * 5 - 5
-    for i in xrange(1, 6):
-        infopanel_path = get_skin_string("IconPanelItem%i.Path" % (i + offset))
-        items.append({'label': get_skin_string("IconPanelItem%i.Label" % (i + offset)),
-                      'path': "plugin://script.extendedinfo/?info=action&&id=" + infopanel_path,
-                      'thumb': get_skin_string("IconPanelItem%i.Icon" % (i + offset)),
-                      'id': "IconPanelitem%i" % (i + offset),
-                      'Type': get_skin_string("IconPanelItem%i.Type" % (i + offset))})
-    return items
-
-
-def get_skin_string(name):
-    return xbmc.getInfoLabel("Skin.String(%s)").decode("utf-8")
-
-
-def set_skin_string(name, value):
-    xbmc.executebuiltin("Skin.SetString(%s, %s)" % (name, value))
-
-
 def log(txt):
     if isinstance(txt, str):
         txt = txt.decode("utf-8", 'ignore')
