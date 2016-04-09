@@ -1,3 +1,7 @@
+v5.2.0
+- moved lot of code to kodi65 library
+- fixes, fixes, fixes
+
 v5.1.0
 - code rework
 - added several new plugin nodes
