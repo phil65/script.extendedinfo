@@ -19,7 +19,6 @@ import xbmcgui
 import xbmcvfs
 
 from kodi65 import addon
-from kodi65 import kodijson
 
 
 def run_async(func):
