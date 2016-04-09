@@ -41,7 +41,7 @@ def get_window(window_type):
                                               episode=kwargs.get('episode'))
             if not data:
                 return None
-            self.info, self.data, self.account_states = data
+            self.info, self.data, self.states = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"] + self.data["guest_stars"]),
                               (ID_LIST_CREW, self.data["crew"]),
@@ -50,8 +50,8 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()
-            super(DialogEpisodeInfo, self).update_states()
             self.get_youtube_vids("%s tv" % (self.info.get_info('title')))
+            super(DialogEpisodeInfo, self).update_states()
 
         def onClick(self, control_id):
             super(DialogEpisodeInfo, self).onClick(control_id)
@@ -95,10 +95,10 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
-                                                                    season=self.info.get_info("season"),
-                                                                    episode=self.info.get_info("episode"),
-                                                                    cache_time=0)
+            _, __, self.states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
+                                                            season=self.info.get_info("season"),
+                                                            episode=self.info.get_info("episode"),
+                                                            cache_time=0)
             super(DialogEpisodeInfo, self).update_states()
 
     return DialogEpisodeInfo

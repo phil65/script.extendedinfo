@@ -59,7 +59,7 @@ def get_window(window_type):
                                             dbid=self.dbid)
             if not data:
                 return None
-            self.info, self.data, self.account_states = data
+            self.info, self.data, self.states = data
             sets_thread = SetItemsThread(self.info.get_property("set_id"))
             self.omdb_thread = Utils.FunctionThread(function=omdb.get_movie_info,
                                                     param=self.info.get_property("imdb_id"))
@@ -254,7 +254,7 @@ def get_window(window_type):
         def change_list_status(self):
             tmdb.change_fav_status(media_id=self.info.get_property("id"),
                                    media_type="movie",
-                                   status=str(not bool(self.account_states["favorite"])).lower())
+                                   status=str(not bool(self.states["favorite"])).lower())
             self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
@@ -311,7 +311,7 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
+            _, __, self.states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
                                                                   dbid=self.dbid,
                                                                   cache_time=0)
             super(DialogMovieInfo, self).update_states()

@@ -49,7 +49,7 @@ def get_window(window_type):
                                              dbid=self.dbid)
             if not data:
                 return None
-            self.info, self.data, self.account_states = data
+            self.info, self.data, self.states = data
             if "dbid" not in self.info.get_properties():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
@@ -192,7 +192,7 @@ def get_window(window_type):
         def toggle_fav_status(self):
             tmdb.change_fav_status(media_id=self.info.get_property("id"),
                                    media_type="tv",
-                                   status=str(not bool(self.account_states["favorite"])).lower())
+                                   status=str(not bool(self.states["favorite"])).lower())
             self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
@@ -214,9 +214,9 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
-                                                                   cache_time=0,
-                                                                   dbid=self.dbid)
+            _, __, self.states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
+                                                           cache_time=0,
+                                                           dbid=self.dbid)
             super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo

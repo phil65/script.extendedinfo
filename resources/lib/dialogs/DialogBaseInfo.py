@@ -165,9 +165,9 @@ class DialogBaseInfo(object):
                                 tvshow_id=info["media"]["id"])
 
     def update_states(self):
-        if not self.account_states:
+        if not self.states:
             return None
-        Utils.pass_dict_to_skin(data=tmdb.get_account_props(self.account_states),
+        Utils.pass_dict_to_skin(data=tmdb.get_account_props(self.states),
                                 window_id=self.window_id)
 
     @ch.action("contextmenu", "*")
