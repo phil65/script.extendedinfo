@@ -744,7 +744,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     releases = merge_with_cert_desc(handle_misc(info["releases"]["countries"]), "movie")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
-                 "lists": handle_misc(info["lists"]["results"]),
+                 "lists": sort_lists(handle_misc(info["lists"]["results"])),
                  "studios": handle_misc(info["production_companies"]),
                  "releases": releases,
                  "crew": handle_people(info["credits"]["crew"]),
@@ -1168,6 +1168,18 @@ def get_person_movies(person_id):
     if "crew" not in response:
         return []
     return handle_movies(response["crew"])
+
+
+def sort_lists(self, lists):
+    if not Login.check_login():
+        return lists
+    account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
+    ids = [i["id"] for i in account_list]
+    own_lists = [i for i in lists if i.get_property("id") in ids]
+    for item in own_lists:
+        item.set_property("account", "True")
+    misc_lists = [i for i in lists if i.get_property("id") not in ids]
+    return own_lists + misc_lists
 
 
 def search_media(media_name=None, year='', media_type="movie", cache_days=1):

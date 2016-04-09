@@ -68,7 +68,6 @@ def get_window(window_type):
             self.info.update_properties(ImageTools.blur(self.info.get_art("thumb")))
             if "dbid" not in self.info.get_infos():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
-            lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})
@@ -77,7 +76,7 @@ def get_window(window_type):
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_SIMILAR, self.data["similar"]),
                               (ID_LIST_SEASONS, sets_thread.listitems),
-                              (ID_LIST_LISTS, lists),
+                              (ID_LIST_LISTS, self.data["lists"]),
                               (ID_LIST_STUDIOS, self.data["studios"]),
                               (ID_LIST_CERTS, self.data["releases"]),
                               (ID_LIST_CREW, Utils.merge_dict_lists(self.data["crew"])),
@@ -295,17 +294,6 @@ def get_window(window_type):
                 return None
             for item in options[selection][1].split("||"):
                 xbmc.executebuiltin(item)
-
-        def sort_lists(self, lists):
-            if not self.logged_in:
-                return lists
-            account_list = tmdb.get_account_lists(10)  # use caching here, forceupdate everywhere else
-            ids = [i["id"] for i in account_list]
-            own_lists = [i for i in lists if i.get_property("id") in ids]
-            for item in own_lists:
-                item.set_property("account", "True")
-            misc_lists = [i for i in lists if i.get_property("id") not in ids]
-            return own_lists + misc_lists
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
