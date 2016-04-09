@@ -71,6 +71,7 @@ def get_window(window_type):
             lists = self.sort_lists(self.data["lists"])
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
+            self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})
             set_ids = [item.get_property("id") for item in sets_thread.listitems]
             self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
@@ -92,9 +93,6 @@ def get_window(window_type):
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info.label,
                                                     self.info.get_info("year")))
-            Utils.pass_dict_to_skin(data=self.setinfo,
-                                    prefix="set.",
-                                    window_id=self.window_id)
             self.join_omdb_async()
 
         def onClick(self, control_id):
@@ -312,8 +310,8 @@ def get_window(window_type):
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
-                                                                  dbid=self.dbid,
-                                                                  cache_time=0)
+                                                          dbid=self.dbid,
+                                                          cache_time=0)
             super(DialogMovieInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
