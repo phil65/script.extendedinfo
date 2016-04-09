@@ -1067,19 +1067,6 @@ def get_full_movie(movie_id):
                     cache_days=30)
 
 
-def get_keywords(movie_id):
-    '''
-    get dict list containing movie keywords
-    '''
-    response = get_full_movie(movie_id)
-    keywords = []
-    if "keywords" in response:
-        for keyword in response["keywords"]["keywords"]:
-            keywords.append({'id': keyword.get('id'),
-                            'label': keyword['name']})
-    return keywords
-
-
 def get_similar_movies(movie_id):
     '''
     get dict list containing movies similar to *movie_id
