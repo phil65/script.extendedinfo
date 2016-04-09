@@ -1157,7 +1157,7 @@ def get_person_movies(person_id):
     return handle_movies(response["crew"])
 
 
-def sort_lists(self, lists):
+def sort_lists(lists):
     if not Login.check_login():
         return lists
     account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
