@@ -93,7 +93,6 @@ def get_window(window_type):
                             value=d.isoformat('T')[:-7] + "Z",
                             typelabel=addon.LANG(172),
                             label=str(labels[index]))
-            self.update()
 
         @ch.click(5003)
         def set_language_filter(self):
@@ -106,7 +105,6 @@ def get_window(window_type):
                             value=labels[index],
                             typelabel=addon.LANG(248),
                             label=str(labels[index]))
-            self.update()
 
         @ch.click(5006)
         def set_dimension_filter(self):
@@ -119,7 +117,6 @@ def get_window(window_type):
                                 value=values[index],
                                 typelabel="Dimensions",
                                 label=str(labels[index]))
-                self.update()
 
         @ch.click(5008)
         def set_duration_filter(self):
@@ -132,7 +129,6 @@ def get_window(window_type):
                                 value=values[index],
                                 typelabel=addon.LANG(180),
                                 label=str(labels[index]))
-                self.update()
 
         @ch.click(5009)
         def set_caption_filter(self):
@@ -145,7 +141,6 @@ def get_window(window_type):
                                 value=values[index],
                                 typelabel=addon.LANG(287),
                                 label=str(labels[index]))
-                self.update()
 
         @ch.click(5012)
         def set_definition_filter(self):
@@ -158,13 +153,10 @@ def get_window(window_type):
                                 value=values[index],
                                 typelabel=addon.LANG(169),
                                 label=str(labels[index]))
-                self.update()
 
         @ch.click(5007)
         def toggle_type(self):
             self.filters = []
-            self.page = 1
-            self.mode = "filter"
             types = {"video": "playlist",
                      "playlist": "channel",
                      "channel": "video"}
@@ -173,7 +165,7 @@ def get_window(window_type):
             if self.sort not in SORTS[self.type].keys():
                 self.sort = "relevance"
                 self.sort_label = addon.LANG(32060)
-            self.update()
+            self.reset()
 
         def update_ui(self):
             self.setProperty("Type", TRANSLATIONS[self.type])
@@ -219,8 +211,6 @@ def get_window(window_type):
         def add_filter(self, **kwargs):
             super(DialogYoutubeList, self).add_filter(force_overwrite=True,
                                                       **kwargs)
-            self.mode = "filter"
-            self.page = 1
 
         def fetch_data(self, force=False):
             self.set_filter_label()

@@ -75,11 +75,6 @@ def get_window(window_type):
             self.getControl(5009).setVisible(self.type != "tv")
             self.getControl(5010).setVisible(self.type != "tv")
 
-        def reset(self, mode="filter"):
-            self.page = 1
-            self.mode = mode
-            self.update()
-
         @ch.action("contextmenu", C_MAIN_LIST)
         def context_menu(self):
             item_id = self.listitem.getProperty("id")
@@ -148,14 +143,13 @@ def get_window(window_type):
                                             list=listitems)
             if index == -1:
                 return None
+            self.sort = sort_strings[index]
+            self.sort_label = listitems[index]
             if sort_strings[index] == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
                                 typelabel="%s (%s)" % (addon.LANG(32111), addon.LANG(21406)),
                                 label="10")
-            self.sort = sort_strings[index]
-            self.sort_label = listitems[index]
-            self.update()
 
         def add_filter(self, **kwargs):
             super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
@@ -227,7 +221,6 @@ def get_window(window_type):
                             value=str(ids[index]),
                             typelabel=addon.LANG(135),
                             label=labels[index])
-            self.reset()
 
         @ch.click(5012)
         def set_vote_count_filter(self):
@@ -244,7 +237,6 @@ def get_window(window_type):
                                 value=result,
                                 typelabel=addon.LANG(32111),
                                 label=" < " + result if ret else " > " + result)
-                self.reset()
 
         @ch.click(5003)
         def set_year_filter(self):
@@ -274,7 +266,6 @@ def get_window(window_type):
                                 value=value,
                                 typelabel=addon.LANG(345),
                                 label=label)
-            self.reset()
 
         @ch.click(5008)
         def set_actor_filter(self):
@@ -289,7 +280,6 @@ def get_window(window_type):
                             value=str(response["id"]),
                             typelabel=addon.LANG(32156),
                             label=response["name"])
-            self.reset()
 
         @ch.click(C_MAIN_LIST)
         def open_media(self):
@@ -328,7 +318,6 @@ def get_window(window_type):
                             value=str(response["id"]),
                             typelabel=addon.LANG(20388),
                             label=response["name"])
-            self.reset()
 
         @ch.click(5009)
         def set_keyword_filter(self):
@@ -350,7 +339,6 @@ def get_window(window_type):
                             value=str(keyword["id"]),
                             typelabel=addon.LANG(32114),
                             label=keyword["name"])
-            self.reset()
 
         @ch.click(5006)
         def set_certification_filter(self):
@@ -370,12 +358,12 @@ def get_window(window_type):
             self.add_filter(key="certification_country",
                             value=country,
                             typelabel=addon.LANG(32153),
-                            label=country)
+                            label=country,
+                            reset=False)
             self.add_filter(key="certification",
                             value=cert,
                             typelabel=addon.LANG(32127),
                             label=cert)
-            self.reset()
 
         def fetch_data(self, force=False):  # TODO: rewrite
             sort_by = self.sort + "." + self.order

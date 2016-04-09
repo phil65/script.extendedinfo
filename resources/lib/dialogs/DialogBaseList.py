@@ -168,6 +168,11 @@ class DialogBaseList(object):
         self.setProperty("ArrowUp", "True" if self.page > 1 else "")
         self.setProperty("Order_Label", addon.LANG(584) if self.order == "asc" else addon.LANG(585))
 
+    def reset(self, mode="filter"):
+        self.page = 1
+        self.mode = mode
+        self.update()
+
     def go_to_next_page(self):
         self.get_column()
         if self.page < self.total_pages:
@@ -193,7 +198,7 @@ class DialogBaseList(object):
         self.update_content(force_update=force_update)
         self.update_ui()
 
-    def add_filter(self, key, value, typelabel, label, force_overwrite=False):
+    def add_filter(self, key, value, typelabel, label, force_overwrite=False, reset=True):
         if not value:
             return False
         new_filter = {"id": value,
@@ -224,3 +229,5 @@ class DialogBaseList(object):
         else:
             self.filters[index]["id"] += "|%s" % value
             self.filters[index]["label"] += "|%s" % label
+        if reset:
+            self.reset()
