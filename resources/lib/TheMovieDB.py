@@ -741,11 +741,12 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie = local_db.merge_with_local("movie", [movie])[0]
     # hack to get tmdb rating instead of local one
     movie.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
+    releases = merge_with_cert_desc(handle_misc(info["releases"]["countries"]), "movie")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
                  "lists": handle_misc(info["lists"]["results"]),
                  "studios": handle_misc(info["production_companies"]),
-                 "releases": handle_misc(info["releases"]["countries"]),
+                 "releases": releases,
                  "crew": handle_people(info["credits"]["crew"]),
                  "genres": handle_misc(info["genres"]),
                  "keywords": handle_misc(info["keywords"]["keywords"]),
@@ -827,11 +828,12 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     # hack to get tmdb rating instead of local one
     tvshow.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
+    certifications = merge_with_cert_desc(handle_misc(info["content_ratings"]["results"]), "tv")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
                  "studios": handle_misc(info["production_companies"]),
                  "networks": handle_misc(info["networks"]),
-                 "certifications": handle_misc(info["content_ratings"]["results"]),
+                 "certifications": certifications,
                  "crew": handle_people(info["credits"]["crew"]),
                  "genres": handle_misc(info["genres"]),
                  "keywords": handle_misc(info["keywords"]["results"]),

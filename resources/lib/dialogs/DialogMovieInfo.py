@@ -78,7 +78,7 @@ def get_window(window_type):
                               (ID_LIST_SEASONS, sets_thread.listitems),
                               (ID_LIST_LISTS, lists),
                               (ID_LIST_STUDIOS, self.data["studios"]),
-                              (ID_LIST_CERTS, tmdb.merge_with_cert_desc(self.data["releases"], "movie")),
+                              (ID_LIST_CERTS, self.data["releases"]),
                               (ID_LIST_CREW, Utils.merge_dict_lists(self.data["crew"])),
                               (ID_LIST_GENRES, self.data["genres"]),
                               (ID_LIST_KEYWORDS, self.data["keywords"]),
