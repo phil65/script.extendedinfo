@@ -101,9 +101,7 @@ class DialogBaseList(object):
                 del self.filters[index]
         else:
             self.filters = []
-        self.page = 1
-        self.mode = "filter"
-        self.update()
+        self.reset()
 
     @ch.click(C_BUTTON_SEARCH)
     def open_search(self):
@@ -126,11 +124,8 @@ class DialogBaseList(object):
         if not label:
             return None
         self.search_str = label
-        self.mode = "search"
         self.filters = []
-        self.page = 1
-        self.update_content()
-        self.update_ui()
+        self.reset("search")
 
     def set_filter_label(self):
         filters = []
