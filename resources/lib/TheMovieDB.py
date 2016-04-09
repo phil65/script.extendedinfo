@@ -9,8 +9,6 @@ import urllib
 import json
 from functools32 import lru_cache
 
-import xbmcgui
-
 from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import selectdialog
@@ -551,8 +549,8 @@ def get_person_info(person_label, skip_dialog=False):
     return False
 
 
-def get_keyword_id(keyword):
-    params = {"query": keyword,
+def get_keywords(search_label):
+    params = {"query": search_label,
               "include_adult": include_adult}
     response = get_data(url="search/keyword",
                         params=params,
@@ -560,13 +558,7 @@ def get_keyword_id(keyword):
     if not response or not response.get("results"):
         Utils.log("could not find Keyword ID")
         return False
-    if len(response["results"]) > 1:
-        names = [item["name"] for item in response["results"]]
-        selection = xbmcgui.Dialog().select(addon.LANG(32114), names)
-        if selection > -1:
-            return response["results"][selection]
-    elif response["results"]:
-        return response["results"][0]
+    return response["results"]
 
 
 def get_set_id(set_name):

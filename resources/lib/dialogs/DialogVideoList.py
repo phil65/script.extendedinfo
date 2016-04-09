@@ -347,13 +347,20 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
                 return None
-            response = tmdb.get_keyword_id(result)
-            if not response:
+            keywords = tmdb.get_keyword_id(result)
+            keyword = None
+            if len(keywords) > 1:
+                names = [item["name"] for item in keywords]
+                selection = xbmcgui.Dialog().select(addon.LANG(32114), names)
+                keyword = keywords[selection] if selection > -1 else None
+            elif keywords:
+                keyword = keywords[0]
+            if not keywords:
                 return None
             self.add_filter(key="with_keywords",
-                            value=str(response["id"]),
+                            value=str(keyword["id"]),
                             typelabel=addon.LANG(32114),
-                            label=response["name"])
+                            label=keyword["name"])
             self.mode = "filter"
             self.page = 1
             self.update()
