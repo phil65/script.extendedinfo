@@ -756,3 +756,7 @@ msgstr ""
 msgctxt "#32169"
 msgid "Rate TV show"
 msgstr ""
+
+msgctxt "#32170"
+msgid "Add to Trakt Watchlist"
+msgstr ""

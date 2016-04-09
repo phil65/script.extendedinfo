@@ -286,7 +286,8 @@ def get_window(window_type):
                             [addon.LANG(32101), call % "mode=custom,extrathumbs"],
                             [addon.LANG(32100), call % "mode=custom"]]
             else:
-                options += [[addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % addon.LANG(32059)]]
+                options += [[addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % addon.LANG(32059)],
+                            [addon.LANG(32170), "RunPlugin(plugin://plugin.video.trakt_list_manager/watchlist/movies/add?imdb_id=" + imdb_id + ")"]]
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
                 options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + movie_id + ")"])
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
@@ -310,7 +311,9 @@ def get_window(window_type):
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.account_states = tmdb.extended_movie_info(self.info.get_property("id"), self.dbid, 0)
+            _, __, self.account_states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
+                                                                  dbid=self.dbid,
+                                                                  cache_time=0)
             super(DialogMovieInfo, self).update_states()
 
         def remove_list_dialog(self, account_lists):
