@@ -52,8 +52,6 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids("%s %s tv" % (self.info["tvshowtitle"], self.info['title']))
             super(DialogSeasonInfo, self).onInit()
-            self.info.to_windowprops(window_id=self.window_id)
-            self.fill_lists()
 
         def onClick(self, control_id):
             super(DialogSeasonInfo, self).onClick(control_id)

@@ -50,10 +50,8 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()
-            self.info.to_windowprops(window_id=self.window_id)
             super(DialogEpisodeInfo, self).update_states()
             self.get_youtube_vids("%s tv" % (self.info.get_info('title')))
-            self.fill_lists()
 
         def onClick(self, control_id):
             super(DialogEpisodeInfo, self).onClick(control_id)

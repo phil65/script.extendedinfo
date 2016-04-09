@@ -89,11 +89,9 @@ def get_window(window_type):
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()
-            self.info.to_windowprops(window_id=self.window_id)
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info.label,
                                                     self.info.get_info("year")))
-            self.fill_lists()
             Utils.pass_dict_to_skin(data=self.setinfo,
                                     prefix="set.",
                                     window_id=self.window_id)

@@ -38,9 +38,15 @@ class DialogBaseInfo(object):
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
+        self.info.to_windowprops(window_id=self.window_id)
+        for container_id, listitems in self.listitems:
+            try:
+                self.getControl(container_id).reset()
+                self.getControl(container_id).addItems([i.get_listitem() for i in listitems])
+            except Exception:
+                Utils.log("Notice: No container with id %i available" % container_id)
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
         addon.set_global("infobackground", self.info.get_art('fanart'))
-        Utils.notify(self.info.get_art('fanart'), self.info.get_art('fanart'))
         self.setProperty("type", self.type)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 
@@ -68,14 +74,6 @@ class DialogBaseInfo(object):
         xbmc.sleep(200)
         self.clearProperty("Bounce.%s" % identifier)
         self.bouncing = False
-
-    def fill_lists(self):
-        for container_id, listitems in self.listitems:
-            try:
-                self.getControl(container_id).reset()
-                self.getControl(container_id).addItems([i.get_listitem() for i in listitems])
-            except Exception:
-                Utils.log("Notice: No container with id %i available" % container_id)
 
     @ch.click(ID_LIST_IMAGES)
     @ch.click(ID_LIST_BACKDROPS)

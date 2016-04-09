@@ -49,8 +49,6 @@ def get_window(window_type):
         def onInit(self):
             self.get_youtube_vids(self.info.label)
             super(DialogActorInfo, self).onInit()
-            self.info.to_windowprops(window_id=self.window_id)
-            self.fill_lists()
 
         def onClick(self, control_id):
             super(DialogActorInfo, self).onClick(control_id)
