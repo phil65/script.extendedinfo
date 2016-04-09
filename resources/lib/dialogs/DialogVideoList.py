@@ -75,6 +75,11 @@ def get_window(window_type):
             self.getControl(5009).setVisible(self.type != "tv")
             self.getControl(5010).setVisible(self.type != "tv")
 
+        def reset(self, mode="filter"):
+            self.page = 1
+            self.mode = mode
+            self.update()
+
         @ch.action("contextmenu", C_MAIN_LIST)
         def context_menu(self):
             item_id = self.listitem.getProperty("id")
@@ -164,10 +169,8 @@ def get_window(window_type):
         @ch.click(5007)
         def toggle_media_type(self):
             self.filters = []
-            self.page = 1
-            self.mode = "filter"
             self.type = "movie" if self.type == "tv" else "tv"
-            self.update()
+            self.reset()
 
         @ch.click(C_BUTTON_ACCOUNT)
         def open_account_menu(self):
@@ -189,19 +192,15 @@ def get_window(window_type):
             if index == -1:
                 pass
             elif index == 0:
-                self.mode = "rating"
                 self.sort = "created_at"
                 self.sort_label = addon.LANG(32157)
                 self.filters = []
-                self.page = 1
-                self.update()
+                self.reset("rating")
             elif index == 1:
-                self.mode = "favorites"
                 self.sort = "created_at"
                 self.sort_label = addon.LANG(32157)
                 self.filters = []
-                self.page = 1
-                self.update()
+                self.reset("favorites")
             else:
                 self.close()
                 dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon.NAME, addon.PATH,
@@ -228,9 +227,7 @@ def get_window(window_type):
                             value=str(ids[index]),
                             typelabel=addon.LANG(135),
                             label=labels[index])
-            self.mode = "filter"
-            self.page = 1
-            self.update()
+            self.reset()
 
         @ch.click(5012)
         def set_vote_count_filter(self):
@@ -247,9 +244,7 @@ def get_window(window_type):
                                 value=result,
                                 typelabel=addon.LANG(32111),
                                 label=" < " + result if ret else " > " + result)
-                self.mode = "filter"
-                self.page = 1
-                self.update()
+                self.reset()
 
         @ch.click(5003)
         def set_year_filter(self):
@@ -279,9 +274,7 @@ def get_window(window_type):
                                 value=value,
                                 typelabel=addon.LANG(345),
                                 label=label)
-            self.mode = "filter"
-            self.page = 1
-            self.update()
+            self.reset()
 
         @ch.click(5008)
         def set_actor_filter(self):
@@ -296,9 +289,7 @@ def get_window(window_type):
                             value=str(response["id"]),
                             typelabel=addon.LANG(32156),
                             label=response["name"])
-            self.mode = "filter"
-            self.page = 1
-            self.update()
+            self.reset()
 
         @ch.click(C_MAIN_LIST)
         def open_media(self):
@@ -337,9 +328,7 @@ def get_window(window_type):
                             value=str(response["id"]),
                             typelabel=addon.LANG(20388),
                             label=response["name"])
-            self.mode = "filter"
-            self.page = 1
-            self.update()
+            self.reset()
 
         @ch.click(5009)
         def set_keyword_filter(self):
@@ -361,9 +350,7 @@ def get_window(window_type):
                             value=str(keyword["id"]),
                             typelabel=addon.LANG(32114),
                             label=keyword["name"])
-            self.mode = "filter"
-            self.page = 1
-            self.update()
+            self.reset()
 
         @ch.click(5006)
         def set_certification_filter(self):
@@ -388,9 +375,7 @@ def get_window(window_type):
                             value=cert,
                             typelabel=addon.LANG(32127),
                             label=cert)
-            self.page = 1
-            self.mode = "filter"
-            self.update()
+            self.reset()
 
         def fetch_data(self, force=False):  # TODO: rewrite
             sort_by = self.sort + "." + self.order
