@@ -223,8 +223,7 @@ class FunctionThread(threading.Thread):
 
 def get_file(url):
     clean_url = xbmc.translatePath(urllib.unquote(url)).decode("utf-8").replace("image://", "")
-    if clean_url.endswith("/"):
-        clean_url = clean_url[:-1]
+    clean_url.rstrip("/")
     cached_thumb = xbmc.getCacheThumbName(clean_url)
     vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
     cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
