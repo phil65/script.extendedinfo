@@ -133,6 +133,18 @@ class DialogBaseInfo(object):
                             rating=rating,
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
+    @ch.context("artist")
+    def movie_context_menu(self, control_id):
+        selection = xbmcgui.Dialog().contextmenu(list=["Show filmography"])
+        if selection == 0:
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+                        "type": "with_people",
+                        "typelabel": addon.LANG(32156),
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+            wm.open_video_list(prev_window=self,
+                               filters=filters)
+
+
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
     def previous_menu(self, control_id):
