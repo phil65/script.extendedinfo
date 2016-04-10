@@ -964,8 +964,7 @@ def translate_status(status):
                     "ended": addon.LANG(32074),
                     "returning series": addon.LANG(32075),
                     "planned": addon.LANG(32076)}
-    if status:
-        return translations.get(status.lower(), status)
+    return translations.get(status.lower(), status)
 
 
 def get_movie_lists(movie_id):
