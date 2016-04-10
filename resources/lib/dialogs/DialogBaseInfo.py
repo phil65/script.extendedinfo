@@ -134,7 +134,7 @@ class DialogBaseInfo(object):
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("artist")
-    def movie_context_menu(self, control_id):
+    def person_context_menu(self, control_id):
         selection = xbmcgui.Dialog().contextmenu(list=["Show filmography"])
         if selection == 0:
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),

@@ -192,7 +192,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_OPENLIST)
         def show_list_dialog(self, control_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-            movie_lists = tmdb.get_movie_lists()
+            movie_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
             listitems = [addon.LANG(32134), addon.LANG(32135)] + listitems
             xbmc.executebuiltin("Dialog.Close(busydialog)")
