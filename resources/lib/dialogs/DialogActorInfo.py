@@ -80,7 +80,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_IMAGES)
         @ch.click(ID_LIST_TAGGED_IMAGES)
         def open_image(self, control_id):
-            listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
+            listitems = next((v for (i, v) in self.listitems if i == control_id), None)
             pos = wm.open_slideshow(listitems=listitems,
                                     index=self.control.getSelectedPosition())
             self.control.selectItem(pos)

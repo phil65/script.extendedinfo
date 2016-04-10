@@ -80,7 +80,7 @@ class DialogBaseInfo(object):
     @ch.click(ID_LIST_IMAGES)
     @ch.click(ID_LIST_BACKDROPS)
     def open_image(self, control_id):
-        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id)),
+        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == control_id)),
                                 index=self.control.getSelectedPosition())
         self.control.selectItem(pos)
 
@@ -135,7 +135,7 @@ class DialogBaseInfo(object):
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
     def previous_menu(self, control_id):
-        onback = self.getProperty("%i_onback" % self.control_id)
+        onback = self.getProperty("%i_onback" % control_id)
         if onback:
             xbmc.executebuiltin(onback)
         else:
