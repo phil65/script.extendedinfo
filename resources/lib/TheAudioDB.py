@@ -109,9 +109,6 @@ def extended_artist_info(results):
             description = artist.get('strBiographyEN')
         elif artist.get('strBiography'):
             description = artist.get('strBiography')
-        banner = artist.get('strArtistBanner')
-        if not banner:
-            banner = ""
         if 'strReview' in artist and artist['strReview']:
             description += "[CR]" + artist.get('strReview')
         artist = {'label': artist.get('strArtist'),
@@ -120,7 +117,7 @@ def extended_artist_info(results):
                   'Country': artist.get('strCountry'),
                   'mbid': artist.get('strMusicBrainzID'),
                   'thumb': artist.get('strArtistThumb'),
-                  'Banner': banner,
+                  'Banner': artist.get('strArtistBanner'),
                   'clearlogo': artist.get('strArtistLogo'),
                   'fanart': artist.get('strArtistFanart'),
                   'fanart2': artist.get('strArtistFanart2'),

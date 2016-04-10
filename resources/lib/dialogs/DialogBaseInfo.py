@@ -94,6 +94,11 @@ class DialogBaseInfo(object):
                               listitem=self.FocusedItem(control_id),
                               window=self)
 
+    @ch.click_by_type("artist")
+    def open_actor_info(self, control_id):
+        wm.open_actor_info(prev_window=self,
+                           actor_id=self.FocusedItem(control_id).getProperty("id"))
+
     @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):
@@ -149,7 +154,6 @@ class DialogBaseInfo(object):
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
-
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")

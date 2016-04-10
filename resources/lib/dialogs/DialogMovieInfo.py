@@ -102,12 +102,6 @@ def get_window(window_type):
             super(DialogMovieInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.click(ID_LIST_ACTORS)
-        @ch.click(ID_LIST_CREW)
-        def open_actor_info(self, control_id):
-            wm.open_actor_info(prev_window=self,
-                               actor_id=self.FocusedItem(control_id).getProperty("id"))
-
         @ch.click(ID_LIST_SIMILAR)
         @ch.click(ID_LIST_SEASONS)
         def open_movie_info(self, control_id):
@@ -122,7 +116,6 @@ def get_window(window_type):
             wm.play_youtube_video(youtube_id=youtube_id,
                                   listitem=listitem,
                                   window=self)
-
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_list(self, control_id):

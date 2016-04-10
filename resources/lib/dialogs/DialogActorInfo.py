@@ -66,11 +66,10 @@ def get_window(window_type):
                                movie_id=self.FocusedItem(control_id).getProperty("id"),
                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
-        @ch.click(ID_LIST_TV_ROLES)
-        @ch.click(ID_LIST_TV_CREW)
+        @ch.context("tvshow")
+        @ch.click_by_type("tvshow")
         def open_tvshow_dialog(self, control_id):
-            selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                                list=[addon.LANG(32148), addon.LANG(32147)])
+            selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32148), addon.LANG(32147)])
             if selection == 0:
                 wm.open_tvshow_info(prev_window=self,
                                     tmdb_id=self.FocusedItem(control_id).getProperty("id"),

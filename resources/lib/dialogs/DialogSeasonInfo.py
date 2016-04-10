@@ -58,12 +58,6 @@ def get_window(window_type):
             super(DialogSeasonInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        @ch.click(ID_LIST_CREW)
-        @ch.click(ID_LIST_ACTORS)
-        def open_actor_info(self, control_id):
-            wm.open_actor_info(prev_window=self,
-                               actor_id=self.FocusedItem(control_id).getProperty("id"))
-
         @ch.click(ID_LIST_EPISODES)
         def open_episode_info(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()
@@ -77,6 +71,5 @@ def get_window(window_type):
         def open_text(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
-
 
     return DialogSeasonInfo
