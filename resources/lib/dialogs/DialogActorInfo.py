@@ -59,13 +59,6 @@ def get_window(window_type):
             super(DialogActorInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.click(ID_LIST_MOVIE_ROLES)
-        @ch.click(ID_LIST_MOVIE_CREW)
-        def open_movie_info(self, control_id):
-            wm.open_movie_info(prev_window=self,
-                               movie_id=self.FocusedItem(control_id).getProperty("id"),
-                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
-
         @ch.context("tvshow")
         @ch.click_by_type("tvshow")
         def open_tvshow_dialog(self, control_id):

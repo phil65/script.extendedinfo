@@ -339,6 +339,11 @@ msgctxt "#32069"
 msgid "Show similar videos"
 msgstr ""
 
+#: /resources/lib/dialogs/DialogBaseInfo.py:149
+msgctxt "#32070"
+msgid "Show filmography"
+msgstr ""
+
 #: \resources\lib\TheMovieDB.py:870
 msgctxt "#32071"
 msgid "Released"

@@ -99,6 +99,12 @@ class DialogBaseInfo(object):
         wm.open_actor_info(prev_window=self,
                            actor_id=self.FocusedItem(control_id).getProperty("id"))
 
+    @ch.click_by_type("movie")
+    def open_movie_info(self, control_id):
+        wm.open_movie_info(prev_window=self,
+                           movie_id=self.FocusedItem(control_id).getProperty("id"),
+                           dbid=self.FocusedItem(control_id).getProperty("dbid"))
+
     @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):
@@ -146,7 +152,7 @@ class DialogBaseInfo(object):
 
     @ch.context("artist")
     def person_context_menu(self, control_id):
-        selection = xbmcgui.Dialog().contextmenu(list=["Show filmography"])
+        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32070)])
         if selection == 0:
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_people",

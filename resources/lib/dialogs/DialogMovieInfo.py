@@ -20,7 +20,7 @@ from kodi65 import kodijson
 from ActionHandler import ActionHandler
 
 ID_LIST_SIMILAR = 150
-ID_LIST_SEASONS = 250
+ID_LIST_SETS = 250
 ID_LIST_YOUTUBE = 350
 ID_LIST_LISTS = 450
 ID_LIST_STUDIOS = 550
@@ -75,7 +75,7 @@ def get_window(window_type):
             self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
             self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_SIMILAR, self.data["similar"]),
-                              (ID_LIST_SEASONS, sets_thread.listitems),
+                              (ID_LIST_SETS, sets_thread.listitems),
                               (ID_LIST_LISTS, self.data["lists"]),
                               (ID_LIST_STUDIOS, self.data["studios"]),
                               (ID_LIST_CERTS, self.data["releases"]),
@@ -101,13 +101,6 @@ def get_window(window_type):
         def onAction(self, action):
             super(DialogMovieInfo, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
-
-        @ch.click(ID_LIST_SIMILAR)
-        @ch.click(ID_LIST_SEASONS)
-        def open_movie_info(self, control_id):
-            wm.open_movie_info(prev_window=self,
-                               movie_id=self.FocusedItem(control_id).getProperty("id"),
-                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
