@@ -33,29 +33,30 @@ def handle_albums(results):
             desc = album['strDescription']
         if album.get('strReview'):
             desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (addon.LANG(185), album['strReview'])
-        album = {'label': album['strAlbum'],
-                 'artist': album['strArtist'],
-                 'mediatype': "album",
-                 'genre': album['strGenre'],
-                 'year': album['intYearReleased'],
-                 'mbid': album['strMusicBrainzID'],
-                 'id': album['idAlbum'],
-                 'audiodb_id': album['idAlbum'],
-                 'album_description': desc,
-                 'album_mood': album['strMood'],
-                 'album_style': album['strStyle'],
-                 'speed': album['strSpeed'],
-                 'album_Theme': album['strTheme'],
-                 'type': album['strReleaseFormat'],
-                 'thumb': album['strAlbumThumb'],
-                 'spine': album['strAlbumSpine'],
-                 'cdart': album['strAlbumCDart'],
-                 'thumbback': album['strAlbumThumbBack'],
-                 'loved': album['intLoved'],
-                 'location': album['strLocation'],
-                 'itunes_id': album['strItunesID'],
-                 'amazon_id': album['strAmazonID'],
-                 'sales': album['intSales']}
+        album = ListItem(label=album['strAlbum'],
+                         path="")
+        album.set_infos({'artist': album['strArtist'],
+                         'mediatype': "album",
+                         'genre': album['strGenre'],
+                         'year': album['intYearReleased']})
+        album.set_properties({'mbid': album['strMusicBrainzID'],
+                              'id': album['idAlbum'],
+                              'audiodb_id': album['idAlbum'],
+                              'album_description': desc,
+                              'album_mood': album['strMood'],
+                              'album_style': album['strStyle'],
+                              'speed': album['strSpeed'],
+                              'album_Theme': album['strTheme'],
+                              'type': album['strReleaseFormat'],
+                              'loved': album['intLoved'],
+                              'location': album['strLocation'],
+                              'itunes_id': album['strItunesID'],
+                              'amazon_id': album['strAmazonID'],
+                              'sales': album['intSales']})
+        album.set_art({'thumb': album['strAlbumThumb'],
+                       'spine': album['strAlbumSpine'],
+                       'cdart': album['strAlbumCDart'],
+                       'thumbback': album['strAlbumThumbBack']})
         albums.append(album)
     return local_db.compare_album_with_library(albums)
 
