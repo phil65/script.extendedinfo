@@ -3,19 +3,21 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import Utils
-import xbmc
-import xbmcgui
-import xbmcvfs
 import os
 import re
 
-import windows
-from kodi65.localdb import local_db
+import xbmc
+import xbmcgui
+import xbmcvfs
 
+import Utils
 import TheMovieDB
+
+import windows
 from kodi65 import addon
+from kodi65 import utils
 from kodi65.player import player
+from kodi65.localdb import local_db
 
 INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
@@ -286,7 +288,7 @@ class WindowManager(object):
             dialog.doModal()
         else:
             self.active_dialog = None
-            Utils.notify(addon.LANG(32143))
+            utils.notify(addon.LANG(32143))
 
     def play_youtube_video(self, youtube_id="", listitem=None, window=False):
         """
@@ -308,7 +310,7 @@ class WindowManager(object):
                 player.wait_for_video_end()
                 self.pop_stack()
         else:
-            Utils.notify(header=addon.LANG(257),
+            utils.notify(header=addon.LANG(257),
                          message="no youtube id found")
 
 
