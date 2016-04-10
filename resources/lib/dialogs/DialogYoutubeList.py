@@ -17,9 +17,20 @@ from ActionHandler import ActionHandler
 
 ch = ActionHandler()
 
+ID_MAIN_LIST = 500
+ID_BUTTON_SORTTYPE = 5001
+ID_BUTTON_PUBLISHEDFILTER = 5002
+ID_BUTTON_LANGUAGEFILTER = 5003
+ID_BUTTON_DIMENSIONFILTER = 5006
+ID_BUTTON_TOGGLETYPE = 5007
+ID_BUTTON_DURATIONFILTER = 5008
+ID_BUTTON_CAPTIONFILTER = 5009
+ID_BUTTON_DEFINITIONFILTER = 5012
+
 TRANSLATIONS = {"video": addon.LANG(157),
                 "playlist": addon.LANG(559),
                 "channel": addon.LANG(19029)}
+
 SORTS = {"video": {"date": addon.LANG(552),
                    "rating": addon.LANG(563),
                    "relevance": addon.LANG(32060),
@@ -61,7 +72,7 @@ def get_window(window_type):
             super(DialogYoutubeList, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.click(500)
+        @ch.click(ID_MAIN_LIST)
         def main_list_click(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
@@ -76,7 +87,7 @@ def get_window(window_type):
                                       listitem=self.FocusedItem(control_id),
                                       window=self)
 
-        @ch.click(5002)
+        @ch.click(ID_BUTTON_PUBLISHEDFILTER)
         def set_published_filter(self, control_id):
             labels = [addon.LANG(32062), addon.LANG(32063), addon.LANG(32064), addon.LANG(32065), addon.LANG(636)]
             deltas = [1, 7, 31, 365, "custom"]
@@ -96,7 +107,7 @@ def get_window(window_type):
                             typelabel=addon.LANG(172),
                             label=str(labels[index]))
 
-        @ch.click(5003)
+        @ch.click(ID_BUTTON_LANGUAGEFILTER)
         def set_language_filter(self, control_id):
             labels = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
@@ -108,7 +119,7 @@ def get_window(window_type):
                             typelabel=addon.LANG(248),
                             label=str(labels[index]))
 
-        @ch.click(5006)
+        @ch.click(ID_BUTTON_DIMENSIONFILTER)
         def set_dimension_filter(self, control_id):
             values = ["2d", "3d", "any"]
             labels = ["2D", "3D", addon.LANG(593)]
@@ -120,7 +131,7 @@ def get_window(window_type):
                                 typelabel="Dimensions",
                                 label=str(labels[index]))
 
-        @ch.click(5008)
+        @ch.click(ID_BUTTON_DURATIONFILTER)
         def set_duration_filter(self, control_id):
             values = ["long", "medium", "short", "any"]
             labels = [addon.LANG(33013), addon.LANG(601), addon.LANG(33012), addon.LANG(593)]
@@ -132,7 +143,7 @@ def get_window(window_type):
                                 typelabel=addon.LANG(180),
                                 label=str(labels[index]))
 
-        @ch.click(5009)
+        @ch.click(ID_BUTTON_CAPTIONFILTER)
         def set_caption_filter(self, control_id):
             values = ["closedCaption", "none", "any"]
             labels = [addon.LANG(107), addon.LANG(106), addon.LANG(593)]
@@ -144,7 +155,7 @@ def get_window(window_type):
                                 typelabel=addon.LANG(287),
                                 label=str(labels[index]))
 
-        @ch.click(5012)
+        @ch.click(ID_BUTTON_DEFINITIONFILTER)
         def set_definition_filter(self, control_id):
             values = ["high", "standard", "any"]
             labels = [addon.LANG(419), addon.LANG(602), addon.LANG(593)]
@@ -156,7 +167,7 @@ def get_window(window_type):
                                 typelabel=addon.LANG(169),
                                 label=str(labels[index]))
 
-        @ch.click(5007)
+        @ch.click(ID_BUTTON_TOGGLETYPE)
         def toggle_type(self, control_id):
             self.filters = []
             types = {"video": "playlist",
@@ -171,13 +182,13 @@ def get_window(window_type):
 
         def update_ui(self, control_id):
             self.setProperty("Type", TRANSLATIONS[self.type])
-            self.getControl(5006).setVisible(self.type == "video")
-            self.getControl(5008).setVisible(self.type == "video")
-            self.getControl(5009).setVisible(self.type == "video")
-            self.getControl(5012).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(self.type == "video")
             super(DialogYoutubeList, self).update_ui()
 
-        @ch.click(5001)
+        @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
             listitems = [key for key in SORTS[self.type].values()]
             sort_strings = [value for value in SORTS[self.type].keys()]
@@ -189,7 +200,7 @@ def get_window(window_type):
             self.sort_label = listitems[index]
             self.update()
 
-        @ch.action("contextmenu", 500)
+        @ch.action("contextmenu", ID_MAIN_LIST)
         def context_menu(self, control_id):
             if self.type == "video":
                 more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))

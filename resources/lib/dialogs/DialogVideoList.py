@@ -15,10 +15,10 @@ from kodi65 import addon
 from kodi65 import utils
 from ActionHandler import ActionHandler
 
-C_MAIN_LIST = [50, 51, 52, 53, 54, 55, 500]
-C_BUTTON_SORT = 5001
-C_BUTTON_ORDER = 5004
-C_BUTTON_ACCOUNT = 7000
+ID_LIST_MAIN = [50, 51, 52, 53, 54, 55, 500]
+ID_BUTTON_SORT = 5001
+ID_BUTTON_ORDER = 5004
+ID_BUTTON_ACCOUNT = 7000
 
 ch = ActionHandler()
 
@@ -78,7 +78,7 @@ def get_window(window_type):
             self.getControl(5009).setVisible(self.type != "tv")
             self.getControl(5010).setVisible(self.type != "tv")
 
-        @ch.action("contextmenu", C_MAIN_LIST)
+        @ch.action("contextmenu", ID_LIST_MAIN)
         def context_menu(self, control_id):
             item_id = self.FocusedItem(control_id).getProperty("id")
             listitems = [addon.LANG(32169)] if self.type == "tv" else [addon.LANG(32113)]
@@ -136,7 +136,7 @@ def get_window(window_type):
                                         movie_id=movie_id,
                                         status=True)
 
-        @ch.click(C_BUTTON_SORT)
+        @ch.click(ID_BUTTON_SORT)
         def get_sort_type(self, control_id):
             sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
             listitems = [k for k in self.SORTS[sort_key].values()]
@@ -157,7 +157,7 @@ def get_window(window_type):
             super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
                                                     **kwargs)
 
-        @ch.click(C_BUTTON_ORDER)
+        @ch.click(ID_BUTTON_ORDER)
         def toggle_order(self, control_id):
             self.order = "desc" if self.order == "asc" else "asc"
             self.update()
@@ -168,7 +168,7 @@ def get_window(window_type):
             self.type = "movie" if self.type == "tv" else "tv"
             self.reset()
 
-        @ch.click(C_BUTTON_ACCOUNT)
+        @ch.click(ID_BUTTON_ACCOUNT)
         def open_account_menu(self, control_id):
             if self.type == "tv":
                 listitems = [addon.LANG(32145)]
@@ -283,7 +283,7 @@ def get_window(window_type):
                             typelabel=addon.LANG(32156),
                             label=response["name"])
 
-        @ch.click(C_MAIN_LIST)
+        @ch.click(ID_LIST_MAIN)
         def open_media(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             info = self.FocusedItem(control_id).getVideoInfoTag()

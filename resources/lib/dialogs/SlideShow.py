@@ -10,7 +10,7 @@ import windows
 
 class SlideShow(windows.DialogXML):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
-    C_LIST_PICTURES = 5000
+    ID_LIST_PICTURES = 5000
 
     def __init__(self, *args, **kwargs):
         self.images = kwargs.get('listitems')
@@ -22,11 +22,11 @@ class SlideShow(windows.DialogXML):
         super(SlideShow, self).onInit()
         if not self.images:
             return None
-        self.getControl(self.C_LIST_PICTURES).addItems(Utils.create_listitems(self.images))
-        self.getControl(self.C_LIST_PICTURES).selectItem(self.index)
-        self.setFocusId(self.C_LIST_PICTURES)
+        self.getControl(self.ID_LIST_PICTURES).addItems(Utils.create_listitems(self.images))
+        self.getControl(self.ID_LIST_PICTURES).selectItem(self.index)
+        self.setFocusId(self.ID_LIST_PICTURES)
 
     def onAction(self, action):
         if action in self.ACTION_PREVIOUS_MENU:
-            self.position = self.getControl(self.C_LIST_PICTURES).getSelectedPosition()
+            self.position = self.getControl(self.ID_LIST_PICTURES).getSelectedPosition()
             self.close()
