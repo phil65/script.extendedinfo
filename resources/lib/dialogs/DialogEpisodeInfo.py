@@ -87,13 +87,6 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
 
-        @ch.click(ID_LIST_YOUTUBE)
-        @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self, control_id):
-            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                  listitem=self.FocusedItem(control_id),
-                                  window=self)
-
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,

@@ -123,12 +123,6 @@ def get_window(window_type):
                                   listitem=listitem,
                                   window=self)
 
-        @ch.click(ID_LIST_YOUTUBE)
-        @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self, control_id):
-            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                  listitem=self.FocusedItem(control_id),
-                                  window=self)
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_list(self, control_id):

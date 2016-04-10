@@ -78,11 +78,5 @@ def get_window(window_type):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
 
-        @ch.click(ID_LIST_YOUTUBE)
-        @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self, control_id):
-            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                  listitem=self.FocusedItem(control_id),
-                                  window=self)
 
     return DialogSeasonInfo

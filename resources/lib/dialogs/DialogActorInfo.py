@@ -86,12 +86,6 @@ def get_window(window_type):
                                     index=self.getControl(control_id).getSelectedPosition())
             self.getControl(control_id).selectItem(pos)
 
-        @ch.click(ID_LIST_YOUTUBE)
-        def play_youtube_video(self, control_id):
-            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                  listitem=self.FocusedItem(control_id),
-                                  window=self)
-
         @ch.click(ID_CONTROL_PLOT)
         def show_plot(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),

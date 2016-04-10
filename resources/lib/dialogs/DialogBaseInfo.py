@@ -88,6 +88,12 @@ class DialogBaseInfo(object):
                                 index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
 
+    @ch.click_by_type("video")
+    def play_youtube_video(self, control_id):
+        wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
+                              listitem=self.FocusedItem(control_id),
+                              window=self)
+
     @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):

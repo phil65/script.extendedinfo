@@ -51,8 +51,8 @@ def handle_videos(results, extended=False):
             duration = details['duration']
             likes = ext_item['statistics'].get('likeCount')
             dislikes = ext_item['statistics'].get('dislikeCount')
-            item.set_info("duration", duration,
-                          "mediatype": "video")
+            item.set_infos({"duration": duration,
+                            "mediatype": "video"})
             props = {"duration": details['duration'][2:].lower(),
                      "dimension": details['dimension'],
                      "definition": details['definition'],

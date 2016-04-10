@@ -207,12 +207,6 @@ def get_window(window_type):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
 
-        @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self, control_id):
-            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                  listitem=self.FocusedItem(control_id),
-                                  window=self)
-
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
