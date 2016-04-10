@@ -228,16 +228,16 @@ def start_info_actions(info, params):
         artists = local_db.get_artists()
         import BandsInTown
         return BandsInTown.get_near_events(artists[0:49])
-    elif info == 'youtubesearch':
+    elif info == 'youtubesearchvideos':
         addon.set_global('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
         if params.get("id"):
             listitems = YouTube.search(search_str=params.get("id", ""),
                                        hd=params.get("hd"),
                                        orderby=params.get("orderby", "relevance"))
             return listitems.get("listitems", [])
-    elif info == 'youtubeplaylist':
+    elif info == 'youtubeplaylistvideos':
         return YouTube.get_playlist_videos(params.get("id", ""))
-    elif info == 'youtubeusersearch':
+    elif info == 'youtubeusersearchvideos':
         user_name = params.get("id")
         if user_name:
             playlists = YouTube.get_user_playlists(user_name)

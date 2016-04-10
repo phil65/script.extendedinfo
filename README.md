@@ -282,15 +282,15 @@ Available Properties:
 
 ### YouTube
 ```
-RunScript(script.extendedinfo,info=youtubesearch)           --> YoutubeSearch.%d
+RunScript(script.extendedinfo,info=youtubesearchvideos)
 ```
   - required additional parameters: id=
 ```
-RunScript(script.extendedinfo,info=youtubeplaylist)         --> YoutubePlaylist.%d
+RunScript(script.extendedinfo,info=youtubeplaylistvideos)
 ```
   - required additional parameters: id=
 ```
-RunScript(script.extendedinfo,info=youtubeusersearch)       --> YoutubeUserSearch.%d
+RunScript(script.extendedinfo,info=youtubeusersearchvideos)
 ```
   - required additional parameters: id=
 
@@ -300,25 +300,6 @@ Available Properties:
 - 'Description':  Video Description
 - 'Title':        Video Title
 - 'Date':         Video Upload Date
-
-
-### Misc Images
-```
-RunScript(script.extendedinfo,info=xkcd)          --> XKCD.%d
-```
-- fetches a daily random list of XKCD webcomics
-```
-RunScript(script.extendedinfo,info=cyanide)       --> CyanideHappiness.%d
-```
-- fetches a daily random list of Cyanide & Happiness webcomics
-
-
-Available Properties:
-
-- 'Thumb':        Image
-- 'Title':        Image Title
-- 'Description':  Image Description (only XKCD)
-
 
 
 info=similarlocalmovies
