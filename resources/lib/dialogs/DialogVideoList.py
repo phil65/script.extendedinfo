@@ -85,8 +85,7 @@ def get_window(window_type):
                     listitems += [addon.LANG(32107)]
                 if self.mode == "list":
                     listitems += [addon.LANG(32035)]
-            selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                                list=listitems)
+            selection = xbmcgui.Dialog().contextmenu(list=listitems)
             if selection == 0:
                 rating = Utils.get_rating_from_selectdialog()
                 if tmdb.set_rating(media_type=self.type,
