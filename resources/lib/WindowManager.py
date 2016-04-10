@@ -297,7 +297,7 @@ class WindowManager(object):
             listitem = yt_listitem
         if url:
             if window and window.window_type == "dialog":
-                wm.add_to_stack(window)
+                self.add_to_stack(window)
                 window.close()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             xbmc.Player().play(item=url,
@@ -306,7 +306,7 @@ class WindowManager(object):
                                startpos=-1)
             if window and window.window_type == "dialog":
                 player.wait_for_video_end()
-                wm.pop_stack()
+                self.pop_stack()
         else:
             Utils.notify(header=addon.LANG(257),
                          message="no youtube id found")

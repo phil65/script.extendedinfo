@@ -2,7 +2,6 @@
 <addon id="script.extendedinfo" name="ExtendedInfo Script" version="5.2.0" provider-name="phil65 (Philipp Temminghoff)">
 	<requires>
 		<import addon="xbmc.python" version="2.25.0"/>
-		<import addon="script.module.youtube.dl" version="14.519.1"/>
 		<import addon="resource.images.studios.white" version="0.0.5"/>
 		<import addon="script.module.autocompletion" version="1.0.0"/>
 		<import addon="script.module.actionhandler" version="1.0.1"/>

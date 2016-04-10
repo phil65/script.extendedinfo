@@ -8,6 +8,7 @@ import xbmcgui
 from .. import Utils
 from .. import TheMovieDB as tmdb
 from kodi65 import addon
+from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import selectdialog
 from kodi65.listitem import ListItem
@@ -109,10 +110,7 @@ class DialogBaseInfo(object):
     def download_video(self, control_id):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
         if selection == 0:
-            import YDStreamExtractor
-            vid = YDStreamExtractor.getVideoInfo(self.FocusedItem(control_id).getProperty("youtube_id"),
-                                                 quality=1)
-            YDStreamExtractor.handleDownload(vid)
+            utils.download_video(self.FocusedItem(control_id).getProperty("youtube_id"))
 
     @ch.context("movie")
     def movie_context_menu(self, control_id):
