@@ -63,8 +63,8 @@ def get_window(window_type):
             sets_thread = SetItemsThread(self.info.get_property("set_id"))
             self.omdb_thread = Utils.FunctionThread(function=omdb.get_movie_info,
                                                     param=self.info.get_property("imdb_id"))
-            for thread in [self.omdb_thread, sets_thread]:
-                thread.start()
+            self.omdb_thread.start()
+            sets_thread.start()
             self.info.update_properties(ImageTools.blur(self.info.get_art("thumb")))
             if "dbid" not in self.info.get_infos():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
@@ -79,7 +79,7 @@ def get_window(window_type):
                               (ID_LIST_LISTS, self.data["lists"]),
                               (ID_LIST_STUDIOS, self.data["studios"]),
                               (ID_LIST_CERTS, self.data["releases"]),
-                              (ID_LIST_CREW, Utils.merge_dict_lists(self.data["crew"])),
+                              (ID_LIST_CREW, self.data["crew"]),
                               (ID_LIST_GENRES, self.data["genres"]),
                               (ID_LIST_KEYWORDS, self.data["keywords"]),
                               (ID_LIST_REVIEWS, self.data["reviews"]),

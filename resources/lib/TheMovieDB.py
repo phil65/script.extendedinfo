@@ -747,7 +747,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                  "lists": sort_lists(handle_misc(info["lists"]["results"])),
                  "studios": handle_misc(info["production_companies"]),
                  "releases": releases,
-                 "crew": handle_people(info["credits"]["crew"]),
+                 "crew": Utils.merge_dict_lists(handle_people(info["credits"]["crew"])),
                  "genres": handle_misc(info["genres"]),
                  "keywords": handle_misc(info["keywords"]["keywords"]),
                  "reviews": handle_misc(info["reviews"]["results"]),
