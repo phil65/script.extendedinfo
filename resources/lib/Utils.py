@@ -150,7 +150,7 @@ def get_http(url=None, headers=False):
     """
     succeed = 0
     if not headers:
-        headers = {'User-agent': 'XBMC/17.0 ( phil65@kodi.tv )'}
+        headers = {'User-agent': 'Kodi/17.0 ( phil65@kodi.tv )'}
     request = urllib2.Request(url)
     for (key, value) in headers.iteritems():
         request.add_header(key, value)

@@ -17,7 +17,7 @@ from ActionHandler import ActionHandler
 
 ch = ActionHandler()
 
-ID_MAIN_LIST = 500
+ID_LIST_MAIN = 500
 ID_BUTTON_SORTTYPE = 5001
 ID_BUTTON_PUBLISHEDFILTER = 5002
 ID_BUTTON_LANGUAGEFILTER = 5003
@@ -72,7 +72,7 @@ def get_window(window_type):
             super(DialogYoutubeList, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        @ch.click(ID_MAIN_LIST)
+        @ch.click(ID_LIST_MAIN)
         def main_list_click(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
@@ -200,7 +200,7 @@ def get_window(window_type):
             self.sort_label = listitems[index]
             self.update()
 
-        @ch.action("contextmenu", ID_MAIN_LIST)
+        @ch.action("contextmenu", ID_LIST_MAIN)
         def context_menu(self, control_id):
             if self.type == "video":
                 more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))

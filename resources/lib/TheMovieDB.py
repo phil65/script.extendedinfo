@@ -27,16 +27,11 @@ STILL_SIZES = ["w92", "w185", "w300", "original"]
 HEADERS = {
     'Accept': 'application/json',
     'Content-Type': 'application/json',
-    'User-agent': 'XBMC/16.0 ( phil65@kodi.tv )'
+    'User-agent': 'Kodi/17.0 ( phil65@kodi.tv )'
 }
 IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
 POSTER_SIZE = "w500"
-include_adult = addon.setting("include_adults").lower()
-if addon.bool_setting("use_https"):
-    URL_BASE = "https://api.themoviedb.org/3/"
-else:
-    URL_BASE = "http://api.themoviedb.org/3/"
-
+URL_BASE = "http{}://api.themoviedb.org/3/".format("s" if addon.bool_setting("use_https") else "")
 ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating"
 ALL_TV_PROPS = "account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos"
 ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_images"
@@ -45,14 +40,14 @@ ALL_EPISODE_PROPS = "account_states,credits,external_ids,images,rating,videos"
 
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
-release_types = {1: "Premiere",
+RELEASE_TYPES = {1: "Premiere",
                  2: "Theatrical (limited)",
                  3: "Theatrical",
                  4: "Digital",
                  5: "Physical",
                  6: "TV"}
 
-genders = {1: addon.LANG(32095),
+GENDERS = {1: addon.LANG(32095),
            2: addon.LANG(32094)}
 
 
@@ -532,7 +527,7 @@ def get_person_info(person_label, skip_dialog=False):
     if not person_label:
         return False
     params = {"query": person_label.split(" / ")[0],
-              "include_adult": include_adult}
+              "include_adult": addon.setting("include_adults").lower()}
     response = get_data(url="search/person",
                         params=params,
                         cache_days=30)
@@ -552,7 +547,7 @@ def get_person_info(person_label, skip_dialog=False):
 
 def get_keywords(search_label):
     params = {"query": search_label,
-              "include_adult": include_adult}
+              "include_adult": addon.setting("include_adults").lower()}
     response = get_data(url="search/keyword",
                         params=params,
                         cache_days=30)
@@ -1178,7 +1173,7 @@ def search_media(media_name=None, year='', media_type="movie", cache_days=1):
         return None
     params = {"query": "%s %s".format(media_name, year) if year else media_name,
               "language": addon.setting("language"),
-              "include_adult": include_adult}
+              "include_adult": addon.setting("include_adults").lower()}
     response = get_data(url="search/%s" % (media_type),
                         params=params,
                         cache_days=cache_days)
