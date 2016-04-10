@@ -4,14 +4,16 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
-import xbmc
-import xbmcvfs
 import os
-import Utils
-from kodi65 import addon
+import threading
 import PIL.Image
 import PIL.ImageFilter
-import threading
+
+import xbmc
+import xbmcvfs
+import Utils
+
+from kodi65 import addon
 
 THUMBS_CACHE_PATH = xbmc.translatePath("special://profile/Thumbnails/Video").decode("utf-8")
 IMAGE_PATH = os.path.join(addon.DATA_PATH, "images")

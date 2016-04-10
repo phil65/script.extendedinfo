@@ -9,14 +9,14 @@ import urllib
 import json
 from functools32 import lru_cache
 
+import Utils
+
 from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import selectdialog
 from kodi65.listitem import ListItem
 from kodi65.localdb import local_db
-
-import Utils
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
 POSTER_SIZES = ["w92", "w154", "w185", "w342", "w500", "w780", "original"]

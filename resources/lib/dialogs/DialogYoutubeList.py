@@ -2,14 +2,17 @@
 
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
+
 import datetime
 
 import xbmcgui
-from .. import YouTube
+
+from resources.lib import YouTube
+from resources.lib.WindowManager import wm
+from DialogBaseList import DialogBaseList
+
 from kodi65 import addon
 from kodi65 import utils
-from DialogBaseList import DialogBaseList
-from ..WindowManager import wm
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()

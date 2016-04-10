@@ -5,12 +5,14 @@
 
 import xbmc
 import xbmcgui
+
+from resources.lib import Utils
+from resources.lib import TheMovieDB as tmdb
+from resources.lib.WindowManager import wm
+from DialogBaseList import DialogBaseList
+
 from kodi65 import addon
 from kodi65 import utils
-from .. import Utils
-from .. import TheMovieDB as tmdb
-from DialogBaseList import DialogBaseList
-from ..WindowManager import wm
 from ActionHandler import ActionHandler
 
 C_MAIN_LIST = [50, 51, 52, 53, 54, 55, 500]

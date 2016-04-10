@@ -5,12 +5,14 @@
 
 import xbmc
 import xbmcgui
-from .. import Utils
+
+from resources.lib import Utils
+from resources.lib import ImageTools
+from resources.lib import TheMovieDB as tmdb
+from resources.lib.WindowManager import wm
+
 from kodi65 import addon
-from .. import ImageTools
-from .. import TheMovieDB as tmdb
 from DialogBaseInfo import DialogBaseInfo
-from ..WindowManager import wm
 from ActionHandler import ActionHandler
 
 ID_LIST_SIMILAR = 150

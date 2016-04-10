@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import Utils
+
 from kodi65 import addon
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem

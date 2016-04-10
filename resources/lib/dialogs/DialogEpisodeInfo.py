@@ -6,13 +6,14 @@
 import xbmc
 import xbmcgui
 
-from .. import Utils
-from .. import TheMovieDB as tmdb
-from .. import ImageTools
+from resources.lib import Utils
+from resources.lib import TheMovieDB as tmdb
+from resources.lib import ImageTools
+from resources.lib.WindowManager import wm
+from DialogBaseInfo import DialogBaseInfo
+
 from kodi65 import addon
 from kodi65 import utils
-from DialogBaseInfo import DialogBaseInfo
-from ..WindowManager import wm
 from ActionHandler import ActionHandler
 
 ID_CONTROL_PLOT = 132

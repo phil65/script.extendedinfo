@@ -3,9 +3,10 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import Utils
 import urllib
 import itertools
+
+import Utils
 
 from kodi65.listitem import ListItem
 

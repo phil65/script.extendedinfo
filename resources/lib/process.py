@@ -13,18 +13,19 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
+import Trakt
+import RottenTomatoes
+import YouTube
 import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 import Utils
+from WindowManager import wm
+
 from kodi65.localdb import local_db
 from kodi65 import addon
 from kodi65 import kodijson
 from kodi65 import favs
-import YouTube
-import Trakt
-import RottenTomatoes
-from WindowManager import wm
 
 
 def start_info_actions(info, params):

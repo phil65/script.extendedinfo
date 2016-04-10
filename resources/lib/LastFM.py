@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
+
 import Utils
 
 LAST_FM_API_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'

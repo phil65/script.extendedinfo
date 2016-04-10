@@ -6,9 +6,10 @@
 import xbmc
 import xbmcgui
 
-from .. import Utils
+from resources.lib import Utils
+from resources.lib.WindowManager import wm
+
 from kodi65 import addon, utils
-from ..WindowManager import wm
 from T9Search import T9Search
 from ActionHandler import ActionHandler
 

@@ -4,12 +4,14 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmcgui
-from .. import Utils
-from .. import ImageTools
-from kodi65 import addon
-from .. import TheMovieDB as tmdb
+
+from resources.lib import Utils
+from resources.lib import ImageTools
+from resources.lib import TheMovieDB as tmdb
+from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
-from ..WindowManager import wm
+
+from kodi65 import addon
 from ActionHandler import ActionHandler
 
 ID_LIST_MOVIE_ROLES = 150

@@ -5,16 +5,19 @@
 
 import xbmc
 import xbmcgui
-from .. import Utils
-from .. import TheMovieDB as tmdb
+
+from resources.lib import Utils
+from resources.lib import TheMovieDB as tmdb
+from resources.lib import YouTube
+from resources.lib.WindowManager import wm
+
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import selectdialog
 from kodi65.listitem import ListItem
-from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from .. import YouTube
+
 ch = ActionHandler()
 
 ID_LIST_YOUTUBE = 350
