@@ -4,10 +4,10 @@
 # This program is Free Software see LICENSE file for details
 
 from .. import Utils
-from .BaseClasses import DialogXML
+import windows
 
 
-class SlideShow(DialogXML):
+class SlideShow(windows.DialogXML):
     ACTION_PREVIOUS_MENU = [9, 92, 10]
     C_LIST_PICTURES = 5000
 

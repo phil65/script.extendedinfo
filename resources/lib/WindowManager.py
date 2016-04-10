@@ -10,7 +10,7 @@ import xbmcvfs
 import os
 import re
 
-from dialogs import BaseClasses
+import windows
 from kodi65.localdb import local_db
 
 import TheMovieDB
@@ -79,7 +79,7 @@ class WindowManager(object):
             movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
                                                     dbid=dbid,
                                                     name=name)
-        movie_class = DialogMovieInfo.get_window(BaseClasses.DialogXML)
+        movie_class = DialogMovieInfo.get_window(windows.DialogXML)
         dialog = movie_class(INFO_XML,
                              addon.PATH,
                              id=movie_id,
@@ -111,7 +111,7 @@ class WindowManager(object):
             tmdb_id = TheMovieDB.search_media(media_name=name,
                                               year="",
                                               media_type="tv")
-        tvshow_class = DialogTVShowInfo.get_window(BaseClasses.DialogXML)
+        tvshow_class = DialogTVShowInfo.get_window(windows.DialogXML)
         dialog = tvshow_class(INFO_XML,
                               addon.PATH,
                               tmdb_id=tmdb_id,
@@ -145,7 +145,7 @@ class WindowManager(object):
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
-        season_class = DialogSeasonInfo.get_window(BaseClasses.DialogXML)
+        season_class = DialogSeasonInfo.get_window(windows.DialogXML)
         dialog = season_class(INFO_XML,
                               addon.PATH,
                               id=tvshow_id,
@@ -162,7 +162,7 @@ class WindowManager(object):
         """
         from dialogs import DialogEpisodeInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
-        ep_class = DialogEpisodeInfo.get_window(BaseClasses.DialogXML)
+        ep_class = DialogEpisodeInfo.get_window(windows.DialogXML)
         if not tvshow_id and tvshow:
             tvshow_id = TheMovieDB.search_media(media_name=tvshow,
                                                 media_type="tv",
@@ -199,7 +199,7 @@ class WindowManager(object):
                 return None
         else:
             xbmc.executebuiltin("ActivateWindow(busydialog)")
-        actor_class = DialogActorInfo.get_window(BaseClasses.DialogXML)
+        actor_class = DialogActorInfo.get_window(windows.DialogXML)
         dialog = actor_class(ACTOR_XML,
                              addon.PATH,
                              id=actor_id)
@@ -221,7 +221,7 @@ class WindowManager(object):
         else:
             color = "FFFFFFFF"
         check_version()
-        browser_class = DialogVideoList.get_window(BaseClasses.DialogXML)
+        browser_class = DialogVideoList.get_window(windows.DialogXML)
         dialog = browser_class(LIST_XML,
                                addon.PATH,
                                listitems=listitems,
@@ -252,7 +252,7 @@ class WindowManager(object):
                 color = "FFFFFFFF"
         else:
             color = "FFFFFFFF"
-        youtube_class = DialogYoutubeList.get_window(BaseClasses.WindowXML)
+        youtube_class = DialogYoutubeList.get_window(windows.WindowXML)
         dialog = youtube_class(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
                                search_str=search_str,
                                color=color,
