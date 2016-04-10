@@ -1170,7 +1170,7 @@ def search_media(media_name=None, year='', media_type="movie", cache_days=1):
     '''
     if not media_name:
         return None
-    params = {"query": "%s %s".format(media_name, year) if year else media_name,
+    params = {"query": "{} {}".format(media_name, year) if year else media_name,
               "language": addon.setting("language"),
               "include_adult": addon.setting("include_adults").lower()}
     response = get_data(url="search/%s" % (media_type),
