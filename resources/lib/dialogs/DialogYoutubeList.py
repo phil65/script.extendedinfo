@@ -60,7 +60,7 @@ def get_window(window_type):
             ch.serve_action(action, self.getFocusId(), self)
 
         @ch.click(500)
-        def main_list_click(self):
+        def main_list_click(self, control_id):
             self.last_position = self.control.getSelectedPosition()
             youtube_id = self.listitem.getProperty("youtube_id")
             if self.type == "channel":
@@ -75,7 +75,7 @@ def get_window(window_type):
                                           window=self)
 
         @ch.click(5002)
-        def set_published_filter(self):
+        def set_published_filter(self, control_id):
             labels = [addon.LANG(32062), addon.LANG(32063), addon.LANG(32064), addon.LANG(32065), addon.LANG(636)]
             deltas = [1, 7, 31, 365, "custom"]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
@@ -95,7 +95,7 @@ def get_window(window_type):
                             label=str(labels[index]))
 
         @ch.click(5003)
-        def set_language_filter(self):
+        def set_language_filter(self, control_id):
             labels = ["en", "de", "fr"]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
@@ -107,7 +107,7 @@ def get_window(window_type):
                             label=str(labels[index]))
 
         @ch.click(5006)
-        def set_dimension_filter(self):
+        def set_dimension_filter(self, control_id):
             values = ["2d", "3d", "any"]
             labels = ["2D", "3D", addon.LANG(593)]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
@@ -119,7 +119,7 @@ def get_window(window_type):
                                 label=str(labels[index]))
 
         @ch.click(5008)
-        def set_duration_filter(self):
+        def set_duration_filter(self, control_id):
             values = ["long", "medium", "short", "any"]
             labels = [addon.LANG(33013), addon.LANG(601), addon.LANG(33012), addon.LANG(593)]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
@@ -131,7 +131,7 @@ def get_window(window_type):
                                 label=str(labels[index]))
 
         @ch.click(5009)
-        def set_caption_filter(self):
+        def set_caption_filter(self, control_id):
             values = ["closedCaption", "none", "any"]
             labels = [addon.LANG(107), addon.LANG(106), addon.LANG(593)]
             index = xbmcgui.Dialog().select(heading=addon.LANG(287),
@@ -143,7 +143,7 @@ def get_window(window_type):
                                 label=str(labels[index]))
 
         @ch.click(5012)
-        def set_definition_filter(self):
+        def set_definition_filter(self, control_id):
             values = ["high", "standard", "any"]
             labels = [addon.LANG(419), addon.LANG(602), addon.LANG(593)]
             index = xbmcgui.Dialog().select(heading=addon.LANG(169),
@@ -155,7 +155,7 @@ def get_window(window_type):
                                 label=str(labels[index]))
 
         @ch.click(5007)
-        def toggle_type(self):
+        def toggle_type(self, control_id):
             self.filters = []
             types = {"video": "playlist",
                      "playlist": "channel",
@@ -167,7 +167,7 @@ def get_window(window_type):
                 self.sort_label = addon.LANG(32060)
             self.reset()
 
-        def update_ui(self):
+        def update_ui(self, control_id):
             self.setProperty("Type", TRANSLATIONS[self.type])
             self.getControl(5006).setVisible(self.type == "video")
             self.getControl(5008).setVisible(self.type == "video")
@@ -176,7 +176,7 @@ def get_window(window_type):
             super(DialogYoutubeList, self).update_ui()
 
         @ch.click(5001)
-        def get_sort_type(self):
+        def get_sort_type(self, control_id):
             listitems = [key for key in SORTS[self.type].values()]
             sort_strings = [value for value in SORTS[self.type].keys()]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
@@ -188,7 +188,7 @@ def get_window(window_type):
             self.update()
 
         @ch.action("contextmenu", 500)
-        def context_menu(self):
+        def context_menu(self, control_id):
             if self.type == "video":
                 more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.listitem.getProperty("channel_title"))
                 selection = xbmcgui.Dialog().contextmenu(heading=addon.LANG(32151),

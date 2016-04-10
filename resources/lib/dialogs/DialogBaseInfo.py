@@ -79,13 +79,13 @@ class DialogBaseInfo(object):
 
     @ch.click(ID_LIST_IMAGES)
     @ch.click(ID_LIST_BACKDROPS)
-    def open_image(self):
+    def open_image(self, control_id):
         pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == self.control_id)),
                                 index=self.control.getSelectedPosition())
         self.control.selectItem(pos)
 
     @ch.action("contextmenu", ID_LIST_IMAGES)
-    def thumbnail_options(self):
+    def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):
             return None
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32006)])
@@ -95,7 +95,7 @@ class DialogBaseInfo(object):
                              dbid=self.info.get_property("dbid"))
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
-    def fanart_options(self):
+    def fanart_options(self, control_id):
         if not self.info.get("dbid"):
             return None
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32007)])
@@ -106,7 +106,7 @@ class DialogBaseInfo(object):
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
     @ch.action("contextmenu", ID_LIST_YOUTUBE)
-    def download_video(self):
+    def download_video(self, control_id):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
         if selection == 0:
             import YDStreamExtractor
@@ -115,7 +115,7 @@ class DialogBaseInfo(object):
             YDStreamExtractor.handleDownload(vid)
 
     @ch.context("movie")
-    def movie_context_menu(self):
+    def movie_context_menu(self, control_id):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32083),
                                                        addon.LANG(32113)])
         if selection == 0:
@@ -134,7 +134,7 @@ class DialogBaseInfo(object):
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
-    def previous_menu(self):
+    def previous_menu(self, control_id):
         onback = self.getProperty("%i_onback" % self.control_id)
         if onback:
             xbmc.executebuiltin(onback)
@@ -143,7 +143,7 @@ class DialogBaseInfo(object):
             wm.pop_stack()
 
     @ch.action("previousmenu", "*")
-    def exit_script(self):
+    def exit_script(self, control_id):
         wm.cancel(self)
 
     @Utils.run_async

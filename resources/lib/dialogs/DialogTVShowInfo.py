@@ -76,14 +76,14 @@ def get_window(window_type):
             ch.serve(control_id, self)
 
         @ch.click(ID_BUTTON_BROWSE)
-        def browse_tvshow(self):
+        def browse_tvshow(self, control_id):
             self.close()
             xbmc.executebuiltin("Dialog.Close(all)")
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
         @ch.click(ID_LIST_CREW)
         @ch.click(ID_LIST_ACTORS)
-        def credit_dialog(self):
+        def credit_dialog(self, control_id):
             selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                                 list=[addon.LANG(32009), addon.LANG(32147)])
             if selection == 0:
@@ -93,13 +93,13 @@ def get_window(window_type):
                 self.open_credit_dialog(self.listitem.getProperty("credit_id"))
 
         @ch.click(ID_LIST_SIMILAR)
-        def open_tvshow_dialog(self):
+        def open_tvshow_dialog(self, control_id):
             wm.open_tvshow_info(prev_window=self,
                                 tmdb_id=self.listitem.getProperty("id"),
                                 dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(ID_LIST_SEASONS)
-        def open_season_dialog(self):
+        def open_season_dialog(self, control_id):
             info = self.listitem.getVideoInfoTag()
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.info.get_property("id"),
@@ -107,7 +107,7 @@ def get_window(window_type):
                                 tvshow=self.info.get_info("title"))
 
         @ch.click(ID_LIST_STUDIOS)
-        def open_company_info(self):
+        def open_company_info(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
@@ -116,7 +116,7 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_KEYWORDS)
-        def open_keyword_info(self):
+        def open_keyword_info(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
@@ -125,7 +125,7 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_GENRES)
-        def open_genre_info(self):
+        def open_genre_info(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
@@ -135,7 +135,7 @@ def get_window(window_type):
                                media_type="tv")
 
         @ch.click(ID_LIST_NETWORKS)
-        def open_network_info(self):
+        def open_network_info(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_networks",
                         "typelabel": addon.LANG(32152),
@@ -145,7 +145,7 @@ def get_window(window_type):
                                media_type="tv")
 
         @ch.click(ID_BUTTON_MANAGE)
-        def show_manage_dialog(self):
+        def show_manage_dialog(self, control_id):
             options = []
             title = self.info.get_info("tvshowtitle")
             if self.dbid:
@@ -167,7 +167,7 @@ def get_window(window_type):
                 xbmc.executebuiltin(item)
 
         @ch.click(ID_BUTTON_SETRATING)
-        def set_rating(self):
+        def set_rating(self, control_id):
             rating = Utils.get_rating_from_selectdialog()
             if tmdb.set_rating(media_type="tv",
                                media_id=self.info.get_property("id"),
@@ -176,7 +176,7 @@ def get_window(window_type):
                 self.update_states()
 
         @ch.click(ID_BUTTON_OPENLIST)
-        def open_list(self):
+        def open_list(self, control_id):
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=[addon.LANG(32144), addon.LANG(32145)])
             if index == 0:
@@ -189,25 +189,25 @@ def get_window(window_type):
                                    media_type="tv")
 
         @ch.click(ID_BUTTON_FAV)
-        def toggle_fav_status(self):
+        def toggle_fav_status(self, control_id):
             tmdb.change_fav_status(media_id=self.info.get_property("id"),
                                    media_type="tv",
                                    status=str(not bool(self.states["favorite"])).lower())
             self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
-        def open_rated_items(self):
+        def open_rated_items(self, control_id):
             wm.open_video_list(prev_window=self,
                                mode="rating",
                                media_type="tv")
 
         @ch.click(ID_BUTTON_PLOT)
-        def open_text(self):
+        def open_text(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
 
         @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self):
+        def play_youtube_video(self, control_id):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)

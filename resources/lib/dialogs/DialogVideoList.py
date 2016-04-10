@@ -76,7 +76,7 @@ def get_window(window_type):
             self.getControl(5010).setVisible(self.type != "tv")
 
         @ch.action("contextmenu", C_MAIN_LIST)
-        def context_menu(self):
+        def context_menu(self, control_id):
             item_id = self.listitem.getProperty("id")
             listitems = [addon.LANG(32169)] if self.type == "tv" else [addon.LANG(32113)]
             if self.logged_in:
@@ -134,7 +134,7 @@ def get_window(window_type):
                                         status=True)
 
         @ch.click(C_BUTTON_SORT)
-        def get_sort_type(self):
+        def get_sort_type(self, control_id):
             sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
             listitems = [k for k in self.SORTS[sort_key].values()]
             sort_strings = [v for v in self.SORTS[sort_key].keys()]
@@ -155,18 +155,18 @@ def get_window(window_type):
                                                     **kwargs)
 
         @ch.click(C_BUTTON_ORDER)
-        def toggle_order(self):
+        def toggle_order(self, control_id):
             self.order = "desc" if self.order == "asc" else "asc"
             self.update()
 
         @ch.click(5007)
-        def toggle_media_type(self):
+        def toggle_media_type(self, control_id):
             self.filters = []
             self.type = "movie" if self.type == "tv" else "tv"
             self.reset()
 
         @ch.click(C_BUTTON_ACCOUNT)
-        def open_account_menu(self):
+        def open_account_menu(self, control_id):
             if self.type == "tv":
                 listitems = [addon.LANG(32145)]
                 if self.logged_in:
@@ -205,7 +205,7 @@ def get_window(window_type):
                 dialog.doModal()
 
         @ch.click(5002)
-        def set_genre_filter(self):
+        def set_genre_filter(self, control_id):
             params = {"language": addon.setting("LanguageID")}
             response = tmdb.get_data(url="genre/%s/list" % (self.type),
                                      params=params,
@@ -222,7 +222,7 @@ def get_window(window_type):
                             label=labels[index])
 
         @ch.click(5012)
-        def set_vote_count_filter(self):
+        def set_vote_count_filter(self, control_id):
             ret = True
             if not self.type == "tv":
                 ret = xbmcgui.Dialog().yesno(heading=addon.LANG(32151),
@@ -238,7 +238,7 @@ def get_window(window_type):
                                 label=" < " + result if ret else " > " + result)
 
         @ch.click(5003)
-        def set_year_filter(self):
+        def set_year_filter(self, control_id):
             ret = xbmcgui.Dialog().yesno(heading=addon.LANG(32151),
                                          line1=addon.LANG(32106),
                                          nolabel=addon.LANG(32150),
@@ -267,7 +267,7 @@ def get_window(window_type):
                                 label=label)
 
         @ch.click(5008)
-        def set_actor_filter(self):
+        def set_actor_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
@@ -281,7 +281,7 @@ def get_window(window_type):
                             label=response["name"])
 
         @ch.click(C_MAIN_LIST)
-        def open_media(self):
+        def open_media(self, control_id):
             self.last_position = self.control.getSelectedPosition()
             info = self.listitem.getVideoInfoTag()
             media_type = info.getMediaType()
@@ -298,7 +298,7 @@ def get_window(window_type):
                                    actor_id=self.listitem.getProperty("id"))
 
         @ch.click(5010)
-        def set_company_filter(self):
+        def set_company_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result < 0:
@@ -319,7 +319,7 @@ def get_window(window_type):
                             label=response["name"])
 
         @ch.click(5009)
-        def set_keyword_filter(self):
+        def set_keyword_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
@@ -340,7 +340,7 @@ def get_window(window_type):
                             label=keyword["name"])
 
         @ch.click(5006)
-        def set_certification_filter(self):
+        def set_certification_filter(self, control_id):
             response = tmdb.get_certification_list(self.type)
             countries = [key for key in response.keys()]
             index = xbmcgui.Dialog().select(heading=addon.LANG(21879),

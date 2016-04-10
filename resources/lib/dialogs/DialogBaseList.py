@@ -55,7 +55,7 @@ class DialogBaseList(object):
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
-    def previous_menu(self):
+    def previous_menu(self, control_id):
         onback = self.getProperty("%i_onback" % self.control_id)
         if onback:
             xbmc.executebuiltin(onback)
@@ -64,14 +64,14 @@ class DialogBaseList(object):
             wm.pop_stack()
 
     @ch.action("previousmenu", "*")
-    def exit_script(self):
+    def exit_script(self, control_id):
         self.close()
 
     @ch.action("left", "*")
     @ch.action("right", "*")
     @ch.action("up", "*")
     @ch.action("down", "*")
-    def save_position(self):
+    def save_position(self, control_id):
         self.position = self.getCurrentListPosition()
 
     def onAction(self, action):
@@ -87,7 +87,7 @@ class DialogBaseList(object):
             self.update()
 
     @ch.click(C_BUTTON_RESET_FILTERS)
-    def reset_filters(self):
+    def reset_filters(self, control_id):
         if len(self.filters) > 1:
             listitems = ["%s: %s" % (f["typelabel"], f["label"]) for f in self.filters]
             listitems.append(addon.LANG(32078))
@@ -104,7 +104,7 @@ class DialogBaseList(object):
         self.reset()
 
     @ch.click(C_BUTTON_SEARCH)
-    def open_search(self):
+    def open_search(self, control_id):
         if addon.bool_setting("classic_search"):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)

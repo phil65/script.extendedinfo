@@ -59,12 +59,12 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_CREW)
         @ch.click(ID_LIST_ACTORS)
-        def open_actor_info(self):
+        def open_actor_info(self, control_id):
             wm.open_actor_info(prev_window=self,
                                actor_id=self.listitem.getProperty("id"))
 
         @ch.click(ID_LIST_EPISODES)
-        def open_episode_info(self):
+        def open_episode_info(self, control_id):
             info = self.listitem.getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
                                  tvshow=self.info["tvshowtitle"],
@@ -73,13 +73,13 @@ def get_window(window_type):
                                  episode=info.getEpisode())
 
         @ch.click(ID_CONTROL_PLOT)
-        def open_text(self):
+        def open_text(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
 
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self):
+        def play_youtube_video(self, control_id):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)

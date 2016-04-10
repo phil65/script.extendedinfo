@@ -59,17 +59,17 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_CREW)
         @ch.click(ID_LIST_ACTORS)
-        def open_actor_info(self):
+        def open_actor_info(self, control_id):
             wm.open_actor_info(prev_window=self,
                                actor_id=self.listitem.getProperty("id"))
 
         @ch.click(ID_CONTROL_PLOT)
-        def open_text(self):
+        def open_text(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_info("plot"))
 
         @ch.click(ID_CONTROL_SETRATING)
-        def set_rating_dialog(self):
+        def set_rating_dialog(self, control_id):
             rating = Utils.get_rating_from_selectdialog()
             if tmdb.set_rating(media_type="episode",
                                media_id=[self.tvshow_id,
@@ -79,7 +79,7 @@ def get_window(window_type):
                 self.update_states()
 
         @ch.click(ID_CONTROL_RATINGLISTS)
-        def open_rating_list(self):
+        def open_rating_list(self, control_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             listitems = tmdb.get_rated_media_items("tv/episodes")
             xbmc.executebuiltin("Dialog.Close(busydialog)")
@@ -88,7 +88,7 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self):
+        def play_youtube_video(self, control_id):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)

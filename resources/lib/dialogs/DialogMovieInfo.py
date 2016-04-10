@@ -104,32 +104,32 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_ACTORS)
         @ch.click(ID_LIST_CREW)
-        def open_actor_info(self):
+        def open_actor_info(self, control_id):
             wm.open_actor_info(prev_window=self,
                                actor_id=self.listitem.getProperty("id"))
 
         @ch.click(ID_LIST_SIMILAR)
         @ch.click(ID_LIST_SEASONS)
-        def open_movie_info(self):
+        def open_movie_info(self, control_id):
             wm.open_movie_info(prev_window=self,
                                movie_id=self.listitem.getProperty("id"),
                                dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(ID_BUTTON_TRAILER)
-        def play_trailer(self):
+        def play_trailer(self, control_id):
             youtube_id = self.getControl(ID_LIST_VIDEOS).getListItem(0).getProperty("youtube_id")
             PLAYER.play_youtube_video(youtube_id=youtube_id,
                                       window=self)
 
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
-        def play_youtube_video(self):
+        def play_youtube_video(self, control_id):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 
         @ch.click(ID_LIST_STUDIOS)
-        def open_company_list(self):
+        def open_company_list(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
@@ -138,14 +138,14 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_REVIEWS)
-        def show_review(self):
+        def show_review(self, control_id):
             author = self.listitem.getProperty("author")
             text = "[B]%s[/B][CR]%s" % (author, Utils.clean_text(self.listitem.getProperty("content")))
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
         @ch.click(ID_LIST_KEYWORDS)
-        def open_keyword_list(self):
+        def open_keyword_list(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
@@ -154,7 +154,7 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_GENRES)
-        def open_genre_list(self):
+        def open_genre_list(self, control_id):
             filters = [{"id": self.listitem.getProperty("id"),
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
@@ -163,7 +163,7 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_CERTS)
-        def open_cert_list(self):
+        def open_cert_list(self, control_id):
             info = self.listitem.getVideoInfoTag()
             filters = [{"id": self.listitem.getProperty("iso_3166_1"),
                         "type": "certification_country",
@@ -181,14 +181,14 @@ def get_window(window_type):
                                filters=filters)
 
         @ch.click(ID_LIST_LISTS)
-        def open_lists_list(self):
+        def open_lists_list(self, control_id):
             wm.open_video_list(prev_window=self,
                                mode="list",
                                list_id=self.listitem.getProperty("id"),
                                filter_label=self.listitem.getLabel().decode("utf-8"))
 
         @ch.click(ID_BUTTON_OPENLIST)
-        def show_list_dialog(self):
+        def show_list_dialog(self, control_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             movie_lists = tmdb.get_movie_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
@@ -208,12 +208,12 @@ def get_window(window_type):
                                    force=True)
 
         @ch.click(ID_BUTTON_PLOT)
-        def show_plot(self):
+        def show_plot(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=self.info.get_info("plot"))
 
         @ch.click(ID_BUTTON_SETRATING)
-        def set_rating_dialog(self):
+        def set_rating_dialog(self, control_id):
             rating = Utils.get_rating_from_selectdialog()
             if tmdb.set_rating(media_type="movie",
                                media_id=self.info.get_property("id"),
@@ -222,7 +222,7 @@ def get_window(window_type):
                 self.update_states()
 
         @ch.click(ID_BUTTON_ADDTOLIST)
-        def add_to_list_dialog(self):
+        def add_to_list_dialog(self, control_id):
             xbmc.executebuiltin("ActivateWindow(busydialog)")
             account_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
@@ -248,31 +248,31 @@ def get_window(window_type):
                 self.update_states()
 
         @ch.click(ID_BUTTON_FAV)
-        def change_list_status(self):
+        def change_list_status(self, control_id):
             tmdb.change_fav_status(media_id=self.info.get_property("id"),
                                    media_type="movie",
                                    status=str(not bool(self.states["favorite"])).lower())
             self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
-        def open_rating_list(self):
+        def open_rating_list(self, control_id):
             wm.open_video_list(prev_window=self,
                                mode="rating")
 
         @ch.click(ID_BUTTON_PLAY_RESUME)
-        def play_movie_resume(self):
+        def play_movie_resume(self, control_id):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             kodijson.play_media("movie", self.info["dbid"], True)
 
         @ch.click(ID_BUTTON_PLAY_NORESUME)
-        def play_movie_no_resume(self):
+        def play_movie_no_resume(self, control_id):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             kodijson.play_media("movie", self.info["dbid"], False)
 
         @ch.click(ID_BUTTON_MANAGE)
-        def show_manage_dialog(self):
+        def show_manage_dialog(self, control_id):
             options = []
             movie_id = str(self.info.get("dbid", ""))
             imdb_id = str(self.info.get("imdb_id", ""))

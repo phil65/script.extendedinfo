@@ -60,14 +60,14 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_MOVIE_ROLES)
         @ch.click(ID_LIST_MOVIE_CREW)
-        def open_movie_info(self):
+        def open_movie_info(self, control_id):
             wm.open_movie_info(prev_window=self,
                                movie_id=self.listitem.getProperty("id"),
                                dbid=self.listitem.getProperty("dbid"))
 
         @ch.click(ID_LIST_TV_ROLES)
         @ch.click(ID_LIST_TV_CREW)
-        def open_tvshow_dialog(self):
+        def open_tvshow_dialog(self, control_id):
             selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                                 list=[addon.LANG(32148), addon.LANG(32147)])
             if selection == 0:
@@ -79,20 +79,20 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_IMAGES)
         @ch.click(ID_LIST_TAGGED_IMAGES)
-        def open_image(self):
+        def open_image(self, control_id):
             listitems = next((v for (i, v) in self.listitems if i == self.control_id), None)
             pos = wm.open_slideshow(listitems=listitems,
                                     index=self.control.getSelectedPosition())
             self.control.selectItem(pos)
 
         @ch.click(ID_LIST_YOUTUBE)
-        def play_youtube_video(self):
+        def play_youtube_video(self, control_id):
             PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 
         @ch.click(ID_CONTROL_PLOT)
-        def show_plot(self):
+        def show_plot(self, control_id):
             xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                         text=self.info.get_property("biography"))
 
