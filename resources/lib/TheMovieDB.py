@@ -11,6 +11,7 @@ from functools32 import lru_cache
 
 from kodi65 import kodijson
 from kodi65 import addon
+from kodi65 import utils
 from kodi65 import selectdialog
 from kodi65.listitem import ListItem
 from kodi65.localdb import local_db
@@ -106,7 +107,7 @@ class LoginProvider(object):
         if self.session_id:
             return self.session_id
         self.session_id = self.start_new_session(cache_days=0)
-        Utils.notify("login failed")
+        utils.notify("login failed")
         return None
 
     def start_new_session(self, cache_days=0):
@@ -166,7 +167,7 @@ def set_rating(media_type, media_id, rating, dbid=None):
                            params=params,
                            values={"value": "%.1f" % rating})
     if results:
-        Utils.notify(addon.NAME, results["status_message"])
+        utils.notify(addon.NAME, results["status_message"])
         return True
 
 
@@ -175,7 +176,7 @@ def send_request(url, params, values, delete=False):
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems()}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
-    Utils.log(url)
+    utils.log(url)
     request = urllib2.Request(url=url,
                               data=json.dumps(values),
                               headers=HEADERS)
@@ -185,7 +186,7 @@ def send_request(url, params, values, delete=False):
         response = urllib2.urlopen(request, timeout=5).read()
     except urllib2.HTTPError as err:
         if err.code == 401:
-            Utils.notify("Error", "Not authorized.")
+            utils.notify("Error", "Not authorized.")
         return None
     return json.loads(response)
 
@@ -196,13 +197,13 @@ def change_fav_status(media_id=None, media_type="movie", status="true"):
               "media_id": media_id,
               "favorite": status}
     if not params["session_id"]:
-        Utils.notify("Could not get session id")
+        utils.notify("Could not get session id")
         return None
     results = send_request(url="account/%s/favorite" % Login.get_account_id(),
                            params=params,
                            values=values)
     if results:
-        Utils.notify(addon.NAME, results["status_message"])
+        utils.notify(addon.NAME, results["status_message"])
 
 
 def create_list(list_name):
@@ -216,7 +217,7 @@ def create_list(list_name):
                            params={"session_id": Login.get_session_id()},
                            values=values)
     if results:
-        Utils.notify(addon.NAME, results["status_message"])
+        utils.notify(addon.NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -226,7 +227,7 @@ def remove_list(list_id):
                            values={'media_id': list_id},
                            delete=True)
     if results:
-        Utils.notify(addon.NAME, results["status_message"])
+        utils.notify(addon.NAME, results["status_message"])
     return results["list_id"]
 
 
@@ -236,7 +237,7 @@ def change_list_status(list_id, movie_id, status):
                            params={"session_id": Login.get_session_id()},
                            values={'media_id': movie_id})
     if results:
-        Utils.notify(addon.NAME, results["status_message"])
+        utils.notify(addon.NAME, results["status_message"])
 
 
 def get_account_lists(cache_time=0):
@@ -374,7 +375,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
 def handle_episodes(results):
     listitems = []
     for item in results:
-        title = Utils.clean_text(item.get("name"))
+        title = item.get("name")
         if not title:
             title = u"%s %s" % (addon.LANG(20359), item.get('episode_number'))
         listitem = {'label': title}
@@ -386,7 +387,7 @@ def handle_episodes(results):
                             'episode': item.get('episode_number'),
                             'season': item.get('season_number'),
                             'userrating': item.get('rating'),
-                            'plot': Utils.clean_text(item.get('overview')),
+                            'plot': item.get('overview'),
                             'rating': round(item['vote_average'], 1) if item.get('vote_average') else "",
                             'votes': item.get('vote_count')})
         listitem.set_properties({'id': item.get('id'),
@@ -398,18 +399,18 @@ def handle_episodes(results):
 def handle_misc(results):
     listitems = []
     for item in results:
-        listitem = ListItem(label=Utils.clean_text(item.get('name')),
+        listitem = ListItem(label=item.get('name'),
                             path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                             artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'year': Utils.get_year(item.get('release_date')),
                             'premiered': item.get('release_date'),
-                            'plot': Utils.clean_text(item.get('description'))})
+                            'plot': item.get('description')})
         listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
                                  'item_count': item.get('item_count'),
                                  'favorite_count': item.get('favorite_count'),
                                  'iso_3166_1': item.get('iso_3166_1', "").lower(),
                                  'author': item.get('author'),
-                                 'content': Utils.clean_text(item.get('content')),
+                                 'content': item.get('content'),
                                  'id': item.get('id'),
                                  'url': item.get('url')})
         listitems.append(listitem)
@@ -514,7 +515,7 @@ def search_company(company_name):
     if response and "results" in response:
         return response["results"]
     else:
-        Utils.log("Could not find company ID for %s" % company_name)
+        utils.log("Could not find company ID for %s" % company_name)
         return ""
 
 
@@ -556,7 +557,7 @@ def get_keywords(search_label):
                         params=params,
                         cache_days=30)
     if not response or not response.get("results"):
-        Utils.log("could not find Keyword ID")
+        utils.log("could not find Keyword ID")
         return False
     return response["results"]
 
@@ -640,7 +641,7 @@ def get_movie_tmdb_id(imdb_id=None, name=None, dbid=None):
     if dbid and (int(dbid) > 0):
         movie_id = local_db.get_imdb_id("movie", dbid)
         if movie_id:
-            Utils.log("IMDB Id from local DB: %s" % (movie_id))
+            utils.log("IMDB Id from local DB: %s" % (movie_id))
             return movie_id
     if imdb_id:
         params = {"external_source": "imdb_id",
@@ -660,7 +661,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     if response and response["tv_results"]:
         return response["tv_results"][0]["id"]
     else:
-        Utils.notify("TVShow Info not available.")
+        utils.notify("TVShow Info not available.")
         return None
 
 
@@ -668,7 +669,7 @@ def get_trailer(movie_id):
     response = get_full_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
-    Utils.notify("Could not get trailer")
+    utils.notify("Could not get trailer")
     return ""
 
 
@@ -688,7 +689,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                         params=params,
                         cache_days=cache_time)
     if not info:
-        Utils.notify("Could not get movie information")
+        utils.notify("Could not get movie information")
         return {}
     mpaa = ""
     studio = [i["name"] for i in info["production_companies"]]
@@ -708,7 +709,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'mpaa': mpaa,
                      'Director': " / ".join(directors),
                      'writer': " / ".join(authors),
-                     'plot': Utils.clean_text(info.get('overview')),
+                     'plot': info.get('overview'),
                      'originaltitle': info.get('original_title'),
                      'Country': info.get('original_language'),
                      'imdbnumber': info.get('imdb_id'),
@@ -799,7 +800,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                       'duration': duration,
                       'mpaa': mpaa,
                       'genre': " / ".join([i["name"] for i in info["genres"]]),
-                      'plot': Utils.clean_text(info.get("overview")),
+                      'plot': info.get("overview"),
                       'year': Utils.get_year(info.get('first_air_date')),
                       'mediatype': "tvshow",
                       'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
@@ -865,7 +866,7 @@ def extended_season_info(tvshow_id, season_number):
                         params=params,
                         cache_days=7)
     if not response:
-        Utils.notify("Could not find season info")
+        utils.notify("Could not find season info")
         return None
     if response.get("name", False):
         title = response["name"]
@@ -874,7 +875,7 @@ def extended_season_info(tvshow_id, season_number):
     else:
         title = "%s %s" % (addon.LANG(20373), season_number)
     season = ListItem(label=title)
-    season.set_infos({'plot': Utils.clean_text(response["overview"]),
+    season.set_infos({'plot': response["overview"],
                       'tvshowtitle': tvshow.get('name'),
                       'title': title,
                       'premiered': response["air_date"]})
@@ -907,7 +908,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
                         params=params,
                         cache_days=cache_time)
     if not response:
-        Utils.notify("Could not find episode info")
+        utils.notify("Could not find episode info")
         return None
     answer = {"actors": handle_people(response["credits"]["cast"]),
               "crew": handle_people(response["credits"]["crew"]),
@@ -927,7 +928,7 @@ def extended_actor_info(actor_id):
                         params={"append_to_response": ALL_ACTOR_PROPS},
                         cache_days=1)
     if not response:
-        Utils.notify("Could not find actor info")
+        utils.notify("Could not find actor info")
         return None
     listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
                  "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
@@ -940,7 +941,7 @@ def extended_actor_info(actor_id):
                     infos={'mediatype': "artist"})
     info.set_properties({'adult': response.get('adult'),
                          'alsoknownas': " / ".join(response.get('also_known_as', [])),
-                         'biography': Utils.clean_text(response.get('biography')),
+                         'biography': response.get('biography'),
                          'birthday': response.get('birthday'),
                          'age': Utils.calculate_age(response.get('birthday'), response.get('deathday')),
                          'character': response.get('character'),
@@ -983,7 +984,7 @@ def get_rated_media_items(media_type):
         session_id = Login.get_session_id()
         account_id = Login.get_account_id()
         if not session_id:
-            Utils.notify("Could not get session id")
+            utils.notify("Could not get session id")
             return []
         params = {"session_id": session_id,
                   "language": addon.setting("LanguageID")}
@@ -993,7 +994,7 @@ def get_rated_media_items(media_type):
     else:
         session_id = Login.get_guest_session_id()
         if not session_id:
-            Utils.notify("Could not get session id")
+            utils.notify("Could not get session id")
             return []
         params = {"language": addon.setting("LanguageID")}
         response = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
@@ -1012,7 +1013,7 @@ def get_fav_items(media_type):
     session_id = Login.get_session_id()
     account_id = Login.get_account_id()
     if not session_id:
-        Utils.notify("Could not get session id")
+        utils.notify("Could not get session id")
         return []
     params = {"session_id": session_id,
               "language": addon.setting("LanguageID")}
