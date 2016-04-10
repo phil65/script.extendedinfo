@@ -3,11 +3,16 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+import urllib
+
 import xbmc
+
 import Utils
+
 from kodi65 import addon
 from kodi65.localdb import local_db
-import urllib
+from kodi65.listitem import ListItem
+
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
@@ -61,14 +66,14 @@ def handle_tracks(results):
         return None
     for item in results['track']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
-        track = {'label': item['strTrack'],
-                 'path': Utils.convert_youtube_url(item['strMusicVid']),
-                 'title': item['strTrack'],
-                 'album': item['strAlbum'],
-                 'artist': item['strArtist'],
-                 'mediatype': "song",
-                 'mbid': item['strMusicBrainzID'],
-                 "artwork": {'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg"}}
+        track = ListItem(label=item['strTrack'],
+                         path=Utils.convert_youtube_url(item['strMusicVid']))
+        track.set_infos({'title': item['strTrack'],
+                         'album': item['strAlbum'],
+                         'artist': item['strArtist'],
+                         'mediatype': "song"})
+        track.set_properties({'mbid': item['strMusicBrainzID']})
+        track.set_art({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
         tracks.append(track)
     return tracks
 
@@ -79,13 +84,13 @@ def handle_musicvideos(results):
     mvids = []
     for item in results['mvids']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
-        mvid = {'label': item['strTrack'],
-                'path': Utils.convert_youtube_url(item['strMusicVid']),
-                'title': item['strTrack'],
-                'plot': item['strDescriptionEN'],
-                'mediatype': "musicvideo",
-                'id': item['idTrack'],
-                "artwork": {'thumb': "http://i.ytimg.com/vi/" + youtube_id + "/0.jpg"}}
+        mvid = ListItem(label=item['strTrack'],
+                        path=Utils.convert_youtube_url(item['strMusicVid']))
+        mvid.set_infos({'title': item['strTrack'],
+                        'plot': item['strDescriptionEN'],
+                        'mediatype': "musicvideo"})
+        mvid.set_properties({'id': item['idTrack']})
+        mvid.set_art({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
         mvids.append(mvid)
     return mvids
 
