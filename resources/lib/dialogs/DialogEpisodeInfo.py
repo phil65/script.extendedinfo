@@ -10,10 +10,10 @@ from .. import Utils
 from .. import TheMovieDB as tmdb
 from .. import ImageTools
 from kodi65 import addon
+from kodi65 import utils
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from ..VideoPlayer import PLAYER
 
 ID_CONTROL_PLOT = 132
 ID_LIST_YOUTUBE = 350
@@ -31,7 +31,7 @@ def get_window(window_type):
 
     class DialogEpisodeInfo(DialogBaseInfo, window_type):
 
-        @Utils.busy_dialog
+        @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
             self.type = "Episode"
@@ -89,9 +89,9 @@ def get_window(window_type):
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                      listitem=self.listitem,
-                                      window=self)
+            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
+                                  listitem=self.FocusedItem(control_id),
+                                  window=self)
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update

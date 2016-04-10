@@ -5,12 +5,11 @@
 import datetime
 
 import xbmcgui
-from .. import Utils
 from .. import YouTube
 from kodi65 import addon
+from kodi65 import utils
 from DialogBaseList import DialogBaseList
 from ..WindowManager import wm
-from ..VideoPlayer import PLAYER
 from ActionHandler import ActionHandler
 
 ch = ActionHandler()
@@ -41,7 +40,7 @@ def get_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
 
-        @Utils.busy_dialog
+        @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")
@@ -70,9 +69,9 @@ def get_window(window_type):
                                    "label": youtube_id}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
-                PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                          listitem=self.listitem,
-                                          window=self)
+                wm.play_youtube_video(youtube_id=youtube_id,
+                                      listitem=self.FocusedItem(control_id),
+                                      window=self)
 
         @ch.click(5002)
         def set_published_filter(self, control_id):

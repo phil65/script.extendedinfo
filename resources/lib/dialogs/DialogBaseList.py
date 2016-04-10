@@ -7,7 +7,7 @@ import xbmc
 import xbmcgui
 
 from .. import Utils
-from kodi65 import addon
+from kodi65 import addon, utils
 from ..WindowManager import wm
 from T9Search import T9Search
 from ActionHandler import ActionHandler
@@ -188,7 +188,7 @@ class DialogBaseList(object):
                 self.column = i
                 break
 
-    @Utils.busy_dialog
+    @utils.busy_dialog
     def update(self, force_update=False):
         self.update_content(force_update=force_update)
         self.update_ui()

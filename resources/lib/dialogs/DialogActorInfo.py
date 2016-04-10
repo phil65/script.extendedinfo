@@ -10,7 +10,6 @@ from kodi65 import addon
 from .. import TheMovieDB as tmdb
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
-from ..VideoPlayer import PLAYER
 from ActionHandler import ActionHandler
 
 ID_LIST_MOVIE_ROLES = 150
@@ -87,9 +86,9 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_YOUTUBE)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                      listitem=self.listitem,
-                                      window=self)
+            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
+                                  listitem=self.FocusedItem(control_id),
+                                  window=self)
 
         @ch.click(ID_CONTROL_PLOT)
         def show_plot(self, control_id):

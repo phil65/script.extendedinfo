@@ -11,7 +11,6 @@ from .. import ImageTools
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from ..VideoPlayer import PLAYER
 
 ID_LIST_YOUTUBE = 350
 ID_LIST_CREW = 750
@@ -80,8 +79,8 @@ def get_window(window_type):
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                      listitem=self.listitem,
-                                      window=self)
+            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
+                                  listitem=self.FocusedItem(control_id),
+                                  window=self)
 
     return DialogSeasonInfo

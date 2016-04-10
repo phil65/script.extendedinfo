@@ -17,7 +17,6 @@ from kodi65 import kodijson
 from DialogBaseInfo import DialogBaseInfo
 from ..WindowManager import wm
 from ActionHandler import ActionHandler
-from ..VideoPlayer import PLAYER
 
 ID_LIST_SIMILAR = 150
 ID_LIST_SEASONS = 250
@@ -117,16 +116,18 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
-            youtube_id = self.getControl(ID_LIST_VIDEOS).getListItem(0).getProperty("youtube_id")
-            PLAYER.play_youtube_video(youtube_id=youtube_id,
-                                      window=self)
+            listitem = self.getControl(ID_LIST_VIDEOS).getListItem(0)
+            youtube_id = listitem.getProperty("youtube_id")
+            wm.play_youtube_video(youtube_id=youtube_id,
+                                  listitem=listitem,
+                                  window=self)
 
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                                      listitem=self.listitem,
-                                      window=self)
+            wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
+                                  listitem=self.FocusedItem(control_id),
+                                  window=self)
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_list(self, control_id):

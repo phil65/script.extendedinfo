@@ -15,6 +15,7 @@ from kodi65.localdb import local_db
 
 import TheMovieDB
 from kodi65 import addon
+from kodi65.player import player
 
 INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
@@ -286,6 +287,29 @@ class WindowManager(object):
         else:
             self.active_dialog = None
             Utils.notify(addon.LANG(32143))
+
+    def play_youtube_video(self, youtube_id="", listitem=None, window=False):
+        """
+        play youtube vid with info from *listitem
+        """
+        url, yt_listitem = player.youtube_info_by_id(youtube_id)
+        if not listitem:
+            listitem = yt_listitem
+        if url:
+            if window and window.window_type == "dialog":
+                wm.add_to_stack(window)
+                window.close()
+            xbmc.executebuiltin("Dialog.Close(movieinformation)")
+            xbmc.Player().play(item=url,
+                               listitem=listitem,
+                               windowed=False,
+                               startpos=-1)
+            if window and window.window_type == "dialog":
+                player.wait_for_video_end()
+                wm.pop_stack()
+        else:
+            Utils.notify(header=addon.LANG(257),
+                         message="no youtube id found")
 
 
 def check_version():

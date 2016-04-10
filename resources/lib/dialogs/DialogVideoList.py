@@ -6,6 +6,7 @@
 import xbmc
 import xbmcgui
 from kodi65 import addon
+from kodi65 import utils
 from .. import Utils
 from .. import TheMovieDB as tmdb
 from DialogBaseList import DialogBaseList
@@ -44,7 +45,7 @@ def get_window(window_type):
 
     class DialogVideoList(DialogBaseList, window_type):
 
-        @Utils.busy_dialog
+        @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogVideoList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "movie")

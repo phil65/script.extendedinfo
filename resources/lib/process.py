@@ -25,7 +25,6 @@ import YouTube
 import Trakt
 import RottenTomatoes
 from WindowManager import wm
-import VideoPlayer
 
 
 def start_info_actions(info, params):
@@ -417,7 +416,7 @@ def start_info_actions(info, params):
             xbmc.executebuiltin(builtin)
     elif info == "youtubevideo":
         xbmc.executebuiltin("Dialog.Close(all,true)")
-        VideoPlayer.PLAYER.play_youtube_video(params.get("id", ""))
+        wm.play_youtube_video(params.get("id", ""))
     elif info == 'playtrailer':
         xbmc.executebuiltin("ActivateWindow(busydialog)")
         if params.get("id"):
@@ -434,7 +433,7 @@ def start_info_actions(info, params):
             xbmc.executebuiltin("Dialog.Close(busydialog)")
             time.sleep(0.1)
             if trailer:
-                VideoPlayer.PLAYER.play_youtube_video(trailer)
+                wm.play_youtube_video(trailer)
             elif params.get("title"):
                 wm.open_youtube_list(search_str=params["title"])
             else:

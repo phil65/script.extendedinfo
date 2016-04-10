@@ -36,26 +36,6 @@ def run_async(func):
     return async_func
 
 
-def busy_dialog(func):
-    """
-    Decorator to show busy dialog while function is running
-    Only one of the decorated functions may run simultaniously
-    """
-
-    @wraps(func)
-    def decorator(self, *args, **kwargs):
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
-        try:
-            result = func(self, *args, **kwargs)
-        except Exception:
-            result = None
-        finally:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
-        return result
-
-    return decorator
-
-
 def dictfind(lst, key, value):
     for i, dic in enumerate(lst):
         if dic[key] == value:
