@@ -91,7 +91,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32006)])
         if selection == 0:
             kodijson.set_art(media_type=self.getProperty("type"),
-                             art={"poster": self.listitem.getProperty("original")},
+                             art={"poster": self.FocusedItem(control_id).getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
     @ch.action("contextmenu", ID_LIST_BACKDROPS)
@@ -101,7 +101,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32007)])
         if selection == 0:
             kodijson.set_art(media_type=self.getProperty("type"),
-                             art={"fanart": self.listitem.getProperty("original")},
+                             art={"fanart": self.FocusedItem(control_id).getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
     @ch.action("contextmenu", ID_LIST_VIDEOS)
@@ -110,7 +110,7 @@ class DialogBaseInfo(object):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
         if selection == 0:
             import YDStreamExtractor
-            vid = YDStreamExtractor.getVideoInfo(self.listitem.getProperty("youtube_id"),
+            vid = YDStreamExtractor.getVideoInfo(self.FocusedItem(control_id).getProperty("youtube_id"),
                                                  quality=1)
             YDStreamExtractor.handleDownload(vid)
 
@@ -123,14 +123,14 @@ class DialogBaseInfo(object):
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
             tmdb.change_list_status(list_id=account_lists[index]["id"],
-                                    movie_id=self.listitem.getProperty("id"),
+                                    movie_id=self.FocusedItem(control_id).getProperty("id"),
                                     status=True)
         elif selection == 1:
             rating = Utils.get_rating_from_selectdialog()
             tmdb.set_rating(media_type="movie",
-                            media_id=self.listitem.getProperty("id"),
+                            media_id=self.FocusedItem(control_id).getProperty("id"),
                             rating=rating,
-                            dbid=self.listitem.getVideoInfoTag().getDbId())
+                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")

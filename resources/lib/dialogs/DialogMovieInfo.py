@@ -106,14 +106,14 @@ def get_window(window_type):
         @ch.click(ID_LIST_CREW)
         def open_actor_info(self, control_id):
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.listitem.getProperty("id"))
+                               actor_id=self.FocusedItem(control_id).getProperty("id"))
 
         @ch.click(ID_LIST_SIMILAR)
         @ch.click(ID_LIST_SEASONS)
         def open_movie_info(self, control_id):
             wm.open_movie_info(prev_window=self,
-                               movie_id=self.listitem.getProperty("id"),
-                               dbid=self.listitem.getProperty("dbid"))
+                               movie_id=self.FocusedItem(control_id).getProperty("id"),
+                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
@@ -124,55 +124,55 @@ def get_window(window_type):
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_list(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(ID_LIST_REVIEWS)
         def show_review(self, control_id):
-            author = self.listitem.getProperty("author")
-            text = "[B]%s[/B][CR]%s" % (author, Utils.clean_text(self.listitem.getProperty("content")))
+            author = self.FocusedItem(control_id).getProperty("author")
+            text = "[B]%s[/B][CR]%s" % (author, Utils.clean_text(self.FocusedItem(control_id).getProperty("content")))
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
         @ch.click(ID_LIST_KEYWORDS)
         def open_keyword_list(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(ID_LIST_GENRES)
         def open_genre_list(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(ID_LIST_CERTS)
         def open_cert_list(self, control_id):
-            info = self.listitem.getVideoInfoTag()
-            filters = [{"id": self.listitem.getProperty("iso_3166_1"),
+            info = self.FocusedItem(control_id).getVideoInfoTag()
+            filters = [{"id": self.FocusedItem(control_id).getProperty("iso_3166_1"),
                         "type": "certification_country",
                         "typelabel": addon.LANG(32153),
-                        "label": self.listitem.getProperty("iso_3166_1")},
-                       {"id": self.listitem.getProperty("certification"),
+                        "label": self.FocusedItem(control_id).getProperty("iso_3166_1")},
+                       {"id": self.FocusedItem(control_id).getProperty("certification"),
                         "type": "certification",
                         "typelabel": addon.LANG(32127),
-                        "label": self.listitem.getProperty("certification")},
+                        "label": self.FocusedItem(control_id).getProperty("certification")},
                        {"id": str(info.getYear()),
                         "type": "year",
                         "typelabel": addon.LANG(345),
@@ -184,8 +184,8 @@ def get_window(window_type):
         def open_lists_list(self, control_id):
             wm.open_video_list(prev_window=self,
                                mode="list",
-                               list_id=self.listitem.getProperty("id"),
-                               filter_label=self.listitem.getLabel().decode("utf-8"))
+                               list_id=self.FocusedItem(control_id).getProperty("id"),
+                               filter_label=self.FocusedItem(control_id).getLabel().decode("utf-8"))
 
         @ch.click(ID_BUTTON_OPENLIST)
         def show_list_dialog(self, control_id):

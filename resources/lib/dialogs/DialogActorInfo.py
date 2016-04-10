@@ -62,8 +62,8 @@ def get_window(window_type):
         @ch.click(ID_LIST_MOVIE_CREW)
         def open_movie_info(self, control_id):
             wm.open_movie_info(prev_window=self,
-                               movie_id=self.listitem.getProperty("id"),
-                               dbid=self.listitem.getProperty("dbid"))
+                               movie_id=self.FocusedItem(control_id).getProperty("id"),
+                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
         @ch.click(ID_LIST_TV_ROLES)
         @ch.click(ID_LIST_TV_CREW)
@@ -72,10 +72,10 @@ def get_window(window_type):
                                                 list=[addon.LANG(32148), addon.LANG(32147)])
             if selection == 0:
                 wm.open_tvshow_info(prev_window=self,
-                                    tmdb_id=self.listitem.getProperty("id"),
-                                    dbid=self.listitem.getProperty("dbid"))
+                                    tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                                    dbid=self.FocusedItem(control_id).getProperty("dbid"))
             if selection == 1:
-                self.open_credit_dialog(credit_id=self.listitem.getProperty("credit_id"))
+                self.open_credit_dialog(credit_id=self.FocusedItem(control_id).getProperty("credit_id"))
 
         @ch.click(ID_LIST_IMAGES)
         @ch.click(ID_LIST_TAGGED_IMAGES)
@@ -87,7 +87,7 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_YOUTUBE)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 

@@ -61,11 +61,11 @@ def get_window(window_type):
         @ch.click(ID_LIST_ACTORS)
         def open_actor_info(self, control_id):
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.listitem.getProperty("id"))
+                               actor_id=self.FocusedItem(control_id).getProperty("id"))
 
         @ch.click(ID_LIST_EPISODES)
         def open_episode_info(self, control_id):
-            info = self.listitem.getVideoInfoTag()
+            info = self.FocusedItem(control_id).getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
                                  tvshow=self.info["tvshowtitle"],
                                  tvshow_id=self.tvshow_id,
@@ -80,7 +80,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_YOUTUBE)
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 

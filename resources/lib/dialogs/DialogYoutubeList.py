@@ -62,7 +62,7 @@ def get_window(window_type):
         @ch.click(500)
         def main_list_click(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            youtube_id = self.listitem.getProperty("youtube_id")
+            youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
@@ -190,22 +190,22 @@ def get_window(window_type):
         @ch.action("contextmenu", 500)
         def context_menu(self, control_id):
             if self.type == "video":
-                more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.listitem.getProperty("channel_title"))
+                more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))
                 selection = xbmcgui.Dialog().contextmenu(heading=addon.LANG(32151),
                                                          list=[addon.LANG(32069), more_vids])
                 if selection < 0:
                     return None
                 elif selection == 0:
-                    filter_ = [{"id": self.listitem.getProperty("youtube_id"),
+                    filter_ = [{"id": self.FocusedItem(control_id).getProperty("youtube_id"),
                                 "type": "relatedToVideoId",
                                 "typelabel": "Related",
-                                "label": self.listitem.getLabel()}]
+                                "label": self.FocusedItem(control_id).getLabel()}]
                     wm.open_youtube_list(filters=filter_)
                 elif selection == 1:
-                    filter_ = [{"id": self.listitem.getProperty("channel_id"),
+                    filter_ = [{"id": self.FocusedItem(control_id).getProperty("channel_id"),
                                 "type": "channelId",
                                 "typelabel": "Related",
-                                "label": self.listitem.getProperty("channel_title")}]
+                                "label": self.FocusedItem(control_id).getProperty("channel_title")}]
                     wm.open_youtube_list(filters=filter_)
 
         def add_filter(self, **kwargs):

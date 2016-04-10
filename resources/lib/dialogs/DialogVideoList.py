@@ -77,7 +77,7 @@ def get_window(window_type):
 
         @ch.action("contextmenu", C_MAIN_LIST)
         def context_menu(self, control_id):
-            item_id = self.listitem.getProperty("id")
+            item_id = self.FocusedItem(control_id).getProperty("id")
             listitems = [addon.LANG(32169)] if self.type == "tv" else [addon.LANG(32113)]
             if self.logged_in:
                 listitems += [addon.LANG(14076)]
@@ -91,7 +91,7 @@ def get_window(window_type):
                 if tmdb.set_rating(media_type=self.type,
                                    media_id=item_id,
                                    rating=rating,
-                                   dbid=self.listitem.getProperty("dbid")):
+                                   dbid=self.FocusedItem(control_id).getProperty("dbid")):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
                     self.setCurrentListPosition(self.position)
@@ -283,19 +283,19 @@ def get_window(window_type):
         @ch.click(C_MAIN_LIST)
         def open_media(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            info = self.listitem.getVideoInfoTag()
+            info = self.FocusedItem(control_id).getVideoInfoTag()
             media_type = info.getMediaType()
             if media_type == "tvshow":
                 wm.open_tvshow_info(prev_window=self,
-                                    tmdb_id=self.listitem.getProperty("id"),
-                                    dbid=self.listitem.getProperty("dbid"))
+                                    tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                                    dbid=self.FocusedItem(control_id).getProperty("dbid"))
             elif media_type == "movie":
                 wm.open_movie_info(prev_window=self,
-                                   movie_id=self.listitem.getProperty("id"),
-                                   dbid=self.listitem.getProperty("dbid"))
+                                   movie_id=self.FocusedItem(control_id).getProperty("id"),
+                                   dbid=self.FocusedItem(control_id).getProperty("dbid"))
             elif media_type == "artist":
                 wm.open_actor_info(prev_window=self,
-                                   actor_id=self.listitem.getProperty("id"))
+                                   actor_id=self.FocusedItem(control_id).getProperty("id"))
 
         @ch.click(5010)
         def set_company_filter(self, control_id):

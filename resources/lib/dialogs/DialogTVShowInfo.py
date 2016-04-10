@@ -88,19 +88,19 @@ def get_window(window_type):
                                                 list=[addon.LANG(32009), addon.LANG(32147)])
             if selection == 0:
                 wm.open_actor_info(prev_window=self,
-                                   actor_id=self.listitem.getProperty("id"))
+                                   actor_id=self.FocusedItem(control_id).getProperty("id"))
             if selection == 1:
-                self.open_credit_dialog(self.listitem.getProperty("credit_id"))
+                self.open_credit_dialog(self.FocusedItem(control_id).getProperty("credit_id"))
 
         @ch.click(ID_LIST_SIMILAR)
         def open_tvshow_dialog(self, control_id):
             wm.open_tvshow_info(prev_window=self,
-                                tmdb_id=self.listitem.getProperty("id"),
-                                dbid=self.listitem.getProperty("dbid"))
+                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
         @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self, control_id):
-            info = self.listitem.getVideoInfoTag()
+            info = self.FocusedItem(control_id).getVideoInfoTag()
             wm.open_season_info(prev_window=self,
                                 tvshow_id=self.info.get_property("id"),
                                 season=info.getSeason(),
@@ -108,38 +108,38 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_info(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(ID_LIST_KEYWORDS)
         def open_keyword_info(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
 
         @ch.click(ID_LIST_GENRES)
         def open_genre_info(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
 
         @ch.click(ID_LIST_NETWORKS)
         def open_network_info(self, control_id):
-            filters = [{"id": self.listitem.getProperty("id"),
+            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_networks",
                         "typelabel": addon.LANG(32152),
-                        "label": self.listitem.getLabel().decode("utf-8")}]
+                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters,
                                media_type="tv")
@@ -208,7 +208,7 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_VIDEOS)
         def play_youtube_video(self, control_id):
-            PLAYER.play_youtube_video(youtube_id=self.listitem.getProperty("youtube_id"),
+            PLAYER.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
                                       listitem=self.listitem,
                                       window=self)
 
