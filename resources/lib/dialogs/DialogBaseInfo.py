@@ -81,8 +81,8 @@ class DialogBaseInfo(object):
     @ch.click(ID_LIST_BACKDROPS)
     def open_image(self, control_id):
         pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == control_id)),
-                                index=self.control.getSelectedPosition())
-        self.control.selectItem(pos)
+                                index=self.getControl(control_id).getSelectedPosition())
+        self.getControl(control_id).selectItem(pos)
 
     @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self, control_id):

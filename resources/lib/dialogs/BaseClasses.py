@@ -15,6 +15,16 @@ class WindowXML(xbmcgui.WindowXML):
     def onInit(self):
         self.window_id = xbmcgui.getCurrentWindowId()
 
+    def FocusedItem(self, control_id):
+        try:
+            control = self.getControl(control_id)
+            listitem = control.getSelectedItem()
+            if not listitem:
+                listitem = self.getListItem(self.getCurrentListPosition())
+            return listitem
+        except Exception:
+            return None
+
 
 class DialogXML(xbmcgui.WindowXMLDialog):
 
@@ -24,3 +34,12 @@ class DialogXML(xbmcgui.WindowXMLDialog):
 
     def onInit(self):
         self.window_id = xbmcgui.getCurrentWindowDialogId()
+
+    def FocusedItem(self, control_id):
+        try:
+            listitem = self.getControl(control_id).getSelectedItem()
+            if not listitem:
+                listitem = self.getListItem(self.getCurrentListPosition())
+            return listitem
+        except Exception:
+            return None

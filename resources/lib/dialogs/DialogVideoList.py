@@ -282,7 +282,7 @@ def get_window(window_type):
 
         @ch.click(C_MAIN_LIST)
         def open_media(self, control_id):
-            self.last_position = self.control.getSelectedPosition()
+            self.last_position = self.getControl(control_id).getSelectedPosition()
             info = self.listitem.getVideoInfoTag()
             media_type = info.getMediaType()
             if media_type == "tvshow":

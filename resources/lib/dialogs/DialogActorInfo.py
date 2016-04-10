@@ -82,8 +82,8 @@ def get_window(window_type):
         def open_image(self, control_id):
             listitems = next((v for (i, v) in self.listitems if i == control_id), None)
             pos = wm.open_slideshow(listitems=listitems,
-                                    index=self.control.getSelectedPosition())
-            self.control.selectItem(pos)
+                                    index=self.getControl(control_id).getSelectedPosition())
+            self.getControl(control_id).selectItem(pos)
 
         @ch.click(ID_LIST_YOUTUBE)
         def play_youtube_video(self, control_id):

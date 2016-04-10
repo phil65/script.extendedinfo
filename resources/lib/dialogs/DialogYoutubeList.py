@@ -61,7 +61,7 @@ def get_window(window_type):
 
         @ch.click(500)
         def main_list_click(self, control_id):
-            self.last_position = self.control.getSelectedPosition()
+            self.last_position = self.getControl(control_id).getSelectedPosition()
             youtube_id = self.listitem.getProperty("youtube_id")
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
