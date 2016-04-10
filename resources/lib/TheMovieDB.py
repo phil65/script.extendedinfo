@@ -943,7 +943,7 @@ def extended_actor_info(actor_id):
                          'department': response.get('department'),
                          'job': response.get('job'),
                          'id': response['id'],
-                         'gender': genders.get(response['gender']),
+                         'gender': GENDERS.get(response['gender']),
                          'cast_id': response.get('cast_id'),
                          'credit_id': response.get('credit_id'),
                          'deathday': response.get('deathday'),
