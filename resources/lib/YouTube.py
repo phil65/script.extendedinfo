@@ -27,6 +27,7 @@ def handle_videos(results, extended=False):
         video = ListItem(label=snippet["title"],
                          path=PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id)
         video.set_infos({'plot': snippet["description"],
+                         'mediatype': "video",
                          'premiered': snippet["publishedAt"][:10]})
         video.set_artwork({'thumb': thumb})
         video.set_properties({'channel_title': snippet["channelTitle"],
@@ -50,7 +51,8 @@ def handle_videos(results, extended=False):
             duration = details['duration']
             likes = ext_item['statistics'].get('likeCount')
             dislikes = ext_item['statistics'].get('dislikeCount')
-            item.set_info("duration", duration)
+            item.set_info("duration", duration,
+                          "mediatype": "video")
             props = {"duration": details['duration'][2:].lower(),
                      "dimension": details['dimension'],
                      "definition": details['definition'],
@@ -89,6 +91,7 @@ def handle_playlists(results):
         playlist = ListItem(label=snippet["title"],
                             path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
         playlist.set_infos({'plot': snippet["description"],
+                            "mediatype": "video",
                             'premiered': snippet["publishedAt"][:10]})
         playlist.set_art("thumb", thumb)
         playlist.set_properties({'youtube_id': playlist_id,
