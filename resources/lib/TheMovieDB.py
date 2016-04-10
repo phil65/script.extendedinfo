@@ -905,9 +905,8 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
     if not response:
         utils.notify("Could not find episode info")
         return None
-    answer = {"actors": handle_people(response["credits"]["cast"]),
+    answer = {"actors": handle_people(response["credits"]["cast"] + response["credits"]["guest_stars"]),
               "crew": handle_people(response["credits"]["crew"]),
-              "guest_stars": handle_people(response["credits"]["guest_stars"]),
               "videos": handle_videos(response["videos"]["results"]) if "videos" in response else [],
               "images": handle_images(response["images"]["stills"])}
     return (handle_episodes([response])[0], answer, response.get("account_states"))
@@ -925,10 +924,10 @@ def extended_actor_info(actor_id):
     if not response:
         utils.notify("Could not find actor info")
         return None
-    listitems = {"movie_roles": handle_movies(response["movie_credits"]["cast"]),
-                 "tvshow_roles": handle_tvshows(response["tv_credits"]["cast"]),
-                 "movie_crew_roles": handle_movies(response["movie_credits"]["crew"]),
-                 "tvshow_crew_roles": handle_tvshows(response["tv_credits"]["crew"]),
+    listitems = {"movie_roles": Utils.merge_dict_lists(handle_movies(response["movie_credits"]["cast"]), "character"),
+                 "tvshow_roles": Utils.merge_dict_lists(handle_tvshows(response["tv_credits"]["cast"]), "character"),
+                 "movie_crew_roles": Utils.merge_dict_lists(handle_movies(response["movie_credits"]["crew"])),
+                 "tvshow_crew_roles": Utils.merge_dict_lists(handle_tvshows(response["tv_credits"]["crew"])),
                  "tagged_images": handle_images(response["tagged_images"]["results"]) if "tagged_images" in response else [],
                  "images": handle_images(response["images"]["profiles"])}
     info = ListItem(label=response['name'],

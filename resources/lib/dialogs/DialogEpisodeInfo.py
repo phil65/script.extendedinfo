@@ -44,7 +44,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.states = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
-            self.listitems = [(ID_LIST_ACTORS, self.data["actors"] + self.data["guest_stars"]),
+            self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
                               (ID_LIST_CREW, self.data["crew"]),
                               (ID_LIST_VIDEOS, self.data["videos"]),
                               (ID_LIST_BACKDROPS, self.data["images"])]

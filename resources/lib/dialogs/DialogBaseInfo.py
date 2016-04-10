@@ -105,6 +105,12 @@ class DialogBaseInfo(object):
                            movie_id=self.FocusedItem(control_id).getProperty("id"),
                            dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
+    @ch.click_by_type("tvshow")
+    def open_tvshow_dialog(self, control_id):
+        wm.open_tvshow_info(prev_window=self,
+                            tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                            dbid=self.FocusedItem(control_id).getProperty("dbid"))
+
     @ch.action("contextmenu", ID_LIST_IMAGES)
     def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):
@@ -150,25 +156,39 @@ class DialogBaseInfo(object):
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("artist")
-    def credit_dialog(self, control_id):
-        options = [addon.LANG(32009), addon.LANG(32147)]
-        credit_id = self.FocusedItem(control_id).getProperty("credit_id")
-        if credit_id:
-            options.append(addon.LANG(32070))
-        selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                            list=options)
+    def person_context_menu(self, control_id):
+        listitem = self.FocusedItem(control_id)
+        options = [addon.LANG(32009), addon.LANG(32070)]
+        credit_id = listitem.getProperty("credit_id")
+        if credit_id and self.type == "TVShow":
+            options.append(addon.LANG(32147))
+        selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:
             wm.open_actor_info(prev_window=self,
-                               actor_id=self.FocusedItem(control_id).getProperty("id"))
+                               actor_id=listitem.getProperty("id"))
         if selection == 1:
-            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+            filters = [{"id": listitem.getProperty("id"),
                         "type": "with_people",
                         "typelabel": addon.LANG(32156),
-                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+                        "label": listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
         if selection == 2:
             self.open_credit_dialog(credit_id)
+
+    @ch.context("tvshow")
+    def tvshow_context_menu(self, control_id):
+        credit_id = self.FocusedItem(control_id).getProperty("credit_id")
+        options = [addon.LANG(32148)]
+        if credit_id:
+            options.append(addon.LANG(32147))
+        selection = xbmcgui.Dialog().contextmenu(list=options)
+        if selection == 0:
+            wm.open_tvshow_info(prev_window=self,
+                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
+        if selection == 1:
+            self.open_credit_dialog(credit_id=credit_id)
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")

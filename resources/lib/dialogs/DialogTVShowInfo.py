@@ -82,12 +82,6 @@ def get_window(window_type):
             xbmc.executebuiltin("Dialog.Close(all)")
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
-        @ch.click(ID_LIST_SIMILAR)
-        def open_tvshow_dialog(self, control_id):
-            wm.open_tvshow_info(prev_window=self,
-                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
-
         @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()

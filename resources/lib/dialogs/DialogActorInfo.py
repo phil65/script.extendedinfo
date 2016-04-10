@@ -40,11 +40,11 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
-            self.listitems = [(ID_LIST_MOVIE_ROLES, Utils.merge_dict_lists(self.data["movie_roles"], "character")),
-                              (ID_LIST_TV_ROLES, Utils.merge_dict_lists(self.data["tvshow_roles"], "character")),
+            self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
+                              (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
                               (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_MOVIE_CREW, Utils.merge_dict_lists(self.data["movie_crew_roles"])),
-                              (ID_LIST_TV_CREW, Utils.merge_dict_lists(self.data["tvshow_crew_roles"])),
+                              (ID_LIST_MOVIE_CREW, self.data["movie_crew_roles"]),
+                              (ID_LIST_TV_CREW, self.data["tvshow_crew_roles"]),
                               (ID_LIST_TAGGED_IMAGES, self.data["tagged_images"])]
 
         def onInit(self):
@@ -54,21 +54,6 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogActorInfo, self).onClick(control_id)
             ch.serve(control_id, self)
-
-        def onAction(self, action):
-            super(DialogActorInfo, self).onAction(action)
-            ch.serve_action(action, self.getFocusId(), self)
-
-        @ch.context("tvshow")
-        @ch.click_by_type("tvshow")
-        def open_tvshow_dialog(self, control_id):
-            selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32148), addon.LANG(32147)])
-            if selection == 0:
-                wm.open_tvshow_info(prev_window=self,
-                                    tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                    dbid=self.FocusedItem(control_id).getProperty("dbid"))
-            if selection == 1:
-                self.open_credit_dialog(credit_id=self.FocusedItem(control_id).getProperty("credit_id"))
 
         @ch.click(ID_LIST_IMAGES)
         @ch.click(ID_LIST_TAGGED_IMAGES)
