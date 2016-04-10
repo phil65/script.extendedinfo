@@ -540,7 +540,7 @@ def get_person_info(person_label, skip_dialog=False):
         return False
     people = [i for i in response["results"] if i["name"] == person_label]
     if len(people) > 1 and not skip_dialog:
-        listitem, index = selectdialog.open(listitems=handle_people(people))
+        listitem, index = selectdialog.open_selectdialog(listitems=handle_people(people))
         if index >= 0:
             return people[index]
     elif people:
