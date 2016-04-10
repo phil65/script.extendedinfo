@@ -666,11 +666,11 @@ msgid "Search for '%s'"
 msgstr ""
 
 msgctxt "#32147"
-msgid "Show actor TV show appearances"
+msgid "Show appearances"
 msgstr ""
 
 msgctxt "#32148"
-msgid "Show TV show information"
+msgid "Show information"
 msgstr ""
 
 msgctxt "#32149"

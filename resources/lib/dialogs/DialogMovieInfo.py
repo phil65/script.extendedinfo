@@ -98,10 +98,6 @@ def get_window(window_type):
             super(DialogMovieInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        def onAction(self, action):
-            super(DialogMovieInfo, self).onAction(action)
-            ch.serve_action(action, self.getFocusId(), self)
-
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
             listitem = self.getControl(ID_LIST_VIDEOS).getListItem(0)

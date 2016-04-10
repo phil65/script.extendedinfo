@@ -82,17 +82,6 @@ def get_window(window_type):
             xbmc.executebuiltin("Dialog.Close(all)")
             xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
 
-        @ch.click(ID_LIST_CREW)
-        @ch.click(ID_LIST_ACTORS)
-        def credit_dialog(self, control_id):
-            selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                                list=[addon.LANG(32009), addon.LANG(32147)])
-            if selection == 0:
-                wm.open_actor_info(prev_window=self,
-                                   actor_id=self.FocusedItem(control_id).getProperty("id"))
-            if selection == 1:
-                self.open_credit_dialog(self.FocusedItem(control_id).getProperty("credit_id"))
-
         @ch.click(ID_LIST_SIMILAR)
         def open_tvshow_dialog(self, control_id):
             wm.open_tvshow_info(prev_window=self,

@@ -125,9 +125,8 @@ class DialogBaseInfo(object):
                              art={"fanart": self.FocusedItem(control_id).getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
-    @ch.action("contextmenu", ID_LIST_VIDEOS)
-    @ch.action("contextmenu", ID_LIST_YOUTUBE)
-    def download_video(self, control_id):
+    @ch.context("video")
+    def video_context_menu(self, control_id):
         selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
         if selection == 0:
             utils.download_video(self.FocusedItem(control_id).getProperty("youtube_id"))
@@ -151,15 +150,25 @@ class DialogBaseInfo(object):
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("artist")
-    def person_context_menu(self, control_id):
-        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32070)])
+    def credit_dialog(self, control_id):
+        options = [addon.LANG(32009), addon.LANG(32147)]
+        credit_id = self.FocusedItem(control_id).getProperty("credit_id")
+        if credit_id:
+            options.append(addon.LANG(32070))
+        selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+                                            list=options)
         if selection == 0:
+            wm.open_actor_info(prev_window=self,
+                               actor_id=self.FocusedItem(control_id).getProperty("id"))
+        if selection == 1:
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_people",
                         "typelabel": addon.LANG(32156),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(prev_window=self,
                                filters=filters)
+        if selection == 2:
+            self.open_credit_dialog(credit_id)
 
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
