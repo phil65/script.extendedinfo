@@ -32,6 +32,11 @@ def get_window(window_type):
 
     class DialogEpisodeInfo(DialogBaseInfo, window_type):
 
+        LISTS = [(ID_LIST_ACTORS, "actors"),
+                 (ID_LIST_CREW, "crew"),
+                 (ID_LIST_VIDEOS, "videos"),
+                 (ID_LIST_BACKDROPS, "images")]
+
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
@@ -44,10 +49,6 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.states = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
-            self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
-                              (ID_LIST_CREW, self.data["crew"]),
-                              (ID_LIST_VIDEOS, self.data["videos"]),
-                              (ID_LIST_BACKDROPS, self.data["images"])]
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()

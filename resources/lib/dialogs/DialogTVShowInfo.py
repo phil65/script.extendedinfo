@@ -42,6 +42,18 @@ ch = ActionHandler()
 def get_window(window_type):
 
     class DialogTVShowInfo(DialogBaseInfo, window_type):
+        LISTS = [(ID_LIST_SIMILAR, "similar"),
+                 (ID_LIST_SEASONS, "seasons"),
+                 (ID_LIST_NETWORKS, "networks"),
+                 (ID_LIST_STUDIOS, "studios"),
+                 (ID_LIST_CERTS, "certifications"),
+                 (ID_LIST_CREW, "crew"),
+                 (ID_LIST_GENRES, "genres"),
+                 (ID_LIST_KEYWORDS, "keywords"),
+                 (ID_LIST_ACTORS, "actors"),
+                 (ID_LIST_VIDEOS, "videos"),
+                 (ID_LIST_IMAGES, "images"),
+                 (ID_LIST_BACKDROPS, "backdrops")]
 
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
@@ -54,18 +66,6 @@ def get_window(window_type):
             if "dbid" not in self.info.get_properties():
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
-            self.listitems = [(ID_LIST_SIMILAR, self.data["similar"]),
-                              (ID_LIST_SEASONS, self.data["seasons"]),
-                              (ID_LIST_NETWORKS, self.data["networks"]),
-                              (ID_LIST_STUDIOS, self.data["studios"]),
-                              (ID_LIST_CERTS, self.data["certifications"]),
-                              (ID_LIST_CREW, self.data["crew"]),
-                              (ID_LIST_GENRES, self.data["genres"]),
-                              (ID_LIST_KEYWORDS, self.data["keywords"]),
-                              (ID_LIST_ACTORS, self.data["actors"]),
-                              (ID_LIST_VIDEOS, self.data["videos"]),
-                              (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_BACKDROPS, self.data["backdrops"])]
 
         def onInit(self):
             self.get_youtube_vids("%s tv" % (self.info.get_info("title")))

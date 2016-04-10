@@ -31,6 +31,13 @@ def get_window(window_type):
 
     class DialogActorInfo(DialogBaseInfo, window_type):
 
+        LISTS = [(ID_LIST_MOVIE_ROLES, "movie_roles"),
+                 (ID_LIST_TV_ROLES, "tvshow_roles"),
+                 (ID_LIST_IMAGES, "images"),
+                 (ID_LIST_MOVIE_CREW, "movie_crew_roles"),
+                 (ID_LIST_TV_CREW, "tvshow_crew_roles"),
+                 (ID_LIST_TAGGED_IMAGES, "tagged_images")]
+
         def __init__(self, *args, **kwargs):
             super(DialogActorInfo, self).__init__(*args, **kwargs)
             self.id = kwargs.get('id', False)
@@ -40,12 +47,6 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
-            self.listitems = [(ID_LIST_MOVIE_ROLES, self.data["movie_roles"]),
-                              (ID_LIST_TV_ROLES, self.data["tvshow_roles"]),
-                              (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_MOVIE_CREW, self.data["movie_crew_roles"]),
-                              (ID_LIST_TV_CREW, self.data["tvshow_crew_roles"]),
-                              (ID_LIST_TAGGED_IMAGES, self.data["tagged_images"])]
 
         def onInit(self):
             self.get_youtube_vids(self.info.label)

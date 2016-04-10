@@ -30,6 +30,13 @@ def get_window(window_type):
 
     class DialogSeasonInfo(DialogBaseInfo, window_type):
 
+        LISTS = [(ID_LIST_ACTORS, "actors"),
+                 (ID_LIST_CREW, "crew"),
+                 (ID_LIST_EPISODES, "episodes"),
+                 (ID_LIST_VIDEOS, "videos"),
+                 (ID_LIST_IMAGES, "images"),
+                 (ID_LIST_BACKDROPS, "backdrops")]
+
         def __init__(self, *args, **kwargs):
             super(DialogSeasonInfo, self).__init__(*args, **kwargs)
             self.type = "Season"
@@ -43,12 +50,6 @@ def get_window(window_type):
                 poster = Utils.get_file(url=self.info.get("poster", ""))
                 self.info.set_art("poster", poster)
             self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
-            self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
-                              (ID_LIST_CREW, self.data["crew"]),
-                              (ID_LIST_EPISODES, self.data["episodes"]),
-                              (ID_LIST_VIDEOS, self.data["videos"]),
-                              (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_BACKDROPS, self.data["backdrops"])]
 
         def onInit(self):
             self.get_youtube_vids("%s %s tv" % (self.info["tvshowtitle"], self.info['title']))

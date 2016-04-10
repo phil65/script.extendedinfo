@@ -52,6 +52,20 @@ def get_window(window_type):
 
     class DialogMovieInfo(DialogBaseInfo, window_type):
 
+        LISTS = [(ID_LIST_ACTORS, "actors"),
+                 (ID_LIST_SIMILAR, "similar"),
+                 (ID_LIST_SETS, "sets"),
+                 (ID_LIST_LISTS, "lists"),
+                 (ID_LIST_STUDIOS, "studios"),
+                 (ID_LIST_CERTS, "releases"),
+                 (ID_LIST_CREW, "crew"),
+                 (ID_LIST_GENRES, "genres"),
+                 (ID_LIST_KEYWORDS, "keywords"),
+                 (ID_LIST_REVIEWS, "reviews"),
+                 (ID_LIST_VIDEOS, "videos"),
+                 (ID_LIST_IMAGES, "images"),
+                 (ID_LIST_BACKDROPS, "backdrops")]
+
         def __init__(self, *args, **kwargs):
             super(DialogMovieInfo, self).__init__(*args, **kwargs)
             self.type = "Movie"
@@ -73,19 +87,7 @@ def get_window(window_type):
             self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})
             set_ids = [item.get_property("id") for item in sets_thread.listitems]
             self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
-            self.listitems = [(ID_LIST_ACTORS, self.data["actors"]),
-                              (ID_LIST_SIMILAR, self.data["similar"]),
-                              (ID_LIST_SETS, sets_thread.listitems),
-                              (ID_LIST_LISTS, self.data["lists"]),
-                              (ID_LIST_STUDIOS, self.data["studios"]),
-                              (ID_LIST_CERTS, self.data["releases"]),
-                              (ID_LIST_CREW, self.data["crew"]),
-                              (ID_LIST_GENRES, self.data["genres"]),
-                              (ID_LIST_KEYWORDS, self.data["keywords"]),
-                              (ID_LIST_REVIEWS, self.data["reviews"]),
-                              (ID_LIST_VIDEOS, self.data["videos"]),
-                              (ID_LIST_IMAGES, self.data["images"]),
-                              (ID_LIST_BACKDROPS, self.data["backdrops"])]
+            self.data["sets"] = sets_thread.listitems
 
         def onInit(self):
             super(DialogMovieInfo, self).onInit()

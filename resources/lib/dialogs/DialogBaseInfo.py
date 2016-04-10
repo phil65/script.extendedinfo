@@ -45,10 +45,11 @@ class DialogBaseInfo(object):
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
         self.info.to_windowprops(window_id=self.window_id)
-        for container_id, listitems in self.listitems:
+        for container_id, key in self.LISTS:
             try:
                 self.getControl(container_id).reset()
-                self.getControl(container_id).addItems([i.get_listitem() for i in listitems])
+                items = [i.get_listitem() for i in self.data[key]]
+                self.getControl(container_id).addItems(items)
             except Exception:
                 Utils.log("Notice: No container with id %i available" % container_id)
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
@@ -84,7 +85,9 @@ class DialogBaseInfo(object):
     @ch.click(ID_LIST_IMAGES)
     @ch.click(ID_LIST_BACKDROPS)
     def open_image(self, control_id):
-        pos = wm.open_slideshow(listitems=next((v for (i, v) in self.listitems if i == control_id)),
+        key = [key for container_id, key in self.LISTS if container_id == control_id][0]
+        listitems = self.data[key]
+        pos = wm.open_slideshow(listitems=listitems,
                                 index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
 
