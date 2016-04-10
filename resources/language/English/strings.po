@@ -527,6 +527,7 @@ msgctxt "#32112"
 msgid "Vote average"
 msgstr ""
 
+#: /resources/lib/dialogs/DialogBaseInfo.py:120
 msgctxt "#32113"
 msgid "Rate movie"
 msgstr ""
