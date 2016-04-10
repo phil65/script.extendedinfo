@@ -457,7 +457,7 @@ def handle_people(results):
                           artwork=get_image_urls(profile=item.get("profile_path")))
         person.set_properties({'adult': item.get('adult'),
                                'alsoknownas': " / ".join(item.get('also_known_as', [])),
-                               'biography': Utils.clean_text(item.get('biography')),
+                               'biography': item.get('biography'),
                                'birthday': item.get('birthday'),
                                'age': Utils.calculate_age(item.get('birthday'), item.get('deathday')),
                                'character': item.get('character'),
