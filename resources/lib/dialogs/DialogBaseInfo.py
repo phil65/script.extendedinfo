@@ -15,6 +15,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import selectdialog
+from kodi65 import slideshow
 from kodi65.listitem import ListItem
 from ActionHandler import ActionHandler
 
@@ -87,8 +88,8 @@ class DialogBaseInfo(object):
     def open_image(self, control_id):
         key = [key for container_id, key in self.LISTS if container_id == control_id][0]
         listitems = self.data[key]
-        pos = wm.open_slideshow(listitems=listitems,
-                                index=self.getControl(control_id).getSelectedPosition())
+        pos = slideshow.open_slideshow(listitems=listitems,
+                                       index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
 
     @ch.click_by_type("video")
@@ -231,7 +232,8 @@ class DialogBaseInfo(object):
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": addon.LANG(19055)}]
-        listitem, index = selectdialog.open_selectdialog(listitems=listitems)
+        listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32151),
+                                                         listitems=listitems)
         if listitem["mediatype"] == "episode":
             wm.open_episode_info(prev_window=self,
                                  season=listitems[index]["season"],
