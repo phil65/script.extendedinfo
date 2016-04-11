@@ -11,10 +11,10 @@ import xbmcgui
 from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import omdb
-from resources.lib import ImageTools
 from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
+from kodi65 import imagetools
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
@@ -79,7 +79,7 @@ def get_window(window_type):
                                                     param=self.info.get_property("imdb_id"))
             self.omdb_thread.start()
             sets_thread.start()
-            self.info.update_properties(ImageTools.blur(self.info.get_art("thumb")))
+            self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
             if not self.info.get_property("dbid"):
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             sets_thread.join()

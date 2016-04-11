@@ -7,10 +7,10 @@ import xbmc
 import xbmcgui
 
 from resources.lib import Utils
-from resources.lib import ImageTools
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
 
+from kodi65 import imagetools
 from kodi65 import addon
 from DialogBaseInfo import DialogBaseInfo
 from ActionHandler import ActionHandler
@@ -65,7 +65,7 @@ def get_window(window_type):
             self.info, self.data, self.states = data
             if not self.info.get_property("dbid"):
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
-            self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
+            self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
 
         def onInit(self):
             self.get_youtube_vids("%s tv" % (self.info.get_info("title")))

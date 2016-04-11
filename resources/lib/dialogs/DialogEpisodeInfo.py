@@ -7,10 +7,10 @@ import xbmc
 import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
-from resources.lib import ImageTools
 from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
+from kodi65 import imagetools
 from kodi65 import addon
 from kodi65 import utils
 from ActionHandler import ActionHandler
@@ -46,7 +46,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data, self.states = data
-            self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
+            self.info.update_properties(imagetools.blur(self.info.get("thumb")))
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()

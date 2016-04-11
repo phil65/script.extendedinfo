@@ -5,11 +5,11 @@
 
 import xbmcgui
 
-from resources.lib import ImageTools
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
+from kodi65 import imagetools
 from kodi65 import addon
 from ActionHandler import ActionHandler
 
@@ -44,7 +44,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            self.info.update_properties(ImageTools.blur(self.info.get("thumb")))
+            self.info.update_properties(imagetools.blur(self.info.get("thumb")))
 
         def onInit(self):
             self.get_youtube_vids(self.info.label)
