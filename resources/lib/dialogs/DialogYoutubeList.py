@@ -180,7 +180,7 @@ def get_window(window_type):
                 self.sort_label = addon.LANG(32060)
             self.reset()
 
-        def update_ui(self, control_id):
+        def update_ui(self):
             self.setProperty("Type", TRANSLATIONS[self.type])
             self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
             self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
