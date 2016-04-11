@@ -856,7 +856,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     certifications = merge_with_cert_desc(handle_misc(info["content_ratings"]["results"]), "tv")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
-                 "studios": handle_misc(info["production_companies"]),
+                 "studios": handle_text(info["production_companies"]),
                  "networks": handle_text(info["networks"]),
                  "certifications": certifications,
                  "crew": handle_people(info["credits"]["crew"]),
@@ -997,7 +997,7 @@ def translate_status(status):
 
 def get_movie_lists(movie_id):
     data = get_full_movie(movie_id)
-    return handle_misc(data["lists"]["results"])
+    return handle_lists(data["lists"]["results"])
 
 
 def get_rated_media_items(media_type):

@@ -254,10 +254,6 @@ def reduce_list(items, key="job"):
     return crews
 
 
-def create_listitems(data=None, preload_images=0):
-    return [item.get_listitem() for item in data] if data else []
-
-
 def clean_text(text):
     if not text:
         return ""

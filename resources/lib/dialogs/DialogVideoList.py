@@ -57,7 +57,7 @@ def get_window(window_type):
             self.order = kwargs.get('order', "desc")
             self.logged_in = tmdb.Login.check_login()
             if self.listitem_list:
-                self.listitems = Utils.create_listitems(self.listitem_list)
+                self.listitems = utils.create_listitems(self.listitem_list)
                 self.total_items = len(self.listitem_list)
             else:
                 self.update_content(force_update=kwargs.get('force', False))

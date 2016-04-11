@@ -17,6 +17,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65.player import player
 from kodi65.localdb import local_db
+from kodi65 import slideshow
 
 INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
@@ -270,12 +271,8 @@ class WindowManager(object):
         """
         open slideshow dialog for single image
         """
-        from dialogs import SlideShow
-        dialog = SlideShow.SlideShow(u'script-%s-SlideShow.xml' % addon.NAME, addon.PATH,
-                                     listitems=listitems,
-                                     index=index)
-        dialog.doModal()
-        return dialog.position
+        return slideshow.open_slideshow(listitems=listitems,
+                                        index=index)
 
     def open_dialog(self, dialog, prev_window):
         if dialog.data:

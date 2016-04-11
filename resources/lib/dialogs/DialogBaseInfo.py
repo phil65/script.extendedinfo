@@ -220,7 +220,7 @@ class DialogBaseInfo(object):
                 vid_ids = [item.get_property("key") for item in self.data["videos"]]
                 self.yt_listitems = [i for i in self.yt_listitems if i.get_property("youtube_id") not in vid_ids]
         youtube_list.reset()
-        youtube_list.addItems(Utils.create_listitems(self.yt_listitems))
+        youtube_list.addItems(utils.create_listitems(self.yt_listitems))
 
     def open_credit_dialog(self, credit_id):
         info = tmdb.get_credit_info(credit_id)

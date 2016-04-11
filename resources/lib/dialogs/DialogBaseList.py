@@ -6,10 +6,10 @@
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib.WindowManager import wm
 
-from kodi65 import addon, utils
+from kodi65 import addon
+from kodi65 import utils
 from T9Search import T9Search
 from ActionHandler import ActionHandler
 
@@ -144,7 +144,7 @@ class DialogBaseList(object):
         self.total_items = data.get("total_results", "")
         self.next_page_token = data.get("next_page_token", "")
         self.prev_page_token = data.get("prev_page_token", "")
-        self.listitems = Utils.create_listitems(self.listitems)
+        self.listitems = utils.create_listitems(self.listitems)
 
     def update_ui(self):
         if not self.listitems and self.getFocusId() == ID_LIST_MAIN:
