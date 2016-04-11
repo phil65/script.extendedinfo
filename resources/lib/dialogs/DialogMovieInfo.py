@@ -119,7 +119,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_REVIEWS)
         def show_review(self, control_id):
             author = self.FocusedItem(control_id).getProperty("author")
-            text = "[B]%s[/B][CR]%s" % (author, Utils.clean_text(self.FocusedItem(control_id).getProperty("content")))
+            text = "[B]%s[/B][CR]%s" % (author, self.FocusedItem(control_id).getProperty("content"))
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
@@ -193,7 +193,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating_dialog(self, control_id):
-            rating = Utils.get_rating_from_selectdialog()
+            rating = Utils.input_userrating()
             if tmdb.set_rating(media_type="movie",
                                media_id=self.info.get_property("id"),
                                rating=rating,

@@ -152,7 +152,7 @@ class DialogBaseInfo(object):
                                     movie_id=self.FocusedItem(control_id).getProperty("id"),
                                     status=True)
         elif selection == 1:
-            rating = Utils.get_rating_from_selectdialog()
+            rating = Utils.input_userrating()
             tmdb.set_rating(media_type="movie",
                             media_id=self.FocusedItem(control_id).getProperty("id"),
                             rating=rating,

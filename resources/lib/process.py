@@ -407,7 +407,7 @@ def start_info_actions(info, params):
             tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=tvdb_id)
         else:
             return False
-        rating = Utils.get_rating_from_selectdialog()
+        rating = Utils.input_userrating()
         tmdb.set_rating(media_type=media_type,
                         media_id=tmdb_id,
                         rating=rating,

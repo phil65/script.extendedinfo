@@ -288,7 +288,7 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   sound=sound)
 
 
-def get_rating_from_selectdialog():
+def input_userrating():
     return xbmcgui.Dialog().select(heading=addon.LANG(32129),
                                    list=[str(float(i * 0.5)) for i in xrange(1, 21)])
 
