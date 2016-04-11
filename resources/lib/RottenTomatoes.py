@@ -6,6 +6,7 @@
 import Utils
 
 from kodi65 import addon
+from kodi65 import utils
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem
 
@@ -41,8 +42,8 @@ def get_movies(movie_type):
                          'imdbnumber': imdb_id,
                          'mpaa': item["mpaa_rating"]})
         movie.set_properties({'imdb_id': imdb_id,
-                              'duration(h)': Utils.format_time(item["runtime"], "h"),
-                              'duration(m)': Utils.format_time(item["runtime"], "m")})
+                              'duration(h)': utils.format_time(item["runtime"], "h"),
+                              'duration(m)': utils.format_time(item["runtime"], "m")})
         movie.set_artwork({'thumb': item["posters"]["original"],
                            'poster': item["posters"]["original"]})
         movies.append(movie)

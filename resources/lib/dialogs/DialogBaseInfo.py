@@ -53,7 +53,7 @@ class DialogBaseInfo(object):
             except Exception:
                 Utils.log("Notice: No container with id %i available" % container_id)
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
-        addon.set_global("infobackground", self.info.get_art('fanart'))
+        addon.set_global("infobackground", self.info.get_art('fanart_small'))
         self.setProperty("type", self.TYPE)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 

@@ -6,6 +6,7 @@
 import datetime
 import Utils
 from kodi65 import addon
+from kodi65 import utils
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem
 import urllib
@@ -63,8 +64,8 @@ def get_episodes(content):
                                  'id': episode["episode"]["ids"]["tvdb"],
                                  'imdb_id': episode["episode"]["ids"]["imdb"],
                                  'homepage': episode["show"]["homepage"],
-                                 'duration(h)': Utils.format_time(episode["show"]["runtime"], "h"),
-                                 'duration(m)': Utils.format_time(episode["show"]["runtime"], "m")})
+                                 'duration(h)': utils.format_time(episode["show"]["runtime"], "h"),
+                                 'duration(m)': utils.format_time(episode["show"]["runtime"], "m")})
             show.set_artwork({'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                               'poster': episode["show"]["images"]["poster"]["full"],
                               'banner': episode["show"]["images"]["banner"]["full"],
@@ -104,8 +105,8 @@ def handle_movies(results):
                               'watchers': item.get("watchers"),
                               'language': item.get("language"),
                               'homepage': item.get("homepage"),
-                              'duration(h)': Utils.format_time(item["runtime"], "h"),
-                              'duration(m)': Utils.format_time(item["runtime"], "m")})
+                              'duration(h)': utils.format_time(item["runtime"], "h"),
+                              'duration(m)': utils.format_time(item["runtime"], "m")})
         movie.set_artwork({'poster': item["images"]["poster"]["full"],
                            'fanart': item["images"]["fanart"]["full"],
                            'clearlogo': item["images"]["logo"]["full"],
@@ -145,8 +146,8 @@ def handle_tvshows(results):
                              'tvdb_id': item['ids']["tvdb"],
                              'imdb_id': item['ids']["imdb"],
                              'trakt_id': item['ids']["trakt"],
-                             'duration(h)': Utils.format_time(item["runtime"], "h"),
-                             'duration(m)': Utils.format_time(item["runtime"], "m"),
+                             'duration(h)': utils.format_time(item["runtime"], "h"),
+                             'duration(m)': utils.format_time(item["runtime"], "m"),
                              'language': item["language"],
                              'aired_episodes': item["aired_episodes"],
                              'homepage': item["homepage"],

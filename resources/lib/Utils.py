@@ -47,27 +47,6 @@ def get_infolabel(name):
     return xbmc.getInfoLabel(name).decode("utf-8")
 
 
-def format_time(time, time_format=None):
-    """
-    get formatted time
-    time_format = h, m or None
-    """
-    try:
-        intTime = int(time)
-    except Exception:
-        return time
-    hour = str(intTime / 60)
-    minute = str(intTime % 60).zfill(2)
-    if time_format == "h":
-        return hour
-    elif time_format == "m":
-        return minute
-    elif intTime >= 60:
-        return hour + " h " + minute + " min"
-    else:
-        return minute + " min"
-
-
 def merge_dicts(*dict_args):
     '''
     Given any number of dicts, shallow copy and merge into a new dict,
