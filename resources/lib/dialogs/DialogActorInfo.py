@@ -5,7 +5,6 @@
 
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import ImageTools
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
@@ -59,7 +58,8 @@ def get_window(window_type):
         @ch.click(ID_LIST_IMAGES)
         @ch.click(ID_LIST_TAGGED_IMAGES)
         def open_image(self, control_id):
-            listitems = next((v for (i, v) in self.listitems if i == control_id), None)
+            key = [key for container_id, key in self.LISTS if container_id == control_id][0]
+            listitems = self.data[key]
             pos = wm.open_slideshow(listitems=listitems,
                                     index=self.getControl(control_id).getSelectedPosition())
             self.getControl(control_id).selectItem(pos)
