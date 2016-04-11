@@ -11,7 +11,7 @@ import Utils
 
 from kodi65 import addon
 from kodi65.localdb import local_db
-from kodi65.listitem import ListItem
+from kodi65.listitem import AudioItem
 
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
@@ -33,8 +33,8 @@ def handle_albums(results):
             desc = item['strDescription']
         if item.get('strReview'):
             desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (addon.LANG(185), item['strReview'])
-        album = ListItem(label=item['strAlbum'],
-                         path="")
+        album = AudioItem(label=item['strAlbum'],
+                          path="")
         album.set_infos({'artist': [item['strArtist']],
                          'mediatype': "album",
                          'genre': item['strGenre'],
@@ -67,8 +67,8 @@ def handle_tracks(results):
         return None
     for item in results['track']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
-        track = ListItem(label=item['strTrack'],
-                         path=Utils.convert_youtube_url(item['strMusicVid']))
+        track = AudioItem(label=item['strTrack'],
+                          path=Utils.convert_youtube_url(item['strMusicVid']))
         track.set_infos({'title': item['strTrack'],
                          'album': item['strAlbum'],
                          'artist': [item['strArtist']],
@@ -85,8 +85,8 @@ def handle_musicvideos(results):
     mvids = []
     for item in results['mvids']:
         youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
-        mvid = ListItem(label=item['strTrack'],
-                        path=Utils.convert_youtube_url(item['strMusicVid']))
+        mvid = AudioItem(label=item['strTrack'],
+                         path=Utils.convert_youtube_url(item['strMusicVid']))
         mvid.set_infos({'title': item['strTrack'],
                         'plot': item['strDescriptionEN'],
                         'mediatype': "musicvideo"})
