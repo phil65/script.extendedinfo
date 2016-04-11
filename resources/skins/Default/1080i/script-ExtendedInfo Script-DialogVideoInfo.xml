@@ -959,26 +959,6 @@
 					<control type="group">
 						<height>120</height>
 						<visible>!IsEmpty(Window.Property(omdb.Awards)) | !IsEmpty(Window.Property(omdb.tomatoConsensus))</visible>
-						<!--
-							 <control type="radiobutton" id="241">
-							 <left>0</left>
-							 <top>-30</top>
-							 <width>1930</width>
-							 <height>130</height>
-							 <radioposx>30</radioposx>
-							 <top>20</top>
-							 <radiowidth>46</radiowidth>
-							 <radioheight>46</radioheight>
-							 <onup>750</onup>
-							 <ondown>150</ondown>
-							 <textureradioonfocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioonfocus>
-							 <textureradioofffocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioofffocus>
-							 <textureradiooffnofocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
-							 <textureradioonnofocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
-							 <texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/button-fo.png</texturefocus>
-							 <texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/button-nofo.png</texturenofocus>
-							 <label>-</label>
-							 </control> -->
 						<control type="image">
 							<left>30</left>
 							<top>0</top>

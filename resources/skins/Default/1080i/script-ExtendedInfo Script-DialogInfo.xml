@@ -196,32 +196,24 @@
 					</control>
 					<control type="group" id="140">
 						<height>255</height>
-						<control type="radiobutton" id="132">
+						<control type="button" id="132">
 							<left>0</left>
 							<top>0</top>
 							<width>1120</width>
 							<height>255</height>
-							<radioposx>30</radioposx>
-							<radioposy>20</radioposy>
-							<radiowidth>46</radiowidth>
-							<radioheight>46</radioheight>
 							<onup>SetFocus(20000)</onup>
 							<ondown>150</ondown>
-							<textureradioonfocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioonfocus>
-							<textureradioofffocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioofffocus>
-							<textureradiooffnofocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradiooffnofocus>
-							<textureradioonnofocus colordiffuse="FFFAFAFA">icons/DefaultAddonTvInfo.png</textureradioonnofocus>
 							<texturefocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/button-fo.png</texturefocus>
 							<texturenofocus border="40" colordiffuse="$INFO[Window(home).Property(ImageColor)]">buttons/button-nofo.png</texturenofocus>
 							<label>-</label>
 						</control>
 						<control type="textbox" id="800">
-							<left>93</left>
-							<top>20</top>
-							<width>980</width>
-							<height>210</height>
+							<left>55</left>
+							<top>30</top>
+							<width>1010</width>
+							<height>188</height>
 							<align>left</align>
-							<label fallback="No info available">$INFO[Window.Property(Biography)]</label>
+							<label fallback="19055">$INFO[Window.Property(Biography)]</label>
 							<font>font12</font>
 							<autoscroll delay="10000" time="2000" repeat="10000">true</autoscroll>
 						</control>
