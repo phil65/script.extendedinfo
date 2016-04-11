@@ -243,9 +243,9 @@ def get_file(url):
         response = urllib2.urlopen(request, timeout=3)
         data = response.read()
         response.close()
-        log('image downloaded: ' + url)
+        log('image downloaded: ' + clean_url)
     except Exception:
-        log('image download failed: ' + url)
+        log('image download failed: ' + clean_url)
         return ""
     if not data:
         return ""
