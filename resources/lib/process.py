@@ -24,6 +24,7 @@ from WindowManager import wm
 
 from kodi65.localdb import local_db
 from kodi65 import addon
+from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import favs
 
@@ -298,7 +299,7 @@ def start_info_actions(info, params):
             params = {"name": Utils.get_infolabel("%sListItem.Label" % container_id)}
             start_info_actions("extendedactorinfo", params)
         else:
-            Utils.notify("Error", "Could not find valid content type")
+            utils.notify("Error", "Could not find valid content type")
     elif info == "ratedialog":
         if xbmc.getCondVisibility("System.HasModalDialog"):
             container_id = ""
@@ -448,7 +449,7 @@ def start_info_actions(info, params):
                     shutil.rmtree(path)
             except Exception as e:
                 Utils.log(e)
-        Utils.notify("Cache deleted")
+        utils.notify("Cache deleted")
     elif info == 'syncwatchlist':
         pass
 

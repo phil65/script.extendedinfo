@@ -315,7 +315,7 @@ def get_window(window_type):
             elif response:
                 response = response[0]
             else:
-                Utils.notify("No company found")
+                utils.notify("No company found")
             self.add_filter(key="with_companies",
                             value=str(response["id"]),
                             typelabel=addon.LANG(20388),
@@ -392,7 +392,7 @@ def get_window(window_type):
                 if self.logged_in:
                     session_id = tmdb.Login.get_session_id()
                     if not session_id:
-                        Utils.notify("Could not get session id")
+                        utils.notify("Could not get session id")
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
@@ -404,7 +404,7 @@ def get_window(window_type):
                 else:
                     session_id = tmdb.Login.get_guest_session_id()
                     if not session_id:
-                        Utils.notify("Could not get session id")
+                        utils.notify("Could not get session id")
                         return {"listitems": [],
                                 "results_per_page": 0,
                                 "total_results": 0}
@@ -438,7 +438,7 @@ def get_window(window_type):
                         "results_per_page": 0,
                         "total_results": 0}
             if not response["results"]:
-                Utils.notify(addon.LANG(284))
+                utils.notify(addon.LANG(284))
             if self.mode == "search":
                 listitems = tmdb.handle_multi_search(response["results"])
             elif self.type == "movie":
