@@ -54,7 +54,7 @@ class DialogBaseInfo(object):
                 Utils.log("Notice: No container with id %i available" % container_id)
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
         addon.set_global("infobackground", self.info.get_art('fanart'))
-        self.setProperty("type", self.type)
+        self.setProperty("type", self.TYPE)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 
     def onAction(self, action):
@@ -163,7 +163,7 @@ class DialogBaseInfo(object):
         listitem = self.FocusedItem(control_id)
         options = [addon.LANG(32009), addon.LANG(32070)]
         credit_id = listitem.getProperty("credit_id")
-        if credit_id and self.type == "TVShow":
+        if credit_id and self.TYPE == "TVShow":
             options.append(addon.LANG(32147))
         selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:

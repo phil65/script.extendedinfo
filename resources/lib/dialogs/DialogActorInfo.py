@@ -29,7 +29,7 @@ ch = ActionHandler()
 def get_window(window_type):
 
     class DialogActorInfo(DialogBaseInfo, window_type):
-
+        TYPE = "Actor"
         LISTS = [(ID_LIST_MOVIE_ROLES, "movie_roles"),
                  (ID_LIST_TV_ROLES, "tvshow_roles"),
                  (ID_LIST_IMAGES, "images"),
@@ -40,7 +40,6 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogActorInfo, self).__init__(*args, **kwargs)
             self.id = kwargs.get('id', False)
-            self.type = "Actor"
             data = tmdb.extended_actor_info(actor_id=self.id)
             if not data:
                 return None

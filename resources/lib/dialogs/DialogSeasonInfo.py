@@ -29,7 +29,7 @@ ch = ActionHandler()
 def get_window(window_type):
 
     class DialogSeasonInfo(DialogBaseInfo, window_type):
-
+        TYPE = "Season"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_CREW, "crew"),
                  (ID_LIST_EPISODES, "episodes"),
@@ -39,7 +39,6 @@ def get_window(window_type):
 
         def __init__(self, *args, **kwargs):
             super(DialogSeasonInfo, self).__init__(*args, **kwargs)
-            self.type = "Season"
             self.tvshow_id = kwargs.get('id')
             data = tmdb.extended_season_info(tvshow_id=self.tvshow_id,
                                              season_number=kwargs.get('season'))

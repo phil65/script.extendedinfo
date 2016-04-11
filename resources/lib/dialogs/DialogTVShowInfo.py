@@ -42,6 +42,7 @@ ch = ActionHandler()
 def get_window(window_type):
 
     class DialogTVShowInfo(DialogBaseInfo, window_type):
+        TYPE = "TVShow"
         LISTS = [(ID_LIST_SIMILAR, "similar"),
                  (ID_LIST_SEASONS, "seasons"),
                  (ID_LIST_NETWORKS, "networks"),
@@ -57,7 +58,6 @@ def get_window(window_type):
 
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-            self.type = "TVShow"
             data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
                                              dbid=self.dbid)
             if not data:

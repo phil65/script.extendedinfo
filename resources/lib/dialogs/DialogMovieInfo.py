@@ -51,7 +51,7 @@ ch = ActionHandler()
 def get_window(window_type):
 
     class DialogMovieInfo(DialogBaseInfo, window_type):
-
+        TYPE = "Movie"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_SIMILAR, "similar"),
                  (ID_LIST_SETS, "sets"),
@@ -68,7 +68,6 @@ def get_window(window_type):
 
         def __init__(self, *args, **kwargs):
             super(DialogMovieInfo, self).__init__(*args, **kwargs)
-            self.type = "Movie"
             data = tmdb.extended_movie_info(movie_id=kwargs.get('id'),
                                             dbid=self.dbid)
             if not data:
