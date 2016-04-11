@@ -168,7 +168,7 @@ def start_info_actions(info, params):
             movies = tmdb.get_person_movies(person["id"])
             for item in movies:
                 del item["credit_id"]
-            return Utils.merge_dict_lists(movies, key="department")
+            return Utils.reduce_list(movies, key="department")
     elif info == 'traktsimilarmovies':
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):

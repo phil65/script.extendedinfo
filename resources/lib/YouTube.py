@@ -8,6 +8,7 @@ import itertools
 
 import Utils
 
+from kodi65 import utils
 from kodi65.listitem import ListItem
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
@@ -57,7 +58,7 @@ def handle_videos(results, extended=False):
                      "dimension": details['dimension'],
                      "definition": details['definition'],
                      "caption": details['caption'],
-                     "viewcount": Utils.millify(ext_item['statistics']['viewCount']),
+                     "viewcount": utils.millify(ext_item['statistics']['viewCount']),
                      "likes": likes,
                      "dislikes": dislikes}
             item.update_properties(props)

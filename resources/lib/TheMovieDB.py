@@ -302,7 +302,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         'Trailer': "%splaytrailer&&id=%s" % (PLUGIN_BASE, movie.get("id")),
                         'genre': " / ".join([i for i in genres if i]),
                         'votes': movie.get('vote_count'),
-                        'year': Utils.get_year(release_date),
+                        'year': utils.get_year(release_date),
                         'rating': round(movie['vote_average'], 1) if movie.get('vote_average') else "",
                         'userrating': movie.get('rating'),
                         'premiered': release_date})
@@ -345,7 +345,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                          'genre': " / ".join([i for i in genres if i]),
                          'country': tv.get('original_language'),
                          'plot': tv.get("overview"),
-                         'year': Utils.get_year(tv.get('first_air_date')),
+                         'year': utils.get_year(tv.get('first_air_date')),
                          'mediatype': "tvshow",
                          'rating': round(tv['vote_average'], 1) if tv.get("vote_average") else "",
                          'userrating': tv.get('rating'),
@@ -397,7 +397,7 @@ def handle_misc(results):
         listitem = ListItem(label=item.get('name'),
                             path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                             artwork=get_image_urls(poster=item.get("poster_path")))
-        listitem.set_infos({'year': Utils.get_year(item.get('release_date')),
+        listitem.set_infos({'year': utils.get_year(item.get('release_date')),
                             'premiered': item.get('release_date'),
                             'plot': item.get('description')})
         listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
@@ -422,7 +422,7 @@ def handle_seasons(results):
         listitem.set_infos({'mediatype': "season",
                             'season': season,
                             'premiered': item.get('air_date'),
-                            'year': Utils.get_year(item.get('air_date'))})
+                            'year': utils.get_year(item.get('air_date'))})
         listitems.append(listitem)
     return listitems
 
@@ -711,7 +711,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'Country': info.get('original_language'),
                      'imdbnumber': info.get('imdb_id'),
                      'genre': " / ".join([i["name"] for i in info["genres"]]),
-                     'year': Utils.get_year(info.get("release_date")),
+                     'year': utils.get_year(info.get("release_date")),
                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
                      'premiered': info.get('release_date'),
                      'votes': info.get('vote_count'),
@@ -724,8 +724,8 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                           'imdb_id': info.get('imdb_id'),
                           'duration(h)': Utils.format_time(info.get("runtime"), "h"),
                           'duration(m)': Utils.format_time(info.get("runtime"), "m"),
-                          'budget': Utils.millify(info.get("budget")),
-                          'revenue': Utils.millify(info.get("revenue")),
+                          'budget': utils.millify(info.get("budget")),
+                          'revenue': utils.millify(info.get("revenue")),
                           'homepage': info.get('homepage'),
                           'studio': " / ".join(studio)})
     movie.set_artwork(get_image_urls(poster=info.get("poster_path"),
@@ -745,7 +745,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                  "lists": sort_lists(handle_misc(info["lists"]["results"])),
                  "studios": handle_misc(info["production_companies"]),
                  "releases": releases,
-                 "crew": Utils.merge_dict_lists(handle_people(info["credits"]["crew"])),
+                 "crew": Utils.reduce_list(handle_people(info["credits"]["crew"])),
                  "genres": handle_misc(info["genres"]),
                  "keywords": handle_misc(info["keywords"]["keywords"]),
                  "reviews": handle_misc(info["reviews"]["results"]),
@@ -798,7 +798,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                       'mpaa': mpaa,
                       'genre': " / ".join([i["name"] for i in info["genres"]]),
                       'plot': info.get("overview"),
-                      'year': Utils.get_year(info.get('first_air_date')),
+                      'year': utils.get_year(info.get('first_air_date')),
                       'mediatype': "tvshow",
                       'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
                       'country': info.get('original_language'),
@@ -920,38 +920,38 @@ def extended_actor_info(actor_id):
     '''
     if not actor_id:
         return None
-    response = get_data(url="person/%s" % (actor_id),
+    data = get_data(url="person/%s" % (actor_id),
                         params={"append_to_response": ALL_ACTOR_PROPS},
                         cache_days=1)
-    if not response:
+    if not data:
         utils.notify("Could not find actor info")
         return None
-    listitems = {"movie_roles": Utils.merge_dict_lists(handle_movies(response["movie_credits"]["cast"]), "character"),
-                 "tvshow_roles": Utils.merge_dict_lists(handle_tvshows(response["tv_credits"]["cast"]), "character"),
-                 "movie_crew_roles": Utils.merge_dict_lists(handle_movies(response["movie_credits"]["crew"])),
-                 "tvshow_crew_roles": Utils.merge_dict_lists(handle_tvshows(response["tv_credits"]["crew"])),
-                 "tagged_images": handle_images(response["tagged_images"]["results"]) if "tagged_images" in response else [],
-                 "images": handle_images(response["images"]["profiles"])}
-    info = ListItem(label=response['name'],
-                    path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, response['id']),
+    listitems = {"movie_roles": Utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
+                 "tvshow_roles": Utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
+                 "movie_crew_roles": Utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
+                 "tvshow_crew_roles": Utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
+                 "tagged_images": handle_images(data["tagged_images"]["results"]) if "tagged_images" in data else [],
+                 "images": handle_images(data["images"]["profiles"])}
+    info = ListItem(label=data['name'],
+                    path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, data['id']),
                     infos={'mediatype': "artist"})
-    info.set_properties({'adult': response.get('adult'),
-                         'alsoknownas': " / ".join(response.get('also_known_as', [])),
-                         'biography': response.get('biography'),
-                         'birthday': response.get('birthday'),
-                         'age': Utils.calculate_age(response.get('birthday'), response.get('deathday')),
-                         'character': response.get('character'),
-                         'department': response.get('department'),
-                         'job': response.get('job'),
-                         'id': response['id'],
-                         'gender': GENDERS.get(response['gender']),
-                         'cast_id': response.get('cast_id'),
-                         'credit_id': response.get('credit_id'),
-                         'deathday': response.get('deathday'),
-                         'placeofbirth': response.get('place_of_birth'),
-                         'homepage': response.get('homepage'),
+    info.set_properties({'adult': data.get('adult'),
+                         'alsoknownas': " / ".join(data.get('also_known_as', [])),
+                         'biography': data.get('biography'),
+                         'birthday': data.get('birthday'),
+                         'age': Utils.calculate_age(data.get('birthday'), data.get('deathday')),
+                         'character': data.get('character'),
+                         'department': data.get('department'),
+                         'job': data.get('job'),
+                         'id': data['id'],
+                         'gender': GENDERS.get(data['gender']),
+                         'cast_id': data.get('cast_id'),
+                         'credit_id': data.get('credit_id'),
+                         'deathday': data.get('deathday'),
+                         'placeofbirth': data.get('place_of_birth'),
+                         'homepage': data.get('homepage'),
                          "DBMovies": len([d for d in listitems["movie_roles"] if "dbid" in d])})
-    info.set_artwork(get_image_urls(profile=response.get("profile_path")))
+    info.set_artwork(get_image_urls(profile=data.get("profile_path")))
     return (info, listitems)
 
 
@@ -969,8 +969,8 @@ def translate_status(status):
 
 
 def get_movie_lists(movie_id):
-    response = get_full_movie(movie_id)
-    return handle_misc(response["lists"]["results"])
+    data = get_full_movie(movie_id)
+    return handle_misc(data["lists"]["results"])
 
 
 def get_rated_media_items(media_type):
@@ -983,24 +983,24 @@ def get_rated_media_items(media_type):
             return []
         params = {"session_id": session_id,
                   "language": addon.setting("LanguageID")}
-        response = get_data(url="account/%s/rated/%s" % (account_id, media_type),
-                            params=params,
-                            cache_days=0)
+        data = get_data(url="account/%s/rated/%s" % (account_id, media_type),
+                        params=params,
+                        cache_days=0)
     else:
         session_id = Login.get_guest_session_id()
         if not session_id:
             utils.notify("Could not get session id")
             return []
         params = {"language": addon.setting("LanguageID")}
-        response = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
-                            params=params,
-                            cache_days=0)
+        data = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
+                        params=params,
+                        cache_days=0)
     if media_type == "tv/episodes":
-        return handle_episodes(response["results"])
+        return handle_episodes(data["results"])
     elif media_type == "tv":
-        return handle_tvshows(response["results"], False, None)
+        return handle_tvshows(data["results"], False, None)
     else:
-        return handle_movies(response["results"], False, None)
+        return handle_movies(data["results"], False, None)
 
 
 def get_fav_items(media_type):
@@ -1012,27 +1012,27 @@ def get_fav_items(media_type):
         return []
     params = {"session_id": session_id,
               "language": addon.setting("LanguageID")}
-    response = get_data(url="account/%s/favorite/%s" % (account_id, media_type),
-                        params=params,
-                        cache_days=0)
-    if "results" not in response:
+    data = get_data(url="account/%s/favorite/%s" % (account_id, media_type),
+                    params=params,
+                    cache_days=0)
+    if "results" not in data:
         return []
     if media_type == "tv":
-        return handle_tvshows(response["results"], False, None)
+        return handle_tvshows(data["results"], False, None)
     elif media_type == "tv/episodes":
-        return handle_episodes(response["results"])
+        return handle_episodes(data["results"])
     else:
-        return handle_movies(response["results"], False, None)
+        return handle_movies(data["results"], False, None)
 
 
 def get_movies_from_list(list_id, cache_time=5):
     '''
     get movie dict list from tmdb list.
     '''
-    response = get_data(url="list/%s" % (list_id),
-                        params={"language": addon.setting("LanguageID")},
-                        cache_days=cache_time)
-    return handle_movies(response["items"], False, None) if response else []
+    data = get_data(url="list/%s" % (list_id),
+                    params={"language": addon.setting("LanguageID")},
+                    cache_days=cache_time)
+    return handle_movies(data["items"], False, None) if data else []
 
 
 def get_popular_actors():

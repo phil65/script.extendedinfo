@@ -358,7 +358,7 @@ def pass_dict_to_skin(data=None, prefix="", window_id=10000):
         window.setProperty('%s%s' % (prefix, key), value)
 
 
-def merge_dict_lists(items, key="job"):
+def reduce_list(items, key="job"):
     """
     TODO: refactor
     """
