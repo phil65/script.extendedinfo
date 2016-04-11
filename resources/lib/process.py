@@ -33,8 +33,8 @@ def start_info_actions(info, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
         params["artist_mbid"] = Utils.fetch_musicbrainz_id(params["artistname"])
-    Utils.log(info)
-    Utils.pp(params)
+    utils.log(info)
+    utils.pp(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
         params["prefix"] = params["prefix"] + '.'
 
@@ -448,7 +448,7 @@ def start_info_actions(info, params):
                 if os.path.isdir(path):
                     shutil.rmtree(path)
             except Exception as e:
-                Utils.log(e)
+                utils.log(e)
         utils.notify("Cache deleted")
     elif info == 'syncwatchlist':
         pass

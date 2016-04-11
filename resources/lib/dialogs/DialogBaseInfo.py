@@ -51,7 +51,7 @@ class DialogBaseInfo(object):
                 items = [i.get_listitem() for i in self.data[key]]
                 self.getControl(container_id).addItems(items)
             except Exception:
-                Utils.log("Notice: No container with id %i available" % container_id)
+                utils.log("Notice: No container with id %i available" % container_id)
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
         addon.set_global("infobackground", self.info.get_art('fanart_small'))
         self.setProperty("type", self.TYPE)

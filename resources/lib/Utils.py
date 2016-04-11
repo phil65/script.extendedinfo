@@ -264,24 +264,6 @@ def extract_youtube_id(raw_string):
         return ""
 
 
-def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
-    xbmcgui.Dialog().notification(heading=header,
-                                  message=message,
-                                  icon=icon,
-                                  time=time,
-                                  sound=sound)
-
-
-def pp(string):
-    """
-    prettyprint json
-    """
-    log(json.dumps(string,
-                   sort_keys=True,
-                   indent=4,
-                   separators=(',', ': ')))
-
-
 def pass_dict_to_skin(data=None, prefix="", window_id=10000):
     window = xbmcgui.Window(window_id)
     if not data:
