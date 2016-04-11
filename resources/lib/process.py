@@ -256,7 +256,7 @@ def start_info_actions(info, params):
     elif info == 'similarlocalmovies' and "dbid" in params:
         return local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
-        return Utils.get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
+        return favs.get_icon_panel(int(params["id"])), "IconPanel" + str(params["id"])
     # ACTIONS
     if params.get("handle"):
         xbmcplugin.setResolvedUrl(handle=int(params.get("handle")),
