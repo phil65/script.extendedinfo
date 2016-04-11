@@ -131,10 +131,10 @@
 							<textcolor>FFBBBBBB</textcolor>
 						</control>
 						<control type="textbox">
-							<left>20</left>
+							<left>30</left>
 							<top>250</top>
 							<height>66</height>
-							<width>420</width>
+							<width>380</width>
 							<label>$INFO[ListItem.Label]</label>
 							<align>center</align>
 							<font>font12</font>
@@ -219,10 +219,10 @@
 							<textcolor>FFBBBBBB</textcolor>
 						</control>
 						<control type="textbox">
-							<left>20</left>
+							<left>30</left>
 							<top>250</top>
 							<height>66</height>
-							<width>420</width>
+							<width>380</width>
 							<align>center</align>
 							<label>$INFO[ListItem.Label]</label>
 							<font>font12</font>
