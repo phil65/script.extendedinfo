@@ -238,7 +238,7 @@ def get_file(url):
         log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
         return vid_cache_file
     try:
-        request = urllib2.Request(url)
+        request = urllib2.Request(clean_url)
         request.add_header('Accept-encoding', 'gzip')
         response = urllib2.urlopen(request, timeout=3)
         data = response.read()
