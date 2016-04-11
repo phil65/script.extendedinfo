@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import ImageTools
 from resources.lib.WindowManager import wm
@@ -65,7 +64,7 @@ def get_window(window_type):
 
         @ch.click(ID_CONTROL_SETRATING)
         def set_rating_dialog(self, control_id):
-            rating = Utils.input_userrating()
+            rating = utils.input_userrating()
             if tmdb.set_rating(media_type="episode",
                                media_id=[self.tvshow_id,
                                          self.info.get_info("season"),

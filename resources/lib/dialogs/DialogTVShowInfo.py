@@ -152,7 +152,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating(self, control_id):
-            rating = Utils.input_userrating()
+            rating = utils.input_userrating()
             if tmdb.set_rating(media_type="tv",
                                media_id=self.info.get_property("id"),
                                rating=rating,

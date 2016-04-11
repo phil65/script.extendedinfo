@@ -74,7 +74,7 @@ class DialogBaseInfo(object):
             self.setFocusId(self.last_focus)
         self.last_focus = control_id
 
-    @Utils.run_async
+    @utils.run_async
     def bounce(self, identifier):
         self.bouncing = True
         self.setProperty("Bounce.%s" % identifier, "true")
@@ -152,7 +152,7 @@ class DialogBaseInfo(object):
                                     movie_id=self.FocusedItem(control_id).getProperty("id"),
                                     status=True)
         elif selection == 1:
-            rating = Utils.input_userrating()
+            rating = utils.input_userrating()
             tmdb.set_rating(media_type="movie",
                             media_id=self.FocusedItem(control_id).getProperty("id"),
                             rating=rating,
@@ -207,7 +207,7 @@ class DialogBaseInfo(object):
     def exit_script(self, control_id):
         wm.cancel(self)
 
-    @Utils.run_async
+    @utils.run_async
     def get_youtube_vids(self, search_str):
         try:
             youtube_list = self.getControl(ID_LIST_YOUTUBE)

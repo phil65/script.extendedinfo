@@ -12,28 +12,12 @@ import json
 import re
 import threading
 import datetime
-from functools import wraps
 
 import xbmc
 import xbmcgui
 import xbmcvfs
 
 from kodi65 import addon
-
-
-def run_async(func):
-    """
-    Decorator to run a function in a separate thread
-    """
-    @wraps(func)
-    def async_func(*args, **kwargs):
-        func_hl = threading.Thread(target=func,
-                                   args=args,
-                                   kwargs=kwargs)
-        func_hl.start()
-        return func_hl
-
-    return async_func
 
 
 def dictfind(lst, key, value):
@@ -286,11 +270,6 @@ def notify(header="", message="", icon=addon.ICON, time=5000, sound=True):
                                   icon=icon,
                                   time=time,
                                   sound=sound)
-
-
-def input_userrating():
-    return xbmcgui.Dialog().select(heading=addon.LANG(32129),
-                                   list=[str(float(i * 0.5)) for i in xrange(1, 21)])
 
 
 def pp(string):

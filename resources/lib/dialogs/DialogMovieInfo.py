@@ -16,6 +16,7 @@ from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
 from kodi65 import addon
+from kodi65 import utils
 from kodi65 import kodijson
 from ActionHandler import ActionHandler
 
@@ -193,7 +194,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating_dialog(self, control_id):
-            rating = Utils.input_userrating()
+            rating = utils.input_userrating()
             if tmdb.set_rating(media_type="movie",
                                media_id=self.info.get_property("id"),
                                rating=rating,
@@ -288,7 +289,7 @@ def get_window(window_type):
                 tmdb.remove_list(account_lists[index]["id"])
                 self.update_states()
 
-        @Utils.run_async
+        @utils.run_async
         def join_omdb_async(self):
             self.omdb_thread.join()
             Utils.pass_dict_to_skin(data=self.omdb_thread.listitems,
