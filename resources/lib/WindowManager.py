@@ -10,7 +10,6 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
-import Utils
 import TheMovieDB
 
 import windows
@@ -319,7 +318,7 @@ def check_version():
     check version, open TextViewer if update detected
     """
     if not addon.setting("changelog_version") == addon.VERSION:
-        text = Utils.read_from_file(os.path.join(addon.PATH, "changelog.txt"), True)
+        text = utils.read_from_file(os.path.join(addon.PATH, "changelog.txt"), True)
         xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
                                     text=text)
         addon.set_setting("changelog_version", addon.VERSION)

@@ -18,6 +18,7 @@ import xbmcgui
 import xbmcvfs
 
 from kodi65 import addon
+from kodi65 import utils
 
 
 def dictfind(lst, key, value):
@@ -63,7 +64,7 @@ def calculate_age(born, died=False):
         if diff_months < 0 or (diff_months == 0 and diff_days < 0):
             base_age -= 1
         elif diff_months == 0 and diff_days == 0 and not died:
-            notify("%s (%i)" % (addon.LANG(32158), base_age))
+            utils.notify("%s (%i)" % (addon.LANG(32158), base_age))
     return base_age
 
 
@@ -78,7 +79,7 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
                                 cache_days=30,
                                 folder="MusicBrainz")
     if results and len(results["artists"]) > 0:
-        log("found artist id for %s: %s" % (artist, results["artists"][0]["id"]))
+        utils.log("found artist id for %s: %s" % (artist, results["artists"][0]["id"]))
         return results["artists"][0]["id"]
     else:
         return None
@@ -99,7 +100,7 @@ def get_http(url=None, headers=False):
             response = urllib2.urlopen(request, timeout=3)
             return response.read()
         except Exception:
-            log("get_http: could not get data from %s" % url)
+            utils.log("get_http: could not get data from %s" % url)
             xbmc.sleep(1000)
             succeed += 1
     return None
@@ -121,25 +122,25 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     if prop_time and now - float(prop_time) < cache_seconds:
         try:
             prop = json.loads(addon.get_global(hashed_url))
-            # log("prop load for %s. time: %f" % (url, time.time() - now))
+            # utils.log("prop load for %s. time: %f" % (url, time.time() - now))
             if prop:
                 return prop
         except Exception:
-            # log("could not load prop data for %s" % url)
+            # utils.log("could not load prop data for %s" % url)
             pass
     if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
-        results = read_from_file(path)
-        # log("loaded file for %s. time: %f" % (url, time.time() - now))
+        results = utils.read_from_file(path)
+        # utils.log("loaded file for %s. time: %f" % (url, time.time() - now))
     else:
         response = get_http(url, headers)
         try:
             results = json.loads(response)
-            # log("download %s. time: %f" % (url, time.time() - now))
-            save_to_file(results, hashed_url, cache_path)
+            # utils.log("download %s. time: %f" % (url, time.time() - now))
+            utils.save_to_file(results, hashed_url, cache_path)
         except Exception:
-            log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
-            log(response)
-            results = read_from_file(path) if xbmcvfs.exists(path) else []
+            utils.log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
+            utils.log(response)
+            results = utils.read_from_file(path) if xbmcvfs.exists(path) else []
     if not results:
         return []
     addon.set_global(hashed_url + "_timestamp", str(now))
@@ -154,7 +155,7 @@ class FunctionThread(threading.Thread):
         self.function = function
         self.param = param
         self.setName(self.function.__name__)
-        log("init " + self.function.__name__)
+        utils.log("init " + self.function.__name__)
 
     def run(self):
         self.listitems = self.function(self.param)
@@ -169,13 +170,13 @@ def get_file(url):
     cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
     cache_file_png = cache_file_jpg[:-4] + ".png"
     if xbmcvfs.exists(cache_file_jpg):
-        log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
+        utils.log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
         return xbmc.translatePath(cache_file_jpg).decode("utf-8")
     elif xbmcvfs.exists(cache_file_png):
-        log("cache_file_png Image: " + url + "-->" + cache_file_png)
+        utils.log("cache_file_png Image: " + url + "-->" + cache_file_png)
         return cache_file_png
     elif xbmcvfs.exists(vid_cache_file):
-        log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
+        utils.log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
         return vid_cache_file
     try:
         request = urllib2.Request(clean_url)
@@ -183,9 +184,9 @@ def get_file(url):
         response = urllib2.urlopen(request, timeout=3)
         data = response.read()
         response.close()
-        log('image downloaded: ' + clean_url)
+        utils.log('image downloaded: ' + clean_url)
     except Exception:
-        log('image download failed: ' + clean_url)
+        utils.log('image download failed: ' + clean_url)
         return ""
     if not data:
         return ""
@@ -195,48 +196,8 @@ def get_file(url):
             f.write(data)
         return xbmc.translatePath(image).decode("utf-8")
     except Exception:
-        log('failed to save image ' + url)
+        utils.log('failed to save image ' + url)
         return ""
-
-
-def log(txt):
-    if isinstance(txt, str):
-        txt = txt.decode("utf-8", 'ignore')
-    message = u'%s: %s' % (addon.ID, txt)
-    xbmc.log(msg=message.encode("utf-8", 'ignore'),
-             level=xbmc.LOGDEBUG)
-
-
-def save_to_file(content, filename, path):
-    """
-    dump json and save to *filename in *path
-    """
-    if not xbmcvfs.exists(path):
-        xbmcvfs.mkdirs(path)
-    text_file_path = os.path.join(path, filename + ".txt")
-    text_file = xbmcvfs.File(text_file_path, "w")
-    json.dump(content, text_file)
-    text_file.close()
-    return True
-
-
-def read_from_file(path, raw=False):
-    """
-    return data from file with *path
-    """
-    if not xbmcvfs.exists(path):
-        return False
-    try:
-        with open(path) as f:
-            # log("opened textfile %s." % (path))
-            if not raw:
-                result = json.load(f)
-            else:
-                result = f.read()
-        return result
-    except Exception:
-        log("failed to load textfile: " + path)
-        return False
 
 
 def convert_youtube_url(raw_string):
