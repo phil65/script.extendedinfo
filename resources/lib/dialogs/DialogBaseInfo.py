@@ -231,7 +231,7 @@ class DialogBaseInfo(object):
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": addon.LANG(19055)}]
-        listitem, index = selectdialog.open(listitems=listitems)
+        listitem, index = selectdialog.open_selectdialog(listitems=listitems)
         if listitem["mediatype"] == "episode":
             wm.open_episode_info(prev_window=self,
                                  season=listitems[index]["season"],
