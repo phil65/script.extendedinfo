@@ -412,6 +412,33 @@ def handle_misc(results):
     return listitems
 
 
+def handle_text(results):
+    listitems = []
+    for item in results:
+        listitem = ListItem(label=item.get('name'),
+                            path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'))
+        listitem.set_properties({'id': item.get('id')})
+        listitems.append(listitem)
+    return listitems
+
+
+def handle_lists(results):
+    listitems = []
+    for item in results:
+        listitem = ListItem(label=item.get('name'),
+                            path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
+                            artwork=get_image_urls(poster=item.get("poster_path")))
+        listitem.set_infos({'plot': item.get('description'),
+                            "media_type": "set"})
+        listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
+                                 'item_count': item.get('item_count'),
+                                 'favorite_count': item.get('favorite_count'),
+                                 'iso_3166_1': item.get('iso_3166_1', "").lower(),
+                                 'id': item.get('id')})
+        listitems.append(listitem)
+    return listitems
+
+
 def handle_seasons(results):
     listitems = []
     for item in results:
@@ -742,12 +769,12 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     releases = merge_with_cert_desc(handle_misc(info["releases"]["countries"]), "movie")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
-                 "lists": sort_lists(handle_misc(info["lists"]["results"])),
-                 "studios": handle_misc(info["production_companies"]),
+                 "lists": sort_lists(handle_lists(info["lists"]["results"])),
+                 "studios": handle_text(info["production_companies"]),
                  "releases": releases,
                  "crew": Utils.reduce_list(handle_people(info["credits"]["crew"])),
-                 "genres": handle_misc(info["genres"]),
-                 "keywords": handle_misc(info["keywords"]["keywords"]),
+                 "genres": handle_text(info["genres"]),
+                 "keywords": handle_text(info["keywords"]["keywords"]),
                  "reviews": handle_misc(info["reviews"]["results"]),
                  "videos": videos,
                  "images": handle_images(info["images"]["posters"]),
@@ -830,11 +857,11 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
                  "studios": handle_misc(info["production_companies"]),
-                 "networks": handle_misc(info["networks"]),
+                 "networks": handle_text(info["networks"]),
                  "certifications": certifications,
                  "crew": handle_people(info["credits"]["crew"]),
-                 "genres": handle_misc(info["genres"]),
-                 "keywords": handle_misc(info["keywords"]["results"]),
+                 "genres": handle_text(info["genres"]),
+                 "keywords": handle_text(info["keywords"]["results"]),
                  "videos": videos,
                  "seasons": handle_seasons(info["seasons"]),
                  "images": handle_images(info["images"]["posters"]),
