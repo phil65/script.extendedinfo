@@ -23,40 +23,40 @@ def handle_albums(results):
     if not results.get('album'):
         return None
     local_desc = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
-    for album in results['album']:
+    for item in results['album']:
         desc = ""
-        if local_desc in album and album[local_desc]:
-            desc = album.get(local_desc, "")
-        elif album.get('strDescriptionEN'):
-            desc = album['strDescriptionEN']
-        elif album.get('strDescription'):
-            desc = album['strDescription']
-        if album.get('strReview'):
-            desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (addon.LANG(185), album['strReview'])
-        album = ListItem(label=album['strAlbum'],
+        if local_desc in item and item[local_desc]:
+            desc = item.get(local_desc, "")
+        elif item.get('strDescriptionEN'):
+            desc = item['strDescriptionEN']
+        elif item.get('strDescription'):
+            desc = item['strDescription']
+        if item.get('strReview'):
+            desc += "[CR][CR][B]%s:[/B][CR][CR]%s" % (addon.LANG(185), item['strReview'])
+        album = ListItem(label=item['strAlbum'],
                          path="")
-        album.set_infos({'artist': album['strArtist'],
+        album.set_infos({'artist': [item['strArtist']],
                          'mediatype': "album",
-                         'genre': album['strGenre'],
-                         'year': album['intYearReleased']})
-        album.set_properties({'mbid': album['strMusicBrainzID'],
-                              'id': album['idAlbum'],
-                              'audiodb_id': album['idAlbum'],
+                         'genre': item['strGenre'],
+                         'year': item['intYearReleased']})
+        album.set_properties({'mbid': item['strMusicBrainzID'],
+                              'id': item['idAlbum'],
+                              'audiodb_id': item['idAlbum'],
                               'album_description': desc,
-                              'album_mood': album['strMood'],
-                              'album_style': album['strStyle'],
-                              'speed': album['strSpeed'],
-                              'album_Theme': album['strTheme'],
-                              'type': album['strReleaseFormat'],
-                              'loved': album['intLoved'],
-                              'location': album['strLocation'],
-                              'itunes_id': album['strItunesID'],
-                              'amazon_id': album['strAmazonID'],
-                              'sales': album['intSales']})
-        album.set_art({'thumb': album['strAlbumThumb'],
-                       'spine': album['strAlbumSpine'],
-                       'cdart': album['strAlbumCDart'],
-                       'thumbback': album['strAlbumThumbBack']})
+                              'album_mood': item['strMood'],
+                              'album_style': item['strStyle'],
+                              'speed': item['strSpeed'],
+                              'album_Theme': item['strTheme'],
+                              'type': item['strReleaseFormat'],
+                              'loved': item['intLoved'],
+                              'location': item['strLocation'],
+                              'itunes_id': item['strItunesID'],
+                              'amazon_id': item['strAmazonID'],
+                              'sales': item['intSales']})
+        album.set_artwork({'thumb': item['strAlbumThumb'],
+                           'spine': item['strAlbumSpine'],
+                           'cdart': item['strAlbumCDart'],
+                           'thumbback': item['strAlbumThumbBack']})
         albums.append(album)
     return local_db.compare_album_with_library(albums)
 
@@ -71,7 +71,7 @@ def handle_tracks(results):
                          path=Utils.convert_youtube_url(item['strMusicVid']))
         track.set_infos({'title': item['strTrack'],
                          'album': item['strAlbum'],
-                         'artist': item['strArtist'],
+                         'artist': [item['strArtist']],
                          'mediatype': "song"})
         track.set_properties({'mbid': item['strMusicBrainzID']})
         track.set_art({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
