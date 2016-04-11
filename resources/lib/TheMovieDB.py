@@ -514,11 +514,13 @@ def search_company(company_name):
         return ""
 
 
-def multi_search(search_str):
-    params = {"query": search_str}
+def multi_search(search_str, page=1, cache_days=1):
+    params = {"query": search_str,
+              "include_adult": addon.setting("include_adults").lower(),
+              "page": page}
     response = get_data(url="search/multi",
                         params=params,
-                        cache_days=1)
+                        cache_days=cache_days)
     if response and "results" in response:
         return response["results"]
 
