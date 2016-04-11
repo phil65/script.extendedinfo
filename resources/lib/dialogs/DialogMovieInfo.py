@@ -79,7 +79,7 @@ def get_window(window_type):
             self.omdb_thread.start()
             sets_thread.start()
             self.info.update_properties(ImageTools.blur(self.info.get_art("thumb")))
-            if "dbid" not in self.info.get_infos():
+            if not self.info.get_property("dbid"):
                 self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
             sets_thread.join()
             self.setinfo = sets_thread.setinfo

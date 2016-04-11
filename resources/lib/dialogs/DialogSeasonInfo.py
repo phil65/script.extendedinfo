@@ -45,7 +45,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.data = data
-            if "dbid" not in self.info:  # need to add comparing for seasons
+            if not self.info.get_property("dbid"):  # need to add comparing for seasons
                 poster = Utils.get_file(url=self.info.get("poster", ""))
                 self.info.set_art("poster", poster)
             self.info.update_properties(ImageTools.blur(self.info.get_art("poster")))
