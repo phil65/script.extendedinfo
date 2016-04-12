@@ -27,10 +27,6 @@ def dictfind(lst, key, value):
     return ""
 
 
-def get_infolabel(name):
-    return xbmc.getInfoLabel(name).decode("utf-8")
-
-
 def merge_dicts(*dict_args):
     '''
     Given any number of dicts, shallow copy and merge into a new dict,
@@ -87,21 +83,20 @@ def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
     now = time.time()
     hashed_url = hashlib.md5(url).hexdigest()
     if folder:
-        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH, folder)).decode("utf-8")
+        cache_path = utils.translate_path(os.path.join(addon.DATA_PATH, folder))
     else:
-        cache_path = xbmc.translatePath(os.path.join(addon.DATA_PATH)).decode("utf-8")
-    path = os.path.join(cache_path, hashed_url + ".txt")
+        cache_path = utils.translate_path(os.path.join(addon.DATA_PATH))
     cache_seconds = int(cache_days * 86400.0)
     prop_time = addon.get_global(hashed_url + "_timestamp")
     if prop_time and now - float(prop_time) < cache_seconds:
         try:
             prop = json.loads(addon.get_global(hashed_url))
-            # utils.log("prop load for %s. time: %f" % (url, time.time() - now))
             if prop:
                 return prop
         except Exception:
             # utils.log("could not load prop data for %s" % url)
             pass
+    path = os.path.join(cache_path, hashed_url + ".txt")
     if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
         results = utils.read_from_file(path)
         # utils.log("loaded file for %s. time: %f" % (url, time.time() - now))
@@ -137,15 +132,15 @@ class FunctionThread(threading.Thread):
 
 
 def get_file(url):
-    clean_url = xbmc.translatePath(urllib.unquote(url)).decode("utf-8").replace("image://", "")
-    clean_url.rstrip("/")
+    clean_url = utils.translate_path(urllib.unquote(url)).replace("image://", "")
+    clean_url = clean_url.rstrip("/")
     cached_thumb = xbmc.getCacheThumbName(clean_url)
     vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
     cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
     cache_file_png = cache_file_jpg[:-4] + ".png"
     if xbmcvfs.exists(cache_file_jpg):
         utils.log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
-        return xbmc.translatePath(cache_file_jpg).decode("utf-8")
+        return utils.translate_path(cache_file_jpg)
     elif xbmcvfs.exists(cache_file_png):
         utils.log("cache_file_png Image: " + url + "-->" + cache_file_png)
         return cache_file_png
@@ -166,9 +161,9 @@ def get_file(url):
         return ""
     image = cache_file_png if url.endswith(".png") else cache_file_jpg
     try:
-        with open(xbmc.translatePath(image).decode("utf-8"), "wb") as f:
+        with open(utils.translate_path(image), "wb") as f:
             f.write(data)
-        return xbmc.translatePath(image).decode("utf-8")
+        return utils.translate_path(image)
     except Exception:
         utils.log('failed to save image ' + url)
         return ""

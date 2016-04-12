@@ -270,33 +270,33 @@ def start_info_actions(info, params):
         if xbmc.getCondVisibility("System.HasModalDialog"):
             container_id = ""
         else:
-            container_id = "Container(%s)" % Utils.get_infolabel("System.CurrentControlId")
-        dbid = Utils.get_infolabel("%sListItem.DBID" % container_id)
-        db_type = Utils.get_infolabel("%sListItem.DBType" % container_id)
+            container_id = "Container(%s)" % utils.get_infolabel("System.CurrentControlId")
+        dbid = utils.get_infolabel("%sListItem.DBID" % container_id)
+        db_type = utils.get_infolabel("%sListItem.DBType" % container_id)
         if not dbid:
-            dbid = Utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
+            dbid = utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
         if db_type == "movie":
             params = {"dbid": dbid,
-                      "id": Utils.get_infolabel("%sListItem.Property(id)" % container_id),
-                      "name": Utils.get_infolabel("%sListItem.Title" % container_id)}
+                      "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),
+                      "name": utils.get_infolabel("%sListItem.Title" % container_id)}
             start_info_actions("extendedinfo", params)
         elif db_type == "tvshow":
             params = {"dbid": dbid,
-                      "tvdb_id": Utils.get_infolabel("%sListItem.Property(tvdb_id)" % container_id),
-                      "id": Utils.get_infolabel("%sListItem.Property(id)" % container_id),
-                      "name": Utils.get_infolabel("%sListItem.Title" % container_id)}
+                      "tvdb_id": utils.get_infolabel("%sListItem.Property(tvdb_id)" % container_id),
+                      "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),
+                      "name": utils.get_infolabel("%sListItem.Title" % container_id)}
             start_info_actions("extendedtvinfo", params)
         elif db_type == "season":
-            params = {"tvshow": Utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
-                      "season": Utils.get_infolabel("%sListItem.Season" % container_id)}
+            params = {"tvshow": utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
+                      "season": utils.get_infolabel("%sListItem.Season" % container_id)}
             start_info_actions("seasoninfo", params)
         elif db_type == "episode":
-            params = {"tvshow": Utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
-                      "season": Utils.get_infolabel("%sListItem.Season" % container_id),
-                      "episode": Utils.get_infolabel("%sListItem.Episode" % container_id)}
+            params = {"tvshow": utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
+                      "season": utils.get_infolabel("%sListItem.Season" % container_id),
+                      "episode": utils.get_infolabel("%sListItem.Episode" % container_id)}
             start_info_actions("extendedepisodeinfo", params)
         elif db_type in ["actor", "director"]:
-            params = {"name": Utils.get_infolabel("%sListItem.Label" % container_id)}
+            params = {"name": utils.get_infolabel("%sListItem.Label" % container_id)}
             start_info_actions("extendedactorinfo", params)
         else:
             utils.notify("Error", "Could not find valid content type")
@@ -304,24 +304,24 @@ def start_info_actions(info, params):
         if xbmc.getCondVisibility("System.HasModalDialog"):
             container_id = ""
         else:
-            container_id = "Container(%s)" % Utils.get_infolabel("System.CurrentControlId")
-        dbid = Utils.get_infolabel("%sListItem.DBID" % container_id)
-        db_type = Utils.get_infolabel("%sListItem.DBType" % container_id)
+            container_id = "Container(%s)" % utils.get_infolabel("System.CurrentControlId")
+        dbid = utils.get_infolabel("%sListItem.DBID" % container_id)
+        db_type = utils.get_infolabel("%sListItem.DBType" % container_id)
         if not dbid:
-            dbid = Utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
+            dbid = utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
         if db_type == "movie":
             params = {"dbid": dbid,
-                      "id": Utils.get_infolabel("%sListItem.Property(id)" % container_id),
+                      "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),
                       "type": "movie"}
             start_info_actions("ratemedia", params)
         elif db_type == "tvshow":
             params = {"dbid": dbid,
-                      "id": Utils.get_infolabel("%sListItem.Property(id)" % container_id),
+                      "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),
                       "type": "tv"}
             start_info_actions("ratemedia", params)
         if db_type == "episode":
-            params = {"tvshow": Utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
-                      "season": Utils.get_infolabel("%sListItem.Season" % container_id),
+            params = {"tvshow": utils.get_infolabel("%sListItem.TVShowTitle" % container_id),
+                      "season": utils.get_infolabel("%sListItem.Season" % container_id),
                       "type": "episode"}
             start_info_actions("ratemedia", params)
     elif info == 'youtubebrowser':
