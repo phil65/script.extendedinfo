@@ -81,7 +81,7 @@ def get_window(window_type):
             sets_thread.start()
             self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
             if not self.info.get_property("dbid"):
-                self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
+                self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
             sets_thread.join()
             self.setinfo = sets_thread.setinfo
             self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})

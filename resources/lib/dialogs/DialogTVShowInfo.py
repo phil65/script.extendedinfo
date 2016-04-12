@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
 
@@ -65,7 +64,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.states = data
             if not self.info.get_property("dbid"):
-                self.info.set_art("poster", Utils.get_file(self.info.get_art("poster")))
+                self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
             self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
 
         def onInit(self):

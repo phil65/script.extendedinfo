@@ -171,7 +171,7 @@ class WindowManager(object):
                                                 cache_days=7)
         dialog = ep_class(INFO_XML,
                           addon.PATH,
-                          show_id=tvshow_id,
+                          tvshow_id=tvshow_id,
                           season=season,
                           episode=episode,
                           dbid=dbid)

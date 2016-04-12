@@ -4,13 +4,8 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
-import urllib2
-import os
 import re
 import threading
-
-import xbmc
-import xbmcvfs
 
 from kodi65 import utils
 
@@ -51,44 +46,6 @@ class FunctionThread(threading.Thread):
     def run(self):
         self.listitems = self.function(self.param)
         return True
-
-
-def get_file(url):
-    clean_url = utils.translate_path(urllib.unquote(url)).replace("image://", "")
-    clean_url = clean_url.rstrip("/")
-    cached_thumb = xbmc.getCacheThumbName(clean_url)
-    vid_cache_file = os.path.join("special://profile/Thumbnails/Video", cached_thumb[0], cached_thumb)
-    cache_file_jpg = os.path.join("special://profile/Thumbnails/", cached_thumb[0], cached_thumb[:-4] + ".jpg").replace("\\", "/")
-    cache_file_png = cache_file_jpg[:-4] + ".png"
-    if xbmcvfs.exists(cache_file_jpg):
-        utils.log("cache_file_jpg Image: " + url + "-->" + cache_file_jpg)
-        return utils.translate_path(cache_file_jpg)
-    elif xbmcvfs.exists(cache_file_png):
-        utils.log("cache_file_png Image: " + url + "-->" + cache_file_png)
-        return cache_file_png
-    elif xbmcvfs.exists(vid_cache_file):
-        utils.log("vid_cache_file Image: " + url + "-->" + vid_cache_file)
-        return vid_cache_file
-    try:
-        request = urllib2.Request(clean_url)
-        request.add_header('Accept-encoding', 'gzip')
-        response = urllib2.urlopen(request, timeout=3)
-        data = response.read()
-        response.close()
-        utils.log('image downloaded: ' + clean_url)
-    except Exception:
-        utils.log('image download failed: ' + clean_url)
-        return ""
-    if not data:
-        return ""
-    image = cache_file_png if url.endswith(".png") else cache_file_jpg
-    try:
-        with open(utils.translate_path(image), "wb") as f:
-            f.write(data)
-        return utils.translate_path(image)
-    except Exception:
-        utils.log('failed to save image ' + url)
-        return ""
 
 
 def convert_youtube_url(raw_string):

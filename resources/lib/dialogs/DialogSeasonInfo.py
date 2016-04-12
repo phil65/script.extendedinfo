@@ -5,13 +5,13 @@
 
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
 from kodi65 import imagetools
 from kodi65 import addon
+from kodi65 import utils
 from ActionHandler import ActionHandler
 
 ID_LIST_YOUTUBE = 350
@@ -46,12 +46,12 @@ def get_window(window_type):
                 return None
             self.info, self.data = data
             if not self.info.get_property("dbid"):  # need to add comparing for seasons
-                poster = Utils.get_file(url=self.info.get("poster", ""))
+                poster = utils.get_file(url=self.info.get("poster", ""))
                 self.info.set_art("poster", poster)
             self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
 
         def onInit(self):
-            self.get_youtube_vids("%s %s tv" % (self.info["tvshowtitle"], self.info['title']))
+            self.get_youtube_vids("%s %s tv" % (self.info.get_info("tvshowtitle"), self.info.get_info('title')))
             super(DialogSeasonInfo, self).onInit()
 
         def onClick(self, control_id):
@@ -62,7 +62,7 @@ def get_window(window_type):
         def open_episode_info(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()
             wm.open_episode_info(prev_window=self,
-                                 tvshow=self.info["tvshowtitle"],
+                                 tvshow=self.info.get_info("tvshowtitle"),
                                  tvshow_id=self.tvshow_id,
                                  season=info.getSeason(),
                                  episode=info.getEpisode())
