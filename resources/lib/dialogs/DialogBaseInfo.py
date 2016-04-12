@@ -147,11 +147,14 @@ class DialogBaseInfo(object):
                                                        addon.LANG(32113)])
         if selection == 0:
             account_lists = tmdb.get_account_lists()
+            if not account_lists:
+                return False
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-            index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
-            tmdb.change_list_status(list_id=account_lists[index]["id"],
-                                    movie_id=self.FocusedItem(control_id).getProperty("id"),
-                                    status=True)
+            i = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
+            if i > -1:
+                tmdb.change_list_status(list_id=account_lists[i]["id"],
+                                        movie_id=self.FocusedItem(control_id).getProperty("id"),
+                                        status=True)
         elif selection == 1:
             rating = utils.input_userrating()
             tmdb.set_rating(media_type="movie",
