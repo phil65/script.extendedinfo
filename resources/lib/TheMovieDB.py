@@ -460,6 +460,7 @@ def handle_videos(results):
         listitem = ListItem(label=item.get('name'),
                             size=item.get('size'),
                             artwork={'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % item.get('key')})
+        listitem.set_infos({'mediatype': "video"})
         listitem.set_properties({'iso_639_1': item.get('iso_639_1'),
                                  'type': item.get('type'),
                                  'key': item.get('key'),
