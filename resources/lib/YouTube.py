@@ -6,8 +6,6 @@
 import urllib
 import itertools
 
-import Utils
-
 from kodi65 import utils
 from kodi65.listitem import ListItem
 
@@ -145,7 +143,7 @@ def get_data(method, params=None, cache_days=0.5):
     url = "{base_url}{method}?{params}".format(base_url=BASE_URL,
                                                method=method,
                                                params=urllib.urlencode(params))
-    return Utils.get_JSON_response(url=url,
+    return utils.get_JSON_response(url=url,
                                    cache_days=cache_days,
                                    folder="YouTube")
 
@@ -158,7 +156,7 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
               "pageToken": page,
               "hd": str(hd and not hd == "false"),
               "q": search_str.replace('"', '')}
-    params = Utils.merge_dicts(params, filters if filters else {})
+    params = utils.merge_dicts(params, filters if filters else {})
     results = get_data(method="search",
                        params=params)
     if not results:

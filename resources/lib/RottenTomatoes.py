@@ -3,8 +3,6 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import Utils
-
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
@@ -18,7 +16,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 def get_movies(movie_type):
     movies = []
     url = '%s.json?apikey=%s' % (movie_type, RT_KEY)
-    results = Utils.get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
+    results = utils.get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if not results or "movies" not in results:
         return []
     for item in results["movies"]:

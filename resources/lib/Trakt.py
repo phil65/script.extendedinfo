@@ -214,7 +214,7 @@ def get_data(url, params=None, cache_days=10):
     params = params if params else {}
     params["limit"] = 20
     url = "%s%s?%s" % (BASE_URL, url, urllib.urlencode(params))
-    return Utils.get_JSON_response(url=url,
+    return utils.get_JSON_response(url=url,
                                    folder="Trakt",
                                    headers=HEADERS,
                                    cache_days=cache_days)

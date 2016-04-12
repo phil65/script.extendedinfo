@@ -292,9 +292,9 @@ def get_window(window_type):
         @utils.run_async
         def join_omdb_async(self):
             self.omdb_thread.join()
-            Utils.pass_dict_to_skin(data=self.omdb_thread.listitems,
-                                    prefix="omdb.",
-                                    window_id=self.window_id)
+            utils.dict_to_windowprops(data=self.omdb_thread.listitems,
+                                      prefix="omdb.",
+                                      window_id=self.window_id)
 
     class SetItemsThread(threading.Thread):
 

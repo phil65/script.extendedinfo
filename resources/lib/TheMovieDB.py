@@ -605,7 +605,7 @@ def get_data(url="", params=None, cache_days=14):
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
-    return Utils.get_JSON_response(url, cache_days, "TheMovieDB")
+    return utils.get_JSON_response(url, cache_days, "TheMovieDB")
 
 
 def get_company_data(company_id):

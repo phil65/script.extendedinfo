@@ -9,6 +9,7 @@ import xbmc
 
 import Utils
 
+from kodi65 import utils
 from kodi65 import addon
 from kodi65.localdb import local_db
 from kodi65.listitem import AudioItem
@@ -208,5 +209,5 @@ def get_data(url, params):
     params = {k: v for k, v in params.items() if v}
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "%s%s.php?%s" % (BASE_URL, url, urllib.urlencode(params))
-    return Utils.get_JSON_response(url=url,
+    return utils.get_JSON_response(url=url,
                                    folder="TheAudioDB")

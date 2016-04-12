@@ -5,7 +5,7 @@
 
 import urllib
 
-import Utils
+from kodi65 import utils
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
 API_KEY = 'xbmc_open_source_media_center'
@@ -38,7 +38,7 @@ def get_near_events(artists):  # not possible with api 2.0
             arts.append(urllib.quote(art['artist'].encode("utf-8")))
     artist_str = 'artists[]=' + '&artists[]='.join(arts)
     url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%s' % (artist_str)
-    results = Utils.get_JSON_response(url, folder="BandsInTown")
+    results = utils.get_JSON_response(url, folder="BandsInTown")
     if results:
         return handle_events(results)
     return []

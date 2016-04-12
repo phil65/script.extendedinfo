@@ -4,8 +4,9 @@
 # This program is Free Software see LICENSE file for details
 
 import urllib
+import re
 
-import Utils
+from kodi65 import utils
 
 LAST_FM_API_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -82,7 +83,7 @@ def get_track_info(artist_name="", track=""):
     summary = results['track']['wiki']['summary'] if "wiki" in results['track'] else ""
     return {'playcount': str(results['track']['playcount']),
             'thumb': str(results['track']['playcount']),
-            'summary': Utils.clean_text(summary)}
+            'summary': clean_text(summary)}
 
 
 def get_data(method, params=None, cache_days=0.5):
@@ -94,6 +95,32 @@ def get_data(method, params=None, cache_days=0.5):
     params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
     url = "{base_url}{params}".format(base_url=BASE_URL,
                                       params=urllib.urlencode(params))
-    return Utils.get_JSON_response(url=url,
+    return utils.get_JSON_response(url=url,
                                    cache_days=cache_days,
                                    folder="LastFM")
+
+
+def clean_text(text):
+    if not text:
+        return ""
+    text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
+    text = re.sub('<(.|\n|\r)*?>', '', text)
+    text = text.replace('<br \/>', '[CR]')
+    text = text.replace('<em>', '[I]').replace('</em>', '[/I]')
+    text = text.replace('&amp;', '&')
+    text = text.replace('&gt;', '>').replace('&lt;', '<')
+    text = text.replace('&#39;', "'").replace('&quot;', '"')
+    text = re.sub("\n\\.$", "", text)
+    text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+    while text:
+        s = text[0]
+        e = text[-1]
+        if s in [u'\u200b', " ", "\n"]:
+            text = text[1:]
+        elif e in [u'\u200b', " ", "\n"]:
+            text = text[:-1]
+        elif s.startswith(".") and not s.startswith(".."):
+            text = text[1:]
+        else:
+            break
+    return text.strip()

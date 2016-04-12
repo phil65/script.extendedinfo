@@ -388,10 +388,10 @@ def start_info_actions(info, params):
     elif info == 'albuminfo':
         if params.get("id"):
             album_details = AudioDB.get_album_details(params.get("id"))
-            Utils.pass_dict_to_skin(album_details, params.get("prefix", ""))
+            utils.dict_to_windowprops(album_details, params.get("prefix", ""))
     elif info == 'artistdetails':
         artist_details = AudioDB.get_artist_details(params["artistname"])
-        Utils.pass_dict_to_skin(artist_details, params.get("prefix", ""))
+        utils.dict_to_windowprops(artist_details, params.get("prefix", ""))
     elif info == 'ratemedia':
         media_type = params.get("type")
         if not media_type:

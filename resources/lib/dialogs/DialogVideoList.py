@@ -418,7 +418,7 @@ def get_window(window_type):
                           "page": self.page,
                           "include_adult": include_adult}
                 filters = dict((item["type"], item["id"]) for item in self.filters)
-                params = Utils.merge_dicts(params, filters)
+                params = utils.merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
             response = tmdb.get_data(url=url,
                                      params=params,

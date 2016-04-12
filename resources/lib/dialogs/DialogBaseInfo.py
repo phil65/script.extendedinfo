@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import YouTube
 from resources.lib.WindowManager import wm
@@ -250,5 +249,5 @@ class DialogBaseInfo(object):
     def update_states(self):
         if not self.states:
             return None
-        Utils.pass_dict_to_skin(data=tmdb.get_account_props(self.states),
-                                window_id=self.window_id)
+        utils.dict_to_windowprops(data=tmdb.get_account_props(self.states),
+                                  window_id=self.window_id)

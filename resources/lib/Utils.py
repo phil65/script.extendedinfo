@@ -6,17 +6,12 @@
 import urllib
 import urllib2
 import os
-import time
-import hashlib
-import json
 import re
 import threading
 
 import xbmc
-import xbmcgui
 import xbmcvfs
 
-from kodi65 import addon
 from kodi65 import utils
 
 
@@ -27,17 +22,6 @@ def dictfind(lst, key, value):
     return ""
 
 
-def merge_dicts(*dict_args):
-    '''
-    Given any number of dicts, shallow copy and merge into a new dict,
-    precedence goes to key value pairs in latter dicts.
-    '''
-    result = {}
-    for dictionary in dict_args:
-        result.update(dictionary)
-    return result
-
-
 def fetch_musicbrainz_id(artist, artist_id=-1):
     """
     fetches MusicBrainz ID for given *artist and returns it
@@ -45,76 +29,14 @@ def fetch_musicbrainz_id(artist, artist_id=-1):
     """
     base_url = "http://musicbrainz.org/ws/2/artist/?fmt=json"
     url = '&query=artist:%s' % urllib.quote_plus(artist)
-    results = get_JSON_response(url=base_url + url,
-                                cache_days=30,
-                                folder="MusicBrainz")
+    results = utils.get_JSON_response(url=base_url + url,
+                                      cache_days=30,
+                                      folder="MusicBrainz")
     if results and len(results["artists"]) > 0:
         utils.log("found artist id for %s: %s" % (artist, results["artists"][0]["id"]))
         return results["artists"][0]["id"]
     else:
         return None
-
-
-def get_http(url=None, headers=False):
-    """
-    fetches data from *url, returns it as a string
-    """
-    succeed = 0
-    if not headers:
-        headers = {'User-agent': 'Kodi/17.0 ( phil65@kodi.tv )'}
-    request = urllib2.Request(url)
-    for (key, value) in headers.iteritems():
-        request.add_header(key, value)
-    while (succeed < 2) and (not xbmc.abortRequested):
-        try:
-            response = urllib2.urlopen(request, timeout=3)
-            return response.read()
-        except Exception:
-            utils.log("get_http: could not get data from %s" % url)
-            xbmc.sleep(1000)
-            succeed += 1
-    return None
-
-
-def get_JSON_response(url="", cache_days=7.0, folder=False, headers=False):
-    """
-    get JSON response for *url, makes use of prop and file cache.
-    """
-    now = time.time()
-    hashed_url = hashlib.md5(url).hexdigest()
-    if folder:
-        cache_path = utils.translate_path(os.path.join(addon.DATA_PATH, folder))
-    else:
-        cache_path = utils.translate_path(os.path.join(addon.DATA_PATH))
-    cache_seconds = int(cache_days * 86400.0)
-    prop_time = addon.get_global(hashed_url + "_timestamp")
-    if prop_time and now - float(prop_time) < cache_seconds:
-        try:
-            prop = json.loads(addon.get_global(hashed_url))
-            if prop:
-                return prop
-        except Exception:
-            # utils.log("could not load prop data for %s" % url)
-            pass
-    path = os.path.join(cache_path, hashed_url + ".txt")
-    if xbmcvfs.exists(path) and ((now - os.path.getmtime(path)) < cache_seconds):
-        results = utils.read_from_file(path)
-        # utils.log("loaded file for %s. time: %f" % (url, time.time() - now))
-    else:
-        response = get_http(url, headers)
-        try:
-            results = json.loads(response)
-            # utils.log("download %s. time: %f" % (url, time.time() - now))
-            utils.save_to_file(results, hashed_url, cache_path)
-        except Exception:
-            utils.log("Exception: Could not get new JSON data from %s. Tryin to fallback to cache" % url)
-            utils.log(response)
-            results = utils.read_from_file(path) if xbmcvfs.exists(path) else []
-    if not results:
-        return []
-    addon.set_global(hashed_url + "_timestamp", str(now))
-    addon.set_global(hashed_url, json.dumps(results))
-    return results
 
 
 class FunctionThread(threading.Thread):
@@ -194,17 +116,6 @@ def extract_youtube_id(raw_string):
         return ""
 
 
-def pass_dict_to_skin(data=None, prefix="", window_id=10000):
-    window = xbmcgui.Window(window_id)
-    if not data:
-        return None
-    for (key, value) in data.iteritems():
-        if not value:
-            continue
-        value = unicode(value)
-        window.setProperty('%s%s' % (prefix, key), value)
-
-
 def reduce_list(items, key="job"):
     """
     TODO: refactor
@@ -221,29 +132,3 @@ def reduce_list(items, key="job"):
             if key in crews[index]:
                 crews[index][key] = crews[index][key] + " / " + item[key]
     return crews
-
-
-def clean_text(text):
-    if not text:
-        return ""
-    text = re.sub('(From Wikipedia, the free encyclopedia)|(Description above from the Wikipedia.*?Wikipedia)', '', text)
-    text = re.sub('<(.|\n|\r)*?>', '', text)
-    text = text.replace('<br \/>', '[CR]')
-    text = text.replace('<em>', '[I]').replace('</em>', '[/I]')
-    text = text.replace('&amp;', '&')
-    text = text.replace('&gt;', '>').replace('&lt;', '<')
-    text = text.replace('&#39;', "'").replace('&quot;', '"')
-    text = re.sub("\n\\.$", "", text)
-    text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-    while text:
-        s = text[0]
-        e = text[-1]
-        if s in [u'\u200b', " ", "\n"]:
-            text = text[1:]
-        elif e in [u'\u200b', " ", "\n"]:
-            text = text[:-1]
-        elif s.startswith(".") and not s.startswith(".."):
-            text = text[1:]
-        else:
-            break
-    return text.strip()
