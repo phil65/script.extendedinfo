@@ -83,7 +83,6 @@ def get_window(window_type):
             if not self.info.get_property("dbid"):
                 self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
             sets_thread.join()
-            self.setinfo = sets_thread.setinfo
             self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})
             set_ids = [item.get_property("id") for item in sets_thread.listitems]
             self.data["similar"] = [i for i in self.data["similar"] if i.get_property("id") not in set_ids]
