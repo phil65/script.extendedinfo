@@ -6,7 +6,6 @@
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
 from DialogBaseList import DialogBaseList
@@ -330,11 +329,12 @@ def get_window(window_type):
             keywords = tmdb.get_keyword_id(result)
             if not keywords:
                 return None
-            keyword = None
             if len(keywords) > 1:
-                names = [item["name"] for item in keywords]
-                selection = xbmcgui.Dialog().select(addon.LANG(32114), names)
+                selection = xbmcgui.Dialog().select(heading=addon.LANG(32114),
+                                                    list=[item["name"] for item in keywords])
                 keyword = keywords[selection] if selection > -1 else None
+                if not keyword:
+                    return None
             else:
                 keyword = keywords[0]
             self.add_filter(key="with_keywords",

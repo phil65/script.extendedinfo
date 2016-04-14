@@ -142,9 +142,17 @@ class DialogBaseInfo(object):
 
     @ch.context("movie")
     def movie_context_menu(self, control_id):
-        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32083),
-                                                       addon.LANG(32113)])
+        options = [addon.LANG(32113)]
+        if self.logged_in:
+            options.append(addon.LANG(32083))
+        selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:
+            rating = utils.input_userrating()
+            tmdb.set_rating(media_type="movie",
+                            media_id=self.FocusedItem(control_id).getProperty("id"),
+                            rating=rating,
+                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
+        elif selection == 1:
             account_lists = tmdb.get_account_lists()
             if not account_lists:
                 return False
@@ -154,12 +162,6 @@ class DialogBaseInfo(object):
                 tmdb.change_list_status(list_id=account_lists[i]["id"],
                                         movie_id=self.FocusedItem(control_id).getProperty("id"),
                                         status=True)
-        elif selection == 1:
-            rating = utils.input_userrating()
-            tmdb.set_rating(media_type="movie",
-                            media_id=self.FocusedItem(control_id).getProperty("id"),
-                            rating=rating,
-                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("artist")
     def person_context_menu(self, control_id):
