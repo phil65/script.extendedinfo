@@ -37,7 +37,6 @@ ID_LIST_BACKDROPS = 1350
 ID_BUTTON_PLAY_NORESUME = 8
 ID_BUTTON_PLAY_RESUME = 9
 ID_BUTTON_TRAILER = 10
-ID_BUTTON_PLOT = 132
 ID_BUTTON_MANAGE = 445
 ID_BUTTON_SETRATING = 6001
 ID_BUTTON_OPENLIST = 6002
@@ -69,7 +68,6 @@ def get_window(window_type):
         # BUTTONS = [ID_BUTTON_PLAY_NORESUME,
         #            ID_BUTTON_PLAY_RESUME,
         #            ID_BUTTON_TRAILER,
-        #            ID_BUTTON_PLOT,
         #            ID_BUTTON_MANAGE,
         #            ID_BUTTON_SETRATING,
         #            ID_BUTTON_OPENLIST,

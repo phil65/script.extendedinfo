@@ -82,12 +82,11 @@ class DialogBaseInfo(object):
         self.clearProperty("Bounce.%s" % identifier)
         self.bouncing = False
 
-    @ch.click(ID_LIST_IMAGES)
-    @ch.click(ID_LIST_BACKDROPS)
+    @ch.click_by_type("music")
+    # hack: use "music" until "pictures" got added to core
     def open_image(self, control_id):
         key = [key for container_id, key in self.LISTS if container_id == control_id][0]
-        listitems = self.lists[key]
-        pos = slideshow.open_slideshow(listitems=listitems,
+        pos = slideshow.open_slideshow(listitems=self.lists[key],
                                        index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
 
@@ -114,24 +113,16 @@ class DialogBaseInfo(object):
                             tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                             dbid=self.FocusedItem(control_id).getProperty("dbid"))
 
-    @ch.action("contextmenu", ID_LIST_IMAGES)
+    @ch.context("music")
     def thumbnail_options(self, control_id):
         if not self.info.get("dbid"):
             return None
-        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32006)])
+        options = [addon.LANG(32006)] if control_id == ID_LIST_IMAGES else [addon.LANG(32007)]
+        selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:
+            listitem = self.FocusedItem(control_id)
             kodijson.set_art(media_type=self.getProperty("type"),
-                             art={"poster": self.FocusedItem(control_id).getProperty("original")},
-                             dbid=self.info.get_property("dbid"))
-
-    @ch.action("contextmenu", ID_LIST_BACKDROPS)
-    def fanart_options(self, control_id):
-        if not self.info.get("dbid"):
-            return None
-        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32007)])
-        if selection == 0:
-            kodijson.set_art(media_type=self.getProperty("type"),
-                             art={"fanart": self.FocusedItem(control_id).getProperty("original")},
+                             art={listitem.getProperty("type"): listitem.getProperty("original")},
                              dbid=self.info.get_property("dbid"))
 
     @ch.context("video")

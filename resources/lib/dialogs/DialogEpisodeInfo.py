@@ -13,7 +13,6 @@ from kodi65 import imagetools
 from kodi65 import utils
 from ActionHandler import ActionHandler
 
-ID_CONTROL_PLOT = 132
 ID_LIST_YOUTUBE = 350
 ID_LIST_CREW = 750
 ID_LIST_ACTORS = 1000

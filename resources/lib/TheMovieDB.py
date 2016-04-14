@@ -498,15 +498,18 @@ def handle_images(results):
     for item in results:
         artwork = get_image_urls(poster=item.get("file_path"))
         image = ListItem(artwork=artwork)
+        image.set_info("mediatype", "music")
         image.set_properties({'aspectratio': item['aspect_ratio'],
+                              'type': "poster" if item['aspect_ratio'] < 0.7 else "fanart",
                               'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
         # HACK: can go when xbmcgui.ListItem.getArt() is available
         image.update_properties(artwork)
         if item.get("media"):
             image.set_infos({'title': item["media"].get("title")})
-            if item["media"].get("poster_path"):
-                image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + item["media"].get("poster_path")})
+            poster_path = item["media"].get("poster_path")
+            if poster_path:
+                image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + poster_path})
         images.append(image)
     return images
 
