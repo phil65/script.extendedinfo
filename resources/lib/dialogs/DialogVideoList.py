@@ -101,7 +101,7 @@ def get_window(window_type):
             selection = xbmcgui.Dialog().contextmenu(list=listitems)
             if selection == 0:
                 rating = utils.input_userrating()
-                if tmdb.set_rating(media_type=self.type,
+                if tmdb.set_rating(media_type="tv" if media_type == "tvshow" else "movie",
                                    media_id=item_id,
                                    rating=rating,
                                    dbid=self.FocusedItem(control_id).getProperty("dbid")):
