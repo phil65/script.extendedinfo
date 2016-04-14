@@ -32,7 +32,7 @@ def get_movies(movie_type):
                          path=path)
         movie.set_infos({'title': item["title"],
                          'mediatype': "movie",
-                         'duration': item["runtime"]*60,
+                         'duration': item["runtime"] * 60,
                          'year': item["year"],
                          'premiered': item["release_dates"].get("theater", ""),
                          'rating': item["ratings"]["audience_score"] / 10.0,

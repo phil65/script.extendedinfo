@@ -6,7 +6,6 @@
 import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
-from resources.lib.WindowManager import wm
 from DialogBaseInfo import DialogBaseInfo
 
 from kodi65 import imagetools
@@ -44,7 +43,7 @@ def get_window(window_type):
             data = tmdb.extended_actor_info(actor_id=self.id)
             if not data:
                 return None
-            self.info, self.data = data
+            self.info, self.lists = data
             self.info.update_properties(imagetools.blur(self.info.get("thumb")))
 
         def onInit(self):
@@ -59,7 +58,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_TAGGED_IMAGES)
         def open_image(self, control_id):
             key = [key for container_id, key in self.LISTS if container_id == control_id][0]
-            listitems = self.data[key]
+            listitems = self.lists[key]
             pos = slideshow.open_slideshow(listitems=listitems,
                                            index=self.getControl(control_id).getSelectedPosition())
             self.getControl(control_id).selectItem(pos)

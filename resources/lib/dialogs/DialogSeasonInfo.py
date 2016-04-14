@@ -44,7 +44,7 @@ def get_window(window_type):
                                              season_number=kwargs.get('season'))
             if not data:
                 return None
-            self.info, self.data = data
+            self.info, self.lists = data
             if not self.info.get_property("dbid"):  # need to add comparing for seasons
                 poster = utils.get_file(url=self.info.get("poster", ""))
                 self.info.set_art("poster", poster)

@@ -62,7 +62,7 @@ def get_window(window_type):
                                              dbid=self.dbid)
             if not data:
                 return None
-            self.info, self.data, self.states = data
+            self.info, self.lists, self.states = data
             if not self.info.get_property("dbid"):
                 self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
             self.info.update_properties(imagetools.blur(self.info.get_art("poster")))

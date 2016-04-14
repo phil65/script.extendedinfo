@@ -38,7 +38,7 @@ class DialogBaseInfo(object):
         self.dbid = kwargs.get('dbid')
         self.bouncing = False
         self.last_focus = None
-        self.data = None
+        self.lists = None
         self.yt_listitems = []
         self.info = ListItem()
 
@@ -48,7 +48,7 @@ class DialogBaseInfo(object):
         for container_id, key in self.LISTS:
             try:
                 self.getControl(container_id).reset()
-                items = [i.get_listitem() for i in self.data[key]]
+                items = [i.get_listitem() for i in self.lists[key]]
                 self.getControl(container_id).addItems(items)
             except Exception:
                 utils.log("Notice: No container with id %i available" % container_id)
@@ -86,7 +86,7 @@ class DialogBaseInfo(object):
     @ch.click(ID_LIST_BACKDROPS)
     def open_image(self, control_id):
         key = [key for container_id, key in self.LISTS if container_id == control_id][0]
-        listitems = self.data[key]
+        listitems = self.lists[key]
         pos = slideshow.open_slideshow(listitems=listitems,
                                        index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
@@ -227,8 +227,8 @@ class DialogBaseInfo(object):
         if not self.yt_listitems:
             result = YouTube.search(search_str, limit=15)
             self.yt_listitems = result.get("listitems", [])
-            if "videos" in self.data:
-                vid_ids = [item.get_property("key") for item in self.data["videos"]]
+            if "videos" in self.lists:
+                vid_ids = [item.get_property("key") for item in self.lists["videos"]]
                 self.yt_listitems = [i for i in self.yt_listitems if i.get_property("youtube_id") not in vid_ids]
         youtube_list.reset()
         youtube_list.addItems(utils.create_listitems(self.yt_listitems))

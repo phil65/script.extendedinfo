@@ -45,7 +45,7 @@ def get_window(window_type):
                                               episode=kwargs.get('episode'))
             if not data:
                 return None
-            self.info, self.data, self.states = data
+            self.info, self.lists, self.states = data
             self.info.update_properties(imagetools.blur(self.info.get("thumb")))
 
         def onInit(self):
