@@ -142,6 +142,8 @@ class DialogBaseInfo(object):
 
     @ch.context("movie")
     def movie_context_menu(self, control_id):
+        movie_id = self.FocusedItem(control_id).getProperty("id")
+        dbid = self.FocusedItem(control_id).getVideoInfoTag().getDbId()
         options = [addon.LANG(32113)]
         if self.logged_in:
             options.append(addon.LANG(32083))
@@ -149,9 +151,13 @@ class DialogBaseInfo(object):
         if selection == 0:
             rating = utils.input_userrating()
             tmdb.set_rating(media_type="movie",
-                            media_id=self.FocusedItem(control_id).getProperty("id"),
+                            media_id=movie_id,
                             rating=rating,
-                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
+                            dbid=dbid)
+            xbmc.sleep(2000)
+            tmdb.extended_movie_info(movie_id=movie_id,
+                                     dbid=dbid,
+                                     cache_time=0)
         elif selection == 1:
             account_lists = tmdb.get_account_lists()
             if not account_lists:
@@ -160,7 +166,7 @@ class DialogBaseInfo(object):
             i = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
             if i > -1:
                 tmdb.change_list_status(list_id=account_lists[i]["id"],
-                                        movie_id=self.FocusedItem(control_id).getProperty("id"),
+                                        movie_id=movie_id,
                                         status=True)
 
     @ch.context("artist")
