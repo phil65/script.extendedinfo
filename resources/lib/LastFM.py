@@ -91,8 +91,7 @@ def get_data(method, params=None, cache_days=0.5):
     params["method"] = method
     params["api_key"] = LAST_FM_API_KEY
     params["format"] = "json"
-    params = {k: v for k, v in params.items() if v}
-    params = {k: unicode(v).encode('utf-8') for k, v in params.items()}
+    params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
     url = "{base_url}{params}".format(base_url=BASE_URL,
                                       params=urllib.urlencode(params))
     return utils.get_JSON_response(url=url,
