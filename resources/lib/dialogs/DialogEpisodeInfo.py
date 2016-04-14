@@ -4,14 +4,12 @@
 # This program is Free Software see LICENSE file for details
 
 import xbmc
-import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
-from DialogBaseInfo import DialogBaseInfo
+from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
-from kodi65 import addon
 from kodi65 import utils
 from ActionHandler import ActionHandler
 
@@ -29,7 +27,7 @@ ch = ActionHandler()
 
 def get_window(window_type):
 
-    class DialogEpisodeInfo(DialogBaseInfo, window_type):
+    class DialogEpisodeInfo(DialogVideoInfo, window_type):
         TYPE = "Episode"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_CREW, "crew"),
@@ -58,11 +56,6 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogEpisodeInfo, self).onClick(control_id)
             ch.serve(control_id, self)
-
-        @ch.click(ID_CONTROL_PLOT)
-        def open_text(self, control_id):
-            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info.get_info("plot"))
 
         @ch.click(ID_CONTROL_SETRATING)
         def set_rating_dialog(self, control_id):

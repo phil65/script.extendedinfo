@@ -3,14 +3,11 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
-import xbmcgui
-
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
-from DialogBaseInfo import DialogBaseInfo
+from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
-from kodi65 import addon
 from kodi65 import utils
 from ActionHandler import ActionHandler
 
@@ -28,7 +25,7 @@ ch = ActionHandler()
 
 def get_window(window_type):
 
-    class DialogSeasonInfo(DialogBaseInfo, window_type):
+    class DialogSeasonInfo(DialogVideoInfo, window_type):
         TYPE = "Season"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_CREW, "crew"),
@@ -66,10 +63,5 @@ def get_window(window_type):
                                  tvshow_id=self.tvshow_id,
                                  season=info.getSeason(),
                                  episode=info.getEpisode())
-
-        @ch.click(ID_CONTROL_PLOT)
-        def open_text(self, control_id):
-            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info.get_info("plot"))
 
     return DialogSeasonInfo

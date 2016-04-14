@@ -29,7 +29,6 @@ class DialogBaseList(object):
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.filters = kwargs.get('filters', [])
-        self.color = kwargs.get('color', "FFAAAAAA")
         self.page = 1
         self.listitems = None
         self.column = None

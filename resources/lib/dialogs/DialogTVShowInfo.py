@@ -12,7 +12,7 @@ from resources.lib.WindowManager import wm
 from kodi65 import imagetools
 from kodi65 import addon
 from kodi65 import utils
-from DialogBaseInfo import DialogBaseInfo
+from DialogVideoInfo import DialogVideoInfo
 from ActionHandler import ActionHandler
 
 ID_LIST_SIMILAR = 150
@@ -41,7 +41,7 @@ ch = ActionHandler()
 
 def get_window(window_type):
 
-    class DialogTVShowInfo(DialogBaseInfo, window_type):
+    class DialogTVShowInfo(DialogVideoInfo, window_type):
         TYPE = "TVShow"
         LISTS = [(ID_LIST_SIMILAR, "similar"),
                  (ID_LIST_SEASONS, "seasons"),
@@ -184,11 +184,6 @@ def get_window(window_type):
             wm.open_video_list(prev_window=self,
                                mode="rating",
                                media_type="tv")
-
-        @ch.click(ID_BUTTON_PLOT)
-        def open_text(self, control_id):
-            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info.get_info("plot"))
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update

@@ -211,23 +211,15 @@ class WindowManager(object):
     def open_video_list(self, prev_window=None, listitems=None, filters=None, mode="filter", list_id=False,
                         filter_label="", force=False, media_type="movie", search_str=""):
         """
-        open video list, deal with window stack and color
+        open video list, deal with window stack
         """
         filters = [] if not filters else filters
         from dialogs import DialogVideoList
-        if prev_window:
-            try:  # TODO rework
-                color = prev_window.data["general"]['ImageColor']
-            except Exception:
-                color = "FFFFFFFF"
-        else:
-            color = "FFFFFFFF"
         check_version()
         browser_class = DialogVideoList.get_window(windows.DialogXML)
         dialog = browser_class(LIST_XML,
                                addon.PATH,
                                listitems=listitems,
-                               color=color,
                                filters=filters,
                                mode=mode,
                                list_id=list_id,
@@ -243,21 +235,13 @@ class WindowManager(object):
     def open_youtube_list(self, prev_window=None, search_str="", filters=None, sort="relevance",
                           filter_label="", media_type="video"):
         """
-        open video list, deal with window stack and color
+        open video list, deal with window stack
         """
         filters = [] if not filters else filters
         from dialogs import DialogYoutubeList
-        if prev_window:
-            try:  # TODO rework
-                color = prev_window.data["general"]['ImageColor']
-            except Exception:
-                color = "FFFFFFFF"
-        else:
-            color = "FFFFFFFF"
         youtube_class = DialogYoutubeList.get_window(windows.WindowXML)
         dialog = youtube_class(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
                                search_str=search_str,
-                               color=color,
                                filters=filters,
                                filter_label=filter_label,
                                type=media_type)
@@ -267,7 +251,7 @@ class WindowManager(object):
         dialog.doModal()
 
     def open_dialog(self, dialog, prev_window):
-        if dialog.data:
+        if dialog.info:
             self.active_dialog = dialog
             check_version()
             if prev_window:

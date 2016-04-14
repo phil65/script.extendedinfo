@@ -11,7 +11,7 @@ import xbmcgui
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import omdb
 from resources.lib.WindowManager import wm
-from DialogBaseInfo import DialogBaseInfo
+from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
 from kodi65 import addon
@@ -50,7 +50,7 @@ ch = ActionHandler()
 
 def get_window(window_type):
 
-    class DialogMovieInfo(DialogBaseInfo, window_type):
+    class DialogMovieInfo(DialogVideoInfo, window_type):
         TYPE = "Movie"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_SIMILAR, "similar"),
@@ -65,6 +65,17 @@ def get_window(window_type):
                  (ID_LIST_VIDEOS, "videos"),
                  (ID_LIST_IMAGES, "images"),
                  (ID_LIST_BACKDROPS, "backdrops")]
+
+        # BUTTONS = [ID_BUTTON_PLAY_NORESUME,
+        #            ID_BUTTON_PLAY_RESUME,
+        #            ID_BUTTON_TRAILER,
+        #            ID_BUTTON_PLOT,
+        #            ID_BUTTON_MANAGE,
+        #            ID_BUTTON_SETRATING,
+        #            ID_BUTTON_OPENLIST,
+        #            ID_BUTTON_FAV,
+        #            ID_BUTTON_ADDTOLIST,
+        #            ID_BUTTON_RATED]
 
         def __init__(self, *args, **kwargs):
             super(DialogMovieInfo, self).__init__(*args, **kwargs)
@@ -97,6 +108,10 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogMovieInfo, self).onClick(control_id)
             ch.serve(control_id, self)
+
+        def set_buttons(self):
+            self.set_visible(ID_BUTTON_PLAY_RESUME, self.info.get_property("dbid"))
+            self.set_visible(ID_BUTTON_PLAY_NORESUME, self.info.get_property("dbid"))
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
@@ -184,11 +199,6 @@ def get_window(window_type):
                                    list_id=movie_lists[index - 2]["id"],
                                    filter_label=movie_lists[index - 2]["name"],
                                    force=True)
-
-        @ch.click(ID_BUTTON_PLOT)
-        def show_plot(self, control_id):
-            xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
-                                        text=self.info.get_info("plot"))
 
         @ch.click(ID_BUTTON_SETRATING)
         def set_rating_dialog(self, control_id):
