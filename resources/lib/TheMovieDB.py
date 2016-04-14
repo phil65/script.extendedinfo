@@ -306,7 +306,7 @@ def handle_multi_search(results):
     for item in results:
         if item["media_type"] == "movie":
             listitems.append(handle_movies([item])[0])
-        elif item["media_type"] == "tvshow":
+        elif item["media_type"] == "tv":
             listitems.append(handle_tvshows([item])[0])
         else:
             listitems.append(handle_people([item])[0])
