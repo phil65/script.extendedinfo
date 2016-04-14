@@ -12,16 +12,20 @@ from DialogBaseList import DialogBaseList
 
 from kodi65 import addon
 from kodi65 import utils
+from kodi65 import confirmdialog
 from ActionHandler import ActionHandler
 
 ID_LIST_MAIN = [50, 51, 52, 53, 54, 55, 500]
 ID_BUTTON_SORT = 5001
+ID_BUTTON_GENREFILTER = 5002
 ID_BUTTON_YEARFILTER = 5003
 ID_BUTTON_ORDER = 5004
 ID_BUTTON_CERTFILTER = 5006
+ID_BUTTON_MEDIATYPETOGGLE = 5007
 ID_BUTTON_ACTORFILTER = 5008
 ID_BUTTON_KEYWORDFILTER = 5009
 ID_BUTTON_COMPANYFILTER = 5010
+ID_BUTTON_VOTECOUNTFILTER = 5012
 ID_BUTTON_ACCOUNT = 7000
 
 ch = ActionHandler()
@@ -82,10 +86,12 @@ def get_window(window_type):
             self.getControl(ID_BUTTON_KEYWORDFILTER).setVisible(self.type != "tv")
             self.getControl(ID_BUTTON_COMPANYFILTER).setVisible(self.type != "tv")
 
-        @ch.action("contextmenu", ID_LIST_MAIN)
+        @ch.context("tvshow")
+        @ch.context("movie")
         def context_menu(self, control_id):
             item_id = self.FocusedItem(control_id).getProperty("id")
-            listitems = [addon.LANG(32169)] if self.type == "tv" else [addon.LANG(32113)]
+            media_type = self.FocusedItem(control_id).getVideoInfoTag().getMediaType()
+            listitems = [addon.LANG(32169)] if media_type == "tvshow" else [addon.LANG(32113)]
             if self.logged_in:
                 listitems += [addon.LANG(14076)]
                 if not self.type == "tv":
@@ -166,7 +172,7 @@ def get_window(window_type):
             self.order = "desc" if self.order == "asc" else "asc"
             self.update()
 
-        @ch.click(5007)
+        @ch.click(ID_BUTTON_MEDIATYPETOGGLE)
         def toggle_media_type(self, control_id):
             self.filters = []
             self.type = "movie" if self.type == "tv" else "tv"
@@ -209,7 +215,7 @@ def get_window(window_type):
                                             filter_label=account_lists[index - 2]["name"])
                 dialog.doModal()
 
-        @ch.click(5002)
+        @ch.click(ID_BUTTON_GENREFILTER)
         def set_genre_filter(self, control_id):
             params = {"language": addon.setting("LanguageID")}
             response = tmdb.get_data(url="genre/%s/list" % (self.type),
@@ -226,33 +232,37 @@ def get_window(window_type):
                             typelabel=addon.LANG(135),
                             label=labels[index])
 
-        @ch.click(5012)
+        @ch.click(ID_BUTTON_VOTECOUNTFILTER)
         def set_vote_count_filter(self, control_id):
             ret = True
             if not self.type == "tv":
-                ret = xbmcgui.Dialog().yesno(heading=addon.LANG(32151),
-                                             line1=addon.LANG(32106),
-                                             nolabel=addon.LANG(32150),
-                                             yeslabel=addon.LANG(32149))
+                ret = confirmdialog.open_confirm(header=addon.LANG(32151),
+                                                 text=addon.LANG(32106),
+                                                 nolabel=addon.LANG(32150),
+                                                 yeslabel=addon.LANG(32149))
+            if ret == -1:
+                return None
             result = xbmcgui.Dialog().input(heading=addon.LANG(32111),
                                             type=xbmcgui.INPUT_NUMERIC)
             if result:
-                self.add_filter(key="vote_count.lte" if ret else "vote_count.gte",
+                self.add_filter(key="vote_count.lte" if ret == 1 else "vote_count.gte",
                                 value=result,
                                 typelabel=addon.LANG(32111),
-                                label=" < " + result if ret else " > " + result)
+                                label=" < " + result if ret == 1 else " > " + result)
 
         @ch.click(ID_BUTTON_YEARFILTER)
         def set_year_filter(self, control_id):
-            ret = xbmcgui.Dialog().yesno(heading=addon.LANG(32151),
-                                         line1=addon.LANG(32106),
-                                         nolabel=addon.LANG(32150),
-                                         yeslabel=addon.LANG(32149))
+            ret = confirmdialog.open_confirm(header=addon.LANG(32151),
+                                             text=addon.LANG(32106),
+                                             nolabel=addon.LANG(32150),
+                                             yeslabel=addon.LANG(32149))
+            if ret == -1:
+                return None
             result = xbmcgui.Dialog().input(heading=addon.LANG(345),
                                             type=xbmcgui.INPUT_NUMERIC)
             if not result:
                 return None
-            if ret:
+            if ret == 1:
                 order = "lte"
                 value = "%s-12-31" % result
                 label = " < " + result

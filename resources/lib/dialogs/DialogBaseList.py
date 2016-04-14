@@ -210,19 +210,25 @@ class DialogBaseList(object):
                 break
         if index == -1:
             self.filters.append(new_filter)
+            if reset:
+                self.reset()
             return None
         if force_overwrite:
             self.filters[index]["id"] = str(value)
             self.filters[index]["label"] = str(label)
+            if reset:
+                self.reset()
             return None
-        ret = xbmcgui.Dialog().yesno(heading=addon.LANG(587),
-                                     line1=addon.LANG(32106),
-                                     nolabel="OR",
-                                     yeslabel="AND")
-        if ret:
+        ret = confirmdialog.open_confirm(header=addon.LANG(587),
+                                         text=addon.LANG(32106),
+                                         nolabel="OR",
+                                         yeslabel="AND")
+        if ret == -1:
+            return None
+        if ret == 1:
             self.filters[index]["id"] += ",%s" % value
             self.filters[index]["label"] += ",%s" % label
-        else:
+        elif ret == 0:
             self.filters[index]["id"] += "|%s" % value
             self.filters[index]["label"] += "|%s" % label
         if reset:
