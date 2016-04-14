@@ -8,7 +8,6 @@ import threading
 import xbmc
 import xbmcgui
 
-from resources.lib import Utils
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import omdb
 from resources.lib.WindowManager import wm
@@ -75,7 +74,7 @@ def get_window(window_type):
                 return None
             self.info, self.data, self.states = data
             sets_thread = SetItemsThread(self.info.get_property("set_id"))
-            self.omdb_thread = Utils.FunctionThread(function=omdb.get_movie_info,
+            self.omdb_thread = utils.FunctionThread(function=omdb.get_movie_info,
                                                     param=self.info.get_property("imdb_id"))
             self.omdb_thread.start()
             sets_thread.start()

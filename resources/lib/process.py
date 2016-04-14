@@ -19,7 +19,6 @@ import YouTube
 import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
-import Utils
 from WindowManager import wm
 
 from kodi65.localdb import local_db
@@ -32,7 +31,7 @@ from kodi65 import favs
 def start_info_actions(info, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
-        params["artist_mbid"] = Utils.fetch_musicbrainz_id(params["artistname"])
+        params["artist_mbid"] = utils.fetch_musicbrainz_id(params["artistname"])
     utils.log(info)
     utils.pp(params)
     if "prefix" in params and not params["prefix"].endswith('.'):

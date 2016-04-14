@@ -274,16 +274,6 @@ msgctxt "#32056"
 msgid "Top rentals"
 msgstr ""
 
-#: /resources/lib/Utils.py:212
-msgctxt "#32057"
-msgid "Daily babe"
-msgstr ""
-
-#: /resources/lib/Utils.py:213
-msgctxt "#32058"
-msgid "Daily babes"
-msgstr ""
-
 #: \resources\lib\DialogVideoInfo.py:297
 msgctxt "#32059"
 msgid "Added movie to CouchPotato"
