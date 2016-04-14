@@ -4,12 +4,12 @@
 # This program is Free Software see LICENSE file for details
 
 import datetime
-import Utils
+import urllib
+
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem
-import urllib
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -90,7 +90,7 @@ def handle_movies(results):
                          'duration': item["runtime"] * 60,
                          'tagline': item["tagline"],
                          'mediatype': "movie",
-                         'trailer': Utils.convert_youtube_url(item["trailer"]),
+                         'trailer': utils.convert_youtube_url(item["trailer"]),
                          'year': item["year"],
                          'mpaa': item["certification"],
                          'plot': item["overview"],

@@ -7,8 +7,6 @@ import urllib
 
 import xbmc
 
-import Utils
-
 from kodi65 import utils
 from kodi65 import addon
 from kodi65.localdb import local_db
@@ -67,9 +65,9 @@ def handle_tracks(results):
     if not results.get('track'):
         return None
     for item in results['track']:
-        youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
+        youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
         track = AudioItem(label=item['strTrack'],
-                          path=Utils.convert_youtube_url(item['strMusicVid']))
+                          path=utils.convert_youtube_url(item['strMusicVid']))
         track.set_infos({'title': item['strTrack'],
                          'album': item['strAlbum'],
                          'artist': [item['strArtist']],
@@ -85,9 +83,9 @@ def handle_musicvideos(results):
         return []
     mvids = []
     for item in results['mvids']:
-        youtube_id = Utils.extract_youtube_id(item.get('strMusicVid', ''))
+        youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
         mvid = AudioItem(label=item['strTrack'],
-                         path=Utils.convert_youtube_url(item['strMusicVid']))
+                         path=utils.convert_youtube_url(item['strMusicVid']))
         mvid.set_infos({'title': item['strTrack'],
                         'plot': item['strDescriptionEN'],
                         'mediatype': "musicvideo"})

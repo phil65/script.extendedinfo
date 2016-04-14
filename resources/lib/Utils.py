@@ -10,13 +10,6 @@ import threading
 from kodi65 import utils
 
 
-def dictfind(lst, key, value):
-    for i, dic in enumerate(lst):
-        if dic[key] == value:
-            return dic
-    return ""
-
-
 def fetch_musicbrainz_id(artist, artist_id=-1):
     """
     fetches MusicBrainz ID for given *artist and returns it
@@ -46,46 +39,3 @@ class FunctionThread(threading.Thread):
     def run(self):
         self.listitems = self.function(self.param)
         return True
-
-
-def convert_youtube_url(raw_string):
-    """
-    get plugin playback URL for URL *raw_string
-    """
-    youtube_id = extract_youtube_id(raw_string)
-    if youtube_id:
-        return 'plugin://script.extendedinfo/?info=youtubevideo&&id=%s' % youtube_id
-    return ""
-
-
-def extract_youtube_id(raw_string):
-    """
-    get youtube video id if from youtube URL
-    """
-    vid_ids = None
-    if raw_string and 'youtube.com/v' in raw_string:
-        vid_ids = re.findall('http://www.youtube.com/v/(.{11})\??', raw_string, re.DOTALL)
-    elif raw_string and 'youtube.com/watch' in raw_string:
-        vid_ids = re.findall('youtube.com/watch\?v=(.{11})\??', raw_string, re.DOTALL)
-    if vid_ids:
-        return vid_ids[0]
-    else:
-        return ""
-
-
-def reduce_list(items, key="job"):
-    """
-    TODO: refactor
-    """
-    crew_ids = []
-    crews = []
-    for item in items:
-        id_ = item.get_property("id")
-        if id_ not in crew_ids:
-            crew_ids.append(id_)
-            crews.append(item)
-        else:
-            index = crew_ids.index(id_)
-            if key in crews[index]:
-                crews[index][key] = crews[index][key] + " / " + item[key]
-    return crews

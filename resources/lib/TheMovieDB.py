@@ -9,8 +9,6 @@ import urllib
 import json
 from functools32 import lru_cache
 
-import Utils
-
 from kodi65 import kodijson
 from kodi65 import addon
 from kodi65 import utils
@@ -261,7 +259,7 @@ def merge_with_cert_desc(input_list, media_type):
         iso = item.get_property("iso_3166_1").upper()
         if iso not in cert_list:
             continue
-        hit = Utils.dictfind(lst=cert_list[iso],
+        hit = utils.dictfind(lst=cert_list[iso],
                              key="certification",
                              value=item.get_property("certification"))
         if hit:
@@ -721,7 +719,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     studio = [i["name"] for i in info["production_companies"]]
     authors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Writing"]
     directors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Directing"]
-    us_cert = Utils.dictfind(info['releases']['countries'], "iso_3166_1", "US")
+    us_cert = utils.dictfind(info['releases']['countries'], "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["certification"]
     elif info['releases']['countries']:
@@ -774,7 +772,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                  "lists": sort_lists(handle_lists(info["lists"]["results"])),
                  "studios": handle_text(info["production_companies"]),
                  "releases": releases,
-                 "crew": Utils.reduce_list(handle_people(info["credits"]["crew"])),
+                 "crew": utils.reduce_list(handle_people(info["credits"]["crew"])),
                  "genres": handle_text(info["genres"]),
                  "keywords": handle_text(info["keywords"]["keywords"]),
                  "reviews": handle_misc(info["reviews"]["results"]),
@@ -811,7 +809,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     else:
         duration = ""
     mpaas = info['content_ratings']['results']
-    us_cert = Utils.dictfind(mpaas, "iso_3166_1", "US")
+    us_cert = utils.dictfind(mpaas, "iso_3166_1", "US")
     if us_cert:
         mpaa = us_cert["rating"]
     elif mpaas:
@@ -955,10 +953,10 @@ def extended_actor_info(actor_id):
     if not data:
         utils.notify("Could not find actor info")
         return None
-    listitems = {"movie_roles": Utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
-                 "tvshow_roles": Utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
-                 "movie_crew_roles": Utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
-                 "tvshow_crew_roles": Utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
+    listitems = {"movie_roles": utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
+                 "tvshow_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
+                 "movie_crew_roles": utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
+                 "tvshow_crew_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
                  "tagged_images": handle_images(data["tagged_images"]["results"]) if "tagged_images" in data else [],
                  "images": handle_images(data["images"]["profiles"])}
     info = ListItem(label=data['name'],
