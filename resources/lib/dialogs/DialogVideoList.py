@@ -16,7 +16,12 @@ from ActionHandler import ActionHandler
 
 ID_LIST_MAIN = [50, 51, 52, 53, 54, 55, 500]
 ID_BUTTON_SORT = 5001
+ID_BUTTON_YEARFILTER = 5003
 ID_BUTTON_ORDER = 5004
+ID_BUTTON_CERTFILTER = 5006
+ID_BUTTON_ACTORFILTER = 5008
+ID_BUTTON_KEYWORDFILTER = 5009
+ID_BUTTON_COMPANYFILTER = 5010
 ID_BUTTON_ACCOUNT = 7000
 
 ch = ActionHandler()
@@ -72,10 +77,10 @@ def get_window(window_type):
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
             self.setProperty("Type", TRANSLATIONS[self.type])
-            self.getControl(5006).setVisible(self.type != "tv")
-            self.getControl(5008).setVisible(self.type != "tv")
-            self.getControl(5009).setVisible(self.type != "tv")
-            self.getControl(5010).setVisible(self.type != "tv")
+            self.getControl(ID_BUTTON_CERTFILTER).setVisible(self.type != "tv")
+            self.getControl(ID_BUTTON_ACTORFILTER).setVisible(self.type != "tv")
+            self.getControl(ID_BUTTON_KEYWORDFILTER).setVisible(self.type != "tv")
+            self.getControl(ID_BUTTON_COMPANYFILTER).setVisible(self.type != "tv")
 
         @ch.action("contextmenu", ID_LIST_MAIN)
         def context_menu(self, control_id):
@@ -198,12 +203,10 @@ def get_window(window_type):
                 self.reset("favorites")
             else:
                 self.close()
-                dialog = DialogVideoList(u'script-%s-VideoList.xml' % addon.NAME, addon.PATH,
-                                         color=self.color,
-                                         filters=[],
-                                         mode="list",
-                                         list_id=account_lists[index - 2]["id"],
-                                         filter_label=account_lists[index - 2]["name"])
+                dialog = wm.open_video_list(filters=[],
+                                            mode="list",
+                                            list_id=account_lists[index - 2]["id"],
+                                            filter_label=account_lists[index - 2]["name"])
                 dialog.doModal()
 
         @ch.click(5002)
@@ -239,7 +242,7 @@ def get_window(window_type):
                                 typelabel=addon.LANG(32111),
                                 label=" < " + result if ret else " > " + result)
 
-        @ch.click(5003)
+        @ch.click(ID_BUTTON_YEARFILTER)
         def set_year_filter(self, control_id):
             ret = xbmcgui.Dialog().yesno(heading=addon.LANG(32151),
                                          line1=addon.LANG(32106),
@@ -268,7 +271,7 @@ def get_window(window_type):
                                 typelabel=addon.LANG(345),
                                 label=label)
 
-        @ch.click(5008)
+        @ch.click(ID_BUTTON_ACTORFILTER)
         def set_actor_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
@@ -299,7 +302,7 @@ def get_window(window_type):
                 wm.open_actor_info(prev_window=self,
                                    actor_id=self.FocusedItem(control_id).getProperty("id"))
 
-        @ch.click(5010)
+        @ch.click(ID_BUTTON_COMPANYFILTER)
         def set_company_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
@@ -320,7 +323,7 @@ def get_window(window_type):
                             typelabel=addon.LANG(20388),
                             label=response["name"])
 
-        @ch.click(5009)
+        @ch.click(ID_BUTTON_KEYWORDFILTER)
         def set_keyword_filter(self, control_id):
             result = xbmcgui.Dialog().input(heading=addon.LANG(16017),
                                             type=xbmcgui.INPUT_ALPHANUM)
@@ -342,7 +345,7 @@ def get_window(window_type):
                             typelabel=addon.LANG(32114),
                             label=keyword["name"])
 
-        @ch.click(5006)
+        @ch.click(ID_BUTTON_CERTFILTER)
         def set_certification_filter(self, control_id):
             response = tmdb.get_certification_list(self.type)
             countries = [key for key in response.keys()]
@@ -417,7 +420,7 @@ def get_window(window_type):
                           "language": addon.setting("LanguageID"),
                           "page": self.page,
                           "include_adult": include_adult}
-                filters = dict((item["type"], item["id"]) for item in self.filters)
+                filters = {item["type"]: item["id"] for item in self.filters}
                 params = utils.merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
             response = tmdb.get_data(url=url,
