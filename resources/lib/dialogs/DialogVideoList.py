@@ -138,15 +138,15 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_SORT)
         def get_sort_type(self, control_id):
             sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
-            listitems = [k for k in self.SORTS[sort_key].values()]
-            sort_strings = [v for v in self.SORTS[sort_key].keys()]
+            listitems = self.SORTS[sort_key].values()
+            sort_strings = self.SORTS[sort_key].keys()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
                                             list=listitems)
             if index == -1:
                 return None
             self.sort = sort_strings[index]
             self.sort_label = listitems[index]
-            if sort_strings[index] == "vote_average":
+            if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
                                 typelabel="%s (%s)" % (addon.LANG(32111), addon.LANG(21406)),
