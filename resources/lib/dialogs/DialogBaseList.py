@@ -41,8 +41,6 @@ class DialogBaseList(object):
 
     def onInit(self):
         super(DialogBaseList, self).onInit()
-        addon.set_global("WindowColor", self.color)
-        self.setProperty("WindowColor", self.color)
         if addon.bool_setting("alt_browser_layout"):
             self.setProperty("alt_layout", "true")
         self.update_ui()
