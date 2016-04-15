@@ -10,6 +10,7 @@ from resources.lib.WindowManager import wm
 
 from kodi65 import addon
 from kodi65 import utils
+from kodi65 import confirmdialog
 from T9Search import T9Search
 from ActionHandler import ActionHandler
 
@@ -17,7 +18,8 @@ ch = ActionHandler()
 
 ID_BUTTON_SEARCH = 6000
 ID_BUTTON_RESETFILTERS = 5005
-ID_LIST_MAIN = 500
+ID_BUTTON_PREV_PAGE = 700
+ID_BUTTON_NEXT_PAGE = 600
 
 
 class DialogBaseList(object):
@@ -41,12 +43,9 @@ class DialogBaseList(object):
 
     def onInit(self):
         super(DialogBaseList, self).onInit()
-        if addon.bool_setting("alt_browser_layout"):
-            self.setProperty("alt_layout", "true")
         self.update_ui()
-        xbmc.sleep(200)
         if self.total_items > 0:
-            self.setFocusId(ID_LIST_MAIN)
+            self.setFocusId(self.getCurrentContainerId())
             self.setCurrentListPosition(self.last_position)
         else:
             self.setFocusId(ID_BUTTON_SEARCH)
@@ -77,9 +76,9 @@ class DialogBaseList(object):
 
     def onFocus(self, control_id):
         old_page = self.page
-        if control_id == 600:
+        if control_id == ID_BUTTON_NEXT_PAGE:
             self.go_to_next_page()
-        elif control_id == 700:
+        elif control_id == ID_BUTTON_PREV_PAGE:
             self.go_to_prev_page()
         if self.page != old_page:
             self.update()
@@ -113,7 +112,7 @@ class DialogBaseList(object):
                      start_value="",
                      history=self.__class__.__name__ + ".search")
         if self.total_items > 0:
-            self.setFocusId(ID_LIST_MAIN)
+            self.setFocusId(self.getCurrentContainerId())
 
     def onClick(self, control_id):
         ch.serve(control_id, self)
@@ -144,7 +143,7 @@ class DialogBaseList(object):
         self.listitems = utils.create_listitems(self.listitems)
 
     def update_ui(self):
-        if not self.listitems and self.getFocusId() == ID_LIST_MAIN:
+        if not self.listitems and self.getFocusId() == self.getCurrentContainerId():
             self.setFocusId(ID_BUTTON_SEARCH)
         self.clearList()
         if self.listitems:

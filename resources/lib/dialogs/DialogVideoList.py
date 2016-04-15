@@ -103,7 +103,7 @@ def get_window(window_type):
                 if tmdb.set_rating(media_type="tv" if media_type == "tvshow" else "movie",
                                    media_id=item_id,
                                    rating=rating,
-                                   dbid=self.FocusedItem(control_id).getProperty("dbid")):
+                                   dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId()):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
                     self.setCurrentListPosition(self.position)
@@ -299,14 +299,14 @@ def get_window(window_type):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             wm.open_movie_info(prev_window=self,
                                movie_id=self.FocusedItem(control_id).getProperty("id"),
-                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
+                               dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
         @ch.click_by_type("tvshow")
         def open_tvshow(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
             wm.open_tvshow_info(prev_window=self,
                                 tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
+                                dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
         @ch.click_by_type("artist")
         def open_media(self, control_id):

@@ -287,7 +287,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -365,7 +365,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -470,7 +470,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -548,7 +548,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -653,7 +653,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -731,7 +731,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -836,7 +836,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -914,7 +914,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.DBID)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>

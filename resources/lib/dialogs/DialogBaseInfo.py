@@ -106,13 +106,13 @@ class DialogBaseInfo(object):
     def open_movie_info(self, control_id):
         wm.open_movie_info(prev_window=self,
                            movie_id=self.FocusedItem(control_id).getProperty("id"),
-                           dbid=self.FocusedItem(control_id).getProperty("dbid"))
+                           dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.click_by_type("tvshow")
     def open_tvshow_dialog(self, control_id):
         wm.open_tvshow_info(prev_window=self,
                             tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                            dbid=self.FocusedItem(control_id).getProperty("dbid"))
+                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("music")
     def thumbnail_options(self, control_id):
@@ -123,8 +123,8 @@ class DialogBaseInfo(object):
         if selection == 0:
             listitem = self.FocusedItem(control_id)
             kodijson.set_art(media_type=self.getProperty("type"),
-                             art={listitem.getProperty("type"): listitem.getProperty("original")},
-                             dbid=self.info.get_property("dbid"))
+                             art={listitem.getProperty("type"): listitem.get_art("original")},
+                             dbid=self.info.get_info("dbid"))
 
     @ch.context("video")
     def video_context_menu(self, control_id):
@@ -192,7 +192,7 @@ class DialogBaseInfo(object):
         if selection == 0:
             wm.open_tvshow_info(prev_window=self,
                                 tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
+                                dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
         if selection == 1:
             self.open_credit_dialog(credit_id=credit_id)
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <window>
 	<onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,FFFFFFFF,home)</onload>
-	<views>500</views>
+	<views>500,50</views>
 	<!--
-		 <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload> -->
+	     <onload condition="IsEmpty(Window(home).Property(WindowColor))">SetProperty(WindowColor,$VAR[AreaColorVar],home)</onload> -->
 	<onunload>ClearProperty(WindowColor,home)</onunload>
 	<defaultcontrol always="true">500</defaultcontrol>
 	<controls>
@@ -42,14 +42,12 @@
 				<effect type="fade" start="100" end="0" time="240" />
 			</animation>
 			<control type="group">
-				<visible>IntegerGreaterThan(Container(500).NumItems,0)</visible>
-				<animation effect="fade" time="320" delay="300">Visible</animation>
 				<control type="image">
 					<left>465</left>
 					<top>107</top>
 					<width>330</width>
 					<height>432</height>
-					<visible>Control.HasFocus(500) + IsEmpty(Window.Property(alt_layout))</visible>
+					<visible>Control.HasFocus(500)</visible>
 					<animation type="WindowOpen" reversible="false">
 						<effect type="fade" start="0" end="100" delay="700" time="300" />
 					</animation>
@@ -57,29 +55,29 @@
 					<animation effect="fade" time="200">Hidden</animation>
 					<texture colordiffuse="FF12B2E7" border="40">buttons/button-fo.png</texture>
 					<animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
-					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,3)">Conditional</animation>
-					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,2)">Conditional</animation>
-					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,1)">Conditional</animation>
-					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,0)">Conditional</animation>
+					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,3)">Conditional</animation>
+					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,2)">Conditional</animation>
+					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,1)">Conditional</animation>
+					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,0)">Conditional</animation>
 				</control>
 				<control type="image">
 					<left>465</left>
 					<top>50</top>
 					<width>800</width>
 					<height>140</height>
-					<visible>Control.HasFocus(500) + !IsEmpty(Window.Property(alt_layout))</visible>
+					<visible>Control.HasFocus(50)</visible>
 					<animation type="WindowOpen" reversible="false">
 						<effect type="fade" start="0" end="100" delay="700" time="300" />
 					</animation>
 					<animation effect="fade" time="320" delay="200">Visible</animation>
 					<animation effect="fade" time="200">Hidden</animation>
 					<texture colordiffuse="FF12B2E7" border="40">buttons/button-fo.png</texture>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,5)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,4)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,3)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,2)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,1)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="IntegerGreaterThan(Container(500).Column,0)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,5)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,4)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,3)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,2)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,1)">Conditional</animation>
+					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,0)">Conditional</animation>
 				</control>
 			</control>
 			<control type="image">
@@ -102,8 +100,8 @@
 				<top>180</top>
 				<width>396</width>
 				<fadetime>200</fadetime>
-							<bordertexture border="3">common/black.png</bordertexture>
-							<bordersize>3</bordersize>
+				<bordertexture border="3">common/black.png</bordertexture>
+				<bordersize>3</bordersize>
 				<height>222</height>
 				<aspectratio>scale</aspectratio>
 				<animation type="WindowOpen" reversible="false">
@@ -151,11 +149,124 @@
 					<width>580</width>
 					<height>870</height>
 					<fadetime>200</fadetime>
-							<bordertexture border="3">common/black.png</bordertexture>
-							<bordersize>3</bordersize>
+					<bordertexture border="3">common/black.png</bordertexture>
+					<bordersize>3</bordersize>
 					<texture>$INFO[ListItem.Thumb]</texture>
-					<visible>!IsEmpty(Window.Property(alt_layout))</visible>
+					<visible>Control.IsVisible(50)</visible>
 				</control>
+			</control>
+			<control type="panel" id="50">
+				<left>440</left>
+				<top>0</top>
+				<animation type="WindowOpen" reversible="false">
+					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
+					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
+				</animation>
+				<width>1536</width>
+				<height>1080</height>
+				<viewtype label="31234">icon</viewtype>
+				<pagecontrol>72</pagecontrol>
+				<preloaditems>2</preloaditems>
+				<scrolltime tween="quadratic">300</scrolltime>
+				<onleft>9000</onleft>
+				<onright>72</onright>
+				<onup>700</onup>
+				<ondown>600</ondown>
+				<orientation>vertical</orientation>
+				<itemlayout width="1536" height="161">
+					<control type="label">
+						<left>80</left>
+						<width>700</width>
+						<height>67</height>
+						<top>75</top>
+						<textcolor>FFFAFAFA</textcolor>
+						<align>left</align>
+						<aligny>top</aligny>
+						<font>font13</font>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+					<control type="label">
+						<left>80</left>
+						<width>700</width>
+						<height>67</height>
+						<top>115</top>
+						<textcolor>FFAAAAAA</textcolor>
+						<align>left</align>
+						<aligny>top</aligny>
+						<font>font12</font>
+						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+					</control>
+					<control type="image">
+						<width>30</width>
+						<height>30</height>
+						<top>120</top>
+						<left>758</left>
+						<texture>icons/database.png</texture>
+						<visible>!IsEmpty(ListItem.DBID)</visible>
+					</control>
+					<control type="label">
+						<width>46</width>
+						<height>40</height>
+						<top>76</top>
+						<align>center</align>
+						<aligny>center</aligny>
+						<left>750</left>
+						<font>font10</font>
+						<textcolor>FFFAFAFA</textcolor>
+						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+						<visible>!IsEmpty(ListItem.UserRating)</visible>
+					</control>
+				</itemlayout>
+				<focusedlayout width="1536" height="161">
+					<control type="label">
+						<left>80</left>
+						<width>700</width>
+						<height>67</height>
+						<top>75</top>
+						<textcolor>FFFAFAFA</textcolor>
+						<align>left</align>
+						<aligny>top</aligny>
+						<font>font13</font>
+						<label>$INFO[ListItem.Label]</label>
+					</control>
+					<control type="label">
+						<left>80</left>
+						<width>700</width>
+						<height>67</height>
+						<top>115</top>
+						<textcolor>FFFAFAFA</textcolor>
+						<animation type="Focus" reversible="false">
+							<effect type="fade" start="62" end="100" time="280" />
+						</animation>
+						<animation type="UnFocus" reversible="false">
+							<effect type="fade" start="100" end="62" time="280" />
+						</animation>
+						<align>left</align>
+						<aligny>top</aligny>
+						<font>font12</font>
+						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+					</control>
+					<control type="image">
+						<width>30</width>
+						<height>30</height>
+						<top>120</top>
+						<left>758</left>
+						<texture>icons/database.png</texture>
+						<visible>!IsEmpty(ListItem.DBID)</visible>
+					</control>
+					<control type="label">
+						<width>46</width>
+						<height>40</height>
+						<top>76</top>
+						<align>center</align>
+						<aligny>center</aligny>
+						<left>750</left>
+						<font>font10</font>
+						<textcolor>FFFAFAFA</textcolor>
+						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+						<visible>!IsEmpty(ListItem.UserRating)</visible>
+					</control>
+				</focusedlayout>
 			</control>
 			<control type="panel" id="500">
 				<left>440</left>
@@ -175,7 +286,7 @@
 				<onup>700</onup>
 				<ondown>600</ondown>
 				<orientation>vertical</orientation>
-				<itemlayout width="350" height="425" condition="IsEmpty(Window.Property(alt_layout))">
+				<itemlayout width="350" height="425">
 					<control type="group">
 						<top>150</top>
 						<left>80</left>
@@ -204,7 +315,7 @@
 							<top>30</top>
 							<left>149</left>
 							<texture>flags/local.png</texture>
-							<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
 						<control type="textbox">
 							<left>0</left>
@@ -238,7 +349,7 @@
 						</control>
 					</control>
 				</itemlayout>
-				<focusedlayout width="350" height="425" condition="IsEmpty(Window.Property(alt_layout))">
+				<focusedlayout width="350" height="425">
 					<control type="group">
 						<top>150</top>
 						<left>80</left>
@@ -270,7 +381,7 @@
 							<top>30</top>
 							<left>149</left>
 							<texture>flags/local.png</texture>
-							<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
 						<control type="image">
 							<width>56</width>
@@ -312,100 +423,7 @@
 						</animation>
 					</control>
 				</focusedlayout>
-				<itemlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
-					<control type="label">
-						<left>80</left>
-						<width>700</width>
-						<height>67</height>
-						<top>75</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font13</font>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<left>80</left>
-						<width>700</width>
-						<height>67</height>
-						<top>115</top>
-						<textcolor>FFAAAAAA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font12</font>
-						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
-					</control>
-					<control type="image">
-						<width>30</width>
-						<height>30</height>
-						<top>120</top>
-						<left>758</left>
-						<texture>icons/database.png</texture>
-						<visible>!IsEmpty(ListItem.Property(DBID))</visible>
-					</control>
-					<control type="label">
-						<width>46</width>
-						<height>40</height>
-						<top>76</top>
-						<align>center</align>
-						<aligny>center</aligny>
-						<left>750</left>
-						<font>font10</font>
-						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.UserRating)</visible>
-					</control>
-				</itemlayout>
-				<focusedlayout width="1536" height="161" condition="!IsEmpty(Window.Property(alt_layout))">
-					<control type="label">
-						<left>80</left>
-						<width>700</width>
-						<height>67</height>
-						<top>75</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font13</font>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<left>80</left>
-						<width>700</width>
-						<height>67</height>
-						<top>115</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<animation type="Focus" reversible="false">
-							<effect type="fade" start="62" end="100" time="280" />
-						</animation>
-						<animation type="UnFocus" reversible="false">
-							<effect type="fade" start="100" end="62" time="280" />
-						</animation>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font12</font>
-						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
-					</control>
-					<control type="image">
-						<width>30</width>
-						<height>30</height>
-						<top>120</top>
-						<left>758</left>
-						<texture>icons/database.png</texture>
-						<visible>!IsEmpty(ListItem.Property(DBID))</visible>
-					</control>
-					<control type="label">
-						<width>46</width>
-						<height>40</height>
-						<top>76</top>
-						<align>center</align>
-						<aligny>center</aligny>
-						<left>750</left>
-						<font>font10</font>
-						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.UserRating)</visible>
-					</control>
-				</focusedlayout>
+
 			</control>
 			<control type="button" id="600">
 				<onfocus>SetFocus(500)</onfocus>
@@ -435,7 +453,7 @@
 				<left>0</left>
 				<top>0</top>
 				<!--
-					 <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation> -->
+				     <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation> -->
 				<width>1920</width>
 				<height>100</height>
 				<animation effect="fade" end="100" time="360">WindowOpen</animation>
@@ -445,7 +463,7 @@
 				<texture>fade.png</texture>
 				<left>0</left>
 				<!--
-					 <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation> -->
+				     <animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation> -->
 				<top>980</top>
 				<width>1920</width>
 				<height>100</height>
@@ -453,7 +471,7 @@
 				<animation effect="fade" start="100" end="0" time="250">WindowClose</animation>
 			</control>
 			<control type="group">
-				<animation effect="slide" start="0" end="-290" time="250" condition="!IsEmpty(Window.Property(alt_layout))">Conditional</animation>
+				<animation effect="slide" start="0" end="-290" time="250" condition="Control.IsVisible(50)">Conditional</animation>
 				<control type="image">
 					<texture>arrowdown.png</texture>
 					<left>1090</left>

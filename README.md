@@ -411,10 +411,10 @@ Labels of Known Movies list
 - Container(150).ListItem.Property(role) ------------> role in currently slected movie
 - Container(150).ListItem.Property(job) -------------> job in currently slected movie (director / writer / etc)
 - Container(150).ListItem.Premiered -----------------> release date of movie
-- Container(150).ListItem.Year ----------------------> same as year, but not return empty
-- Container(150).ListItem.Property(DBID) ------------> return 1 or empty, if movie exists in library
-- Container(150).ListItem.Property(Playcount) -------> Playcount of movie (default is 0)
-- Container(150).ListItem.Property(file) ------------> media to play
+- Container(150).ListItem.Year ----------------------> production year
+- Container(150).ListItem.DBID ----------------------> returns the dbid, or empty if not available.
+- Container(150).ListItem.PlayCount -----------------> Playcount of movie (default is 0)
+- Container(150).ListItem.File ----------------------> media to play
 
 Labels of thumbs list
 - Container(250).ListItem.Label --------------------> Image résolution (512x720)

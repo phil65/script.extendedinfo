@@ -272,8 +272,6 @@ def start_info_actions(info, params):
             container_id = "Container(%s)" % utils.get_infolabel("System.CurrentControlId")
         dbid = utils.get_infolabel("%sListItem.DBID" % container_id)
         db_type = utils.get_infolabel("%sListItem.DBType" % container_id)
-        if not dbid:
-            dbid = utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
         if db_type == "movie":
             params = {"dbid": dbid,
                       "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),
@@ -306,8 +304,6 @@ def start_info_actions(info, params):
             container_id = "Container(%s)" % utils.get_infolabel("System.CurrentControlId")
         dbid = utils.get_infolabel("%sListItem.DBID" % container_id)
         db_type = utils.get_infolabel("%sListItem.DBType" % container_id)
-        if not dbid:
-            dbid = utils.get_infolabel("%sListItem.Property(dbid)" % container_id)
         if db_type == "movie":
             params = {"dbid": dbid,
                       "id": utils.get_infolabel("%sListItem.Property(id)" % container_id),

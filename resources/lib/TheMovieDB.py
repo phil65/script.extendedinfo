@@ -503,8 +503,7 @@ def handle_images(results):
                               'type': "poster" if item['aspect_ratio'] < 0.7 else "fanart",
                               'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
-        # HACK: can go when xbmcgui.ListItem.getArt() is available
-        image.update_properties(artwork)
+        image.update_artwork(artwork)
         if item.get("media"):
             image.set_infos({'title': item["media"].get("title")})
             poster_path = item["media"].get("poster_path")

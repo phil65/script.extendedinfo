@@ -80,7 +80,7 @@ def get_window(window_type):
             self.omdb_thread.start()
             sets_thread.start()
             self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
-            if not self.info.get_property("dbid"):
+            if not self.info.get_info("dbid"):
                 self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
             sets_thread.join()
             self.info.update_properties({"set.%s" % k: v for k, v in sets_thread.setinfo.iteritems()})
@@ -101,9 +101,9 @@ def get_window(window_type):
 
         def set_buttons(self):
             super(DialogMovieInfo, self).set_buttons()
-            condition = self.info.get_property("dbid") and int(self.info.get_property("percentplayed")) > 0
+            condition = self.info.get_info("dbid") and int(self.info.get_property("percentplayed")) > 0
             self.set_visible(ID_BUTTON_PLAY_RESUME, condition)
-            self.set_visible(ID_BUTTON_PLAY_NORESUME, self.info.get_property("dbid"))
+            self.set_visible(ID_BUTTON_PLAY_NORESUME, self.info.get_info("dbid"))
             self.set_visible(ID_BUTTON_TRAILER, self.info.get_info("trailer"))
             # self.set_visible(ID_BUTTON_SETRATING, True)
             # self.set_visible(ID_BUTTON_RATED, True)

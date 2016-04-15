@@ -1066,7 +1066,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.dbid)</visible>
 										</control>
 										<control type="image">
 											<top>10</top>
@@ -1126,7 +1126,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.dbid)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -1284,7 +1284,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.dbid)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>
@@ -1362,7 +1362,7 @@
 											<top>10</top>
 											<left>169</left>
 											<texture>flags/local.png</texture>
-											<visible>!IsEmpty(ListItem.Property(DBID))</visible>
+											<visible>!IsEmpty(ListItem.dbid)</visible>
 										</control>
 										<control type="image">
 											<top>310</top>

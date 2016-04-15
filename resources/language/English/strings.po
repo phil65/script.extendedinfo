@@ -374,11 +374,6 @@ msgctxt "#32078"
 msgid "Remove all"
 msgstr ""
 
-#: \resources\settings.xml:10
-msgctxt "#32079"
-msgid "Alternative browser layout (does not affect all skins)"
-msgstr ""
-
 #: \resources\settings.xml:11
 msgctxt "#32080"
 msgid "Force native appearance"
