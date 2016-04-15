@@ -327,25 +327,26 @@
 							<font>font12</font>
 							<label>$INFO[ListItem.Label]</label>
 						</control>
-						<control type="image">
-							<width>56</width>
-							<height>56</height>
-							<top>2</top>
-							<left>-10</left>
-							<texture>circle.png</texture>
+						<control type="group">
 							<visible>!IsEmpty(ListItem.UserRating)</visible>
-						</control>
-						<control type="label">
-							<width>52</width>
-							<height>40</height>
-							<top>8</top>
-							<align>center</align>
-							<aligny>center</aligny>
-							<left>-9</left>
-							<font>font10</font>
-							<textcolor>FF000000</textcolor>
-							<label>$INFO[ListItem.UserRating]</label>
-							<visible>!IsEmpty(ListItem.UserRating)</visible>
+							<control type="image">
+								<width>56</width>
+								<height>56</height>
+								<top>2</top>
+								<left>-10</left>
+								<texture>circle.png</texture>
+							</control>
+							<control type="label">
+								<width>52</width>
+								<height>40</height>
+								<top>8</top>
+								<align>center</align>
+								<aligny>center</aligny>
+								<left>-9</left>
+								<font>font10</font>
+								<textcolor>FF000000</textcolor>
+								<label>$INFO[ListItem.UserRating]</label>
+							</control>
 						</control>
 					</control>
 				</itemlayout>
@@ -383,25 +384,26 @@
 							<texture>flags/local.png</texture>
 							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
-						<control type="image">
-							<width>56</width>
-							<height>56</height>
-							<top>2</top>
-							<left>-10</left>
-							<texture>circle.png</texture>
+						<control type="group">
 							<visible>!IsEmpty(ListItem.UserRating)</visible>
-						</control>
-						<control type="label">
-							<width>52</width>
-							<height>40</height>
-							<top>8</top>
-							<align>center</align>
-							<aligny>center</aligny>
-							<left>-9</left>
-							<font>font10</font>
-							<textcolor>FF000000</textcolor>
-							<label>$INFO[ListItem.UserRating]</label>
-							<visible>!IsEmpty(ListItem.UserRating)</visible>
+							<control type="image">
+								<width>56</width>
+								<height>56</height>
+								<top>2</top>
+								<left>-10</left>
+								<texture>circle.png</texture>
+							</control>
+							<control type="label">
+								<width>52</width>
+								<height>40</height>
+								<top>8</top>
+								<align>center</align>
+								<aligny>center</aligny>
+								<left>-9</left>
+								<font>font10</font>
+								<textcolor>FF000000</textcolor>
+								<label>$INFO[ListItem.UserRating]</label>
+							</control>
 						</control>
 					</control>
 					<control type="textbox">
