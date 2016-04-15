@@ -423,7 +423,6 @@
 						</animation>
 					</control>
 				</focusedlayout>
-
 			</control>
 			<control type="button" id="600">
 				<onfocus>SetFocus(500)</onfocus>
@@ -542,14 +541,14 @@
 					<align>left</align>
 					<textcolor>FFFAFAFA</textcolor>
 					<label>$INFO[Window.Property(Filter_Label)]</label>
-					<animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(7000)">
+					<animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(6001) + !Control.HasFocus(7000)">
 						<effect type="slide" end="-460" time="320" easing="in" tween="cubic" />
 					</animation>
 				</control>
 			</control>
 		</control>
 		<control type="group">
-			<animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(7000)">
+			<animation type="Conditional" condition="!ControlGroup(9000).HasFocus + !Control.HasFocus(6000) + !Control.HasFocus(6001) + !Control.HasFocus(7000)">
 				<effect type="slide" end="-460" time="320" easing="in" tween="cubic" />
 			</animation>
 			<left>0</left>
@@ -562,9 +561,9 @@
 			</control>
 			<control type="button" id="6000">
 				<label>$LOCALIZE[19140]</label>
-				<left>0</left>
+				<left>100</left>
 				<top>40</top>
-				<width>420</width>
+				<width>310</width>
 				<height>110</height>
 				<textoffsetx>40</textoffsetx>
 				<textoffsety>35</textoffsety>
@@ -576,7 +575,28 @@
 				<font>font13</font>
 				<textcolor>FF999999</textcolor>
 				<ondown>SetFocus(7000)</ondown>
-				<onright>500</onright>
+				<onright>50</onright>
+				<onleft>6001</onleft>
+				<focusedcolor>FFFAFAFA</focusedcolor>
+			</control>
+			<control type="button" id="6001">
+				<label>..</label>
+				<left>0</left>
+				<top>40</top>
+				<width>110</width>
+				<height>110</height>
+				<textoffsetx>40</textoffsetx>
+				<textoffsety>35</textoffsety>
+				<textwidth>315</textwidth>
+				<align>left</align>
+				<aligny>top</aligny>
+				<onclick>Container.NextViewMode</onclick>
+				<texturefocus border="23" colordiffuse="FF12B2E7">buttons/button-fo.png</texturefocus>
+				<texturenofocus border="23">buttons/button-nofo.png</texturenofocus>
+				<font>font13</font>
+				<textcolor>FF999999</textcolor>
+				<ondown>SetFocus(7000)</ondown>
+				<onright>6000</onright>
 				<onleft>500</onleft>
 				<focusedcolor>FFFAFAFA</focusedcolor>
 			</control>
