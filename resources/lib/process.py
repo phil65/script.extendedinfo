@@ -419,7 +419,7 @@ def start_info_actions(info, params):
         xbmc.executebuiltin("Dialog.Close(all,true)")
         wm.play_youtube_video(params.get("id", ""))
     elif info == 'playtrailer':
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        wm.show_busy()
         if params.get("id"):
             movie_id = params["id"]
         elif int(params.get("dbid", -1)) > 0:
@@ -431,14 +431,14 @@ def start_info_actions(info, params):
             movie_id = ""
         if movie_id:
             trailer = tmdb.get_trailer(movie_id)
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             time.sleep(0.1)
             if trailer:
                 wm.play_youtube_video(trailer)
             elif params.get("title"):
                 wm.open_youtube_list(search_str=params["title"])
             else:
-                xbmc.executebuiltin("Dialog.Close(busydialog)")
+                wm.hide_busy()
     elif info == 'deletecache':
         addon.clear_globals()
         for rel_path in os.listdir(addon.DATA_PATH):

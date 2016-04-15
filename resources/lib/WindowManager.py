@@ -46,6 +46,7 @@ class WindowManager(object):
         self.active_dialog = None
         self.saved_background = addon.get_global("infobackground")
         self.monitor = SettingsMonitor()
+        self.busy = 0
 
     def add_to_stack(self, window):
         """
@@ -74,7 +75,7 @@ class WindowManager(object):
         """
         open movie info, deal with window stack
         """
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.show_busy()
         from dialogs import DialogMovieInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not movie_id:
@@ -86,7 +87,7 @@ class WindowManager(object):
                              addon.PATH,
                              id=movie_id,
                              dbid=dbid)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        self.hide_busy()
         self.open_dialog(dialog, prev_window)
 
     def open_tvshow_info(self, prev_window=None, tmdb_id=None, dbid=None,
@@ -94,7 +95,7 @@ class WindowManager(object):
         """
         open tvshow info, deal with window stack
         """
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.show_busy()
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         from dialogs import DialogTVShowInfo
         if tmdb_id:
@@ -118,7 +119,7 @@ class WindowManager(object):
                               addon.PATH,
                               tmdb_id=tmdb_id,
                               dbid=dbid)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        self.hide_busy()
         self.open_dialog(dialog, prev_window)
 
     def open_season_info(self, prev_window=None, tvshow_id=None,
@@ -127,7 +128,7 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
         """
-        xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.show_busy()
         from dialogs import DialogSeasonInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not tvshow_id:
@@ -153,7 +154,7 @@ class WindowManager(object):
                               id=tvshow_id,
                               season=season,
                               dbid=dbid)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        self.hide_busy()
         self.open_dialog(dialog, prev_window)
 
     def open_episode_info(self, prev_window=None, tvshow_id=None, season=None,
@@ -193,19 +194,19 @@ class WindowManager(object):
                 name = names[ret]
             else:
                 name = names[0]
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.show_busy()
             actor_info = TheMovieDB.get_person_info(name)
             if actor_info:
                 actor_id = actor_info["id"]
             else:
                 return None
         else:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            self.show_busy()
         actor_class = DialogActorInfo.get_window(windows.DialogXML)
         dialog = actor_class(ACTOR_XML,
                              addon.PATH,
                              id=actor_id)
-        xbmc.executebuiltin("Dialog.Close(busydialog)")
+        self.hide_busy()
         self.open_dialog(dialog, prev_window)
 
     def open_video_list(self, prev_window=None, listitems=None, filters=None, mode="filter", list_id=False,
@@ -284,6 +285,16 @@ class WindowManager(object):
         else:
             utils.notify(header=addon.LANG(257),
                          message="no youtube id found")
+
+    def show_busy(self):
+        if self.busy == 0:
+            xbmc.executebuiltin("ActivateWindow(busydialog)")
+        self.busy += 1
+
+    def hide_busy(self):
+        self.busy = max(0, self.busy - 1)
+        if self.busy == 0:
+            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
 
 def check_version():

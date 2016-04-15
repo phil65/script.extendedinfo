@@ -37,10 +37,8 @@ ID_LIST_BACKDROPS = 1350
 ID_BUTTON_PLAY_NORESUME = 8
 ID_BUTTON_PLAY_RESUME = 9
 ID_BUTTON_TRAILER = 10
-ID_BUTTON_MANAGE = 445
 ID_BUTTON_SETRATING = 6001
 ID_BUTTON_OPENLIST = 6002
-ID_BUTTON_FAV = 6003
 ID_BUTTON_ADDTOLIST = 6005
 ID_BUTTON_RATED = 6006
 
@@ -51,6 +49,7 @@ def get_window(window_type):
 
     class DialogMovieInfo(DialogVideoInfo, window_type):
         TYPE = "Movie"
+        TYPE_ALT = "movie"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_SIMILAR, "similar"),
                  (ID_LIST_SETS, "sets"),
@@ -65,15 +64,8 @@ def get_window(window_type):
                  (ID_LIST_IMAGES, "images"),
                  (ID_LIST_BACKDROPS, "backdrops")]
 
-        # BUTTONS = [ID_BUTTON_PLAY_NORESUME,
-        #            ID_BUTTON_PLAY_RESUME,
-        #            ID_BUTTON_TRAILER,
-        #            ID_BUTTON_MANAGE,
-        #            ID_BUTTON_SETRATING,
-        #            ID_BUTTON_OPENLIST,
-        #            ID_BUTTON_FAV,
-        #            ID_BUTTON_ADDTOLIST,
-        #            ID_BUTTON_RATED]
+        # BUTTONS = [ID_BUTTON_OPENLIST,
+        #            ID_BUTTON_ADDTOLIST]
 
         def __init__(self, *args, **kwargs):
             super(DialogMovieInfo, self).__init__(*args, **kwargs)
@@ -108,13 +100,18 @@ def get_window(window_type):
             ch.serve(control_id, self)
 
         def set_buttons(self):
-            self.set_visible(ID_BUTTON_PLAY_RESUME, self.info.get_property("dbid"))
+            super(DialogMovieInfo, self).set_buttons()
+            condition = self.info.get_property("dbid") and int(self.info.get_property("percentplayed")) > 0
+            self.set_visible(ID_BUTTON_PLAY_RESUME, condition)
             self.set_visible(ID_BUTTON_PLAY_NORESUME, self.info.get_property("dbid"))
+            self.set_visible(ID_BUTTON_TRAILER, self.info.get_info("trailer"))
+            # self.set_visible(ID_BUTTON_SETRATING, True)
+            # self.set_visible(ID_BUTTON_RATED, True)
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
-            listitem = self.getControl(ID_LIST_VIDEOS).getListItem(0)
-            youtube_id = listitem.getProperty("youtube_id")
+            listitem = self.info.get_listitem()
+            youtube_id = self.info.get_property("trailer")
             wm.play_youtube_video(youtube_id=youtube_id,
                                   listitem=listitem,
                                   window=self)
@@ -180,11 +177,11 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_OPENLIST)
         def show_list_dialog(self, control_id):
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            wm.show_busy()
             movie_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
             listitems = [addon.LANG(32134), addon.LANG(32135)] + listitems
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
             if index == -1:
                 pass
@@ -198,23 +195,14 @@ def get_window(window_type):
                                    filter_label=movie_lists[index - 2]["name"],
                                    force=True)
 
-        @ch.click(ID_BUTTON_SETRATING)
-        def set_rating_dialog(self, control_id):
-            rating = utils.input_userrating()
-            if tmdb.set_rating(media_type="movie",
-                               media_id=self.info.get_property("id"),
-                               rating=rating,
-                               dbid=self.info.get("dbid")):
-                self.update_states()
-
         @ch.click(ID_BUTTON_ADDTOLIST)
         def add_to_list_dialog(self, control_id):
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            wm.show_busy()
             account_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.insert(0, addon.LANG(32139))
             listitems.append(addon.LANG(32138))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == 0:
@@ -233,13 +221,6 @@ def get_window(window_type):
                 tmdb.change_list_status(account_lists[index - 1]["id"], self.info.get_property("id"), True)
                 self.update_states()
 
-        @ch.click(ID_BUTTON_FAV)
-        def change_list_status(self, control_id):
-            tmdb.change_fav_status(media_id=self.info.get_property("id"),
-                                   media_type="movie",
-                                   status=str(not bool(self.states["favorite"])).lower())
-            self.update_states()
-
         @ch.click(ID_BUTTON_RATED)
         def open_rating_list(self, control_id):
             wm.open_video_list(prev_window=self,
@@ -257,8 +238,7 @@ def get_window(window_type):
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             kodijson.play_media("movie", self.info["dbid"], False)
 
-        @ch.click(ID_BUTTON_MANAGE)
-        def show_manage_dialog(self, control_id):
+        def get_manage_options(self):
             options = []
             movie_id = str(self.info.get("dbid", ""))
             imdb_id = str(self.info.get("imdb_id", ""))
@@ -274,12 +254,7 @@ def get_window(window_type):
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and movie_id:
                 options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=%s)" % movie_id])
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-            selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
-                                                list=[i[0] for i in options])
-            if selection == -1:
-                return None
-            for item in options[selection][1].split("||"):
-                xbmc.executebuiltin(item)
+            return options
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update

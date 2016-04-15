@@ -18,8 +18,7 @@ ID_LIST_CREW = 750
 ID_LIST_ACTORS = 1000
 ID_LIST_VIDEOS = 1150
 ID_LIST_BACKDROPS = 1350
-ID_CONTROL_SETRATING = 6001
-ID_CONTROL_RATINGLISTS = 6006
+ID_BUTTON_RATED = 6006
 
 ch = ActionHandler()
 
@@ -28,6 +27,7 @@ def get_window(window_type):
 
     class DialogEpisodeInfo(DialogVideoInfo, window_type):
         TYPE = "Episode"
+        TYPE_ALT = "episode"
         LISTS = [(ID_LIST_ACTORS, "actors"),
                  (ID_LIST_CREW, "crew"),
                  (ID_LIST_VIDEOS, "videos"),
@@ -56,23 +56,16 @@ def get_window(window_type):
             super(DialogEpisodeInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
-        @ch.click(ID_CONTROL_SETRATING)
-        def set_rating_dialog(self, control_id):
-            rating = utils.input_userrating()
-            if tmdb.set_rating(media_type="episode",
-                               media_id=[self.tvshow_id,
-                                         self.info.get_info("season"),
-                                         self.info.get_info("episode")],
-                               rating=rating):
-                self.update_states()
-
-        @ch.click(ID_CONTROL_RATINGLISTS)
+        @ch.click(ID_BUTTON_RATED)
         def open_rating_list(self, control_id):
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            wm.show_busy()
             listitems = tmdb.get_rated_media_items("tv/episodes")
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             wm.open_video_list(prev_window=self,
                                listitems=listitems)
+
+        def get_identifier(self):
+            return [self.tvshow_id, self.info.get_info("season"), self.info.get_info("episode")]
 
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update

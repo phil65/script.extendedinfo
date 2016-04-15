@@ -44,6 +44,7 @@ class DialogBaseInfo(object):
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
+        # self.set_buttons()
         self.info.to_windowprops(window_id=self.window_id)
         for container_id, key in self.LISTS:
             try:

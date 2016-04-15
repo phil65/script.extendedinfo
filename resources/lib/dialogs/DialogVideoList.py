@@ -15,7 +15,6 @@ from kodi65 import utils
 from kodi65 import confirmdialog
 from ActionHandler import ActionHandler
 
-ID_LIST_MAIN = [50, 51, 52, 53, 54, 55, 500]
 ID_BUTTON_SORT = 5001
 ID_BUTTON_GENREFILTER = 5002
 ID_BUTTON_YEARFILTER = 5003
@@ -122,12 +121,12 @@ def get_window(window_type):
                 self.setCurrentListPosition(self.position)
 
         def list_dialog(self, movie_id):
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            wm.show_busy()
             listitems = [addon.LANG(32139)]
             account_lists = tmdb.get_account_lists()
             listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.append(addon.LANG(32138))
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == 0:
@@ -188,11 +187,11 @@ def get_window(window_type):
                 listitems = [addon.LANG(32135)]
                 if self.logged_in:
                     listitems.append(addon.LANG(32134))
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
+            wm.show_busy()
             if self.logged_in:
                 account_lists = tmdb.get_account_lists()
                 listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
+            wm.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == -1:
@@ -295,22 +294,25 @@ def get_window(window_type):
                             typelabel=addon.LANG(32156),
                             label=response["name"])
 
-        @ch.click(ID_LIST_MAIN)
+        @ch.click_by_type("movie")
+        def open_movie(self, control_id):
+            self.last_position = self.getControl(control_id).getSelectedPosition()
+            wm.open_movie_info(prev_window=self,
+                               movie_id=self.FocusedItem(control_id).getProperty("id"),
+                               dbid=self.FocusedItem(control_id).getProperty("dbid"))
+
+        @ch.click_by_type("tvshow")
+        def open_tvshow(self, control_id):
+            self.last_position = self.getControl(control_id).getSelectedPosition()
+            wm.open_tvshow_info(prev_window=self,
+                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+                                dbid=self.FocusedItem(control_id).getProperty("dbid"))
+
+        @ch.click_by_type("artist")
         def open_media(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            info = self.FocusedItem(control_id).getVideoInfoTag()
-            media_type = info.getMediaType()
-            if media_type == "tvshow":
-                wm.open_tvshow_info(prev_window=self,
-                                    tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                    dbid=self.FocusedItem(control_id).getProperty("dbid"))
-            elif media_type == "movie":
-                wm.open_movie_info(prev_window=self,
-                                   movie_id=self.FocusedItem(control_id).getProperty("id"),
-                                   dbid=self.FocusedItem(control_id).getProperty("dbid"))
-            elif media_type == "artist":
-                wm.open_actor_info(prev_window=self,
-                                   actor_id=self.FocusedItem(control_id).getProperty("id"))
+            wm.open_actor_info(prev_window=self,
+                               actor_id=self.FocusedItem(control_id).getProperty("id"))
 
         @ch.click(ID_BUTTON_COMPANYFILTER)
         def set_company_filter(self, control_id):

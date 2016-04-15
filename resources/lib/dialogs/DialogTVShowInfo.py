@@ -29,10 +29,7 @@ ID_LIST_IMAGES = 1250
 ID_LIST_BACKDROPS = 1350
 
 ID_BUTTON_BROWSE = 120
-ID_BUTTON_MANAGE = 445
-ID_BUTTON_SETRATING = 6001
 ID_BUTTON_OPENLIST = 6002
-ID_BUTTON_FAV = 6003
 ID_BUTTON_RATED = 6006
 
 ch = ActionHandler()
@@ -42,6 +39,7 @@ def get_window(window_type):
 
     class DialogTVShowInfo(DialogVideoInfo, window_type):
         TYPE = "TVShow"
+        TYPE_ALT = "tv"
         LISTS = [(ID_LIST_SIMILAR, "similar"),
                  (ID_LIST_SEASONS, "seasons"),
                  (ID_LIST_NETWORKS, "networks"),
@@ -127,8 +125,7 @@ def get_window(window_type):
                                filters=filters,
                                media_type="tv")
 
-        @ch.click(ID_BUTTON_MANAGE)
-        def show_manage_dialog(self, control_id):
+        def get_manage_options(self):
             options = []
             title = self.info.get_info("tvshowtitle")
             if self.dbid:
@@ -142,21 +139,7 @@ def get_window(window_type):
             if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
                 options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
-            selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
-                                                list=[item[0] for item in options])
-            if selection == -1:
-                return None
-            for item in options[selection][1].split("||"):
-                xbmc.executebuiltin(item)
-
-        @ch.click(ID_BUTTON_SETRATING)
-        def set_rating(self, control_id):
-            rating = utils.input_userrating()
-            if tmdb.set_rating(media_type="tv",
-                               media_id=self.info.get_property("id"),
-                               rating=rating,
-                               dbid=self.info.get_property("dbid")):
-                self.update_states()
+            return options
 
         @ch.click(ID_BUTTON_OPENLIST)
         def open_list(self, control_id):
@@ -170,13 +153,6 @@ def get_window(window_type):
                 wm.open_video_list(prev_window=self,
                                    mode="rating",
                                    media_type="tv")
-
-        @ch.click(ID_BUTTON_FAV)
-        def toggle_fav_status(self, control_id):
-            tmdb.change_fav_status(media_id=self.info.get_property("id"),
-                                   media_type="tv",
-                                   status=str(not bool(self.states["favorite"])).lower())
-            self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
         def open_rated_items(self, control_id):
