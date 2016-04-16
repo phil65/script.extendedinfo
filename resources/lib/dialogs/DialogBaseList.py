@@ -50,6 +50,10 @@ class DialogBaseList(object):
         else:
             self.setFocusId(ID_BUTTON_SEARCH)
 
+    def close(self):
+        self.last_position = self.getCurrentListPosition()
+        super(DialogBaseList, self).close()
+
     @ch.action("parentdir", "*")
     @ch.action("parentfolder", "*")
     def previous_menu(self, control_id):

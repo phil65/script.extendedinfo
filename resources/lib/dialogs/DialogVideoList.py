@@ -77,10 +77,6 @@ def get_window(window_type):
             super(DialogVideoList, self).onAction(action)
             ch.serve_action(action, self.getFocusId(), self)
 
-        def close(self):
-            self.last_position = self.getCurrentListPosition()
-            super(DialogVideoList, self).close()
-
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
             self.setProperty("Type", TRANSLATIONS[self.type])
