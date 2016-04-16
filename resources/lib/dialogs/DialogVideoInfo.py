@@ -40,7 +40,7 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.click(ID_BUTTON_PLOT)
     def show_plot(self, control_id):
-        xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
+        xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
                                     text=self.info.get_info("plot"))
 
     def get_manage_options(self):
@@ -72,5 +72,5 @@ class DialogVideoInfo(DialogBaseInfo):
         if tmdb.set_rating(media_type=self.TYPE_ALT,
                            media_id=self.get_identifier(),
                            rating=rating,
-                           dbid=self.info.get("dbid")):
+                           dbid=self.info.get_info("dbid")):
             self.update_states()

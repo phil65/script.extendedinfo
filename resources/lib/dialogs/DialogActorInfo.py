@@ -44,7 +44,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.lists = data
-            self.info.update_properties(imagetools.blur(self.info.get("thumb")))
+            self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
 
         def onInit(self):
             self.get_youtube_vids(self.info.label)

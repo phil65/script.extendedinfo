@@ -42,7 +42,7 @@ def get_window(window_type):
                 return None
             self.info, self.lists = data
             if not self.info.get_info("dbid"):  # need to add comparing for seasons
-                poster = utils.get_file(url=self.info.get("poster", ""))
+                poster = utils.get_file(url=self.info.get_art("poster"))
                 self.info.set_art("poster", poster)
             self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
 

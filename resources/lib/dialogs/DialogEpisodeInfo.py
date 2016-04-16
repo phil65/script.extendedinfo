@@ -43,7 +43,7 @@ def get_window(window_type):
             if not data:
                 return None
             self.info, self.lists, self.states = data
-            self.info.update_properties(imagetools.blur(self.info.get("thumb")))
+            self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
 
         def onInit(self):
             super(DialogEpisodeInfo, self).onInit()

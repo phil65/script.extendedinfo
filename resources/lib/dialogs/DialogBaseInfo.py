@@ -116,7 +116,7 @@ class DialogBaseInfo(object):
 
     @ch.context("music")
     def thumbnail_options(self, control_id):
-        if not self.info.get("dbid"):
+        if not self.info.get_info("dbid"):
             return None
         options = [addon.LANG(32006)] if control_id == ID_LIST_IMAGES else [addon.LANG(32007)]
         selection = xbmcgui.Dialog().contextmenu(list=options)
