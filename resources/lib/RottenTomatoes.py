@@ -39,9 +39,7 @@ def get_movies(movie_type):
                          'plot': item["synopsis"],
                          'imdbnumber': imdb_id,
                          'mpaa': item["mpaa_rating"]})
-        movie.set_properties({'imdb_id': imdb_id,
-                              'duration(h)': utils.format_time(item["runtime"], "h"),
-                              'duration(m)': utils.format_time(item["runtime"], "m")})
+        movie.set_properties({'imdb_id': imdb_id})
         movie.set_artwork({'thumb': item["posters"]["original"],
                            'poster': item["posters"]["original"]})
         movies.append(movie)

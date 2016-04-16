@@ -689,7 +689,7 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
 
 
 def get_trailer(movie_id):
-    response = get_full_movie(movie_id)
+    response = get_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
     utils.notify("Could not get trailer")
@@ -727,10 +727,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     movie = ListItem(label=info.get('title'),
                      path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
     movie.set_infos({'title': info.get('title'),
-                     'Tagline': info.get('tagline'),
+                     'tagline': info.get('tagline'),
                      'duration': info.get('runtime'),
                      'mpaa': mpaa,
-                     'Director': " / ".join(directors),
+                     'director': " / ".join(directors),
                      'writer': " / ".join(authors),
                      'plot': info.get('overview'),
                      'originaltitle': info.get('original_title'),
@@ -741,19 +741,17 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'rating': round(info['vote_average'], 1) if info.get('vote_average') else "",
                      'premiered': info.get('release_date'),
                      'votes': info.get('vote_count'),
-                     'Status': translate_status(info.get('status'))})
+                     'studio': " / ".join(studio),
+                     'status': translate_status(info.get('status'))})
     movie.set_properties({'adult': str(info.get('adult')),
                           'popularity': info.get('popularity'),
                           'set': movie_set.get("name") if movie_set else "",
                           'set_id': movie_set.get("id") if movie_set else "",
                           'id': info.get('id'),
                           'imdb_id': info.get('imdb_id'),
-                          'duration(h)': utils.format_time(info.get("runtime"), "h"),
-                          'duration(m)': utils.format_time(info.get("runtime"), "m"),
                           'budget': utils.millify(info.get("budget")),
                           'revenue': utils.millify(info.get("revenue")),
-                          'homepage': info.get('homepage'),
-                          'studio': " / ".join(studio)})
+                          'homepage': info.get('homepage')})
     movie.set_artwork(get_image_urls(poster=info.get("poster_path"),
                                      fanart=info.get("backdrop_path")))
     videos = handle_videos(info["videos"]["results"]) if "videos" in info else []
@@ -833,8 +831,6 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                       'premiered': info.get('first_air_date'),
                       'Status': translate_status(info.get('status'))})
     tvshow.set_properties({'credit_id': info.get('credit_id'),
-                           'duration(h)': utils.format_time(duration, "h"),
-                           'duration(m)': utils.format_time(duration, "m"),
                            'id': tmdb_id,
                            'popularity': info.get('popularity'),
                            'ShowType': info.get('type'),
@@ -995,7 +991,7 @@ def translate_status(status):
 
 
 def get_movie_lists(movie_id):
-    data = get_full_movie(movie_id)
+    data = get_movie(movie_id)
     return handle_lists(data["lists"]["results"])
 
 
@@ -1079,10 +1075,10 @@ def get_actor_credits(actor_id, media_type):
     return handle_movies(response["cast"])
 
 
-def get_full_movie(movie_id):
+def get_movie(movie_id, light=False):
     params = {"include_image_language": "en,null,%s" % addon.setting("LanguageID"),
               "language": addon.setting("LanguageID"),
-              "append_to_response": ALL_MOVIE_PROPS
+              "append_to_response": None if light else ALL_MOVIE_PROPS
               }
     return get_data(url="movie/%s" % (movie_id),
                     params=params,
@@ -1093,7 +1089,7 @@ def get_similar_movies(movie_id):
     '''
     get dict list containing movies similar to *movie_id
     '''
-    response = get_full_movie(movie_id)
+    response = get_movie(movie_id)
     if not response.get("similar"):
         return []
     return handle_movies(response["similar"]["results"])

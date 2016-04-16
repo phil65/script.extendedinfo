@@ -63,9 +63,7 @@ def get_episodes(content):
             show.set_properties({'tvdb_id': episode["episode"]["ids"]["tvdb"],
                                  'id': episode["episode"]["ids"]["tvdb"],
                                  'imdb_id': episode["episode"]["ids"]["imdb"],
-                                 'homepage': episode["show"]["homepage"],
-                                 'duration(h)': utils.format_time(episode["show"]["runtime"], "h"),
-                                 'duration(m)': utils.format_time(episode["show"]["runtime"], "m")})
+                                 'homepage': episode["show"]["homepage"]})
             show.set_artwork({'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
                               'poster': episode["show"]["images"]["poster"]["full"],
                               'banner': episode["show"]["images"]["banner"]["full"],
@@ -104,9 +102,7 @@ def handle_movies(results):
                               'trakt_id': item["ids"]["trakt"],
                               'watchers': item.get("watchers"),
                               'language': item.get("language"),
-                              'homepage': item.get("homepage"),
-                              'duration(h)': utils.format_time(item["runtime"], "h"),
-                              'duration(m)': utils.format_time(item["runtime"], "m")})
+                              'homepage': item.get("homepage")})
         movie.set_artwork({'poster': item["images"]["poster"]["full"],
                            'fanart': item["images"]["fanart"]["full"],
                            'clearlogo': item["images"]["logo"]["full"],
@@ -146,8 +142,6 @@ def handle_tvshows(results):
                              'tvdb_id': item['ids']["tvdb"],
                              'imdb_id': item['ids']["imdb"],
                              'trakt_id': item['ids']["trakt"],
-                             'duration(h)': utils.format_time(item["runtime"], "h"),
-                             'duration(m)': utils.format_time(item["runtime"], "m"),
                              'language': item["language"],
                              'aired_episodes': item["aired_episodes"],
                              'homepage': item["homepage"],

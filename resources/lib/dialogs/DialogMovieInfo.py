@@ -110,10 +110,8 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
-            listitem = self.info.get_listitem()
-            youtube_id = self.info.get_property("trailer")
-            wm.play_youtube_video(youtube_id=youtube_id,
-                                  listitem=listitem,
+            wm.play_youtube_video(youtube_id=self.info.get_property("trailer"),
+                                  listitem=self.info.get_listitem(),
                                   window=self)
 
         @ch.click(ID_LIST_STUDIOS)
@@ -240,8 +238,8 @@ def get_window(window_type):
 
         def get_manage_options(self):
             options = []
-            movie_id = str(self.info.get("dbid", ""))
-            imdb_id = str(self.info.get("imdb_id", ""))
+            movie_id = str(self.info.get_info("dbid"))
+            imdb_id = self.info.get_property("imdb_id")
             if movie_id:
                 call = "RunScript(script.artwork.downloader,mediatype=movie,dbid={}%s)".format(movie_id)
                 options += [[addon.LANG(413), call % "mode=gui"],
@@ -277,17 +275,18 @@ def get_window(window_type):
                                       prefix="omdb.",
                                       window_id=self.window_id)
 
-    class SetItemsThread(threading.Thread):
-
-        def __init__(self, set_id=""):
-            threading.Thread.__init__(self)
-            self.set_id = set_id
-
-        def run(self):
-            if self.set_id:
-                self.listitems, self.setinfo = tmdb.get_set_movies(self.set_id)
-            else:
-                self.listitems = []
-                self.setinfo = {}
-
     return DialogMovieInfo
+
+
+class SetItemsThread(threading.Thread):
+
+    def __init__(self, set_id=""):
+        threading.Thread.__init__(self)
+        self.set_id = set_id
+
+    def run(self):
+        if self.set_id:
+            self.listitems, self.setinfo = tmdb.get_set_movies(self.set_id)
+        else:
+            self.listitems = []
+            self.setinfo = {}
