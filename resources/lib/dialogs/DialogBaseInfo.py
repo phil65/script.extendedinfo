@@ -99,19 +99,16 @@ class DialogBaseInfo(object):
 
     @ch.click_by_type("artist")
     def open_actor_info(self, control_id):
-        wm.open_actor_info(prev_window=self,
-                           actor_id=self.FocusedItem(control_id).getProperty("id"))
+        wm.open_actor_info(actor_id=self.FocusedItem(control_id).getProperty("id"))
 
     @ch.click_by_type("movie")
     def open_movie_info(self, control_id):
-        wm.open_movie_info(prev_window=self,
-                           movie_id=self.FocusedItem(control_id).getProperty("id"),
+        wm.open_movie_info(movie_id=self.FocusedItem(control_id).getProperty("id"),
                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.click_by_type("tvshow")
     def open_tvshow_dialog(self, control_id):
-        wm.open_tvshow_info(prev_window=self,
-                            tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+        wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.context("music")
@@ -170,15 +167,13 @@ class DialogBaseInfo(object):
             options.append(addon.LANG(32147))
         selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:
-            wm.open_actor_info(prev_window=self,
-                               actor_id=listitem.getProperty("id"))
+            wm.open_actor_info(actor_id=listitem.getProperty("id"))
         if selection == 1:
             filters = [{"id": listitem.getProperty("id"),
                         "type": "with_people",
                         "typelabel": addon.LANG(32156),
                         "label": listitem.getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
         if selection == 2:
             self.open_credit_dialog(credit_id)
 
@@ -190,8 +185,7 @@ class DialogBaseInfo(object):
             options.append(addon.LANG(32147))
         selection = xbmcgui.Dialog().contextmenu(list=options)
         if selection == 0:
-            wm.open_tvshow_info(prev_window=self,
-                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+            wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                                 dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
         if selection == 1:
             self.open_credit_dialog(credit_id=credit_id)
@@ -237,13 +231,11 @@ class DialogBaseInfo(object):
         listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32151),
                                                          listitems=listitems)
         if listitem["mediatype"] == "episode":
-            wm.open_episode_info(prev_window=self,
-                                 season=listitems[index]["season"],
+            wm.open_episode_info(season=listitems[index]["season"],
                                  episode=listitems[index]["episode"],
                                  tvshow_id=info["media"]["id"])
         elif listitem["mediatype"] == "season":
-            wm.open_season_info(prev_window=self,
-                                season=listitems[index]["season"],
+            wm.open_season_info(season=listitems[index]["season"],
                                 tvshow_id=info["media"]["id"])
 
     def update_states(self):

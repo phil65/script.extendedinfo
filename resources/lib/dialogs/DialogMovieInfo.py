@@ -120,8 +120,7 @@ def get_window(window_type):
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_REVIEWS)
         def show_review(self, control_id):
@@ -136,8 +135,7 @@ def get_window(window_type):
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_GENRES)
         def open_genre_list(self, control_id):
@@ -145,8 +143,7 @@ def get_window(window_type):
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_CERTS)
         def open_cert_list(self, control_id):
@@ -163,13 +160,11 @@ def get_window(window_type):
                         "type": "year",
                         "typelabel": addon.LANG(345),
                         "label": str(info.getYear())}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_LISTS)
         def open_lists_list(self, control_id):
-            wm.open_video_list(prev_window=self,
-                               mode="list",
+            wm.open_video_list(mode="list",
                                list_id=self.FocusedItem(control_id).getProperty("id"),
                                filter_label=self.FocusedItem(control_id).getLabel().decode("utf-8"))
 
@@ -184,11 +179,9 @@ def get_window(window_type):
             if index == -1:
                 pass
             elif index < 2:
-                wm.open_video_list(prev_window=self,
-                                   mode="favorites" if index == 0 else "rating")
+                wm.open_video_list(mode="favorites" if index == 0 else "rating")
             else:
-                wm.open_video_list(prev_window=self,
-                                   mode="list",
+                wm.open_video_list(mode="list",
                                    list_id=movie_lists[index - 2]["id"],
                                    filter_label=movie_lists[index - 2]["name"],
                                    force=True)
@@ -221,8 +214,7 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_RATED)
         def open_rating_list(self, control_id):
-            wm.open_video_list(prev_window=self,
-                               mode="rating")
+            wm.open_video_list(mode="rating")
 
         @ch.click(ID_BUTTON_PLAY_RESUME)
         def play_movie_resume(self, control_id):

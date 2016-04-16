@@ -82,8 +82,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()
-            wm.open_season_info(prev_window=self,
-                                tvshow_id=self.info.get_property("id"),
+            wm.open_season_info(tvshow_id=self.info.get_property("id"),
                                 season=info.getSeason(),
                                 tvshow=self.info.get_info("title"))
 
@@ -93,8 +92,7 @@ def get_window(window_type):
                         "type": "with_companies",
                         "typelabel": addon.LANG(20388),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_KEYWORDS)
         def open_keyword_info(self, control_id):
@@ -102,8 +100,7 @@ def get_window(window_type):
                         "type": "with_keywords",
                         "typelabel": addon.LANG(32114),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters)
+            wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_GENRES)
         def open_genre_info(self, control_id):
@@ -111,8 +108,7 @@ def get_window(window_type):
                         "type": "with_genres",
                         "typelabel": addon.LANG(135),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters,
+            wm.open_video_list(filters=filters,
                                media_type="tv")
 
         @ch.click(ID_LIST_NETWORKS)
@@ -121,8 +117,7 @@ def get_window(window_type):
                         "type": "with_networks",
                         "typelabel": addon.LANG(32152),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(prev_window=self,
-                               filters=filters,
+            wm.open_video_list(filters=filters,
                                media_type="tv")
 
         def get_manage_options(self):
@@ -146,18 +141,15 @@ def get_window(window_type):
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=[addon.LANG(32144), addon.LANG(32145)])
             if index == 0:
-                wm.open_video_list(prev_window=self,
-                                   media_type="tv",
+                wm.open_video_list(media_type="tv",
                                    mode="favorites")
             elif index == 1:
-                wm.open_video_list(prev_window=self,
-                                   mode="rating",
+                wm.open_video_list(mode="rating",
                                    media_type="tv")
 
         @ch.click(ID_BUTTON_RATED)
         def open_rated_items(self, control_id):
-            wm.open_video_list(prev_window=self,
-                               mode="rating",
+            wm.open_video_list(mode="rating",
                                media_type="tv")
 
         def update_states(self):

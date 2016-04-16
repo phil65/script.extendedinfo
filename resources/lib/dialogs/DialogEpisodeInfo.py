@@ -61,8 +61,7 @@ def get_window(window_type):
             wm.show_busy()
             listitems = tmdb.get_rated_media_items("tv/episodes")
             wm.hide_busy()
-            wm.open_video_list(prev_window=self,
-                               listitems=listitems)
+            wm.open_video_list(listitems=listitems)
 
         def get_identifier(self):
             return [self.tvshow_id, self.info.get_info("season"), self.info.get_info("episode")]

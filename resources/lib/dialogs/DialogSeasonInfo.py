@@ -57,8 +57,7 @@ def get_window(window_type):
         @ch.click(ID_LIST_EPISODES)
         def open_episode_info(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()
-            wm.open_episode_info(prev_window=self,
-                                 tvshow=self.info.get_info("tvshowtitle"),
+            wm.open_episode_info(tvshow=self.info.get_info("tvshowtitle"),
                                  tvshow_id=self.tvshow_id,
                                  season=info.getSeason(),
                                  episode=info.getEpisode())

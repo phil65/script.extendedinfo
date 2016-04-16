@@ -70,7 +70,7 @@ class WindowManager(object):
         self.window_stack = []
         window.close()
 
-    def open_movie_info(self, prev_window=None, movie_id=None, dbid=None,
+    def open_movie_info(self, movie_id=None, dbid=None,
                         name=None, imdb_id=None):
         """
         open movie info, deal with window stack
@@ -88,9 +88,9 @@ class WindowManager(object):
                              id=movie_id,
                              dbid=dbid)
         self.hide_busy()
-        self.open_dialog(dialog, prev_window)
+        self.open_infodialog(dialog)
 
-    def open_tvshow_info(self, prev_window=None, tmdb_id=None, dbid=None,
+    def open_tvshow_info(self, tmdb_id=None, dbid=None,
                          tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
@@ -120,9 +120,9 @@ class WindowManager(object):
                               tmdb_id=tmdb_id,
                               dbid=dbid)
         self.hide_busy()
-        self.open_dialog(dialog, prev_window)
+        self.open_infodialog(dialog)
 
-    def open_season_info(self, prev_window=None, tvshow_id=None,
+    def open_season_info(self, tvshow_id=None,
                          season=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
@@ -155,9 +155,9 @@ class WindowManager(object):
                               season=season,
                               dbid=dbid)
         self.hide_busy()
-        self.open_dialog(dialog, prev_window)
+        self.open_infodialog(dialog)
 
-    def open_episode_info(self, prev_window=None, tvshow_id=None, season=None,
+    def open_episode_info(self, tvshow_id=None, season=None,
                           episode=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
@@ -176,9 +176,9 @@ class WindowManager(object):
                           season=season,
                           episode=episode,
                           dbid=dbid)
-        self.open_dialog(dialog, prev_window)
+        self.open_infodialog(dialog)
 
-    def open_actor_info(self, prev_window=None, actor_id=None, name=None):
+    def open_actor_info(self, actor_id=None, name=None):
         """
         open actor info, deal with window stack
         """
@@ -207,16 +207,15 @@ class WindowManager(object):
                              addon.PATH,
                              id=actor_id)
         self.hide_busy()
-        self.open_dialog(dialog, prev_window)
+        self.open_infodialog(dialog)
 
-    def open_video_list(self, prev_window=None, listitems=None, filters=None, mode="filter", list_id=False,
+    def open_video_list(self, listitems=None, filters=None, mode="filter", list_id=False,
                         filter_label="", force=False, media_type="movie", search_str=""):
         """
         open video list, deal with window stack
         """
         filters = [] if not filters else filters
         from dialogs import DialogVideoList
-        check_version()
         browser_class = DialogVideoList.get_window(windows.DialogXML)
         dialog = browser_class(LIST_XML,
                                addon.PATH,
@@ -228,12 +227,9 @@ class WindowManager(object):
                                filter_label=filter_label,
                                search_str=search_str,
                                type=media_type)
-        if prev_window:
-            self.add_to_stack(prev_window)
-            prev_window.close()
-        dialog.doModal()
+        self.open_dialog(dialog)
 
-    def open_youtube_list(self, prev_window=None, search_str="", filters=None, sort="relevance",
+    def open_youtube_list(self, search_str="", filters=None, sort="relevance",
                           filter_label="", media_type="video"):
         """
         open video list, deal with window stack
@@ -246,22 +242,22 @@ class WindowManager(object):
                                filters=filters,
                                filter_label=filter_label,
                                type=media_type)
-        if prev_window:
-            self.add_to_stack(prev_window)
-            prev_window.close()
-        dialog.doModal()
+        self.open_dialog(dialog)
 
-    def open_dialog(self, dialog, prev_window):
+    def open_infodialog(self, dialog):
         if dialog.info:
-            self.active_dialog = dialog
-            check_version()
-            if prev_window:
-                self.add_to_stack(prev_window)
-                prev_window.close()
-            dialog.doModal()
+            self.open_dialog(dialog)
         else:
             self.active_dialog = None
             utils.notify(addon.LANG(32143))
+
+    def open_dialog(self, dialog):
+        if self.active_dialog:
+            self.add_to_stack(self.active_dialog)
+            self.active_dialog.close()
+        check_version()
+        self.active_dialog = dialog
+        dialog.doModal()
 
     def play_youtube_video(self, youtube_id="", listitem=None, window=False):
         """

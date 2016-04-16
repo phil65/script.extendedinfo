@@ -297,22 +297,19 @@ def get_window(window_type):
         @ch.click_by_type("movie")
         def open_movie(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            wm.open_movie_info(prev_window=self,
-                               movie_id=self.FocusedItem(control_id).getProperty("id"),
+            wm.open_movie_info(movie_id=self.FocusedItem(control_id).getProperty("id"),
                                dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
         @ch.click_by_type("tvshow")
         def open_tvshow(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            wm.open_tvshow_info(prev_window=self,
-                                tmdb_id=self.FocusedItem(control_id).getProperty("id"),
+            wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                                 dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
         @ch.click_by_type("artist")
         def open_media(self, control_id):
             self.last_position = self.getControl(control_id).getSelectedPosition()
-            wm.open_actor_info(prev_window=self,
-                               actor_id=self.FocusedItem(control_id).getProperty("id"))
+            wm.open_actor_info(actor_id=self.FocusedItem(control_id).getProperty("id"))
 
         @ch.click(ID_BUTTON_COMPANYFILTER)
         def set_company_filter(self, control_id):
