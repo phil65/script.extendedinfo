@@ -276,7 +276,7 @@ class WindowManager(object):
                                startpos=-1)
             if self.active_dialog and self.active_dialog.window_type == "dialog":
                 player.wait_for_video_end()
-                self.doModal()
+                self.active_dialog.doModal()
         else:
             utils.notify(header=addon.LANG(257),
                          message="no youtube id found")
