@@ -73,7 +73,6 @@ def get_window(window_type):
 
         @ch.click_by_type("video")
         def main_list_click(self, control_id):
-            self.last_position = self.getCurrentListPosition()
             youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
