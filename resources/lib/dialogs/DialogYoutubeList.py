@@ -102,7 +102,7 @@ def get_window(window_type):
             self.add_filter(key="publishedAfter",
                             value=d.isoformat('T')[:-7] + "Z",
                             typelabel=addon.LANG(172),
-                            label=str(labels[index]))
+                            label=labels[index])
 
         @ch.click(ID_BUTTON_LANGUAGEFILTER)
         def set_language_filter(self, control_id):
@@ -114,7 +114,7 @@ def get_window(window_type):
             self.add_filter(key="regionCode",
                             value=labels[index],
                             typelabel=addon.LANG(248),
-                            label=str(labels[index]))
+                            label=labels[index])
 
         @ch.click(ID_BUTTON_DIMENSIONFILTER)
         def set_dimension_filter(self, control_id):
@@ -126,7 +126,7 @@ def get_window(window_type):
                 self.add_filter(key="videoDimension",
                                 value=values[index],
                                 typelabel=addon.LANG(32057),
-                                label=str(labels[index]))
+                                label=labels[index])
 
         @ch.click(ID_BUTTON_DURATIONFILTER)
         def set_duration_filter(self, control_id):
@@ -138,7 +138,7 @@ def get_window(window_type):
                 self.add_filter(key="videoDuration",
                                 value=values[index],
                                 typelabel=addon.LANG(180),
-                                label=str(labels[index]))
+                                label=labels[index])
 
         @ch.click(ID_BUTTON_CAPTIONFILTER)
         def set_caption_filter(self, control_id):
@@ -150,7 +150,7 @@ def get_window(window_type):
                 self.add_filter(key="videoCaption",
                                 value=values[index],
                                 typelabel=addon.LANG(287),
-                                label=str(labels[index]))
+                                label=labels[index])
 
         @ch.click(ID_BUTTON_DEFINITIONFILTER)
         def set_definition_filter(self, control_id):
@@ -162,7 +162,7 @@ def get_window(window_type):
                 self.add_filter(key="videoDefinition",
                                 value=values[index],
                                 typelabel=addon.LANG(169),
-                                label=str(labels[index]))
+                                label=labels[index])
 
         @ch.click(ID_BUTTON_TOGGLETYPE)
         def toggle_type(self, control_id):
