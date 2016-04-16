@@ -25,7 +25,7 @@ def pass_list_to_skin(name, data, handle=None, limit=False):
     addon.clear_global(name)
     if data:
         addon.set_global(name + ".Count", str(len(data)))
-        items = [(i.get_property("path"), i.get_listitem(), bool(i.get_property("directory"))) for i in data]
+        items = [(i.get_path(), i.get_listitem(), bool(i.get_property("directory"))) for i in data]
         xbmcplugin.addDirectoryItems(handle=handle,
                                      items=items,
                                      totalItems=len(items))
