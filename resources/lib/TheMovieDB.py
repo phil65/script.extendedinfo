@@ -392,7 +392,6 @@ def handle_misc(results):
     listitems = []
     for item in results:
         listitem = ListItem(label=item.get('name'),
-                            path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                             artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'year': utils.get_year(item.get('release_date')),
                             'premiered': item.get('release_date'),
@@ -412,8 +411,7 @@ def handle_misc(results):
 def handle_text(results):
     listitems = []
     for item in results:
-        listitem = ListItem(label=item.get('name'),
-                            path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'))
+        listitem = ListItem(label=item.get('name'))
         listitem.set_properties({'id': item.get('id')})
         listitems.append(listitem)
     return listitems
@@ -528,10 +526,8 @@ def handle_companies(results):
 
 def search_company(company_name):
     regex = re.compile('\(.+?\)')
-    company_name = regex.sub('', company_name)
-    params = {"query": company_name}
     response = get_data(url="search/company",
-                        params=params,
+                        params={"query": regex.sub('', company_name)},
                         cache_days=10)
     if response and "results" in response:
         return response["results"]
@@ -618,9 +614,8 @@ def get_company_data(company_id):
 def get_credit_info(credit_id):
     if not credit_id:
         return []
-    params = {"language": addon.setting("LanguageID")}
     return get_data(url="credit/%s" % (credit_id),
-                    params=params,
+                    params={"language": addon.setting("LanguageID")},
                     cache_days=30)
 
 
@@ -948,12 +943,12 @@ def extended_actor_info(actor_id):
     if not data:
         utils.notify("Could not find actor info")
         return None
-    listitems = {"movie_roles": utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
-                 "tvshow_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
-                 "movie_crew_roles": utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
-                 "tvshow_crew_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
-                 "tagged_images": handle_images(data["tagged_images"]["results"]) if "tagged_images" in data else [],
-                 "images": handle_images(data["images"]["profiles"])}
+    lists = {"movie_roles": utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
+             "tvshow_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
+             "movie_crew_roles": utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
+             "tvshow_crew_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
+             "tagged_images": handle_images(data["tagged_images"]["results"]) if "tagged_images" in data else [],
+             "images": handle_images(data["images"]["profiles"])}
     info = ListItem(label=data['name'],
                     path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, data['id']),
                     infos={'mediatype': "artist"})
@@ -972,9 +967,9 @@ def extended_actor_info(actor_id):
                          'deathday': data.get('deathday'),
                          'placeofbirth': data.get('place_of_birth'),
                          'homepage': data.get('homepage'),
-                         "DBMovies": len([d for d in listitems["movie_roles"] if "dbid" in d])})
+                         "DBMovies": len([d for d in lists["movie_roles"] if "dbid" in d])})
     info.set_artwork(get_image_urls(profile=data.get("profile_path")))
-    return (info, listitems)
+    return (info, lists)
 
 
 def translate_status(status):
@@ -1013,9 +1008,8 @@ def get_rated_media_items(media_type):
         if not session_id:
             utils.notify("Could not get session id")
             return []
-        params = {"language": addon.setting("LanguageID")}
         data = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
-                        params=params,
+                        params={"language": addon.setting("LanguageID")},
                         cache_days=0)
     if media_type == "tv/episodes":
         return handle_episodes(data["results"])
@@ -1117,9 +1111,8 @@ def get_tmdb_shows(tvshow_type):
     return list with tv shows
     available types: airing, on_the_air, top_rated, popular
     '''
-    params = {"language": addon.setting("LanguageID")}
     response = get_data(url="tv/%s" % (tvshow_type),
-                        params=params,
+                        params={"language": addon.setting("LanguageID")},
                         cache_days=0.3)
     if not response.get("results"):
         return []
@@ -1131,9 +1124,8 @@ def get_tmdb_movies(movie_type):
     return list with movies
     available types: now_playing, upcoming, top_rated, popular
     '''
-    params = {"language": addon.setting("LanguageID")}
     response = get_data(url="movie/%s" % (movie_type),
-                        params=params,
+                        params={"language": addon.setting("LanguageID")},
                         cache_days=0.3)
     if not response.get("results"):
         return []
@@ -1165,9 +1157,8 @@ def get_person_movies(person_id):
     '''
     get movies from person with *person_id
     '''
-    params = {"language": addon.setting("LanguageID")}
     response = get_data(url="person/%s/credits" % (person_id),
-                        params=params,
+                        params={"language": addon.setting("LanguageID")},
                         cache_days=14)
     # return handle_movies(response["crew"]) + handle_movies(response["cast"])
     if "crew" not in response:
@@ -1178,8 +1169,7 @@ def get_person_movies(person_id):
 def sort_lists(lists):
     if not Login.check_login():
         return lists
-    account_list = get_account_lists(10)  # use caching here, forceupdate everywhere else
-    ids = [i["id"] for i in account_list]
+    ids = [i["id"] for i in get_account_lists(10)]
     own_lists = [i for i in lists if i.get_property("id") in ids]
     for item in own_lists:
         item.set_property("account", "True")
