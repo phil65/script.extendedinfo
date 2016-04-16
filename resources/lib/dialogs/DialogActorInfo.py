@@ -12,14 +12,6 @@ from kodi65 import imagetools
 from kodi65 import addon
 from ActionHandler import ActionHandler
 
-ID_LIST_MOVIE_ROLES = 150
-ID_LIST_TV_ROLES = 250
-ID_LIST_YOUTUBE = 350
-ID_LIST_IMAGES = 450
-ID_LIST_MOVIE_CREW = 550
-ID_LIST_TV_CREW = 650
-ID_LIST_TAGGED_IMAGES = 750
-ID_LIST_BACKDROPS = 1350
 ID_CONTROL_PLOT = 132
 
 ch = ActionHandler()
@@ -29,17 +21,16 @@ def get_window(window_type):
 
     class DialogActorInfo(DialogBaseInfo, window_type):
         TYPE = "Actor"
-        LISTS = [(ID_LIST_MOVIE_ROLES, "movie_roles"),
-                 (ID_LIST_TV_ROLES, "tvshow_roles"),
-                 (ID_LIST_IMAGES, "images"),
-                 (ID_LIST_MOVIE_CREW, "movie_crew_roles"),
-                 (ID_LIST_TV_CREW, "tvshow_crew_roles"),
-                 (ID_LIST_TAGGED_IMAGES, "tagged_images")]
+        LISTS = [(150, "movie_roles"),
+                 (250, "tvshow_roles"),
+                 (450, "images"),
+                 (550, "movie_crew_roles"),
+                 (650, "tvshow_crew_roles"),
+                 (750, "tagged_images")]
 
         def __init__(self, *args, **kwargs):
             super(DialogActorInfo, self).__init__(*args, **kwargs)
-            self.id = kwargs.get('id', False)
-            data = tmdb.extended_actor_info(actor_id=self.id)
+            data = tmdb.extended_actor_info(actor_id=kwargs.get('id', False))
             if not data:
                 return None
             self.info, self.lists = data

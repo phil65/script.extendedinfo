@@ -111,8 +111,7 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_TRAILER)
         def play_trailer(self, control_id):
             wm.play_youtube_video(youtube_id=self.info.get_property("trailer"),
-                                  listitem=self.info.get_listitem(),
-                                  window=self)
+                                  listitem=self.info.get_listitem())
 
         @ch.click(ID_LIST_STUDIOS)
         def open_company_list(self, control_id):

@@ -498,7 +498,6 @@ def handle_images(results):
     for item in results:
         artwork = get_image_urls(poster=item.get("file_path"))
         image = ListItem(artwork=artwork)
-        image.set_info("mediatype", "music")
         image.set_properties({'aspectratio': item['aspect_ratio'],
                               'type': "poster" if item['aspect_ratio'] < 0.7 else "fanart",
                               'rating': item.get("vote_average"),
@@ -508,6 +507,7 @@ def handle_images(results):
             poster_path = item["media"].get("poster_path")
             if poster_path:
                 image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + poster_path})
+        image.set_info("mediatype", "music")
         images.append(image)
     return images
 
@@ -563,8 +563,8 @@ def get_person_info(person_label, skip_dialog=False):
         return False
     people = [i for i in response["results"] if i["name"] == person_label]
     if len(people) > 1 and not skip_dialog:
-        listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32151),
-                                                         listitems=handle_people(people))
+        listitem, index = selectdialog.open(header=addon.LANG(32151),
+                                            listitems=handle_people(people))
         if index >= 0:
             return people[index]
     elif people:

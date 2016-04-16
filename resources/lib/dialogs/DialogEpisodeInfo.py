@@ -13,11 +13,6 @@ from kodi65 import imagetools
 from kodi65 import utils
 from ActionHandler import ActionHandler
 
-ID_LIST_YOUTUBE = 350
-ID_LIST_CREW = 750
-ID_LIST_ACTORS = 1000
-ID_LIST_VIDEOS = 1150
-ID_LIST_BACKDROPS = 1350
 ID_BUTTON_RATED = 6006
 
 ch = ActionHandler()
@@ -28,10 +23,10 @@ def get_window(window_type):
     class DialogEpisodeInfo(DialogVideoInfo, window_type):
         TYPE = "Episode"
         TYPE_ALT = "episode"
-        LISTS = [(ID_LIST_ACTORS, "actors"),
-                 (ID_LIST_CREW, "crew"),
-                 (ID_LIST_VIDEOS, "videos"),
-                 (ID_LIST_BACKDROPS, "images")]
+        LISTS = [(1000, "actors"),
+                 (750, "crew"),
+                 (1150, "videos"),
+                 (1350, "images")]
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):

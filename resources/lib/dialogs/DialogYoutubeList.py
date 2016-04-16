@@ -83,8 +83,7 @@ def get_window(window_type):
                 wm.open_youtube_list(filters=channel_filter)
             else:
                 wm.play_youtube_video(youtube_id=youtube_id,
-                                      listitem=self.FocusedItem(control_id),
-                                      window=self)
+                                      listitem=self.FocusedItem(control_id))
 
         @ch.click(ID_BUTTON_PUBLISHEDFILTER)
         def set_published_filter(self, control_id):

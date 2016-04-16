@@ -4,7 +4,6 @@
 # This program is Free Software see LICENSE file for details
 
 from resources.lib import TheMovieDB as tmdb
-from resources.lib.WindowManager import wm
 from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
@@ -53,13 +52,5 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogSeasonInfo, self).onClick(control_id)
             ch.serve(control_id, self)
-
-        @ch.click(ID_LIST_EPISODES)
-        def open_episode_info(self, control_id):
-            info = self.FocusedItem(control_id).getVideoInfoTag()
-            wm.open_episode_info(tvshow=self.info.get_info("tvshowtitle"),
-                                 tvshow_id=self.tvshow_id,
-                                 season=info.getSeason(),
-                                 episode=info.getEpisode())
 
     return DialogSeasonInfo

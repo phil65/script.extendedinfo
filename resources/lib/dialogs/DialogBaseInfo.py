@@ -21,9 +21,7 @@ from ActionHandler import ActionHandler
 ch = ActionHandler()
 
 ID_LIST_YOUTUBE = 350
-ID_LIST_VIDEOS = 1150
 ID_LIST_IMAGES = 1250
-ID_LIST_BACKDROPS = 1350
 ID_BUTTON_BOUNCEUP = 20000
 ID_BUTTON_BOUNCEDOWN = 20001
 
@@ -62,6 +60,7 @@ class DialogBaseInfo(object):
         ch.serve_action(action, self.getFocusId(), self)
 
     def onClick(self, control_id):
+        super(DialogBaseInfo, self).onClick(control_id)
         ch.serve(control_id, self)
 
     def onFocus(self, control_id):
@@ -94,8 +93,7 @@ class DialogBaseInfo(object):
     @ch.click_by_type("video")
     def play_youtube_video(self, control_id):
         wm.play_youtube_video(youtube_id=self.FocusedItem(control_id).getProperty("youtube_id"),
-                              listitem=self.FocusedItem(control_id),
-                              window=self)
+                              listitem=self.FocusedItem(control_id))
 
     @ch.click_by_type("artist")
     def open_actor_info(self, control_id):
@@ -107,9 +105,17 @@ class DialogBaseInfo(object):
                            dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
 
     @ch.click_by_type("tvshow")
-    def open_tvshow_dialog(self, control_id):
+    def open_tvshow_info(self, control_id):
         wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                             dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
+
+    @ch.click_by_type("episode")
+    def open_episode_info(self, control_id):
+        info = self.FocusedItem(control_id).getVideoInfoTag()
+        wm.open_episode_info(tvshow=self.info.get_info("tvshowtitle"),
+                             tvshow_id=self.tvshow_id,
+                             season=info.getSeason(),
+                             episode=info.getEpisode())
 
     @ch.context("music")
     def thumbnail_options(self, control_id):
@@ -228,8 +234,8 @@ class DialogBaseInfo(object):
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": addon.LANG(19055)}]
-        listitem, index = selectdialog.open_selectdialog(header=addon.LANG(32151),
-                                                         listitems=listitems)
+        listitem, index = selectdialog.open(header=addon.LANG(32151),
+                                            listitems=listitems)
         if listitem["mediatype"] == "episode":
             wm.open_episode_info(season=listitems[index]["season"],
                                  episode=listitems[index]["episode"],

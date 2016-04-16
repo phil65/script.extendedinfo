@@ -259,7 +259,7 @@ class WindowManager(object):
         self.active_dialog = dialog
         dialog.doModal()
 
-    def play_youtube_video(self, youtube_id="", listitem=None, window=False):
+    def play_youtube_video(self, youtube_id="", listitem=None):
         """
         play youtube vid with info from *listitem
         """
@@ -267,15 +267,15 @@ class WindowManager(object):
         if not listitem:
             listitem = yt_listitem
         if url:
-            if window and window.window_type == "dialog":
-                self.add_to_stack(window)
-                window.close()
+            if self.active_dialog and self.active_dialog.window_type == "dialog":
+                self.add_to_stack(self.active_dialog)
+                self.active_dialog.close()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             xbmc.Player().play(item=url,
                                listitem=listitem,
                                windowed=False,
                                startpos=-1)
-            if window and window.window_type == "dialog":
+            if self.active_dialog and self.active_dialog.window_type == "dialog":
                 player.wait_for_video_end()
                 self.pop_stack()
         else:
