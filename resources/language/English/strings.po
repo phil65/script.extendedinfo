@@ -274,6 +274,11 @@ msgctxt "#32056"
 msgid "Top rentals"
 msgstr ""
 
+#: /resources/lib/dialogs/DialogYoutubeList.py:128
+msgctxt "#32057"
+msgid "Dimensions"
+msgstr ""
+
 #: \resources\lib\DialogVideoInfo.py:297
 msgctxt "#32059"
 msgid "Added movie to CouchPotato"

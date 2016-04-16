@@ -125,7 +125,7 @@ def get_window(window_type):
             if index > -1:
                 self.add_filter(key="videoDimension",
                                 value=values[index],
-                                typelabel="Dimensions",
+                                typelabel=addon.LANG(32057),
                                 label=str(labels[index]))
 
         @ch.click(ID_BUTTON_DURATIONFILTER)
