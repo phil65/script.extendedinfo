@@ -10,7 +10,6 @@ from DialogBaseInfo import DialogBaseInfo
 
 from kodi65 import imagetools
 from kodi65 import addon
-from kodi65 import slideshow
 from ActionHandler import ActionHandler
 
 ID_LIST_MOVIE_ROLES = 150
@@ -53,15 +52,6 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogActorInfo, self).onClick(control_id)
             ch.serve(control_id, self)
-
-        @ch.click(ID_LIST_IMAGES)
-        @ch.click(ID_LIST_TAGGED_IMAGES)
-        def open_image(self, control_id):
-            key = [key for container_id, key in self.LISTS if container_id == control_id][0]
-            listitems = self.lists[key]
-            pos = slideshow.open_slideshow(listitems=listitems,
-                                           index=self.getControl(control_id).getSelectedPosition())
-            self.getControl(control_id).selectItem(pos)
 
         @ch.click(ID_CONTROL_PLOT)
         def show_plot(self, control_id):
