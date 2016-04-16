@@ -122,8 +122,8 @@ class DialogBaseInfo(object):
         if not self.info.get_info("dbid"):
             return None
         options = [addon.LANG(32006)] if control_id == ID_LIST_IMAGES else [addon.LANG(32007)]
-        selection = xbmcgui.Dialog().contextmenu(list=options)
-        if selection == 0:
+        index = xbmcgui.Dialog().contextmenu(list=options)
+        if index == 0:
             listitem = self.FocusedItem(control_id)
             kodijson.set_art(media_type=self.getProperty("type"),
                              art={listitem.getProperty("type"): listitem.get_art("original")},
@@ -131,8 +131,8 @@ class DialogBaseInfo(object):
 
     @ch.context("video")
     def video_context_menu(self, control_id):
-        selection = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
-        if selection == 0:
+        index = xbmcgui.Dialog().contextmenu(list=[addon.LANG(33003)])
+        if index == 0:
             utils.download_video(self.FocusedItem(control_id).getProperty("youtube_id"))
 
     @ch.context("movie")
@@ -142,8 +142,8 @@ class DialogBaseInfo(object):
         options = [addon.LANG(32113)]
         if self.logged_in:
             options.append(addon.LANG(32083))
-        selection = xbmcgui.Dialog().contextmenu(list=options)
-        if selection == 0:
+        index = xbmcgui.Dialog().contextmenu(list=options)
+        if index == 0:
             rating = utils.input_userrating()
             tmdb.set_rating(media_type="movie",
                             media_id=movie_id,
@@ -153,7 +153,7 @@ class DialogBaseInfo(object):
             tmdb.extended_movie_info(movie_id=movie_id,
                                      dbid=dbid,
                                      cache_time=0)
-        elif selection == 1:
+        elif index == 1:
             account_lists = tmdb.get_account_lists()
             if not account_lists:
                 return False
@@ -171,16 +171,16 @@ class DialogBaseInfo(object):
         credit_id = listitem.getProperty("credit_id")
         if credit_id and self.TYPE == "TVShow":
             options.append(addon.LANG(32147))
-        selection = xbmcgui.Dialog().contextmenu(list=options)
-        if selection == 0:
+        index = xbmcgui.Dialog().contextmenu(list=options)
+        if index == 0:
             wm.open_actor_info(actor_id=listitem.getProperty("id"))
-        if selection == 1:
+        if index == 1:
             filters = [{"id": listitem.getProperty("id"),
                         "type": "with_people",
                         "typelabel": addon.LANG(32156),
                         "label": listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
-        if selection == 2:
+        if index == 2:
             self.open_credit_dialog(credit_id)
 
     @ch.context("tvshow")
@@ -189,11 +189,11 @@ class DialogBaseInfo(object):
         options = [addon.LANG(32148)]
         if credit_id:
             options.append(addon.LANG(32147))
-        selection = xbmcgui.Dialog().contextmenu(list=options)
-        if selection == 0:
+        index = xbmcgui.Dialog().contextmenu(list=options)
+        if index == 0:
             wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
                                 dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
-        if selection == 1:
+        if index == 1:
             self.open_credit_dialog(credit_id=credit_id)
 
     @ch.action("parentdir", "*")

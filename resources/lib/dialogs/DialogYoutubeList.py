@@ -201,17 +201,17 @@ def get_window(window_type):
         def context_menu(self, control_id):
             if self.type == "video":
                 more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))
-                selection = xbmcgui.Dialog().contextmenu(heading=addon.LANG(32151),
-                                                         list=[addon.LANG(32069), more_vids])
-                if selection < 0:
+                index = xbmcgui.Dialog().contextmenu(heading=addon.LANG(32151),
+                                                     list=[addon.LANG(32069), more_vids])
+                if index < 0:
                     return None
-                elif selection == 0:
+                elif index == 0:
                     filter_ = [{"id": self.FocusedItem(control_id).getProperty("youtube_id"),
                                 "type": "relatedToVideoId",
                                 "typelabel": "Related",
                                 "label": self.FocusedItem(control_id).getLabel()}]
                     wm.open_youtube_list(filters=filter_)
-                elif selection == 1:
+                elif index == 1:
                     filter_ = [{"id": self.FocusedItem(control_id).getProperty("channel_id"),
                                 "type": "channelId",
                                 "typelabel": "Related",

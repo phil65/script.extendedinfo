@@ -52,11 +52,11 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(ID_BUTTON_MANAGE)
     def show_manage_dialog(self, control_id):
         options = self.get_manage_options()
-        selection = xbmcgui.Dialog().select(heading=addon.LANG(32133),
-                                            list=[i[0] for i in options])
-        if selection == -1:
+        index = xbmcgui.Dialog().select(heading=addon.LANG(32133),
+                                        list=[i[0] for i in options])
+        if index == -1:
             return None
-        for item in options[selection][1].split("||"):
+        for item in options[index][1].split("||"):
             xbmc.executebuiltin(item)
 
     @ch.click(ID_BUTTON_FAV)

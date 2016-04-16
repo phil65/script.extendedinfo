@@ -97,8 +97,8 @@ def get_window(window_type):
                     listitems += [addon.LANG(32107)]
                 if self.mode == "list":
                     listitems += [addon.LANG(32035)]
-            selection = xbmcgui.Dialog().contextmenu(list=listitems)
-            if selection == 0:
+            index = xbmcgui.Dialog().contextmenu(list=listitems)
+            if index == 0:
                 rating = utils.input_userrating()
                 if tmdb.set_rating(media_type="tv" if media_type == "tvshow" else "movie",
                                    media_id=item_id,
@@ -107,13 +107,13 @@ def get_window(window_type):
                     xbmc.sleep(2000)
                     self.update(force_update=True)
                     self.setCurrentListPosition(self.position)
-            elif selection == 1:
+            elif index == 1:
                 tmdb.change_fav_status(media_id=item_id,
                                        media_type=self.type,
                                        status="true")
-            elif selection == 2:
+            elif index == 2:
                 self.list_dialog(item_id)
-            elif selection == 3:
+            elif index == 3:
                 tmdb.change_list_status(list_id=self.list_id,
                                         movie_id=item_id,
                                         status=False)
@@ -316,10 +316,10 @@ def get_window(window_type):
                 return None
             response = tmdb.search_company(result)
             if len(response) > 1:
-                selection = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+                index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                                     list=[i["name"] for i in response])
-                if selection > -1:
-                    response = response[selection]
+                if index > -1:
+                    response = response[index]
             elif response:
                 response = response[0]
             else:
@@ -339,9 +339,9 @@ def get_window(window_type):
             if not keywords:
                 return None
             if len(keywords) > 1:
-                selection = xbmcgui.Dialog().select(heading=addon.LANG(32114),
+                index = xbmcgui.Dialog().select(heading=addon.LANG(32114),
                                                     list=[item["name"] for item in keywords])
-                keyword = keywords[selection] if selection > -1 else None
+                keyword = keywords[index] if index > -1 else None
                 if not keyword:
                     return None
             else:
