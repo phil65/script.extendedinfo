@@ -192,12 +192,12 @@ def send_request(url, params, values, delete=False):
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
     session_id = Login.get_session_id()
-    values = {"media_type": "%s" % media_type,
-              "media_id": media_id,
-              "favorite": status}
     if not session_id:
         utils.notify("Could not get session id")
         return None
+    values = {"media_type": media_type,
+              "media_id": media_id,
+              "favorite": status}
     results = send_request(url="account/%s/favorite" % Login.get_account_id(),
                            params={"session_id": session_id},
                            values=values)
@@ -210,7 +210,7 @@ def create_list(list_name):
     creates new list on TMDB with name *list_name
     returns newly created list id
     '''
-    values = {'name': '%s' % list_name,
+    values = {'name': list_name,
               'description': 'List created by ExtendedInfo Script for Kodi.'}
     results = send_request(url="list",
                            params={"session_id": Login.get_session_id()},
@@ -983,7 +983,6 @@ def translate_status(status):
     '''
     get movies from person with *person_id
     '''
-
     return STATUS.get(status.lower(), status)
 
 

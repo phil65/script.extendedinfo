@@ -90,14 +90,14 @@ class Main:
 @plugin.route('/rotten_tomatoes')
 def rotten_tomatoes():
     xbmcplugin.setPluginCategory(plugin.handle, "Rotten Tomatoes")
-    items = [("intheatermovies", "%s" % addon.LANG(32042)),
-             ("boxofficemovies", "%s" % addon.LANG(32055)),
-             ("openingmovies", "%s" % addon.LANG(32048)),
-             ("comingsoonmovies", "%s" % addon.LANG(32043)),
-             ("toprentalmovies", "%s" % addon.LANG(32056)),
-             ("currentdvdmovies", "%s" % addon.LANG(32049)),
-             ("newdvdmovies", "%s" % addon.LANG(32053)),
-             ("upcomingdvdmovies", "%s" % addon.LANG(32054))]
+    items = [("intheatermovies", addon.LANG(32042)),
+             ("boxofficemovies", addon.LANG(32055)),
+             ("openingmovies", addon.LANG(32048)),
+             ("comingsoonmovies", addon.LANG(32043)),
+             ("toprentalmovies", addon.LANG(32056)),
+             ("currentdvdmovies", addon.LANG(32049)),
+             ("newdvdmovies", addon.LANG(32053)),
+             ("upcomingdvdmovies", addon.LANG(32054))]
     for key, value in items:
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
