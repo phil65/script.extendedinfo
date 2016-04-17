@@ -508,7 +508,7 @@ def handle_images(results):
                               'rating': item.get("vote_average"),
                               'iso_639_1': item.get("iso_639_1")})
         if item.get("media"):
-            image.set_infos({'title': item["media"].get("title")})
+            image.set_label(item["media"].get("title"))
             poster_path = item["media"].get("poster_path")
             if poster_path:
                 image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + poster_path})
