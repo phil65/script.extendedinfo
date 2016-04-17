@@ -48,6 +48,13 @@ RELEASE_TYPES = {1: "Premiere",
 GENDERS = {1: addon.LANG(32095),
            2: addon.LANG(32094)}
 
+STATUS = {"released": addon.LANG(32071),
+          "post production": addon.LANG(32072),
+          "in production": addon.LANG(32073),
+          "ended": addon.LANG(32074),
+          "returning series": addon.LANG(32075),
+          "planned": addon.LANG(32076)}
+
 
 class LoginProvider(object):
 
@@ -184,15 +191,15 @@ def send_request(url, params, values, delete=False):
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
-    params = {"session_id": Login.get_session_id()}
+    session_id = Login.get_session_id()
     values = {"media_type": "%s" % media_type,
               "media_id": media_id,
               "favorite": status}
-    if not params["session_id"]:
+    if not session_id:
         utils.notify("Could not get session id")
         return None
     results = send_request(url="account/%s/favorite" % Login.get_account_id(),
-                           params=params,
+                           params={"session_id": session_id},
                            values=values)
     if results:
         utils.notify(addon.NAME, results["status_message"])
@@ -828,11 +835,11 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     tvshow.set_properties({'credit_id': info.get('credit_id'),
                            'id': tmdb_id,
                            'popularity': info.get('popularity'),
-                           'ShowType': info.get('type'),
+                           'showtype': info.get('type'),
                            'homepage': info.get('homepage'),
                            'last_air_date': info.get('last_air_date'),
-                           'TotalEpisodes': info.get('number_of_episodes'),
-                           'TotalSeasons': info.get('number_of_seasons'),
+                           'totalepisodes': info.get('number_of_episodes'),
+                           'totalseasons': info.get('number_of_seasons'),
                            'in_production': info.get('in_production')})
     tvshow.set_artwork(get_image_urls(poster=info.get("poster_path"),
                                       fanart=info.get("backdrop_path")))
@@ -976,13 +983,8 @@ def translate_status(status):
     '''
     get movies from person with *person_id
     '''
-    translations = {"released": addon.LANG(32071),
-                    "post production": addon.LANG(32072),
-                    "in production": addon.LANG(32073),
-                    "ended": addon.LANG(32074),
-                    "returning series": addon.LANG(32075),
-                    "planned": addon.LANG(32076)}
-    return translations.get(status.lower(), status)
+
+    return STATUS.get(status.lower(), status)
 
 
 def get_movie_lists(movie_id):
