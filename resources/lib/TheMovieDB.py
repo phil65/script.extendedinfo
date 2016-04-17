@@ -14,6 +14,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65 import selectdialog
 from kodi65.listitem import ListItem
+from kodi65.itemlist import ItemList
 from kodi65.localdb import local_db
 
 TMDB_KEY = '34142515d9d23817496eeb4ff1d223d0'
@@ -274,7 +275,7 @@ def merge_with_cert_desc(input_list, media_type):
 
 
 def handle_multi_search(results):
-    listitems = []
+    listitems = ItemList(content_type="videos")
     for item in results:
         if item["media_type"] == "movie":
             listitems.append(handle_movies([item])[0])
@@ -291,7 +292,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         cache_days=30)
     ids = [item["id"] for item in response["genres"]]
     labels = [item["name"] for item in response["genres"]]
-    movies = []
+    movies = ItemList(content_type="movies")
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for movie in results:
         genres = [labels[ids.index(id_)] for id_ in movie.get("genre_ids", []) if id_ in ids]
@@ -326,7 +327,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
 
 
 def handle_tvshows(results, local_first=True, sortkey="year"):
-    tvshows = []
+    tvshows = ItemList(content_type="tvshows")
     response = get_data(url="genre/tv/list",
                         params={"language": addon.setting("LanguageID")},
                         cache_days=30)
@@ -372,7 +373,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
 
 
 def handle_episodes(results):
-    listitems = []
+    listitems = ItemList(content_type="episodes")
     for item in results:
         title = item.get("name")
         if not title:
@@ -396,7 +397,7 @@ def handle_episodes(results):
 
 
 def handle_misc(results):
-    listitems = []
+    listitems = ItemList(content_type="videos")
     for item in results:
         listitem = ListItem(label=item.get('name'),
                             artwork=get_image_urls(poster=item.get("poster_path")))
@@ -415,17 +416,29 @@ def handle_misc(results):
     return listitems
 
 
+def handle_reviews(results):
+    listitems = ItemList()
+    for item in results:
+        listitem = ListItem(label=item.get('author'))
+        listitem.set_properties({'author': item.get('author'),
+                                 'content': item.get('content'),
+                                 'id': item.get('id'),
+                                 'url': item.get('url')})
+        listitems.append(listitem)
+    return listitems
+
+
 def handle_text(results):
-    listitems = []
+    listitems = ItemList()
     for item in results:
         listitem = ListItem(label=item.get('name'))
-        listitem.set_properties({'id': item.get('id')})
+        listitem.set_property("id", item.get('id'))
         listitems.append(listitem)
     return listitems
 
 
 def handle_lists(results):
-    listitems = []
+    listitems = ItemList(content_type="sets")
     for item in results:
         listitem = ListItem(label=item.get('name'),
                             path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
@@ -442,7 +455,7 @@ def handle_lists(results):
 
 
 def handle_seasons(results):
-    listitems = []
+    listitems = ItemList(content_type="seasons")
     for item in results:
         season = item.get('season_number')
         listitem = ListItem(label=addon.LANG(20381) if season == 0 else u"%s %s" % (addon.LANG(20373), season),
@@ -457,7 +470,7 @@ def handle_seasons(results):
 
 
 def handle_videos(results):
-    listitems = []
+    listitems = ItemList(content_type="videos")
     for item in results:
         listitem = ListItem(label=item.get('name'),
                             size=item.get('size'),
@@ -474,7 +487,7 @@ def handle_videos(results):
 
 
 def handle_people(results):
-    people = []
+    people = ItemList(content_type="actors")
     for item in results:
         person = ListItem(label=item['name'],
                           path="%sextendedactorinfo&&id=%s" % (PLUGIN_BASE, item['id']),
@@ -499,7 +512,7 @@ def handle_people(results):
 
 
 def handle_images(results):
-    images = []
+    images = ItemList(content_type="images")
     for item in results:
         artwork = get_image_urls(poster=item.get("file_path"))
         image = ListItem(artwork=artwork)
@@ -518,7 +531,7 @@ def handle_images(results):
 
 
 def handle_companies(results):
-    companies = []
+    companies = ItemList(content_type="studios")
     for item in results:
         company = ListItem(label=item['name'],
                            infos={'plot': item['description']})
@@ -774,7 +787,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                  "crew": utils.reduce_list(handle_people(info["credits"]["crew"])),
                  "genres": handle_text(info["genres"]),
                  "keywords": handle_text(info["keywords"]["keywords"]),
-                 "reviews": handle_misc(info["reviews"]["results"]),
+                 "reviews": handle_reviews(info["reviews"]["results"]),
                  "videos": videos,
                  "images": handle_images(info["images"]["posters"]),
                  "backdrops": handle_images(info["images"]["backdrops"])}

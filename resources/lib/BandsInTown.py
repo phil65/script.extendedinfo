@@ -6,6 +6,7 @@
 import urllib
 
 from kodi65 import utils
+from kodi65.itemlist import ItemList
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
 API_KEY = 'xbmc_open_source_media_center'
@@ -13,7 +14,7 @@ BASE_URL = "http://api.bandsintown.com/events/search?format=json&api_version=2.0
 
 
 def handle_events(results):
-    events = []
+    events = ItemList()
     for event in results:
         venue = event['venue']
         events.append({'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
@@ -30,12 +31,7 @@ def handle_events(results):
 
 
 def get_near_events(artists):  # not possible with api 2.0
-    arts = []
-    for art in artists[:50]:
-        try:
-            arts.append(urllib.quote(art['artist']))
-        except Exception:
-            arts.append(urllib.quote(art['artist'].encode("utf-8")))
+    arts = [urllib.quote(art['artist'].encode("utf-8")) for art in artists[:50]]
     artist_str = 'artists[]=' + '&artists[]='.join(arts)
     url = BASE_URL + 'location=use_geoip&radius=50&per_page=100&%s' % (artist_str)
     results = utils.get_JSON_response(url, folder="BandsInTown")

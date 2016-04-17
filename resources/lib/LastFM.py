@@ -7,6 +7,7 @@ import urllib
 import re
 
 from kodi65 import utils
+from kodi65.itemlist import ItemList
 
 LAST_FM_API_KEY = 'd942dd5ca4c9ee5bd821df58cf8130d4'
 GOOGLE_MAPS_KEY = 'AIzaSyBESfDvQgWtWLkNiOYXdrA9aU-2hv_eprY'
@@ -14,7 +15,7 @@ BASE_URL = 'http://ws.audioscrobbler.com/2.0/?'
 
 
 def handle_albums(results):
-    albums = []
+    albums = ItemList(content_type="albums")
     if not results:
         return []
     if 'topalbums' in results and "album" in results['topalbums']:
@@ -30,7 +31,7 @@ def handle_albums(results):
 
 
 def handle_artists(results):
-    artists = []
+    artists = ItemList(content_type="artists")
     if not results:
         return []
     for artist in results['artist']:

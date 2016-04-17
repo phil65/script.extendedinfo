@@ -10,6 +10,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem
+from kodi65.itemlist import ItemList
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
 BASE_URL = "https://api-v2launch.trakt.tv/"
@@ -22,7 +23,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def get_episodes(content):
-    shows = []
+    shows = ItemList(content_type="episodes")
     url = ""
     if content == "shows":
         url = 'calendars/shows/%s/14' % datetime.date.today()
@@ -78,7 +79,7 @@ def get_episodes(content):
 
 
 def handle_movies(results):
-    movies = []
+    movies = ItemList(content_type="movies")
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for i in results:
         item = i["movie"] if "movie" in i else i
@@ -117,7 +118,7 @@ def handle_movies(results):
 
 
 def handle_tvshows(results):
-    shows = []
+    shows = ItemList(content_type="tvshows")
     for i in results:
         item = i["show"] if "show" in i else i
         airs = item.get("airs", {})

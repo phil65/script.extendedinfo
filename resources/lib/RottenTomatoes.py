@@ -7,6 +7,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
 from kodi65.listitem import ListItem
+from kodi65.itemlist import ItemList
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"
@@ -14,7 +15,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def get_movies(movie_type):
-    movies = []
+    movies = ItemList(content_type="movies")
     url = '%s.json?apikey=%s' % (movie_type, RT_KEY)
     results = utils.get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
     if not results or "movies" not in results:

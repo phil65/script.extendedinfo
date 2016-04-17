@@ -11,6 +11,7 @@ from kodi65 import utils
 from kodi65 import addon
 from kodi65.localdb import local_db
 from kodi65.listitem import AudioItem
+from kodi65.itemlist import ItemList
 
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
@@ -18,7 +19,7 @@ BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
 
 
 def handle_albums(results):
-    albums = []
+    albums = ItemList(content_type="albums")
     if not results.get('album'):
         return None
     local_desc = 'strDescription' + xbmc.getLanguage(xbmc.ISO_639_1).upper()
@@ -61,7 +62,7 @@ def handle_albums(results):
 
 
 def handle_tracks(results):
-    tracks = []
+    tracks = ItemList(content_type="songs")
     if not results.get('track'):
         return None
     for item in results['track']:
@@ -81,7 +82,7 @@ def handle_tracks(results):
 def handle_musicvideos(results):
     if not results.get('mvids'):
         return []
-    mvids = []
+    mvids = ItemList(content_type="musicvideos")
     for item in results['mvids']:
         youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
         mvid = AudioItem(label=item['strTrack'],
@@ -96,53 +97,48 @@ def handle_musicvideos(results):
 
 
 def extended_artist_info(results):
-    artists = []
     if not results.get('artists'):
-        return None
-    local_bio = 'strBiography' + addon.setting("LanguageID").upper()
-    for artist in results['artists']:
-        description = ""
-        if local_bio in artist and artist[local_bio]:
-            description = artist.get(local_bio)
-        elif artist.get('strBiographyEN'):
-            description = artist.get('strBiographyEN')
-        elif artist.get('strBiography'):
-            description = artist.get('strBiography')
-        if 'strReview' in artist and artist['strReview']:
-            description += "[CR]" + artist.get('strReview')
-        artist = {'label': artist.get('strArtist'),
-                  'artist': artist.get('strArtist'),
-                  'mediatype': "artist",
-                  'Country': artist.get('strCountry'),
-                  'mbid': artist.get('strMusicBrainzID'),
-                  'thumb': artist.get('strArtistThumb'),
-                  'Banner': artist.get('strArtistBanner'),
-                  'clearlogo': artist.get('strArtistLogo'),
-                  'fanart': artist.get('strArtistFanart'),
-                  'fanart2': artist.get('strArtistFanart2'),
-                  'fanart3': artist.get('strArtistFanart3'),
-                  'Artist_Mood': artist.get('strMood'),
-                  'Artist_Born': artist.get('intBornYear'),
-                  'Artist_Formed': artist.get('intFormedYear'),
-                  'Artist_Died': artist.get('intDiedYear'),
-                  'Artist_Disbanded': artist.get('strDisbanded'),
-                  'Artist_Mood': artist.get('strMood'),
-                  'Artist_Description': description,
-                  'Artist_Genre': artist.get('strGenre'),
-                  'Artist_Style': artist.get('strStyle'),
-                  'CountryCode': artist.get('strCountryCode'),
-                  'Website': artist.get('strWebsite'),
-                  'Twitter': artist.get('strTwitter'),
-                  'Facebook': artist.get('strFacebook'),
-                  'LastFMChart': artist.get('strLastFMChart'),
-                  'Gender': artist.get('strGender'),
-                  'audiodb_id': artist.get('idArtist'),
-                  'Members': artist.get('intMembers')}
-        artists.append(artist)
-    if artists:
-        return artists[0]
-    else:
         return {}
+    local_bio = 'strBiography' + addon.setting("LanguageID").upper()
+    artist = results['artists'][0]
+    description = ""
+    if local_bio in artist and artist[local_bio]:
+        description = artist.get(local_bio)
+    elif artist.get('strBiographyEN'):
+        description = artist.get('strBiographyEN')
+    elif artist.get('strBiography'):
+        description = artist.get('strBiography')
+    if 'strReview' in artist and artist['strReview']:
+        description += "[CR]" + artist.get('strReview')
+    artist = {'label': artist.get('strArtist'),
+              'artist': artist.get('strArtist'),
+              'mediatype': "artist",
+              'Country': artist.get('strCountry'),
+              'mbid': artist.get('strMusicBrainzID'),
+              'thumb': artist.get('strArtistThumb'),
+              'Banner': artist.get('strArtistBanner'),
+              'clearlogo': artist.get('strArtistLogo'),
+              'fanart': artist.get('strArtistFanart'),
+              'fanart2': artist.get('strArtistFanart2'),
+              'fanart3': artist.get('strArtistFanart3'),
+              'Artist_Mood': artist.get('strMood'),
+              'Artist_Born': artist.get('intBornYear'),
+              'Artist_Formed': artist.get('intFormedYear'),
+              'Artist_Died': artist.get('intDiedYear'),
+              'Artist_Disbanded': artist.get('strDisbanded'),
+              'Artist_Mood': artist.get('strMood'),
+              'Artist_Description': description,
+              'Artist_Genre': artist.get('strGenre'),
+              'Artist_Style': artist.get('strStyle'),
+              'CountryCode': artist.get('strCountryCode'),
+              'Website': artist.get('strWebsite'),
+              'Twitter': artist.get('strTwitter'),
+              'Facebook': artist.get('strFacebook'),
+              'LastFMChart': artist.get('strLastFMChart'),
+              'Gender': artist.get('strGender'),
+              'audiodb_id': artist.get('idArtist'),
+              'Members': artist.get('intMembers')}
+    return artist
 
 
 def get_artist_discography(search_str):

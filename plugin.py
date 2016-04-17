@@ -41,23 +41,20 @@ class Main:
         for info in self.infos:
             listitems = process.start_info_actions(info, self.params)
             if info.endswith("shows"):
-                xbmcplugin.setContent(plugin.handle, 'tvshows')
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
             elif info.endswith("episodes"):
-                xbmcplugin.setContent(plugin.handle, 'episodes')
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
 
             elif info.endswith("movies"):
-                xbmcplugin.setContent(plugin.handle, 'movies')
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
                 xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
-            elif info.endswith("lists"):
-                xbmcplugin.setContent(plugin.handle, 'sets')
+            if listitems.content_type:
+                xbmcplugin.setContent(plugin.handle, listitems.content_type)
             pass_list_to_skin(name=info,
                               data=listitems,
                               handle=plugin.handle,
@@ -101,8 +98,10 @@ def rotten_tomatoes():
     for key, value in items:
         li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
-        xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
-                                    listitem=li, isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=plugin.handle,
+                                    url=url,
+                                    listitem=li,
+                                    isFolder=True)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
