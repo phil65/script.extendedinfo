@@ -7,6 +7,7 @@ import urllib
 
 from kodi65 import utils
 from kodi65.itemlist import ItemList
+from kodi65.listitem import ListItem
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
 API_KEY = 'xbmc_open_source_media_center'
@@ -17,16 +18,17 @@ def handle_events(results):
     events = ItemList()
     for event in results:
         venue = event['venue']
-        events.append({'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
-                       'city': venue['city'],
-                       'lat': venue['latitude'],
-                       'lon': venue['longitude'],
-                       'id': venue['id'],
-                       'url': venue['url'],
-                       'label': venue['name'],
-                       'region': venue['region'],
-                       'country': venue['country'],
-                       'artists': " / ".join([art for art in event["artists"]])})
+        item = ListItem(label=venue['name'])
+        item.set_properties({'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
+                             'city': venue['city'],
+                             'lat': venue['latitude'],
+                             'lon': venue['longitude'],
+                             'id': venue['id'],
+                             'url': venue['url'],
+                             'region': venue['region'],
+                             'country': venue['country'],
+                             'artists': " / ".join([art for art in event["artists"]])})
+        events.append(item)
     return events
 
 
