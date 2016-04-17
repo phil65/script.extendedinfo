@@ -33,7 +33,6 @@ class DialogBaseInfo(object):
     def __init__(self, *args, **kwargs):
         super(DialogBaseInfo, self).__init__(*args, **kwargs)
         self.logged_in = tmdb.Login.check_login()
-        self.dbid = kwargs.get('dbid')
         self.bouncing = False
         self.last_focus = None
         self.lists = None

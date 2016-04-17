@@ -55,8 +55,8 @@ def get_window(window_type):
 
         def __init__(self, *args, **kwargs):
             super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-            data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id', False),
-                                             dbid=self.dbid)
+            data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id'),
+                                             dbid=kwargs.get('dbid'))
             if not data:
                 return None
             self.info, self.lists, self.states = data
@@ -77,7 +77,7 @@ def get_window(window_type):
         def browse_tvshow(self, control_id):
             self.close()
             xbmc.executebuiltin("Dialog.Close(all)")
-            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.dbid)
+            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.info.get_info("dbid"))
 
         @ch.click(ID_LIST_SEASONS)
         def open_season_dialog(self, control_id):
@@ -123,16 +123,17 @@ def get_window(window_type):
         def get_manage_options(self):
             options = []
             title = self.info.get_info("tvshowtitle")
-            if self.dbid:
+            dbid = self.info.get_info("dbid")
+            if dbid:
                 call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
-                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + self.dbid)],
-                            [addon.LANG(14061), call % ("dbid=" + self.dbid)],
-                            [addon.LANG(32101), call % ("mode=custom,dbid=" + self.dbid + ",extrathumbs")],
-                            [addon.LANG(32100), call % ("mode=custom,dbid=" + self.dbid)]]
+                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + dbid)],
+                            [addon.LANG(14061), call % ("dbid=" + dbid)],
+                            [addon.LANG(32101), call % ("mode=custom,dbid=" + dbid + ",extrathumbs")],
+                            [addon.LANG(32100), call % ("mode=custom,dbid=" + dbid)]]
             else:
                 options += [[addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
-            if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and self.dbid:
-                options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + self.dbid + ")"])
+            if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and dbid:
+                options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + dbid + ")"])
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             return options
 
@@ -156,7 +157,7 @@ def get_window(window_type):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
                                                            cache_time=0,
-                                                           dbid=self.dbid)
+                                                           dbid=self.info.get_info("dbid"))
             super(DialogTVShowInfo, self).update_states()
 
     return DialogTVShowInfo

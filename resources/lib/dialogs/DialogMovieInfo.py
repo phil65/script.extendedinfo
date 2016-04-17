@@ -70,7 +70,7 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             super(DialogMovieInfo, self).__init__(*args, **kwargs)
             data = tmdb.extended_movie_info(movie_id=kwargs.get('id'),
-                                            dbid=self.dbid)
+                                            dbid=kwargs.get('dbid'))
             if not data:
                 return None
             self.info, self.lists, self.states = data
@@ -248,7 +248,7 @@ def get_window(window_type):
         def update_states(self):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
-                                                          dbid=self.dbid,
+                                                          dbid=self.info.get_info("dbid"),
                                                           cache_time=0)
             super(DialogMovieInfo, self).update_states()
 
