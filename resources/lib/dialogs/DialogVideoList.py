@@ -317,7 +317,7 @@ def get_window(window_type):
             response = tmdb.search_company(result)
             if len(response) > 1:
                 index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                                    list=[i["name"] for i in response])
+                                                list=[i["name"] for i in response])
                 if index > -1:
                     response = response[index]
             elif response:
@@ -340,7 +340,7 @@ def get_window(window_type):
                 return None
             if len(keywords) > 1:
                 index = xbmcgui.Dialog().select(heading=addon.LANG(32114),
-                                                    list=[item["name"] for item in keywords])
+                                                list=[item["name"] for item in keywords])
                 keyword = keywords[index] if index > -1 else None
                 if not keyword:
                     return None
