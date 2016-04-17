@@ -299,7 +299,7 @@ def get_window(window_type):
 
         @ch.click(C_MAIN_LIST)
         def open_media(self):
-            self.last_position = self.control.getSelectedPosition()
+            self.last_position = self.getCurrentListPosition()
             media_type = self.listitem.getProperty("mediatype")
             if media_type == "tvshow":
                 wm.open_tvshow_info(prev_window=self,
