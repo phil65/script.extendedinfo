@@ -1032,7 +1032,7 @@ def get_rated_media_items(media_type, sort_by=None, page=1, cache_days=0):
             utils.notify("Could not get session id")
             return []
         params = {"sort_by": sort_by,
-                  "page": 1,
+                  "page": page,
                   "session_id": session_id,
                   "language": addon.setting("LanguageID")}
         data = get_data(url="account/%s/rated/%s" % (account_id, media_type),
