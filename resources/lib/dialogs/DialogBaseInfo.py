@@ -201,14 +201,23 @@ class DialogBaseInfo(object):
 
     @ch.context("tvshow")
     def tvshow_context_menu(self, control_id):
+        tvshow_id = self.FocusedItem(control_id).getProperty("id")
+        dbid = self.FocusedItem(control_id).getVideoInfoTag().getDbId()
         credit_id = self.FocusedItem(control_id).getProperty("credit_id")
-        options = [addon.LANG(32148)]
+        options = [addon.LANG(32169)]
         if credit_id:
             options.append(addon.LANG(32147))
         index = xbmcgui.Dialog().contextmenu(list=options)
         if index == 0:
-            wm.open_tvshow_info(tmdb_id=self.FocusedItem(control_id).getProperty("id"),
-                                dbid=self.FocusedItem(control_id).getVideoInfoTag().getDbId())
+            rating = utils.input_userrating()
+            tmdb.set_rating(media_type="tvshow",
+                            media_id=tvshow_id,
+                            rating=rating,
+                            dbid=dbid)
+            xbmc.sleep(2000)
+            tmdb.extended_tvshow_info(tvshow_id=tvshow_id,
+                                      dbid=dbid,
+                                      cache_time=0)
         if index == 1:
             self.open_credit_dialog(credit_id=credit_id)
 
