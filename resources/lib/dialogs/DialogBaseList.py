@@ -197,7 +197,7 @@ class DialogBaseList(object):
         self.update_content(force_update=force_update)
         self.update_ui()
 
-    def add_filter(self, key, value, typelabel, label, force_overwrite=False, reset=True):
+    def add_filter(self, key, value, label, typelabel="", force_overwrite=False, reset=True):
         if not value:
             return False
         new_filter = {"id": str(value),
