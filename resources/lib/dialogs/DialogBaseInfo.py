@@ -247,14 +247,17 @@ class DialogBaseInfo(object):
             listitems += tmdb.handle_episodes(info["media"]["episodes"])
         if not listitems:
             listitems += [{"label": addon.LANG(19055)}]
-        listitem, index = selectdialog.open(header=addon.LANG(32151),
-                                            listitems=listitems)
+        index = selectdialog.open(header=addon.LANG(32151),
+                                  listitems=listitems)
+        if index == -1:
+            return None
+        listitem = listitems[index]
         if listitem["mediatype"] == "episode":
-            wm.open_episode_info(season=listitems[index]["season"],
-                                 episode=listitems[index]["episode"],
+            wm.open_episode_info(season=listitem["season"],
+                                 episode=listitem["episode"],
                                  tvshow_id=info["media"]["id"])
         elif listitem["mediatype"] == "season":
-            wm.open_season_info(season=listitems[index]["season"],
+            wm.open_season_info(season=listitem["season"],
                                 tvshow_id=info["media"]["id"])
 
     def update_states(self):
