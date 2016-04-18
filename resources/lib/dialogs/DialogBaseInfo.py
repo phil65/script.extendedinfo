@@ -38,6 +38,8 @@ class DialogBaseInfo(object):
         self.lists = None
         self.yt_listitems = []
         self.info = VideoItem()
+        self.last_control = None
+        self.last_position = None
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
@@ -50,6 +52,13 @@ class DialogBaseInfo(object):
                 self.getControl(container_id).addItems(items)
             except Exception:
                 utils.log("Notice: No container with id %i available" % container_id)
+        if self.last_control:
+            self.setFocusId(self.last_control)
+        if self.last_control and self.last_position:
+            try:
+                self.getControl(self.last_control).selectItem(self.last_position)
+            except Exception:
+                pass
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
         addon.set_global("infobackground", self.info.get_art('fanart_small'))
         self.setProperty("type", self.TYPE)
@@ -72,6 +81,14 @@ class DialogBaseInfo(object):
                 self.bounce("down")
             self.setFocusId(self.last_focus)
         self.last_focus = control_id
+
+    def close(self):
+        try:
+            self.last_position = self.getFocus().getSelectedPosition()
+        except Exception:
+            self.last_position = None
+        self.last_control = self.getFocusId()
+        super(DialogBaseInfo, self).close()
 
     @utils.run_async
     def bounce(self, identifier):
