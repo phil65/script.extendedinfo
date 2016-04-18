@@ -574,6 +574,8 @@ def get_list_movies(list_id, force):
     response = get_data(url=url,
                         params={"language": addon.setting("LanguageID")},
                         cache_days=0 if force else 2)
+    if not response:
+        return None
     items = handle_movies(results=response["items"],
                           local_first=True,
                           sortkey=None)
