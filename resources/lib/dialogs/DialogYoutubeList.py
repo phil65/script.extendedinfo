@@ -226,7 +226,7 @@ def get_window(window_type):
             self.set_filter_label()
             if self.search_str:
                 self.filter_label = addon.LANG(32146) % (self.search_str) + "  " + self.filter_label
-            return YouTube.search(self.search_str,
+            return YouTube.search(search_str=self.search_str,
                                   orderby=self.sort,
                                   extended=True,
                                   filters={item["type"]: item["id"] for item in self.filters},

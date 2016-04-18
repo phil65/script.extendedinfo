@@ -136,15 +136,14 @@ class DialogBaseList(object):
         self.filter_label = "  -  ".join(filters)
 
     def update_content(self, force_update=False):
-        data = self.fetch_data(force=force_update)
-        if not data:
+        self.data = self.fetch_data(force=force_update)
+        if not self.data:
             return None
-        self.listitems = data.get("listitems", [])
-        self.total_pages = data.get("results_per_page", "")
-        self.total_items = data.get("total_results", "")
-        self.next_page_token = data.get("next_page_token", "")
-        self.prev_page_token = data.get("prev_page_token", "")
-        self.listitems = utils.create_listitems(self.listitems)
+        self.listitems = self.data.create_listitems()
+        self.total_pages = self.data.total_pages
+        self.total_items = self.data.totals
+        self.next_page_token = self.data.next_page_token
+        self.prev_page_token = self.data.prev_page_token
 
     def update_ui(self):
         if not self.listitems and self.getFocusId() == self.getCurrentContainerId():

@@ -8,6 +8,7 @@ import itertools
 
 from kodi65 import utils
 from kodi65.listitem import ListItem
+from kodi65.itemlist import ItemList
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
 BASE_URL = "https://www.googleapis.com/youtube/v3/"
@@ -15,7 +16,7 @@ PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
 
 def handle_videos(results, extended=False):
-    videos = []
+    videos = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
         thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
@@ -78,7 +79,7 @@ def get_duration_in_seconds(duration):
 
 
 def handle_playlists(results):
-    playlists = []
+    playlists = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
         thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
@@ -107,7 +108,7 @@ def handle_playlists(results):
 
 
 def handle_channels(results):
-    channels = []
+    channels = ItemList(content_type="videos")
     for item in results:
         snippet = item["snippet"]
         thumb = snippet["thumbnails"]["high"]["url"] if "thumbnails" in snippet else ""
@@ -158,20 +159,18 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
     results = get_data(method="search",
                        params=params)
     if not results:
-        return {}
+        return None
     if media_type == "video":
         listitems = handle_videos(results["items"], extended=extended)
     elif media_type == "playlist":
         listitems = handle_playlists(results["items"])
     elif media_type == "channel":
         listitems = handle_channels(results["items"])
-    if not listitems:
-        return {}
-    return {"listitems": listitems,
-            "results_per_page": results["pageInfo"]["resultsPerPage"],
-            "total_results": results["pageInfo"]["totalResults"],
-            "next_page_token": results.get("nextPageToken", ""),
-            "prev_page_token": results.get("prevPageToken", "")}
+    listitems.total_pages = results["pageInfo"]["resultsPerPage"]
+    listitems.totals = results["pageInfo"]["totalResults"]
+    listitems.next_page_token = results.get("nextPageToken", "")
+    listitems.prev_page_token = results.get("prevPageToken", "")
+    return listitems
 
 
 def get_playlist_videos(playlist_id=""):

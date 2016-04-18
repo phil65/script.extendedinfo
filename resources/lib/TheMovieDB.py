@@ -564,7 +564,23 @@ def multi_search(search_str, page=1, cache_days=1):
                         params=params,
                         cache_days=cache_days)
     if response and "results" in response:
-        return response["results"]
+        itemlist = handle_multi_search(response["results"])
+        itemlist.set_totals(response["total_results"])
+        return itemlist
+
+
+def get_list_movies(list_id, force):
+    params = {"language": addon.setting("LanguageID")}
+    url = "list/%s" % (list_id)
+    response = get_data(url=url,
+                        params=params,
+                        cache_days=0 if force else 2)
+    items = handle_movies(results=response["items"],
+                          local_first=True,
+                          sortkey=None)
+    itemlist = ItemList(items=items)
+    itemlist.set_totals(len(response["items"]))
+    return itemlist
 
 
 def get_person_info(person_label, skip_dialog=False):
@@ -1004,19 +1020,23 @@ def get_movie_lists(movie_id):
     return handle_lists(data["lists"]["results"])
 
 
-def get_rated_media_items(media_type):
-    '''takes "tv/episodes", "tv" or "movies"'''
+def get_rated_media_items(media_type, sort_by=None, page=1, cache_days=0):
+    '''
+    takes "tv/episodes", "tv" or "movies"
+    '''
     if Login.check_login():
         session_id = Login.get_session_id()
         account_id = Login.get_account_id()
         if not session_id:
             utils.notify("Could not get session id")
             return []
-        params = {"session_id": session_id,
+        params = {"sort_by": sort_by,
+                  "page": 1,
+                  "session_id": session_id,
                   "language": addon.setting("LanguageID")}
         data = get_data(url="account/%s/rated/%s" % (account_id, media_type),
                         params=params,
-                        cache_days=0)
+                        cache_days=cache_days)
     else:
         session_id = Login.get_guest_session_id()
         if not session_id:
@@ -1033,15 +1053,19 @@ def get_rated_media_items(media_type):
         return handle_movies(data["results"], False, None)
 
 
-def get_fav_items(media_type):
-    '''takes "tv/episodes", "tv" or "movies"'''
+def get_fav_items(media_type, sort_by=None, page=1):
+    '''
+    takes "tv/episodes", "tv" or "movies"
+    '''
     session_id = Login.get_session_id()
     account_id = Login.get_account_id()
     if not session_id:
         utils.notify("Could not get session id")
         return []
-    params = {"session_id": session_id,
-              "language": addon.setting("LanguageID")}
+    params = {"sort_by": sort_by,
+              "language": addon.setting("LanguageID"),
+              "page": page,
+              "session_id": session_id}
     data = get_data(url="account/%s/favorite/%s" % (account_id, media_type),
                     params=params,
                     cache_days=0)
@@ -1100,7 +1124,8 @@ def get_similar_movies(movie_id):
     response = get_movie(movie_id)
     if not response.get("similar"):
         return []
-    return handle_movies(response["similar"]["results"])
+    itemlist = handle_movies(response["similar"]["results"])
+    return itemlist
 
 
 def get_similar_tvshows(tvshow_id):
@@ -1120,7 +1145,7 @@ def get_similar_tvshows(tvshow_id):
     return handle_tvshows(response["similar"]["results"])
 
 
-def get_tmdb_shows(tvshow_type):
+def get_tvshows(tvshow_type):
     '''
     return list with tv shows
     available types: airing, on_the_air, top_rated, popular
@@ -1133,7 +1158,7 @@ def get_tmdb_shows(tvshow_type):
     return handle_tvshows(response["results"], False, None)
 
 
-def get_tmdb_movies(movie_type):
+def get_movies(movie_type):
     '''
     return list with movies
     available types: now_playing, upcoming, top_rated, popular

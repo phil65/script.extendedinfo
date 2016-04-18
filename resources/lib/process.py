@@ -68,32 +68,32 @@ def start_info_actions(info, params):
         return RottenTomatoes.get_movies("dvds/upcoming")
     #  The MovieDB
     elif info == 'incinemamovies':
-        return tmdb.get_tmdb_movies("now_playing")
+        return tmdb.get_movies("now_playing")
     elif info == 'upcomingmovies':
-        return tmdb.get_tmdb_movies("upcoming")
+        return tmdb.get_movies("upcoming")
     elif info == 'topratedmovies':
-        return tmdb.get_tmdb_movies("top_rated")
+        return tmdb.get_movies("top_rated")
     elif info == 'popularmovies':
-        return tmdb.get_tmdb_movies("popular")
+        return tmdb.get_movies("popular")
     elif info == 'ratedmovies':
         return tmdb.get_rated_media_items("movies")
     elif info == 'starredmovies':
         return tmdb.get_fav_items("movies")
     elif info == 'accountlists':
-        account_lists = tmdb.handle_misc(tmdb.get_account_lists())
+        account_lists = tmdb.handle_lists(tmdb.get_account_lists())
         for item in account_lists:
-            item["directory"] = True
+            item.set_property("directory", True)
         return account_lists
     elif info == 'listmovies':
         return tmdb.get_movies_from_list(params["id"])
     elif info == 'airingtodaytvshows':
-        return tmdb.get_tmdb_shows("airing_today")
+        return tmdb.get_tvshows("airing_today")
     elif info == 'onairtvshows':
-        return tmdb.get_tmdb_shows("on_the_air")
+        return tmdb.get_tvshows("on_the_air")
     elif info == 'topratedtvshows':
-        return tmdb.get_tmdb_shows("top_rated")
+        return tmdb.get_tvshows("top_rated")
     elif info == 'populartvshows':
-        return tmdb.get_tmdb_shows("popular")
+        return tmdb.get_tvshows("popular")
     elif info == 'ratedtvshows':
         return tmdb.get_rated_media_items("tv")
     elif info == 'ratedepisodes':

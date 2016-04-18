@@ -380,46 +380,23 @@ def get_window(window_type):
             sort_by = self.sort + "." + self.order
             temp = "tv" if self.type == "tv" else "movies"
             if self.mode == "search":
-                params = {"query": self.search_str,
-                          "include_adult": include_adult,
-                          "page": self.page}
-                url = "search/multi"
                 self.filter_label = addon.LANG(32146) % self.search_str if self.search_str else ""
+                return tmdb.multi_search(search_str=self.search_str,
+                                         page=self.page)
             elif self.mode == "list":
-                params = {"language": addon.setting("LanguageID")}
-                url = "list/%s" % (self.list_id)
-                # self.filter_label = addon.LANG(32036)
+                return tmdb.get_list_movies(list_id=self.list_id,
+                                            force=force)
             elif self.mode == "favorites":
-                params = {"sort_by": sort_by,
-                          "language": addon.setting("LanguageID"),
-                          "page": self.page,
-                          "session_id": tmdb.Login.get_session_id()}
-                url = "account/%s/favorite/%s" % (tmdb.Login.get_account_id(), temp)
                 self.filter_label = addon.LANG(32144) if self.type == "tv" else addon.LANG(32134)
+                tmdb.get_fav_items(media_type=temp,
+                                   sort_by=sort_by,
+                                   page=self.page)
             elif self.mode == "rating":
-                force = True  # workaround, should be updated after setting rating
-                if self.logged_in:
-                    session_id = tmdb.Login.get_session_id()
-                    if not session_id:
-                        utils.notify("Could not get session id")
-                        return {"listitems": [],
-                                "results_per_page": 0,
-                                "total_results": 0}
-                    params = {"sort_by": sort_by,
-                              "language": addon.setting("LanguageID"),
-                              "page": self.page,
-                              "session_id": session_id}
-                    url = "account/%s/rated/%s" % (tmdb.Login.get_account_id(), temp)
-                else:
-                    session_id = tmdb.Login.get_guest_session_id()
-                    if not session_id:
-                        utils.notify("Could not get session id")
-                        return {"listitems": [],
-                                "results_per_page": 0,
-                                "total_results": 0}
-                    params = {"language": addon.setting("LanguageID")}
-                    url = "guest_session/%s/rated_movies" % (session_id)
                 self.filter_label = addon.LANG(32145) if self.type == "tv" else addon.LANG(32135)
+                return tmdb.get_rated_media_items(media_type=temp,
+                                                  sort_by=sort_by,
+                                                  page=self.page,
+                                                  cache_days=0)
             else:
                 self.set_filter_label()
                 params = {"sort_by": sort_by,
@@ -429,38 +406,23 @@ def get_window(window_type):
                 filters = {item["type"]: item["id"] for item in self.filters}
                 params = utils.merge_dicts(params, filters)
                 url = "discover/%s" % (self.type)
-            response = tmdb.get_data(url=url,
-                                     params=params,
-                                     cache_days=0 if force else 2)
-            if not response:
-                return None
-            if self.mode == "list":
-                info = {"listitems": tmdb.handle_movies(results=response["items"],
-                                                        local_first=True,
-                                                        sortkey=None),
-                        "results_per_page": 1,
-                        "total_results": len(response["items"])}
-                return info
-            if "results" not in response:
-                # self.close()
-                return {"listitems": [],
-                        "results_per_page": 0,
-                        "total_results": 0}
-            if not response["results"]:
-                utils.notify(addon.LANG(284))
-            if self.mode == "search":
-                listitems = tmdb.handle_multi_search(response["results"])
-            elif self.type == "movie":
-                listitems = tmdb.handle_movies(results=response["results"],
-                                               local_first=False,
-                                               sortkey=None)
-            else:
-                listitems = tmdb.handle_tvshows(results=response["results"],
-                                                local_first=False,
-                                                sortkey=None)
-            info = {"listitems": listitems,
-                    "results_per_page": response["total_pages"],
-                    "total_results": response["total_results"]}
-            return info
+                response = tmdb.get_data(url=url,
+                                         params=params,
+                                         cache_days=0 if force else 2)
+
+                if not response["results"]:
+                    utils.notify(addon.LANG(284))
+                    return None
+                if self.type == "movie":
+                    itemlist = tmdb.handle_movies(results=response["results"],
+                                                  local_first=False,
+                                                  sortkey=None)
+                else:
+                    itemlist = tmdb.handle_tvshows(results=response["results"],
+                                                   local_first=False,
+                                                   sortkey=None)
+                itemlist.set_totals(response["total_results"])
+                itemlist.set_total_pages(response["total_pages"])
+                return itemlist
 
     return DialogVideoList
