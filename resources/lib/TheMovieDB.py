@@ -1043,8 +1043,10 @@ def get_rated_media_items(media_type, sort_by=None, page=1, cache_days=0):
         if not session_id:
             utils.notify("Could not get session id")
             return []
+        params = {"language": addon.setting("LanguageID"),
+                  "page": page}
         data = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
-                        params={"language": addon.setting("LanguageID")},
+                        params=params,
                         cache_days=0)
     if media_type == "tv/episodes":
         itemlist = handle_episodes(data["results"])
