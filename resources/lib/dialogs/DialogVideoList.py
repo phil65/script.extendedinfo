@@ -388,9 +388,9 @@ def get_window(window_type):
                                             force=force)
             elif self.mode == "favorites":
                 self.filter_label = addon.LANG(32144) if self.type == "tv" else addon.LANG(32134)
-                tmdb.get_fav_items(media_type=temp,
-                                   sort_by=sort_by,
-                                   page=self.page)
+                return tmdb.get_fav_items(media_type=temp,
+                                          sort_by=sort_by,
+                                          page=self.page)
             elif self.mode == "rating":
                 self.filter_label = addon.LANG(32145) if self.type == "tv" else addon.LANG(32135)
                 return tmdb.get_rated_media_items(media_type=temp,
