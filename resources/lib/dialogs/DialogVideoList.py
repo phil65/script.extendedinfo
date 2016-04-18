@@ -235,10 +235,10 @@ def get_window(window_type):
         def set_vote_count_filter(self, control_id):
             ret = True
             if not self.type == "tv":
-                ret = confirmdialog.open_confirm(header=addon.LANG(32151),
-                                                 text=addon.LANG(32106),
-                                                 nolabel=addon.LANG(32150),
-                                                 yeslabel=addon.LANG(32149))
+                ret = confirmdialog.open(header=addon.LANG(32151),
+                                         text=addon.LANG(32106),
+                                         nolabel=addon.LANG(32150),
+                                         yeslabel=addon.LANG(32149))
             if ret == -1:
                 return None
             result = xbmcgui.Dialog().input(heading=addon.LANG(32111),
@@ -251,10 +251,10 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_YEARFILTER)
         def set_year_filter(self, control_id):
-            ret = confirmdialog.open_confirm(header=addon.LANG(32151),
-                                             text=addon.LANG(32106),
-                                             nolabel=addon.LANG(32150),
-                                             yeslabel=addon.LANG(32149))
+            ret = confirmdialog.open(header=addon.LANG(32151),
+                                     text=addon.LANG(32106),
+                                     nolabel=addon.LANG(32150),
+                                     yeslabel=addon.LANG(32149))
             if ret == -1:
                 return None
             result = xbmcgui.Dialog().input(heading=addon.LANG(345),

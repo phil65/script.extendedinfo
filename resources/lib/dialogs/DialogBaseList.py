@@ -217,10 +217,10 @@ class DialogBaseList(object):
             if reset:
                 self.reset()
             return None
-        ret = confirmdialog.open_confirm(header=addon.LANG(587),
-                                         text=addon.LANG(32106),
-                                         nolabel="OR",
-                                         yeslabel="AND")
+        ret = confirmdialog.open(header=addon.LANG(587),
+                                 text=addon.LANG(32106),
+                                 nolabel="OR",
+                                 yeslabel="AND")
         if ret == -1:
             return None
         if ret == 1:
