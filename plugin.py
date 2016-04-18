@@ -101,6 +101,7 @@ def tmdb():
                                     url=url,
                                     listitem=li,
                                     isFolder=True)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -130,6 +131,7 @@ def trakt():
                                     url=url,
                                     listitem=li,
                                     isFolder=True)
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -144,6 +146,7 @@ def root():
         (plugin.url_for(tmdb), xbmcgui.ListItem(label="TheMovieDB",
                                                 thumbnailImage=MOVIEDB_IMAGE), True),
     ]
+    xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.addDirectoryItems(plugin.handle, items)
     xbmcplugin.endOfDirectory(plugin.handle)
 
