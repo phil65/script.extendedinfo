@@ -13,7 +13,7 @@ from DialogBaseList import DialogBaseList
 
 from kodi65 import addon
 from kodi65 import utils
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
 
@@ -59,7 +59,6 @@ def get_window(window_type):
             self.type = kwargs.get('type', "video")
             self.sort = kwargs.get('sort', "relevance")
             self.sort_label = kwargs.get('sort_label', addon.LANG(32060))
-            self.order = kwargs.get('order', "desc")
             force = kwargs.get('force', False)
             self.update_content(force_update=force)
 

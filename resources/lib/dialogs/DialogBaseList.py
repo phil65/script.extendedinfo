@@ -12,7 +12,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65 import confirmdialog
 from T9Search import T9Search
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
 
@@ -30,6 +30,7 @@ class DialogBaseList(object):
         self.search_str = kwargs.get('search_str', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
+        self.order = kwargs.get('order', "desc")
         self.filters = kwargs.get('filters', [])
         self.page = 1
         self.listitems = None

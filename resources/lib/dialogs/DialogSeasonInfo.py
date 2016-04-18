@@ -8,7 +8,7 @@ from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
 from kodi65 import utils
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
 

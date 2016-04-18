@@ -16,7 +16,7 @@ from kodi65 import kodijson
 from kodi65 import selectdialog
 from kodi65 import slideshow
 from kodi65.listitem import ListItem
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
 

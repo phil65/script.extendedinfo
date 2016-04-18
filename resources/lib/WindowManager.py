@@ -12,7 +12,7 @@ import xbmcvfs
 
 import TheMovieDB
 
-import windows
+from kodi65 import windows
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.player import player

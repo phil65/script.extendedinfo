@@ -13,7 +13,7 @@ from DialogBaseList import DialogBaseList
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import confirmdialog
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ID_BUTTON_SORT = 5001
 ID_BUTTON_GENREFILTER = 5002
@@ -61,7 +61,6 @@ def get_window(window_type):
             self.list_id = kwargs.get("list_id", False)
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', addon.LANG(32110))
-            self.order = kwargs.get('order', "desc")
             self.logged_in = tmdb.Login.check_login()
             if self.listitem_list:
                 self.listitems = utils.create_listitems(self.listitem_list)

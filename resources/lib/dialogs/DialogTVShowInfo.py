@@ -13,7 +13,7 @@ from kodi65 import imagetools
 from kodi65 import addon
 from kodi65 import utils
 from DialogVideoInfo import DialogVideoInfo
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ID_LIST_SIMILAR = 150
 ID_LIST_SEASONS = 250

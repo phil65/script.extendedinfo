@@ -10,7 +10,7 @@ from DialogBaseInfo import DialogBaseInfo
 
 from kodi65 import imagetools
 from kodi65 import addon
-from ActionHandler import ActionHandler
+from kodi65.actionhandler import ActionHandler
 
 ID_CONTROL_PLOT = 132
 
