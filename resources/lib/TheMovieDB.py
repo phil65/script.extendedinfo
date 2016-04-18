@@ -570,10 +570,9 @@ def multi_search(search_str, page=1, cache_days=1):
 
 
 def get_list_movies(list_id, force):
-    params = {"language": addon.setting("LanguageID")}
     url = "list/%s" % (list_id)
     response = get_data(url=url,
-                        params=params,
+                        params={"language": addon.setting("LanguageID")},
                         cache_days=0 if force else 2)
     items = handle_movies(results=response["items"],
                           local_first=True,
@@ -1046,11 +1045,14 @@ def get_rated_media_items(media_type, sort_by=None, page=1, cache_days=0):
                         params={"language": addon.setting("LanguageID")},
                         cache_days=0)
     if media_type == "tv/episodes":
-        return handle_episodes(data["results"])
+        itemlist = handle_episodes(data["results"])
     elif media_type == "tv":
-        return handle_tvshows(data["results"], False, None)
+        itemlist = handle_tvshows(data["results"], False, None)
     else:
-        return handle_movies(data["results"], False, None)
+        itemlist = handle_movies(data["results"], False, None)
+    itemlist.set_totals(data["total_results"])
+    itemlist.set_total_pages(data["total_pages"])
+    return itemlist
 
 
 def get_fav_items(media_type, sort_by=None, page=1):
@@ -1072,11 +1074,14 @@ def get_fav_items(media_type, sort_by=None, page=1):
     if "results" not in data:
         return []
     if media_type == "tv":
-        return handle_tvshows(data["results"], False, None)
+        itemlist = handle_tvshows(data["results"], False, None)
     elif media_type == "tv/episodes":
-        return handle_episodes(data["results"])
+        itemlist = handle_episodes(data["results"])
     else:
-        return handle_movies(data["results"], False, None)
+        itemlist = handle_movies(data["results"], False, None)
+    itemlist.set_totals(data["total_results"])
+    itemlist.set_total_pages(data["total_pages"])
+    return itemlist
 
 
 def get_movies_from_list(list_id, cache_time=5):
