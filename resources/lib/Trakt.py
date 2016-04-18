@@ -9,7 +9,7 @@ import urllib
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 from kodi65.itemlist import ItemList
 
 TRAKT_KEY = 'e9a7fba3fa1b527c08c073770869c258804124c5d7c984ce77206e695fbaddd5'
@@ -42,8 +42,8 @@ def get_episodes(content):
                                                  episode["episode"]["season"],
                                                  episode["episode"]["number"],
                                                  title)
-            show = ListItem(label=label,
-                            path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"])
+            show = VideoItem(label=label,
+                             path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"])
             show.set_infos({'title': title,
                             'aired': episode["episode"]["first_aired"],
                             'season': episode["episode"]["season"],
@@ -83,8 +83,8 @@ def handle_movies(results):
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for i in results:
         item = i["movie"] if "movie" in i else i
-        movie = ListItem(label=item["title"],
-                         path=PLUGIN_BASE + path % item["ids"]["tmdb"])
+        movie = VideoItem(label=item["title"],
+                          path=PLUGIN_BASE + path % item["ids"]["tmdb"])
         movie.set_infos({'title': item["title"],
                          'duration': item["runtime"] * 60,
                          'tagline': item["tagline"],
@@ -122,8 +122,8 @@ def handle_tvshows(results):
     for i in results:
         item = i["show"] if "show" in i else i
         airs = item.get("airs", {})
-        show = ListItem(label=item["title"],
-                        path='%sextendedtvinfo&&tvdb_id=%s' % (PLUGIN_BASE, item['ids']["tvdb"]))
+        show = VideoItem(label=item["title"],
+                         path='%sextendedtvinfo&&tvdb_id=%s' % (PLUGIN_BASE, item['ids']["tvdb"]))
         show.set_infos({'mediatype': "tvshow",
                         'title': item["title"],
                         'duration': item["runtime"] * 60,

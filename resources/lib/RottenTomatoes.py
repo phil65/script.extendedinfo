@@ -6,7 +6,7 @@
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.localdb import local_db
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 from kodi65.itemlist import ItemList
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
@@ -29,8 +29,8 @@ def get_movies(movie_type):
         else:
             search_string = "%s %s trailer" % (item["title"], item["year"])
             path = PLUGIN_BASE + "playtrailer&&title=%s&&imdb_id=%s" % (search_string, imdb_id)
-        movie = ListItem(label=item.get('title'),
-                         path=path)
+        movie = VideoItem(label=item.get('title'),
+                          path=path)
         movie.set_infos({'title': item["title"],
                          'mediatype': "movie",
                          'duration': item["runtime"] * 60,

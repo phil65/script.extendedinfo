@@ -10,7 +10,7 @@ import xbmc
 from kodi65 import utils
 from kodi65 import addon
 from kodi65.localdb import local_db
-from kodi65.listitem import AudioItem
+from kodi65.listitem import AudioItem, VideoItem
 from kodi65.itemlist import ItemList
 
 
@@ -85,7 +85,7 @@ def handle_musicvideos(results):
     mvids = ItemList(content_type="musicvideos")
     for item in results['mvids']:
         youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
-        mvid = AudioItem(label=item['strTrack'],
+        mvid = VideoItem(label=item['strTrack'],
                          path=utils.convert_youtube_url(item['strMusicVid']))
         mvid.set_infos({'title': item['strTrack'],
                         'plot': item['strDescriptionEN'],

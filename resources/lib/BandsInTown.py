@@ -7,7 +7,7 @@ import urllib
 
 from kodi65 import utils
 from kodi65.itemlist import ItemList
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 
 # TVRAGE_KEY = 'VBp9BuIr5iOiBeWCFRMG'
 API_KEY = 'xbmc_open_source_media_center'
@@ -18,7 +18,7 @@ def handle_events(results):
     events = ItemList()
     for event in results:
         venue = event['venue']
-        item = ListItem(label=venue['name'])
+        item = VideoItem(label=venue['name'])
         item.set_properties({'date': event['datetime'].replace("T", " - ").replace(":00", "", 1),
                              'city': venue['city'],
                              'lat': venue['latitude'],

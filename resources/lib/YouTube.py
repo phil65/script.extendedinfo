@@ -7,7 +7,7 @@ import urllib
 import itertools
 
 from kodi65 import utils
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 from kodi65.itemlist import ItemList
 
 YT_KEY = 'AIzaSyB-BOZ_o09NLVwq_lMskvvj1olDkFI4JK0'
@@ -24,8 +24,8 @@ def handle_videos(results, extended=False):
             video_id = item["id"]["videoId"]
         except Exception:
             video_id = snippet["resourceId"]["videoId"]
-        video = ListItem(label=snippet["title"],
-                         path=PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id)
+        video = VideoItem(label=snippet["title"],
+                          path=PLUGIN_BASE + 'youtubevideo&&id=%s' % video_id)
         video.set_infos({'plot': snippet["description"],
                          'mediatype': "video",
                          'premiered': snippet["publishedAt"][:10]})
@@ -87,8 +87,8 @@ def handle_playlists(results):
             playlist_id = item["id"]["playlistId"]
         except Exception:
             playlist_id = snippet["resourceId"]["playlistId"]
-        playlist = ListItem(label=snippet["title"],
-                            path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
+        playlist = VideoItem(label=snippet["title"],
+                             path=PLUGIN_BASE + 'youtubeplaylist&&id=%s' % playlist_id)
         playlist.set_infos({'plot': snippet["description"],
                             "mediatype": "video",
                             'premiered': snippet["publishedAt"][:10]})
@@ -116,8 +116,8 @@ def handle_channels(results):
             channel_id = item["id"]["channelId"]
         except Exception:
             channel_id = snippet["resourceId"]["channelId"]
-        channel = ListItem(label=snippet["title"],
-                           path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
+        channel = VideoItem(label=snippet["title"],
+                            path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
         channel.set_infos({'plot': snippet["description"],
                            'premiered': snippet["publishedAt"][:10]})
         channel.set_art("thumb", thumb)

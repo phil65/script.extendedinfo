@@ -15,7 +15,7 @@ from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import selectdialog
 from kodi65 import slideshow
-from kodi65.listitem import ListItem
+from kodi65.listitem import VideoItem
 from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
@@ -37,7 +37,7 @@ class DialogBaseInfo(object):
         self.last_focus = None
         self.lists = None
         self.yt_listitems = []
-        self.info = ListItem()
+        self.info = VideoItem()
 
     def onInit(self, *args, **kwargs):
         super(DialogBaseInfo, self).onInit()
