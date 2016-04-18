@@ -195,7 +195,7 @@ class DialogBaseList(object):
     def add_filter(self, key, value, typelabel, label, force_overwrite=False, reset=True):
         if not value:
             return False
-        new_filter = {"id": value,
+        new_filter = {"id": str(value),
                       "type": key,
                       "typelabel": typelabel,
                       "label": label}

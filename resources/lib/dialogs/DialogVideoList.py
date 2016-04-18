@@ -159,8 +159,8 @@ def get_window(window_type):
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
-                                typelabel="%s (%s)" % (addon.LANG(32111), addon.LANG(21406)),
-                                label="10")
+                                typelabel=addon.LANG(32111),
+                                label=" > 10")
 
         def add_filter(self, **kwargs):
             super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
@@ -227,7 +227,7 @@ def get_window(window_type):
             if index == -1:
                 return None
             self.add_filter(key="with_genres",
-                            value=str(ids[index]),
+                            value=ids[index],
                             typelabel=addon.LANG(135),
                             label=labels[index])
 
@@ -290,7 +290,7 @@ def get_window(window_type):
             if not response:
                 return None
             self.add_filter(key="with_people",
-                            value=str(response["id"]),
+                            value=response["id"],
                             typelabel=addon.LANG(32156),
                             label=response["name"])
 
@@ -325,7 +325,7 @@ def get_window(window_type):
             else:
                 utils.notify("No company found")
             self.add_filter(key="with_companies",
-                            value=str(response["id"]),
+                            value=response["id"],
                             typelabel=addon.LANG(20388),
                             label=response["name"])
 
@@ -347,7 +347,7 @@ def get_window(window_type):
             else:
                 keyword = keywords[0]
             self.add_filter(key="with_keywords",
-                            value=str(keyword["id"]),
+                            value=keyword["id"],
                             typelabel=addon.LANG(32114),
                             label=keyword["name"])
 
