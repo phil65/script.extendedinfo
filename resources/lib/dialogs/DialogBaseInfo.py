@@ -102,8 +102,8 @@ class DialogBaseInfo(object):
     # hack: use "music" until "pictures" got added to core
     def open_image(self, control_id):
         key = [key for container_id, key in self.LISTS if container_id == control_id][0]
-        pos = slideshow.open_slideshow(listitems=self.lists[key],
-                                       index=self.getControl(control_id).getSelectedPosition())
+        pos = slideshow.open(listitems=self.lists[key],
+                             index=self.getControl(control_id).getSelectedPosition())
         self.getControl(control_id).selectItem(pos)
 
     @ch.click_by_type("video")
