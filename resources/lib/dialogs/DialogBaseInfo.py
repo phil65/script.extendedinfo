@@ -233,13 +233,10 @@ class DialogBaseInfo(object):
         except Exception:
             return None
         if not self.yt_listitems:
-            result = YouTube.search(search_str, limit=15)
-            self.yt_listitems = result.get("listitems", [])
-            if "videos" in self.lists:
-                vid_ids = [item.get_property("key") for item in self.lists["videos"]]
-                self.yt_listitems = [i for i in self.yt_listitems if i.get_property("youtube_id") not in vid_ids]
+            self.yt_listitems = YouTube.search(search_str, limit=15)
+        vid_ids = [item.get_property("key") for item in self.lists["videos"]] if "videos" in self.lists else []
         youtube_list.reset()
-        youtube_list.addItems(utils.create_listitems(self.yt_listitems))
+        youtube_list.addItems([i.get_listitem() for i in self.yt_listitems if i.get_property("youtube_id") not in vid_ids])
 
     def open_credit_dialog(self, credit_id):
         info = tmdb.get_credit_info(credit_id)

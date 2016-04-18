@@ -232,10 +232,9 @@ def start_info_actions(info, params):
     elif info == 'youtubesearchvideos':
         addon.set_global('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
         if params.get("id"):
-            listitems = YouTube.search(search_str=params.get("id", ""),
-                                       hd=params.get("hd"),
-                                       orderby=params.get("orderby", "relevance"))
-            return listitems.get("listitems", [])
+            return YouTube.search(search_str=params.get("id", ""),
+                                  hd=params.get("hd"),
+                                  orderby=params.get("orderby", "relevance"))
     elif info == 'youtubeplaylistvideos':
         return YouTube.get_playlist_videos(params.get("id", ""))
     elif info == 'youtubeusersearchvideos':
