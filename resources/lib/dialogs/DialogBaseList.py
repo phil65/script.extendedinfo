@@ -31,8 +31,7 @@ class DialogBaseList(object):
         self.mode = kwargs.get("mode", "filter")
         self.order = kwargs.get('order', "desc")
         self.filters = []
-        filters = kwargs.get('filters', [])
-        for item in filters:
+        for item in kwargs.get('filters', []):
             self.add_filter(key=item["type"],
                             value=item["id"],
                             label=item["label"],
