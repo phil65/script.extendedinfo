@@ -26,7 +26,6 @@ class DialogBaseList(object):
 
     def __init__(self, *args, **kwargs):
         super(DialogBaseList, self).__init__(*args, **kwargs)
-        self.listitem_list = kwargs.get('listitems', None)
         self.search_str = kwargs.get('search_str', "")
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")

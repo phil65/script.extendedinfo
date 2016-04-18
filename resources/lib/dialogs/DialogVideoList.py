@@ -62,9 +62,10 @@ def get_window(window_type):
             self.sort = kwargs.get('sort', "popularity")
             self.sort_label = kwargs.get('sort_label', addon.LANG(32110))
             self.logged_in = tmdb.Login.check_login()
-            if self.listitem_list:
-                self.listitems = utils.create_listitems(self.listitem_list)
-                self.total_items = len(self.listitem_list)
+            self.listitems = kwargs.get('listitems', None)
+            if self.listitems:
+                self.listitems = self.listitems.create_listitems()
+                self.total_items = len(self.listitems)
             else:
                 self.update_content(force_update=kwargs.get('force', False))
 
