@@ -79,13 +79,10 @@ class DialogBaseList(object):
         ch.serve_action(action, self.getFocusId(), self)
 
     def onFocus(self, control_id):
-        old_page = self.page
         if control_id == ID_BUTTON_NEXT_PAGE:
             self.go_to_next_page()
         elif control_id == ID_BUTTON_PREV_PAGE:
             self.go_to_prev_page()
-        if self.page != old_page:
-            self.update()
 
     @ch.click(ID_BUTTON_RESETFILTERS)
     def reset_filters(self, control_id):
@@ -174,6 +171,7 @@ class DialogBaseList(object):
             self.page += 1
             self.prev_page_token = self.page_token
             self.page_token = self.next_page_token
+            self.update()
 
     def go_to_prev_page(self):
         self.get_column()
@@ -181,6 +179,7 @@ class DialogBaseList(object):
             self.page -= 1
             self.next_page_token = self.page_token
             self.page_token = self.prev_page_token
+            self.update()
 
     def get_column(self):
         for i in xrange(0, 10):
