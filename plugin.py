@@ -19,19 +19,6 @@ TRAKT_IMAGE = os.path.join(addon.MEDIA_PATH, "trakt.png")
 plugin = routing.Plugin()
 
 
-def pass_list_to_skin(name, data, handle=None, limit=False):
-    if data and limit and int(limit) < len(data):
-        data = data[:int(limit)]
-    addon.clear_global(name)
-    if data:
-        addon.set_global(name + ".Count", str(len(data)))
-        items = [(i.get_path(), i.get_listitem(), bool(i.get_property("directory"))) for i in data]
-        xbmcplugin.addDirectoryItems(handle=handle,
-                                     items=items,
-                                     totalItems=len(items))
-    xbmcplugin.endOfDirectory(handle)
-
-
 class Main:
 
     def __init__(self):
@@ -40,25 +27,7 @@ class Main:
         self._parse_argv()
         for info in self.infos:
             listitems = process.start_info_actions(info, self.params)
-            if info.endswith("shows"):
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
-            elif info.endswith("episodes"):
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
-
-            elif info.endswith("movies"):
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_TITLE)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_YEAR)
-                xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_VIDEO_RATING)
-            if listitems.content_type:
-                xbmcplugin.setContent(plugin.handle, listitems.content_type)
-            pass_list_to_skin(name=info,
-                              data=listitems,
-                              handle=plugin.handle,
-                              limit=self.params.get("limit", 20))
+            listitems.set_plugin_list()
             break
         else:
             plugin.run()
@@ -125,10 +94,13 @@ def tmdb():
     if addon.setting("tmdb_username") and addon.setting("tmdb_password"):
         items += login
     for key, value in items:
-        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
+        li = xbmcgui.ListItem(label=value,
+                              thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
-        xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
-                                    listitem=li, isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=plugin.handle,
+                                    url=url,
+                                    listitem=li,
+                                    isFolder=True)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -151,10 +123,13 @@ def trakt():
              ("airingepisodes", addon.LANG(32028)),
              ("premiereepisodes", addon.LANG(32029))]
     for key, value in items:
-        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
+        li = xbmcgui.ListItem(label=value,
+                              thumbnailImage="DefaultFolder.png")
         url = 'plugin://script.extendedinfo?info=%s' % key
-        xbmcplugin.addDirectoryItem(handle=plugin.handle, url=url,
-                                    listitem=li, isFolder=True)
+        xbmcplugin.addDirectoryItem(handle=plugin.handle,
+                                    url=url,
+                                    listitem=li,
+                                    isFolder=True)
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
@@ -162,9 +137,12 @@ def trakt():
 def root():
     # xbmcplugin.setContent(plugin.handle, 'files')
     items = [
-        (plugin.url_for(trakt), xbmcgui.ListItem("Trakt", thumbnailImage=TRAKT_IMAGE), True),
-        (plugin.url_for(rotten_tomatoes), xbmcgui.ListItem("Rotten Tomatoes", thumbnailImage=RT_IMAGE), True),
-        (plugin.url_for(tmdb), xbmcgui.ListItem("TheMovieDB", thumbnailImage=MOVIEDB_IMAGE), True),
+        (plugin.url_for(trakt), xbmcgui.ListItem(label="Trakt",
+                                                 thumbnailImage=TRAKT_IMAGE), True),
+        (plugin.url_for(rotten_tomatoes), xbmcgui.ListItem(label="Rotten Tomatoes",
+                                                           thumbnailImage=RT_IMAGE), True),
+        (plugin.url_for(tmdb), xbmcgui.ListItem(label="TheMovieDB",
+                                                thumbnailImage=MOVIEDB_IMAGE), True),
     ]
     xbmcplugin.addDirectoryItems(plugin.handle, items)
     xbmcplugin.endOfDirectory(plugin.handle)
