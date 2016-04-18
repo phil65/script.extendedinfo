@@ -164,7 +164,7 @@
 				</animation>
 				<width>1536</width>
 				<height>1080</height>
-				<viewtype label="31234">icon</viewtype>
+				<viewtype label="535">list</viewtype>
 				<pagecontrol>72</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<scrolltime tween="quadratic">300</scrolltime>
@@ -277,7 +277,7 @@
 				</animation>
 				<width>1536</width>
 				<height>1080</height>
-				<viewtype label="31234">icon</viewtype>
+				<viewtype label="Wall">list</viewtype>
 				<pagecontrol>72</pagecontrol>
 				<preloaditems>2</preloaditems>
 				<scrolltime tween="quadratic">300</scrolltime>
