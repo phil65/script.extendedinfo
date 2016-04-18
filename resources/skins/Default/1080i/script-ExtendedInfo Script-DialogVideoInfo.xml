@@ -19,7 +19,7 @@
 				<animation effect="fade" start="100" end="60" time="0" condition="true">Conditional</animation>
 				<height>1080</height>
 				<aspectratio align="center">scale</aspectratio>
-				<texture colordiffuse="$INFO[Window(home).Property(ImageColor)]">diffuseoverlay.png</texture>
+				<texture colordiffuse="$INFO[Window(home).Property(ImageColor)]">diffuseoverlay.jpg</texture>
 			</control>
 			<control type="button" id="20000">
 				<height>0</height>

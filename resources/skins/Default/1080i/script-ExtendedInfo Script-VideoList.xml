@@ -24,7 +24,7 @@
 			<animation effect="fade" start="100" end="0" time="200">WindowClose</animation>
 		</control>
 		<control type="image">
-			<texture colordiffuse="FF12B2E7">diffuseoverlay.png</texture>
+			<texture colordiffuse="FF12B2E7">diffuseoverlay.jpg</texture>
 			<animation effect="fade" start="100" end="80" time="0" condition="true">Conditional</animation>
 			<width>1920</width>
 			<height>1080</height>
