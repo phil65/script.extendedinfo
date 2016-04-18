@@ -53,6 +53,16 @@ def get_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
 
+        FILTERS = {"channelId": addon.LANG(19029),
+                   "publishedAfter": addon.LANG(172),
+                   "regionCode": addon.LANG(248),
+                   "videoDimension": addon.LANG(32057),
+                   "videoDuration": addon.LANG(180),
+                   "videoCaption": addon.LANG(287),
+                   "videoDefinition": "Related",
+                   "relatedToVideoId": "Related",
+                   "channelId": addon.LANG(32111)}
+
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
@@ -76,7 +86,6 @@ def get_window(window_type):
             if self.type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
-                                   "typelabel": addon.LANG(19029),
                                    "label": youtube_id}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
@@ -100,7 +109,6 @@ def get_window(window_type):
             d = datetime.datetime.now() - datetime.timedelta(int(delta))
             self.add_filter(key="publishedAfter",
                             value=d.isoformat('T')[:-7] + "Z",
-                            typelabel=addon.LANG(172),
                             label=labels[index])
 
         @ch.click(ID_BUTTON_LANGUAGEFILTER)
@@ -112,7 +120,6 @@ def get_window(window_type):
                 return None
             self.add_filter(key="regionCode",
                             value=labels[index],
-                            typelabel=addon.LANG(248),
                             label=labels[index])
 
         @ch.click(ID_BUTTON_DIMENSIONFILTER)
@@ -124,7 +131,6 @@ def get_window(window_type):
             if index > -1:
                 self.add_filter(key="videoDimension",
                                 value=values[index],
-                                typelabel=addon.LANG(32057),
                                 label=labels[index])
 
         @ch.click(ID_BUTTON_DURATIONFILTER)
@@ -136,7 +142,6 @@ def get_window(window_type):
             if index > -1:
                 self.add_filter(key="videoDuration",
                                 value=values[index],
-                                typelabel=addon.LANG(180),
                                 label=labels[index])
 
         @ch.click(ID_BUTTON_CAPTIONFILTER)
@@ -148,7 +153,6 @@ def get_window(window_type):
             if index > -1:
                 self.add_filter(key="videoCaption",
                                 value=values[index],
-                                typelabel=addon.LANG(287),
                                 label=labels[index])
 
         @ch.click(ID_BUTTON_DEFINITIONFILTER)
@@ -160,7 +164,6 @@ def get_window(window_type):
             if index > -1:
                 self.add_filter(key="videoDefinition",
                                 value=values[index],
-                                typelabel=addon.LANG(169),
                                 label=labels[index])
 
         @ch.click(ID_BUTTON_TOGGLETYPE)
@@ -207,17 +210,16 @@ def get_window(window_type):
                 elif index == 0:
                     filter_ = [{"id": self.FocusedItem(control_id).getProperty("youtube_id"),
                                 "type": "relatedToVideoId",
-                                "typelabel": "Related",
                                 "label": self.FocusedItem(control_id).getLabel()}]
                     wm.open_youtube_list(filters=filter_)
                 elif index == 1:
                     filter_ = [{"id": self.FocusedItem(control_id).getProperty("channel_id"),
                                 "type": "channelId",
-                                "typelabel": "Related",
                                 "label": self.FocusedItem(control_id).getProperty("channel_title")}]
                     wm.open_youtube_list(filters=filter_)
 
         def add_filter(self, **kwargs):
+            kwargs["typelabel"] = self.FILTERS[kwargs["key"]]
             super(DialogYoutubeList, self).add_filter(force_overwrite=True,
                                                       **kwargs)
 

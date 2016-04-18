@@ -117,7 +117,6 @@ def get_window(window_type):
         def open_company_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_companies",
-                        "typelabel": addon.LANG(20388),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
@@ -132,7 +131,6 @@ def get_window(window_type):
         def open_keyword_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_keywords",
-                        "typelabel": addon.LANG(32114),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
@@ -140,7 +138,6 @@ def get_window(window_type):
         def open_genre_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_genres",
-                        "typelabel": addon.LANG(135),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
@@ -149,15 +146,12 @@ def get_window(window_type):
             info = self.FocusedItem(control_id).getVideoInfoTag()
             filters = [{"id": self.FocusedItem(control_id).getProperty("iso_3166_1"),
                         "type": "certification_country",
-                        "typelabel": addon.LANG(32153),
                         "label": self.FocusedItem(control_id).getProperty("iso_3166_1")},
                        {"id": self.FocusedItem(control_id).getProperty("certification"),
                         "type": "certification",
-                        "typelabel": addon.LANG(32127),
                         "label": self.FocusedItem(control_id).getProperty("certification")},
                        {"id": str(info.getYear()),
                         "type": "year",
-                        "typelabel": addon.LANG(345),
                         "label": str(info.getYear())}]
             wm.open_video_list(filters=filters)
 

@@ -193,7 +193,6 @@ class DialogBaseInfo(object):
         if index == 1:
             filters = [{"id": listitem.getProperty("id"),
                         "type": "with_people",
-                        "typelabel": addon.LANG(32156),
                         "label": listitem.getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
         if index == 2:

@@ -90,7 +90,6 @@ def get_window(window_type):
         def open_company_info(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_companies",
-                        "typelabel": addon.LANG(20388),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
@@ -98,7 +97,6 @@ def get_window(window_type):
         def open_keyword_info(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_keywords",
-                        "typelabel": addon.LANG(32114),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
@@ -106,7 +104,6 @@ def get_window(window_type):
         def open_genre_info(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_genres",
-                        "typelabel": addon.LANG(135),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters,
                                media_type="tv")
@@ -115,7 +112,6 @@ def get_window(window_type):
         def open_network_info(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_networks",
-                        "typelabel": addon.LANG(32152),
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters,
                                media_type="tv")

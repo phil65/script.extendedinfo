@@ -43,6 +43,7 @@ SORTS = {"movie": {"popularity": addon.LANG(32110),
          "favorites": {"created_at": addon.LANG(32157)},
          "list": {"created_at": addon.LANG(32157)},
          "rating": {"created_at": addon.LANG(32157)}}
+
 TRANSLATIONS = {"movie": addon.LANG(20338),
                 "tv": addon.LANG(20364),
                 "person": addon.LANG(32156)}
@@ -53,6 +54,17 @@ include_adult = addon.setting("include_adults").lower()
 def get_window(window_type):
 
     class DialogVideoList(DialogBaseList, window_type):
+
+        FILTERS = {"certification_country": addon.LANG(32153),
+                   "certification": addon.LANG(32127),
+                   "with_genres": addon.LANG(135),
+                   "with_people": addon.LANG(32156),
+                   "with_companies": addon.LANG(20388),
+                   "with_networks": addon.LANG(32152),
+                   "with_keywords": addon.LANG(32114),
+                   "first_air_date": addon.LANG(20416),
+                   "primary_release_date": addon.LANG(345),
+                   "vote_count": addon.LANG(32111)}
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
@@ -159,10 +171,11 @@ def get_window(window_type):
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
-                                typelabel=addon.LANG(32111),
                                 label=" > 10")
 
         def add_filter(self, **kwargs):
+            key = kwargs["key"].replace(".gte", "").replace(".lte", "")
+            kwargs["typelabel"] = self.FILTERS[key]
             super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
                                                     **kwargs)
 
@@ -228,7 +241,6 @@ def get_window(window_type):
                 return None
             self.add_filter(key="with_genres",
                             value=ids[index],
-                            typelabel=addon.LANG(135),
                             label=labels[index])
 
         @ch.click(ID_BUTTON_VOTECOUNTFILTER)
@@ -246,7 +258,6 @@ def get_window(window_type):
             if result:
                 self.add_filter(key="vote_count.lte" if ret == 1 else "vote_count.gte",
                                 value=result,
-                                typelabel=addon.LANG(32111),
                                 label=" < " + result if ret == 1 else " > " + result)
 
         @ch.click(ID_BUTTON_YEARFILTER)
@@ -272,12 +283,10 @@ def get_window(window_type):
             if self.type == "tv":
                 self.add_filter(key="first_air_date.%s" % order,
                                 value=value,
-                                typelabel=addon.LANG(20416),
                                 label=label)
             else:
                 self.add_filter(key="primary_release_date.%s" % order,
                                 value=value,
-                                typelabel=addon.LANG(345),
                                 label=label)
 
         @ch.click(ID_BUTTON_ACTORFILTER)
@@ -291,7 +300,6 @@ def get_window(window_type):
                 return None
             self.add_filter(key="with_people",
                             value=response["id"],
-                            typelabel=addon.LANG(32156),
                             label=response["name"])
 
         @ch.click_by_type("movie")
@@ -326,7 +334,6 @@ def get_window(window_type):
                 utils.notify("No company found")
             self.add_filter(key="with_companies",
                             value=response["id"],
-                            typelabel=addon.LANG(20388),
                             label=response["name"])
 
         @ch.click(ID_BUTTON_KEYWORDFILTER)
@@ -335,7 +342,7 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result == -1:
                 return None
-            keywords = tmdb.get_keyword_id(result)
+            keywords = tmdb.get_keywords(result)
             if not keywords:
                 return None
             if len(keywords) > 1:
@@ -348,7 +355,6 @@ def get_window(window_type):
                 keyword = keywords[0]
             self.add_filter(key="with_keywords",
                             value=keyword["id"],
-                            typelabel=addon.LANG(32114),
                             label=keyword["name"])
 
         @ch.click(ID_BUTTON_CERTFILTER)
@@ -368,12 +374,10 @@ def get_window(window_type):
             cert = certs[index].split("  -  ")[0]
             self.add_filter(key="certification_country",
                             value=country,
-                            typelabel=addon.LANG(32153),
                             label=country,
                             reset=False)
             self.add_filter(key="certification",
                             value=cert,
-                            typelabel=addon.LANG(32127),
                             label=cert)
 
         def fetch_data(self, force=False):  # TODO: rewrite
