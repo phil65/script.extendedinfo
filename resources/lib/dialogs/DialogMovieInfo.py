@@ -93,7 +93,7 @@ def get_window(window_type):
             super(DialogMovieInfo, self).update_states()
             self.get_youtube_vids("%s %s, movie" % (self.info.label,
                                                     self.info.get_info("year")))
-            self.join_omdb_async()
+            self.set_omdb_infos_async()
 
         def onClick(self, control_id):
             super(DialogMovieInfo, self).onClick(control_id)
@@ -109,40 +109,40 @@ def get_window(window_type):
             # self.set_visible(ID_BUTTON_RATED, True)
 
         @ch.click(ID_BUTTON_TRAILER)
-        def play_trailer(self, control_id):
+        def youtube_button(self, control_id):
             wm.play_youtube_video(youtube_id=self.info.get_property("trailer"),
                                   listitem=self.info.get_listitem())
 
         @ch.click(ID_LIST_STUDIOS)
-        def open_company_list(self, control_id):
+        def company_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_companies",
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_REVIEWS)
-        def show_review(self, control_id):
+        def reviews_list(self, control_id):
             author = self.FocusedItem(control_id).getProperty("author")
             text = "[B]%s[/B][CR]%s" % (author, self.FocusedItem(control_id).getProperty("content"))
             xbmcgui.Dialog().textviewer(heading=addon.LANG(207),
                                         text=text)
 
         @ch.click(ID_LIST_KEYWORDS)
-        def open_keyword_list(self, control_id):
+        def keyword_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_keywords",
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_GENRES)
-        def open_genre_list(self, control_id):
+        def genre_list(self, control_id):
             filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
                         "type": "with_genres",
                         "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
             wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_CERTS)
-        def open_cert_list(self, control_id):
+        def cert_list(self, control_id):
             info = self.FocusedItem(control_id).getVideoInfoTag()
             filters = [{"id": self.FocusedItem(control_id).getProperty("iso_3166_1"),
                         "type": "certification_country",
@@ -153,13 +153,13 @@ def get_window(window_type):
             wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_LISTS)
-        def open_lists_list(self, control_id):
+        def movielists_list(self, control_id):
             wm.open_video_list(mode="list",
                                list_id=self.FocusedItem(control_id).getProperty("id"),
                                filter_label=self.FocusedItem(control_id).getLabel().decode("utf-8"))
 
         @ch.click(ID_BUTTON_OPENLIST)
-        def show_list_dialog(self, control_id):
+        def open_list_button(self, control_id):
             wm.show_busy()
             movie_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
@@ -177,7 +177,7 @@ def get_window(window_type):
                                    force=True)
 
         @ch.click(ID_BUTTON_ADDTOLIST)
-        def add_to_list_dialog(self, control_id):
+        def add_to_list_button(self, control_id):
             wm.show_busy()
             account_lists = tmdb.get_account_lists()
             listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
@@ -203,17 +203,17 @@ def get_window(window_type):
                 self.update_states()
 
         @ch.click(ID_BUTTON_RATED)
-        def open_rating_list(self, control_id):
+        def rating_button(self, control_id):
             wm.open_video_list(mode="rating")
 
         @ch.click(ID_BUTTON_PLAY_RESUME)
-        def play_movie_resume(self, control_id):
+        def play_noresume_button(self, control_id):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             kodijson.play_media("movie", self.info["dbid"], True)
 
         @ch.click(ID_BUTTON_PLAY_NORESUME)
-        def play_movie_no_resume(self, control_id):
+        def play_resume_button(self, control_id):
             self.exit_script()
             xbmc.executebuiltin("Dialog.Close(movieinformation)")
             kodijson.play_media("movie", self.info["dbid"], False)
@@ -251,7 +251,7 @@ def get_window(window_type):
                 self.update_states()
 
         @utils.run_async
-        def join_omdb_async(self):
+        def set_omdb_infos_async(self):
             self.omdb_thread.join()
             utils.dict_to_windowprops(data=self.omdb_thread.listitems,
                                       prefix="omdb.",
