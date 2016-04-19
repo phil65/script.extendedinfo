@@ -171,7 +171,9 @@ def get_window(window_type):
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
-                                label=" > 10")
+                                label=" > 10",
+                                reset=False)
+            self.update()
 
         def add_filter(self, **kwargs):
             key = kwargs["key"].replace(".gte", "").replace(".lte", "")
