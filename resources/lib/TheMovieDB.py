@@ -31,7 +31,7 @@ HEADERS = {
 IMAGE_BASE_URL = "http://image.tmdb.org/t/p/"
 POSTER_SIZE = "w500"
 URL_BASE = "http{}://api.themoviedb.org/3/".format("s" if addon.bool_setting("use_https") else "")
-ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,releases,videos,translations,similar,reviews,lists,rating"
+ALL_MOVIE_PROPS = "account_states,alternative_titles,credits,images,keywords,release_dates,videos,translations,similar,reviews,lists,rating"
 ALL_TV_PROPS = "account_states,alternative_titles,content_ratings,credits,external_ids,images,keywords,rating,similar,translations,videos"
 ALL_ACTOR_PROPS = "tv_credits,movie_credits,combined_credits,images,tagged_images"
 ALL_SEASON_PROPS = "videos,images,external_ids,credits"
@@ -396,22 +396,19 @@ def handle_episodes(results):
     return listitems
 
 
-def handle_misc(results):
-    listitems = ItemList(content_type="videos")
+def handle_release_dates(results):
+    listitems = ItemList()
     for item in results:
-        listitem = VideoItem(label=item.get('name'),
-                             artwork=get_image_urls(poster=item.get("poster_path")))
-        listitem.set_infos({'year': utils.get_year(item.get('release_date')),
-                            'premiered': item.get('release_date'),
-                            'plot': item.get('description')})
-        listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
-                                 'item_count': item.get('item_count'),
-                                 'favorite_count': item.get('favorite_count'),
+        ref = item["release_dates"][0]
+        if not ref.get("certification"):
+            continue
+        listitem = VideoItem(label=item.get('name'))
+        listitem.set_properties({'certification': ref.get('certification'),
                                  'iso_3166_1': item.get('iso_3166_1', "").lower(),
-                                 'author': item.get('author'),
-                                 'content': item.get('content'),
-                                 'id': item.get('id'),
-                                 'url': item.get('url')})
+                                 'note': ref.get('note'),
+                                 'iso_639_1': ref.get('iso_639_1'),
+                                 'release_date': ref.get('release_date'),
+                                 'type': ref.get('type')})
         listitems.append(listitem)
     return listitems
 
@@ -760,11 +757,11 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     studio = [i["name"] for i in info["production_companies"]]
     authors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Writing"]
     directors = [i["name"] for i in info['credits']['crew'] if i["department"] == "Directing"]
-    us_cert = utils.dictfind(info['releases']['countries'], "iso_3166_1", "US")
+    us_cert = utils.dictfind(info['release_dates']['results'], "iso_3166_1", "US")
     if us_cert:
-        mpaa = us_cert["certification"]
-    elif info['releases']['countries']:
-        mpaa = info['releases']['countries'][0]['certification']
+        mpaa = us_cert['release_dates'][0]["certification"]
+    elif info['release_dates']['results']:
+        mpaa = info['release_dates']['results'][0]['release_dates'][0]['certification']
     movie_set = info.get("belongs_to_collection")
     movie = VideoItem(label=info.get('title'),
                       path=PLUGIN_BASE + 'youtubevideo&&id=%s' % info.get("id", ""))
@@ -805,7 +802,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
         movie = local_db.merge_with_local("movie", [movie])[0]
     # hack to get tmdb rating instead of local one
     movie.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
-    releases = merge_with_cert_desc(handle_misc(info["releases"]["countries"]), "movie")
+    releases = merge_with_cert_desc(handle_release_dates(info["release_dates"]["results"]), "movie")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
                  "lists": sort_lists(handle_lists(info["lists"]["results"])),
