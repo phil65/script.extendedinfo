@@ -27,7 +27,8 @@ class Main:
         self._parse_argv()
         for info in self.infos:
             listitems = process.start_info_actions(info, self.params)
-            listitems.set_plugin_list()
+            if listitems:
+                listitems.set_plugin_list()
             break
         else:
             plugin.run()
