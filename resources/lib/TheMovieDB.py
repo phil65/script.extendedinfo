@@ -177,18 +177,7 @@ def send_request(url, params, values, delete=False):
     params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     utils.log(url)
-    request = urllib2.Request(url=url,
-                              data=json.dumps(values),
-                              headers=HEADERS)
-    if delete:
-        request.get_method = lambda: 'DELETE'
-    try:
-        response = urllib2.urlopen(request, timeout=5).read()
-    except urllib2.HTTPError as err:
-        if err.code == 401:
-            utils.notify("Error", "Not authorized.")
-        return None
-    return json.loads(response)
+    return utils.post(url, values=values, headers=HEADERS, delete=delete)
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
