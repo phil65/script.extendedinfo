@@ -416,6 +416,16 @@ def handle_misc(results):
     return listitems
 
 
+def handle_content_ratings(results):
+    listitems = ItemList()
+    for item in results:
+        listitem = VideoItem(label=item['rating'])
+        listitem.set_properties({'iso_3166_1': item['iso_3166_1'].lower(),
+                                 'certification': item['rating'].lower()})
+        listitems.append(listitem)
+    return listitems
+
+
 def handle_reviews(results):
     listitems = ItemList()
     for item in results:
@@ -880,7 +890,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         tvshow = local_db.merge_with_local("tvshow", [tvshow])[0]
     # hack to get tmdb rating instead of local one
     tvshow.set_info("rating", round(info['vote_average'], 1) if info.get('vote_average') else "")
-    certifications = merge_with_cert_desc(handle_misc(info["content_ratings"]["results"]), "tv")
+    certifications = merge_with_cert_desc(handle_content_ratings(info["content_ratings"]["results"]), "tv")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
                  "studios": handle_text(info["production_companies"]),
