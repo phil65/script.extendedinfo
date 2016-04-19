@@ -57,6 +57,7 @@ def get_window(window_type):
 
         FILTERS = {"certification_country": addon.LANG(32153),
                    "certification": addon.LANG(32127),
+                   "year": addon.LANG(562),
                    "with_genres": addon.LANG(135),
                    "with_people": addon.LANG(32156),
                    "with_companies": addon.LANG(20388),

@@ -149,10 +149,7 @@ def get_window(window_type):
                         "label": self.FocusedItem(control_id).getProperty("iso_3166_1")},
                        {"id": self.FocusedItem(control_id).getProperty("certification"),
                         "type": "certification",
-                        "label": self.FocusedItem(control_id).getProperty("certification")},
-                       {"id": str(info.getYear()),
-                        "type": "year",
-                        "label": str(info.getYear())}]
+                        "label": self.FocusedItem(control_id).getProperty("certification")}]
             wm.open_video_list(filters=filters)
 
         @ch.click(ID_LIST_LISTS)
