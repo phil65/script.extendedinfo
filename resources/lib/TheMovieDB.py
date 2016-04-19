@@ -4,9 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 import re
-import urllib2
 import urllib
-import json
 from functools32 import lru_cache
 
 from kodi65 import kodijson
