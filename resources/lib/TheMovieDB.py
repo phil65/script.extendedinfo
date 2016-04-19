@@ -408,7 +408,7 @@ def handle_release_dates(results):
                                  'note': ref.get('note'),
                                  'iso_639_1': ref.get('iso_639_1'),
                                  'release_date': ref.get('release_date'),
-                                 'type': ref.get('type')})
+                                 'type': RELEASE_TYPES.get(ref.get('type'))})
         listitems.append(listitem)
     return listitems
 
