@@ -313,7 +313,7 @@
 							<left>0</left>
 							<width>228</width>
 							<height>67</height>
-							<top>340</top>
+							<top>335</top>
 							<textcolor>A0FFFFFF</textcolor>
 							<align>center</align>
 							<font>font12</font>
@@ -393,17 +393,17 @@
 						<left>80</left>
 						<width>228</width>
 						<height>67</height>
-						<top>490</top>
+						<top>485</top>
 						<textcolor>FFFAFAFA</textcolor>
 						<align>center</align>
 						<font>font12</font>
 						<label>$INFO[ListItem.Label]</label>
 						<animation type="Focus" reversible="false">
-							<effect type="slide" start="0,0" end="0,30" time="280" tween="back" reversible="false"/>
+							<effect type="slide" start="0,0" end="0,35" time="280" tween="back" reversible="false"/>
 							<effect type="fade" start="62" end="100" time="280" />
 						</animation>
 						<animation type="UnFocus" reversible="false">
-							<effect type="slide"  start="0,30" end="0" time="200" tween="cubic" reversible="false"/>
+							<effect type="slide"  start="0,35" end="0" time="200" tween="cubic" reversible="false"/>
 							<effect type="fade" start="100" end="62" time="280" />
 						</animation>
 					</control>
