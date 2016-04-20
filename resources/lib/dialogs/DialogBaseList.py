@@ -187,10 +187,8 @@ class DialogBaseList(object):
             self.update()
 
     def get_column(self):
-        for i in xrange(0, 10):
-            if xbmc.getCondVisibility("Container(500).Column(%i)" % i):
-                self.column = i
-                break
+        col = xbmc.getInfoLabel("Container(%s).Column" % self.getCurrentContainerId())
+        self.column = int(col) if col != "" else None
 
     @utils.busy_dialog
     def update(self, force_update=False):
