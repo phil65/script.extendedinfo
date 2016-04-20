@@ -304,8 +304,8 @@
 						<control type="image">
 							<width>55</width>
 							<height>55</height>
-							<top>30</top>
-							<left>149</left>
+							<top>20</top>
+							<left>159</left>
 							<texture>flags/local.png</texture>
 							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
@@ -322,9 +322,9 @@
 						<control type="group">
 							<visible>!IsEmpty(ListItem.UserRating)</visible>
 							<control type="image">
-								<width>56</width>
-								<height>56</height>
-								<top>2</top>
+								<width>48</width>
+								<height>48</height>
+								<top>5</top>
 								<left>-10</left>
 								<texture>circle.png</texture>
 							</control>
@@ -334,7 +334,7 @@
 								<top>8</top>
 								<align>center</align>
 								<aligny>center</aligny>
-								<left>-9</left>
+								<left>-12</left>
 								<font>font10</font>
 								<textcolor>FF000000</textcolor>
 								<label>$INFO[ListItem.UserRating]</label>
@@ -359,21 +359,20 @@
 							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
 							<fadetime>0</fadetime>
 						</control>
-
 						<control type="image">
 							<width>55</width>
 							<height>55</height>
-							<top>30</top>
-							<left>149</left>
+							<top>20</top>
+							<left>159</left>
 							<texture>flags/local.png</texture>
 							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
 						<control type="group">
 							<visible>!IsEmpty(ListItem.UserRating)</visible>
 							<control type="image">
-								<width>56</width>
-								<height>56</height>
-								<top>2</top>
+								<width>48</width>
+								<height>48</height>
+								<top>5</top>
 								<left>-10</left>
 								<texture>circle.png</texture>
 							</control>
@@ -383,7 +382,7 @@
 								<top>8</top>
 								<align>center</align>
 								<aligny>center</aligny>
-								<left>-9</left>
+								<left>-12</left>
 								<font>font10</font>
 								<textcolor>FF000000</textcolor>
 								<label>$INFO[ListItem.UserRating]</label>
