@@ -14,7 +14,6 @@ from resources.lib.WindowManager import wm
 from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
-from kodi65 import selectdialog
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
@@ -144,7 +143,6 @@ def get_window(window_type):
 
         @ch.click(ID_LIST_CERTS)
         def cert_list(self, control_id):
-            info = self.FocusedItem(control_id).getVideoInfoTag()
             filters = [{"id": self.FocusedItem(control_id).getProperty("iso_3166_1"),
                         "type": "certification_country",
                         "label": self.FocusedItem(control_id).getProperty("iso_3166_1")},
