@@ -36,6 +36,7 @@ class DialogBaseInfo(object):
         self.bouncing = False
         self.last_focus = None
         self.lists = None
+        self.states = False
         self.yt_listitems = []
         self.info = VideoItem()
         self.last_control = None
