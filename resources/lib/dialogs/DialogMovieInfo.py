@@ -105,8 +105,10 @@ def get_window(window_type):
             self.set_visible(ID_BUTTON_PLAY_RESUME, condition)
             self.set_visible(ID_BUTTON_PLAY_NORESUME, self.info.get_info("dbid"))
             self.set_visible(ID_BUTTON_TRAILER, self.info.get_info("trailer"))
-            # self.set_visible(ID_BUTTON_SETRATING, True)
-            # self.set_visible(ID_BUTTON_RATED, True)
+            self.set_visible(ID_BUTTON_SETRATING, True)
+            self.set_visible(ID_BUTTON_RATED, True)
+            self.set_visible(ID_BUTTON_ADDTOLIST, True)
+            self.set_visible(ID_BUTTON_OPENLIST, True)
 
         @ch.click(ID_BUTTON_TRAILER)
         def youtube_button(self, control_id):
