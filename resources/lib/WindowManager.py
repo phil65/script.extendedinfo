@@ -45,6 +45,8 @@ class WindowManager(object):
     def __init__(self):
         self.active_dialog = None
         self.saved_background = addon.get_global("infobackground")
+        self.saved_control = xbmc.getInfoLabel("System.CurrentControlId")
+        self.saved_dialogstate = xbmc.getCondVisibility("Window.IsActive(Movieinformation)")
         self.monitor = SettingsMonitor()
         self.busy = 0
 
