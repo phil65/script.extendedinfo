@@ -152,7 +152,7 @@ def get_window(window_type):
                                             movie_id=movie_id,
                                             status=True)
             elif index == len(listitems) - 1:
-                self.remove_list_dialog(account_lists)
+                tmdb.remove_list_dialog(account_lists)
             elif index > 0:
                 tmdb.change_list_status(list_id=account_lists[index - 1]["id"],
                                         movie_id=movie_id,

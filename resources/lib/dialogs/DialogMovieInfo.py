@@ -14,6 +14,7 @@ from resources.lib.WindowManager import wm
 from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
+from kodi65 import selectdialog
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
@@ -197,7 +198,8 @@ def get_window(window_type):
                                         movie_id=self.info.get_property("id"),
                                         status=True)
             elif index == len(listitems) - 1:
-                self.remove_list_dialog(account_lists)
+                if tmdb.remove_list_dialog(account_lists):
+                    self.update_states()
             elif index > 0:
                 tmdb.change_list_status(account_lists[index - 1]["id"], self.info.get_property("id"), True)
                 self.update_states()
@@ -242,13 +244,6 @@ def get_window(window_type):
                                                           dbid=self.info.get_info("dbid"),
                                                           cache_time=0)
             super(DialogMovieInfo, self).update_states()
-
-        def remove_list_dialog(self, account_lists):
-            listitems = ["%s (%i)" % (d["name"], d["item_count"]) for d in account_lists]
-            index = xbmcgui.Dialog().select(addon.LANG(32138), listitems)
-            if index >= 0:
-                tmdb.remove_list(account_lists[index]["id"])
-                self.update_states()
 
         @utils.run_async
         def set_omdb_infos_async(self):

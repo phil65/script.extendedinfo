@@ -161,7 +161,6 @@ def set_rating(media_type, media_id, rating, dbid=None):
         url = "tv/%s/season/%s/episode/%s/rating" % (media_id[0], media_id[1], media_id[2])
     else:
         url = "%s/%s/rating" % (media_type, media_id)
-    # request.get_method = lambda: 'DELETE'
     results = send_request(url=url,
                            params=params,
                            values={"value": "%.1f" % rating})
@@ -206,6 +205,14 @@ def create_list(list_name):
     if results:
         utils.notify(addon.NAME, results["status_message"])
     return results["list_id"]
+
+
+def remove_list_dialog(self, account_lists):
+    index = selectdialog.open(header=addon.LANG(32138),
+                              listitems=account_lists)
+    if index >= 0:
+        remove_list(account_lists[index]["id"])
+        return True
 
 
 def remove_list(list_id):
@@ -842,7 +849,6 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
     tvshow = VideoItem(label=info.get('name'),
                        path=PLUGIN_BASE + 'extendedtvinfo&&id=%s' % tmdb_id)
     tvshow.set_infos({'title': info.get('name'),
-                      'tvshowtitle': info.get('name'),
                       'originaltitle': info.get('original_name', ""),
                       'duration': duration,
                       'mpaa': mpaa,
