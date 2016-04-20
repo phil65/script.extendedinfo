@@ -198,10 +198,9 @@ class WindowManager(object):
                 name = names[0]
             self.show_busy()
             actor_info = TheMovieDB.get_person_info(name)
-            if actor_info:
-                actor_id = actor_info["id"]
-            else:
+            if not actor_info:
                 return None
+            actor_id = actor_info["id"]
         else:
             self.show_busy()
         actor_class = DialogActorInfo.get_window(windows.DialogXML)

@@ -599,8 +599,7 @@ def get_person_info(person_label, skip_dialog=False):
     if len(people) > 1 and not skip_dialog:
         index = selectdialog.open(header=addon.LANG(32151),
                                   listitems=handle_people(people))
-        if index >= 0:
-            return people[index]
+        return people[index] if index > -1 else False
     elif people:
         return people[0]
     elif response["results"]:
