@@ -146,13 +146,12 @@ def get_window(window_type):
                 listname = xbmcgui.Dialog().input(heading=addon.LANG(32137),
                                                   type=xbmcgui.INPUT_ALPHANUM)
                 if listname:
-                    list_id = tmdb.create_list(listname)
                     xbmc.sleep(1000)
-                    tmdb.change_list_status(list_id=list_id,
+                    tmdb.change_list_status(list_id=tmdb.create_list(listname),
                                             movie_id=movie_id,
                                             status=True)
             elif index == len(listitems) - 1:
-                tmdb.remove_list_dialog(account_lists)
+                tmdb.remove_list_dialog(tmdb.handle_lists(account_lists))
             elif index > 0:
                 tmdb.change_list_status(list_id=account_lists[index - 1]["id"],
                                         movie_id=movie_id,
