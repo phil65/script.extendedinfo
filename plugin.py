@@ -4,13 +4,16 @@
 # This program is Free Software see LICENSE file for details
 
 import sys
-import xbmc
+import os
+
 import xbmcplugin
 import xbmcgui
-import routing
-import os
+
 from resources.lib import process
+
 from kodi65 import addon
+from kodi65 import utils
+import routing
 
 MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
 RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")
@@ -22,7 +25,7 @@ plugin = routing.Plugin()
 class Main:
 
     def __init__(self):
-        xbmc.log("version %s started" % addon.VERSION)
+        utils.log("version %s started" % addon.VERSION)
         addon.set_global("extendedinfo_running", "true")
         self._parse_argv()
         for info in self.infos:
@@ -138,7 +141,6 @@ def trakt():
 
 @plugin.route('/')
 def root():
-    # xbmcplugin.setContent(plugin.handle, 'files')
     items = [
         (plugin.url_for(trakt), xbmcgui.ListItem(label="Trakt",
                                                  thumbnailImage=TRAKT_IMAGE), True),
@@ -153,4 +155,4 @@ def root():
 
 if (__name__ == "__main__"):
     Main()
-xbmc.log('finished')
+utils.log('finished')
