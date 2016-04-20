@@ -54,7 +54,7 @@
 					<animation effect="fade" time="320" delay="200">Visible</animation>
 					<animation effect="fade" time="200">Hidden</animation>
 					<texture colordiffuse="FF12B2E7" border="40">buttons/button-fo.png</texture>
-					<animation effect="slide" end="0,420" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
+					<animation effect="slide" end="0,425" time="300" tween="cubic" easing="inout" condition="Container(500).Row(1)">Conditional</animation>
 					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,3)">Conditional</animation>
 					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,2)">Conditional</animation>
 					<animation effect="slide" end="350,0" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(500).Column,1)">Conditional</animation>
@@ -122,7 +122,7 @@
 					<height>300</height>
 					<label>[B]$INFO[ListItem.Year][CR][CR][CR]$INFO[ListItem.Genre][/B]</label>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFDDDDDD</textcolor>
 				</control>
 				<control type="image">
 					<left>40</left>
@@ -141,7 +141,7 @@
 					<label fallback="416">$INFO[ListItem.Plot,,[CR][CR]  ]</label>
 					<autoscroll delay="10000" time="1600" repeat="10000">true</autoscroll>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFDDDDDD</textcolor>
 				</control>
 				<control type="image">
 					<left>1320</left>
@@ -291,23 +291,15 @@
 						<top>150</top>
 						<left>80</left>
 						<control type="image">
-							<left>11</left>
-							<top>30</top>
-							<width>193</width>
-							<height>290</height>
-							<aspectratio scalediffuse="false">scale</aspectratio>
-							<texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-							<fadetime>200</fadetime>
-						</control>
-						<control type="image">
-							<left>-8.5</left>
-							<top>10.5</top>
-							<width>232</width>
-							<height>328</height>
-							<aspectratio scalediffuse="false">stretch</aspectratio>
-							<texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
-							<bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
-							<bordersize>19.5</bordersize>
+							<left>-15</left>
+							<top>0</top>
+							<width>250</width>
+							<height>350</height>
+							<bordertexture border="20">overlays/shadow.png</bordertexture>
+							<bordersize>20</bordersize>
+							<aspectratio>keep</aspectratio>
+							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+							<fadetime>0</fadetime>
 						</control>
 						<control type="image">
 							<width>55</width>
@@ -321,7 +313,7 @@
 							<left>0</left>
 							<width>228</width>
 							<height>67</height>
-							<top>320</top>
+							<top>340</top>
 							<textcolor>A0FFFFFF</textcolor>
 							<align>center</align>
 							<font>font12</font>
@@ -354,28 +346,20 @@
 					<control type="group">
 						<top>150</top>
 						<left>80</left>
-						<animation effect="zoom" center="176,340" start="100" end="127" time="280" tween="back" reversible="false">Focus</animation>
-						<animation effect="zoom" center="176,340" start="127" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
+						<animation effect="zoom" center="176,340" start="100" end="115" time="280" tween="back" reversible="false">Focus</animation>
+						<animation effect="zoom" center="176,340" start="115" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
 						<control type="image">
-							<left>11</left>
-							<top>30</top>
-							<width>193</width>
-							<height>290</height>
-							<aspectratio scalediffuse="false">scale</aspectratio>
-							<texture diffuse="thumbs/movieposter_mask.png" background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+							<left>-15</left>
+							<top>0</top>
+							<width>250</width>
+							<height>350</height>
+							<bordertexture border="20">overlays/shadow.png</bordertexture>
+							<bordersize>20</bordersize>
+							<aspectratio>keep</aspectratio>
+							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
 							<fadetime>0</fadetime>
 						</control>
-						<control type="image">
-							<left>-8.5</left>
-							<top>10.5</top>
-							<width>232</width>
-							<height>328</height>
-							<aspectratio scalediffuse="false">stretch</aspectratio>
-							<texture diffuse="thumbs/movieposter_mask.png">thumbs/thumb_glass_noreflect.png</texture>
-							<bordertexture border="19.5">thumbs/poster_shadow.png</bordertexture>
-							<bordersize>19.5</bordersize>
-							<fadetime>0</fadetime>
-						</control>
+
 						<control type="image">
 							<width>55</width>
 							<height>55</height>
@@ -410,17 +394,17 @@
 						<left>80</left>
 						<width>228</width>
 						<height>67</height>
-						<top>470</top>
+						<top>490</top>
 						<textcolor>FFFAFAFA</textcolor>
 						<align>center</align>
 						<font>font12</font>
 						<label>$INFO[ListItem.Label]</label>
 						<animation type="Focus" reversible="false">
-							<effect type="slide" start="0,0" end="0,50" time="280" tween="back" reversible="false"/>
+							<effect type="slide" start="0,0" end="0,30" time="280" tween="back" reversible="false"/>
 							<effect type="fade" start="62" end="100" time="280" />
 						</animation>
 						<animation type="UnFocus" reversible="false">
-							<effect type="slide"  start="0,50" end="0" time="200" tween="cubic" reversible="false"/>
+							<effect type="slide"  start="0,30" end="0" time="200" tween="cubic" reversible="false"/>
 							<effect type="fade" start="100" end="62" time="280" />
 						</animation>
 					</control>
@@ -532,7 +516,7 @@
 					<width>1900</width>
 					<align>right</align>
 					<textcolor>FFFAFAFA</textcolor>
-					<label>$INFO[Window.Property(TotalItems),[COLOR FF999999]$ADDON[script.extendedinfo 32124]:[/COLOR] ]$INFO[Window.Property(CurrentPage),[COLOR FF999999] - $ADDON[script.extendedinfo 32125]: [/COLOR]]$INFO[Window.Property(TotalPages), / ]</label>
+					<label>$INFO[Window.Property(TotalItems),[COLOR FFBBBBBB]$ADDON[script.extendedinfo 32124]:[/COLOR] ]$INFO[Window.Property(CurrentPage),[COLOR FFBBBBBB] - $ADDON[script.extendedinfo 32125]: [/COLOR]]$INFO[Window.Property(TotalPages), / ]</label>
 				</control>
 				<control type="label">
 					<left>470</left>
@@ -575,7 +559,7 @@
 				<texturefocus border="23" colordiffuse="FF12B2E7">buttons/button-fo.png</texturefocus>
 				<texturenofocus border="23">buttons/button-nofo.png</texturenofocus>
 				<font>font13</font>
-				<textcolor>FF999999</textcolor>
+				<textcolor>FFBBBBBB</textcolor>
 				<ondown>SetFocus(7000)</ondown>
 				<onright>50</onright>
 				<onleft>6001</onleft>
@@ -596,7 +580,7 @@
 				<texturefocus border="23" colordiffuse="FF12B2E7">buttons/button-fo.png</texturefocus>
 				<texturenofocus border="23">buttons/button-nofo.png</texturenofocus>
 				<font>font13</font>
-				<textcolor>FF999999</textcolor>
+				<textcolor>FFBBBBBB</textcolor>
 				<ondown>SetFocus(7000)</ondown>
 				<onright>6000</onright>
 				<onleft>500</onleft>
@@ -614,9 +598,9 @@
 			</control>
 			<control type="button" id="7000">
 				<left>0</left>
-				<top>135</top>
+				<top>155</top>
 				<width>420</width>
-				<height>110</height>
+				<height>90</height>
 				<align>left</align>
 				<aligny>center</aligny>
 				<ondown>9000</ondown>
@@ -628,7 +612,7 @@
 				<font>font13</font>
 				<textwidth>315</textwidth>
 				<label>$ADDON[script.extendedinfo 32024]</label>
-				<textcolor>FF999999</textcolor>
+				<textcolor>FFBBBBBB</textcolor>
 				<focusedcolor>FFFAFAFA</focusedcolor>
 				<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 				<texturenofocus border="20">lists/separator.png</texturenofocus>
@@ -658,7 +642,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5001">
@@ -675,7 +659,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5004">
@@ -691,7 +675,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="label" id="5333">
@@ -715,7 +699,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5003">
@@ -729,7 +713,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5006">
@@ -743,7 +727,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5008">
@@ -757,7 +741,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5009">
@@ -771,7 +755,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5010">
@@ -785,7 +769,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5012">
@@ -799,7 +783,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 				<control type="button" id="5005">
@@ -813,7 +797,7 @@
 					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 					<texturenofocus border="20">lists/separator.png</texturenofocus>
 					<font>font12</font>
-					<textcolor>FF999999</textcolor>
+					<textcolor>FFBBBBBB</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
 			</control>
