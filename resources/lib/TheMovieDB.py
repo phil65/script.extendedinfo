@@ -207,7 +207,7 @@ def create_list(list_name):
     return results["list_id"]
 
 
-def remove_list_dialog(self, account_lists):
+def remove_list_dialog(account_lists):
     index = selectdialog.open(header=addon.LANG(32138),
                               listitems=account_lists)
     if index >= 0:
