@@ -144,9 +144,7 @@ def set_rating(media_type, media_id, rating, dbid=None):
     rating: ratung value (0.5-10.0, 0.5 steps)
     dbid: dbid for syncing userrating of db item
     '''
-    if not media_type or not media_id:
-        return False
-    if rating == -1:
+    if not media_type or not media_id or rating == -1:
         return False
     if dbid:
         kodijson.set_userrating(media_type, dbid, round((rating + 1) / 2))
