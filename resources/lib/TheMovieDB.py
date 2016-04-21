@@ -59,6 +59,7 @@ class LoginProvider(object):
 
     def __init__(self, *args, **kwargs):
         self.session_id = None
+        self.logged_in = False
         self.request_token = None
         self.account_id = None
         self.username = kwargs.get("username")
@@ -99,14 +100,14 @@ class LoginProvider(object):
         '''
         returns session id for TMDB Account
         '''
-        if self.session_id:
+        if self.session_id and not cache_days == 0:
             return self.session_id
         self.request_token = self.auth_request_token(cache_days=cache_days)
         self.session_id = self.start_new_session(cache_days=cache_days)
         if self.session_id:
             return self.session_id
         self.session_id = self.start_new_session(cache_days=0)
-        utils.notify("login failed")
+        utils.notify("login failed", str(self.session_id))
         return None
 
     def start_new_session(self, cache_days=0):
@@ -124,7 +125,7 @@ class LoginProvider(object):
         if self.request_token:
             return self.request_token
         response = get_data(url="authentication/token/new",
-                            cache_days=999999)
+                            cache_days=cache_days)
         self.request_token = response["request_token"]
         params = {"request_token": self.request_token,
                   "username": self.username,
