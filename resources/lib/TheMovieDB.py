@@ -305,7 +305,7 @@ def handle_movies(results, local_first=True, sortkey="year"):
                         'userrating': movie.get('rating'),
                         'premiered': release_date})
         item.set_properties({'id': movie.get("id"),
-                             'popularity': movie.get('popularity'),
+                             'popularity': round(movie['popularity'], 1) if movie.get('popularity') else "",
                              'credit_id': movie.get('credit_id'),
                              'character': movie.get('character'),
                              'job': movie.get('job'),
@@ -351,7 +351,7 @@ def handle_tvshows(results, local_first=True, sortkey="year"):
                          'premiered': tv.get('first_air_date')})
         newtv.set_properties({'id': tmdb_id,
                               'character': tv.get('character'),
-                              'popularity': tv.get('popularity'),
+                              'popularity': round(tv['popularity'], 1) if tv.get('popularity') else "",
                               'credit_id': tv.get('credit_id'),
                               'totalepisodes': tv.get('number_of_episodes'),
                               'totalseasons': tv.get('number_of_seasons')})
@@ -775,7 +775,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
                      'studio': " / ".join(studio),
                      'status': translate_status(info.get('status'))})
     movie.set_properties({'adult': str(info.get('adult')),
-                          'popularity': info.get('popularity'),
+                          'popularity': round(info['popularity'], 1) if info.get('popularity') else "",
                           'set': movie_set.get("name") if movie_set else "",
                           'set_id': movie_set.get("id") if movie_set else "",
                           'id': info.get('id'),
@@ -862,7 +862,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
                       'Status': translate_status(info.get('status'))})
     tvshow.set_properties({'credit_id': info.get('credit_id'),
                            'id': tmdb_id,
-                           'popularity': info.get('popularity'),
+                           'popularity': round(info['popularity'], 1) if info.get('popularity') else "",
                            'showtype': info.get('type'),
                            'homepage': info.get('homepage'),
                            'last_air_date': info.get('last_air_date'),
@@ -1131,8 +1131,7 @@ def get_similar_movies(movie_id):
     response = get_movie(movie_id)
     if not response.get("similar"):
         return []
-    itemlist = handle_movies(response["similar"]["results"])
-    return itemlist
+    return handle_movies(response["similar"]["results"])
 
 
 def get_similar_tvshows(tvshow_id):
