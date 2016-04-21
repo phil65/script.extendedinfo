@@ -170,7 +170,7 @@ def start_info_actions(info, params):
                 return None
             for item in movies:
                 del item["credit_id"]
-            return utils.reduce_list(movies, key="department")
+            return movies.reduce(key="department")
     elif info == 'traktsimilarmovies':
         if params.get("id") or params.get("dbid"):
             if params.get("dbid"):

@@ -792,7 +792,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_days=14):
                  "lists": sort_lists(handle_lists(info["lists"]["results"])),
                  "studios": handle_text(info["production_companies"]),
                  "releases": releases,
-                 "crew": utils.reduce_list(handle_people(info["credits"]["crew"])),
+                 "crew": handle_people(info["credits"]["crew"]).reduce(),
                  "genres": handle_text(info["genres"]),
                  "keywords": handle_text(info["keywords"]["keywords"]),
                  "reviews": handle_reviews(info["reviews"]["results"]),
@@ -970,10 +970,10 @@ def extended_actor_info(actor_id):
     if not data:
         utils.notify("Could not find actor info")
         return None
-    lists = {"movie_roles": utils.reduce_list(handle_movies(data["movie_credits"]["cast"]), "character"),
-             "tvshow_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["cast"]), "character"),
-             "movie_crew_roles": utils.reduce_list(handle_movies(data["movie_credits"]["crew"])),
-             "tvshow_crew_roles": utils.reduce_list(handle_tvshows(data["tv_credits"]["crew"])),
+    lists = {"movie_roles": handle_movies(data["movie_credits"]["cast"]).reduce("character"),
+             "tvshow_roles": handle_tvshows(data["tv_credits"]["cast"]).reduce("character"),
+             "movie_crew_roles": handle_movies(data["movie_credits"]["crew"]).reduce(),
+             "tvshow_crew_roles": handle_tvshows(data["tv_credits"]["crew"]).reduce(),
              "tagged_images": handle_images(data["tagged_images"]["results"]) if "tagged_images" in data else [],
              "images": handle_images(data["images"]["profiles"])}
     info = VideoItem(label=data['name'],
