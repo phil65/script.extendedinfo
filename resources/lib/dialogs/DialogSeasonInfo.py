@@ -8,6 +8,7 @@ from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
 from kodi65 import utils
+from kodi65 import addon
 from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
@@ -44,5 +45,8 @@ def get_window(window_type):
         def onClick(self, control_id):
             super(DialogSeasonInfo, self).onClick(control_id)
             ch.serve(control_id, self)
+
+        def get_manage_options(self):
+            return [(addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)")]
 
     return DialogSeasonInfo

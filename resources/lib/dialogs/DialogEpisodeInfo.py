@@ -11,6 +11,7 @@ from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
 from kodi65 import utils
+from kodi65 import addon
 from kodi65.actionhandler import ActionHandler
 
 ID_BUTTON_RATED = 6006
@@ -68,5 +69,8 @@ def get_window(window_type):
                                                             episode=self.info.get_info("episode"),
                                                             cache_days=0)
             super(DialogEpisodeInfo, self).update_states()
+
+        def get_manage_options(self):
+            return [(addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)")]
 
     return DialogEpisodeInfo

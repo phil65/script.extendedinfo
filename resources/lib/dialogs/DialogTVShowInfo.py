@@ -73,6 +73,11 @@ def get_window(window_type):
             super(DialogTVShowInfo, self).onClick(control_id)
             ch.serve(control_id, self)
 
+        def set_buttons(self):
+            self.set_visible(ID_BUTTON_BROWSE, self.get_info("dbid"))
+            self.set_visible(ID_BUTTON_OPENLIST, self.logged_in)
+            self.set_visible(ID_BUTTON_RATED, True)
+
         @ch.click(ID_BUTTON_BROWSE)
         def browse_tvshow(self, control_id):
             self.close()
@@ -121,14 +126,14 @@ def get_window(window_type):
             title = self.info.get_info("tvshowtitle")
             dbid = self.info.get_info("dbid")
             if dbid:
-                call = "RunScript(script.artwork.downloader,mediatype=tv,%s)"
-                options += [[addon.LANG(413), call % ("mode=gui,dbid=" + dbid)],
-                            [addon.LANG(14061), call % ("dbid=" + dbid)],
-                            [addon.LANG(32101), call % ("mode=custom,dbid=" + dbid + ",extrathumbs")],
-                            [addon.LANG(32100), call % ("mode=custom,dbid=" + dbid)]]
+                call = "RunScript(script.artwork.downloader,mediatype=tv,dbid={}%s)".format(dbid)
+                options += [(addon.LANG(413), call % (",mode=gui")),
+                            (addon.LANG(14061), call % ("")),
+                            (addon.LANG(32101), call % (",mode=custom,extrathumbs")),
+                            (addon.LANG(32100), call % (",mode=custom"))]
             else:
-                options += [[addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
-            options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
+                options += [(addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title)]
+            options.append((addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"))
             return options
 
         @ch.click(ID_BUTTON_OPENLIST)
