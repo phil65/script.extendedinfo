@@ -166,6 +166,8 @@ def start_info_actions(info, params):
                                       skip_dialog=True)
         if person and person.get("id"):
             movies = tmdb.get_person_movies(person["id"])
+            if not movies:
+                return None
             for item in movies:
                 del item["credit_id"]
             return utils.reduce_list(movies, key="department")
