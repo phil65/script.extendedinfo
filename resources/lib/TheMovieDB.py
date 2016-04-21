@@ -1123,7 +1123,7 @@ def get_similar_movies(movie_id):
     get dict list containing movies similar to *movie_id
     '''
     response = get_movie(movie_id)
-    if not response.get("similar"):
+    if not response or not response.get("similar"):
         return []
     return handle_movies(response["similar"]["results"])
 
