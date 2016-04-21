@@ -222,7 +222,7 @@ def get_window(window_type):
 
         def get_manage_options(self):
             options = []
-            movie_id = str(self.info.get_info("dbid"))
+            movie_id = self.info.get_info("dbid")
             imdb_id = self.info.get_property("imdb_id")
             if movie_id:
                 call = "RunScript(script.artwork.downloader,mediatype=movie,dbid={}%s)".format(movie_id)
