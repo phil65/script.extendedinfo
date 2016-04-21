@@ -31,7 +31,7 @@ class Main:
         for info in self.infos:
             listitems = process.start_info_actions(info, self.params)
             if listitems:
-                listitems.set_plugin_list()
+                listitems.set_plugin_list(plugin.handle)
             break
         else:
             plugin.run()
