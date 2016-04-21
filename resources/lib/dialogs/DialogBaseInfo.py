@@ -232,8 +232,7 @@ class DialogBaseInfo(object):
         if onback:
             xbmc.executebuiltin(onback)
         else:
-            self.close()
-            wm.pop_stack()
+            self.exit()
 
     @ch.action("previousmenu", "*")
     def exit_script(self, control_id):

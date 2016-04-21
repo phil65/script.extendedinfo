@@ -6,13 +6,11 @@
 import xbmc
 import xbmcgui
 
-from resources.lib.WindowManager import wm
-
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import confirmdialog
-from T9Search import T9Search
 from kodi65.actionhandler import ActionHandler
+from T9Search import T9Search
 
 ch = ActionHandler()
 
@@ -66,8 +64,7 @@ class DialogBaseList(object):
         if onback:
             xbmc.executebuiltin(onback)
         else:
-            self.close()
-            wm.pop_stack()
+            self.exit()
 
     @ch.action("previousmenu", "*")
     def exit_script(self, control_id):

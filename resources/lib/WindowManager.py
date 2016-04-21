@@ -259,6 +259,8 @@ class WindowManager(object):
         check_version()
         self.active_dialog = dialog
         dialog.doModal()
+        if not dialog.cancelled:
+            self.pop_stack()
 
     def play_youtube_video(self, youtube_id="", listitem=None):
         """
