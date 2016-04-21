@@ -231,8 +231,8 @@ def get_window(window_type):
                             (addon.LANG(32101), call % ",mode=custom,extrathumbs"),
                             (addon.LANG(32100), call % ",mode=custom")]
             else:
-                options += [(addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=" + imdb_id + ")||Notification(script.extendedinfo,%s))" % addon.LANG(32059)),
-                            (addon.LANG(32170), "RunPlugin(plugin://plugin.video.trakt_list_manager/watchlist/movies/add?imdb_id=" + imdb_id + ")")]
+                options += [(addon.LANG(32165), "RunPlugin(plugin://plugin.video.couchpotato_manager/movies/add?imdb_id=%s)" % imdb_id),
+                            (addon.LANG(32170), "RunPlugin(plugin://plugin.video.trakt_list_manager/watchlist/movies/add?imdb_id=%s)" % imdb_id)]
             options.append((addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"))
             return options
 
