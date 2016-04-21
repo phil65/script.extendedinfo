@@ -1200,7 +1200,7 @@ def get_person_movies(person_id):
                         params={"language": addon.setting("LanguageID")},
                         cache_days=14)
     # return handle_movies(response["crew"]) + handle_movies(response["cast"])
-    if "crew" not in response:
+    if not response or "crew" not in response:
         return []
     return handle_movies(response["crew"])
 
