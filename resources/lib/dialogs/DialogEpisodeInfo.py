@@ -66,7 +66,7 @@ def get_window(window_type):
             _, __, self.states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
                                                             season=self.info.get_info("season"),
                                                             episode=self.info.get_info("episode"),
-                                                            cache_time=0)
+                                                            cache_days=0)
             super(DialogEpisodeInfo, self).update_states()
 
     return DialogEpisodeInfo

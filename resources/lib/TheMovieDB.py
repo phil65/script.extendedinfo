@@ -233,7 +233,7 @@ def change_list_status(list_id, movie_id, status):
         utils.notify(addon.NAME, results["status_message"])
 
 
-def get_account_lists(cache_time=0):
+def get_account_lists(cache_days=0):
     '''
     returns movie lists for TMDB user
     '''
@@ -243,7 +243,7 @@ def get_account_lists(cache_time=0):
         return []
     response = get_data(url="account/%s/lists" % (account_id),
                         params={"session_id": session_id},
-                        cache_days=cache_time)
+                        cache_days=cache_days)
     return response["results"]
 
 
@@ -727,21 +727,14 @@ def get_trailer(movie_id):
     return ""
 
 
-def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
+def extended_movie_info(movie_id=None, dbid=None, cache_days=14):
     '''
     get listitem with extended info for movie with *movie_id
     merge in info from *dbid if available
     '''
     if not movie_id:
         return None
-    params = {"append_to_response": ALL_MOVIE_PROPS,
-              "language": addon.setting("LanguageID"),
-              "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
-    if Login.check_login():
-        params["session_id"] = Login.get_session_id()
-    info = get_data(url="movie/%s" % (movie_id),
-                        params=params,
-                        cache_days=cache_time)
+    info = get_movie(movie_id=movie_id, cache_days=cache_days)
     if not info:
         utils.notify("Could not get movie information")
         return {}
@@ -810,7 +803,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_time=14):
     return (movie, listitems, account_states)
 
 
-def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
+def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
     '''
     get listitem with extended info for tvshow with *tvshow_id
     merge in info from *dbid if available
@@ -824,7 +817,7 @@ def extended_tvshow_info(tvshow_id=None, cache_time=7, dbid=None):
         params["session_id"] = Login.get_session_id()
     info = get_data(url="tv/%s" % (tvshow_id),
                     params=params,
-                    cache_days=cache_time)
+                    cache_days=cache_days)
     if not info:
         return False
     account_states = info.get("account_states")
@@ -940,7 +933,7 @@ def extended_season_info(tvshow_id, season_number):
     return (season, listitems)
 
 
-def extended_episode_info(tvshow_id, season, episode, cache_time=7):
+def extended_episode_info(tvshow_id, season, episode, cache_days=7):
     '''
     get listitem with extended info for episode (*tvshow_id, *season, *episode)
     '''
@@ -955,7 +948,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_time=7):
         params["session_id"] = Login.get_session_id()
     response = get_data(url="tv/%s/season/%s/episode/%s" % (tvshow_id, season, episode),
                         params=params,
-                        cache_days=cache_time)
+                        cache_days=cache_days)
     if not response:
         utils.notify("Could not find episode info")
         return None
@@ -1086,13 +1079,13 @@ def get_fav_items(media_type, sort_by=None, page=1):
     return itemlist
 
 
-def get_movies_from_list(list_id, cache_time=5):
+def get_movies_from_list(list_id, cache_days=5):
     '''
     get movie dict list from tmdb list.
     '''
     data = get_data(url="list/%s" % (list_id),
                     params={"language": addon.setting("LanguageID")},
-                    cache_days=cache_time)
+                    cache_days=cache_days)
     return handle_movies(data["items"], False, None) if data else []
 
 
@@ -1114,14 +1107,16 @@ def get_actor_credits(actor_id, media_type):
     return handle_movies(response["cast"])
 
 
-def get_movie(movie_id, light=False):
+def get_movie(movie_id, light=False, cache_days=30):
     params = {"include_image_language": "en,null,%s" % addon.setting("LanguageID"),
               "language": addon.setting("LanguageID"),
               "append_to_response": None if light else ALL_MOVIE_PROPS
               }
+    if Login.check_login():
+        params["session_id"] = Login.get_session_id()
     return get_data(url="movie/%s" % (movie_id),
                     params=params,
-                    cache_days=30)
+                    cache_days=cache_days)
 
 
 def get_similar_movies(movie_id):

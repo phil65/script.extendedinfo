@@ -242,7 +242,7 @@ def get_window(window_type):
             xbmc.sleep(2000)  # delay because MovieDB takes some time to update
             _, __, self.states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
                                                           dbid=self.info.get_info("dbid"),
-                                                          cache_time=0)
+                                                          cache_days=0)
             super(DialogMovieInfo, self).update_states()
 
         @utils.run_async

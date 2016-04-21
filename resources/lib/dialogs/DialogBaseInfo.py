@@ -171,7 +171,7 @@ class DialogBaseInfo(object):
             xbmc.sleep(2000)
             tmdb.extended_movie_info(movie_id=movie_id,
                                      dbid=dbid,
-                                     cache_time=0)
+                                     cache_days=0)
         elif index == 1:
             account_lists = tmdb.get_account_lists()
             if not account_lists:
@@ -221,7 +221,7 @@ class DialogBaseInfo(object):
             xbmc.sleep(2000)
             tmdb.extended_tvshow_info(tvshow_id=tvshow_id,
                                       dbid=dbid,
-                                      cache_time=0)
+                                      cache_days=0)
         if index == 1:
             self.open_credit_dialog(credit_id=credit_id)
 
