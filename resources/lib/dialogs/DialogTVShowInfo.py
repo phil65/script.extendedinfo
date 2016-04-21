@@ -128,8 +128,6 @@ def get_window(window_type):
                             [addon.LANG(32100), call % ("mode=custom,dbid=" + dbid)]]
             else:
                 options += [[addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title]]
-            if xbmc.getCondVisibility("system.hasaddon(script.libraryeditor)") and dbid:
-                options.append([addon.LANG(32103), "RunScript(script.libraryeditor,DBID=" + dbid + ")"])
             options.append([addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"])
             return options
 
