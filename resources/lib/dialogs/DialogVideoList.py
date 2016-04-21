@@ -113,6 +113,8 @@ def get_window(window_type):
             index = xbmcgui.Dialog().contextmenu(list=listitems)
             if index == 0:
                 rating = utils.input_userrating()
+                if rating == -1:
+                    return None
                 if tmdb.set_rating(media_type="tv" if media_type == "tvshow" else "movie",
                                    media_id=item_id,
                                    rating=rating,

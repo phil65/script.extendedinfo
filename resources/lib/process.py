@@ -403,6 +403,8 @@ def start_info_actions(info, params):
         else:
             return False
         rating = utils.input_userrating()
+        if rating == -1:
+            return None
         tmdb.set_rating(media_type=media_type,
                         media_id=tmdb_id,
                         rating=rating,

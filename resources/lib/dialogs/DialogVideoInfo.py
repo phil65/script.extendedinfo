@@ -69,6 +69,8 @@ class DialogVideoInfo(DialogBaseInfo):
     @ch.click(ID_BUTTON_SETRATING)
     def set_rating_dialog(self, control_id):
         rating = utils.input_userrating()
+        if rating == -1:
+            return None
         if tmdb.set_rating(media_type=self.TYPE_ALT,
                            media_id=self.get_identifier(),
                            rating=rating,

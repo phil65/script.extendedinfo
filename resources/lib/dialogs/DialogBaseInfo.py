@@ -162,6 +162,8 @@ class DialogBaseInfo(object):
         index = xbmcgui.Dialog().contextmenu(list=options)
         if index == 0:
             rating = utils.input_userrating()
+            if rating == -1:
+                return None
             tmdb.set_rating(media_type="movie",
                             media_id=movie_id,
                             rating=rating,
@@ -210,6 +212,8 @@ class DialogBaseInfo(object):
         index = xbmcgui.Dialog().contextmenu(list=options)
         if index == 0:
             rating = utils.input_userrating()
+            if rating == -1:
+                return None
             tmdb.set_rating(media_type="tvshow",
                             media_id=tvshow_id,
                             rating=rating,

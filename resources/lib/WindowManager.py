@@ -186,7 +186,7 @@ class WindowManager(object):
         """
         from dialogs import DialogActorInfo
         if not actor_id:
-            name = name.split(" " + addon.LANG(20347) + " ")
+            name = name.split(" %s " % addon.LANG(20347))
             names = name[0].strip().split(" / ")
             if len(names) > 1:
                 ret = xbmcgui.Dialog().select(heading=addon.LANG(32027),
@@ -323,7 +323,7 @@ class SettingsMonitor(xbmc.Monitor):
                                                         password=password)
         if wm.active_dialog:
             wm.active_dialog.close()
-            wm.active_dialog.logged_in = TheMovieDB.Login.check_login(cache_days=0)
+            wm.active_dialog.update_states()
             wm.active_dialog.doModal()
 
 
