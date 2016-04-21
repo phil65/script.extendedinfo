@@ -141,14 +141,13 @@ def set_rating(media_type, media_id, rating, dbid=None):
     '''
     media_type: movie, tv or episode
     media_id: tmdb_id / episode ident array
-    rating: ratung value (0.5-10.0, 0.5 steps)
+    rating: ratung value (1 - 10, 1 steps)
     dbid: dbid for syncing userrating of db item
     '''
     if not media_type or not media_id or rating == -1:
         return False
     if dbid:
-        kodijson.set_userrating(media_type, dbid, round((rating + 1) / 2))
-    rating = float(rating) * 0.5 + 0.5
+        kodijson.set_userrating(media_type, dbid, rating)
     params = {}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
@@ -162,7 +161,7 @@ def set_rating(media_type, media_id, rating, dbid=None):
         url = "%s/%s/rating" % (media_type, media_id)
     results = send_request(url=url,
                            params=params,
-                           values={"value": "%.1f" % rating})
+                           values={"value": "%.1f" % float(rating)})
     if results:
         utils.notify(addon.NAME, results["status_message"])
         return True
