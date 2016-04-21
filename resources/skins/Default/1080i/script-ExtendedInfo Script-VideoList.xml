@@ -120,7 +120,7 @@
 					<left>40</left>
 					<width>395</width>
 					<height>300</height>
-					<label>[B]$INFO[ListItem.Year][CR][CR][CR]$INFO[ListItem.Genre][/B]</label>
+					<label>[B]$INFO[ListItem.Premiered][CR][CR][CR]$INFO[ListItem.Genre][/B]</label>
 					<font>font12</font>
 					<textcolor>FFDDDDDD</textcolor>
 				</control>
