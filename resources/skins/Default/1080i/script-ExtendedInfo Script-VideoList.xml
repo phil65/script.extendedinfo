@@ -162,7 +162,7 @@
 					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
 					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
 				</animation>
-				<width>1536</width>
+				<width>800</width>
 				<height>1080</height>
 				<viewtype label="535">list</viewtype>
 				<pagecontrol>72</pagecontrol>
@@ -173,10 +173,10 @@
 				<onup>700</onup>
 				<ondown>600</ondown>
 				<orientation>vertical</orientation>
-				<itemlayout width="1536" height="161">
+				<itemlayout width="800" height="161">
 					<control type="label">
 						<left>80</left>
-						<width>700</width>
+						<width>690</width>
 						<height>67</height>
 						<top>75</top>
 						<textcolor>FFFAFAFA</textcolor>
@@ -187,7 +187,7 @@
 					</control>
 					<control type="label">
 						<left>80</left>
-						<width>700</width>
+						<width>690</width>
 						<height>67</height>
 						<top>115</top>
 						<textcolor>FFAAAAAA</textcolor>
@@ -217,10 +217,10 @@
 						<visible>!IsEmpty(ListItem.UserRating)</visible>
 					</control>
 				</itemlayout>
-				<focusedlayout width="1536" height="161">
+				<focusedlayout width="800" height="161">
 					<control type="label">
 						<left>80</left>
-						<width>700</width>
+						<width>690</width>
 						<height>67</height>
 						<top>75</top>
 						<textcolor>FFFAFAFA</textcolor>
@@ -231,7 +231,7 @@
 					</control>
 					<control type="label">
 						<left>80</left>
-						<width>700</width>
+						<width>690</width>
 						<height>67</height>
 						<top>115</top>
 						<textcolor>FFFAFAFA</textcolor>
@@ -275,7 +275,7 @@
 					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
 					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
 				</animation>
-				<width>1536</width>
+				<width>800</width>
 				<height>1080</height>
 				<viewtype label="Wall">list</viewtype>
 				<pagecontrol>72</pagecontrol>
