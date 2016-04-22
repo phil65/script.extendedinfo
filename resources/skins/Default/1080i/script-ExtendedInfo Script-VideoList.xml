@@ -84,7 +84,7 @@
 				<texture>moviedb.png</texture>
 				<left>60</left>
 				<top>170</top>
-				<width>420</width>
+				<width>438</width>
 				<height>200</height>
 				<aspectratio align="left">keep</aspectratio>
 				<animation type="WindowOpen" reversible="false">
@@ -544,15 +544,15 @@
 			<animation effect="slide" start="0" end="-460" time="320" tween="cubic">WindowClose</animation>
 			<control type="image">
 				<left>-112</left>
-				<width>600</width>
+				<width>620</width>
 				<height>1080</height>
 				<texture colordiffuse="FF12B2E7">lists/panel.png</texture>
 			</control>
-			<control type="button" id="6000">
+			<control type="radiobutton" id="6000">
 				<label>$LOCALIZE[19140]</label>
-				<left>100</left>
+				<left>110</left>
 				<top>40</top>
-				<width>310</width>
+				<width>330</width>
 				<height>110</height>
 				<textoffsetx>40</textoffsetx>
 				<textoffsety>35</textoffsety>
@@ -565,12 +565,18 @@
 				<textcolor>FFBBBBBB</textcolor>
 				<ondown>SetFocus(7000)</ondown>
 				<onright>50</onright>
+				<radiowidth>46</radiowidth>
+				<radioposx>250</radioposx>
+				<textureradioonnofocus>icons/magnifier.png</textureradioonnofocus>
+				<textureradioonfocus>icons/magnifier.png</textureradioonfocus>
+				<textureradiooffnofocus>icons/magnifier.png</textureradiooffnofocus>
+				<textureradioofffocus>icons/magnifier.png</textureradioofffocus>
 				<onleft>6001</onleft>
 				<focusedcolor>FFFAFAFA</focusedcolor>
 			</control>
 			<control type="button" id="6001">
 				<label>..</label>
-				<left>0</left>
+				<left>20</left>
 				<top>40</top>
 				<width>110</width>
 				<height>110</height>
@@ -589,20 +595,10 @@
 				<onleft>500</onleft>
 				<focusedcolor>FFFAFAFA</focusedcolor>
 			</control>
-			<control type="image">
-				<left>305</left>
-				<top>70</top>
-				<width>45</width>
-				<height>45</height>
-				<align>center</align>
-				<aligny>center</aligny>
-				<aspectratio>keep</aspectratio>
-				<texture colordiffuse="AAFFFFFF">icons/magnifier.png</texture>
-			</control>
 			<control type="button" id="7000">
 				<left>0</left>
 				<top>155</top>
-				<width>420</width>
+				<width>438</width>
 				<height>90</height>
 				<align>left</align>
 				<aligny>center</aligny>
@@ -622,7 +618,7 @@
 			</control>
 			<control type="grouplist" id="9000">
 				<top>250</top>
-				<width>420</width>
+				<width>438</width>
 				<height>830</height>
 				<orientation>vertical</orientation>
 				<scroll>true</scroll>
@@ -636,7 +632,7 @@
 					<label>$LOCALIZE[467]:</label>
 					<!-- 564 -->
 					<label2>[COLOR FFFAFAFA]$INFO[Window.Property(Type)][/COLOR]</label2>
-					<width>420</width>
+					<width>438</width>
 					<height>70</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -652,7 +648,7 @@
 					<onup>6000</onup>
 					<label>$ADDON[script.extendedinfo 32104]</label>
 					<label2>[COLOR FFFAFAFA]$INFO[Window.Property(Sort_Label)][/COLOR]</label2>
-					<width>420</width>
+					<width>438</width>
 					<height>70</height>
 					<textoffsetx>40</textoffsetx>
 					<textoffsety>30</textoffsety>
@@ -668,7 +664,7 @@
 				<control type="button" id="5004">
 					<label>$ADDON[script.extendedinfo 32128]</label>
 					<label2>[COLOR FFFAFAFA]$INFO[Window.Property(Order_Label)][/COLOR]</label2>
-					<width>420</width>
+					<width>438</width>
 					<height>70</height>
 					<textoffsetx>40</textoffsetx>
 					<textoffsety>30</textoffsety>
@@ -683,7 +679,7 @@
 				</control>
 				<control type="label" id="5333">
 					<label>$ADDON[script.extendedinfo 32023]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>75</height>
 					<textoffsetx>25</textoffsetx>
 					<align>left</align>
@@ -693,7 +689,7 @@
 				</control>
 				<control type="button" id="5002">
 					<label>$LOCALIZE[515]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -707,7 +703,7 @@
 				</control>
 				<control type="button" id="5003">
 					<label>$LOCALIZE[172]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -721,7 +717,7 @@
 				</control>
 				<control type="button" id="5006">
 					<label>$ADDON[script.extendedinfo 32127]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -735,7 +731,7 @@
 				</control>
 				<control type="button" id="5008">
 					<label>$ADDON[script.extendedinfo 32126]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -749,7 +745,7 @@
 				</control>
 				<control type="button" id="5009">
 					<label>$ADDON[script.extendedinfo 32114]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -763,7 +759,7 @@
 				</control>
 				<control type="button" id="5010">
 					<label>$LOCALIZE[572]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -777,7 +773,7 @@
 				</control>
 				<control type="button" id="5012">
 					<label>$ADDON[script.extendedinfo 32111]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
@@ -791,7 +787,7 @@
 				</control>
 				<control type="button" id="5005">
 					<label>$ADDON[script.extendedinfo 32022]</label>
-					<width>420</width>
+					<width>438</width>
 					<height>60</height>
 					<textoffsetx>40</textoffsetx>
 					<textwidth>315</textwidth>
