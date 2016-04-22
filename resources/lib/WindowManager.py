@@ -47,7 +47,7 @@ class WindowManager(object):
         self.saved_background = addon.get_global("infobackground")
         self.saved_control = xbmc.getInfoLabel("System.CurrentControlId")
         self.saved_dialogstate = xbmc.getCondVisibility("Window.IsActive(Movieinformation)")
-        self.monitor = SettingsMonitor()
+        # self.monitor = SettingsMonitor()
         self.busy = 0
 
     def add_to_stack(self, window):
@@ -311,22 +311,22 @@ def check_version():
                             line2=addon.LANG(32141))
 
 
-class SettingsMonitor(xbmc.Monitor):
+# class SettingsMonitor(xbmc.Monitor):
 
-    def __init__(self):
-        xbmc.Monitor.__init__(self)
+#     def __init__(self):
+#         xbmc.Monitor.__init__(self)
 
-    def onSettingsChanged(self):
-        addon.reload_addon()
-        username = addon.setting("tmdb_username")
-        password = addon.setting("tmdb_password")
-        if username and password:
-            TheMovieDB.Login = TheMovieDB.LoginProvider(username=username,
-                                                        password=password)
-        if wm.active_dialog:
-            wm.active_dialog.close()
-            wm.active_dialog.update_states()
-            wm.active_dialog.doModal()
+#     def onSettingsChanged(self):
+#         addon.reload_addon()
+#         username = addon.setting("tmdb_username")
+#         password = addon.setting("tmdb_password")
+#         if username and password:
+#             TheMovieDB.Login = TheMovieDB.LoginProvider(username=username,
+#                                                         password=password)
+#         if wm.active_dialog:
+#             wm.active_dialog.close()
+#             wm.active_dialog.update_states()
+#             wm.active_dialog.doModal()
 
 
 wm = WindowManager()

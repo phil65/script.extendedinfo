@@ -46,6 +46,9 @@ class DialogBaseList(object):
 
     def onInit(self):
         super(DialogBaseList, self).onInit()
+        viewtype = addon.setting("viewtype_selection")
+        if viewtype:
+            xbmc.executebuiltin("Container.SetViewMode(%s)" % viewtype)
         self.update_ui()
         if self.total_items > 0:
             self.setFocusId(self.getCurrentContainerId())
@@ -54,6 +57,7 @@ class DialogBaseList(object):
             self.setFocusId(ID_BUTTON_SEARCH)
 
     def close(self):
+        addon.set_setting("viewtype_selection", str(self.getCurrentContainerId()))
         self.last_position = self.getCurrentListPosition()
         super(DialogBaseList, self).close()
 
