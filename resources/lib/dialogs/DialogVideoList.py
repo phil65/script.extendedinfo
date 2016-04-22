@@ -44,10 +44,6 @@ SORTS = {"movie": {"popularity": addon.LANG(32110),
          "list": {"created_at": addon.LANG(32157)},
          "rating": {"created_at": addon.LANG(32157)}}
 
-TRANSLATIONS = {"movie": addon.LANG(20338),
-                "tv": addon.LANG(20364),
-                "person": addon.LANG(32156)}
-
 include_adult = addon.setting("include_adults").lower()
 
 
@@ -66,6 +62,10 @@ def get_window(window_type):
                    "first_air_date": addon.LANG(20416),
                    "primary_release_date": addon.LANG(345),
                    "vote_count": addon.LANG(32111)}
+
+        TRANSLATIONS = {"movie": addon.LANG(20338),
+                        "tv": addon.LANG(20364),
+                        "person": addon.LANG(32156)}
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
@@ -92,7 +92,6 @@ def get_window(window_type):
 
         def update_ui(self):
             super(DialogVideoList, self).update_ui()
-            self.setProperty("Type", TRANSLATIONS[self.type])
             self.getControl(ID_BUTTON_CERTFILTER).setVisible(self.type != "tv")
             self.getControl(ID_BUTTON_ACTORFILTER).setVisible(self.type != "tv")
             self.getControl(ID_BUTTON_KEYWORDFILTER).setVisible(self.type != "tv")

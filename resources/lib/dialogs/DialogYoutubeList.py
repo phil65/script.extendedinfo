@@ -26,10 +26,6 @@ ID_BUTTON_DURATIONFILTER = 5008
 ID_BUTTON_CAPTIONFILTER = 5009
 ID_BUTTON_DEFINITIONFILTER = 5012
 
-TRANSLATIONS = {"video": addon.LANG(157),
-                "playlist": addon.LANG(559),
-                "channel": addon.LANG(19029)}
-
 SORTS = {"video": {"date": addon.LANG(552),
                    "rating": addon.LANG(563),
                    "relevance": addon.LANG(32060),
@@ -62,6 +58,10 @@ def get_window(window_type):
                    "videoDefinition": "Related",
                    "relatedToVideoId": "Related",
                    "channelId": addon.LANG(32111)}
+
+        TRANSLATIONS = {"video": addon.LANG(157),
+                        "playlist": addon.LANG(559),
+                        "channel": addon.LANG(19029)}
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
@@ -180,7 +180,6 @@ def get_window(window_type):
             self.reset()
 
         def update_ui(self):
-            self.setProperty("Type", TRANSLATIONS[self.type])
             self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
             self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
             self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(self.type == "video")

@@ -165,6 +165,7 @@ class DialogBaseList(object):
         self.setProperty("ArrowDown", "True" if self.page != self.total_pages else "")
         self.setProperty("ArrowUp", "True" if self.page > 1 else "")
         self.setProperty("Order_Label", addon.LANG(584) if self.order == "asc" else addon.LANG(585))
+        self.setProperty("Type", self.TRANSLATIONS[self.type])
 
     def reset(self, mode="filter"):
         self.page = 1
