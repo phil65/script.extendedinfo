@@ -26,24 +26,6 @@ ID_BUTTON_DURATIONFILTER = 5008
 ID_BUTTON_CAPTIONFILTER = 5009
 ID_BUTTON_DEFINITIONFILTER = 5012
 
-SORTS = {"video": {"date": addon.LANG(552),
-                   "rating": addon.LANG(563),
-                   "relevance": addon.LANG(32060),
-                   "title": addon.LANG(369),
-                   "viewCount": addon.LANG(567)},
-         "playlist": {"date": addon.LANG(552),
-                      "rating": addon.LANG(563),
-                      "relevance": addon.LANG(32060),
-                      "title": addon.LANG(369),
-                      "videoCount": addon.LANG(32068),
-                      "viewCount": addon.LANG(567)},
-         "channel": {"date": addon.LANG(552),
-                     "rating": addon.LANG(563),
-                     "relevance": addon.LANG(32060),
-                     "title": addon.LANG(369),
-                     "videoCount": addon.LANG(32068),
-                     "viewCount": addon.LANG(567)}}
-
 
 def get_window(window_type):
 
@@ -62,6 +44,24 @@ def get_window(window_type):
         TRANSLATIONS = {"video": addon.LANG(157),
                         "playlist": addon.LANG(559),
                         "channel": addon.LANG(19029)}
+
+        SORTS = {"video": {"date": addon.LANG(552),
+                           "rating": addon.LANG(563),
+                           "relevance": addon.LANG(32060),
+                           "title": addon.LANG(369),
+                           "viewCount": addon.LANG(567)},
+                 "playlist": {"date": addon.LANG(552),
+                              "rating": addon.LANG(563),
+                              "relevance": addon.LANG(32060),
+                              "title": addon.LANG(369),
+                              "videoCount": addon.LANG(32068),
+                              "viewCount": addon.LANG(567)},
+                 "channel": {"date": addon.LANG(552),
+                             "rating": addon.LANG(563),
+                             "relevance": addon.LANG(32060),
+                             "title": addon.LANG(369),
+                             "videoCount": addon.LANG(32068),
+                             "viewCount": addon.LANG(567)}}
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
@@ -174,7 +174,7 @@ def get_window(window_type):
                      "channel": "video"}
             if self.type in types:
                 self.type = types[self.type]
-            if self.sort not in SORTS[self.type].keys():
+            if self.sort not in self.SORTS[self.type].keys():
                 self.sort = "relevance"
                 self.sort_label = addon.LANG(32060)
             self.reset()
@@ -188,14 +188,8 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
-            listitems = [key for key in SORTS[self.type].values()]
-            sort_strings = [value for value in SORTS[self.type].keys()]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
-                                            list=listitems)
-            if index == -1:
+            if not self.choose_sort_method(self.type):
                 return None
-            self.sort = sort_strings[index]
-            self.sort_label = listitems[index]
             self.update()
 
         @ch.context("video")

@@ -29,21 +29,6 @@ ID_BUTTON_ACCOUNT = 7000
 
 ch = ActionHandler()
 
-SORTS = {"movie": {"popularity": addon.LANG(32110),
-                   "release_date": addon.LANG(172),
-                   "revenue": addon.LANG(32108),
-                   # "Release Date": "primary_release_date",
-                   "original_title": addon.LANG(20376),
-                   "vote_average": addon.LANG(32112),
-                   "vote_count": addon.LANG(32111)},
-         "tv": {"popularity": addon.LANG(32110),
-                "first_air_date": addon.LANG(20416),
-                "vote_average": addon.LANG(32112),
-                "vote_count": addon.LANG(32111)},
-         "favorites": {"created_at": addon.LANG(32157)},
-         "list": {"created_at": addon.LANG(32157)},
-         "rating": {"created_at": addon.LANG(32157)}}
-
 include_adult = addon.setting("include_adults").lower()
 
 
@@ -66,6 +51,21 @@ def get_window(window_type):
         TRANSLATIONS = {"movie": addon.LANG(20338),
                         "tv": addon.LANG(20364),
                         "person": addon.LANG(32156)}
+
+        SORTS = {"movie": {"popularity": addon.LANG(32110),
+                           "release_date": addon.LANG(172),
+                           "revenue": addon.LANG(32108),
+                           # "Release Date": "primary_release_date",
+                           "original_title": addon.LANG(20376),
+                           "vote_average": addon.LANG(32112),
+                           "vote_count": addon.LANG(32111)},
+                 "tv": {"popularity": addon.LANG(32110),
+                        "first_air_date": addon.LANG(20416),
+                        "vote_average": addon.LANG(32112),
+                        "vote_count": addon.LANG(32111)},
+                 "favorites": {"created_at": addon.LANG(32157)},
+                 "list": {"created_at": addon.LANG(32157)},
+                 "rating": {"created_at": addon.LANG(32157)}}
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
@@ -161,14 +161,8 @@ def get_window(window_type):
         @ch.click(ID_BUTTON_SORT)
         def get_sort_type(self, control_id):
             sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
-            listitems = SORTS[sort_key].values()
-            sort_strings = SORTS[sort_key].keys()
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
-                                            list=listitems)
-            if index == -1:
+            if not self.choose_sort_method(sort_key):
                 return None
-            self.sort = sort_strings[index]
-            self.sort_label = listitems[index]
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",

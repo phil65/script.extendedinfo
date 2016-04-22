@@ -197,6 +197,18 @@ class DialogBaseList(object):
         self.update_content(force_update=force_update)
         self.update_ui()
 
+    def choose_sort_method(self, sort_key):
+        listitems = self.SORTS[sort_key].values()
+        sort_strings = self.SORTS[sort_key].keys()
+        index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
+                                        list=listitems,
+                                        preselect=listitems.index(self.sort_label))
+        if index == -1 or listitems[index] == self.sort_label:
+            return False
+        self.sort = sort_strings[index]
+        self.sort_label = listitems[index]
+        return True
+
     def add_filter(self, key, value, label, typelabel="", force_overwrite=False, reset=True):
         if not value:
             return False
