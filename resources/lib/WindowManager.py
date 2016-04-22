@@ -286,7 +286,7 @@ def check_version():
     check version, open TextViewer if update detected
     """
     if not addon.setting("changelog_version") == addon.VERSION:
-        text = utils.read_from_file(os.path.join(addon.PATH, "changelog.txt"), True)
+        text = utils.read_from_file(addon.CHANGELOG, True)
         xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
                                     text=text)
         addon.set_setting("changelog_version", addon.VERSION)
