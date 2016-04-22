@@ -155,259 +155,263 @@
 					<visible>Control.IsVisible(50)</visible>
 				</control>
 			</control>
-			<control type="panel" id="50">
-				<left>440</left>
-				<top>0</top>
+			<control type="group">
 				<animation type="WindowOpen" reversible="false">
 					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
 					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
 				</animation>
-				<width>800</width>
-				<height>1080</height>
-				<viewtype label="535">list</viewtype>
-				<pagecontrol>72</pagecontrol>
-				<preloaditems>2</preloaditems>
-				<scrolltime tween="quadratic">300</scrolltime>
-				<onleft>9000</onleft>
-				<onright>72</onright>
-				<onup>700</onup>
-				<ondown>600</ondown>
-				<orientation>vertical</orientation>
-				<itemlayout width="800" height="161">
-					<control type="label">
-						<left>80</left>
-						<width>690</width>
-						<height>67</height>
-						<top>75</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font13</font>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<left>80</left>
-						<width>690</width>
-						<height>67</height>
-						<top>115</top>
-						<textcolor>FFAAAAAA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font12</font>
-						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
-					</control>
-					<control type="image">
-						<width>30</width>
-						<height>30</height>
-						<top>120</top>
-						<left>758</left>
-						<texture>icons/database.png</texture>
-						<visible>!IsEmpty(ListItem.DBID)</visible>
-					</control>
-					<control type="label">
-						<width>46</width>
-						<height>40</height>
-						<top>76</top>
-						<align>center</align>
-						<aligny>center</aligny>
-						<left>750</left>
-						<font>font10</font>
-						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.UserRating)</visible>
-					</control>
-				</itemlayout>
-				<focusedlayout width="800" height="161">
-					<control type="label">
-						<left>80</left>
-						<width>690</width>
-						<height>67</height>
-						<top>75</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font13</font>
-						<label>$INFO[ListItem.Label]</label>
-					</control>
-					<control type="label">
-						<left>80</left>
-						<width>690</width>
-						<height>67</height>
-						<top>115</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<animation type="Focus" reversible="false">
-							<effect type="fade" start="62" end="100" time="280" />
-						</animation>
-						<animation type="UnFocus" reversible="false">
-							<effect type="fade" start="100" end="62" time="280" />
-						</animation>
-						<align>left</align>
-						<aligny>top</aligny>
-						<font>font12</font>
-						<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
-					</control>
-					<control type="image">
-						<width>30</width>
-						<height>30</height>
-						<top>120</top>
-						<left>758</left>
-						<texture>icons/database.png</texture>
-						<visible>!IsEmpty(ListItem.DBID)</visible>
-					</control>
-					<control type="label">
-						<width>46</width>
-						<height>40</height>
-						<top>76</top>
-						<align>center</align>
-						<aligny>center</aligny>
-						<left>750</left>
-						<font>font10</font>
-						<textcolor>FFFAFAFA</textcolor>
-						<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
-						<visible>!IsEmpty(ListItem.UserRating)</visible>
-					</control>
-				</focusedlayout>
-			</control>
-			<control type="panel" id="500">
-				<left>440</left>
-				<top>0</top>
-				<animation type="WindowOpen" reversible="false">
-					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
-					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
-				</animation>
-				<width>800</width>
-				<height>1080</height>
-				<viewtype label="Wall">list</viewtype>
-				<pagecontrol>72</pagecontrol>
-				<preloaditems>2</preloaditems>
-				<scrolltime tween="quadratic">300</scrolltime>
-				<onleft>9000</onleft>
-				<onright>72</onright>
-				<onup>700</onup>
-				<ondown>600</ondown>
-				<orientation>vertical</orientation>
-				<itemlayout width="350" height="425">
-					<control type="group">
-						<top>150</top>
-						<left>80</left>
-						<control type="image">
-							<left>-15</left>
-							<top>0</top>
-							<width>250</width>
-							<height>350</height>
-							<bordertexture border="20">overlays/shadow.png</bordertexture>
-							<bordersize>20</bordersize>
-							<aspectratio aligny="top">keep</aspectratio>
-							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-							<fadetime>0</fadetime>
+				<control type="panel" id="50">
+					<left>440</left>
+					<top>0</top>
+					<width>800</width>
+					<height>1080</height>
+					<viewtype label="535">list</viewtype>
+					<pagecontrol>72</pagecontrol>
+					<preloaditems>2</preloaditems>
+					<scrolltime tween="quadratic">300</scrolltime>
+					<onleft>9000</onleft>
+					<onright>72</onright>
+					<onup>700</onup>
+					<ondown>600</ondown>
+					<orientation>vertical</orientation>
+					<itemlayout width="800" height="161">
+						<control type="label">
+							<left>80</left>
+							<width>690</width>
+							<height>67</height>
+							<top>75</top>
+							<textcolor>FFFAFAFA</textcolor>
+							<align>left</align>
+							<aligny>top</aligny>
+							<font>font13</font>
+							<label>$INFO[ListItem.Label]</label>
+						</control>
+						<control type="label">
+							<left>80</left>
+							<width>690</width>
+							<height>67</height>
+							<top>115</top>
+							<textcolor>FFAAAAAA</textcolor>
+							<align>left</align>
+							<aligny>top</aligny>
+							<font>font12</font>
+							<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
 						</control>
 						<control type="image">
-							<width>55</width>
-							<height>55</height>
-							<top>20</top>
-							<left>159</left>
-							<texture>flags/local.png</texture>
+							<width>30</width>
+							<height>30</height>
+							<top>120</top>
+							<left>758</left>
+							<texture>icons/database.png</texture>
 							<visible>!IsEmpty(ListItem.DBID)</visible>
 						</control>
+						<control type="label">
+							<width>46</width>
+							<height>40</height>
+							<top>76</top>
+							<align>center</align>
+							<aligny>center</aligny>
+							<left>750</left>
+							<font>font10</font>
+							<textcolor>FFFAFAFA</textcolor>
+							<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
+						</control>
+					</itemlayout>
+					<focusedlayout width="800" height="161">
+						<control type="label">
+							<left>80</left>
+							<width>690</width>
+							<height>67</height>
+							<top>75</top>
+							<textcolor>FFFAFAFA</textcolor>
+							<align>left</align>
+							<aligny>top</aligny>
+							<font>font13</font>
+							<label>$INFO[ListItem.Label]</label>
+						</control>
+						<control type="label">
+							<left>80</left>
+							<width>690</width>
+							<height>67</height>
+							<top>115</top>
+							<textcolor>FFFAFAFA</textcolor>
+							<animation type="Focus" reversible="false">
+								<effect type="fade" start="62" end="100" time="280" />
+							</animation>
+							<animation type="UnFocus" reversible="false">
+								<effect type="fade" start="100" end="62" time="280" />
+							</animation>
+							<align>left</align>
+							<aligny>top</aligny>
+							<font>font12</font>
+							<label>$INFO[ListItem.Year]$INFO[ListItem.Genre, - ]</label>
+						</control>
+						<control type="image">
+							<width>30</width>
+							<height>30</height>
+							<top>120</top>
+							<left>758</left>
+							<texture>icons/database.png</texture>
+							<visible>!IsEmpty(ListItem.DBID)</visible>
+						</control>
+						<control type="label">
+							<width>46</width>
+							<height>40</height>
+							<top>76</top>
+							<align>center</align>
+							<aligny>center</aligny>
+							<left>750</left>
+							<font>font10</font>
+							<textcolor>FFFAFAFA</textcolor>
+							<label>$INFO[ListItem.UserRating,[B],[/B]]</label>
+							<visible>!IsEmpty(ListItem.UserRating)</visible>
+						</control>
+					</focusedlayout>
+				</control>
+			</control>
+			<control type="group">
+				<animation type="WindowOpen" reversible="false">
+					<effect type="slide" start="1000" end="0" delay="0" center="auto" tween="cubic" time="900" />
+					<effect type="zoom" start="50" end="100" center="960,1080" delay="0" tween="cubic" time="900" />
+				</animation>
+				<control type="panel" id="500">
+					<left>440</left>
+					<top>0</top>
+					<width>800</width>
+					<height>1080</height>
+					<viewtype label="Wall">list</viewtype>
+					<pagecontrol>72</pagecontrol>
+					<preloaditems>2</preloaditems>
+					<scrolltime tween="quadratic">300</scrolltime>
+					<onleft>9000</onleft>
+					<onright>72</onright>
+					<onup>700</onup>
+					<ondown>600</ondown>
+					<orientation>vertical</orientation>
+					<itemlayout width="350" height="425">
+						<control type="group">
+							<top>150</top>
+							<left>80</left>
+							<control type="image">
+								<left>-15</left>
+								<top>0</top>
+								<width>250</width>
+								<height>350</height>
+								<bordertexture border="20">overlays/shadow.png</bordertexture>
+								<bordersize>20</bordersize>
+								<aspectratio aligny="top">keep</aspectratio>
+								<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+								<fadetime>0</fadetime>
+							</control>
+							<control type="image">
+								<width>55</width>
+								<height>55</height>
+								<top>20</top>
+								<left>159</left>
+								<texture>flags/local.png</texture>
+								<visible>!IsEmpty(ListItem.DBID)</visible>
+							</control>
+							<control type="textbox">
+								<left>0</left>
+								<width>228</width>
+								<height>67</height>
+								<top>335</top>
+								<textcolor>A0FFFFFF</textcolor>
+								<align>center</align>
+								<font>font12</font>
+								<label>$INFO[ListItem.Label]</label>
+							</control>
+							<control type="group">
+								<visible>!IsEmpty(ListItem.UserRating)</visible>
+								<control type="image">
+									<width>48</width>
+									<height>48</height>
+									<top>5</top>
+									<left>-10</left>
+									<texture>circle.png</texture>
+								</control>
+								<control type="label">
+									<width>52</width>
+									<height>40</height>
+									<top>8</top>
+									<align>center</align>
+									<aligny>center</aligny>
+									<left>-12</left>
+									<font>font10</font>
+									<textcolor>FF000000</textcolor>
+									<label>$INFO[ListItem.UserRating]</label>
+								</control>
+							</control>
+						</control>
+					</itemlayout>
+					<focusedlayout width="350" height="425">
+						<control type="group">
+							<top>150</top>
+							<left>80</left>
+							<animation effect="zoom" center="176,340" start="100" end="115" time="280" tween="back" reversible="false">Focus</animation>
+							<animation effect="zoom" center="176,340" start="115" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
+							<control type="image">
+								<left>-15</left>
+								<top>0</top>
+								<width>250</width>
+								<height>350</height>
+								<bordertexture border="20">overlays/shadow.png</bordertexture>
+								<bordersize>20</bordersize>
+								<aspectratio aligny="top">keep</aspectratio>
+								<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
+								<fadetime>0</fadetime>
+							</control>
+							<control type="image">
+								<width>55</width>
+								<height>55</height>
+								<top>20</top>
+								<left>159</left>
+								<texture>flags/local.png</texture>
+								<visible>!IsEmpty(ListItem.DBID)</visible>
+							</control>
+							<control type="group">
+								<visible>!IsEmpty(ListItem.UserRating)</visible>
+								<control type="image">
+									<width>48</width>
+									<height>48</height>
+									<top>5</top>
+									<left>-10</left>
+									<texture>circle.png</texture>
+								</control>
+								<control type="label">
+									<width>52</width>
+									<height>40</height>
+									<top>8</top>
+									<align>center</align>
+									<aligny>center</aligny>
+									<left>-12</left>
+									<font>font10</font>
+									<textcolor>FF000000</textcolor>
+									<label>$INFO[ListItem.UserRating]</label>
+								</control>
+							</control>
+						</control>
 						<control type="textbox">
-							<left>0</left>
+							<left>80</left>
 							<width>228</width>
 							<height>67</height>
-							<top>335</top>
-							<textcolor>A0FFFFFF</textcolor>
+							<top>485</top>
+							<textcolor>FFFAFAFA</textcolor>
 							<align>center</align>
 							<font>font12</font>
 							<label>$INFO[ListItem.Label]</label>
+							<animation type="Focus" reversible="false">
+								<effect type="slide" start="0,0" end="0,35" time="280" tween="back" reversible="false"/>
+								<effect type="fade" start="62" end="100" time="280" />
+							</animation>
+							<animation type="UnFocus" reversible="false">
+								<effect type="slide"  start="0,35" end="0" time="200" tween="cubic" reversible="false"/>
+								<effect type="fade" start="100" end="62" time="280" />
+							</animation>
 						</control>
-						<control type="group">
-							<visible>!IsEmpty(ListItem.UserRating)</visible>
-							<control type="image">
-								<width>48</width>
-								<height>48</height>
-								<top>5</top>
-								<left>-10</left>
-								<texture>circle.png</texture>
-							</control>
-							<control type="label">
-								<width>52</width>
-								<height>40</height>
-								<top>8</top>
-								<align>center</align>
-								<aligny>center</aligny>
-								<left>-12</left>
-								<font>font10</font>
-								<textcolor>FF000000</textcolor>
-								<label>$INFO[ListItem.UserRating]</label>
-							</control>
-						</control>
-					</control>
-				</itemlayout>
-				<focusedlayout width="350" height="425">
-					<control type="group">
-						<top>150</top>
-						<left>80</left>
-						<animation effect="zoom" center="176,340" start="100" end="115" time="280" tween="back" reversible="false">Focus</animation>
-						<animation effect="zoom" center="176,340" start="115" end="100" time="200" tween="cubic" reversible="false">UnFocus</animation>
-						<control type="image">
-							<left>-15</left>
-							<top>0</top>
-							<width>250</width>
-							<height>350</height>
-							<bordertexture border="20">overlays/shadow.png</bordertexture>
-							<bordersize>20</bordersize>
-							<aspectratio aligny="top">keep</aspectratio>
-							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
-							<fadetime>0</fadetime>
-						</control>
-						<control type="image">
-							<width>55</width>
-							<height>55</height>
-							<top>20</top>
-							<left>159</left>
-							<texture>flags/local.png</texture>
-							<visible>!IsEmpty(ListItem.DBID)</visible>
-						</control>
-						<control type="group">
-							<visible>!IsEmpty(ListItem.UserRating)</visible>
-							<control type="image">
-								<width>48</width>
-								<height>48</height>
-								<top>5</top>
-								<left>-10</left>
-								<texture>circle.png</texture>
-							</control>
-							<control type="label">
-								<width>52</width>
-								<height>40</height>
-								<top>8</top>
-								<align>center</align>
-								<aligny>center</aligny>
-								<left>-12</left>
-								<font>font10</font>
-								<textcolor>FF000000</textcolor>
-								<label>$INFO[ListItem.UserRating]</label>
-							</control>
-						</control>
-					</control>
-					<control type="textbox">
-						<left>80</left>
-						<width>228</width>
-						<height>67</height>
-						<top>485</top>
-						<textcolor>FFFAFAFA</textcolor>
-						<align>center</align>
-						<font>font12</font>
-						<label>$INFO[ListItem.Label]</label>
-						<animation type="Focus" reversible="false">
-							<effect type="slide" start="0,0" end="0,35" time="280" tween="back" reversible="false"/>
-							<effect type="fade" start="62" end="100" time="280" />
-						</animation>
-						<animation type="UnFocus" reversible="false">
-							<effect type="slide"  start="0,35" end="0" time="200" tween="cubic" reversible="false"/>
-							<effect type="fade" start="100" end="62" time="280" />
-						</animation>
-					</control>
-				</focusedlayout>
+					</focusedlayout>
+				</control>
 			</control>
 			<control type="button" id="600">
 				<onfocus>SetFocus(500)</onfocus>
