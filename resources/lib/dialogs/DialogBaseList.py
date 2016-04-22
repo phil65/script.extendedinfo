@@ -56,30 +56,8 @@ class DialogBaseList(object):
         else:
             self.setFocusId(ID_BUTTON_SEARCH)
 
-    def close(self):
-        addon.set_setting("viewtype_selection", str(self.getCurrentContainerId()))
-        self.last_position = self.getCurrentListPosition()
-        super(DialogBaseList, self).close()
-
-    @ch.action("parentdir", "*")
-    @ch.action("parentfolder", "*")
-    def previous_menu(self, control_id):
-        onback = self.getProperty("%i_onback" % control_id)
-        if onback:
-            xbmc.executebuiltin(onback)
-        else:
-            self.close()
-
-    @ch.action("previousmenu", "*")
-    def exit_script(self, control_id):
-        self.exit()
-
-    @ch.action("left", "*")
-    @ch.action("right", "*")
-    @ch.action("up", "*")
-    @ch.action("down", "*")
-    def save_position(self, control_id):
-        self.position = self.getCurrentListPosition()
+    def onClick(self, control_id):
+        ch.serve(control_id, self)
 
     def onAction(self, action):
         ch.serve_action(action, self.getFocusId(), self)
@@ -89,6 +67,11 @@ class DialogBaseList(object):
             self.go_to_next_page()
         elif control_id == ID_BUTTON_PREV_PAGE:
             self.go_to_prev_page()
+
+    def close(self):
+        addon.set_setting("viewtype_selection", str(self.getCurrentContainerId()))
+        self.last_position = self.getCurrentListPosition()
+        super(DialogBaseList, self).close()
 
     @ch.click(ID_BUTTON_RESETFILTERS)
     def reset_filters(self, control_id):
@@ -121,8 +104,25 @@ class DialogBaseList(object):
         if self.total_items > 0:
             self.setFocusId(self.getCurrentContainerId())
 
-    def onClick(self, control_id):
-        ch.serve(control_id, self)
+    @ch.action("parentdir", "*")
+    @ch.action("parentfolder", "*")
+    def previous_menu(self, control_id):
+        onback = self.getProperty("%i_onback" % control_id)
+        if onback:
+            xbmc.executebuiltin(onback)
+        else:
+            self.close()
+
+    @ch.action("previousmenu", "*")
+    def exit_script(self, control_id):
+        self.exit()
+
+    @ch.action("left", "*")
+    @ch.action("right", "*")
+    @ch.action("up", "*")
+    @ch.action("down", "*")
+    def save_position(self, control_id):
+        self.position = self.getCurrentListPosition()
 
     def search(self, label):
         if not label:

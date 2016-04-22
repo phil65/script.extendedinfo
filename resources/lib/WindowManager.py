@@ -215,7 +215,7 @@ class WindowManager(object):
         """
         filters = [] if not filters else filters
         from dialogs import DialogYoutubeList
-        youtube_class = DialogYoutubeList.get_window(windows.WindowXML)
+        youtube_class = DialogYoutubeList.get_window(windows.DialogXML)
         dialog = youtube_class(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
                                search_str=search_str,
                                filters=filters,

@@ -39,7 +39,7 @@ def get_window(window_type):
                    "videoCaption": addon.LANG(287),
                    "videoDefinition": "Related",
                    "relatedToVideoId": "Related",
-                   "channelId": addon.LANG(32111)}
+                   "channelId": addon.LANG(19029)}
 
         TRANSLATIONS = {"video": addon.LANG(157),
                         "playlist": addon.LANG(559),
@@ -83,10 +83,12 @@ def get_window(window_type):
         @ch.click_by_type("video")
         def main_list_click(self, control_id):
             youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
-            if self.type == "channel":
+            channel_id = self.FocusedItem(control_id).getProperty("channel_id")
+            media_type = self.FocusedItem(control_id).getProperty("type")
+            if media_type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
-                                   "label": youtube_id}]
+                                   "label": self.FocusedItem(control_id).getLabel()}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
                 wm.play_youtube_video(youtube_id=youtube_id,
