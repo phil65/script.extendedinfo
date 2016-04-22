@@ -420,7 +420,7 @@ def handle_reviews(results):
     for item in results:
         listitem = VideoItem(label=item.get('author'))
         listitem.set_properties({'author': item.get('author'),
-                                 'content': item.get('content'),
+                                 'content': re.sub("<a.*?</a>", "", item.get('content')).lstrip(),
                                  'id': item.get('id'),
                                  'url': item.get('url')})
         listitems.append(listitem)
