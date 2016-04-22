@@ -232,11 +232,11 @@ class DialogBaseInfo(object):
         if onback:
             xbmc.executebuiltin(onback)
         else:
-            self.exit()
+            self.close()
 
     @ch.action("previousmenu", "*")
     def exit_script(self, control_id):
-        wm.cancel(self)
+        self.exit()
 
     @utils.run_async
     def get_youtube_vids(self, search_str):

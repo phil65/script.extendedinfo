@@ -68,11 +68,11 @@ class DialogBaseList(object):
         if onback:
             xbmc.executebuiltin(onback)
         else:
-            self.exit()
+            self.close()
 
     @ch.action("previousmenu", "*")
     def exit_script(self, control_id):
-        self.close()
+        self.exit()
 
     @ch.action("left", "*")
     @ch.action("right", "*")

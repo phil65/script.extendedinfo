@@ -56,22 +56,6 @@ class WindowManager(object):
         """
         self.window_stack.append(window)
 
-    def pop_stack(self):
-        """
-        get newest item from global window stack
-        """
-        if self.window_stack:
-            self.active_dialog = self.window_stack.pop()
-            xbmc.sleep(300)
-            self.active_dialog.doModal()
-        else:
-            addon.set_global("infobackground", self.saved_background)
-
-    def cancel(self, window):
-        addon.set_global("infobackground", self.saved_background)
-        self.window_stack = []
-        window.close()
-
     def open_movie_info(self, movie_id=None, dbid=None,
                         name=None, imdb_id=None):
         """
@@ -259,8 +243,15 @@ class WindowManager(object):
         check_version()
         self.active_dialog = dialog
         dialog.doModal()
-        if not dialog.cancelled:
-            self.pop_stack()
+        if self.window_stack:
+            self.active_dialog = self.window_stack.pop()
+            if dialog.cancelled:
+                addon.set_global("infobackground", self.saved_background)
+                return None
+            xbmc.sleep(300)
+            self.active_dialog.doModal()
+        else:
+            addon.set_global("infobackground", self.saved_background)
 
     def play_youtube_video(self, youtube_id="", listitem=None):
         """
