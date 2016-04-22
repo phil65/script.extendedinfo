@@ -32,6 +32,7 @@ def handle_videos(results, extended=False):
         video.set_artwork({'thumb': thumb})
         video.set_properties({'channel_title': snippet["channelTitle"],
                               'channel_id': snippet["channelId"],
+                              'type': "channel",
                               'youtube_id': video_id})
         videos.append(video)
     if not extended:
@@ -47,11 +48,9 @@ def handle_videos(results, extended=False):
             if not item.get_property("youtube_id") == ext_item['id']:
                 continue
             details = ext_item['contentDetails']
-            duration = details['duration']
             likes = ext_item['statistics'].get('likeCount')
             dislikes = ext_item['statistics'].get('dislikeCount')
-            item.set_infos({"duration": duration,
-                            "mediatype": "video"})
+            item.set_infos({"duration": details['duration']})
             props = {"duration": details['duration'][2:].lower(),
                      "dimension": details['dimension'],
                      "definition": details['definition'],
@@ -95,6 +94,7 @@ def handle_playlists(results):
         playlist.set_art("thumb", thumb)
         playlist.set_properties({'youtube_id': playlist_id,
                                  'channel_title': snippet["channelTitle"],
+                                 'type': "playlist",
                                  'live': snippet["liveBroadcastContent"].replace("none", "")})
         playlists.append(playlist)
     params = {"id": ",".join([i.get_property("youtube_id") for i in playlists]),
@@ -119,9 +119,11 @@ def handle_channels(results):
         channel = VideoItem(label=snippet["title"],
                             path=PLUGIN_BASE + 'youtubechannel&&id=%s' % channel_id)
         channel.set_infos({'plot': snippet["description"],
+                           'mediatype': "video",
                            'premiered': snippet["publishedAt"][:10]})
         channel.set_art("thumb", thumb)
-        channel.set_property("youtube_id", channel_id)
+        channel.set_properties({"youtube_id": channel_id,
+                                "type": "channel"})
         channels.append(channel)
     channel_ids = [item.get_property("youtube_id") for item in channels]
     params = {"id": ",".join(channel_ids),
@@ -155,9 +157,8 @@ def search(search_str="", hd="", orderby="relevance", limit=40, extended=True, p
               "pageToken": page,
               "hd": str(hd and not hd == "false"),
               "q": search_str.replace('"', '')}
-    params = utils.merge_dicts(params, filters if filters else {})
     results = get_data(method="search",
-                       params=params)
+                       params=utils.merge_dicts(params, filters if filters else {}))
     if not results:
         return None
     if media_type == "video":
