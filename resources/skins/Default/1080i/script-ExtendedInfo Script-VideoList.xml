@@ -297,7 +297,7 @@
 							<height>350</height>
 							<bordertexture border="20">overlays/shadow.png</bordertexture>
 							<bordersize>20</bordersize>
-							<aspectratio>keep</aspectratio>
+							<aspectratio aligny="top">keep</aspectratio>
 							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
 							<fadetime>0</fadetime>
 						</control>
@@ -355,7 +355,7 @@
 							<height>350</height>
 							<bordertexture border="20">overlays/shadow.png</bordertexture>
 							<bordersize>20</bordersize>
-							<aspectratio>keep</aspectratio>
+							<aspectratio aligny="top">keep</aspectratio>
 							<texture background="true" fallback="DefaultVideo.png">$INFO[ListItem.Thumb]</texture>
 							<fadetime>0</fadetime>
 						</control>
