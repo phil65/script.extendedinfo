@@ -987,8 +987,8 @@
 							<top>30</top>
 							<width>1950</width>
 							<height>700</height>
-							<onleft>250</onleft>
-							<onright>250</onright>
+							<onleft>350</onleft>
+							<onright>350</onright>
 							<onup>650</onup>
 							<ondown>450</ondown>
 							<pagecontrol>60</pagecontrol>
