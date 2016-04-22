@@ -237,11 +237,12 @@ class WindowManager(object):
         check_version()
         self.active_dialog = dialog
         dialog.doModal()
+        if dialog.cancelled:
+            addon.set_global("infobackground", self.saved_background)
+            self.window_stack = []
+            return None
         if self.window_stack:
             self.active_dialog = self.window_stack.pop()
-            if dialog.cancelled:
-                addon.set_global("infobackground", self.saved_background)
-                return None
             xbmc.sleep(300)
             self.active_dialog.doModal()
         else:
