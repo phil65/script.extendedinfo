@@ -63,7 +63,7 @@ def handle_videos(results, extended=False):
             if likes and dislikes:
                 vote_count = int(likes) + int(dislikes)
                 if vote_count > 0:
-                    item.set_info("rating", format(float(likes) / vote_count * 10, '.2f'))
+                    item.set_info("rating", round(float(likes) / vote_count * 10, 1))
             break
     return videos
 
