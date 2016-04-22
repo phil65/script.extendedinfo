@@ -50,12 +50,6 @@ class WindowManager(object):
         # self.monitor = SettingsMonitor()
         self.busy = 0
 
-    def add_to_stack(self, window):
-        """
-        add window / dialog to global window stack
-        """
-        self.window_stack.append(window)
-
     def open_movie_info(self, movie_id=None, dbid=None,
                         name=None, imdb_id=None):
         """
@@ -238,7 +232,7 @@ class WindowManager(object):
 
     def open_dialog(self, dialog):
         if self.active_dialog:
-            self.add_to_stack(self.active_dialog)
+            self.window_stack.append(self.active_dialog)
             self.active_dialog.close()
         check_version()
         self.active_dialog = dialog
