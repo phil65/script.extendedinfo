@@ -161,7 +161,8 @@ def set_rating(media_type, media_id, rating, dbid=None):
         url = "%s/%s/rating" % (media_type, media_id)
     results = send_request(url=url,
                            params=params,
-                           values={"value": "%.1f" % float(rating)})
+                           values={"value": "%.1f" % float(rating)} if rating > 0 else {},
+                           delete=rating == 0)
     if results:
         utils.notify(addon.NAME, results["status_message"])
         return True
@@ -172,7 +173,10 @@ def send_request(url, params, values, delete=False):
     params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
     utils.log(url)
-    return utils.post(url, values=values, headers=HEADERS, delete=delete)
+    if delete:
+        return utils.delete(url, values=values, headers=HEADERS)
+    else:
+        return utils.post(url, values=values, headers=HEADERS)
 
 
 def change_fav_status(media_id=None, media_type="movie", status="true"):
