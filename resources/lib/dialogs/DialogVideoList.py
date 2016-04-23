@@ -383,7 +383,8 @@ def get_window(window_type):
             if self.mode == "search":
                 self.filter_label = addon.LANG(32146) % self.search_str if self.search_str else ""
                 return tmdb.multi_search(search_str=self.search_str,
-                                         page=self.page)
+                                         page=self.page,
+                                         cache_days=0 if force else 2)
             elif self.mode == "list":
                 return tmdb.get_list_movies(list_id=self.list_id,
                                             force=force)
