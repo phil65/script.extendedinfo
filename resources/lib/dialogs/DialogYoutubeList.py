@@ -68,7 +68,6 @@ def get_window(window_type):
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.type = kwargs.get('type', "video")
             self.sort = kwargs.get('sort', "relevance")
-            self.sort_label = kwargs.get('sort_label', addon.LANG(32060))
             force = kwargs.get('force', False)
             self.update_content(force_update=force)
 

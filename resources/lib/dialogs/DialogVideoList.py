@@ -73,7 +73,6 @@ def get_window(window_type):
             self.type = kwargs.get('type', "movie")
             self.list_id = kwargs.get("list_id", False)
             self.sort = kwargs.get('sort', "popularity")
-            self.sort_label = kwargs.get('sort_label', addon.LANG(32110))
             self.logged_in = tmdb.Login.check_login()
             self.listitems = kwargs.get('listitems', None)
             if self.listitems:
