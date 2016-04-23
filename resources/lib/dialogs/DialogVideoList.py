@@ -69,10 +69,10 @@ def get_window(window_type):
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
-            super(DialogVideoList, self).__init__(*args, **kwargs)
-            self.type = kwargs.get('type', "movie")
-            self.list_id = kwargs.get("list_id", False)
             self.sort = kwargs.get('sort', "popularity")
+            self.type = kwargs.get('type', "movie")
+            super(DialogVideoList, self).__init__(*args, **kwargs)
+            self.list_id = kwargs.get("list_id", False)
             self.logged_in = tmdb.Login.check_login()
             self.listitems = kwargs.get('listitems', None)
             if self.listitems:
