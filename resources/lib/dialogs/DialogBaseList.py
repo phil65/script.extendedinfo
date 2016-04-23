@@ -200,9 +200,10 @@ class DialogBaseList(object):
     def choose_sort_method(self, sort_key):
         listitems = self.SORTS[sort_key].values()
         sort_strings = self.SORTS[sort_key].keys()
+        preselect = listitems.index(self.sort_label) if self.sort_label in listitems else -1
         index = xbmcgui.Dialog().select(heading=addon.LANG(32104),
                                         list=listitems,
-                                        preselect=listitems.index(self.sort_label))
+                                        preselect=preselect)
         if index == -1 or listitems[index] == self.sort_label:
             return False
         self.sort = sort_strings[index]
