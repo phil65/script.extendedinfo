@@ -168,13 +168,17 @@ def get_window(window_type):
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
                                 value="10",
-                                label=" > 10",
+                                label="10",
                                 reset=False)
             self.update()
 
         def add_filter(self, **kwargs):
             key = kwargs["key"].replace(".gte", "").replace(".lte", "")
             kwargs["typelabel"] = self.FILTERS[key]
+            if kwargs["key"].endswith(".lte"):
+                kwargs["label"] = "< %s" % kwargs["label"]
+            if kwargs["key"].endswith(".gte"):
+                kwargs["label"] = "> %s" % kwargs["label"]
             super(DialogVideoList, self).add_filter(force_overwrite=kwargs["key"].endswith((".gte", ".lte")),
                                                     **kwargs)
 
@@ -255,7 +259,7 @@ def get_window(window_type):
             if result:
                 self.add_filter(key="vote_count.lte" if ret == 1 else "vote_count.gte",
                                 value=result,
-                                label=" < " + result if ret == 1 else " > " + result)
+                                label=result)
 
         @ch.click(ID_BUTTON_YEARFILTER)
         def set_year_filter(self, control_id):
@@ -269,22 +273,11 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_NUMERIC)
             if not result:
                 return None
-            if ret == 1:
-                order = "lte"
-                value = "%s-12-31" % result
-                label = " < " + result
-            else:
-                order = "gte"
-                value = "%s-01-01" % result
-                label = " > " + result
-            if self.type == "tv":
-                self.add_filter(key="first_air_date.%s" % order,
-                                value=value,
-                                label=label)
-            else:
-                self.add_filter(key="primary_release_date.%s" % order,
-                                value=value,
-                                label=label)
+            value = "{}-12-31" if ret == 1 else "{}-01-01"
+            key = "first_air_date" if self.type == "tv" else "primary_release_date"
+            self.add_filter(key="%s.%s" % (key, "lte" if ret == 1 else "gte"),
+                            value=value.format(result),
+                            label=result)
 
         @ch.click(ID_BUTTON_ACTORFILTER)
         def set_actor_filter(self, control_id):
