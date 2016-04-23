@@ -87,7 +87,7 @@ def get_window(window_type):
             if media_type == "channel":
                 channel_filter = [{"id": youtube_id,
                                    "type": "channelId",
-                                   "label": self.FocusedItem(control_id).getLabel()}]
+                                   "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
                 wm.open_youtube_list(filters=channel_filter)
             else:
                 wm.play_youtube_video(youtube_id=youtube_id,

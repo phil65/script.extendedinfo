@@ -32,7 +32,7 @@ def handle_videos(results, extended=False):
         video.set_artwork({'thumb': thumb})
         video.set_properties({'channel_title': snippet["channelTitle"],
                               'channel_id': snippet["channelId"],
-                              'type': "channel",
+                              'type': "video",
                               'youtube_id': video_id})
         videos.append(video)
     if not extended:
