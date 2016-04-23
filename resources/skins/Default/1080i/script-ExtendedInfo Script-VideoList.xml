@@ -83,13 +83,13 @@
 			<control type="group">
 				<top>140</top>
 				<animation type="WindowOpen" reversible="false">
-					<effect type="slide" start="0,1000" end="0,0" delay="0" tween="sine" time="1000" />
+					<effect type="slide" start="0,1000" end="0,0" delay="0" tween="sine" time="900" />
 					<effect type="fade" start="0" end="100" delay="0" tween="sine" time="1500" />
 				</animation>
 			<control type="image">
 				<texture>$INFO[ListItem.Art(fanart_small)]</texture>
 				<left>40</left>
-				<top>40</top>
+				<top>30</top>
 				<width>396</width>
 				<fadetime>200</fadetime>
 				<bordertexture border="3">common/black.png</bordertexture>
