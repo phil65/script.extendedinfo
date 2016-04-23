@@ -76,4 +76,5 @@ class DialogVideoInfo(DialogBaseInfo):
                            media_id=self.get_identifier(),
                            rating=rating,
                            dbid=self.info.get_info("dbid")):
+            self.setProperty("rated", str(rating) if rating > 0 else "")
             self.update_states()
