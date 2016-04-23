@@ -241,8 +241,9 @@ def get_window(window_type):
             indexes = xbmcgui.Dialog().multiselect(heading=addon.LANG(32151),
                                                    options=labels,
                                                    preselect=preselect)
-            if not indexes:
+            if indexes is None:
                 return None
+            self.filters = [i for i in self.filters if i["type"] != "with_genres"]
             for i in indexes:
                 self.add_filter(key="with_genres",
                                 value=ids[i],
