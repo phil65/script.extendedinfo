@@ -233,16 +233,22 @@ def get_window(window_type):
             params = {"language": addon.setting("LanguageID")}
             response = tmdb.get_data(url="genre/%s/list" % (self.type),
                                      params=params,
-                                     cache_days=10)
+                                     cache_days=100)
+            selected = [i["id"] for i in self.filters if i["type"] == "with_genres"]
             ids = [item["id"] for item in response["genres"]]
             labels = [item["name"] for item in response["genres"]]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                            list=labels)
-            if index == -1:
+            preselect = [ids.index(int(i)) for i in selected[0].split(",")] if selected else []
+            indexes = xbmcgui.Dialog().multiselect(heading=addon.LANG(32151),
+                                                   options=labels,
+                                                   preselect=preselect)
+            if not indexes:
                 return None
-            self.add_filter(key="with_genres",
-                            value=ids[index],
-                            label=labels[index])
+            for i in indexes:
+                self.add_filter(key="with_genres",
+                                value=ids[i],
+                                label=labels[i],
+                                reset=False)
+            self.reset()
 
         @ch.click(ID_BUTTON_VOTECOUNTFILTER)
         def set_vote_count_filter(self, control_id):

@@ -8,7 +8,6 @@ import xbmcgui
 
 from kodi65 import addon
 from kodi65 import utils
-from kodi65 import confirmdialog
 from kodi65.actionhandler import ActionHandler
 from T9Search import T9Search
 
@@ -245,5 +244,9 @@ class DialogBaseList(object):
             return None
         self.filters[index]["id"] += ",%s" % value
         self.filters[index]["label"] += ",%s" % label
+        ids = self.filters[index]["id"].split(",")
+        labels = self.filters[index]["label"].split(",")
+        self.filters[index]["id"] = ",".join(list(set(ids)))
+        self.filters[index]["label"] = ",".join(list(set(labels)))
         if reset:
             self.reset()
