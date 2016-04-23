@@ -80,41 +80,23 @@
 					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Row,0)">Conditional</animation>
 				</control>
 			</control>
-			<control type="image">
-				<texture>moviedb.png</texture>
-				<left>60</left>
-				<top>170</top>
-				<width>438</width>
-				<height>200</height>
-				<aspectratio align="left">keep</aspectratio>
-				<animation type="WindowOpen" reversible="false">
-					<effect type="slide" start="0,-1000" end="0,0" delay="0" tween="sine" time="1000" />
-					<effect type="fade" start="0" end="100" delay="0" tween="sine" time="2000" />
-					<effect type="rotatex" start="0" end="75" delay="3000" center="300,0" tween="sine" time="750" />
-					<effect type="fade" start="100" end="0" delay="3750" time="0" />
-				</animation>
-			</control>
-			<control type="image">
-				<texture>$INFO[ListItem.Art(fanart_small)]</texture>
-				<left>40</left>
-				<top>180</top>
-				<width>396</width>
-				<fadetime>200</fadetime>
-				<bordertexture border="3">common/black.png</bordertexture>
-				<bordersize>3</bordersize>
-				<height>222</height>
-				<aspectratio>scale</aspectratio>
-				<animation type="WindowOpen" reversible="false">
-					<effect type="rotatex" start="75" end="0" delay="3750" center="300,0" tween="sine" time="750" />
-					<effect type="fade" start="0" end="100" delay="3750" time="0" />
-				</animation>
-			</control>
 			<control type="group">
 				<top>140</top>
 				<animation type="WindowOpen" reversible="false">
 					<effect type="slide" start="0,1000" end="0,0" delay="0" tween="sine" time="1000" />
 					<effect type="fade" start="0" end="100" delay="0" tween="sine" time="1500" />
 				</animation>
+			<control type="image">
+				<texture>$INFO[ListItem.Art(fanart_small)]</texture>
+				<left>40</left>
+				<top>40</top>
+				<width>396</width>
+				<fadetime>200</fadetime>
+				<bordertexture border="3">common/black.png</bordertexture>
+				<bordersize>3</bordersize>
+				<height>222</height>
+				<aspectratio>scale</aspectratio>
+			</control>
 				<control type="textbox">
 					<top>270</top>
 					<left>40</left>
@@ -595,11 +577,11 @@
 				<onleft>500</onleft>
 				<focusedcolor>FFFAFAFA</focusedcolor>
 			</control>
-			<control type="button" id="7000">
+			<control type="radiobutton" id="7000">
 				<left>0</left>
 				<top>155</top>
 				<width>438</width>
-				<height>90</height>
+				<height>140</height>
 				<align>left</align>
 				<aligny>center</aligny>
 				<ondown>9000</ondown>
@@ -610,14 +592,21 @@
 				<textoffsety>25</textoffsety>
 				<font>font13</font>
 				<textwidth>315</textwidth>
-				<label>$ADDON[script.extendedinfo 32024]</label>
+				<label>-</label>
 				<textcolor>FFBBBBBB</textcolor>
 				<focusedcolor>FFFAFAFA</focusedcolor>
+				<radiowidth>200</radiowidth>
+				<radioheight>180</radioheight>
+				<radioposx>130</radioposx>
+				<textureradioonnofocus>moviedb.png</textureradioonnofocus>
+				<textureradioonfocus>moviedb.png</textureradioonfocus>
+				<textureradiooffnofocus>moviedb.png</textureradiooffnofocus>
+				<textureradioofffocus>moviedb.png</textureradioofffocus>
 				<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
 				<texturenofocus border="20">lists/separator.png</texturenofocus>
 			</control>
 			<control type="grouplist" id="9000">
-				<top>250</top>
+				<top>310</top>
 				<width>438</width>
 				<height>830</height>
 				<orientation>vertical</orientation>
