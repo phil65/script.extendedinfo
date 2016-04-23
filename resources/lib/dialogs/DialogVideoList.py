@@ -158,10 +158,12 @@ def get_window(window_type):
                                         movie_id=movie_id,
                                         status=True)
 
+        def get_sort_key(self):
+            return self.mode if self.mode in ["favorites", "rating", "list"] else self.type
+
         @ch.click(ID_BUTTON_SORT)
         def get_sort_type(self, control_id):
-            sort_key = self.mode if self.mode in ["favorites", "rating", "list"] else self.type
-            if not self.choose_sort_method(sort_key):
+            if not self.choose_sort_method(self.get_sort_key()):
                 return None
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
@@ -207,13 +209,11 @@ def get_window(window_type):
             if index == -1:
                 pass
             elif index == 0:
-                self.sort = "created_at"
-                self.sort_label = addon.LANG(32157)
+                self.set_sort("created_at")
                 self.filters = []
                 self.reset("rating")
             elif index == 1:
-                self.sort = "created_at"
-                self.sort_label = addon.LANG(32157)
+                self.set_sort("created_at")
                 self.filters = []
                 self.reset("favorites")
             else:

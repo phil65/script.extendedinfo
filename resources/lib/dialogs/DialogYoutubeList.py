@@ -175,8 +175,7 @@ def get_window(window_type):
             if self.type in types:
                 self.type = types[self.type]
             if self.sort not in self.SORTS[self.type].keys():
-                self.sort = "relevance"
-                self.sort_label = addon.LANG(32060)
+                self.set_sort("relevance")
             self.reset()
 
         def update_ui(self):

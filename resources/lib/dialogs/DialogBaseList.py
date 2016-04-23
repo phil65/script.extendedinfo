@@ -37,6 +37,7 @@ class DialogBaseList(object):
         self.page = 1
         self.listitems = None
         self.column = None
+        self.set_sort(self.sort)
         self.last_position = 0
         self.total_pages = 1
         self.total_items = 0
@@ -72,6 +73,13 @@ class DialogBaseList(object):
         addon.set_setting("viewtype_selection", str(self.getCurrentContainerId()))
         self.last_position = self.getCurrentListPosition()
         super(DialogBaseList, self).close()
+
+    def set_sort(self, sort):
+        self.sort = sort
+        self.sort_label = self.SORTS[self.get_sort_key()][self.sort]
+
+    def get_sort_key(self):
+        return self.type
 
     @ch.click(ID_BUTTON_RESETFILTERS)
     def reset_filters(self, control_id):
