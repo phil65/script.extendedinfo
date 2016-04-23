@@ -243,17 +243,7 @@ class DialogBaseList(object):
             if reset:
                 self.reset()
             return None
-        ret = confirmdialog.open(header=addon.LANG(587),
-                                 text=addon.LANG(32106),
-                                 nolabel="OR",
-                                 yeslabel="AND")
-        if ret == -1:
-            return None
-        if ret == 1:
-            self.filters[index]["id"] += ",%s" % value
-            self.filters[index]["label"] += ",%s" % label
-        elif ret == 0:
-            self.filters[index]["id"] += "|%s" % value
-            self.filters[index]["label"] += "|%s" % label
+        self.filters[index]["id"] += ",%s" % value
+        self.filters[index]["label"] += ",%s" % label
         if reset:
             self.reset()
