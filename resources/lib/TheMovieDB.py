@@ -141,7 +141,7 @@ def set_rating(media_type, media_id, rating, dbid=None):
     '''
     media_type: movie, tv or episode
     media_id: tmdb_id / episode ident array
-    rating: ratung value (1 - 10, 1 steps)
+    rating: ratung value (1 - 10, 0 for deleting)
     dbid: dbid for syncing userrating of db item
     '''
     if not media_type or not media_id or rating == -1:
