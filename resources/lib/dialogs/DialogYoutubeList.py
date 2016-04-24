@@ -108,60 +108,52 @@ def get_window(window_type):
                             value=d.isoformat('T')[:-7] + "Z",
                             label=labels[index])
 
-        @ch.click(ID_BUTTON_LANGUAGEFILTER)
-        def set_language_filter(self, control_id):
-            labels = ["en", "de", "fr"]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
+        def chooose_filter(self, filter_code, header, options):
+            values = [i[0] for i in options]
+            labels = [i[1] for i in options]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(header),
                                             list=labels)
             if index == -1:
                 return None
-            self.add_filter(key="regionCode",
-                            value=labels[index],
+            self.add_filter(key=filter_code,
+                            value=values[index],
                             label=labels[index])
+
+        @ch.click(ID_BUTTON_LANGUAGEFILTER)
+        def set_language_filter(self, control_id):
+            options = [("en", "en"),
+                       ("de", "de"),
+                       ("fr", "fr")]
+            self.chooose_filter("regionCode", 32151, options)
 
         @ch.click(ID_BUTTON_DIMENSIONFILTER)
         def set_dimension_filter(self, control_id):
-            values = ["2d", "3d", "any"]
-            labels = ["2D", "3D", addon.LANG(593)]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                            list=labels)
-            if index > -1:
-                self.add_filter(key="videoDimension",
-                                value=values[index],
-                                label=labels[index])
+            options = [("2d", "2D"),
+                       ("3d", "3D"),
+                       ("any", addon.LANG(593))]
+            self.chooose_filter("videoDimension", 32151, options)
 
         @ch.click(ID_BUTTON_DURATIONFILTER)
         def set_duration_filter(self, control_id):
-            values = ["long", "medium", "short", "any"]
-            labels = [addon.LANG(33013), addon.LANG(601), addon.LANG(33012), addon.LANG(593)]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                            list=labels)
-            if index > -1:
-                self.add_filter(key="videoDuration",
-                                value=values[index],
-                                label=labels[index])
+            options = [("long", addon.LANG(33013)),
+                       ("medium", addon.LANG(601)),
+                       ("short", addon.LANG(33012)),
+                       ("any", addon.LANG(593))]
+            self.chooose_filter("videoDuration", 32151, options)
 
         @ch.click(ID_BUTTON_CAPTIONFILTER)
         def set_caption_filter(self, control_id):
-            values = ["closedCaption", "none", "any"]
-            labels = [addon.LANG(107), addon.LANG(106), addon.LANG(593)]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(287),
-                                            list=labels)
-            if index > -1:
-                self.add_filter(key="videoCaption",
-                                value=values[index],
-                                label=labels[index])
+            options = [("closedCaption", addon.LANG(107)),
+                       ("none", addon.LANG(106)),
+                       ("any", addon.LANG(593))]
+            self.chooose_filter("videoCaption", 287, options)
 
         @ch.click(ID_BUTTON_DEFINITIONFILTER)
         def set_definition_filter(self, control_id):
-            values = ["high", "standard", "any"]
-            labels = [addon.LANG(419), addon.LANG(602), addon.LANG(593)]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(169),
-                                            list=labels)
-            if index > -1:
-                self.add_filter(key="videoDefinition",
-                                value=values[index],
-                                label=labels[index])
+            options = [("high", addon.LANG(419)),
+                       ("standard", addon.LANG(602)),
+                       ("any", addon.LANG(593))]
+            self.chooose_filter("videoDefinition", 169, options)
 
         @ch.click(ID_BUTTON_TOGGLETYPE)
         def toggle_type(self, control_id):
