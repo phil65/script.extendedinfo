@@ -38,8 +38,7 @@ def get_window(window_type):
                    "videoDuration": addon.LANG(180),
                    "videoCaption": addon.LANG(287),
                    "videoDefinition": addon.LANG(32058),
-                   "relatedToVideoId": addon.LANG(32058),
-                   "channelId": addon.LANG(19029)}
+                   "relatedToVideoId": addon.LANG(32058)}
 
         TRANSLATIONS = {"video": addon.LANG(157),
                         "playlist": addon.LANG(559),
