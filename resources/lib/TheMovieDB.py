@@ -67,7 +67,7 @@ class LoginProvider(object):
 
     def check_login(self, cache_days=9999):
         if self.username:
-            return(bool(self.get_session_id(cache_days)))
+            return bool(self.get_session_id(cache_days))
         return False
 
     def get_account_id(self):
@@ -96,21 +96,10 @@ class LoginProvider(object):
             return None
         return str(response["guest_session_id"])
 
-    def get_session_id(self, cache_days=9999):
-        '''
-        returns session id for TMDB Account
-        '''
-        if self.session_id and not cache_days == 0:
+    def get_session_id(self, cache_days=999):
+        if self.session_id and cache_days:
             return self.session_id
         self.request_token = self.auth_request_token(cache_days=cache_days)
-        self.session_id = self.start_new_session(cache_days=cache_days)
-        if self.session_id:
-            return self.session_id
-        self.session_id = self.start_new_session(cache_days=0)
-        utils.notify("login failed", str(self.session_id))
-        return None
-
-    def start_new_session(self, cache_days=0):
         response = get_data(url="authentication/session/new",
                             params={"request_token": self.request_token},
                             cache_days=cache_days)
@@ -126,8 +115,7 @@ class LoginProvider(object):
             return self.request_token
         response = get_data(url="authentication/token/new",
                             cache_days=cache_days)
-        self.request_token = response["request_token"]
-        params = {"request_token": self.request_token,
+        params = {"request_token": response["request_token"],
                   "username": self.username,
                   "password": self.password}
         response = get_data(url="authentication/token/validate_with_login",
