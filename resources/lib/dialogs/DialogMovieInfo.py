@@ -236,9 +236,9 @@ class DialogMovieInfo(DialogVideoInfo):
 
     def update_states(self):
         xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-        _, __, self.states = tmdb.extended_movie_info(movie_id=self.info.get_property("id"),
-                                                      dbid=self.info.get_info("dbid"),
-                                                      cache_days=0)
+        info = tmdb.get_movie(movie_id=self.info.get_property("id"),
+                              cache_days=0)
+        self.states = info.get("account_states")
         super(DialogMovieInfo, self).update_states()
 
     @utils.run_async
