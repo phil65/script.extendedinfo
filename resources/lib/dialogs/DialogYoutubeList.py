@@ -65,7 +65,6 @@ def get_window(window_type):
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
-            self.sort = kwargs.get('sort', "relevance")
             self.type = kwargs.get('type', "video")
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
             self.update_content(force_update=kwargs.get('force', False))

@@ -69,7 +69,6 @@ def get_window(window_type):
 
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
-            self.sort = kwargs.get('sort', "popularity")
             self.type = kwargs.get('type', "movie")
             super(DialogVideoList, self).__init__(*args, **kwargs)
             self.list_id = kwargs.get("list_id", False)
