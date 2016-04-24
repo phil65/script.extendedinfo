@@ -67,7 +67,6 @@ def get_window(window_type):
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "video")
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
-            self.update_content(force_update=kwargs.get('force', False))
 
         def onClick(self, control_id):
             super(DialogYoutubeList, self).onClick(control_id)

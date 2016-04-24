@@ -70,15 +70,9 @@ def get_window(window_type):
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "movie")
-            super(DialogVideoList, self).__init__(*args, **kwargs)
             self.list_id = kwargs.get("list_id", False)
             self.logged_in = tmdb.Login.check_login()
-            self.listitems = kwargs.get('listitems', None)
-            if self.listitems:
-                self.listitems = self.listitems.create_listitems()
-                self.total_items = len(self.listitems)
-            else:
-                self.update_content(force_update=kwargs.get('force', False))
+            super(DialogVideoList, self).__init__(*args, **kwargs)
 
         def onClick(self, control_id):
             super(DialogVideoList, self).onClick(control_id)

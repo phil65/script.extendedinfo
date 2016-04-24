@@ -44,6 +44,12 @@ class DialogBaseList(object):
         self.page_token = ""
         self.next_page_token = ""
         self.prev_page_token = ""
+        self.listitems = kwargs.get('listitems')
+        if self.listitems:
+            self.listitems = self.listitems.create_listitems()
+            self.total_items = len(self.listitems)
+        else:
+            self.update_content(force_update=kwargs.get('force', False))
 
     def onInit(self):
         super(DialogBaseList, self).onInit()
@@ -206,6 +212,10 @@ class DialogBaseList(object):
         self.update_ui()
 
     def choose_sort_method(self, sort_key):
+        """
+        open dialog and let user choose sortmethod
+        returns True if sorthmethod changed
+        """
         listitems = self.SORTS[sort_key].values()
         sort_strings = self.SORTS[sort_key].keys()
         preselect = listitems.index(self.sort_label) if self.sort_label in listitems else -1
