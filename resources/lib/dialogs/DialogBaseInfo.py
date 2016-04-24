@@ -137,15 +137,26 @@ class DialogBaseInfo(windows.DialogXML):
 
     @ch.context("music")
     def thumbnail_options(self, control_id):
-        if not self.info.get_info("dbid"):
+        listitem = self.FocusedItem(control_id)
+        art_type = listitem.getProperty("type")
+        options = []
+        if self.info.get_info("dbid") and art_type == "poster":
+            options.append(("db_art", addon.LANG(32006)))
+        if self.info.get_info("dbid") and art_type == "fanart":
+            options.append(("db_art", addon.LANG(32007)))
+        movie_id = listitem.getProperty("movie_id")
+        if movie_id:
+            options.append(("movie_info", addon.LANG(10524)))
+        if not options:
             return None
-        options = [addon.LANG(32006)] if control_id == ID_LIST_IMAGES else [addon.LANG(32007)]
-        index = xbmcgui.Dialog().contextmenu(list=options)
-        if index == 0:
-            listitem = self.FocusedItem(control_id)
+        action = utils.contextmenu(options=options)
+        if action == "db_art":
             kodijson.set_art(media_type=self.getProperty("type"),
-                             art={listitem.getProperty("type"): listitem.get_art("original")},
+                             art={art_type: listitem.get_art("original")},
                              dbid=self.info.get_info("dbid"))
+        elif action == "movie_info":
+            wm.open_movie_info(movie_id=listitem.getProperty("movie_id"),
+                               dbid=listitem.getVideoInfoTag().getDbId())
 
     @ch.context("video")
     def video_context_menu(self, control_id):

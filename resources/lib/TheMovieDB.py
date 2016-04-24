@@ -513,6 +513,7 @@ def handle_images(results):
                               'iso_639_1': item.get("iso_639_1")})
         if item.get("media"):
             image.set_label(item["media"].get("title"))
+            image.set_property("movie_id", item["media"].get("id"))
             poster_path = item["media"].get("poster_path")
             if poster_path:
                 image.update_artwork({'mediaposter': IMAGE_BASE_URL + POSTER_SIZE + poster_path})
