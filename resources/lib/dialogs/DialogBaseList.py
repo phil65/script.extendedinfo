@@ -27,7 +27,7 @@ class DialogBaseList(object):
         self.filter_label = kwargs.get("filter_label", "")
         self.mode = kwargs.get("mode", "filter")
         self.order = kwargs.get('order', "desc")
-        self.sort = kwargs.get('sort', self.SORTS[self.get_sort_key()].keys()[0])
+        self.sort = kwargs.get('sort', self.get_default_sort())
         self.filters = []
         for item in kwargs.get('filters', []):
             self.add_filter(key=item["type"],

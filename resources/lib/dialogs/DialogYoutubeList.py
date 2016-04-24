@@ -183,6 +183,9 @@ def get_window(window_type):
             self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(self.type == "video")
             super(DialogYoutubeList, self).update_ui()
 
+        def get_default_sort(self):
+            return "relevance"
+
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
             if not self.choose_sort_method(self.type):
