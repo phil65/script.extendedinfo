@@ -103,6 +103,7 @@ def get_window(window_type):
                     listitems += [addon.LANG(32035)]
             index = xbmcgui.Dialog().contextmenu(list=listitems)
             if index == 0:
+                # HACK until we can get userrating from listitem via python
                 rating = utils.get_infolabel("listitem.userrating")
                 rating = utils.input_userrating(preselect=int(rating) if rating.isdigit() else -1)
                 if rating == -1:
