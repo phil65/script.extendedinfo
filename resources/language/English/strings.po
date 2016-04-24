@@ -279,6 +279,11 @@ msgctxt "#32057"
 msgid "Dimensions"
 msgstr ""
 
+#: C:/Kodi/portable_data/addons/script.extendedinfo/resources/lib/dialogs/DialogYoutubeList.py:40
+msgctxt "#32058"
+msgid "Related"
+msgstr ""
+
 #: \resources\lib\DialogVideoInfo.py:297
 msgctxt "#32059"
 msgid "Added movie to CouchPotato"
