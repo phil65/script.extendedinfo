@@ -181,9 +181,8 @@ class DialogBaseInfo(windows.DialogXML):
                             rating=rating,
                             dbid=dbid)
             xbmc.sleep(2000)
-            tmdb.extended_movie_info(movie_id=movie_id,
-                                     dbid=dbid,
-                                     cache_days=0)
+            tmdb.get_movie(movie_id=movie_id,
+                           cache_days=0)
         elif index == 1:
             account_lists = tmdb.get_account_lists()
             if not account_lists:
