@@ -84,6 +84,10 @@ class DialogBaseList(object):
         self.sort = sort
         self.sort_label = self.SORTS[self.get_sort_key()][self.sort]
 
+    def verify_sort(self):
+        if self.sort not in [i for i in self.SORTS[self.get_sort_key()].keys()]:
+            self.set_sort(self.get_default_sort())
+
     def get_sort_key(self):
         return self.type
 
@@ -184,6 +188,7 @@ class DialogBaseList(object):
     def reset(self, mode="filter"):
         self.page = 1
         self.mode = mode
+        self.verify_sort()
         self.update()
 
     def go_to_next_page(self):
