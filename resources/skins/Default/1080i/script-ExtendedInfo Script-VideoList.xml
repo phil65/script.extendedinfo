@@ -71,12 +71,12 @@
 					<animation effect="fade" time="320" delay="200">Visible</animation>
 					<animation effect="fade" time="200">Hidden</animation>
 					<texture colordiffuse="FF12B2E7" border="40">buttons/button-fo.png</texture>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,5)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,4)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,3)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,2)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,1)">Conditional</animation>
-					<animation effect="slide" end="0,161" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,0)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,5)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,4)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,3)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,2)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,1)">Conditional</animation>
+					<animation effect="slide" end="0,142" time="300" tween="cubic" easing="inout" condition="Integer.IsGreater(Container(50).Position,0)">Conditional</animation>
 				</control>
 			</control>
 			<control type="group">
@@ -154,7 +154,7 @@
 					<onup>700</onup>
 					<ondown>600</ondown>
 					<orientation>vertical</orientation>
-					<itemlayout width="800" height="161">
+					<itemlayout width="800" height="142">
 						<control type="label">
 							<left>80</left>
 							<width>690</width>
@@ -198,7 +198,7 @@
 							<visible>!IsEmpty(ListItem.UserRating)</visible>
 						</control>
 					</itemlayout>
-					<focusedlayout width="800" height="161">
+					<focusedlayout width="800" height="142">
 						<control type="label">
 							<left>80</left>
 							<width>690</width>
