@@ -91,8 +91,13 @@ def get_window(window_type):
 
         @ch.click(ID_BUTTON_PUBLISHEDFILTER)
         def set_published_filter(self, control_id):
-            labels = [addon.LANG(32062), addon.LANG(32063), addon.LANG(32064), addon.LANG(32065), addon.LANG(636)]
-            deltas = [1, 7, 31, 365, "custom"]
+            options = [(1, addon.LANG(32062)),
+                       (7, addon.LANG(32063)),
+                       (31, addon.LANG(32064)),
+                       (365, addon.LANG(32065)),
+                       ("custom", addon.LANG(636))]
+            deltas = [i[0] for i in options]
+            labels = [i[1] for i in options]
             index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
                                             list=labels)
             if index == -1:
@@ -106,17 +111,6 @@ def get_window(window_type):
             d = datetime.datetime.now() - datetime.timedelta(int(delta))
             self.add_filter(key="publishedAfter",
                             value=d.isoformat('T')[:-7] + "Z",
-                            label=labels[index])
-
-        def chooose_filter(self, filter_code, header, options):
-            values = [i[0] for i in options]
-            labels = [i[1] for i in options]
-            index = xbmcgui.Dialog().select(heading=addon.LANG(header),
-                                            list=labels)
-            if index == -1:
-                return None
-            self.add_filter(key=filter_code,
-                            value=values[index],
                             label=labels[index])
 
         @ch.click(ID_BUTTON_LANGUAGEFILTER)
@@ -167,16 +161,6 @@ def get_window(window_type):
                 self.set_sort("relevance")
             self.reset()
 
-        def update_ui(self):
-            self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(self.type == "video")
-            super(DialogYoutubeList, self).update_ui()
-
-        def get_default_sort(self):
-            return "relevance"
-
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
             if not self.choose_sort_method(self.type):
@@ -201,6 +185,16 @@ def get_window(window_type):
                                 "label": self.FocusedItem(control_id).getProperty("channel_title")}]
                     wm.open_youtube_list(filters=filter_)
 
+        def update_ui(self):
+            self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(self.type == "video")
+            self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(self.type == "video")
+            super(DialogYoutubeList, self).update_ui()
+
+        def get_default_sort(self):
+            return "relevance"
+
         def add_filter(self, **kwargs):
             kwargs["typelabel"] = self.FILTERS[kwargs["key"]]
             super(DialogYoutubeList, self).add_filter(force_overwrite=True,
@@ -216,5 +210,16 @@ def get_window(window_type):
                                   filters={item["type"]: item["id"] for item in self.filters},
                                   media_type=self.type,
                                   page=self.page_token)
+
+        def chooose_filter(self, filter_code, header, options):
+            values = [i[0] for i in options]
+            labels = [i[1] for i in options]
+            index = xbmcgui.Dialog().select(heading=addon.LANG(header),
+                                            list=labels)
+            if index == -1:
+                return None
+            self.add_filter(key=filter_code,
+                            value=values[index],
+                            label=labels[index])
 
     return DialogYoutubeList
