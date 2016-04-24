@@ -35,128 +35,124 @@ ID_BUTTON_RATED = 6006
 ch = ActionHandler()
 
 
-def get_window(window_type):
+class DialogTVShowInfo(DialogVideoInfo):
+    TYPE = "TVShow"
+    TYPE_ALT = "tv"
+    LISTS = [(ID_LIST_SIMILAR, "similar"),
+             (ID_LIST_SEASONS, "seasons"),
+             (ID_LIST_NETWORKS, "networks"),
+             (ID_LIST_STUDIOS, "studios"),
+             (ID_LIST_CERTS, "certifications"),
+             (ID_LIST_CREW, "crew"),
+             (ID_LIST_GENRES, "genres"),
+             (ID_LIST_KEYWORDS, "keywords"),
+             (ID_LIST_ACTORS, "actors"),
+             (ID_LIST_VIDEOS, "videos"),
+             (ID_LIST_IMAGES, "images"),
+             (ID_LIST_BACKDROPS, "backdrops")]
 
-    class DialogTVShowInfo(DialogVideoInfo, window_type):
-        TYPE = "TVShow"
-        TYPE_ALT = "tv"
-        LISTS = [(ID_LIST_SIMILAR, "similar"),
-                 (ID_LIST_SEASONS, "seasons"),
-                 (ID_LIST_NETWORKS, "networks"),
-                 (ID_LIST_STUDIOS, "studios"),
-                 (ID_LIST_CERTS, "certifications"),
-                 (ID_LIST_CREW, "crew"),
-                 (ID_LIST_GENRES, "genres"),
-                 (ID_LIST_KEYWORDS, "keywords"),
-                 (ID_LIST_ACTORS, "actors"),
-                 (ID_LIST_VIDEOS, "videos"),
-                 (ID_LIST_IMAGES, "images"),
-                 (ID_LIST_BACKDROPS, "backdrops")]
+    def __init__(self, *args, **kwargs):
+        super(DialogTVShowInfo, self).__init__(*args, **kwargs)
+        data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id'),
+                                         dbid=kwargs.get('dbid'))
+        if not data:
+            return None
+        self.info, self.lists, self.states = data
+        if not self.info.get_info("dbid"):
+            self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
+        self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
 
-        def __init__(self, *args, **kwargs):
-            super(DialogTVShowInfo, self).__init__(*args, **kwargs)
-            data = tmdb.extended_tvshow_info(tvshow_id=kwargs.get('tmdb_id'),
-                                             dbid=kwargs.get('dbid'))
-            if not data:
-                return None
-            self.info, self.lists, self.states = data
-            if not self.info.get_info("dbid"):
-                self.info.set_art("poster", utils.get_file(self.info.get_art("poster")))
-            self.info.update_properties(imagetools.blur(self.info.get_art("poster")))
+    def onInit(self):
+        self.get_youtube_vids("%s tv" % (self.info.get_info("title")))
+        super(DialogTVShowInfo, self).onInit()
+        super(DialogTVShowInfo, self).update_states()
 
-        def onInit(self):
-            self.get_youtube_vids("%s tv" % (self.info.get_info("title")))
-            super(DialogTVShowInfo, self).onInit()
-            super(DialogTVShowInfo, self).update_states()
+    def onClick(self, control_id):
+        super(DialogTVShowInfo, self).onClick(control_id)
+        ch.serve(control_id, self)
 
-        def onClick(self, control_id):
-            super(DialogTVShowInfo, self).onClick(control_id)
-            ch.serve(control_id, self)
+    def set_buttons(self):
+        self.set_visible(ID_BUTTON_BROWSE, self.get_info("dbid"))
+        self.set_visible(ID_BUTTON_OPENLIST, self.logged_in)
+        self.set_visible(ID_BUTTON_RATED, True)
 
-        def set_buttons(self):
-            self.set_visible(ID_BUTTON_BROWSE, self.get_info("dbid"))
-            self.set_visible(ID_BUTTON_OPENLIST, self.logged_in)
-            self.set_visible(ID_BUTTON_RATED, True)
+    @ch.click(ID_BUTTON_BROWSE)
+    def browse_tvshow(self, control_id):
+        self.close()
+        xbmc.executebuiltin("Dialog.Close(all)")
+        xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.info.get_info("dbid"))
 
-        @ch.click(ID_BUTTON_BROWSE)
-        def browse_tvshow(self, control_id):
-            self.close()
-            xbmc.executebuiltin("Dialog.Close(all)")
-            xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.info.get_info("dbid"))
+    @ch.click(ID_LIST_SEASONS)
+    def open_season_dialog(self, control_id):
+        info = self.FocusedItem(control_id).getVideoInfoTag()
+        wm.open_season_info(tvshow_id=self.info.get_property("id"),
+                            season=info.getSeason(),
+                            tvshow=self.info.get_info("title"))
 
-        @ch.click(ID_LIST_SEASONS)
-        def open_season_dialog(self, control_id):
-            info = self.FocusedItem(control_id).getVideoInfoTag()
-            wm.open_season_info(tvshow_id=self.info.get_property("id"),
-                                season=info.getSeason(),
-                                tvshow=self.info.get_info("title"))
+    @ch.click(ID_LIST_STUDIOS)
+    def open_company_info(self, control_id):
+        filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+                    "type": "with_companies",
+                    "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+        wm.open_video_list(filters=filters)
 
-        @ch.click(ID_LIST_STUDIOS)
-        def open_company_info(self, control_id):
-            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
-                        "type": "with_companies",
-                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(filters=filters)
+    @ch.click(ID_LIST_KEYWORDS)
+    def open_keyword_info(self, control_id):
+        filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+                    "type": "with_keywords",
+                    "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+        wm.open_video_list(filters=filters)
 
-        @ch.click(ID_LIST_KEYWORDS)
-        def open_keyword_info(self, control_id):
-            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
-                        "type": "with_keywords",
-                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(filters=filters)
+    @ch.click(ID_LIST_GENRES)
+    def open_genre_info(self, control_id):
+        filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+                    "type": "with_genres",
+                    "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+        wm.open_video_list(filters=filters,
+                           media_type="tv")
 
-        @ch.click(ID_LIST_GENRES)
-        def open_genre_info(self, control_id):
-            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
-                        "type": "with_genres",
-                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(filters=filters,
-                               media_type="tv")
+    @ch.click(ID_LIST_NETWORKS)
+    def open_network_info(self, control_id):
+        filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
+                    "type": "with_networks",
+                    "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+        wm.open_video_list(filters=filters,
+                           media_type="tv")
 
-        @ch.click(ID_LIST_NETWORKS)
-        def open_network_info(self, control_id):
-            filters = [{"id": self.FocusedItem(control_id).getProperty("id"),
-                        "type": "with_networks",
-                        "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-            wm.open_video_list(filters=filters,
-                               media_type="tv")
+    def get_manage_options(self):
+        options = []
+        title = self.info.get_info("tvshowtitle")
+        dbid = self.info.get_info("dbid")
+        if dbid:
+            call = "RunScript(script.artwork.downloader,mediatype=tv,dbid={}%s)".format(dbid)
+            options += [(addon.LANG(413), call % (",mode=gui")),
+                        (addon.LANG(14061), call % ("")),
+                        (addon.LANG(32101), call % (",mode=custom,extrathumbs")),
+                        (addon.LANG(32100), call % (",mode=custom"))]
+        else:
+            options += [(addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title)]
+        options.append((addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"))
+        return options
 
-        def get_manage_options(self):
-            options = []
-            title = self.info.get_info("tvshowtitle")
-            dbid = self.info.get_info("dbid")
-            if dbid:
-                call = "RunScript(script.artwork.downloader,mediatype=tv,dbid={}%s)".format(dbid)
-                options += [(addon.LANG(413), call % (",mode=gui")),
-                            (addon.LANG(14061), call % ("")),
-                            (addon.LANG(32101), call % (",mode=custom,extrathumbs")),
-                            (addon.LANG(32100), call % (",mode=custom"))]
-            else:
-                options += [(addon.LANG(32166), "RunPlugin(plugin://plugin.video.sickrage?action=addshow&show_name=%s)" % title)]
-            options.append((addon.LANG(1049), "Addon.OpenSettings(script.extendedinfo)"))
-            return options
-
-        @ch.click(ID_BUTTON_OPENLIST)
-        def open_list(self, control_id):
-            index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
-                                            list=[addon.LANG(32144), addon.LANG(32145)])
-            if index == 0:
-                wm.open_video_list(media_type="tv",
-                                   mode="favorites")
-            elif index == 1:
-                wm.open_video_list(mode="rating",
-                                   media_type="tv")
-
-        @ch.click(ID_BUTTON_RATED)
-        def open_rated_items(self, control_id):
+    @ch.click(ID_BUTTON_OPENLIST)
+    def open_list(self, control_id):
+        index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
+                                        list=[addon.LANG(32144), addon.LANG(32145)])
+        if index == 0:
+            wm.open_video_list(media_type="tv",
+                               mode="favorites")
+        elif index == 1:
             wm.open_video_list(mode="rating",
                                media_type="tv")
 
-        def update_states(self):
-            xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-            _, __, self.states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
-                                                           cache_days=0,
-                                                           dbid=self.info.get_info("dbid"))
-            super(DialogTVShowInfo, self).update_states()
+    @ch.click(ID_BUTTON_RATED)
+    def open_rated_items(self, control_id):
+        wm.open_video_list(mode="rating",
+                           media_type="tv")
 
-    return DialogTVShowInfo
+    def update_states(self):
+        xbmc.sleep(2000)  # delay because MovieDB takes some time to update
+        _, __, self.states = tmdb.extended_tvshow_info(tvshow_id=self.info.get_property("id"),
+                                                       cache_days=0,
+                                                       dbid=self.info.get_info("dbid"))
+        super(DialogTVShowInfo, self).update_states()

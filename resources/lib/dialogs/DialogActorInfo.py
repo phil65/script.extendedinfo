@@ -17,36 +17,32 @@ ID_CONTROL_PLOT = 132
 ch = ActionHandler()
 
 
-def get_window(window_type):
+class DialogActorInfo(DialogBaseInfo):
+    TYPE = "Actor"
+    LISTS = [(150, "movie_roles"),
+             (250, "tvshow_roles"),
+             (450, "images"),
+             (550, "movie_crew_roles"),
+             (650, "tvshow_crew_roles"),
+             (750, "tagged_images")]
 
-    class DialogActorInfo(DialogBaseInfo, window_type):
-        TYPE = "Actor"
-        LISTS = [(150, "movie_roles"),
-                 (250, "tvshow_roles"),
-                 (450, "images"),
-                 (550, "movie_crew_roles"),
-                 (650, "tvshow_crew_roles"),
-                 (750, "tagged_images")]
+    def __init__(self, *args, **kwargs):
+        super(DialogActorInfo, self).__init__(*args, **kwargs)
+        data = tmdb.extended_actor_info(actor_id=kwargs.get('id', False))
+        if not data:
+            return None
+        self.info, self.lists = data
+        self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
 
-        def __init__(self, *args, **kwargs):
-            super(DialogActorInfo, self).__init__(*args, **kwargs)
-            data = tmdb.extended_actor_info(actor_id=kwargs.get('id', False))
-            if not data:
-                return None
-            self.info, self.lists = data
-            self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
+    def onInit(self):
+        self.get_youtube_vids(self.info.label)
+        super(DialogActorInfo, self).onInit()
 
-        def onInit(self):
-            self.get_youtube_vids(self.info.label)
-            super(DialogActorInfo, self).onInit()
+    def onClick(self, control_id):
+        super(DialogActorInfo, self).onClick(control_id)
+        ch.serve(control_id, self)
 
-        def onClick(self, control_id):
-            super(DialogActorInfo, self).onClick(control_id)
-            ch.serve(control_id, self)
-
-        @ch.click(ID_CONTROL_PLOT)
-        def show_plot(self, control_id):
-            xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
-                                        text=self.info.get_property("biography"))
-
-    return DialogActorInfo
+    @ch.click(ID_CONTROL_PLOT)
+    def show_plot(self, control_id):
+        xbmcgui.Dialog().textviewer(heading=addon.LANG(32037),
+                                    text=self.info.get_property("biography"))

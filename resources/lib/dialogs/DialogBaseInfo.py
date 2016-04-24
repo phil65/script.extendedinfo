@@ -17,6 +17,7 @@ from kodi65 import selectdialog
 from kodi65 import slideshow
 from kodi65.listitem import VideoItem
 from kodi65.actionhandler import ActionHandler
+from kodi65 import windows
 
 ch = ActionHandler()
 
@@ -26,7 +27,7 @@ ID_BUTTON_BOUNCEUP = 20000
 ID_BUTTON_BOUNCEDOWN = 20001
 
 
-class DialogBaseInfo(object):
+class DialogBaseInfo(windows.DialogXML):
     ACTION_PREVIOUS_MENU = [92, 9]
     ACTION_EXIT_SCRIPT = [13, 10]
 

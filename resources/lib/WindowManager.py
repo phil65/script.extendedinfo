@@ -62,11 +62,10 @@ class WindowManager(object):
             movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
                                                     dbid=dbid,
                                                     name=name)
-        movie_class = DialogMovieInfo.get_window(windows.DialogXML)
-        dialog = movie_class(INFO_XML,
-                             addon.PATH,
-                             id=movie_id,
-                             dbid=dbid)
+        dialog = DialogMovieInfo.DialogMovieInfo(INFO_XML,
+                                                 addon.PATH,
+                                                 id=movie_id,
+                                                 dbid=dbid)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -94,11 +93,10 @@ class WindowManager(object):
             tmdb_id = TheMovieDB.search_media(media_name=name,
                                               year="",
                                               media_type="tv")
-        tvshow_class = DialogTVShowInfo.get_window(windows.DialogXML)
-        dialog = tvshow_class(INFO_XML,
-                              addon.PATH,
-                              tmdb_id=tmdb_id,
-                              dbid=dbid)
+        dialog = DialogTVShowInfo.DialogTVShowInfo(INFO_XML,
+                                                   addon.PATH,
+                                                   tmdb_id=tmdb_id,
+                                                   dbid=dbid)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -128,12 +126,11 @@ class WindowManager(object):
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
-        season_class = DialogSeasonInfo.get_window(windows.DialogXML)
-        dialog = season_class(INFO_XML,
-                              addon.PATH,
-                              id=tvshow_id,
-                              season=season,
-                              dbid=dbid)
+        dialog = DialogSeasonInfo.DialogSeasonInfo(INFO_XML,
+                                                   addon.PATH,
+                                                   id=tvshow_id,
+                                                   season=season,
+                                                   dbid=dbid)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -145,17 +142,16 @@ class WindowManager(object):
         """
         from dialogs import DialogEpisodeInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
-        ep_class = DialogEpisodeInfo.get_window(windows.DialogXML)
         if not tvshow_id and tvshow:
             tvshow_id = TheMovieDB.search_media(media_name=tvshow,
                                                 media_type="tv",
                                                 cache_days=7)
-        dialog = ep_class(INFO_XML,
-                          addon.PATH,
-                          tvshow_id=tvshow_id,
-                          season=season,
-                          episode=episode,
-                          dbid=dbid)
+        dialog = DialogEpisodeInfo.DialogEpisodeInfo(INFO_XML,
+                                                     addon.PATH,
+                                                     tvshow_id=tvshow_id,
+                                                     season=season,
+                                                     episode=episode,
+                                                     dbid=dbid)
         self.open_infodialog(dialog)
 
     def open_actor_info(self, actor_id=None, name=None):
@@ -181,10 +177,9 @@ class WindowManager(object):
             actor_id = actor_info["id"]
         else:
             self.show_busy()
-        actor_class = DialogActorInfo.get_window(windows.DialogXML)
-        dialog = actor_class(ACTOR_XML,
-                             addon.PATH,
-                             id=actor_id)
+        dialog = DialogActorInfo.DialogActorInfo(ACTOR_XML,
+                                                 addon.PATH,
+                                                 id=actor_id)
         self.hide_busy()
         self.open_infodialog(dialog)
 
