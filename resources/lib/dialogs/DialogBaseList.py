@@ -233,6 +233,17 @@ class DialogBaseList(object):
         self.sort_label = listitems[index]
         return True
 
+    def chooose_filter(self, filter_code, header, options):
+        values = [i[0] for i in options]
+        labels = [i[1] for i in options]
+        index = xbmcgui.Dialog().select(heading=addon.LANG(header),
+                                        list=labels)
+        if index == -1:
+            return None
+        self.add_filter(key=filter_code,
+                        value=values[index],
+                        label=labels[index])
+
     def add_filter(self, key, value, label, typelabel="", force_overwrite=False, reset=True):
         if not value:
             return False
