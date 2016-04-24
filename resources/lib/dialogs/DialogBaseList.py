@@ -82,6 +82,7 @@ class DialogBaseList(object):
 
     def set_sort(self, sort):
         self.sort = sort
+        self.verify_sort()
         self.sort_label = self.SORTS[self.get_sort_key()][self.sort]
 
     def verify_sort(self):
