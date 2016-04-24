@@ -81,10 +81,10 @@ def get_window(window_type):
             youtube_id = self.FocusedItem(control_id).getProperty("youtube_id")
             media_type = self.FocusedItem(control_id).getProperty("type")
             if media_type == "channel":
-                channel_filter = [{"id": youtube_id,
-                                   "type": "channelId",
-                                   "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
-                wm.open_youtube_list(filters=channel_filter)
+                filter_ = [{"id": youtube_id,
+                            "type": "channelId",
+                            "label": self.FocusedItem(control_id).getLabel().decode("utf-8")}]
+                wm.open_youtube_list(filters=filter_)
             else:
                 wm.play_youtube_video(youtube_id=youtube_id,
                                       listitem=self.FocusedItem(control_id))
@@ -170,7 +170,8 @@ def get_window(window_type):
         @ch.context("video")
         def context_menu(self, control_id):
             if self.type == "video":
-                more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))
+                more_vids = "{} [B]{}[/B]".format(addon.LANG(32081),
+                                                  self.FocusedItem(control_id).getProperty("channel_title"))
                 index = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32069), more_vids])
                 if index < 0:
                     return None
@@ -186,10 +187,11 @@ def get_window(window_type):
                     wm.open_youtube_list(filters=filter_)
 
         def update_ui(self):
-            self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(self.type == "video")
-            self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(self.type == "video")
+            is_video = self.type == "video"
+            self.getControl(ID_BUTTON_DIMENSIONFILTER).setVisible(is_video)
+            self.getControl(ID_BUTTON_DURATIONFILTER).setVisible(is_video)
+            self.getControl(ID_BUTTON_CAPTIONFILTER).setVisible(is_video)
+            self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(is_video)
             super(DialogYoutubeList, self).update_ui()
 
         def get_default_sort(self):
