@@ -195,8 +195,7 @@ def get_window(window_type):
         def context_menu(self, control_id):
             if self.type == "video":
                 more_vids = "%s [B]%s[/B]" % (addon.LANG(32081), self.FocusedItem(control_id).getProperty("channel_title"))
-                index = xbmcgui.Dialog().contextmenu(heading=addon.LANG(32151),
-                                                     list=[addon.LANG(32069), more_vids])
+                index = xbmcgui.Dialog().contextmenu(list=[addon.LANG(32069), more_vids])
                 if index < 0:
                     return None
                 elif index == 0:
