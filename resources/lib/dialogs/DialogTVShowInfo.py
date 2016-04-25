@@ -78,7 +78,7 @@ class DialogTVShowInfo(DialogVideoInfo):
 
     @ch.click(ID_BUTTON_BROWSE)
     def browse_tvshow(self, control_id):
-        self.close()
+        self.exit()
         xbmc.executebuiltin("Dialog.Close(all)")
         xbmc.executebuiltin("ActivateWindow(videos,videodb://tvshows/titles/%s/)" % self.info.get_info("dbid"))
 
