@@ -796,10 +796,10 @@ def extended_movie_info(movie_id=None, dbid=None, cache_days=14):
     return (movie, listitems, account_states)
 
 
-def get_tvshow(tvshow_id, cache_days):
+def get_tvshow(tvshow_id, cache_days=30, light=False):
     if not tvshow_id:
         return None
-    params = {"append_to_response": ALL_TV_PROPS,
+    params = {"append_to_response": None if light else ALL_TV_PROPS,
               "language": addon.setting("LanguageID"),
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
     if Login.check_login():
