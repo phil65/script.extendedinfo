@@ -21,7 +21,6 @@ ID_BUTTON_SORTTYPE = 5001
 ID_BUTTON_PUBLISHEDFILTER = 5002
 ID_BUTTON_LANGUAGEFILTER = 5003
 ID_BUTTON_DIMENSIONFILTER = 5006
-ID_BUTTON_TOGGLETYPE = 5007
 ID_BUTTON_DURATIONFILTER = 5008
 ID_BUTTON_CAPTIONFILTER = 5009
 ID_BUTTON_DEFINITIONFILTER = 5012
@@ -30,6 +29,8 @@ ID_BUTTON_DEFINITIONFILTER = 5012
 def get_window(window_type):
 
     class DialogYoutubeList(DialogBaseList, window_type):
+
+        TYPES = ["video", "playlist", "channel"]
 
         FILTERS = {"channelId": addon.LANG(19029),
                    "publishedAfter": addon.LANG(172),
@@ -147,18 +148,6 @@ def get_window(window_type):
                        ("standard", addon.LANG(602)),
                        ("any", addon.LANG(593))]
             self.chooose_filter("videoDefinition", 169, options)
-
-        @ch.click(ID_BUTTON_TOGGLETYPE)
-        def toggle_type(self, control_id):
-            self.filters = []
-            types = {"video": "playlist",
-                     "playlist": "channel",
-                     "channel": "video"}
-            if self.type in types:
-                self.type = types[self.type]
-            if self.sort not in self.SORTS[self.type].keys():
-                self.set_sort("relevance")
-            self.reset()
 
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):

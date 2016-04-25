@@ -20,7 +20,6 @@ ID_BUTTON_GENREFILTER = 5002
 ID_BUTTON_YEARFILTER = 5003
 ID_BUTTON_ORDER = 5004
 ID_BUTTON_CERTFILTER = 5006
-ID_BUTTON_MEDIATYPETOGGLE = 5007
 ID_BUTTON_ACTORFILTER = 5008
 ID_BUTTON_KEYWORDFILTER = 5009
 ID_BUTTON_COMPANYFILTER = 5010
@@ -35,6 +34,8 @@ include_adult = addon.setting("include_adults").lower()
 def get_window(window_type):
 
     class DialogVideoList(DialogBaseList, window_type):
+
+        TYPES = ["movie", "tv"]
 
         FILTERS = {"certification_country": addon.LANG(32153),
                    "certification": addon.LANG(32127),
@@ -183,12 +184,6 @@ def get_window(window_type):
         def toggle_order(self, control_id):
             self.order = "desc" if self.order == "asc" else "asc"
             self.update()
-
-        @ch.click(ID_BUTTON_MEDIATYPETOGGLE)
-        def toggle_media_type(self, control_id):
-            self.filters = []
-            self.type = "movie" if self.type == "tv" else "tv"
-            self.reset()
 
         @ch.click(ID_BUTTON_ACCOUNT)
         def open_account_menu(self, control_id):

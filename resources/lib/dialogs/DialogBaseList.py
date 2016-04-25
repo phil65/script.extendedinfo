@@ -17,6 +17,7 @@ ID_BUTTON_SEARCH = 6000
 ID_BUTTON_RESETFILTERS = 5005
 ID_BUTTON_PREV_PAGE = 700
 ID_BUTTON_NEXT_PAGE = 600
+ID_BUTTON_TOGGLETYPE = 5007
 
 
 class DialogBaseList(object):
@@ -91,6 +92,13 @@ class DialogBaseList(object):
 
     def get_sort_key(self):
         return self.type
+
+    @ch.click(ID_BUTTON_TOGGLETYPE)
+    def toggle_type(self, control_id):
+        self.filters = []
+        self.type = self.TYPES[self.TYPES.index(self.type) - 1]
+        self.verify_sort()
+        self.reset()
 
     @ch.click(ID_BUTTON_RESETFILTERS)
     def reset_filters(self, control_id):
