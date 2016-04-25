@@ -230,9 +230,8 @@ class DialogBaseInfo(windows.DialogXML):
                             rating=rating,
                             dbid=dbid)
             xbmc.sleep(2000)
-            tmdb.extended_tvshow_info(tvshow_id=tvshow_id,
-                                      dbid=dbid,
-                                      cache_days=0)
+            tmdb.get_tvshow(tvshow_id=tvshow_id,
+                            cache_days=0)
         if index == 1:
             self.open_credit_dialog(credit_id=credit_id)
 

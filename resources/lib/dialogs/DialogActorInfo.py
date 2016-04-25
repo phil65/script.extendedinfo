@@ -28,7 +28,7 @@ class DialogActorInfo(DialogBaseInfo):
 
     def __init__(self, *args, **kwargs):
         super(DialogActorInfo, self).__init__(*args, **kwargs)
-        data = tmdb.extended_actor_info(actor_id=kwargs.get('id', False))
+        data = tmdb.extended_actor_info(actor_id=kwargs.get('id'))
         if not data:
             return None
         self.info, self.lists = data

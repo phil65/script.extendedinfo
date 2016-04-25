@@ -510,6 +510,7 @@ def handle_images(results):
         image.set_properties({'aspectratio': item['aspect_ratio'],
                               'type': "poster" if item['aspect_ratio'] < 0.7 else "fanart",
                               'rating': item.get("vote_average"),
+                              'votes': item.get("vote_count"),
                               'iso_639_1': item.get("iso_639_1")})
         if item.get("media"):
             image.set_label(item["media"].get("title"))
@@ -795,11 +796,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_days=14):
     return (movie, listitems, account_states)
 
 
-def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
-    '''
-    get listitem with extended info for tvshow with *tvshow_id
-    merge in info from *dbid if available
-    '''
+def get_tvshow(tvshow_id, cache_days):
     if not tvshow_id:
         return None
     params = {"append_to_response": ALL_TV_PROPS,
@@ -807,9 +804,17 @@ def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    info = get_data(url="tv/%s" % (tvshow_id),
+    return get_data(url="tv/%s" % (tvshow_id),
                     params=params,
                     cache_days=cache_days)
+
+
+def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
+    '''
+    get listitem with extended info for tvshow with *tvshow_id
+    merge in info from *dbid if available
+    '''
+    info = get_tvshow(tvshow_id, cache_days)
     if not info:
         return False
     account_states = info.get("account_states")
