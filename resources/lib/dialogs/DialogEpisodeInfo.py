@@ -31,19 +31,21 @@ class DialogEpisodeInfo(DialogVideoInfo):
     def __init__(self, *args, **kwargs):
         super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
         self.tvshow_id = kwargs.get('tvshow_id')
+        tv_info = tmdb.get_tvshow(self.tvshow_id, light=True)
         data = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
                                           season=kwargs.get('season'),
                                           episode=kwargs.get('episode'))
         if not data:
             return None
         self.info, self.lists, self.states = data
+        self.info.set_info("tvshowtitle", tv_info["name"])
         self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
-        self.get_youtube_vids("{} {}x{}".format(self.info.get_info("tvshowtitle"),
-                                                self.info.get_info('season'),
-                                                self.info.get_info('episode')))
+        self.get_youtube_vids('{} "Season {}" "Episode {}"'.format(self.info.get_info("tvshowtitle"),
+                                                                   self.info.get_info('season'),
+                                                                   self.info.get_info('episode')))
         super(DialogEpisodeInfo, self).update_states()
 
     def onClick(self, control_id):
