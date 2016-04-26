@@ -10,7 +10,7 @@ import xbmc
 import xbmcgui
 import xbmcvfs
 
-import TheMovieDB
+import TheMovieDB as tmdb
 
 from kodi65 import windows
 from kodi65 import addon
@@ -56,16 +56,16 @@ class WindowManager(object):
         open movie info, deal with window stack
         """
         self.show_busy()
-        from dialogs import DialogMovieInfo
+        from dialogs.DialogMovieInfo import DialogMovieInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not movie_id:
-            movie_id = TheMovieDB.get_movie_tmdb_id(imdb_id=imdb_id,
-                                                    dbid=dbid,
-                                                    name=name)
-        dialog = DialogMovieInfo.DialogMovieInfo(INFO_XML,
-                                                 addon.PATH,
-                                                 id=movie_id,
-                                                 dbid=dbid)
+            movie_id = tmdb.get_movie_tmdb_id(imdb_id=imdb_id,
+                                              dbid=dbid,
+                                              name=name)
+        dialog = DialogMovieInfo(INFO_XML,
+                                 addon.PATH,
+                                 id=movie_id,
+                                 dbid=dbid)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -76,27 +76,27 @@ class WindowManager(object):
         """
         self.show_busy()
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
-        from dialogs import DialogTVShowInfo
+        from dialogs.DialogTVShowInfo import DialogTVShowInfo
         if tmdb_id:
             pass
         elif tvdb_id:
-            tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
+            tmdb_id = tmdb.get_show_tmdb_id(tvdb_id)
         elif imdb_id:
-            tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id=imdb_id,
-                                                  source="imdb_id")
+            tmdb_id = tmdb.get_show_tmdb_id(tvdb_id=imdb_id,
+                                            source="imdb_id")
         elif dbid:
             tvdb_id = local_db.get_imdb_id(media_type="tvshow",
                                            dbid=dbid)
             if tvdb_id:
-                tmdb_id = TheMovieDB.get_show_tmdb_id(tvdb_id)
+                tmdb_id = tmdb.get_show_tmdb_id(tvdb_id)
         elif name:
-            tmdb_id = TheMovieDB.search_media(media_name=name,
-                                              year="",
-                                              media_type="tv")
-        dialog = DialogTVShowInfo.DialogTVShowInfo(INFO_XML,
-                                                   addon.PATH,
-                                                   tmdb_id=tmdb_id,
-                                                   dbid=dbid)
+            tmdb_id = tmdb.search_media(media_name=name,
+                                        year="",
+                                        media_type="tv")
+        dialog = DialogTVShowInfo(INFO_XML,
+                                  addon.PATH,
+                                  tmdb_id=tmdb_id,
+                                  dbid=dbid)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -107,30 +107,29 @@ class WindowManager(object):
         needs *season AND (*tvshow_id OR *tvshow)
         """
         self.show_busy()
-        from dialogs import DialogSeasonInfo
-        dbid = int(dbid) if dbid and int(dbid) > 0 else None
+        from dialogs.DialogSeasonInfo import DialogSeasonInfo
         if not tvshow_id:
             params = {"query": tvshow,
                       "language": addon.setting("language")}
-            response = TheMovieDB.get_data(url="search/tv",
-                                           params=params,
-                                           cache_days=30)
+            response = tmdb.get_data(url="search/tv",
+                                     params=params,
+                                     cache_days=30)
             if response["results"]:
                 tvshow_id = str(response['results'][0]['id'])
             else:
                 params = {"query": re.sub('\(.*?\)', '', tvshow),
                           "language": addon.setting("language")}
-                response = TheMovieDB.get_data(url="search/tv",
-                                               params=params,
-                                               cache_days=30)
+                response = tmdb.get_data(url="search/tv",
+                                         params=params,
+                                         cache_days=30)
                 if response["results"]:
                     tvshow_id = str(response['results'][0]['id'])
 
-        dialog = DialogSeasonInfo.DialogSeasonInfo(INFO_XML,
-                                                   addon.PATH,
-                                                   id=tvshow_id,
-                                                   season=season,
-                                                   dbid=dbid)
+        dialog = DialogSeasonInfo(INFO_XML,
+                                  addon.PATH,
+                                  id=tvshow_id,
+                                  season=season,
+                                  dbid=int(dbid) if dbid and int(dbid) > 0 else None)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -140,25 +139,24 @@ class WindowManager(object):
         open season info, deal with window stack
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
         """
-        from dialogs import DialogEpisodeInfo
-        dbid = int(dbid) if dbid and int(dbid) > 0 else None
+        from dialogs.DialogEpisodeInfo import DialogEpisodeInfo
         if not tvshow_id and tvshow:
-            tvshow_id = TheMovieDB.search_media(media_name=tvshow,
-                                                media_type="tv",
-                                                cache_days=7)
-        dialog = DialogEpisodeInfo.DialogEpisodeInfo(INFO_XML,
-                                                     addon.PATH,
-                                                     tvshow_id=tvshow_id,
-                                                     season=season,
-                                                     episode=episode,
-                                                     dbid=dbid)
+            tvshow_id = tmdb.search_media(media_name=tvshow,
+                                          media_type="tv",
+                                          cache_days=7)
+        dialog = DialogEpisodeInfo(INFO_XML,
+                                   addon.PATH,
+                                   tvshow_id=tvshow_id,
+                                   season=season,
+                                   episode=episode,
+                                   dbid=int(dbid) if dbid and int(dbid) > 0 else None)
         self.open_infodialog(dialog)
 
     def open_actor_info(self, actor_id=None, name=None):
         """
         open actor info, deal with window stack
         """
-        from dialogs import DialogActorInfo
+        from dialogs.DialogActorInfo import DialogActorInfo
         if not actor_id:
             name = name.split(" %s " % addon.LANG(20347))
             names = name[0].strip().split(" / ")
@@ -171,15 +169,15 @@ class WindowManager(object):
             else:
                 name = names[0]
             self.show_busy()
-            actor_info = TheMovieDB.get_person_info(name)
+            actor_info = tmdb.get_person_info(name)
             if not actor_info:
                 return None
             actor_id = actor_info["id"]
         else:
             self.show_busy()
-        dialog = DialogActorInfo.DialogActorInfo(ACTOR_XML,
-                                                 addon.PATH,
-                                                 id=actor_id)
+        dialog = DialogActorInfo(ACTOR_XML,
+                                 addon.PATH,
+                                 id=actor_id)
         self.hide_busy()
         self.open_infodialog(dialog)
 
@@ -188,19 +186,18 @@ class WindowManager(object):
         """
         open video list, deal with window stack
         """
-        filters = [] if not filters else filters
         from dialogs import DialogVideoList
-        browser_class = DialogVideoList.get_window(windows.DialogXML)
-        dialog = browser_class(LIST_XML,
-                               addon.PATH,
-                               listitems=listitems,
-                               filters=filters,
-                               mode=mode,
-                               list_id=list_id,
-                               force=force,
-                               filter_label=filter_label,
-                               search_str=search_str,
-                               type=media_type)
+        Browser = DialogVideoList.get_window(windows.DialogXML)
+        dialog = Browser(LIST_XML,
+                         addon.PATH,
+                         listitems=listitems,
+                         filters=[] if not filters else filters,
+                         mode=mode,
+                         list_id=list_id,
+                         force=force,
+                         filter_label=filter_label,
+                         search_str=search_str,
+                         type=media_type)
         self.open_dialog(dialog)
 
     def open_youtube_list(self, search_str="", filters=None, sort="relevance",
@@ -208,14 +205,13 @@ class WindowManager(object):
         """
         open video list, deal with window stack
         """
-        filters = [] if not filters else filters
         from dialogs import DialogYoutubeList
-        youtube_class = DialogYoutubeList.get_window(windows.DialogXML)
-        dialog = youtube_class(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
-                               search_str=search_str,
-                               filters=filters,
-                               filter_label=filter_label,
-                               type=media_type)
+        YouTube = DialogYoutubeList.get_window(windows.DialogXML)
+        dialog = YouTube(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
+                         search_str=search_str,
+                         filters=[] if not filters else filters,
+                         filter_label=filter_label,
+                         type=media_type)
         self.open_dialog(dialog)
 
     def open_infodialog(self, dialog):
@@ -301,7 +297,7 @@ def check_version():
 #         username = addon.setting("tmdb_username")
 #         password = addon.setting("tmdb_password")
 #         if username and password:
-#             TheMovieDB.Login = TheMovieDB.LoginProvider(username=username,
+#             tmdb.Login = tmdb.LoginProvider(username=username,
 #                                                         password=password)
 #         if wm.active_dialog:
 #             wm.active_dialog.close()
