@@ -7,9 +7,9 @@ import xbmc
 import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
-from resources.lib import YouTube
 from resources.lib.WindowManager import wm
 
+from kodi65 import youtube
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
@@ -255,7 +255,7 @@ class DialogBaseInfo(windows.DialogXML):
         except Exception:
             return None
         if not self.yt_listitems:
-            self.yt_listitems = YouTube.search(search_str, limit=15)
+            self.yt_listitems = youtube.search(search_str, limit=15)
         vid_ids = [item.get_property("key") for item in self.lists["videos"]] if "videos" in self.lists else []
         youtube_list.reset()
         youtube_list.addItems([i.get_listitem() for i in self.yt_listitems if i.get_property("youtube_id") not in vid_ids])

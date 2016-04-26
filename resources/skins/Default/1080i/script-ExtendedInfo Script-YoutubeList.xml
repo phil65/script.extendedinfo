@@ -569,6 +569,20 @@
 					<textcolor>FF999999</textcolor>
 					<focusedcolor>FFFAFAFA</focusedcolor>
 				</control>
+				<control type="button" id="5013">
+					<label>$LOCALIZE[564]</label>
+					<width>420</width>
+					<height>60</height>
+					<textoffsetx>30</textoffsetx>
+					<textwidth>315</textwidth>
+					<align>left</align>
+					<aligny>center</aligny>
+					<texturefocus colordiffuse="FF12B2E7">lists/focus.png</texturefocus>
+					<texturenofocus border="20">lists/separator.png</texturenofocus>
+					<font>font12</font>
+					<textcolor>FF999999</textcolor>
+					<focusedcolor>FFFAFAFA</focusedcolor>
+				</control>
 				<control type="button" id="5005">
 					<label>$ADDON[script.extendedinfo 32022]</label>
 					<width>420</width>

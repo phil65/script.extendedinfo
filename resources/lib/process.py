@@ -15,12 +15,12 @@ import xbmcplugin
 
 import Trakt
 import RottenTomatoes
-import YouTube
 import LastFM
 import TheAudioDB as AudioDB
 import TheMovieDB as tmdb
 from WindowManager import wm
 
+from kodi65 import youtube
 from kodi65.localdb import local_db
 from kodi65 import addon
 from kodi65 import utils
@@ -234,16 +234,16 @@ def start_info_actions(info, params):
     elif info == 'youtubesearchvideos':
         addon.set_global('%sSearchValue' % params.get("prefix", ""), params.get("id", ""))
         if params.get("id"):
-            return YouTube.search(search_str=params.get("id", ""),
+            return youtube.search(search_str=params.get("id", ""),
                                   hd=params.get("hd"),
                                   orderby=params.get("orderby", "relevance"))
     elif info == 'youtubeplaylistvideos':
-        return YouTube.get_playlist_videos(params.get("id", ""))
+        return youtube.get_playlist_videos(params.get("id", ""))
     elif info == 'youtubeusersearchvideos':
         user_name = params.get("id")
         if user_name:
-            playlists = YouTube.get_user_playlists(user_name)
-            return YouTube.get_playlist_videos(playlists["uploads"])
+            playlists = youtube.get_user_playlists(user_name)
+            return youtube.get_playlist_videos(playlists["uploads"])
     elif info == 'favourites':
         if params.get("id"):
             items = favs.get_favs_by_type(params["id"])

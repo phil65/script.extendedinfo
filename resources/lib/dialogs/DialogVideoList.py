@@ -8,7 +8,7 @@ import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
-from DialogBaseList import DialogBaseList
+from kodi65.dialogbaselist import DialogBaseList
 
 from kodi65 import addon
 from kodi65 import utils

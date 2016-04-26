@@ -7,10 +7,10 @@ import datetime
 
 import xbmcgui
 
-from resources.lib import YouTube
 from resources.lib.WindowManager import wm
-from DialogBaseList import DialogBaseList
 
+from kodi65 import youtube
+from kodi65.dialogbaselist import DialogBaseList
 from kodi65 import addon
 from kodi65 import utils
 from kodi65.actionhandler import ActionHandler
@@ -24,6 +24,7 @@ ID_BUTTON_DIMENSIONFILTER = 5006
 ID_BUTTON_DURATIONFILTER = 5008
 ID_BUTTON_CAPTIONFILTER = 5009
 ID_BUTTON_DEFINITIONFILTER = 5012
+ID_BUTTON_TYPEFILTER = 5013
 
 
 def get_window(window_type):
@@ -39,6 +40,7 @@ def get_window(window_type):
                    "videoDuration": addon.LANG(180),
                    "videoCaption": addon.LANG(287),
                    "videoDefinition": addon.LANG(32058),
+                   "videoType": "Type",
                    "relatedToVideoId": addon.LANG(32058)}
 
         TRANSLATIONS = {"video": addon.LANG(157),
@@ -150,6 +152,13 @@ def get_window(window_type):
                        ("any", addon.LANG(593))]
             self.chooose_filter("videoDefinition", 169, options)
 
+        @ch.click(ID_BUTTON_TYPEFILTER)
+        def set_type_filter(self, control_id):
+            options = [("movie", addon.LANG(20338)),
+                       ("episode", addon.LANG(20359)),
+                       ("any", addon.LANG(593))]
+            self.chooose_filter("videoType", 32151, options)
+
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
             if not self.choose_sort_method(self.type):
@@ -196,7 +205,7 @@ def get_window(window_type):
             self.set_filter_label()
             if self.search_str:
                 self.filter_label = addon.LANG(32146) % (self.search_str) + "  " + self.filter_label
-            return YouTube.search(search_str=self.search_str,
+            return youtube.search(search_str=self.search_str,
                                   orderby=self.sort,
                                   extended=True,
                                   filters={item["type"]: item["id"] for item in self.filters},
