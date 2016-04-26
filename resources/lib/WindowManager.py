@@ -225,7 +225,12 @@ class WindowManager(object):
         if self.active_dialog:
             self.window_stack.append(self.active_dialog)
             self.active_dialog.close()
-        check_version()
+        utils.check_version()
+        if not addon.setting("first_start_infodialog"):
+            addon.set_setting("first_start_infodialog", "True")
+            xbmcgui.Dialog().ok(heading=addon.NAME,
+                                line1=addon.LANG(32140),
+                                line2=addon.LANG(32141))
         self.active_dialog = dialog
         dialog.doModal()
         if dialog.cancelled:
@@ -270,21 +275,6 @@ class WindowManager(object):
         self.busy = max(0, self.busy - 1)
         if self.busy == 0:
             xbmc.executebuiltin("Dialog.Close(busydialog)")
-
-
-def check_version():
-    """
-    check version, open TextViewer if update detected
-    """
-    if not addon.setting("changelog_version") == addon.VERSION:
-        xbmcgui.Dialog().textviewer(heading=addon.LANG(24036),
-                                    text=utils.read_from_file(addon.CHANGELOG, True))
-        addon.set_setting("changelog_version", addon.VERSION)
-    if not addon.setting("first_start_infodialog"):
-        addon.set_setting("first_start_infodialog", "True")
-        xbmcgui.Dialog().ok(heading=addon.NAME,
-                            line1=addon.LANG(32140),
-                            line2=addon.LANG(32141))
 
 
 # class SettingsMonitor(xbmc.Monitor):
