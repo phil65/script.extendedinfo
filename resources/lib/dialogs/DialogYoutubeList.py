@@ -13,6 +13,7 @@ from kodi65 import youtube
 from kodi65.dialogbaselist import DialogBaseList
 from kodi65 import addon
 from kodi65 import utils
+from kodi65 import windows
 from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
@@ -121,14 +122,14 @@ def get_window(window_type):
             options = [("en", "en"),
                        ("de", "de"),
                        ("fr", "fr")]
-            self.chooose_filter("regionCode", 32151, options)
+            self.choose_filter("regionCode", 32151, options)
 
         @ch.click(ID_BUTTON_DIMENSIONFILTER)
         def set_dimension_filter(self, control_id):
             options = [("2d", "2D"),
                        ("3d", "3D"),
                        ("any", addon.LANG(593))]
-            self.chooose_filter("videoDimension", 32151, options)
+            self.choose_filter("videoDimension", 32151, options)
 
         @ch.click(ID_BUTTON_DURATIONFILTER)
         def set_duration_filter(self, control_id):
@@ -136,28 +137,28 @@ def get_window(window_type):
                        ("medium", addon.LANG(601)),
                        ("short", addon.LANG(33012)),
                        ("any", addon.LANG(593))]
-            self.chooose_filter("videoDuration", 32151, options)
+            self.choose_filter("videoDuration", 32151, options)
 
         @ch.click(ID_BUTTON_CAPTIONFILTER)
         def set_caption_filter(self, control_id):
             options = [("closedCaption", addon.LANG(107)),
                        ("none", addon.LANG(106)),
                        ("any", addon.LANG(593))]
-            self.chooose_filter("videoCaption", 287, options)
+            self.choose_filter("videoCaption", 287, options)
 
         @ch.click(ID_BUTTON_DEFINITIONFILTER)
         def set_definition_filter(self, control_id):
             options = [("high", addon.LANG(419)),
                        ("standard", addon.LANG(602)),
                        ("any", addon.LANG(593))]
-            self.chooose_filter("videoDefinition", 169, options)
+            self.choose_filter("videoDefinition", 169, options)
 
         @ch.click(ID_BUTTON_TYPEFILTER)
         def set_type_filter(self, control_id):
             options = [("movie", addon.LANG(20338)),
                        ("episode", addon.LANG(20359)),
                        ("any", addon.LANG(593))]
-            self.chooose_filter("videoType", 32151, options)
+            self.choose_filter("videoType", 32151, options)
 
         @ch.click(ID_BUTTON_SORTTYPE)
         def get_sort_type(self, control_id):
@@ -213,3 +214,16 @@ def get_window(window_type):
                                   page=self.page_token)
 
     return DialogYoutubeList
+
+
+def open(self, search_str="", filters=None, sort="relevance", filter_label="", media_type="video"):
+    """
+    open video list, deal with window stack
+    """
+    YouTube = get_window(windows.DialogXML)
+    dialog = YouTube(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
+                     search_str=search_str,
+                     filters=[] if not filters else filters,
+                     filter_label=filter_label,
+                     type=media_type)
+    return dialog
