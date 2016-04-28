@@ -62,8 +62,7 @@ def get_window(window_type):
                            "vote_count": addon.LANG(32111)},
                  "tv": {"popularity": addon.LANG(32110),
                         "first_air_date": addon.LANG(20416),
-                        "vote_average": addon.LANG(32112),
-                        "vote_count": addon.LANG(32111)},
+                        "vote_average": addon.LANG(32112)},
                  "favorites": {"created_at": addon.LANG(32157)},
                  "list": {"created_at": addon.LANG(32157)},
                  "rating": {"created_at": addon.LANG(32157)}}
