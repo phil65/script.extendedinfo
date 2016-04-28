@@ -68,6 +68,15 @@ def get_window(window_type):
                  "list": {"created_at": addon.LANG(32157)},
                  "rating": {"created_at": addon.LANG(32157)}}
 
+        LABEL2 = {"popularity": lambda x: x.get_property("popularity"),
+                  "release_date": lambda x: x.get_info("premiered"),
+                  "revenue": lambda x: x.get_info("genre"),
+                  "vote_average": lambda x: x.get_info("rating"),
+                  "vote_count": lambda x: "{} votes".format(x.get_info("votes")),
+                  "first_air_date": lambda x: x.get_info("premiered"),
+                  "created_at": lambda x: x.get_property("created_at"),
+                  "original_title": lambda x: x.get_info("originaltitle")}
+
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "movie")

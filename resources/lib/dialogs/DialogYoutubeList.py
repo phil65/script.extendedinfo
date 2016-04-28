@@ -66,6 +66,13 @@ def get_window(window_type):
                              "videoCount": addon.LANG(32068),
                              "viewCount": addon.LANG(567)}}
 
+        LABEL2 = {"date": lambda x: x.get_info("date"),
+                  "relevance": lambda x: x.get_property("relevance"),
+                  "title": lambda x: x.get_info("title"),
+                  "viewCount": lambda x: x.get_property("viewCount"),
+                  "videoCount": lambda x: x.get_property("videoCount"),
+                  "rating": lambda x: x.get_info("rating")}
+
         @utils.busy_dialog
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "video")

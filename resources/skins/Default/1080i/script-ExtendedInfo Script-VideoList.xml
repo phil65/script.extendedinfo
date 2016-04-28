@@ -175,7 +175,7 @@
 							<align>left</align>
 							<aligny>top</aligny>
 							<font>font12</font>
-							<label>$INFO[ListItem.Premiered]$INFO[ListItem.Genre, - ]</label>
+							<label>$INFO[ListItem.Label2]</label>
 						</control>
 						<control type="image">
 							<width>30</width>
@@ -225,7 +225,7 @@
 							<align>left</align>
 							<aligny>top</aligny>
 							<font>font12</font>
-							<label>$INFO[ListItem.Premiered]$INFO[ListItem.Genre, - ]</label>
+							<label>$INFO[ListItem.Label2]</label>
 						</control>
 						<control type="image">
 							<width>30</width>
