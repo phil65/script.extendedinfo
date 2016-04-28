@@ -201,7 +201,8 @@ def get_window(window_type):
             self.getControl(ID_BUTTON_DEFINITIONFILTER).setVisible(is_video)
             super(DialogYoutubeList, self).update_ui()
 
-        def get_default_sort(self):
+        @property
+        def default_sort(self):
             return "relevance"
 
         def add_filter(self, **kwargs):

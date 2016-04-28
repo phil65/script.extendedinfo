@@ -161,15 +161,17 @@ def get_window(window_type):
                                         movie_id=movie_id,
                                         status=True)
 
-        def get_sort_key(self):
+        @property
+        def sort_key(self):
             return self.mode if self.mode in ["favorites", "rating", "list"] else self.type
 
-        def get_default_sort(self):
+        @property
+        def default_sort(self):
             return "created_at" if self.mode in ["favorites", "rating", "list"] else "popularity"
 
         @ch.click(ID_BUTTON_SORT)
         def get_sort_type(self, control_id):
-            if not self.choose_sort_method(self.get_sort_key()):
+            if not self.choose_sort_method(self.sort_key):
                 return None
             if self.sort == "vote_average":
                 self.add_filter(key="vote_count.gte",
