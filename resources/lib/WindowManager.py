@@ -15,6 +15,7 @@ import TheMovieDB as tmdb
 from kodi65 import windows
 from kodi65 import addon
 from kodi65 import utils
+from kodi65.busyhandler import busyhandler
 from kodi65.player import player
 from kodi65.localdb import local_db
 
@@ -48,13 +49,12 @@ class WindowManager(object):
         self.saved_control = xbmc.getInfoLabel("System.CurrentControlId")
         self.saved_dialogstate = xbmc.getCondVisibility("Window.IsActive(Movieinformation)")
         # self.monitor = SettingsMonitor()
-        self.busy = 0
 
     def open_movie_info(self, movie_id=None, dbid=None, name=None, imdb_id=None):
         """
         open movie info, deal with window stack
         """
-        self.show_busy()
+        busyhandler.show_busy()
         from dialogs.DialogMovieInfo import DialogMovieInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not movie_id:
@@ -65,14 +65,14 @@ class WindowManager(object):
                                  addon.PATH,
                                  id=movie_id,
                                  dbid=dbid)
-        self.hide_busy()
+        busyhandler.hide_busy()
         self.open_infodialog(dialog)
 
     def open_tvshow_info(self, tmdb_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
         """
-        self.show_busy()
+        busyhandler.show_busy()
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         from dialogs.DialogTVShowInfo import DialogTVShowInfo
         if tmdb_id:
@@ -95,7 +95,7 @@ class WindowManager(object):
                                   addon.PATH,
                                   tmdb_id=tmdb_id,
                                   dbid=dbid)
-        self.hide_busy()
+        busyhandler.hide_busy()
         self.open_infodialog(dialog)
 
     def open_season_info(self, tvshow_id=None, season=None, tvshow=None, dbid=None):
@@ -103,7 +103,7 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
         """
-        self.show_busy()
+        busyhandler.show_busy()
         from dialogs.DialogSeasonInfo import DialogSeasonInfo
         if not tvshow_id:
             params = {"query": tvshow,
@@ -127,7 +127,7 @@ class WindowManager(object):
                                   id=tvshow_id,
                                   season=season,
                                   dbid=int(dbid) if dbid and int(dbid) > 0 else None)
-        self.hide_busy()
+        busyhandler.hide_busy()
         self.open_infodialog(dialog)
 
     def open_episode_info(self, tvshow_id=None, season=None, episode=None, tvshow=None, dbid=None):
@@ -164,17 +164,17 @@ class WindowManager(object):
                 name = names[ret]
             else:
                 name = names[0]
-            self.show_busy()
+            busyhandler.show_busy()
             actor_info = tmdb.get_person_info(name)
             if not actor_info:
                 return None
             actor_id = actor_info["id"]
         else:
-            self.show_busy()
+            busyhandler.show_busy()
         dialog = DialogActorInfo(ACTOR_XML,
                                  addon.PATH,
                                  id=actor_id)
-        self.hide_busy()
+        busyhandler.hide_busy()
         self.open_infodialog(dialog)
 
     def open_video_list(self, listitems=None, filters=None, mode="filter", list_id=False,
@@ -259,16 +259,6 @@ class WindowManager(object):
         if self.active_dialog and self.active_dialog.window_type == "dialog":
             player.wait_for_video_end()
             self.active_dialog.doModal()
-
-    def show_busy(self):
-        if self.busy == 0:
-            xbmc.executebuiltin("ActivateWindow(busydialog)")
-        self.busy += 1
-
-    def hide_busy(self):
-        self.busy = max(0, self.busy - 1)
-        if self.busy == 0:
-            xbmc.executebuiltin("Dialog.Close(busydialog)")
 
 
 # class SettingsMonitor(xbmc.Monitor):

@@ -12,6 +12,7 @@ from kodi65.dialogbaselist import DialogBaseList
 
 from kodi65 import addon
 from kodi65 import utils
+from kodi65 import busyhandler
 from kodi65 import confirmdialog
 from kodi65.actionhandler import ActionHandler
 
@@ -76,7 +77,7 @@ def get_window(window_type):
                   "created_at": lambda x: x.get_property("created_at"),
                   "original_title": lambda x: x.get_info("originaltitle")}
 
-        @utils.busy_dialog
+        @busyhandler.set_busy
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "movie")
             self.list_id = kwargs.get("list_id", False)

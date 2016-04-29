@@ -10,10 +10,10 @@ import xbmcgui
 from resources.lib.WindowManager import wm
 
 from kodi65 import youtube
-from kodi65.dialogbaselist import DialogBaseList
 from kodi65 import addon
-from kodi65 import utils
 from kodi65 import windows
+from kodi65 import busyhandler
+from kodi65.dialogbaselist import DialogBaseList
 from kodi65.actionhandler import ActionHandler
 
 ch = ActionHandler()
@@ -73,7 +73,7 @@ def get_window(window_type):
                   "videoCount": lambda x: x.get_property("videoCount"),
                   "rating": lambda x: x.get_info("rating")}
 
-        @utils.busy_dialog
+        @busyhandler.set_busy
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "video")
             super(DialogYoutubeList, self).__init__(*args, **kwargs)

@@ -10,7 +10,7 @@ from resources.lib.WindowManager import wm
 from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
-from kodi65 import utils
+from kodi65 import busyhandler
 from kodi65 import addon
 from kodi65.actionhandler import ActionHandler
 
@@ -27,7 +27,7 @@ class DialogEpisodeInfo(DialogVideoInfo):
              (1150, "videos"),
              (1350, "images")]
 
-    @utils.busy_dialog
+    @busyhandler.set_busy
     def __init__(self, *args, **kwargs):
         super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
         self.tvshow_id = kwargs.get('tvshow_id')
