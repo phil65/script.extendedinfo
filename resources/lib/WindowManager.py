@@ -50,8 +50,7 @@ class WindowManager(object):
         # self.monitor = SettingsMonitor()
         self.busy = 0
 
-    def open_movie_info(self, movie_id=None, dbid=None,
-                        name=None, imdb_id=None):
+    def open_movie_info(self, movie_id=None, dbid=None, name=None, imdb_id=None):
         """
         open movie info, deal with window stack
         """
@@ -69,8 +68,7 @@ class WindowManager(object):
         self.hide_busy()
         self.open_infodialog(dialog)
 
-    def open_tvshow_info(self, tmdb_id=None, dbid=None,
-                         tvdb_id=None, imdb_id=None, name=None):
+    def open_tvshow_info(self, tmdb_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
         """
@@ -100,8 +98,7 @@ class WindowManager(object):
         self.hide_busy()
         self.open_infodialog(dialog)
 
-    def open_season_info(self, tvshow_id=None,
-                         season=None, tvshow=None, dbid=None):
+    def open_season_info(self, tvshow_id=None, season=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
@@ -133,8 +130,7 @@ class WindowManager(object):
         self.hide_busy()
         self.open_infodialog(dialog)
 
-    def open_episode_info(self, tvshow_id=None, season=None,
-                          episode=None, tvshow=None, dbid=None):
+    def open_episode_info(self, tvshow_id=None, season=None, episode=None, tvshow=None, dbid=None):
         """
         open season info, deal with window stack
         needs (*tvshow_id OR *tvshow) AND *season AND *episode
@@ -200,8 +196,7 @@ class WindowManager(object):
                          type=media_type)
         self.open_dialog(dialog)
 
-    def open_youtube_list(self, search_str="", filters=None, sort="relevance",
-                          filter_label="", media_type="video"):
+    def open_youtube_list(self, search_str="", filters=None, filter_label="", media_type="video"):
         """
         open video list, deal with window stack
         """
@@ -210,7 +205,6 @@ class WindowManager(object):
         dialog = YouTube(u'script-%s-YoutubeList.xml' % addon.NAME, addon.PATH,
                          search_str=search_str,
                          filters=[] if not filters else filters,
-                         filter_label=filter_label,
                          type=media_type)
         self.open_dialog(dialog)
 
