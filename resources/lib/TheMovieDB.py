@@ -362,6 +362,7 @@ def handle_episodes(results):
                             'aired': item.get('air_date'),
                             'episode': item.get('episode_number'),
                             'season': item.get('season_number'),
+                            'code': item["production_code"],
                             'userrating': item.get('rating'),
                             'plot': item.get('overview'),
                             'rating': round(item['vote_average'], 1) if item.get('vote_average') else "",
@@ -879,7 +880,7 @@ def extended_season_info(tvshow_id, season_number):
     '''
     get listitem with extended info for season (*tvshow_id, *season_number)
     '''
-    if not tvshow_id or not season_number:
+    if not tvshow_id or season_number is not None:
         return None
     tvshow = get_tvshow(tvshow_id)
     params = {"append_to_response": ALL_SEASON_PROPS,
