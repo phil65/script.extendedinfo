@@ -39,13 +39,15 @@ class DialogEpisodeInfo(DialogVideoInfo):
             return None
         self.info, self.lists, self.states = data
         self.info.set_info("tvshowtitle", tv_info["name"])
-        self.info.update_properties(imagetools.blur(self.info.get_art("thumb")))
+        image_info = imagetools.blur(self.info.get_art("thumb"))
+        self.info.update_properties(image_info)
 
     def onInit(self):
         super(DialogEpisodeInfo, self).onInit()
-        self.get_youtube_vids('{} "Season {}" "Episode {}"'.format(self.info.get_info("tvshowtitle"),
-                                                                   self.info.get_info('season'),
-                                                                   self.info.get_info('episode')))
+        search_str = '{} "Season {}" "Episode {}"'.format(self.info.get_info("tvshowtitle"),
+                                                          self.info.get_info('season'),
+                                                          self.info.get_info('episode'))
+        self.get_youtube_vids(search_str)
         super(DialogEpisodeInfo, self).update_states()
 
     def onClick(self, control_id):
@@ -60,14 +62,17 @@ class DialogEpisodeInfo(DialogVideoInfo):
         wm.open_video_list(listitems=listitems)
 
     def get_identifier(self):
-        return [self.tvshow_id, self.info.get_info("season"), self.info.get_info("episode")]
+        return [self.tvshow_id,
+                self.info.get_info("season"),
+                self.info.get_info("episode")]
 
     def update_states(self):
         xbmc.sleep(2000)  # delay because MovieDB takes some time to update
-        _, __, self.states = tmdb.extended_episode_info(tvshow_id=self.tvshow_id,
-                                                        season=self.info.get_info("season"),
-                                                        episode=self.info.get_info("episode"),
-                                                        cache_days=0)
+        info = tmdb.get_episode(tvshow_id=self.tvshow_id,
+                                season=self.info.get_info("season"),
+                                episode=self.info.get_info("episode"),
+                                cache_days=0)
+        self.states = info.get("account_states")
         super(DialogEpisodeInfo, self).update_states()
 
     def get_manage_options(self):

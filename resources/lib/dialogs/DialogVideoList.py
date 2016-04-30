@@ -8,13 +8,13 @@ import xbmcgui
 
 from resources.lib import TheMovieDB as tmdb
 from resources.lib.WindowManager import wm
-from kodi65.dialogbaselist import DialogBaseList
 
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import busyhandler
 from kodi65 import confirmdialog
 from kodi65.actionhandler import ActionHandler
+from kodi65.dialogbaselist import DialogBaseList
 
 ID_BUTTON_SORT = 5001
 ID_BUTTON_GENREFILTER = 5002

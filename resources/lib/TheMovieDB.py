@@ -921,10 +921,7 @@ def extended_season_info(tvshow_id, season_number):
     return (season, listitems)
 
 
-def extended_episode_info(tvshow_id, season, episode, cache_days=7):
-    '''
-    get listitem with extended info for episode (*tvshow_id, *season, *episode)
-    '''
+def get_episode(tvshow_id, season, episode, cache_days=7):
     if not tvshow_id or not episode:
         return None
     if not season:
@@ -934,9 +931,16 @@ def extended_episode_info(tvshow_id, season, episode, cache_days=7):
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
     if Login.check_login():
         params["session_id"] = Login.get_session_id()
-    response = get_data(url="tv/%s/season/%s/episode/%s" % (tvshow_id, season, episode),
-                        params=params,
-                        cache_days=cache_days)
+    return get_data(url="tv/%s/season/%s/episode/%s" % (tvshow_id, season, episode),
+                    params=params,
+                    cache_days=cache_days)
+
+
+def extended_episode_info(tvshow_id, season, episode, cache_days=7):
+    '''
+    get ListItem and lists with extended info for episode (*tvshow_id, *season, *episode)
+    '''
+    response = get_episode(tvshow_id, season, episode, cache_days)
     if not response:
         utils.notify("Could not find episode info")
         return None
@@ -949,7 +953,7 @@ def extended_episode_info(tvshow_id, season, episode, cache_days=7):
 
 def extended_actor_info(actor_id):
     '''
-    get listitem with extended info for actor with *actor_id
+    get ListItem and lists with extended info for actor with *actor_id
     '''
     if not actor_id:
         return None
