@@ -620,7 +620,10 @@ def get_data(url="", params=None, cache_days=14):
     params["api_key"] = TMDB_KEY
     params = {k: unicode(v).encode('utf-8') for k, v in params.iteritems() if v}
     url = "%s%s?%s" % (URL_BASE, url, urllib.urlencode(params))
-    return utils.get_JSON_response(url, cache_days, "TheMovieDB")
+    response = utils.get_JSON_response(url, cache_days, "TheMovieDB")
+    if "status_code" in response:
+        utils.log("TMDB status code: " + response.get("status_code"))
+    return
 
 
 def get_company_data(company_id):
@@ -880,7 +883,7 @@ def extended_season_info(tvshow_id, season_number):
     '''
     get listitem with extended info for season (*tvshow_id, *season_number)
     '''
-    if not tvshow_id or season_number is not None:
+    if not tvshow_id or season_number is None:
         return None
     tvshow = get_tvshow(tvshow_id)
     params = {"append_to_response": ALL_SEASON_PROPS,
