@@ -17,6 +17,7 @@ from kodi65 import imagetools
 from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
+from kodi65 import busyhandler
 from kodi65.actionhandler import ActionHandler
 
 ID_LIST_SIMILAR = 150
@@ -159,11 +160,11 @@ class DialogMovieInfo(DialogVideoInfo):
 
     @ch.click(ID_BUTTON_OPENLIST)
     def open_list_button(self, control_id):
-        wm.show_busy()
+        busyhandler.busyhandler.show_busy()
         movie_lists = tmdb.get_account_lists()
         listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in movie_lists]
         listitems = [addon.LANG(32134), addon.LANG(32135)] + listitems
-        wm.hide_busy()
+        busyhandler.busyhandler.hide_busy()
         index = xbmcgui.Dialog().select(addon.LANG(32136), listitems)
         if index == -1:
             pass
@@ -177,12 +178,12 @@ class DialogMovieInfo(DialogVideoInfo):
 
     @ch.click(ID_BUTTON_ADDTOLIST)
     def add_to_list_button(self, control_id):
-        wm.show_busy()
+        busyhandler.busyhandler.show_busy()
         account_lists = tmdb.get_account_lists()
         listitems = ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
         listitems.insert(0, addon.LANG(32139))
         listitems.append(addon.LANG(32138))
-        wm.hide_busy()
+        busyhandler.busyhandler.hide_busy()
         index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                         list=listitems)
         if index == 0:

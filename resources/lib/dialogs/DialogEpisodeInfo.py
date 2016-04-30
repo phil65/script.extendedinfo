@@ -54,9 +54,9 @@ class DialogEpisodeInfo(DialogVideoInfo):
 
     @ch.click(ID_BUTTON_RATED)
     def open_rating_list(self, control_id):
-        wm.show_busy()
+        busyhandler.busyhandler.show_busy()
         listitems = tmdb.get_rated_media_items("tv/episodes")
-        wm.hide_busy()
+        busyhandler.busyhandler.hide_busy()
         wm.open_video_list(listitems=listitems)
 
     def get_identifier(self):

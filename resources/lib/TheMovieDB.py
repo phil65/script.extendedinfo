@@ -697,11 +697,10 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
               "language": addon.setting("LanguageID")}
     response = get_data(url="find/%s" % (tvdb_id),
                         params=params)
-    if response and response["tv_results"]:
-        return response["tv_results"][0]["id"]
-    else:
+    if not response or not response["tv_results"]:
         utils.notify("TVShow Info not available.")
         return None
+    return response["tv_results"][0]["id"]
 
 
 def get_trailer(movie_id):
@@ -709,7 +708,7 @@ def get_trailer(movie_id):
     if response and "videos" in response and response['videos']['results']:
         return response['videos']['results'][0]['key']
     utils.notify("Could not get trailer")
-    return ""
+    return None
 
 
 def extended_movie_info(movie_id=None, dbid=None, cache_days=14):

@@ -139,12 +139,12 @@ def get_window(window_type):
                 self.setCurrentListPosition(self.position)
 
         def list_dialog(self, movie_id):
-            wm.show_busy()
+            busyhandler.busyhandler.show_busy()
             listitems = [addon.LANG(32139)]
             account_lists = tmdb.get_account_lists()
             listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.append(addon.LANG(32138))
-            wm.hide_busy()
+            busyhandler.busyhandler.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == 0:
@@ -206,11 +206,11 @@ def get_window(window_type):
                 listitems = [addon.LANG(32135)]
                 if self.logged_in:
                     listitems.append(addon.LANG(32134))
-            wm.show_busy()
+            busyhandler.busyhandler.show_busy()
             if self.logged_in:
                 account_lists = tmdb.get_account_lists()
                 listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-            wm.hide_busy()
+            busyhandler.busyhandler.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == -1:
