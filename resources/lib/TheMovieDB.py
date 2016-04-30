@@ -5,7 +5,6 @@
 
 import re
 import urllib
-from functools32 import lru_cache
 
 from kodi65 import kodijson
 from kodi65 import addon
@@ -60,14 +59,13 @@ class LoginProvider(object):
     def __init__(self, *args, **kwargs):
         self.session_id = None
         self.logged_in = False
-        self.request_token = None
         self.account_id = None
         self.username = kwargs.get("username")
         self.password = kwargs.get("password")
 
-    def check_login(self, cache_days=9999):
-        if self.username:
-            return bool(self.get_session_id(cache_days))
+    def check_login(self):
+        if self.username and self.password:
+            return bool(self.get_session_id())
         return False
 
     def get_account_id(self):
@@ -85,44 +83,38 @@ class LoginProvider(object):
         self.account_id = response.get("id")
         return self.account_id
 
-    @lru_cache(maxsize=128)
     def get_guest_session_id(self):
         '''
         returns guest session id for TMDB
         '''
         response = get_data(url="authentication/guest_session/new",
-                            cache_days=999999)
+                            cache_days=9999)
         if not response or "guest_session_id" not in response:
             return None
         return str(response["guest_session_id"])
 
     def get_session_id(self, cache_days=999):
-        if self.session_id and cache_days:
-            return self.session_id
-        self.request_token = self.auth_request_token(cache_days=cache_days)
-        response = get_data(url="authentication/session/new",
-                            params={"request_token": self.request_token},
-                            cache_days=cache_days)
-        if response and "success" in response:
-            self.session_id = str(response["session_id"])
-            return self.session_id
+        if addon.setting("session_id"):
+            return addon.setting("session_id")
+        self.create_session_id()
+        return self.session_id
 
-    def auth_request_token(self, cache_days=9999):
-        '''
-        returns request token, is used to get session_id
-        '''
-        if self.request_token:
-            return self.request_token
+    def create_session_id(self):
         response = get_data(url="authentication/token/new",
-                            cache_days=cache_days)
+                            cache_days=0)
         params = {"request_token": response["request_token"],
                   "username": self.username,
                   "password": self.password}
         response = get_data(url="authentication/token/validate_with_login",
                             params=params,
-                            cache_days=cache_days)
+                            cache_days=0)
         if response and response.get("success"):
-            return response["request_token"]
+            request_token = response["request_token"]
+            response = get_data(url="authentication/session/new",
+                                params={"request_token": request_token})
+            if response and "success" in response:
+                self.session_id = str(response["session_id"])
+                addon.set_setting("session_id", self.session_id)
 
 
 def set_rating(media_type, media_id, rating, dbid=None):

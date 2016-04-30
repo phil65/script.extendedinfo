@@ -68,7 +68,7 @@ class DialogVideoInfo(DialogBaseInfo):
 
     @ch.click(ID_BUTTON_SETRATING)
     def set_rating_dialog(self, control_id):
-        preselect = int(self.states["rated"]["value"]) if self.states.get("rated") else -1
+        preselect = int(self.states["rated"]["value"]) if (self.states and self.states.get("rated")) else -1
         rating = utils.input_userrating(preselect=preselect)
         if rating == -1:
             return None
