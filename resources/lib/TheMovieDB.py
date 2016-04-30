@@ -881,14 +881,7 @@ def extended_season_info(tvshow_id, season_number):
     '''
     if not tvshow_id or not season_number:
         return None
-    params = {"append_to_response": ALL_TV_PROPS,
-              "language": addon.setting("LanguageID"),
-              "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
-    if Login.check_login():
-        params["session_id"] = Login.get_session_id()
-    tvshow = get_data(url="tv/%s" % (tvshow_id),
-                      params=params,
-                      cache_days=99999)
+    tvshow = get_tvshow(tvshow_id)
     params = {"append_to_response": ALL_SEASON_PROPS,
               "language": addon.setting("LanguageID"),
               "include_image_language": "en,null,%s" % addon.setting("LanguageID")}
@@ -898,7 +891,7 @@ def extended_season_info(tvshow_id, season_number):
     if not response:
         utils.notify("Could not find season info")
         return None
-    if response.get("name", False):
+    if response.get("name"):
         title = response["name"]
     elif season_number == "0":
         title = addon.LANG(20381)
