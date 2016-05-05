@@ -89,7 +89,7 @@ class DialogBaseInfo(windows.DialogXML):
             self.last_position = self.getFocus().getSelectedPosition()
         except Exception:
             self.last_position = None
-        # addon.set_global("infobackground", "")
+        addon.set_global("infobackground", "")
         self.last_control = self.getFocusId()
         super(DialogBaseInfo, self).close()
 
