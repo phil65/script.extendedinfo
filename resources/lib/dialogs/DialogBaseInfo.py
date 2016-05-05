@@ -62,8 +62,7 @@ class DialogBaseInfo(windows.DialogXML):
             except Exception:
                 pass
         addon.set_global("ImageColor", self.info.get_property('ImageColor'))
-        fanart = self.info.get_art('fanart_small') if self.info.get_art('fanart_small') else "None"
-        addon.set_global("infobackground", fanart)
+        addon.set_global("infobackground", self.info.get_art('fanart_small'))
         self.setProperty("type", self.TYPE)
         self.setProperty("tmdb_logged_in", "true" if self.logged_in else "")
 
@@ -90,7 +89,7 @@ class DialogBaseInfo(windows.DialogXML):
             self.last_position = self.getFocus().getSelectedPosition()
         except Exception:
             self.last_position = None
-        addon.set_global("infobackground", "None")
+        # addon.set_global("infobackground", "")
         self.last_control = self.getFocusId()
         super(DialogBaseInfo, self).close()
 
