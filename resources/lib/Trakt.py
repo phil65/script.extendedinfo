@@ -114,6 +114,7 @@ def handle_movies(results):
     movies = local_db.merge_with_local(media_type="movie",
                                        items=movies,
                                        library_first=False)
+    movies.set_sorts(["mpaa", "duration"])
     return movies
 
 
@@ -159,6 +160,7 @@ def handle_tvshows(results):
     shows = local_db.merge_with_local(media_type="tvshow",
                                       items=shows,
                                       library_first=False)
+    shows.set_sorts(["mpaa", "duration"])
     return shows
 
 
@@ -172,12 +174,6 @@ def get_shows_from_time(show_type, period="monthly"):
     results = get_data(url='shows/%s/%s' % (show_type, period),
                        params={"extended": "full,images"})
     return handle_tvshows(results) if results else []
-
-
-def get_tshow_info(imdb_id):
-    results = get_data(url='show/%s' % imdb_id,
-                       params={"extended": "full,images"})
-    return handle_tvshows([results]) if results else []
 
 
 def get_movies(movie_type):
