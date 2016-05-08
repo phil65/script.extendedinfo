@@ -112,12 +112,13 @@ def clean_text(text):
     text = text.replace('&#39;', "'").replace('&quot;', '"')
     text = re.sub("\n\\.$", "", text)
     text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
+    removals = set([u'\u200b', " ", "\n"])
     while text:
         s = text[0]
         e = text[-1]
-        if s in [u'\u200b', " ", "\n"]:
+        if s in removals:
             text = text[1:]
-        elif e in [u'\u200b', " ", "\n"]:
+        elif e in removals:
             text = text[:-1]
         elif s.startswith(".") and not s.startswith(".."):
             text = text[1:]
