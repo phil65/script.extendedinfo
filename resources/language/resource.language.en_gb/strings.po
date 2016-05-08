@@ -394,7 +394,7 @@ msgctxt "#32081"
 msgid "More videos from"
 msgstr ""
 
-#: /resources/skins/Default/1080i/script-ExtendedInfo Script-DialogVideoInfo.xml:2925
+#: /resources/skins/Default/1080i/script-ExtendedInfo Script-DialogVideoInfo.xml:2925 /resources/lib/dialogs/DialogVideoList.py
 msgctxt "#32082"
 msgid "votes"
 msgstr ""
