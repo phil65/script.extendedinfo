@@ -15,7 +15,7 @@ import TheMovieDB as tmdb
 from kodi65 import windows
 from kodi65 import addon
 from kodi65 import utils
-from kodi65 import busyhandler
+from kodi65 import busy
 from kodi65 import player
 from kodi65 import local_db
 
@@ -54,7 +54,7 @@ class WindowManager(object):
         """
         open movie info, deal with window stack
         """
-        busyhandler.show_busy()
+        busy.show_busy()
         from dialogs.DialogMovieInfo import DialogMovieInfo
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         if not movie_id:
@@ -65,14 +65,14 @@ class WindowManager(object):
                                  addon.PATH,
                                  id=movie_id,
                                  dbid=dbid)
-        busyhandler.hide_busy()
+        busy.hide_busy()
         self.open_infodialog(dialog)
 
     def open_tvshow_info(self, tmdb_id=None, dbid=None, tvdb_id=None, imdb_id=None, name=None):
         """
         open tvshow info, deal with window stack
         """
-        busyhandler.show_busy()
+        busy.show_busy()
         dbid = int(dbid) if dbid and int(dbid) > 0 else None
         from dialogs.DialogTVShowInfo import DialogTVShowInfo
         if tmdb_id:
@@ -95,7 +95,7 @@ class WindowManager(object):
                                   addon.PATH,
                                   tmdb_id=tmdb_id,
                                   dbid=dbid)
-        busyhandler.hide_busy()
+        busy.hide_busy()
         self.open_infodialog(dialog)
 
     def open_season_info(self, tvshow_id=None, season=None, tvshow=None, dbid=None):
@@ -103,7 +103,7 @@ class WindowManager(object):
         open season info, deal with window stack
         needs *season AND (*tvshow_id OR *tvshow)
         """
-        busyhandler.show_busy()
+        busy.show_busy()
         from dialogs.DialogSeasonInfo import DialogSeasonInfo
         if not tvshow_id:
             params = {"query": tvshow,
@@ -127,7 +127,7 @@ class WindowManager(object):
                                   id=tvshow_id,
                                   season=max(0, season),
                                   dbid=int(dbid) if dbid and int(dbid) > 0 else None)
-        busyhandler.hide_busy()
+        busy.hide_busy()
         self.open_infodialog(dialog)
 
     def open_episode_info(self, tvshow_id=None, season=None, episode=None, tvshow=None, dbid=None):
@@ -164,17 +164,17 @@ class WindowManager(object):
                 name = names[ret]
             else:
                 name = names[0]
-            busyhandler.show_busy()
+            busy.show_busy()
             actor_info = tmdb.get_person_info(name)
             if not actor_info:
                 return None
             actor_id = actor_info["id"]
         else:
-            busyhandler.show_busy()
+            busy.show_busy()
         dialog = DialogActorInfo(ACTOR_XML,
                                  addon.PATH,
                                  id=actor_id)
-        busyhandler.hide_busy()
+        busy.hide_busy()
         self.open_infodialog(dialog)
 
     def open_video_list(self, listitems=None, filters=None, mode="filter", list_id=False,

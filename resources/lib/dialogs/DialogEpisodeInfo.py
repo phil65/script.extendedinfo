@@ -10,7 +10,7 @@ from resources.lib.WindowManager import wm
 from DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
-from kodi65 import busyhandler
+from kodi65 import busy
 from kodi65 import addon
 from kodi65 import ActionHandler
 
@@ -27,7 +27,7 @@ class DialogEpisodeInfo(DialogVideoInfo):
              (1150, "videos"),
              (1350, "images")]
 
-    @busyhandler.set_busy
+    @busy.set_busy
     def __init__(self, *args, **kwargs):
         super(DialogEpisodeInfo, self).__init__(*args, **kwargs)
         self.tvshow_id = kwargs.get('tvshow_id')
@@ -56,9 +56,9 @@ class DialogEpisodeInfo(DialogVideoInfo):
 
     @ch.click(ID_BUTTON_RATED)
     def open_rating_list(self, control_id):
-        busyhandler.busyhandler.show_busy()
+        busy.show_busy()
         listitems = tmdb.get_rated_media_items("tv/episodes")
-        busyhandler.busyhandler.hide_busy()
+        busy.hide_busy()
         wm.open_video_list(listitems=listitems)
 
     def get_identifier(self):

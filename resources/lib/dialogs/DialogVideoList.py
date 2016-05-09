@@ -11,7 +11,7 @@ from resources.lib.WindowManager import wm
 
 from kodi65 import addon
 from kodi65 import utils
-from kodi65 import busyhandler, set_busy
+from kodi65 import busy
 from kodi65 import confirmdialog
 from kodi65 import ActionHandler
 from kodi65 import DialogBaseList
@@ -77,7 +77,7 @@ def get_window(window_type):
                   "created_at": lambda x: x.get_property("created_at"),
                   "original_title": lambda x: x.get_info("originaltitle")}
 
-        @set_busy
+        @busy.set_busy
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "movie")
             self.list_id = kwargs.get("list_id", False)
@@ -139,12 +139,12 @@ def get_window(window_type):
                 self.setCurrentListPosition(self.position)
 
         def list_dialog(self, movie_id):
-            busyhandler.busyhandler.show_busy()
+            busy.show_busy()
             listitems = [addon.LANG(32139)]
             account_lists = tmdb.get_account_lists()
             listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
             listitems.append(addon.LANG(32138))
-            busyhandler.busyhandler.hide_busy()
+            busy.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == 0:
@@ -206,11 +206,11 @@ def get_window(window_type):
                 listitems = [addon.LANG(32135)]
                 if self.logged_in:
                     listitems.append(addon.LANG(32134))
-            busyhandler.busyhandler.show_busy()
+            busy.show_busy()
             if self.logged_in:
                 account_lists = tmdb.get_account_lists()
                 listitems += ["%s (%i)" % (i["name"], i["item_count"]) for i in account_lists]
-            busyhandler.busyhandler.hide_busy()
+            busy.hide_busy()
             index = xbmcgui.Dialog().select(heading=addon.LANG(32136),
                                             list=listitems)
             if index == -1:

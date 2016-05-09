@@ -24,7 +24,7 @@ from kodi65 import youtube
 from kodi65 import local_db
 from kodi65 import addon
 from kodi65 import utils
-from kodi65 import busyhandler
+from kodi65 import busy
 from kodi65 import kodijson
 from kodi65 import favs
 
@@ -419,7 +419,7 @@ def start_info_actions(info, params):
         xbmc.executebuiltin("Dialog.Close(all,true)")
         wm.play_youtube_video(params.get("id", ""))
     elif info == 'playtrailer':
-        busyhandler.show_busy()
+        busy.show_busy()
         if params.get("id"):
             movie_id = params["id"]
         elif int(params.get("dbid", -1)) > 0:
@@ -431,14 +431,14 @@ def start_info_actions(info, params):
             movie_id = ""
         if movie_id:
             trailer = tmdb.get_trailer(movie_id)
-            busyhandler.hide_busy()
+            busy.hide_busy()
             time.sleep(0.1)
             if trailer:
                 wm.play_youtube_video(trailer)
             elif params.get("title"):
                 wm.open_youtube_list(search_str=params["title"])
             else:
-                busyhandler.hide_busy()
+                busy.hide_busy()
     elif info == 'deletecache':
         addon.clear_globals()
         for rel_path in os.listdir(addon.DATA_PATH):

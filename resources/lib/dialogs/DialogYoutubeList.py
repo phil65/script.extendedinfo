@@ -12,7 +12,7 @@ from resources.lib.WindowManager import wm
 from kodi65 import youtube
 from kodi65 import addon
 from kodi65 import windows
-from kodi65 import busyhandler
+from kodi65 import busy
 from kodi65 import DialogBaseList
 from kodi65 import ActionHandler
 
@@ -73,7 +73,7 @@ def get_window(window_type):
                   "videoCount": lambda x: x.get_property("videoCount"),
                   "rating": lambda x: x.get_info("rating")}
 
-        @busyhandler.set_busy
+        @busy.set_busy
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "video")
             super(DialogYoutubeList, self).__init__(*args, **kwargs)
