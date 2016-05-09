@@ -21,10 +21,10 @@ import TheMovieDB as tmdb
 from WindowManager import wm
 
 from kodi65 import youtube
-from kodi65.localdb import local_db
+from kodi65 import local_db
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.busyhandler import busyhandler
+from kodi65 import busyhandler
 from kodi65 import kodijson
 from kodi65 import favs
 

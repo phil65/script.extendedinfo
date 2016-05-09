@@ -5,9 +5,9 @@
 
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.localdb import local_db
-from kodi65.listitem import VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import local_db
+from kodi65 import VideoItem
+from kodi65 import ItemList
 
 RT_KEY = '63sbsudx936yedd2wdmt6tkn'
 BASE_URL = "http://api.rottentomatoes.com/api/public/v1.0/lists/"

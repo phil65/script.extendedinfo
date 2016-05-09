@@ -13,8 +13,8 @@ from kodi65 import youtube
 from kodi65 import addon
 from kodi65 import windows
 from kodi65 import busyhandler
-from kodi65.dialogbaselist import DialogBaseList
-from kodi65.actionhandler import ActionHandler
+from kodi65 import DialogBaseList
+from kodi65 import ActionHandler
 
 ch = ActionHandler()
 

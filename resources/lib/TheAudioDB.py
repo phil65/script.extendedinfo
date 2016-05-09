@@ -9,9 +9,9 @@ import xbmc
 
 from kodi65 import utils
 from kodi65 import addon
-from kodi65.localdb import local_db
-from kodi65.listitem import AudioItem, VideoItem
-from kodi65.itemlist import ItemList
+from kodi65 import local_db
+from kodi65 import AudioItem, VideoItem
+from kodi65 import ItemList
 
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'

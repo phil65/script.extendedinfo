@@ -18,7 +18,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65 import kodijson
 from kodi65 import busyhandler
-from kodi65.actionhandler import ActionHandler
+from kodi65 import ActionHandler
 
 ID_LIST_SIMILAR = 150
 ID_LIST_SETS = 250

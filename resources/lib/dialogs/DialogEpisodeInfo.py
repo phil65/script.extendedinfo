@@ -12,7 +12,7 @@ from DialogVideoInfo import DialogVideoInfo
 from kodi65 import imagetools
 from kodi65 import busyhandler
 from kodi65 import addon
-from kodi65.actionhandler import ActionHandler
+from kodi65 import ActionHandler
 
 ID_BUTTON_RATED = 6006
 

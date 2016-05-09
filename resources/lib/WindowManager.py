@@ -15,9 +15,9 @@ import TheMovieDB as tmdb
 from kodi65 import windows
 from kodi65 import addon
 from kodi65 import utils
-from kodi65.busyhandler import busyhandler
-from kodi65.player import player
-from kodi65.localdb import local_db
+from kodi65 import busyhandler
+from kodi65 import player
+from kodi65 import local_db
 
 INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
 LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)

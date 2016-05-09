@@ -11,10 +11,10 @@ from resources.lib.WindowManager import wm
 
 from kodi65 import addon
 from kodi65 import utils
-from kodi65 import busyhandler
+from kodi65 import busyhandler, set_busy
 from kodi65 import confirmdialog
-from kodi65.actionhandler import ActionHandler
-from kodi65.dialogbaselist import DialogBaseList
+from kodi65 import ActionHandler
+from kodi65 import DialogBaseList
 
 ID_BUTTON_SORT = 5001
 ID_BUTTON_GENREFILTER = 5002
@@ -72,12 +72,12 @@ def get_window(window_type):
                   "release_date": lambda x: x.get_info("premiered"),
                   "revenue": lambda x: x.get_info("genre"),
                   "vote_average": lambda x: x.get_info("rating"),
-                  "vote_count": lambda x: "{} votes".format(x.get_info("votes")),
+                  "vote_count": lambda x: "{} {}".format(x.get_info("votes"), addon.LANG(32082)),
                   "first_air_date": lambda x: x.get_info("premiered"),
                   "created_at": lambda x: x.get_property("created_at"),
                   "original_title": lambda x: x.get_info("originaltitle")}
 
-        @busyhandler.set_busy
+        @set_busy
         def __init__(self, *args, **kwargs):
             self.type = kwargs.get('type', "movie")
             self.list_id = kwargs.get("list_id", False)
