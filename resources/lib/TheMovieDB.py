@@ -520,26 +520,28 @@ def handle_companies(results):
     companies = ItemList(content_type="studios")
     for item in results:
         company = VideoItem(label=item['name'],
-                            infos={'plot': item['description']})
-        company.set_properties({'parent_company': item['parent_company'],
-                                'headquarters': item['headquarters'],
-                                'homepage': item['homepage'],
-                                'id': item['id'],
-                                'logo_path': item['logo_path']})
+                            infos={'plot': item.get('description')})
+        company.set_properties({'parent_company': item.get('parent_company'),
+                                'headquarters': item.get('headquarters'),
+                                'homepage': item.get('homepage'),
+                                'id': item['id']})
+        art = u"resource://resource.images.studios.white/{}.png".format(item['name']) if item['name'] else ""
+        company.set_artwork({"thumb": art,
+                             "icon": art})
         companies.append(company)
     return companies
 
 
-def search_company(company_name):
+def search_companies(company_name):
     regex = re.compile('\(.+?\)')
     response = get_data(url="search/company",
                         params={"query": regex.sub('', company_name)},
                         cache_days=10)
     if response and "results" in response:
-        return response["results"]
+        return handle_companies(response["results"])
     else:
         utils.log("Could not find company ID for %s" % company_name)
-        return ""
+        return None
 
 
 def multi_search(search_str, page=1, cache_days=1):
@@ -779,7 +781,7 @@ def extended_movie_info(movie_id=None, dbid=None, cache_days=14):
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_movies(info["similar"]["results"]),
                  "lists": sort_lists(handle_lists(info["lists"]["results"])),
-                 "studios": handle_text(info["production_companies"]),
+                 "studios": handle_companies(info["production_companies"]),
                  "releases": releases,
                  "crew": handle_people(info["credits"]["crew"]).reduce(),
                  "genres": handle_text(info["genres"]),
@@ -866,8 +868,8 @@ def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
     certifications = merge_with_cert_desc(handle_content_ratings(info["content_ratings"]["results"]), "tv")
     listitems = {"actors": handle_people(info["credits"]["cast"]),
                  "similar": handle_tvshows(info["similar"]["results"]),
-                 "studios": handle_text(info["production_companies"]),
-                 "networks": handle_text(info["networks"]),
+                 "studios": handle_companies(info["production_companies"]),
+                 "networks": handle_companies(info["networks"]),
                  "certifications": certifications,
                  "crew": handle_people(info["credits"]["crew"]),
                  "genres": handle_text(info["genres"]),

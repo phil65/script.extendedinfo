@@ -13,6 +13,7 @@ from kodi65 import addon
 from kodi65 import utils
 from kodi65 import busy
 from kodi65 import confirmdialog
+from kodi65 import selectdialog
 from kodi65 import ActionHandler
 from kodi65 import DialogBaseList
 
@@ -325,19 +326,19 @@ def get_window(window_type):
                                             type=xbmcgui.INPUT_ALPHANUM)
             if not result or result < 0:
                 return None
-            response = tmdb.search_company(result)
-            if len(response) > 1:
-                index = xbmcgui.Dialog().select(heading=addon.LANG(32151),
-                                                list=[i["name"] for i in response])
+            items = tmdb.search_companies(result)
+            if len(items) > 1:
+                index = selectdialog.open(header=addon.LANG(32151),
+                                          listitems=items)
                 if index > -1:
-                    response = response[index]
-            elif response:
-                response = response[0]
+                    item = items[index]
+            elif items:
+                item = items[0]
             else:
                 utils.notify("No company found")
             self.add_filter(key="with_companies",
-                            value=response["id"],
-                            label=response["name"])
+                            value=item.get_property("id"),
+                            label=item.get_label())
 
         @ch.click(ID_BUTTON_KEYWORDFILTER)
         def set_keyword_filter(self, control_id):
@@ -412,10 +413,8 @@ def get_window(window_type):
                           "page": self.page,
                           "include_adult": include_adult}
                 filters = {item["type"]: item["id"] for item in self.filters}
-                params = utils.merge_dicts(params, filters)
-                url = "discover/%s" % (self.type)
-                response = tmdb.get_data(url=url,
-                                         params=params,
+                response = tmdb.get_data(url="discover/%s" % (self.type),
+                                         params=utils.merge_dicts(params, filters),
                                          cache_days=0 if force else 2)
 
                 if not response["results"]:

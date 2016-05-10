@@ -135,7 +135,7 @@ def start_info_actions(info, params):
         if params.get("id"):
             return tmdb.get_company_data(params["id"])
         elif params.get("studio"):
-            company_data = tmdb.search_company(params["studio"])
+            company_data = tmdb.search_companies(params["studio"])
             if company_data:
                 return tmdb.get_company_data(company_data[0]["id"])
     elif info == 'set':

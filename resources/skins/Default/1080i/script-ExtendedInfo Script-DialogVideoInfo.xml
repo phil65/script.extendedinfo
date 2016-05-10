@@ -1715,7 +1715,7 @@
 										<left>50</left>
 										<width>273</width>
 										<height>100</height>
-										<texture fallback="flags/source/default.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+										<texture fallback="flags/source/default.png">$INFO[ListItem.Thumb]</texture>
 										<aspectratio aligny="center" align="center">keep</aspectratio>
 									</control>
 									<control type="textbox">
@@ -1752,7 +1752,7 @@
 										<left>50</left>
 										<width>273</width>
 										<height>100</height>
-										<texture fallback="flags/source/default.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+										<texture fallback="flags/source/default.png">$INFO[ListItem.Thumb]</texture>
 										<aspectratio aligny="center" align="center">keep</aspectratio>
 									</control>
 									<control type="textbox">
@@ -1829,7 +1829,7 @@
 										<left>30</left>
 										<width>313</width>
 										<height>100</height>
-										<texture fallback="flags/source/default.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+										<texture fallback="flags/source/default.png">$INFO[ListItem.Thumb]</texture>
 										<aspectratio aligny="center" align="center">keep</aspectratio>
 									</control>
 									<control type="textbox">
@@ -1866,7 +1866,7 @@
 										<left>30</left>
 										<width>313</width>
 										<height>100</height>
-										<texture fallback="flags/source/default.png">$INFO[ListItem.Label,resource://resource.images.studios.white/,.png]</texture>
+										<texture fallback="flags/source/default.png">$INFO[ListItem.Thumb]</texture>
 										<aspectratio aligny="center" align="center">keep</aspectratio>
 									</control>
 									<control type="textbox">
