@@ -37,40 +37,42 @@ def get_episodes(content):
         return None
     for day in results.iteritems():
         for episode in day[1]:
-            title = episode["episode"]["title"] if episode["episode"]["title"] else ""
-            label = u"{0} - {1}x{2}. {3}".format(episode["show"]["title"],
-                                                 episode["episode"]["season"],
-                                                 episode["episode"]["number"],
+            ep = episode["episode"]
+            tv = episode["show"]
+            title = ep["title"] if ep["title"] else ""
+            label = u"{0} - {1}x{2}. {3}".format(tv["title"],
+                                                 ep["season"],
+                                                 ep["number"],
                                                  title)
             show = VideoItem(label=label,
-                             path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % episode["show"]["ids"]["tvdb"])
+                             path=PLUGIN_BASE + 'extendedtvinfo&&tvdb_id=%s' % tv["ids"]["tvdb"])
             show.set_infos({'title': title,
-                            'aired': episode["episode"]["first_aired"],
-                            'season': episode["episode"]["season"],
-                            'episode': episode["episode"]["number"],
-                            'tvshowtitle': episode["show"]["title"],
+                            'aired': ep["first_aired"],
+                            'season': ep["season"],
+                            'episode': ep["number"],
+                            'tvshowtitle': tv["title"],
                             'mediatype': "episode",
-                            'year': episode["show"].get("year"),
-                            'duration': episode["show"]["runtime"] * 60,
-                            'studio': episode["show"]["network"],
-                            'plot': episode["show"]["overview"],
-                            'country': episode["show"]["country"],
-                            'status': episode["show"]["status"],
-                            'trailer': episode["show"]["trailer"],
-                            'imdbnumber': episode["episode"]["ids"]["imdb"],
-                            'rating': episode["show"]["rating"],
-                            'genre': " / ".join(episode["show"]["genres"]),
-                            'mpaa': episode["show"]["certification"]})
-            show.set_properties({'tvdb_id': episode["episode"]["ids"]["tvdb"],
-                                 'id': episode["episode"]["ids"]["tvdb"],
-                                 'imdb_id': episode["episode"]["ids"]["imdb"],
-                                 'homepage': episode["show"]["homepage"]})
-            show.set_artwork({'thumb': episode["episode"]["images"]["screenshot"]["thumb"],
-                              'poster': episode["show"]["images"]["poster"]["full"],
-                              'banner': episode["show"]["images"]["banner"]["full"],
-                              'clearart': episode["show"]["images"]["clearart"]["full"],
-                              'clearlogo': episode["show"]["images"]["logo"]["full"],
-                              'fanart': episode["show"]["images"]["fanart"]["full"]})
+                            'year': tv.get("year"),
+                            'duration': tv["runtime"] * 60,
+                            'studio': tv["network"],
+                            'plot': tv["overview"],
+                            'country': tv["country"],
+                            'status': tv["status"],
+                            'trailer': tv["trailer"],
+                            'imdbnumber': ep["ids"]["imdb"],
+                            'rating': tv["rating"],
+                            'genre': " / ".join(tv["genres"]),
+                            'mpaa': tv["certification"]})
+            show.set_properties({'tvdb_id': ep["ids"]["tvdb"],
+                                 'id': ep["ids"]["tvdb"],
+                                 'imdb_id': ep["ids"]["imdb"],
+                                 'homepage': tv["homepage"]})
+            show.set_artwork({'thumb': ep["images"]["screenshot"]["thumb"],
+                              'poster': tv["images"]["poster"]["full"],
+                              'banner': tv["images"]["banner"]["full"],
+                              'clearart': tv["images"]["clearart"]["full"],
+                              'clearlogo': tv["images"]["logo"]["full"],
+                              'fanart': tv["images"]["fanart"]["full"]})
             shows.append(show)
             count += 1
             if count > 20:
