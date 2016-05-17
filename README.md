@@ -359,8 +359,8 @@ Please have a look at reference implementation, too much to cover. Consider the 
 
 
 #### List of Built In Controls for add-on dialogs :
- - MOVIES, TVSHOWS, SEASONS, EPISODES: script-ExtendedInfo Script-DialogVideoInfo.xml
- - ACTORS: script-ExtendedInfo Script-DialogInfo.xml
+ - MOVIES, TVSHOWS, SEASONS, EPISODES: script-script.extendedinfo-DialogVideoInfo.xml
+ - ACTORS: script-script.extendedinfo-DialogInfo.xml
 
 | IDS     | MOVIES    | TVSHOWS   | SEASONS   | EPISODES | ACTORS      |
 |---------|-----------|-----------|-----------|----------|-------------|

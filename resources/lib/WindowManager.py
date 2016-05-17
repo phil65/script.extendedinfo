@@ -19,14 +19,14 @@ from kodi65 import busy
 from kodi65 import player
 from kodi65 import local_db
 
-INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.NAME)
-LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.NAME)
-ACTOR_XML_CLASSIC = u'script-%s-DialogInfo.xml' % (addon.NAME)
+INFO_XML_CLASSIC = u'script-%s-DialogVideoInfo.xml' % (addon.ID)
+LIST_XML_CLASSIC = u'script-%s-VideoList.xml' % (addon.ID)
+ACTOR_XML_CLASSIC = u'script-%s-DialogInfo.xml' % (addon.ID)
 if addon.bool_setting("force_native_layout") and addon.setting("xml_version") != addon.VERSION:
     addon.set_setting("xml_version", addon.VERSION)
-    INFO_XML = u'script-%s-DialogVideoInfo-classic.xml' % (addon.NAME)
-    LIST_XML = u'script-%s-VideoList-classic.xml' % (addon.NAME)
-    ACTOR_XML = u'script-%s-DialogInfo-classic.xml' % (addon.NAME)
+    INFO_XML = u'script-%s-DialogVideoInfo-classic.xml' % (addon.ID)
+    LIST_XML = u'script-%s-VideoList-classic.xml' % (addon.ID)
+    ACTOR_XML = u'script-%s-DialogInfo-classic.xml' % (addon.ID)
     path = os.path.join(addon.PATH, "resources", "skins", "Default", "1080i")
     xbmcvfs.copy(strSource=os.path.join(path, INFO_XML_CLASSIC),
                  strDestnation=os.path.join(path, INFO_XML))

@@ -106,7 +106,7 @@ msgctxt "#32019"
 msgid "Job"
 msgstr ""
 
-#: \resources\skins\Default\1080i\script-ExtendedInfo Script-DialogInfo.xml:118
+#: \resources\skins\Default\1080i\script-script.extendedinfo-DialogInfo.xml:118
 msgctxt "#32020"
 msgid "Age"
 msgstr ""
@@ -294,7 +294,7 @@ msgctxt "#32060"
 msgid "Relevance"
 msgstr ""
 
-#: \resources\skins\Default\1080i\script-ExtendedInfo Script-YoutubeList.xml:113
+#: \resources\skins\Default\1080i\script-script.extendedinfo-YoutubeList.xml:113
 msgctxt "#32061"
 msgid "views"
 msgstr ""
@@ -319,7 +319,7 @@ msgctxt "#32065"
 msgid "One year"
 msgstr ""
 
-#: \resources\skins\Default\1080i\script-ExtendedInfo Script-YoutubeList.xml:518
+#: \resources\skins\Default\1080i\script-script.extendedinfo-YoutubeList.xml:518
 msgctxt "#32066"
 msgid "2D / 3D"
 msgstr ""
@@ -394,7 +394,7 @@ msgctxt "#32081"
 msgid "More videos from"
 msgstr ""
 
-#: /resources/skins/Default/1080i/script-ExtendedInfo Script-DialogVideoInfo.xml:2925 /resources/lib/dialogs/DialogVideoList.py
+#: /resources/skins/Default/1080i/script-script.extendedinfo-DialogVideoInfo.xml:2925 /resources/lib/dialogs/DialogVideoList.py
 msgctxt "#32082"
 msgid "votes"
 msgstr ""
