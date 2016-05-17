@@ -16,7 +16,7 @@ from kodi65 import ItemList
 
 AUDIO_DB_KEY = '58353d43204d68753987fl'
 BASE_URL = 'http://www.theaudiodb.com/api/v1/json/%s/' % (AUDIO_DB_KEY)
-
+PLUGIN_BASE = 'plugin://script.extendedinfo/?info='
 
 def handle_albums(results):
     albums = ItemList(content_type="albums")
@@ -68,7 +68,7 @@ def handle_tracks(results):
     for item in results['track']:
         youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
         track = AudioItem(label=item['strTrack'],
-                          path=utils.convert_youtube_url(item['strMusicVid']))
+                          path="%syoutubevideo&&id=%s" % (PLUGIN_BASE, youtube_id))
         track.set_infos({'title': item['strTrack'],
                          'album': item['strAlbum'],
                          'artist': [item['strArtist']],
@@ -86,7 +86,7 @@ def handle_musicvideos(results):
     for item in results['mvids']:
         youtube_id = utils.extract_youtube_id(item.get('strMusicVid', ''))
         mvid = VideoItem(label=item['strTrack'],
-                         path=utils.convert_youtube_url(item['strMusicVid']))
+                         path="%syoutubevideo&&id=%s" % (PLUGIN_BASE, youtube_id))
         mvid.set_infos({'title': item['strTrack'],
                         'plot': item['strDescriptionEN'],
                         'mediatype': "musicvideo"})

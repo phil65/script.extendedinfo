@@ -83,13 +83,14 @@ def handle_movies(results):
     path = 'extendedinfo&&id=%s' if addon.bool_setting("infodialog_onclick") else "playtrailer&&id=%s"
     for i in results:
         item = i["movie"] if "movie" in i else i
+        trailer = "%syoutubevideo&&id=%s" % (PLUGIN_BASE, utils.extract_youtube_id(item["trailer"]))
         movie = VideoItem(label=item["title"],
                           path=PLUGIN_BASE + path % item["ids"]["tmdb"])
         movie.set_infos({'title': item["title"],
                          'duration': item["runtime"] * 60,
                          'tagline': item["tagline"],
                          'mediatype': "movie",
-                         'trailer': utils.convert_youtube_url(item["trailer"]),
+                         'trailer': trailer,
                          'year': item["year"],
                          'mpaa': item["certification"],
                          'plot': item["overview"],
