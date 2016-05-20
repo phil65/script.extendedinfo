@@ -194,7 +194,7 @@ def get_movies_from_time(movie_type, period="monthly"):
 def get_similar(media_type, imdb_id):
     if not imdb_id or not media_type:
         return None
-    results = get_data(url='%s/%s/related' % (media_type, imdb_id),
+    results = get_data(url='%ss/%s/related' % (media_type, imdb_id),
                        params={"extended": "full,images"})
     if not results:
         return None
