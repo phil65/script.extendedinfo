@@ -709,6 +709,17 @@ def get_show_tmdb_id(tvdb_id=None, source="tvdb_id"):
     return response["tv_results"][0]["id"]
 
 
+def get_show_id(tmdb_id=None, return_id="imdb_id"):
+    params = {"append_to_response": "external_ids",
+              "language": addon.setting("LanguageID")}
+    response = get_data(url="tv/%s" % (tmdb_id),
+                        params=params)
+    if not response:
+        utils.notify("TVShow Info not available.")
+        return None
+    return response["external_ids"][return_id]
+
+
 def get_trailer(movie_id):
     response = get_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
