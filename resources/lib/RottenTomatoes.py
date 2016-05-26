@@ -18,6 +18,8 @@ def get_movies(movie_type):
     movies = ItemList(content_type="movies")
     url = '%s.json?apikey=%s' % (movie_type, RT_KEY)
     results = utils.get_JSON_response(BASE_URL + url, folder="RottenTomatoes")
+    if "error" in results:
+        utils.notify("Error", results["error"])
     if not results or "movies" not in results:
         return []
     for item in results["movies"]:
