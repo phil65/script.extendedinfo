@@ -112,7 +112,7 @@ def clean_text(text):
     text = text.replace('&#39;', "'").replace('&quot;', '"')
     text = re.sub("\n\\.$", "", text)
     text = text.replace('User-contributed text is available under the Creative Commons By-SA License and may also be available under the GNU FDL.', '')
-    removals = set([u'\u200b', " ", "\n"])
+    removals = {u'\u200b', " ", "\n"}
     while text:
         s = text[0]
         e = text[-1]
