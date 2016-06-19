@@ -22,5 +22,6 @@
 		<forum>http://forum.kodi.tv/showthread.php?tid=160558</forum>
 		<source>https://github.com/phil65/script.extendedinfo</source>
 		<email>phil65@kodi.tv</email>
+		<news>Fixed: French language[CR]Fixed: Issue with Youtube Browser[CR]Fixed: Some issues related to error handling</news>
 	</extension>
 </addon>
