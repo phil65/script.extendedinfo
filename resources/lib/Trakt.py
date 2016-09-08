@@ -53,7 +53,7 @@ def get_episodes(content):
                             'tvshowtitle': tv["title"],
                             'mediatype': "episode",
                             'year': tv.get("year"),
-                            'duration': tv["runtime"] * 60,
+                            'duration': tv["runtime"] * 60 if tv["runtime"] else "",
                             'studio': tv["network"],
                             'plot': tv["overview"],
                             'country': tv["country"],
@@ -89,7 +89,7 @@ def handle_movies(results):
         movie = VideoItem(label=item["title"],
                           path=PLUGIN_BASE + path % item["ids"]["tmdb"])
         movie.set_infos({'title': item["title"],
-                         'duration': item["runtime"] * 60,
+                         'duration': item["runtime"] * 60 if item["runtime"] else "",
                          'tagline': item["tagline"],
                          'mediatype': "movie",
                          'trailer': trailer,
@@ -130,7 +130,7 @@ def handle_tvshows(results):
                          path='%sextendedtvinfo&&tvdb_id=%s' % (PLUGIN_BASE, item['ids']["tvdb"]))
         show.set_infos({'mediatype': "tvshow",
                         'title': item["title"],
-                        'duration': item["runtime"] * 60,
+                        'duration': item["runtime"] * 60 if item["runtime"] else "",
                         'year': item["year"],
                         'premiered': item["first_aired"][:10],
                         'country': item["country"],
