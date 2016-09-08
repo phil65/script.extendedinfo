@@ -46,7 +46,7 @@
 					<left>800</left>
 					<top>184</top>
 					<itemgap>20</itemgap>
-					<ondown>-</ondown>
+					<ondown>noop</ondown>
 					<animation type="Conditional" condition="!IsEmpty(Window.Property(Bounce.Down))" reversible="false">
 						<effect type="slide" end="0,20" time="60" tween="sine" />
 						<effect type="slide" end="0,-20" time="180" tween="sine" delay="80" />
