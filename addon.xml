@@ -23,5 +23,14 @@
 		<source>https://github.com/phil65/script.extendedinfo</source>
 		<email>phil65@kodi.tv</email>
 		<news>Fixed: French language[CR]Fixed: Issue with Youtube Browser[CR]Fixed: Some issues related to error handling</news>
+		<assets>
+			<icon>resources/icon.png</icon>
+			<fanart>resources/fanart.jpg</fanart>
+			<screenshot>resources/screenshot-01.jpg</screenshot>
+			<screenshot>resources/screenshot-02.jpg</screenshot>
+			<screenshot>resources/screenshot-03.jpg</screenshot>
+			<screenshot>resources/screenshot-04.jpg</screenshot>
+			<screenshot>resources/screenshot-05.jpg</screenshot>
+		</assets>
 	</extension>
 </addon>
