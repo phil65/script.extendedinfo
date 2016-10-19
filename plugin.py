@@ -16,7 +16,6 @@ from kodi65 import utils
 import routing
 
 MOVIEDB_IMAGE = os.path.join(addon.MEDIA_PATH, "moviedb.png")
-RT_IMAGE = os.path.join(addon.MEDIA_PATH, "rottentomatoes.png")
 TRAKT_IMAGE = os.path.join(addon.MEDIA_PATH, "trakt.png")
 
 plugin = routing.Plugin()
