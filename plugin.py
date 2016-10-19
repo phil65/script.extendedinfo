@@ -56,27 +56,6 @@ class Main:
                     pass
 
 
-@plugin.route('/rotten_tomatoes')
-def rotten_tomatoes():
-    xbmcplugin.setPluginCategory(plugin.handle, "Rotten Tomatoes")
-    items = [("intheatermovies", addon.LANG(32042)),
-             ("boxofficemovies", addon.LANG(32055)),
-             ("openingmovies", addon.LANG(32048)),
-             ("comingsoonmovies", addon.LANG(32043)),
-             ("toprentalmovies", addon.LANG(32056)),
-             ("currentdvdmovies", addon.LANG(32049)),
-             ("newdvdmovies", addon.LANG(32053)),
-             ("upcomingdvdmovies", addon.LANG(32054))]
-    for key, value in items:
-        li = xbmcgui.ListItem(value, thumbnailImage="DefaultFolder.png")
-        url = 'plugin://script.extendedinfo?info=%s' % key
-        xbmcplugin.addDirectoryItem(handle=plugin.handle,
-                                    url=url,
-                                    listitem=li,
-                                    isFolder=True)
-    xbmcplugin.endOfDirectory(plugin.handle)
-
-
 @plugin.route('/tmdb')
 def tmdb():
     xbmcplugin.setPluginCategory(plugin.handle, "TheMovieDB")
@@ -143,14 +122,13 @@ def root():
     items = [
         (plugin.url_for(trakt), xbmcgui.ListItem(label="Trakt",
                                                  thumbnailImage=TRAKT_IMAGE), True),
-        (plugin.url_for(rotten_tomatoes), xbmcgui.ListItem(label="Rotten Tomatoes",
-                                                           thumbnailImage=RT_IMAGE), True),
         (plugin.url_for(tmdb), xbmcgui.ListItem(label="TheMovieDB",
                                                 thumbnailImage=MOVIEDB_IMAGE), True),
     ]
     xbmcplugin.addSortMethod(plugin.handle, xbmcplugin.SORT_METHOD_LABEL)
     xbmcplugin.addDirectoryItems(plugin.handle, items)
     xbmcplugin.endOfDirectory(plugin.handle)
+
 
 if (__name__ == "__main__"):
     Main()
