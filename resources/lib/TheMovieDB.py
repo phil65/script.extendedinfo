@@ -723,11 +723,14 @@ def get_show_id(tmdb_id=None, return_id="imdb_id"):
     return response["external_ids"][return_id]
 
 
-def get_trailer(movie_id):
+def get_movie_videos(movie_id):
+    '''
+    get trailers / teasers for movie with *movie_id
+    '''
     response = get_movie(movie_id)
     if response and "videos" in response and response['videos']['results']:
-        return response['videos']['results'][0]['key']
-    utils.notify("Could not get trailer")
+        return response['videos']['results']
+    utils.notify("Could not get movie videos")
     return None
 
 

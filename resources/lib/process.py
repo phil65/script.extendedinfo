@@ -160,6 +160,13 @@ def start_info_actions(info, params):
                                               dbid=params.get("dbid"))
         if movie_id:
             return tmdb.get_keywords(movie_id)
+    elif info == 'trailers':
+        movie_id = params.get("id")
+        if not movie_id:
+            movie_id = tmdb.get_movie_tmdb_id(imdb_id=params.get("imdb_id"),
+                                              dbid=params.get("dbid"))
+        if movie_id:
+            return tmdb.handle_videos(tmdb.get_movie_videos(movie_id))
     elif info == 'popularpeople':
         return tmdb.get_popular_actors()
     elif info == 'personmovies':
@@ -430,11 +437,11 @@ def start_info_actions(info, params):
         else:
             movie_id = ""
         if movie_id:
-            trailer = tmdb.get_trailer(movie_id)
+            trailers = tmdb.get_movie_videos(movie_id)
             busy.hide_busy()
             time.sleep(0.1)
-            if trailer:
-                wm.play_youtube_video(trailer)
+            if trailers:
+                wm.play_youtube_video(trailers[0]["key"])
             elif params.get("title"):
                 wm.open_youtube_list(search_str=params["title"])
             else:
