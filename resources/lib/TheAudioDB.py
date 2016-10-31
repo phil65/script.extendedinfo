@@ -75,7 +75,7 @@ def handle_tracks(results):
                          'artist': [item['strArtist']],
                          'mediatype': "song"})
         track.set_properties({'mbid': item['strMusicBrainzID']})
-        track.set_art({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
+        track.set_artwork({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
         tracks.append(track)
     return tracks
 
@@ -92,7 +92,7 @@ def handle_musicvideos(results):
                         'plot': item['strDescriptionEN'],
                         'mediatype': "musicvideo"})
         mvid.set_properties({'id': item['idTrack']})
-        mvid.set_art({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
+        mvid.set_artwork({'thumb': "http://i.ytimg.com/vi/%s/0.jpg" % youtube_id})
         mvids.append(mvid)
     return mvids
 
