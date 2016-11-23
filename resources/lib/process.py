@@ -323,6 +323,7 @@ def start_info_actions(info, params):
             if result and result > -1:
                 search_str = result
             else:
+                addon.clear_global('infodialogs.active')
                 return None
         wm.open_video_list(search_str=search_str,
                            mode="search")
