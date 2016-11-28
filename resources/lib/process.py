@@ -442,6 +442,8 @@ def start_info_actions(info, params):
             except Exception as e:
                 utils.log(e)
         utils.notify("Cache deleted")
+    elif info == 'tmdbpassword':
+        addon.set_password_prompt("tmdb_password")
     elif info == 'syncwatchlist':
         pass
 
