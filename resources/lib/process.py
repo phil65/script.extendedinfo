@@ -31,7 +31,8 @@ from kodi65 import favs
 def start_info_actions(info, params):
     if "artistname" in params:
         params["artistname"] = params.get("artistname", "").split(" feat. ")[0].strip()
-        params["artist_mbid"] = utils.fetch_musicbrainz_id(params["artistname"])
+        if not params.get("artist_mbid"):
+            params["artist_mbid"] = utils.fetch_musicbrainz_id(params["artistname"])
     utils.log(info)
     utils.pp(params)
     if "prefix" in params and not params["prefix"].endswith('.'):
@@ -243,6 +244,8 @@ def start_info_actions(info, params):
             if items:
                 addon.set_global('favourite.1.name', items[-1]["label"])
         return items
+    elif info == "addonsbyauthor":
+        items = favs.get_addons_by_author("phil65")
     elif info == 'similarlocalmovies' and "dbid" in params:
         return local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
