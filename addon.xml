@@ -22,7 +22,7 @@
 		<forum>http://forum.kodi.tv/showthread.php?tid=160558</forum>
 		<source>https://github.com/phil65/script.extendedinfo</source>
 		<email>phil65@kodi.tv</email>
-		<news>Added: filter movies / tv shows by runtime[CR]Added: plugin path to show trailers within skins[CR]Misc fixes</news>
+		<news>Some additional infolabels for AudioDB albums[CR]Misc fixes</news>
 		<assets>
 			<icon>resources/icon.png</icon>
 			<fanart>resources/fanart.jpg</fanart>
