@@ -245,7 +245,7 @@ def start_info_actions(info, params):
                 addon.set_global('favourite.1.name', items[-1]["label"])
         return items
     elif info == "addonsbyauthor":
-        items = favs.get_addons_by_author("phil65")
+        items = favs.get_addons_by_author(params.get("id"))
     elif info == 'similarlocalmovies' and "dbid" in params:
         return local_db.get_similar_movies(params["dbid"])
     elif info == 'iconpanel':
