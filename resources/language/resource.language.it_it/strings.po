@@ -240,7 +240,7 @@ msgstr "Film di apertura"
 #: /plugin.py:41
 msgctxt "#32049"
 msgid "Current DVD releases"
-msgstr "Release DVD attuali"
+msgstr "Uscite DVD attuali"
 
 msgctxt "#32050"
 msgid "Online information"
@@ -257,7 +257,7 @@ msgstr "Nessun trailer trovato"
 #: /plugin.py:42
 msgctxt "#32053"
 msgid "New DVD releases"
-msgstr "Release DVD buove"
+msgstr "Nuove uscite DVD"
 
 #: /plugin.py:43
 msgctxt "#32054"
@@ -367,7 +367,7 @@ msgstr "Finito"
 #: \resources\lib\TheMovieDB.py:874
 msgctxt "#32075"
 msgid "Returning series"
-msgstr "Serie che ritornano"
+msgstr "Serie riproposte"
 
 #: \resources\lib\TheMovieDB.py:875
 msgctxt "#32076"
@@ -422,7 +422,7 @@ msgstr "Serie TV più riprodotte"
 #: /plugin.py:140
 msgctxt "#32087"
 msgid "Most collected TV shows"
-msgstr "Serie TV più colleionate"
+msgstr "Serie TV più collezionate"
 
 #: /plugin.py:141
 msgctxt "#32088"
@@ -474,7 +474,7 @@ msgstr "Ottieni extrafanart"
 
 msgctxt "#32101"
 msgid "Get extrathumbs"
-msgstr "Ottieni extrathumbs"
+msgstr "Ottieni vignette extra"
 
 msgctxt "#32102"
 msgid "Get tune"
@@ -562,11 +562,11 @@ msgstr "Ruoli in Serie TV"
 
 msgctxt "#32122"
 msgid "Movie crew member"
-msgstr "Membro della crew del film"
+msgstr "Membro della Crew del film"
 
 msgctxt "#32123"
 msgid "TV show crew member"
-msgstr "Membro della crew della Serie TV"
+msgstr "Membro della Crew della Serie TV"
 
 msgctxt "#32124"
 msgid "Items"
@@ -578,7 +578,7 @@ msgstr "Pagina"
 
 msgctxt "#32126"
 msgid "Actor / Crew member"
-msgstr "Attore / Membro Crew"
+msgstr "Attore / Membro della Crew"
 
 msgctxt "#32127"
 msgid "Certification"
@@ -634,7 +634,7 @@ msgstr "Nuova lista film"
 
 msgctxt "#32140"
 msgid "For all features enter your TMDB credentials in addon settings. "
-msgstr "Per tutte le funzioni imetti le tue credenzioli di TMDB nelle impostazione dell'addon."
+msgstr "Per tutte le funzionalità imetti le tue credenziali di TMDB nelle impostazione dell'addon."
 
 msgctxt "#32141"
 msgid "This product uses the TMDb API but is not endorsed or certified by TMDb."
@@ -679,7 +679,7 @@ msgstr "Limite inferiore"
 #: /resources/lib/Utils.py:224
 msgctxt "#32151"
 msgid "Choose option"
-msgstr "Segli opzione"
+msgstr "Scegli opzione"
 
 msgctxt "#32152"
 msgid "Networks"
@@ -755,4 +755,4 @@ msgstr "Valuta Serie TV"
 
 msgctxt "#32170"
 msgid "Add to Trakt Watchlist"
-msgstr "Aggiungi alla  Trakt Watchlist"
+msgstr "Aggiungi alla Trakt Watchlist"
