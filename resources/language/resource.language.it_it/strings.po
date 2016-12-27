@@ -133,7 +133,7 @@ msgstr "Indice episodio"
 
 msgctxt "#32026"
 msgid "Related movie lists"
-msgstr "Liste film correlati"
+msgstr "Lista film correlati"
 
 msgctxt "#32027"
 msgid "Select person"
