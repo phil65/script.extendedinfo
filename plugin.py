@@ -130,6 +130,19 @@ def root():
     xbmcplugin.endOfDirectory(plugin.handle)
 
 
+@plugin.route("/play_youtube/<youtube_id>")
+def play(youtube_id):
+    # xbmc.executebuiltin("Dialog.Close(all,true)")
+    # wm.play_youtube_video(youtube_id)
+    url, _ = utils.youtube_info_by_id(youtube_id)
+    utils.log(url)
+    # utils.notify("test", "test")
+    xbmcplugin.setResolvedUrl(handle=plugin.handle,
+                              succeeded=True,
+                              listitem=xbmcgui.ListItem(path=url))
+
+
 if (__name__ == "__main__"):
     Main()
+
 utils.log('finished')
