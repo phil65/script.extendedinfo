@@ -64,10 +64,7 @@ def start_info_actions(info, params):
     elif info == 'starredmovies':
         return tmdb.get_fav_items("movies")
     elif info == 'accountlists':
-        account_lists = tmdb.handle_lists(tmdb.get_account_lists())
-        for item in account_lists:
-            item.set_property("directory", True)
-        return account_lists
+        return tmdb.handle_lists(tmdb.get_account_lists())
     elif info == 'listmovies':
         return tmdb.get_movies_from_list(params["id"])
     elif info == 'airingtodaytvshows':
