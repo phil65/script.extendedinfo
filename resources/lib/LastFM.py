@@ -79,8 +79,8 @@ def get_track_info(artist_name="", track=""):
     if not results:
         return {}
     summary = results['track']['wiki']['summary'] if "wiki" in results['track'] else ""
-    return {'playcount': str(results['track']['playcount']),
-            'thumb': str(results['track']['playcount']),
+    return {'playcount': results['track']['playcount'],
+            'thumb': results['album']['image'][-1]['#text'],
             'summary': clean_text(summary)}
 
 
