@@ -428,7 +428,8 @@ def handle_lists(results):
                              path="plugin://script.extendedinfo?info=listmovies&---id=%s" % item.get('id'),
                              artwork=get_image_urls(poster=item.get("poster_path")))
         listitem.set_infos({'plot': item.get('description'),
-                            "media_type": "set"})
+                            "mediatype": "set"})
+        listitem.set_folder(True)
         listitem.set_properties({'certification': item.get('certification', "") + item.get('rating', ""),
                                  'item_count': item.get('item_count'),
                                  'favorite_count': item.get('favorite_count'),
