@@ -15,9 +15,7 @@ BASE_URL = 'http://ws.audioscrobbler.com/2.0/?'
 
 def handle_albums(results):
     albums = ItemList(content_type="albums")
-    if not results:
-        return albums
-    if 'topalbums' in results and "album" in results['topalbums']:
+    if results and 'topalbums' in results and "album" in results['topalbums']:
         for album in results['topalbums']['album']:
             albums.append({'artist': album['artist']['name'],
                            'mbid': album.get('mbid', ""),
