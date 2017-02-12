@@ -122,7 +122,7 @@ class DialogTVShowInfo(DialogVideoInfo):
 
     def get_manage_options(self):
         options = []
-        title = self.info.get_info("tvshowtitle")
+        title = self.info.get_info("title")
         dbid = self.info.get_info("dbid")
         if dbid:
             call = "RunScript(script.artwork.downloader,mediatype=tv,dbid={}%s)".format(dbid)
