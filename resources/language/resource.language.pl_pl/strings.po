@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: XBMC-Addons\n"
 "Report-Msgid-Bugs-To: alanwww1@xbmc.org\n"
 "POT-Creation-Date: 2014-10-26 17:05+0000\n"
-"PO-Revision-Date: 2017-02-13 10:44+0100\n"
+"PO-Revision-Date: 2017-02-20 13:55+0100\n"
 "Language-Team: Polish (Poland) (http://www.transifex.com/teamxbmc/kodi-main/language/pl_PL/)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Language: pl_PL\n"
 "Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"Last-Translator: \n"
-"X-Generator: Poedit 1.8.11\n"
+"Last-Translator: Marcin W.\n"
+"X-Generator: Poedit 1.8.12\n"
 
 msgctxt "Addon Summary"
 msgid "ExtendedInfo Script"
@@ -40,11 +40,11 @@ msgstr "Bilion"
 
 msgctxt "#32003"
 msgid "Autocompletion language"
-msgstr "Język automatycznego uzupełniania"
+msgstr "Język podpowiedzi"
 
 msgctxt "#32004"
 msgid "Autocompletion provider"
-msgstr "Dostawca automatycznego uzupełniania"
+msgstr "Dostawca podpowiedzi"
 
 msgctxt "#32005"
 msgid "Windowed mode (for low-power platforms)"
@@ -349,7 +349,7 @@ msgstr "Pokazuj filmografię"
 #: \resources\lib\TheMovieDB.py:870
 msgctxt "#32071"
 msgid "Released"
-msgstr "Wydany"
+msgstr "Premiera"
 
 #: \resources\lib\TheMovieDB.py:871
 msgctxt "#32072"
@@ -544,16 +544,16 @@ msgstr "Rekomendowane przez TMDB"
 
 msgctxt "#32117"
 msgid "Official videos"
-msgstr "Wideo oficjalne"
+msgstr "Materiały oficjalne"
 
 #: \resources\lib\DialogYoutubeList.py:13
 msgctxt "#32118"
 msgid "YouTube videos"
-msgstr "Wideo z YouTube"
+msgstr "Materiały na YouTube"
 
 msgctxt "#32119"
 msgid "Artwork"
-msgstr "Grafika"
+msgstr "Portret"
 
 msgctxt "#32120"
 msgid "Movie actor roles"
@@ -649,7 +649,7 @@ msgstr "Wytwórnie"
 
 msgctxt "#32143"
 msgid "Could not find item at MovieDB"
-msgstr "Pozycja nie została odnaleziona w MovieDB"
+msgstr "Pozycja nie została odnaleziona"
 
 msgctxt "#32144"
 msgid "Starred TV shows"
@@ -714,19 +714,19 @@ msgstr "Dzisiaj urodziny!"
 
 msgctxt "#32159"
 msgid "Language for TheMovieDB requests"
-msgstr "Język zapytań TheMovieDB"
+msgstr "Wyszukuj w języku"
 
 msgctxt "#32160"
 msgid "TheMovieDB username"
-msgstr "Użytkownik TheMovieDB"
+msgstr "Użytkownik"
 
 msgctxt "#32161"
 msgid "TheMovieDB password"
-msgstr "Hasło TheMovieDB"
+msgstr "Hasło"
 
 msgctxt "#32162"
 msgid "Include adult actors / movies"
-msgstr "Uwzględniaj filmy i aktorów filmów dla dorosłych"
+msgstr "Uwzględniaj tytuły i aktorów filmów dla dorosłych"
 
 msgctxt "#32163"
 msgid "Open InfoDialog by default"
