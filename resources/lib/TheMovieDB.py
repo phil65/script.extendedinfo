@@ -867,6 +867,7 @@ def extended_tvshow_info(tvshow_id=None, cache_days=7, dbid=None):
                       'Status': translate_status(info.get('status'))})
     tvshow.set_properties({'credit_id': info.get('credit_id'),
                            'id': tmdb_id,
+                           'tvdb_id': info["external_ids"].get("tvdb_id"),
                            'popularity': round(info['popularity'], 1) if info.get('popularity') else "",
                            'showtype': info.get('type'),
                            'homepage': info.get('homepage'),
