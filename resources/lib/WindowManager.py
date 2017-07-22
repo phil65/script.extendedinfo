@@ -29,11 +29,11 @@ if addon.bool_setting("force_native_layout") and addon.setting("xml_version") !=
     ACTOR_XML = u'script-%s-DialogInfo-classic.xml' % (addon.ID)
     path = os.path.join(addon.PATH, "resources", "skins", "Default", "1080i")
     xbmcvfs.copy(strSource=os.path.join(path, INFO_XML_CLASSIC),
-                 strDestnation=os.path.join(path, INFO_XML))
+                 strDestination=os.path.join(path, INFO_XML))
     xbmcvfs.copy(strSource=os.path.join(path, LIST_XML_CLASSIC),
-                 strDestnation=os.path.join(path, LIST_XML))
+                 strDestination=os.path.join(path, LIST_XML))
     xbmcvfs.copy(strSource=os.path.join(path, ACTOR_XML_CLASSIC),
-                 strDestnation=os.path.join(path, ACTOR_XML))
+                 strDestination=os.path.join(path, ACTOR_XML))
 else:
     INFO_XML = INFO_XML_CLASSIC
     LIST_XML = LIST_XML_CLASSIC
