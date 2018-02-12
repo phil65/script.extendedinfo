@@ -18,7 +18,7 @@ BASE_URL = "https://api-v2launch.trakt.tv/"
 HEADERS = {
     'Content-Type': 'application/json',
     'trakt-api-key': TRAKT_KEY,
-    'trakt-api-version': 2
+    'trakt-api-version': '2'
 }
 PLUGIN_BASE = "plugin://script.extendedinfo/?info="
 
