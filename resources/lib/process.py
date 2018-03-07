@@ -4,6 +4,7 @@
 # This program is Free Software see LICENSE file for details
 
 from __future__ import unicode_literals
+from __future__ import absolute_import
 
 import time
 import os
@@ -13,11 +14,11 @@ import xbmc
 import xbmcgui
 import xbmcplugin
 
-import Trakt
-import LastFM
-import TheAudioDB as AudioDB
-import TheMovieDB as tmdb
-from WindowManager import wm
+from resources.lib import Trakt
+from resources.lib import LastFM
+from resources.lib import TheAudioDB as AudioDB
+from resources.lib import TheMovieDB as tmdb
+from resources.lib.WindowManager import wm
 
 from kodi65 import youtube
 from kodi65 import local_db
