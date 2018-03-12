@@ -3,6 +3,9 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import xbmc
 import xbmcgui
 

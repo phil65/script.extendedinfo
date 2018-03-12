@@ -3,6 +3,9 @@
 # Copyright (C) 2015 - Philipp Temminghoff <phil65@kodi.tv>
 # This program is Free Software see LICENSE file for details
 
+from __future__ import absolute_import
+from __future__ import unicode_literals
+
 import threading
 
 import xbmc
@@ -11,7 +14,7 @@ import xbmcgui
 from resources.lib import TheMovieDB as tmdb
 from resources.lib import omdb
 from resources.lib.WindowManager import wm
-from DialogVideoInfo import DialogVideoInfo
+from resources.lib.dialogs.DialogVideoInfo import DialogVideoInfo
 
 from kodi65 import imagetools
 from kodi65 import addon
