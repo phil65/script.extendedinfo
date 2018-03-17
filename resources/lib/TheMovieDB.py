@@ -1049,6 +1049,8 @@ def get_rated_media_items(media_type, sort_by=None, page=1, cache_days=0):
         data = get_data(url="guest_session/%s/rated/%s" % (session_id, media_type),
                         params=params,
                         cache_days=0)
+    if not data.get("results"):
+        utils.notify("Nothing rated yet")
     if media_type == "tv/episodes":
         itemlist = handle_episodes(data["results"])
     elif media_type == "tv":
