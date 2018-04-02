@@ -92,11 +92,11 @@ msgstr "Actor para adultos"
 
 msgctxt "#32016"
 msgid "Also known as"
-msgstr "También conocido como"
+msgstr "También conocido/a como"
 
 msgctxt "#32017"
 msgid "Homepage"
-msgstr "Web Oficial"
+msgstr "Página Oficial"
 
 msgctxt "#32018"
 msgid "Role"
@@ -205,12 +205,12 @@ msgstr "Programas TV populares"
 #: /plugin.py:36 /plugin.py:45
 msgctxt "#32042"
 msgid "In-cinema movies"
-msgstr "Películas en cines"
+msgstr "Películas en Cines"
 
 #: /plugin.py:46 /plugin.py:39
 msgctxt "#32043"
 msgid "Upcoming movies"
-msgstr "Películas proximamente"
+msgstr "Películas próximamente"
 
 #: /plugin.py:48 /plugin.py:128
 msgctxt "#32044"
@@ -220,7 +220,7 @@ msgstr "Películas populares"
 #: /plugin.py:49
 msgctxt "#32045"
 msgid "User-created lists"
-msgstr "Listas creadas por el usuario"
+msgstr "Listas creadas por usuario"
 
 #: /plugin.py:47
 msgctxt "#32046"
@@ -240,7 +240,7 @@ msgstr "Películas de estreno"
 #: /plugin.py:41
 msgctxt "#32049"
 msgid "Current DVD releases"
-msgstr "Actuales DVD publicados"
+msgstr "Lanzamientos en DVD"
 
 msgctxt "#32050"
 msgid "Online information"
@@ -257,12 +257,12 @@ msgstr "Tráiler no encontrado"
 #: /plugin.py:42
 msgctxt "#32053"
 msgid "New DVD releases"
-msgstr "Nuevos DVD publicados"
+msgstr "Nuevos en DVD"
 
 #: /plugin.py:43
 msgctxt "#32054"
 msgid "Upcoming DVDs"
-msgstr "En DVDs proximamente"
+msgstr "Proximamente en DVDs"
 
 #: /plugin.py:37 /plugin.py:133
 msgctxt "#32055"
@@ -357,7 +357,7 @@ msgstr "En Post-producción"
 #: \resources\lib\TheMovieDB.py:872
 msgctxt "#32073"
 msgid "In production"
-msgstr "En producción"
+msgstr "En Producción"
 
 #: \resources\lib\TheMovieDB.py:873
 msgctxt "#32074"
@@ -372,7 +372,7 @@ msgstr "Series que vuelven"
 #: \resources\lib\TheMovieDB.py:875
 msgctxt "#32076"
 msgid "Planned"
-msgstr ""
+msgstr "Planificado"
 
 #: \resources\lib\dialogs\DialogBaseList.py:73
 msgctxt "#32077"
@@ -407,7 +407,7 @@ msgstr "Agregar película a la lista"
 #: /resources/settings.xml:7
 msgctxt "#32084"
 msgid "Use classic keyboard for search"
-msgstr "Usar teclado clásico para busquedas"
+msgstr "Usar teclado clásico para búsquedas"
 
 #: /plugin.py:138
 msgctxt "#32085"
@@ -494,7 +494,7 @@ msgstr "Filtros"
 
 msgctxt "#32106"
 msgid "Choose filter behaviour"
-msgstr "Seleccione comportamiento de filtrado"
+msgstr "Seleccione comportamiento para filtrado"
 
 msgctxt "#32107"
 msgid "Add to list"
@@ -516,7 +516,7 @@ msgstr "Popularidad"
 #: \resources\lib\DialogVideoList.py:288
 msgctxt "#32111"
 msgid "Vote count"
-msgstr "Conteo de votos"
+msgstr "Recuento de votos"
 
 msgctxt "#32112"
 msgid "Vote average"
@@ -537,7 +537,7 @@ msgstr "Equipo Técnico"
 
 msgctxt "#32116"
 msgid "Recommended By TMDB"
-msgstr "Recomendación de TMDb"
+msgstr "Recomendado por TMDB"
 
 msgctxt "#32117"
 msgid "Official videos"
@@ -562,11 +562,11 @@ msgstr "Programas TV"
 
 msgctxt "#32122"
 msgid "Movie crew member"
-msgstr "Películas como equipo técnico"
+msgstr "Películas como Equipo Técnico"
 
 msgctxt "#32123"
 msgid "TV show crew member"
-msgstr "Programa TV como equipo técnico"
+msgstr "Programa TV como Equipo Técnico"
 
 msgctxt "#32124"
 msgid "Items"
@@ -598,7 +598,7 @@ msgstr "Mostrar listas"
 
 msgctxt "#32131"
 msgid "Already rated"
-msgstr "Ya calificadas"
+msgstr "Ya valoradas"
 
 msgctxt "#32132"
 msgid "Extras"
@@ -626,19 +626,19 @@ msgstr "Introduzca nombre de la lista"
 
 msgctxt "#32138"
 msgid "Delete movie list"
-msgstr "Eliminar lista de película"
+msgstr "Eliminar lista de películas"
 
 msgctxt "#32139"
 msgid "New movie list"
-msgstr "Nueva lista de película"
+msgstr "Nueva lista de películas"
 
 msgctxt "#32140"
 msgid "For all features enter your TMDB credentials in addon settings. "
-msgstr "Para usar todas las funcionalidades, introduzca sus credenciales de acceso a TMDb en los ajustes del complemento."
+msgstr "Para usar todas las funcionalidades, introduzca sus credenciales de acceso a TheMovieDB en los ajustes del complemento."
 
 msgctxt "#32141"
 msgid "This product uses the TMDb API but is not endorsed or certified by TMDb."
-msgstr "Este producto usa la API de TMDb pero no está avalado ni certificado por TMDb."
+msgstr "Este producto usa la API de TheMovieDB pero no está avalado ni certificado por TheMovieDB."
 
 msgctxt "#32142"
 msgid "Studios"
@@ -646,7 +646,7 @@ msgstr "Estudios"
 
 msgctxt "#32143"
 msgid "Could not find item at MovieDB"
-msgstr "Elemento no encontrado en MovieDB"
+msgstr "Elemento no encontrado en TheMovieDB"
 
 msgctxt "#32144"
 msgid "Starred TV shows"
